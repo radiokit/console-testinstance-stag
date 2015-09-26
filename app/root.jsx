@@ -1,5 +1,7 @@
 import React from 'react';
 
+import RadioKitAuth from './radiokit/auth/oauth2.js';
+
 import LoadingLayout from './layouts/loading_layout.jsx';
 import AdminLayout from './layouts/admin_layout.jsx';
 
@@ -11,6 +13,8 @@ export default React.createClass({
 
 
   componentWillMount: function() {
+    this.auth = new RadioKitAuth("Editor").authenticate();
+
     // this.dataInterface = new RadioKit.Data.Interface({ auth: this.props.auth, apps: this.props.apps, verbose: true });
     // this.dataInterface.signIn("Editor");
   },

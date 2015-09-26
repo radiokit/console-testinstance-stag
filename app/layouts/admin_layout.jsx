@@ -3,6 +3,6 @@ import React from 'react';
 
 export default React.createClass({
   render: function() {
-    return <div/>;
+    return <div>Admin</div>;
   }
 });
