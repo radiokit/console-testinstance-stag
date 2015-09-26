@@ -1,8 +1,8 @@
 import React from 'react';
-import Hello from './component.jsx';
+import Root from './root.jsx';
 
 main();
 
 function main() {
-    React.render(<Hello />, document.getElementById('app'));
+    React.render(<Root />, document.getElementById('app'));
 }
