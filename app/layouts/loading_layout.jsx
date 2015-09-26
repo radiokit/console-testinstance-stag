@@ -1,8 +1,8 @@
 import React from 'react';
 import Spinner from 'spin.js';
 
-export default class LoadingLayout extends React.Component {
-  componentDidMount() {
+export default React.createClass({
+  componentDidMount: function() {
     let opts = {
         lines: 17 // The number of lines to draw
       , length: 10 // The length of each line
@@ -27,16 +27,15 @@ export default class LoadingLayout extends React.Component {
     }
 
     this.spinner = new Spinner(opts).spin(React.findDOMNode(this.refs.spinner));
-  }
+  },
 
 
-  componentWillUnmount() {
+  componentWillUnmount: function() {
     this.spinner.stop();
-  }
+  },
 
 
-  render() {
+  render: function() {
     return <div ref="spinner"/>;
   }
-}
-
+});
