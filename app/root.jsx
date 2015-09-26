@@ -14,13 +14,11 @@ export default React.createClass({
 
   componentWillMount: function() {
     this.api = new RadioKit({ role: "Editor" });
-    // this.dataInterface = new RadioKit.Data.Interface({ auth: this.props.auth, apps: this.props.apps, verbose: true });
-    // this.dataInterface.signIn("Editor");
   },
 
 
-  componentWillUnmount: function() {
-    // this.dataInterface.teardown();
+  componentDidMount: function() {
+    this.api.data().app("auth").model("Editor");
   },
 
 
