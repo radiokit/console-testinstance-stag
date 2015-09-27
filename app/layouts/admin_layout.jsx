@@ -1,4 +1,6 @@
 import React from 'react';
+import Gravatar from 'gravatar-api';
+import { Link } from 'react-router';
 
 import '../../vendor/assets/stylesheets/materialadmin/bootstrap.css';
 import '../../vendor/assets/stylesheets/materialadmin/materialadmin.css';
@@ -12,28 +14,17 @@ export default React.createClass({
         <header id="header">
           <div className="headerbar">
             <div className="headerbar-left">
-              <ul className="header-nav header-nav-options hidden-sm hidden-md hidden-lg">
-                <li>
-                  <a className="btn btn-icon-toggle menubar-toggle" data-toggle="menubar">
-                    <i className="md md-menu" />
-                  </a>
-                </li>
-              </ul>
-
-              <ul className="header-nav header-nav-menu header-nav-no-margin">
-                <li className="dropdown">
-                  <a aria-expanded="false" className="dropdown-toggle ink-reaction" data-toggle="dropdown">
-                    <span className="text-lg text-bold text-primary text-uppercase">
-                    </span>
-                  </a>
-                  <ul className="dropdown-menu animation-dock">
-                    <li>
-                      CHANNEL
-                    </li>
-                  </ul>
+              <ul className="header-nav header-nav-options">
+                <li className="header-nav-brand">
+                  <div className="brand-holder">
+                    <Link to="/">
+                      <img src={require('../assets/images/logo-horizontal.svg')} />
+                    </Link>
+                  </div>
                 </li>
               </ul>
             </div>
+
 
             <div className="headerbar-right">
               <ul className="header-nav header-nav-options">
@@ -47,9 +38,9 @@ export default React.createClass({
               <ul className="header-nav header-nav-profile">
                 <li className="dropdown">
                   <a aria-expanded="false" className="dropdown-toggle ink-reaction" data-toggle="dropdown">
-                    <img src="" alt="" />
+                    <img src={Gravatar.imageUrl({ email: this.props.currentEditor.get("email"), parameters: { s: "40", d: "mm" }, secure: true })} alt="" />
                     <span className="profile-info">
-                      <small>X</small>
+                      {this.props.currentEditor.get("email")}
                     </span>
                   </a>
                   <ul className="dropdown-menu animation-dock">

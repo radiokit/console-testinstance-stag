@@ -4,6 +4,6 @@ import AdminLayout from '../../layouts/admin_layout.jsx';
 
 export default React.createClass({
   render: function() {
-    return <AdminLayout/>;
+    return <AdminLayout {...this.props} />;
   }
 });
