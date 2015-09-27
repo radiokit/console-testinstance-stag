@@ -21,6 +21,9 @@ var config = {
     }, {
       test: /\.(png|jpg)$/,
       loader: 'url?limit=25000'
+    }, {
+      test: /\.(woff|ttf|eot|woff2|svg)$/,
+      loader: 'url?limit=100000'
     }]
   }
 };

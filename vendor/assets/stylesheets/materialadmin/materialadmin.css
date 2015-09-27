@@ -5857,7 +5857,7 @@ section.style-info .btn-flat:hover,
   color: inherit;
 }
 .style-image {
-  background-image: url('graphics/bg.jpg');
+  /*background-image: url('../../../images/materialadmin/libs/graphics/bg.jpg');*/
   background-size: cover;
   background-repeat: no-repeat;
   filter: saturate(200%);
