@@ -1,8 +1,9 @@
 import React from 'react';
 import RadioKit from 'radiokit-api';
+import { Router } from 'react-router';
+
 
 import LoadingLayout from './layouts/loading_layout.jsx';
-import AdminLayout from './layouts/admin_layout.jsx';
 
 
 export default React.createClass({
@@ -46,21 +47,28 @@ export default React.createClass({
 
 
   onAuthSuccess: function() {
+    console.log("Authenticated");
+
     this.data
       .query("auth", "Editor")
       .method("me") // FIXME methods should be deprecated in favour of tokens
-      .on("update", (_, query) => this.setState({ currentEditor: query.getData().first()}))
+      .on("update", this.onCurrentEditorFetched)
       .fetch();
   },
 
 
+  onCurrentEditorFetched: function(_, query) {
+    console.log("Fetched current editor");
+    this.setState({ currentEditor: query.getData().first() });
+  },
+
+
   render: function() {
-    if(this.state.currentEditor == null) {
-      return (<LoadingLayout />);
-
+   if(this.state.currentEditor == null) {
+     return (<LoadingLayout />);
+  
     } else {
-      return (<AdminLayout currentEditor={this.state.currentEditor} data={this.data} />);
+      return (<div>{React.cloneElement(this.props.children, { data: this.data, currentEditor: this.state.currentEditor })}</div>);
     }
-
   }
 });

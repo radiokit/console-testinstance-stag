@@ -1,7 +1,12 @@
 import React from 'react';
+import ReactAddons from 'react/addons';
+
 import Spinner from 'spin.js';
 
 export default React.createClass({
+  mixins: [ReactAddons.addons.PureRenderMixin],
+
+
   componentDidMount: function() {
     let opts = {
         lines: 17 // The number of lines to draw
