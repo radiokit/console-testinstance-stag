@@ -1,6 +1,5 @@
 import React from 'react';
-
-import RadioKit from './radiokit/api.js';
+import RadioKit from 'radiokit-api';
 
 import LoadingLayout from './layouts/loading_layout.jsx';
 import AdminLayout from './layouts/admin_layout.jsx';
@@ -12,13 +11,40 @@ export default React.createClass({
   },
 
 
+  getEnv: function() {
+    if(typeof(window.ENV) === "object") {
+      return window.ENV;
+    
+    } else {
+      return { 
+        auth: { clientId: "123", baseUrl: "http://localhost:4000" }, 
+        apps: { 
+          "plumber" : { baseUrl: "https://radiokit-plumber-stag.herokuapp.com" },
+          "auth" : { baseUrl: "http://localhost:4000" } 
+        },
+        verbose: true
+      };
+    }
+  },
+
+
   componentWillMount: function() {
-    this.api = new RadioKit({ role: "Editor" });
+    this.data = new RadioKit.Data.Interface(this.getEnv());
   },
 
 
   componentDidMount: function() {
-    this.api.data().app("auth").model("Editor");
+    this.data.on("auth::success", this.onAuthSuccess);
+    this.data.signIn("Editor");
+  },
+
+
+  onAuthSuccess: function() {
+    this.data
+      .query("auth", "Editor")
+      .method("me") // FIXME methods should be deprecated in favour of tokens
+      .on("update", (_, query) => this.setState({ currentEditor: query.getData()[0]}))
+      .fetch();
   },
 
 
@@ -27,7 +53,8 @@ export default React.createClass({
       return (<LoadingLayout />);
 
     } else {
-      return (<AdminLayout currentEditor={this.state.currentEditor} api={this.api} />);
+      return (<AdminLayout currentEditor={this.state.currentEditor} data={this.data} />);
     }
+
   }
 });
