@@ -1,0 +1,24 @@
+env:
+  global:
+    - secure: WR2IAoqYMJqobnxXRd2wCcpQr1husAeitpTgjNovkdQ05BKaxRipPwB4ngWvPwshpnefVa+M1MMf3Avj+iJJ9CBSU0fKDq4wVeOxdvohVoLDjvRvOGWhFeoxfL3SeT3Hohyp57R6nkrubNvazTbdwZcgqb23PGIdRXOHFsYTonRubz4j2Gspryam5/MtYhQU6OTfmxSRwn4DkhzTvcm9GcPNORVQblWXFLCGN99eGx/FnRxXwKGGQiusyVawvYM0hQBlg81NozUXSL5LnJycUnAUBzOYAwWQA0DofBkZqVaBtf87+GMwwOLjFs/dPuOA5j8nP20anUbFbwICX0X2WA==
+
+language: node_js
+
+node_js:
+  - 0.12
+
+after_failure:
+  - apt-get install wget -y; wget -O /tmp/notify.py http://mspanc.github.io/shippable-slack-notifier/notify.py; python /tmp/notify.py --slack-url $SLACK_URL --message failure
+after_success:
+  - apt-get install wget -y; wget -O /tmp/notify.py http://mspanc.github.io/shippable-slack-notifier/notify.py; python /tmp/notify.py --slack-url $SLACK_URL --message success
+
+before_install:
+  - source ~/.nvm/nvm.sh && nvm install $SHIPPABLE_NODE_VERSION
+  - node --version
+
+install:
+  - npm install
+
+script:
+  - npm run dist
+
