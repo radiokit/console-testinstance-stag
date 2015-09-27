@@ -39,6 +39,12 @@ export default React.createClass({
   },
 
 
+  componentWillUnmount: function() {
+    this.data.teardown();
+    delete this.data;
+  },
+
+
   onAuthSuccess: function() {
     this.data
       .query("auth", "Editor")
