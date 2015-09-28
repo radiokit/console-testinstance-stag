@@ -2,13 +2,21 @@ import React from 'react';
 import Gravatar from 'gravatar-api';
 import { Link } from 'react-router';
 
+import SubRoute from '../widgets/general/subroute_widget.jsx';
+
 import '../../vendor/assets/stylesheets/materialadmin/materialadmin.css';
 import '../../vendor/assets/stylesheets/materialadmin/material-design-iconic-font.css';
 
 export default React.createClass({
+  propTypes: {
+    currentEditor: React.PropTypes.object.isRequired,
+    data: React.PropTypes.object.isRequired
+  },
+
+
   render: function() {
     return (
-      <div className="hrader-fixed">
+      <div>
         <div id="background"/>
 
         <header id="header">
@@ -50,7 +58,7 @@ export default React.createClass({
           </div>
 
           <div id="content">
-            {this.props.children}
+            <SubRoute parent={this}/>
           </div>
 
 

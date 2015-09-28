@@ -1,34 +1,23 @@
 import React from 'react';
-
+import { History } from 'react-router';
 import AdminLayout from '../../layouts/admin_layout.jsx';
-import ChannelSelector from '../../widgets/broadcast/channel_selector_widget.jsx';
-import Section from '../../widgets/admin/section_widget.jsx';
 
 export default React.createClass({
-  getInitialState: function() {
-    return { currentBroadcastChannel: null };
+  mixins: [ History ],
+
+
+  propTypes: {
+    currentEditor: React.PropTypes.object,
+    data: React.PropTypes.object.isRequired
   },
 
 
   componentDidMount: function() {
-    // this.props.data
-    //   .query("plumber", "Media.Input.Stream.RTP")
-    //   .select("id", "references", "jitter_buffer_duration", "read_buffer_duration")
-    //   .fetch();
+    this.history.replaceState(null, "/joint/broadcast_channels");
   },
 
 
   render: function() {
-    if(this.state.currentBroadcastChannel == null) {
-      return (
-        <AdminLayout {...this.props}>
-          <Section>
-            <ChannelSelector {...this.props}/>
-          </Section>
-        </AdminLayout>);
-
-    } else {
-
-    }
+    return (<AdminLayout {...this.props}/>);
   }
 });
