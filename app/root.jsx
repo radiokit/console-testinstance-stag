@@ -52,14 +52,8 @@ export default React.createClass({
     this.data
       .query("auth", "Editor")
       .method("me") // FIXME methods should be deprecated in favour of tokens
-      .on("update", this.onCurrentEditorFetched)
+      .on("update", (_, query) => {if(this.isMounted()) { this.setState({ currentEditor: query.getData().first() }) }})
       .fetch();
-  },
-
-
-  onCurrentEditorFetched: function(_, query) {
-    console.log("Fetched current editor");
-    this.setState({ currentEditor: query.getData().first() });
   },
 
 

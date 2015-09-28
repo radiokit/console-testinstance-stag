@@ -24,7 +24,7 @@ export default React.createClass({
       .query("auth", "Broadcast.Channel")
       .select("id", "name")
       .order("name", "asc")
-      .on("update", (_, query) => this.setState({ availableBroadcastChannels: query.getData() }))
+      .on("update", (_, query) => {if(this.isMounted()) { this.setState({ availableBroadcastChannels: query.getData() }) }})
       .fetch();
   },
 
