@@ -2,7 +2,6 @@ import React from 'react';
 import Gravatar from 'gravatar-api';
 import { Link } from 'react-router';
 
-import '../../vendor/assets/stylesheets/materialadmin/bootstrap.css';
 import '../../vendor/assets/stylesheets/materialadmin/materialadmin.css';
 import '../../vendor/assets/stylesheets/materialadmin/material-design-iconic-font.css';
 
