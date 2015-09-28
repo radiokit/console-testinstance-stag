@@ -13,6 +13,7 @@ var config = {
   module: {
     loaders: [{
       test: /\.jsx?$/,
+      include: path.join(__dirname, 'app'),
       exclude: [node_modules_dir],
       loader: 'babel'
     }, {
@@ -25,8 +26,8 @@ var config = {
       test: /\.(png|jpg)$/,
       loader: 'url?limit=25000'
     }, {
-      test: /\.(woff|ttf|eot|woff2|svg)$/,
-      loader: 'url?limit=100000'
+      test: /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
+      loader: 'file-loader'
     }]
   }
 };

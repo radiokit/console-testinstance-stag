@@ -4,11 +4,12 @@ import { Link } from 'react-router';
 
 import '../../vendor/assets/stylesheets/materialadmin/bootstrap.css';
 import '../../vendor/assets/stylesheets/materialadmin/materialadmin.css';
+import '../../vendor/assets/stylesheets/materialadmin/material-design-iconic-font.css';
 
 export default React.createClass({
   render: function() {
     return (
-      <div>
+      <div className="hrader-fixed">
         <div id="background"/>
 
         <header id="header">
@@ -28,11 +29,6 @@ export default React.createClass({
 
             <div className="headerbar-right">
               <ul className="header-nav header-nav-options">
-                <li>
-                  <a className="btn btn-icon-toggle btn-default">
-                    <i className="md md-play-circle-fill"/>
-                  </a>
-                </li>
               </ul>
 
               <ul className="header-nav header-nav-profile">
@@ -43,14 +39,6 @@ export default React.createClass({
                       {this.props.currentEditor.get("email")}
                     </span>
                   </a>
-                  <ul className="dropdown-menu animation-dock">
-                    <li>
-                      Header
-                    </li>
-                    <li>
-                    </li>
-                    <li><a href=""><i className="fa fa-fw fa-power-off text-danger"></i> Logout</a></li>
-                  </ul>
                 </li>
               </ul>
             </div>
@@ -70,7 +58,19 @@ export default React.createClass({
           <div id="menubar" className="menubar-inverse animate">
             <div className="menubar-scroll-panel">
               <ul id="main-menu" className="gui-controls gui-controls-tree">
+                <li>
+                  <Link to="/">
+                    <div className="gui-icon"><i className="md md-home" /></div>
+                    <span className="title">Dashboard</span>
+                  </Link>
+                </li>
 
+                <li>
+                  <Link to="/joint">
+                    <div className="gui-icon"><i className="mdi mdi-remote" /></div>
+                    <span className="title">Joint</span>
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>

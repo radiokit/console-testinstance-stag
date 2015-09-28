@@ -30,6 +30,7 @@
     "counterpart": "^0.16.10",
     "gravatar-api": "^1.2.5",
     "history": "^1.11.1",
+    "mdi": "^1.2.65",
     "node-sass": "^3.2.0",
     "radiokit-api": "git+https://radiokitrepo:pamparam@bitbucket.org/radiokit/api-js.git",
     "react": "^0.13.3",
