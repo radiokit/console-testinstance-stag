@@ -2,7 +2,8 @@ export default {
   apps: {
     joint: {
       index: {
-        loading: "Fetching list of available channels"
+        loading: "Fetching list of available channels",
+        none: "You have no permissions to any channel"        
       },
 
       partials: {
