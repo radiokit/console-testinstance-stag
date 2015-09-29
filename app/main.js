@@ -2,27 +2,43 @@ import React from 'react';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 import { Router, Route, IndexRoute } from 'react-router';
 import Counterpart from 'counterpart';
+import RadioKit from 'radiokit-api';
 
-import Root from './root.jsx';
-import IndexApp from './apps/index/index_app.jsx';
-import JointApp from './apps/joint/joint_app.jsx';
-import JointBroadcastChannelApp from './apps/joint/joint_broadcast_channel_app.jsx';
-import JointBroadcastChannelsApp from './apps/joint/joint_broadcast_channels_app.jsx';
+import App from './app.jsx';
+import JointIndex from './apps/joint/index_view.jsx';
 
 
-Counterpart.registerTranslations("en", require('./locales/en/widgets.js'));
+Counterpart.registerTranslations("en", require('./locales/en/apps/joint.js'));
+Counterpart.registerTranslations("pl", require('./locales/pl/apps/joint.js'));
+
+
+function getEnv() {
+  if(typeof(ENV) === "object") {
+    return ENV;
+  
+  } else {
+    return { 
+      auth: { clientId: "123", baseUrl: "http://localhost:4000" }, 
+      apps: { 
+        "plumber" : { baseUrl: "https://radiokit-plumber-stag.herokuapp.com" },
+        "auth" : { baseUrl: "http://localhost:4000" } 
+      },
+      verbose: true
+    };
+  }
+}
+
+function requireAuth(nextState, replaceState) {
+  window.data.signIn("Editor");  
+}
+
+window.data = new RadioKit.Data.Interface(getEnv());
 
 
 React.render((
   <Router history={createBrowserHistory()}>
-    <Route path="/" component={Root}>
-      <IndexRoute component={IndexApp}/>
-
-      <Route path="joint" component={JointApp}>
-        <Route path="broadcast_channels" component={JointBroadcastChannelsApp}>
-          <Route path=":broadcast_channel_id" component={JointBroadcastChannelApp} />
-        </Route>
-      </Route>
+    <Route path="/" component={App} onEnter={requireAuth}>
+      <Route path="joint" component={JointIndex}/>
     </Route>
   </Router>
 ), document.getElementById('app'));

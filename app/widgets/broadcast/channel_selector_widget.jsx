@@ -12,7 +12,6 @@ export default React.createClass({
 
 
   propTypes: {
-    data: React.PropTypes.object.isRequired,
     nextRoute: React.PropTypes.string.isRequired
   },
 
@@ -25,7 +24,7 @@ export default React.createClass({
 
 
   componentDidMount: function() {
-    this.props.data
+    window.data
       .query("auth", "Broadcast.Channel")
       .select("id", "name")
       .order("name", "asc")
@@ -46,7 +45,7 @@ export default React.createClass({
     } else if(this.state.selectedBroadcastChannel == null) {
       return (<Card padding={false} header={true} headerTextKey="widgets.broadcast.channel_selector.header">
         <List>
-          {this.state.availableBroadcastChannels.map(x => <Tile onClick={this.transitionToNextRoute(x.get("id"))}>{x.get("name")}</Tile>)}
+          {this.state.availableBroadcastChannels.map(x => <Tile>{x.get("name")}</Tile>)}
         </List>
       </Card>);
     
