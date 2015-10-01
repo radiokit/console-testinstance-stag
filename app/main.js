@@ -32,6 +32,7 @@ function requireAuth(nextState, replaceState) {
   window.data.signIn("Editor");  
 }
 
+window.ENV = getEnv();
 window.data = new RadioKit.Data.Interface(getEnv());
 
 

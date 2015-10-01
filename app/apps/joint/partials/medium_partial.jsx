@@ -1,6 +1,8 @@
 import React from 'react';
 import Translate from 'react-translate-component';
 
+import { Socket } from '../../../../vendor/assets/javascripts/phoenixframework/socket.js';
+
 import '../../../assets/stylesheets/apps/joint/partials/medium.scss';
 
 
@@ -11,6 +13,17 @@ export default React.createClass({
     role: React.PropTypes.string.isRequired, 
     subrole: React.PropTypes.string.isRequired, 
     totalCount: React.PropTypes.number.isRequired, 
+  },
+
+
+  componentDidMount: function() {
+    // FIXME merge with official JS API
+    this.streamEndpoint = new Socket(ENV.apps.plumber.baseUrl.replace(/^http/, "ws") + "/api/stream/v1.0", {})
+    this.streamEndpoint.connect();
+
+    this.streamChannel = this.streamEndpoint.channel("media/input/stream/" + this.props.kind + "/" + this.props.input.get("id"));
+    this.streamChannel.on("new_msg", (msg) => console.log("Got message", msg) );
+    this.streamChannel.join();
   },
 
 

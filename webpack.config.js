@@ -12,8 +12,11 @@ var config = {
 
   module: {
     loaders: [{
-      test: /\.jsx?$/,
-      include: path.join(__dirname, 'app'),
+      test: /\.jsx$/,
+      exclude: [node_modules_dir],
+      loader: 'babel'
+    }, {
+      test: /\.js$/,
       exclude: [node_modules_dir],
       loader: 'babel'
     }, {
