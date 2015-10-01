@@ -12,7 +12,9 @@ export default React.createClass({
     rmsValues: React.PropTypes.array.isRequired,
     thresholdHigh: React.PropTypes.number,
     thresholdMedium: React.PropTypes.number,
-    thresholdLow: React.PropTypes.number
+    thresholdLow: React.PropTypes.number,
+    barWidth: React.PropTypes.number,
+    barMargin: React.PropTypes.number
   },
 
 
@@ -20,12 +22,14 @@ export default React.createClass({
     return { 
       thresholdHigh: -6,
       thresholdMedium: -20,
-      thresholdLow: -80
+      thresholdLow: -80,
+      barWidth: 16,
+      barMargin: 1
     };
   },
 
 
-  renderChannel: function(index, total, peak, rms) {
+  renderChannel: function(index, peak, rms) {
     if(peak <= this.props.thresholdLow) {
       var lowHeight = 0;
       var mediumHeight = 0;
@@ -49,7 +53,7 @@ export default React.createClass({
 
 
     return (
-      <div key={"peakmeter-bar-" + index} className="bar" style={{left: (100/total*index) + "%", width: (100/total) + "%"}}>
+      <div key={"peakmeter-bar-" + index} className="bar" style={{left: (((this.props.barWidth + this.props.barMargin) * index) - this.props.barMargin) + "px", width: this.props.barWidth + "px"}}>
         <div className="high" style={{height: highHeight + "%"}} />
         <div className="medium" style={{height: mediumHeight + "%"}} />
         <div className="low" style={{height: lowHeight + "%"}} />
@@ -65,8 +69,8 @@ export default React.createClass({
     
     return (
       <div className="widgets-general-peakmeter--container">
-        <div className="bars">
-          {this.props.peakValues.map((_, i) => { return this.renderChannel(i, this.props.peakValues.length, this.props.peakValues[i], this.props.rmsValues[i]); })}
+        <div className="bars" style={{marginLeft: ((this.props.barWidth + this.props.barMargin) * this.props.peakValues.length - this.props.barMargin) / -2 + "px"}}>
+          {this.props.peakValues.map((_, i) => { return this.renderChannel(i, this.props.peakValues[i], this.props.rmsValues[i]); })}
         </div>
       </div>
     );

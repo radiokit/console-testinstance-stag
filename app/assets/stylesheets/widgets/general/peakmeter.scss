@@ -1,10 +1,9 @@
 .widgets-general-peakmeter--container {
   .bars {
     position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
+    top: 1.5em;
+    bottom: 0.5em;
+    left: 50%;
 
     .bar {
       background: #2b323a;
