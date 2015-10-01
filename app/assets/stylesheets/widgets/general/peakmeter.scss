@@ -5,6 +5,21 @@
     bottom: 0.5em;
     left: 50%;
 
+    .label {
+      font-size: 6pt;
+      position: absolute;
+      margin-top: 1em;
+      color: #666;
+
+      div {
+        margin-bottom: -0.8em;
+      }
+
+      &.over div {
+        margin-left: 0.7ex;
+      }
+    }
+
     .bar {
       background: #2b323a;
       position: absolute;

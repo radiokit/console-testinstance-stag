@@ -71,6 +71,10 @@ export default React.createClass({
       <div className="widgets-general-peakmeter--container">
         <div className="bars" style={{marginLeft: ((this.props.barWidth + this.props.barMargin) * this.props.peakValues.length - this.props.barMargin) / -2 + "px"}}>
           {this.props.peakValues.map((_, i) => { return this.renderChannel(i, this.props.peakValues[i], this.props.rmsValues[i]); })}
+          <div className="label low" style={{bottom: 0, left: ((this.props.barWidth + this.props.barMargin) * this.props.peakValues.length - this.props.barMargin) + "px"}}><div>{this.props.thresholdLow}</div></div>
+          <div className="label medium" style={{bottom: 100 - (this.props.thresholdMedium / this.props.thresholdLow) * 100 + "%", left: ((this.props.barWidth + this.props.barMargin) * this.props.peakValues.length - this.props.barMargin) + "px"}}><div>{this.props.thresholdMedium}</div></div>
+          <div className="label high" style={{bottom: 100 - (this.props.thresholdHigh / this.props.thresholdLow) * 100 + "%", left: ((this.props.barWidth + this.props.barMargin) * this.props.peakValues.length - this.props.barMargin) + "px"}}><div>{this.props.thresholdHigh}</div></div>
+          <div className="label over" style={{bottom: "100%", left: ((this.props.barWidth + this.props.barMargin) * this.props.peakValues.length - this.props.barMargin) + "px"}}><div>0</div></div>
         </div>
       </div>
     );

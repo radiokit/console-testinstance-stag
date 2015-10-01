@@ -52,18 +52,10 @@ export default React.createClass({
   },
 
 
-  renderControls: function() {
-    return (<div className="controls">
-      <button>CONTROL</button>
-    </div>);
-  },
-
-
   render: function() {
     return <div className="apps-joint-partial-medium--container" style={{ width: (100 / this.props.totalCount) + "%" }}>
       {this.renderName()}
       {this.renderPeakmeter()}
-      {this.renderControls()}
     </div>;
   }
 });
