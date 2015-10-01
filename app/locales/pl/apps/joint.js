@@ -9,11 +9,17 @@ export default {
       partials: {
         channel: {
           return: {
-            header: "Zwrotna"
+            header: "Zwrotna",
+            radio: {
+              header: "Radio"
+            },
+            talkback: {
+              header: "Talkback"
+            }
           },
 
-          inputs: {
-            header: "Sygnały przychodzące"
+          transmissions: {
+            header: "Transmisje"
           }
         }
       }

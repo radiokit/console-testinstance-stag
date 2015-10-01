@@ -20,7 +20,7 @@ function getEnv() {
     return { 
       auth: { clientId: "123", baseUrl: "http://localhost:4000" }, 
       apps: { 
-        "plumber" : { baseUrl: "https://radiokit-plumber-stag.herokuapp.com" },
+        "plumber" : { baseUrl: "http://localhost:4010" },
         "auth" : { baseUrl: "http://localhost:4000" } 
       },
       verbose: true
