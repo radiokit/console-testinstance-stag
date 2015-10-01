@@ -7,19 +7,34 @@ export default {
       },
 
       partials: {
-        channel: {
-          return: {
+        mix: {
+          returns: {
             header: "Zwrotna",
-            radio: {
-              header: "Radio"
-            },
-            talkback: {
-              header: "Talkback"
-            }
+            none: "Brak źródeł dźwięku"
           },
 
           transmissions: {
-            header: "Transmisje"
+            header: "Transmisje",
+            none: "Brak źródeł dźwięku"
+          }
+        },
+
+        medium: {
+          return: {
+            radio: {
+              header: "Antena"
+            },
+            talkback: {
+              header: "Interkom"
+            }
+          },
+          transmission: {
+            studio: {
+              header: "Studio"
+            },
+            reporter: {
+              header: "Reporter"
+            }
           }
         }
       }

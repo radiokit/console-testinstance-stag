@@ -1,0 +1,30 @@
+.apps-joint-partial-medium--container {
+  display: inline-block;
+
+  .subrole {
+    height: 1.5em;
+    overflow-y: hidden;
+    text-align: center;
+    font-size: 7pt;
+    color: #666;
+    text-transform: uppercase;
+  }
+
+  .name {
+    height: 1.5em;
+    overflow-y: hidden;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+  }
+
+  .peakmeter {
+    height: 17em;
+    position: relative;
+  }
+
+  .controls {
+    height: 3em;
+    text-align: center;
+  }
+}

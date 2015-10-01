@@ -1,0 +1,15 @@
+.apps-joint-partial-mix--container {
+  height: 30em;
+  
+  .none {
+    text-align: center;
+  }
+
+  .apps-joint-partial-medium--container {
+    border-left: 1px solid #f0f0f0;
+
+    &:first-child {
+      border-left: none;
+    }
+  }
+}

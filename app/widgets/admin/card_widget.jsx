@@ -46,7 +46,7 @@ export default React.createClass({
 
   render: function() {
     return (
-      <div className="card card-underline">
+      <div className={"card card-underline " + this.props.className}>
         {this.renderHeader()}
         {this.renderBody()}
       </div>);

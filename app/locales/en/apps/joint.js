@@ -7,19 +7,34 @@ export default {
       },
 
       partials: {
-        channel: {
-          return: {
+        mix: {
+          returns: {
             header: "Return",
+            none: "No inputs available"
+          },
+
+          transmissions: {
+            header: "Transmissions",
+            none: "No inputs available"
+          }
+        },
+
+        medium: {
+          return: {
             radio: {
-              header: "Radio"
+              header: "Broadcast"
             },
             talkback: {
               header: "Talkback"
             }
           },
-
-          transmissions: {
-            header: "Transmissions"
+          transmission: {
+            studio: {
+              header: "Studio"
+            },
+            reporter: {
+              header: "Reporter"
+            }
           }
         }
       }
