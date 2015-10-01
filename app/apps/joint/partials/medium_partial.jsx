@@ -3,6 +3,8 @@ import Translate from 'react-translate-component';
 
 import { Socket } from '../../../../vendor/assets/javascripts/phoenixframework/socket.js';
 
+import Peakmeter from '../../../widgets/general/peakmeter_widget.jsx';
+
 import '../../../assets/stylesheets/apps/joint/partials/medium.scss';
 
 
@@ -11,26 +13,28 @@ export default React.createClass({
     input: React.PropTypes.object.isRequired, 
     kind: React.PropTypes.string.isRequired, 
     role: React.PropTypes.string.isRequired, 
-    subrole: React.PropTypes.string.isRequired, 
     totalCount: React.PropTypes.number.isRequired, 
+  },
+
+
+  getInitialState: function() {
+    return { peakValues: [], rmsValues: [] };
   },
 
 
   componentDidMount: function() {
     // FIXME merge with official JS API
-    this.streamEndpoint = new Socket(ENV.apps.plumber.baseUrl.replace(/^http/, "ws") + "/api/stream/v1.0", {})
+    this.streamEndpoint = new Socket(ENV.apps.plumber.baseUrl.replace(/^http/, "ws") + "/api/stream/v1.0", { heartbeatIntervalMs: 1000 });
     this.streamEndpoint.connect();
 
     this.streamChannel = this.streamEndpoint.channel("media/input/stream/" + this.props.kind + "/" + this.props.input.get("id"));
-    this.streamChannel.on("new_msg", (msg) => console.log("Got message", msg) );
+    this.streamChannel.on("level", this.onLevel);
     this.streamChannel.join();
   },
 
 
-  renderSubRole: function() {
-    return (<div className="subrole">
-      <Translate content={"apps.joint.partials.medium." + this.props.role + "." + this.props.subrole + ".header"}/>
-    </div>);
+  onLevel: function(payload) {
+    this.setState({ peakValues: payload.params.decay, rmsValues: payload.params.rms });
   },
 
 
@@ -43,7 +47,7 @@ export default React.createClass({
 
   renderPeakmeter: function() {
     return (<div className="peakmeter">
-      PIKMETER
+      <Peakmeter peakValues={this.state.peakValues} rmsValues={this.state.rmsValues} />
     </div>);
   },
 
@@ -57,7 +61,6 @@ export default React.createClass({
 
   render: function() {
     return <div className="apps-joint-partial-medium--container" style={{ width: (100 / this.props.totalCount) + "%" }}>
-      {this.renderSubRole()}
       {this.renderName()}
       {this.renderPeakmeter()}
       {this.renderControls()}

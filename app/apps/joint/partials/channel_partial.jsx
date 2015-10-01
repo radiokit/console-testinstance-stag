@@ -46,24 +46,20 @@ export default React.createClass({
   },
 
 
-  filterInputs: function(collection, kind, role, subrole) {
+  filterInputs: function(collection, kind, role) {
     return collection
-      .filter((x) => { try { return x.get("extra").get("joint.role") === role && x.get("extra").get("joint.subrole") === subrole } catch(e) { /* There are missing keys */ } })
-      .map((x) => { return Immutable.Map({ kind: kind, role: role, subrole: subrole, input: x })});
+      .filter((x) => { return x.get("extra", {}).get("joint.role") === role })
+      .map((x) => { return Immutable.Map({ kind: kind, role: role, input: x })});
   },
 
 
 
   render: function() {
-    let returns = this.filterInputs(this.state.inputsRtp, "rtp", "return", "radio")
-      .concat(this.filterInputs(this.state.inputsHttp, "http", "return", "radio"))
-      .concat(this.filterInputs(this.state.inputsRtp, "rtp", "return", "talkback"))
-      .concat(this.filterInputs(this.state.inputsHttp, "http", "return", "talkback"));
+    let returns = this.filterInputs(this.state.inputsRtp, "rtp", "return")
+      .concat(this.filterInputs(this.state.inputsHttp, "http", "return"));
 
-    let transmissions = this.filterInputs(this.state.inputsRtp, "rtp", "transmission", "studio")
-      .concat(this.filterInputs(this.state.inputsHttp, "http", "transmission", "studio"))
-      .concat(this.filterInputs(this.state.inputsRtp, "rtp", "transmission", "reporter"))
-      .concat(this.filterInputs(this.state.inputsHttp, "http", "transmission", "reporter"));
+    let transmissions = this.filterInputs(this.state.inputsRtp, "rtp", "transmission")
+      .concat(this.filterInputs(this.state.inputsHttp, "http", "transmission"));
 
 
     return <Section header={true} headerText={this.props.broadcastChannel.get("name")}>

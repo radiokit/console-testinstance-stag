@@ -17,25 +17,6 @@ export default {
             header: "Transmisje",
             none: "Brak źródeł dźwięku"
           }
-        },
-
-        medium: {
-          return: {
-            radio: {
-              header: "Antena"
-            },
-            talkback: {
-              header: "Interkom"
-            }
-          },
-          transmission: {
-            studio: {
-              header: "Studio"
-            },
-            reporter: {
-              header: "Reporter"
-            }
-          }
         }
       }
     }

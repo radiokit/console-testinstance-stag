@@ -20,7 +20,7 @@ export default React.createClass({
       return <Translate content={"apps.joint.partials.mix." + this.props.role + ".none"} className="none" component="div"/>;
 
     } else {
-      return this.props.inputs.map((x) => { return <Medium key={"joint-mix-" + x.get("kind") + "-" + x.get("input").get("id")} kind={x.get("kind")} role={x.get("role")} subrole={x.get("subrole")} input={x.get("input")} totalCount={this.props.inputs.count()} />; })
+      return this.props.inputs.map((x) => { return <Medium key={"joint-mix-" + x.get("kind") + "-" + x.get("input").get("id")} kind={x.get("kind")} role={x.get("role")} input={x.get("input")} totalCount={this.props.inputs.count()} />; })
     }
   },
 

@@ -1,0 +1,40 @@
+.widgets-general-peakmeter--container {
+  .bars {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+
+    .bar {
+      background: #2b323a;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+
+      .low {
+        background: #4caf50;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+
+      .medium {
+        background: #ff9800;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+
+      .high {
+        background: #f44336;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+    }
+  }
+}

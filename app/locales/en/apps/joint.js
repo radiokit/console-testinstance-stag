@@ -17,26 +17,8 @@ export default {
             header: "Transmissions",
             none: "No inputs available"
           }
-        },
-
-        medium: {
-          return: {
-            radio: {
-              header: "Broadcast"
-            },
-            talkback: {
-              header: "Talkback"
-            }
-          },
-          transmission: {
-            studio: {
-              header: "Studio"
-            },
-            reporter: {
-              header: "Reporter"
-            }
-          }
         }
+
       }
     }
   }
