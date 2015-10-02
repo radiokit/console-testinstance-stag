@@ -5,8 +5,8 @@
   "scripts": {
     "build": "webpack",
     "dev": "webpack-dev-server --devtool eval --progress --colors --hot --content-base build",
-    "stag": "NODE_ENV=staging webpack -p --optimize-minimize --config webpack.stag.config.js",
-    "prod": "NODE_ENV=production webpack -p --optimize-minimize --config webpack.prod.config.js"
+    "stag": "NODE_ENV=stag webpack -p --optimize-minimize --progress --config webpack.stag.config.js",
+    "prod": "NODE_ENV=prod webpack -p --optimize-minimize --progress --config webpack.prod.config.js"
   },
   "repository": {
     "type": "git",
