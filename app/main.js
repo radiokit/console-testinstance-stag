@@ -28,9 +28,19 @@ function getEnv() {
   }
 }
 
-function requireAuth(nextState, replaceState) {
+
+function requireAuth() {
   window.data.signIn("Editor");  
+  pingGoogleAnalytics();
 }
+
+
+function pingGoogleAnalytics() {
+  if(typeof(ga) !== "undefined") {
+    ga('send', 'pageview');
+  }
+}
+
 
 window.ENV = getEnv();
 window.data = new RadioKit.Data.Interface(getEnv());
@@ -39,7 +49,7 @@ window.data = new RadioKit.Data.Interface(getEnv());
 React.render((
   <Router history={createBrowserHistory()}>
     <Route path="/" component={App} onEnter={requireAuth}>
-      <Route path="joint" component={JointIndex}/>
+      <Route path="joint" component={JointIndex} onEnter={pingGoogleAnalytics}/>
     </Route>
   </Router>
 ), document.getElementById('app'));
