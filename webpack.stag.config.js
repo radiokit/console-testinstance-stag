@@ -7,7 +7,7 @@ var config = {
   entry: path.resolve(__dirname, 'app/main.js'),
 
   output: {
-    path: '/tmp/site-console-stag'),
+    path: '/tmp/site-console-stag', // That is expected in ./release.sh
     filename: 'bundle.js'
   },
 
