@@ -14,11 +14,23 @@ export default React.createClass({
   },
 
 
+  initializeGoogleAnalytics: function(currentEditor) {
+    if(typeof(ga) !== "undefined") {
+      ga('create', ENV.external.googleAnalyticsID, { 'userId' : "Editor#" + currentEditor.get("id") });
+    }
+  },
+
+
   componentDidMount: function() {
     window.data
       .query("auth", "Editor")
       .method("me") // FIXME methods should be deprecated in favour of tokens
-      .on("update", (_, query) => {if(this.isMounted()) { this.setState({ currentEditor: query.getData().first() }) }})
+      .on("update", (_, query) => {
+        if(this.isMounted()) { 
+          this.initializeGoogleAnalytics(query.getData().first());
+          this.setState({ currentEditor: query.getData().first() });
+        }
+      })
       .fetch();
   },
 
