@@ -7,7 +7,7 @@ var config = {
   entry: path.resolve(__dirname, 'app/main.js'),
 
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'dist/stag'),
     filename: 'bundle.js'
   },
 
