@@ -19,6 +19,34 @@ The app assumes that you have an instance of radiokit-auth running, refer to its
 * Enjoy
 
 
+## Staging
+
+You must have an access to appropriate repository on github.
+
+### Auth
+
+The app assumes that you have an instance of radiokit-auth running under URL specified in `dist/stag/env.js`, refer to its docs to see how to launch it.
+
+### Console
+
+* Clone repo
+* Type `npm install`
+* Type `./release.sh stag`
+
+## Production
+
+You must have an access to appropriate repository on github.
+
+### Auth
+
+The app assumes that you have an instance of radiokit-auth running under URL specified in `dist/prod/env.js`, refer to its docs to see how to launch it.
+
+### Console
+
+* Clone repo
+* Type `npm install`
+* Type `./release.sh prod`
+
 # Authors
 
 Marcin Lewandowski, Łukasz Odziewa

@@ -11,20 +11,10 @@
   <body class="header-fixed"> <!-- FIXME move to React -->
     <div id="app"></div>
 
-
-    <script>
-    window.ENV = { 
-      auth: { clientId: "123", baseUrl: "http://stag.console.radiokitapp.org" }, 
-      apps: { 
-        "plumber" : { baseUrl: "https://radiokit-plumber-stag.herokuapp.com" },
-        "auth" : { baseUrl: "https://radiokit-auth-stag.herokuapp.com" } 
-      },
-      verbose: false
-    };
-    </script>
     <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="env.js"></script>
     <script src="bundle.js"></script>
   </body>
 </html>
