@@ -49,7 +49,7 @@ window.data = new RadioKit.Data.Interface(getEnv());
 React.render((
   <Router history={createBrowserHistory()}>
     <Route path="/" component={App} onEnter={requireAuth}>
-      <Route path="joint" component={JointIndex} onEnter={pingGoogleAnalytics}/>
+      <Route path="app/joint" component={JointIndex} onEnter={pingGoogleAnalytics}/>
     </Route>
   </Router>
 ), document.getElementById('app'));

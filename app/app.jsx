@@ -83,7 +83,7 @@ export default React.createClass({
           </li>
 
           <li>
-            <Link to="/joint">
+            <Link to="/app/joint">
               <div className="gui-icon"><i className="mdi mdi-remote" /></div>
               <span className="title">Joint</span>
             </Link>
