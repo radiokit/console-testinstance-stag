@@ -4,6 +4,8 @@ import { Router, Route, IndexRoute } from 'react-router';
 import Counterpart from 'counterpart';
 import RadioKit from 'radiokit-api';
 
+import { Socket } from '../vendor/assets/javascripts/phoenixframework/socket.js';
+
 import App from './app.jsx';
 import JointIndex from './apps/joint/index_view.jsx';
 
@@ -44,6 +46,9 @@ function pingGoogleAnalytics() {
 
 window.ENV = getEnv();
 window.data = new RadioKit.Data.Interface(getEnv());
+// FIXME merge with official JS API
+window.plumberStream = new Socket(getEnv().apps.plumber.baseUrl.replace(/^http/, "ws") + "/api/stream/v1.0", { heartbeatIntervalMs: 1000 });
+window.plumberStream.connect();
 
 
 React.render((
