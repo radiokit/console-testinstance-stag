@@ -12,7 +12,7 @@ export default {
           form: {
             name: {
               label: "Name of the device",
-              hint: "Optionally, choose any name that will help you to later distinguish this device from others"
+              hint: "Optionally, choose any name that will help you to later distinguish this device from others, e.g. \"Adam's laptop\""
             },
             submit: "Add"
           }
