@@ -6,6 +6,23 @@ export default {
         none: "Nie masz uprawnień do ani jednego kanału"
       },
 
+      client_nodes: {
+        create: {
+          header: "Dodawanie urządzenia",
+          form: {
+            name: {
+              label: "Nazwa urządzenia",
+              hint: "Jeśli chcesz, wybierz jakąś nazwę urządzenia, która pozwoli Ci odróżnić je później od innych"
+            },
+            submit: "Dodaj"
+          }
+        },
+        index: {
+          loading: "Pobieranie listy urządzeń",
+          none: "Nie zarejestrowano dotychczas żadnych urządzeń"
+        }
+      },
+
       partials: {
         mix: {
           returns: {
