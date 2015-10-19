@@ -9,13 +9,17 @@ import SubmitButton from '../../widgets/admin/submit_button_widget.jsx';
 import Section from '../../widgets/admin/section_widget.jsx';
 
 export default React.createClass({
+  onSubmit: function() {
+    console.log(":)");
+  },
+
 
   render: function() {
     return (
       <Section>
         <Grid size="medium">
           <Card header={true} headerTextKey="apps.joint.client_nodes.create.header">
-            <Form>
+            <Form onSubmit={this.onSubmit}>
               <CardBody>
                 <TextInput size="large" autofocus={true} label={true} labelTextKey="apps.joint.client_nodes.create.form.name.label" hint={true} hintTextKey="apps.joint.client_nodes.create.form.name.hint" />
               </CardBody>
