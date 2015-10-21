@@ -13,7 +13,9 @@ import JointClientNodesIndex from './apps/joint/client_nodes_index_view.jsx';
 import JointClientNodesCreate from './apps/joint/client_nodes_create_view.jsx';
 
 
+Counterpart.registerTranslations("en", require('./locales/en/general.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/joint.js'));
+Counterpart.registerTranslations("pl", require('./locales/pl/general.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/joint.js'));
 
 

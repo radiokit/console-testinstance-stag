@@ -3,14 +3,22 @@ import { Router, Link } from 'react-router';
 import Gravatar from 'gravatar-api';
 
 import LoadingLayout from './layouts/loading_layout.jsx';
+import Alert from './widgets/admin/alert_widget.jsx';
 
+import './assets/stylesheets/general.scss';
 import '../vendor/assets/stylesheets/materialadmin/materialadmin.css';
 import '../vendor/assets/stylesheets/materialadmin/material-design-iconic-font.css';
 
 
 export default React.createClass({
   getInitialState: function() {
-    return { currentEditor: null };
+    return { 
+      currentEditor:     null,
+      availableAccounts: null,
+      currentAccount:    null,
+      availableChannels: null,
+      currentChannel:    null,
+    };
   },
 
 
@@ -22,6 +30,35 @@ export default React.createClass({
 
 
   componentDidMount: function() {
+    window.data
+      .query("auth", "User.Account")
+      .select("name_custom")
+      .on("update", (_, query) => {
+        if(this.isMounted()) { 
+          this.setState({ 
+            availableAccounts: query.getData(),
+            currentAccount: query.getData().first()
+          });
+
+          if(query.getData().size != 0) {
+            window.data
+              .query("auth", "Broadcast.Channel")
+              .select("name")
+              .where("user_account_id", "eq", query.getData().first().get("id"))
+              .on("update", (_, query) => {
+                if(this.isMounted()) { 
+                  this.setState({ 
+                    availableChannels: query.getData(),
+                    currentChannel: query.getData().first()
+                  });
+                }
+              })
+              .fetch();
+          }
+        }
+      })
+      .fetch();
+
     window.data
       .query("auth", "Editor")
       .method("me") // FIXME methods should be deprecated in favour of tokens
@@ -35,36 +72,72 @@ export default React.createClass({
   },
 
 
+  renderLogo: function() {
+    return (
+      <li className="header-nav-brand">
+        <div className="brand-holder">
+          <Link to="/">
+            <img src={require('./assets/images/logo-horizontal.svg')} />
+          </Link>
+        </div>
+      </li>
+    );
+  },
+
+
+  renderAccountDropdown: function() {
+    if(this.state.availableAccounts.size > 1) {
+      return (
+        <li className="header-nav-brand">
+          <div className="brand-holder">
+            <span className="header-nav-breadcrumb-separator mdi mdi-chevron-right"/>
+            <span className="header-nav-breadcrumb-label">{this.state.currentAccount.get("name_custom")}</span>
+          </div>
+        </li>);
+    }
+  },
+
+
+  renderChannelDropdown: function() {
+    return (
+      <li className="header-nav-brand">
+        <div className="brand-holder">
+          <span className="header-nav-breadcrumb-separator mdi mdi-chevron-right"/>
+          <span className="header-nav-breadcrumb-label">{this.state.currentChannel.get("name")}</span>
+        </div>
+      </li>);
+  },
+
+
+  renderEditorDropdown: function() {
+    return (
+      <ul className="header-nav header-nav-profile">
+        <li className="dropdown">
+          <a aria-expanded="false" className="dropdown-toggle ink-reaction" data-toggle="dropdown">
+            <img src={Gravatar.imageUrl({ email: this.state.currentEditor.get("email"), parameters: { s: "40", d: "mm" }, secure: true })} alt="" />
+            <span className="profile-info">
+              {this.state.currentEditor.get("email")}
+            </span>
+          </a>
+        </li>
+      </ul>);
+  },
+
+
   renderHeader: function() {
     return (<header id="header">
       <div className="headerbar">
         <div className="headerbar-left">
           <ul className="header-nav header-nav-options">
-            <li className="header-nav-brand">
-              <div className="brand-holder">
-                <Link to="/">
-                  <img src={require('./assets/images/logo-horizontal.svg')} />
-                </Link>
-              </div>
-            </li>
+            {this.renderLogo()}
+            {this.renderAccountDropdown()}
+            {this.renderChannelDropdown()}
           </ul>
         </div>
 
 
         <div className="headerbar-right">
-          <ul className="header-nav header-nav-options">
-          </ul>
-
-          <ul className="header-nav header-nav-profile">
-            <li className="dropdown">
-              <a aria-expanded="false" className="dropdown-toggle ink-reaction" data-toggle="dropdown">
-                <img src={Gravatar.imageUrl({ email: this.state.currentEditor.get("email"), parameters: { s: "40", d: "mm" }, secure: true })} alt="" />
-                <span className="profile-info">
-                  {this.state.currentEditor.get("email")}
-                </span>
-              </a>
-            </li>
-          </ul>
+          {this.renderEditorDropdown()}
         </div>
       </div>
     </header>);
@@ -108,6 +181,13 @@ export default React.createClass({
   },
 
 
+  renderContent: function() {
+    <div id="content">
+      {this.props.children && React.cloneElement(this.props.children, {currentAccount: this.state.currentAccount, currentEditor: this.state.currentEditor})}
+    </div>
+  },
+
+
   renderAdmin: function() {
     return (
       <div>
@@ -116,15 +196,8 @@ export default React.createClass({
         {this.renderHeader()}
 
         <div id="base">
-          <div className="offcanvas"/>
-
-          <div id="content">
-            {this.props.children && React.cloneElement(this.props.children, {data: window.data})}
-          </div>
-
+          {this.renderContent()}
           {this.renderMenuBar()}
-
-          <div className="offcanvas"/>
         </div>
       </div>
     );
@@ -132,11 +205,19 @@ export default React.createClass({
 
 
   render: function() {
-   if(this.state.currentEditor == null) {
+   if(this.state.currentEditor == null || this.state.availableAccounts == null || this.state.availableChannels == null) {
      return (<LoadingLayout />);
   
     } else {
-      return this.renderAdmin();
+      if(this.state.currentAccount == null) {
+        return (<Alert type="error" fullscreen={true} infoTextKey="general.no_accounts"/>);
+
+      } else if(this.state.currentChannel == null) {
+        return (<Alert type="error" fullscreen={true} infoTextKey="general.no_channels"/>);
+
+      } else {
+        return this.renderAdmin();
+      }
     }
   }
 });

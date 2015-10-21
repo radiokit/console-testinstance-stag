@@ -9,6 +9,11 @@ import SubmitButton from '../../widgets/admin/submit_button_widget.jsx';
 import Section from '../../widgets/admin/section_widget.jsx';
 
 export default React.createClass({
+  propTypes: {
+    currentAccount: React.PropTypes.object.isRequired
+  },
+
+
   onSubmit: function() {
     console.log(":)");
   },
