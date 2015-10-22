@@ -1,7 +1,8 @@
 import React from 'react';
 
-export default React.createClass({
+import AdminLayout from '../layouts/admin_layout.jsx';
 
+export default React.createClass({
   render: function() {
     return (<div>{this.props.children}</div>);    
   }  

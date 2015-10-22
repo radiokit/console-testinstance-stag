@@ -10,12 +10,12 @@ import Section from '../../widgets/admin/section_widget.jsx';
 
 export default React.createClass({
   propTypes: {
-    currentAccount: React.PropTypes.object.isRequired
+    params: React.PropTypes.object.isRequired
   },
 
 
   onSubmit: function() {
-    console.log(":)");
+    console.log(":) " + this.props.params.userAccountId);    
   },
 
 

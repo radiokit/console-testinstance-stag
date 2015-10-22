@@ -6,7 +6,8 @@ import RadioKit from 'radiokit-api';
 
 import { Socket } from '../vendor/assets/javascripts/phoenixframework/socket.js';
 
-import App from './app.jsx';
+import Root from './root.jsx';
+import AppsIndex from './apps/apps_index.jsx';
 import JointApp from './apps/joint/app.jsx';
 import JointControlRoom from './apps/joint/control_room_view.jsx';
 import JointClientNodesIndex from './apps/joint/client_nodes_index_view.jsx';
@@ -58,11 +59,13 @@ window.plumberStream.connect();
 
 React.render((
   <Router history={createBrowserHistory()}>
-    <Route path="/" component={App} onEnter={requireAuth}>
-      <Route path="app/joint" component={JointApp}>
-        <Route path="control_room" component={JointControlRoom} onEnter={pingGoogleAnalytics}/>
-        <Route path="client_nodes/create" component={JointClientNodesCreate} onEnter={pingGoogleAnalytics}/>
-        <Route path="client_nodes/index" component={JointClientNodesIndex} onEnter={pingGoogleAnalytics}/>
+    <Route path="/" component={Root} onEnter={requireAuth}>
+      <Route path="apps" component={AppsIndex} onEnter={pingGoogleAnalytics}>
+        <Route path="joint/:userAccountId" component={JointApp}>
+          <Route path="control_room" component={JointControlRoom} onEnter={pingGoogleAnalytics}/>
+          <Route path="client_nodes/create" component={JointClientNodesCreate} onEnter={pingGoogleAnalytics}/>
+          <Route path="client_nodes/index" component={JointClientNodesIndex} onEnter={pingGoogleAnalytics}/>
+        </Route>
       </Route>
     </Route>
   </Router>
