@@ -71,10 +71,10 @@ export default React.createClass({
      return (<LoadingLayout />);
   
     } else {
-      if(this.state.currentAccount == null) {
+      if(this.state.currentAccount === undefined) {
         return (<Alert type="error" fullscreen={true} infoTextKey="general.no_accounts"/>);
 
-      } else if(this.state.currentChannel == null) {
+      } else if(this.state.currentChannel === undefined) {
         return (<Alert type="error" fullscreen={true} infoTextKey="general.no_channels"/>);
 
       } else {

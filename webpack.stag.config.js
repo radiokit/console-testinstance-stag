@@ -8,7 +8,9 @@ var config = {
 
   output: {
     path: '/tmp/site-console-stag', // That is expected in ./release.sh
-    filename: 'bundle.js'
+    publicPath: "assets/[hash]/",
+    filename: "output.[hash].bundle.js",
+    chunkFilename: "[id].[hash].bundle.js"
   },
 
   module: {
