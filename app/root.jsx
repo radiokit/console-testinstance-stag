@@ -67,7 +67,7 @@ export default React.createClass({
 
 
   render: function() {
-   if(this.state.currentEditor == null || this.state.availableAccounts == null || this.state.availableChannels == null) {
+   if(this.state.currentEditor === undefined || this.state.availableAccounts === undefined || this.state.availableChannels === undefined) {
      return (<LoadingLayout />);
   
     } else {
