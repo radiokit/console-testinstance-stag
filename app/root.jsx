@@ -7,11 +7,11 @@ import Alert from './widgets/admin/alert_widget.jsx';
 export default React.createClass({
   getInitialState: function() {
     return { 
-      currentEditor:     null,
-      availableAccounts: null,
-      currentAccount:    null,
-      availableChannels: null,
-      currentChannel:    null,
+      currentEditor:     undefined,
+      availableAccounts: undefined,
+      currentAccount:    undefined,
+      availableChannels: undefined,
+      currentChannel:    undefined,
     };
   },
 
