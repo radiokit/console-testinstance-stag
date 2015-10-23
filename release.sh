@@ -23,7 +23,7 @@ cp -rv dist/$1/* $TMP_DIR/ || (echo "Error"; exit 2)
 npm run $1 || (echo "Error"; exit 2)
 
 BUNDLE_FILENAME=$(basename `find $TMP_DIR/*.bundle.js`) || (echo "Error"; exit 2)
-cat dist/shared/templates/index.html | sed 's/BUNDLE_FILENAME/$BUNDLE_FILENAME/' > $TMP_DIR/index.html || (echo "Error"; exit 2)
+cat dist/shared/templates/index.html | sed s/BUNDLE_FILENAME/$BUNDLE_FILENAME/ > $TMP_DIR/index.html || (echo "Error"; exit 2)
 cp -v $TMP_DIR/index.html $TMP_DIR/404.html || (echo "Error"; exit 2)
 
 cd $TMP_DIR || (echo "Error"; exit 2) 
