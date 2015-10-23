@@ -17,7 +17,7 @@ echo "Releasing $CURRENT_REVISION to '$1' environment..."
 git clone --depth=1 $REPO_URL $TMP_DIR -b $BRANCH || (echo "Error"; exit 2)
 rm -rvf $TMP_DIR/* || (echo "Error"; exit 2)
 
-cp -rv dist/shared/* $TMP_DIR/ || (echo "Error"; exit 2)
+cp -rv dist/shared/files/* $TMP_DIR/ || (echo "Error"; exit 2)
 cp -rv dist/$1/* $TMP_DIR/ || (echo "Error"; exit 2)
 
 npm run $1 || (echo "Error"; exit 2)
