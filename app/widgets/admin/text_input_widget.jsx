@@ -25,6 +25,12 @@ export default React.createClass({
   },
 
 
+  // public
+  getValue: function() {
+    return this.refs.input.getDOMNode().value;
+  },
+
+
   renderInput: function() {
     switch(this.props.size) {
       case "large": var klass = "form-control input-lg"; break;
@@ -32,7 +38,7 @@ export default React.createClass({
       default:      var klass = "form-control"; break;
     }
 
-    return (<input type="text" className={klass} autoFocus={this.props.autofocus} />);
+    return (<input ref="input" type="text" className={klass} autoFocus={this.props.autofocus} />);
   },
 
 

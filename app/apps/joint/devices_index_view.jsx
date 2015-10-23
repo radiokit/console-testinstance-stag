@@ -3,10 +3,14 @@ import React from 'react';
 import Grid from '../../widgets/admin/grid_widget.jsx';
 import Card from '../../widgets/admin/card_widget.jsx';
 import CardBody from '../../widgets/admin/card_body_widget.jsx';
+import CardHeader from '../../widgets/admin/card_header_widget.jsx';
+import CardToolBar from '../../widgets/admin/card_tool_bar_widget.jsx';
+import CardToolBarCreate from '../../widgets/admin/card_tool_bar_create_widget.jsx';
 import Table from '../../widgets/admin/table_widget.jsx';
 import Alert from '../../widgets/admin/alert_widget.jsx';
 import Section from '../../widgets/admin/section_widget.jsx';
 import Loading from '../../widgets/general/loading_widget.jsx';
+import RoutingHelper from '../../helpers/routing_helper.js';
 
 export default React.createClass({
   getInitialState: function() {
@@ -57,7 +61,12 @@ export default React.createClass({
         return (
           <Section>
             <Grid size="medium">
-              <Card header={true} headerTextKey="apps.joint.devices.index.header">
+              <Card>
+                <CardHeader headerTextKey="apps.joint.devices.index.header">
+                  <CardToolBar>
+                    <CardToolBarCreate path={RoutingHelper.apps.joint.devices.create({ userAccountId: "FIXME" })} hintTooltipKey="apps.joint.devices.create.form.header" />
+                  </CardToolBar>
+                </CardHeader>
                 <CardBody>
                   <Table attributes={["name", "os_type"]} contentPrefix="apps.joint.devices.index.table" records={this.state.availableDevices} />
                 </CardBody>
@@ -65,7 +74,6 @@ export default React.createClass({
             </Grid>
           </Section>
         );
-        // return (<div>{this.state.availableDevices.map(x => <Channel key={`joint.channel.${x.get("id")}`} broadcastChannel={x}/>)}</div>);
       }
     } 
   }

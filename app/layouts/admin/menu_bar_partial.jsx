@@ -35,13 +35,6 @@ export default React.createClass({
               <span className="title">Joint</span>
             </Link>
           </li>
-
-          <li>
-            <Link to={RoutingHelper.apps.joint.devices.create({ userAccountId: this.props.currentAccount.get("id") })}>
-              <div className="gui-icon"><i className="mdi mdi-remote" /></div>
-              <span className="title">Joint</span>
-            </Link>
-          </li>
         </ul>
       </div>
     </div>);

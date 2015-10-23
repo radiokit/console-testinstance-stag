@@ -5325,6 +5325,43 @@ section.style-gray-dark .btn-flat:hover,
   border-color: #313534;
   color: #ffffff;
 }
+
+section .style-gray-dark2,
+.offcanvas-pane .style-gray-dark2,
+.card .style-gray-dark2,
+section.style-gray-dark2,
+.offcanvas-pane.style-gray-dark2,
+.card.style-gray-dark2 {
+  background-color: #2b323a;
+  border-color: #2b323a;
+  color: #ffffff;
+}
+section .style-gray-dark2 .btn-icon-toggle:hover,
+.offcanvas-pane .style-gray-dark2 .btn-icon-toggle:hover,
+.card .style-gray-dark2 .btn-icon-toggle:hover,
+section.style-gray-dark2 .btn-icon-toggle:hover,
+.offcanvas-pane.style-gray-dark2 .btn-icon-toggle:hover,
+.card.style-gray-dark2 .btn-icon-toggle:hover,
+section .style-gray-dark2 .btn-flat:hover,
+.offcanvas-pane .style-gray-dark2 .btn-flat:hover,
+.card .style-gray-dark2 .btn-flat:hover,
+section.style-gray-dark2 .btn-flat:hover,
+.offcanvas-pane.style-gray-dark2 .btn-flat:hover,
+.card.style-gray-dark2 .btn-flat:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+.card-body-darken .style-gray-dark2,
+.card-body-darken.style-gray-dark2 {
+  background-color: #2d2f2f;
+  border-color: #2d2f2f;
+  color: #ffffff;
+}
+.badge.style-gray-dark2 {
+  background-color: #2b323a;
+  border-color: #2b323a;
+  color: #ffffff;
+}
+
 section .style-gray,
 .offcanvas-pane .style-gray,
 .card .style-gray,

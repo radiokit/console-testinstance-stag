@@ -4,6 +4,7 @@ import Translate from 'react-translate-component';
 import Grid from '../../widgets/admin/grid_widget.jsx';
 import Card from '../../widgets/admin/card_widget.jsx';
 import Alert from '../../widgets/admin/alert_widget.jsx';
+import CardHeader from '../../widgets/admin/card_header_widget.jsx';
 import CardBody from '../../widgets/admin/card_body_widget.jsx';
 import CardActionBar from '../../widgets/admin/card_actionbar_widget.jsx';
 import Form from '../../widgets/admin/form_widget.jsx';
@@ -49,6 +50,7 @@ export default React.createClass({
         "references" : {
           "joint.user_account" : "auth:User.Account#" + this.props.params.userAccountId
         },
+        "name" : this.refs.inputName.getValue(),
         "destroy_in" : 900000 // 15 minutes
       })
   },
@@ -69,11 +71,12 @@ export default React.createClass({
         return (
           <Section>
             <Grid size="medium">
-              <Card header={true} headerTextKey="apps.joint.devices.create.form.header">
+              <Card>
+                <CardHeader headerTextKey="apps.joint.devices.create.form.header"/>
                 <Form onSubmit={this.onSubmit}>
                   <CardBody>
                     {this.renderError()}
-                    <TextInput size="large" autofocus={true} label={true} labelTextKey="apps.joint.devices.create.form.name.label" hint={true} hintTextKey="apps.joint.devices.create.form.name.hint" />
+                    <TextInput ref="inputName" size="large" autofocus={true} label={true} labelTextKey="apps.joint.devices.create.form.name.label" hint={true} hintTextKey="apps.joint.devices.create.form.name.hint" />
                   </CardBody>
 
                   <CardActionBar>
@@ -90,7 +93,8 @@ export default React.createClass({
         return (
           <Section>
             <Grid size="medium">
-              <Card header={true} headerTextKey="apps.joint.devices.create.pending.header">
+              <Card>
+                <CardHeader headerTextKey="apps.joint.devices.create.pending.header"/>
                 <CardBody>
                   <Loading />
                 </CardBody>
@@ -104,7 +108,8 @@ export default React.createClass({
         return (
           <Section>
             <Grid size="medium">
-              <Card header={true} headerTextKey="apps.joint.devices.create.created.header">
+              <Card>
+                <CardHeader headerTextKey="apps.joint.devices.create.created.header"/>
                 <CardBody>
                   <Translate component="p" className="lead text-center" content="apps.joint.devices.create.created.instructions.header" />
                 </CardBody>
