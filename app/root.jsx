@@ -6,12 +6,16 @@ import Alert from './widgets/admin/alert_widget.jsx';
 
 export default React.createClass({
   getInitialState: function() {
-    return { 
-      currentEditor:     undefined,
-      availableAccounts: undefined,
-      currentAccount:    undefined,
-      availableChannels: undefined,
-      currentChannel:    undefined,
+    return {
+      loadedEditor:      false,
+      currentEditor:     null,
+      loadedAccounts:    false,
+      availableAccounts: null,
+      currentAccount:    null,
+      loadedChannels:    false,
+      availableChannels: null,
+      currentChannel:    null,
+      loadingError:      false
     };
   },
 
@@ -23,66 +27,119 @@ export default React.createClass({
   },
 
 
-  componentDidMount: function() {
+  loadAccounts: function() {
     window.data
       .query("auth", "User.Account")
       .select("name_custom")
+      .on("error", () => {
+        if(this.isMounted()) { 
+          this.setState({ 
+            loadingError: true
+          });
+        }
+      })
       .on("update", (_, query) => {
         if(this.isMounted()) { 
           this.setState({ 
+            loadedAccounts: true,
             availableAccounts: query.getData(),
             currentAccount: query.getData().first()
           });
 
-          if(query.getData().size != 0) {
-            window.data
-              .query("auth", "Broadcast.Channel")
-              .select("name")
-              .where("user_account_id", "eq", query.getData().first().get("id"))
-              .on("update", (_, query) => {
-                if(this.isMounted()) { 
-                  this.setState({ 
-                    availableChannels: query.getData(),
-                    currentChannel: query.getData().first()
-                  });
-                }
-              })
-              .fetch();
-          }
-        }
-      })
-      .fetch();
 
-    window.data
-      .query("auth", "Editor")
-      .method("me") // FIXME methods should be deprecated in favour of tokens
-      .on("update", (_, query) => {
-        if(this.isMounted()) { 
-          this.initializeGoogleAnalytics(query.getData().first());
-          this.setState({ currentEditor: query.getData().first() });
+          if(query.getData().size != 0) {
+            this.loadChannels(query.getData().first().get("id"))
+          
+          } else {
+            this.setState({
+              loadedChannels: true,
+              availableChannels: null,
+              currentChannel: null
+            });
+          }
         }
       })
       .fetch();
   },
 
 
+  loadChannels: function(userAccountId) {
+    window.data
+      .query("auth", "Broadcast.Channel")
+      .select("name")
+      .where("user_account_id", "eq", userAccountId)
+      .on("error", () => {
+        if(this.isMounted()) { 
+          this.setState({ 
+            loadingError: true
+          });
+        }
+      })
+      .on("update", (_, query) => {
+        if(this.isMounted()) { 
+          this.setState({
+            loadedChannels: true,
+            availableChannels: query.getData(),
+            currentChannel: query.getData().first()
+          });
+        }
+      })
+      .fetch();
+  },
+
+
+  loadEditor: function() {
+    window.data
+      .query("auth", "Editor")
+      .method("me") // FIXME methods should be deprecated in favour of tokens
+      .on("error", () => {
+        if(this.isMounted()) { 
+          this.setState({ 
+            loadingError: true
+          });
+        }
+      })
+      .on("update", (_, query) => {
+        if(this.isMounted()) { 
+          this.initializeGoogleAnalytics(query.getData().first());
+          this.setState({ 
+            loadedEditor: true, 
+            currentEditor: query.getData().first() 
+          });
+        }
+      })
+      .fetch();
+  },
+
+
+  componentDidMount: function() {
+    this.loadAccounts();
+    this.loadEditor();
+  },
+
+
   render: function() {
-   if(this.state.currentEditor === undefined || this.state.availableAccounts === undefined || this.state.availableChannels === undefined) {
-     return (<LoadingLayout />);
-  
+    if(this.state.loadingError) {
+      return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.communication.general" />);
+
     } else {
-      if(this.state.currentAccount === undefined) {
-        return (<Alert type="error" fullscreen={true} infoTextKey="general.no_accounts"/>);
-
-      } else if(this.state.currentChannel === undefined) {
-        return (<Alert type="error" fullscreen={true} infoTextKey="general.no_channels"/>);
-
+      if(this.state.loadedEditor === false || this.state.loadedAccounts === false || this.state.loadedChannels === false) {
+        return (<LoadingLayout />);
+    
       } else {
-        return (
-          <AdminLayout availableAccounts={this.state.availableAccounts} availableChannels={this.state.availableChannels} currentAccount={this.state.currentAccount} currentChannel={this.state.currentChannel} currentEditor={this.state.currentEditor}>
-            {this.props.children}
-          </AdminLayout>
-        );
+        if(this.state.availableAccounts.size === 0) {
+          return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.authentication.no_accounts"/>);
+
+        } else if(this.state.availableChannels.size === 0) {
+          return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.authentication.no_channels"/>);
+
+        } else {
+          return (
+            <AdminLayout availableAccounts={this.state.availableAccounts} availableChannels={this.state.availableChannels} currentAccount={this.state.currentAccount} currentChannel={this.state.currentChannel} currentEditor={this.state.currentEditor}>
+              {this.props.children}
+            </AdminLayout>
+          );
+        }
       }
     }
   }
