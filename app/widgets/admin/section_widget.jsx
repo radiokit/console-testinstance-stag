@@ -1,5 +1,7 @@
 import React from 'react';
 
+import AdminHelper from '../../helpers/admin_helper.js';
+
 
 export default React.createClass({  
   propTypes: {
@@ -21,7 +23,7 @@ export default React.createClass({
 
 
   render: function() {
-    return (<section>
+    return (<section onMouseOver={AdminHelper.hideMenuBar}>
       <div className="section-body">
         {this.renderHeader()}
         {this.props.children}
