@@ -110,6 +110,12 @@ export default React.createClass({
                 </CardBody>
 
                 <CardBody>
+                  <Translate component="p" className="lead text-center" content="apps.joint.client_nodes.create.created.instructions.code" />
+
+                  <p className="text-xxxl text-center">{this.state.pairingKey}</p>                  
+                </CardBody>
+
+                <CardBody>
                   <Translate component="p" className="text-center" content="apps.joint.client_nodes.create.created.instructions.os" />
 
                   <div className="row style-accent">
@@ -137,11 +143,6 @@ export default React.createClass({
                   </div>
                 </CardBody>
 
-                <CardBody>
-                  <Translate component="p" className="lead text-center" content="apps.joint.client_nodes.create.created.instructions.code" />
-
-                  <p className="text-xxxl text-center">{this.state.pairingKey}</p>                  
-                </CardBody>
               </Card>
             </Grid>
           </Section>
