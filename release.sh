@@ -11,7 +11,7 @@ TMP_DIR="/tmp/site-console-$1"
 BRANCH="gh-pages"
 REPO_URL="git@github.com:radiokit/site-console-$1.git"
 
-[ -e $TMP_DIR ] && rm -rf $TMP_DIR
+rm -rf $TMP_DIR
 
 echo "Releasing $CURRENT_REVISION to '$1' environment..."
 git clone --depth=1 $REPO_URL $TMP_DIR -b $BRANCH || (echo "Error"; exit 2)

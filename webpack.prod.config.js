@@ -8,7 +8,7 @@ var config = {
 
   output: {
     path: '/tmp/site-console-prod', // That is expected in ./release.sh
-    publicPath: "assets/[hash]/",
+    // publicPath: "assets/[hash]/", // FIXME we should prefix assets, too
     filename: "output.[hash].bundle.js",
     chunkFilename: "[id].[hash].bundle.js"
   },
