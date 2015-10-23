@@ -6,7 +6,7 @@ export default {
         none: "Nie masz uprawnień do ani jednego kanału"
       },
 
-      client_nodes: {
+      devices: {
         create: {
           form: {
             header: "Dodawanie urządzenia",
@@ -41,8 +41,15 @@ export default {
           }
         },
         index: {
-          loading: "Pobieranie listy urządzeń",
-          none: "Nie zarejestrowano dotychczas żadnych urządzeń"
+          loading: "Pobieranie listy zarejestrowanych urządzeń",
+          none: "Nie zarejestrowano dotychczas żadnych urządzeń",
+          header: "Lista zarejestrowanych urządzeń",
+          table: {
+            headers: {
+              name: "Nazwa",
+              os_type: "System"
+            }
+          }
         }
       },
 

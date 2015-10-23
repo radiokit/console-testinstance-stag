@@ -69,15 +69,15 @@ export default React.createClass({
         return (
           <Section>
             <Grid size="medium">
-              <Card header={true} headerTextKey="apps.joint.client_nodes.create.form.header">
+              <Card header={true} headerTextKey="apps.joint.devices.create.form.header">
                 <Form onSubmit={this.onSubmit}>
                   <CardBody>
                     {this.renderError()}
-                    <TextInput size="large" autofocus={true} label={true} labelTextKey="apps.joint.client_nodes.create.form.name.label" hint={true} hintTextKey="apps.joint.client_nodes.create.form.name.hint" />
+                    <TextInput size="large" autofocus={true} label={true} labelTextKey="apps.joint.devices.create.form.name.label" hint={true} hintTextKey="apps.joint.devices.create.form.name.hint" />
                   </CardBody>
 
                   <CardActionBar>
-                    <SubmitButton labelTextKey="apps.joint.client_nodes.create.form.submit" />
+                    <SubmitButton labelTextKey="apps.joint.devices.create.form.submit" />
                   </CardActionBar>
                 </Form>
               </Card>
@@ -90,7 +90,7 @@ export default React.createClass({
         return (
           <Section>
             <Grid size="medium">
-              <Card header={true} headerTextKey="apps.joint.client_nodes.create.pending.header">
+              <Card header={true} headerTextKey="apps.joint.devices.create.pending.header">
                 <CardBody>
                   <Loading />
                 </CardBody>
@@ -104,39 +104,39 @@ export default React.createClass({
         return (
           <Section>
             <Grid size="medium">
-              <Card header={true} headerTextKey="apps.joint.client_nodes.create.created.header">
+              <Card header={true} headerTextKey="apps.joint.devices.create.created.header">
                 <CardBody>
-                  <Translate component="p" className="lead text-center" content="apps.joint.client_nodes.create.created.instructions.header" />
+                  <Translate component="p" className="lead text-center" content="apps.joint.devices.create.created.instructions.header" />
                 </CardBody>
 
                 <CardBody>
-                  <Translate component="p" className="lead text-center" content="apps.joint.client_nodes.create.created.instructions.code" />
+                  <Translate component="p" className="lead text-center" content="apps.joint.devices.create.created.instructions.code" />
 
                   <p className="text-xxxl text-center">{this.state.pairingKey}</p>                  
                 </CardBody>
 
                 <CardBody>
-                  <Translate component="p" className="text-center" content="apps.joint.client_nodes.create.created.instructions.os" />
+                  <Translate component="p" className="text-center" content="apps.joint.devices.create.created.instructions.os" />
 
                   <div className="row style-accent">
                     <div className="col-md-6 text-center">
-                      <Translate component="h2" content="apps.joint.client_nodes.create.created.instructions.android.header" />
+                      <Translate component="h2" content="apps.joint.devices.create.created.instructions.android.header" />
                       <i className="mdi mdi-android text-xxxxl small-padding"/>
-                      <Translate component="p" content="apps.joint.client_nodes.create.created.instructions.android.instructions" />
+                      <Translate component="p" content="apps.joint.devices.create.created.instructions.android.instructions" />
                       <div className="btn-group btn-group-justified small-padding" role="group">
                         <a className="btn btn-default-bright">
-                          <Translate component="span" content="apps.joint.client_nodes.create.created.instructions.android.action_open" />
+                          <Translate component="span" content="apps.joint.devices.create.created.instructions.android.action_open" />
                         </a>
                       </div>
                     </div>
 
                     <div className="col-md-6 text-center">
-                      <Translate component="h2" content="apps.joint.client_nodes.create.created.instructions.windows.header" />
+                      <Translate component="h2" content="apps.joint.devices.create.created.instructions.windows.header" />
                       <i className="mdi mdi-windows text-xxxxl small-padding"/>
-                      <Translate component="p" content="apps.joint.client_nodes.create.created.instructions.windows.instructions" />
+                      <Translate component="p" content="apps.joint.devices.create.created.instructions.windows.instructions" />
                       <div className="btn-group btn-group-justified small-padding" role="group">
                         <a className="btn btn-default-bright">
-                          <Translate component="span" content="apps.joint.client_nodes.create.created.instructions.windows.action_open" />
+                          <Translate component="span" content="apps.joint.devices.create.created.instructions.windows.action_open" />
                         </a>
                       </div>
                     </div>

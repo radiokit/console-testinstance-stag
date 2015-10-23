@@ -6,7 +6,7 @@ export default {
         none: "You have no permissions to any channel"        
       },
 
-      client_nodes: {
+      devices: {
         create: {
           form: {
             header: "Add new device",
@@ -42,7 +42,14 @@ export default {
         },
         index: {
           loading: "Fetching list of associated devices",
-          none: "There are no associated devices"                  
+          none: "There are no associated devices",
+          header: "List of associated devices",
+          table: {
+            header: {
+              name: "Name",
+              os_type: "OS"
+            }
+          }
         }
       },
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 
 import AdminHelper from '../../helpers/admin_helper.js';
+import RoutingHelper from '../../helpers/routing_helper.js';
 
 
 export default React.createClass({
@@ -29,14 +30,14 @@ export default React.createClass({
           </li>
 
           <li>
-            <Link to={"/apps/joint/" + this.props.currentAccount.get("id") + "/client_nodes/index"}>
+            <Link to={RoutingHelper.apps.joint.devices.index({ userAccountId: this.props.currentAccount.get("id") })}>
               <div className="gui-icon"><i className="mdi mdi-remote" /></div>
               <span className="title">Joint</span>
             </Link>
           </li>
 
           <li>
-            <Link to={"/apps/joint/" + this.props.currentAccount.get("id") + "/client_nodes/create"}>
+            <Link to={RoutingHelper.apps.joint.devices.create({ userAccountId: this.props.currentAccount.get("id") })}>
               <div className="gui-icon"><i className="mdi mdi-remote" /></div>
               <span className="title">Joint</span>
             </Link>
