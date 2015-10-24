@@ -64,7 +64,7 @@ export default React.createClass({
               <Card>
                 <CardHeader headerTextKey="apps.joint.devices.index.header">
                   <CardToolBar>
-                    <CardToolBarCreate path={RoutingHelper.apps.joint.devices.create({ userAccountId: "FIXME" })} hintTooltipKey="apps.joint.devices.create.form.header" />
+                    <CardToolBarCreate path={RoutingHelper.apps.joint.devices.create(this)} hintTooltipKey="apps.joint.devices.create.form.header" />
                   </CardToolBar>
                 </CardHeader>
                 <CardBody>

@@ -30,7 +30,7 @@ export default React.createClass({
           </li>
 
           <li>
-            <Link to={RoutingHelper.apps.joint.devices.index({ userAccountId: this.props.currentAccount.get("id") })}>
+            <Link to={RoutingHelper.apps.joint.devices.index(this)}>
               <div className="gui-icon"><i className="mdi mdi-remote" /></div>
               <span className="title">Joint</span>
             </Link>
