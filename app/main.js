@@ -12,6 +12,7 @@ import JointApp from './apps/joint/app.jsx';
 import JointControlRoom from './apps/joint/control_room_view.jsx';
 import JointDevicesIndex from './apps/joint/devices_index_view.jsx';
 import JointDevicesCreate from './apps/joint/devices_create_view.jsx';
+import JointDevicesAdd from './apps/joint/devices_add_view.jsx';
 
 
 Counterpart.registerTranslations("en", require('./locales/en/general.js'));
@@ -65,6 +66,7 @@ React.render((
           <Route path="control_room" component={JointControlRoom} onEnter={pingGoogleAnalytics}/>
           <Route path="devices/create" component={JointDevicesCreate} onEnter={pingGoogleAnalytics}/>
           <Route path="devices/index" component={JointDevicesIndex} onEnter={pingGoogleAnalytics}/>
+          <Route path="devices/add" component={JointDevicesAdd} onEnter={pingGoogleAnalytics}/>
         </Route>
       </Route>
     </Route>

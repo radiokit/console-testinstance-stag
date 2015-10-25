@@ -24,7 +24,7 @@ export default React.createClass({
 
 
   componentDidMount: function() {
-    window.data
+    this.devicesQuery = window.data
       .query("plumber", "Resource.Architecture.ClientNode")
       .select("id", "name")
       .order("name", "asc")
@@ -43,9 +43,14 @@ export default React.createClass({
           }) 
         }
       })
-      .fetch();
+      .enableAutoUpdate(10000);
   },
 
+
+  componentWillUnmount: function() {
+    this.devicesQuery.teardown();
+  },
+  
 
   render: function() {
     if(this.state.loadingError) {

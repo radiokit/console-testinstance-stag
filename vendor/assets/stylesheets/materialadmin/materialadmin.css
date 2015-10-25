@@ -5332,8 +5332,8 @@ section .style-gray-dark2,
 section.style-gray-dark2,
 .offcanvas-pane.style-gray-dark2,
 .card.style-gray-dark2 {
-  background-color: #2b323a;
-  border-color: #2b323a;
+  background-color: #006c90;
+  border-color: #006c90;
   color: #ffffff;
 }
 section .style-gray-dark2 .btn-icon-toggle:hover,
@@ -5357,8 +5357,8 @@ section.style-gray-dark2 .btn-flat:hover,
   color: #ffffff;
 }
 .badge.style-gray-dark2 {
-  background-color: #2b323a;
-  border-color: #2b323a;
+  background-color: #006c90;
+  border-color: #006c90;
   color: #ffffff;
 }
 

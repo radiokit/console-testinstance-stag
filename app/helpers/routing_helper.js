@@ -10,6 +10,10 @@ export default {
           return "/apps/joint/" +  this.getCurrentAccountIdFromContext(context) + "/devices/create";
         },
 
+        add: function(context) {
+          return "/apps/joint/" +  this.getCurrentAccountIdFromContext(context) + "/devices/add";
+        },
+
 
         getCurrentAccountIdFromContext: function(context) {
           if(context.props.hasOwnProperty("currentAccount")) {

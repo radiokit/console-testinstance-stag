@@ -1,7 +1,8 @@
 import React from 'react';
 import Translate from 'react-translate-component';
 
-import Grid from '../../widgets/admin/grid_widget.jsx';
+import GridRow from '../../widgets/admin/grid_row_widget.jsx';
+import GridCell from '../../widgets/admin/grid_cell_widget.jsx';
 import Card from '../../widgets/admin/card_widget.jsx';
 import Alert from '../../widgets/admin/alert_widget.jsx';
 import CardHeader from '../../widgets/admin/card_header_widget.jsx';
@@ -70,21 +71,23 @@ export default React.createClass({
       case "form": // TODO handle error
         return (
           <Section>
-            <Grid size="medium">
-              <Card>
-                <CardHeader headerTextKey="apps.joint.devices.create.form.header"/>
-                <Form onSubmit={this.onSubmit}>
-                  <CardBody>
-                    {this.renderError()}
-                    <TextInput ref="inputName" size="large" autofocus={true} label={true} labelTextKey="apps.joint.devices.create.form.name.label" hint={true} hintTextKey="apps.joint.devices.create.form.name.hint" />
-                  </CardBody>
+            <GridRow>
+              <GridCell size="medium" center={true}>
+                <Card>
+                  <CardHeader headerTextKey="apps.joint.devices.create.form.header"/>
+                  <Form onSubmit={this.onSubmit}>
+                    <CardBody>
+                      {this.renderError()}
+                      <TextInput ref="inputName" size="large" autofocus={true} label={true} labelTextKey="apps.joint.devices.create.form.name.label" hint={true} hintTextKey="apps.joint.devices.create.form.name.hint" />
+                    </CardBody>
 
-                  <CardActionBar>
-                    <SubmitButton labelTextKey="apps.joint.devices.create.form.submit" />
-                  </CardActionBar>
-                </Form>
-              </Card>
-            </Grid>
+                    <CardActionBar>
+                      <SubmitButton labelTextKey="apps.joint.devices.create.form.submit" />
+                    </CardActionBar>
+                  </Form>
+                </Card>
+              </GridCell>
+            </GridRow>
           </Section>
         );
         break;
@@ -92,14 +95,16 @@ export default React.createClass({
       case "pending":
         return (
           <Section>
-            <Grid size="medium">
-              <Card>
-                <CardHeader headerTextKey="apps.joint.devices.create.pending.header"/>
-                <CardBody>
-                  <Loading />
-                </CardBody>
-              </Card>
-            </Grid>
+            <GridRow>
+              <GridCell size="medium" center={true}>
+                <Card>
+                  <CardHeader headerTextKey="apps.joint.devices.create.pending.header"/>
+                  <CardBody>
+                    <Loading />
+                  </CardBody>
+                </Card>
+              </GridCell>
+            </GridRow>
           </Section>
         );
         break;
@@ -107,49 +112,51 @@ export default React.createClass({
       case "created":
         return (
           <Section>
-            <Grid size="medium">
-              <Card>
-                <CardHeader headerTextKey="apps.joint.devices.create.created.header"/>
-                <CardBody>
-                  <Translate component="p" className="lead text-center" content="apps.joint.devices.create.created.instructions.header" />
-                </CardBody>
+            <GridRow>
+              <GridCell size="medium" center={true}>
+                <Card>
+                  <CardHeader headerTextKey="apps.joint.devices.create.created.header"/>
+                  <CardBody>
+                    <Translate component="p" className="lead text-center" content="apps.joint.devices.create.created.instructions.header" />
+                  </CardBody>
 
-                <CardBody>
-                  <Translate component="p" className="lead text-center" content="apps.joint.devices.create.created.instructions.code" />
+                  <CardBody>
+                    <Translate component="p" className="lead text-center" content="apps.joint.devices.create.created.instructions.code" />
 
-                  <p className="text-xxxl text-center">{this.state.pairingKey}</p>                  
-                </CardBody>
+                    <p className="text-xxxl text-center">{this.state.pairingKey}</p>                  
+                  </CardBody>
 
-                <CardBody>
-                  <Translate component="p" className="text-center" content="apps.joint.devices.create.created.instructions.os" />
+                  <CardBody>
+                    <Translate component="p" className="text-center" content="apps.joint.devices.create.created.instructions.os" />
 
-                  <div className="row style-accent">
-                    <div className="col-md-6 text-center">
-                      <Translate component="h2" content="apps.joint.devices.create.created.instructions.android.header" />
-                      <i className="mdi mdi-android text-xxxxl small-padding"/>
-                      <Translate component="p" content="apps.joint.devices.create.created.instructions.android.instructions" />
-                      <div className="btn-group btn-group-justified small-padding" role="group">
-                        <a className="btn btn-default-bright">
-                          <Translate component="span" content="apps.joint.devices.create.created.instructions.android.action_open" />
-                        </a>
+                    <div className="row style-accent">
+                      <div className="col-md-6 text-center">
+                        <Translate component="h2" content="apps.joint.devices.create.created.instructions.android.header" />
+                        <i className="mdi mdi-android text-xxxxl small-padding"/>
+                        <Translate component="p" content="apps.joint.devices.create.created.instructions.android.instructions" />
+                        <div className="btn-group btn-group-justified small-padding" role="group">
+                          <a className="btn btn-default-bright">
+                            <Translate component="span" content="apps.joint.devices.create.created.instructions.android.action_open" />
+                          </a>
+                        </div>
+                      </div>
+
+                      <div className="col-md-6 text-center">
+                        <Translate component="h2" content="apps.joint.devices.create.created.instructions.windows.header" />
+                        <i className="mdi mdi-windows text-xxxxl small-padding"/>
+                        <Translate component="p" content="apps.joint.devices.create.created.instructions.windows.instructions" />
+                        <div className="btn-group btn-group-justified small-padding" role="group">
+                          <a className="btn btn-default-bright">
+                            <Translate component="span" content="apps.joint.devices.create.created.instructions.windows.action_open" />
+                          </a>
+                        </div>
                       </div>
                     </div>
+                  </CardBody>
 
-                    <div className="col-md-6 text-center">
-                      <Translate component="h2" content="apps.joint.devices.create.created.instructions.windows.header" />
-                      <i className="mdi mdi-windows text-xxxxl small-padding"/>
-                      <Translate component="p" content="apps.joint.devices.create.created.instructions.windows.instructions" />
-                      <div className="btn-group btn-group-justified small-padding" role="group">
-                        <a className="btn btn-default-bright">
-                          <Translate component="span" content="apps.joint.devices.create.created.instructions.windows.action_open" />
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </CardBody>
-
-              </Card>
-            </Grid>
+                </Card>
+              </GridCell>
+            </GridRow>
           </Section>
         );
         break;

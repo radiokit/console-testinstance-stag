@@ -1,9 +1,20 @@
 export default {
   apps: {
     joint: {
-      index: {
-        loading: "Fetching list of available channels",
-        none: "You have no permissions to any channel"        
+      navigation: {
+        title: "Transmissions"
+      },
+      
+      control_room: {
+        return: {
+          header: "Return",
+        },
+        transmissions: {
+          header: "Transmissions",
+        },
+        studio: {
+          header: "Studio",
+        },
       },
 
       devices: {
@@ -52,21 +63,6 @@ export default {
           }
         }
       },
-
-      partials: {
-        mix: {
-          returns: {
-            header: "Return",
-            none: "No inputs available"
-          },
-
-          transmissions: {
-            header: "Transmissions",
-            none: "No inputs available"
-          }
-        }
-
-      }
     }
   }
 };

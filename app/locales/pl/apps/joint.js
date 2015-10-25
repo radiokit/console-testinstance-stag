@@ -1,11 +1,22 @@
 export default {
   apps: {
     joint: {
-      index: {
-        loading: "Pobieranie listy dostępnych kanałów",
-        none: "Nie masz uprawnień do ani jednego kanału"
+      navigation: {
+        title: "Transmisje"
       },
 
+      control_room: {
+        return: {
+          header: "Zwrotna",
+        },
+        transmissions: {
+          header: "Transmisje",
+        },
+        studio: {
+          header: "Studio",
+        },
+      },
+      
       devices: {
         create: {
           form: {
@@ -52,20 +63,6 @@ export default {
           }
         }
       },
-
-      partials: {
-        mix: {
-          returns: {
-            header: "Zwrotna",
-            none: "Brak źródeł dźwięku"
-          },
-
-          transmissions: {
-            header: "Transmisje",
-            none: "Brak źródeł dźwięku"
-          }
-        }
-      }
     }
   }
 };

@@ -1,4 +1,5 @@
 import React from 'react';
+import Translate from 'react-translate-component';
 import { Link } from 'react-router';
 
 import AdminHelper from '../../helpers/admin_helper.js';
@@ -16,23 +17,9 @@ export default React.createClass({
       <div className="menubar-scroll-panel">
         <ul id="main-menu" className="gui-controls gui-controls-tree">
           <li>
-            <Link to="/">
-              <div className="gui-icon"><i className="md md-home" /></div>
-              <span className="title">Dashboard</span>
-            </Link>
-          </li>
-
-          <li>
             <Link to={"/apps/joint/" + this.props.currentAccount.get("id") + "/control_room"}>
               <div className="gui-icon"><i className="mdi mdi-remote" /></div>
-              <span className="title">Joint</span>
-            </Link>
-          </li>
-
-          <li>
-            <Link to={RoutingHelper.apps.joint.devices.index(this)}>
-              <div className="gui-icon"><i className="mdi mdi-remote" /></div>
-              <span className="title">Joint</span>
+              <Translate component="span" className="title" content="apps.joint.navigation.title" />
             </Link>
           </li>
         </ul>
