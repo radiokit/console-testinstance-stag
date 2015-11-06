@@ -62,25 +62,11 @@ export default React.createClass({
     return (
       <Section>
         <GridRow>
-          <GridCell size="xsmall">
-            <Card>
-              <CardHeader headerTextKey="apps.joint.control_room.return.header">
-                <CardToolBar>
-                  <CardToolBarCreate path={RoutingHelper.apps.joint.devices.add(this)} hintTooltipKey="apps.joint.devices.create.form.header" />
-                </CardToolBar>
-              </CardHeader>
-
-              <CardBody>
-
-              </CardBody>
-            </Card>
-          </GridCell>
-
           <GridCell size="medium">
             <Card>
               <CardHeader headerTextKey="apps.joint.control_room.transmissions.header">
                 <CardToolBar>
-                  <CardToolBarCreate path={RoutingHelper.apps.joint.devices.add(this)} hintTooltipKey="apps.joint.devices.create.form.header" />
+                  <CardToolBarCreate path={RoutingHelper.apps.joint.devices.add(this, "transmissions")} hintTooltipKey="apps.joint.devices.create.form.header" />
                 </CardToolBar>
               </CardHeader>
 
@@ -92,9 +78,23 @@ export default React.createClass({
 
           <GridCell size="xsmall">
             <Card>
-              <CardHeader headerTextKey="apps.joint.control_room.studio.header">
+              <CardHeader headerTextKey="apps.joint.control_room.talkbacks.header">
                 <CardToolBar>
-                  <CardToolBarCreate path={RoutingHelper.apps.joint.devices.add(this)} hintTooltipKey="apps.joint.devices.create.form.header" />
+                  <CardToolBarCreate path={RoutingHelper.apps.joint.devices.add(this, "talbacks")} hintTooltipKey="apps.joint.devices.create.form.header" />
+                </CardToolBar>
+              </CardHeader>
+
+              <CardBody>
+
+              </CardBody>
+            </Card>
+          </GridCell>
+
+          <GridCell size="xsmall">
+            <Card>
+              <CardHeader headerTextKey="apps.joint.control_room.onair.header">
+                <CardToolBar>
+                  <CardToolBarCreate path={RoutingHelper.apps.joint.devices.add(this, "onair")} hintTooltipKey="apps.joint.devices.create.form.header" />
                 </CardToolBar>
               </CardHeader>
 

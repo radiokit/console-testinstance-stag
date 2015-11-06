@@ -4,16 +4,16 @@ export default {
       navigation: {
         title: "Transmissions"
       },
-      
+
       control_room: {
-        return: {
-          header: "Return",
+        talkbacks: {
+          header: "Talkbacks",
         },
         transmissions: {
           header: "Transmissions",
         },
-        studio: {
-          header: "Studio",
+        onair: {
+          header: "On air",
         },
       },
 

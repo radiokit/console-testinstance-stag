@@ -24,13 +24,13 @@ Counterpart.registerTranslations("pl", require('./locales/pl/apps/joint.js'));
 function getEnv() {
   if(typeof(ENV) === "object") {
     return ENV;
-  
+
   } else {
-    return { 
-      auth: { clientId: "123", baseUrl: "http://localhost:4000" }, 
-      apps: { 
+    return {
+      auth: { clientId: "123", baseUrl: "http://localhost:4000" },
+      apps: {
         "plumber" : { baseUrl: "http://localhost:4010" },
-        "auth" : { baseUrl: "http://localhost:4000" } 
+        "auth" : { baseUrl: "http://localhost:4000" }
       },
       verbose: true
     };
@@ -39,7 +39,7 @@ function getEnv() {
 
 
 function requireAuth() {
-  window.data.signIn("Editor");  
+  window.data.signIn("Editor");
   pingGoogleAnalytics();
 }
 
@@ -66,10 +66,9 @@ React.render((
           <Route path="control_room" component={JointControlRoom} onEnter={pingGoogleAnalytics}/>
           <Route path="devices/create" component={JointDevicesCreate} onEnter={pingGoogleAnalytics}/>
           <Route path="devices/index" component={JointDevicesIndex} onEnter={pingGoogleAnalytics}/>
-          <Route path="devices/add" component={JointDevicesAdd} onEnter={pingGoogleAnalytics}/>
+          <Route path="devices/add/:role" component={JointDevicesAdd} onEnter={pingGoogleAnalytics}/>
         </Route>
       </Route>
     </Route>
   </Router>
 ), document.getElementById('app'));
-

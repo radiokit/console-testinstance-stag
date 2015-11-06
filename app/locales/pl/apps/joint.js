@@ -6,17 +6,17 @@ export default {
       },
 
       control_room: {
-        return: {
-          header: "Zwrotna",
+        talkbacks: {
+          header: "Talkback",
         },
         transmissions: {
           header: "Transmisje",
         },
-        studio: {
-          header: "Studio",
+        onair: {
+          header: "Antena",
         },
       },
-      
+
       devices: {
         create: {
           form: {
