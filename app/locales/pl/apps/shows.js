@@ -4,6 +4,11 @@ export default {
       navigation: {
         title: "Audycje"
       },
+      index: {
+      	add_track: {
+      		header: "Dodaj utwór"
+      	}
+      }
     }
   }
 };
