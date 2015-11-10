@@ -19,7 +19,13 @@ export default React.createClass({
           <li>
             <Link to={"/apps/joint/" + this.props.currentAccount.get("id") + "/control_room"}>
               <div className="gui-icon"><i className="mdi mdi-remote" /></div>
-              <Translate component="span" className="title" content="apps.joint.navigation.title" />
+              <Translate component="span" className="title" content="apps.joint.navigation.title"/>
+            </Link>
+          </li>
+          <li>
+            <Link to={"/apps/shows/" + this.props.currentAccount.get("id") + "/control_room"}>
+              <div className="gui-icon"><i className="mdi mdi-remote" /></div>
+              <Translate component="span" className="title" content="apps.shows.navigation.title"/>
             </Link>
           </li>
         </ul>

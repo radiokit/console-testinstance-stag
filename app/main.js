@@ -13,13 +13,16 @@ import JointControlRoom from './apps/joint/control_room_view.jsx';
 import JointDevicesIndex from './apps/joint/devices_index_view.jsx';
 import JointDevicesCreate from './apps/joint/devices_create_view.jsx';
 import JointDevicesAdd from './apps/joint/devices_add_view.jsx';
+import ShowsApp from './apps/shows/app.jsx';
+import ShowsControlRoom from './apps/shows/control_room_view.jsx';
 
 
 Counterpart.registerTranslations("en", require('./locales/en/general.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/joint.js'));
+Counterpart.registerTranslations("en", require('./locales/en/apps/shows.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/general.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/joint.js'));
-
+Counterpart.registerTranslations("pl", require('./locales/pl/apps/shows.js'));
 
 function getEnv() {
   if(typeof(ENV) === "object") {
@@ -67,6 +70,9 @@ React.render((
           <Route path="devices/create" component={JointDevicesCreate} onEnter={pingGoogleAnalytics}/>
           <Route path="devices/index" component={JointDevicesIndex} onEnter={pingGoogleAnalytics}/>
           <Route path="devices/add/:role" component={JointDevicesAdd} onEnter={pingGoogleAnalytics}/>
+        </Route>
+        <Route path="shows/:userAccountId" component={ShowsApp}>
+          <Route path="control_room" component={ShowsControlRoom} onEnter={pingGoogleAnalytics}/>
         </Route>
       </Route>
     </Route>
