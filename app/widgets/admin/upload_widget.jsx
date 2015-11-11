@@ -61,7 +61,22 @@ export default React.createClass({
       target: window.ENV.apps.vault.baseUrl + '/api/upload/v1.0/resumablejs',
       headers: window.data.options.auth.getHeaders(),
       query: { record_repository_id: recordRepositoryId },
-      minFileSize: 1
+      minFileSize: 1,
+      generateUniqueIdentifier: () => {
+        return ""
+          + parseInt(Math.random() * 10000000000000000)
+          + parseInt(Math.random() * 10000000000000000)
+          + parseInt(Math.random() * 10000000000000000)
+          + parseInt(Math.random() * 10000000000000000)
+          + parseInt(Math.random() * 10000000000000000)
+          + parseInt(Math.random() * 10000000000000000)
+          + parseInt(Math.random() * 10000000000000000)
+          + parseInt(Math.random() * 10000000000000000)
+          + parseInt(Math.random() * 10000000000000000)
+          + parseInt(Math.random() * 10000000000000000)
+          + parseInt(Math.random() * 10000000000000000)
+          + Date.now();
+      }
     });
 
 
