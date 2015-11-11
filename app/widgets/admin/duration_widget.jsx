@@ -6,11 +6,11 @@ export default React.createClass({
   },
 
   millisecondsToHuman: function(v) {
-    seconds = parseInt(v / 1000);
-    minutes = seconds / 60;
+    var seconds = parseInt(v / 1000);
+    var minutes = seconds / 60;
     seconds = seconds % 60;
 
-    hours = minutes / 60;
+    var hours = minutes / 60;
     minutes = minutes % 60;
 
     return this.padTwo(hours) + ":" + this.padTwo(minutes) + ":" + this.padTwo(seconds);

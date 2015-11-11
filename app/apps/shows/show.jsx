@@ -1,6 +1,7 @@
 import React from 'react';
 import Translate from 'react-translate-component';
 import { Link } from 'react-router';
+
 import DurationWidget from '../../widgets/admin/duration_widget.jsx';
 import ButtonLinkWidget from '../../widgets/admin/button_link_widget.jsx';
 import RoutingHelper from '../../helpers/routing_helper.js';
@@ -104,9 +105,10 @@ export default React.createClass({
   },
 
 	renderEpisode: function() {
-	  var episode = {}
-	  var item = this.state.track
-	  if (item != null) {
+    var episode = {}
+    var collection = this.state.track;
+	  if (collection != null) {
+      var item = collection.first();
 	  	episode['EpisodeShowRow' + item.get("id")] = (
 	  	  <div className="section-body">
 	  	    <div className="row">

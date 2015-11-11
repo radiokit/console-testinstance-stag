@@ -18,6 +18,7 @@ import ShowsIndex from './apps/shows/index.jsx';
 import ShowsNew from './apps/shows/new.jsx';
 import ShowsCreate from './apps/shows/create.jsx';
 import ShowsShow from './apps/shows/show.jsx';
+import ShowsShowTrackMarkers from './apps/shows/show_track_markers.jsx';
 
 Counterpart.registerTranslations("en", require('./locales/en/general.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/joint.js'));
@@ -80,6 +81,7 @@ React.render((
           <Route path="new" component={ShowsNew} onEnter={pingGoogleAnalytics}/>
           <Route path="create" component={ShowsCreate} onEnter={pingGoogleAnalytics}/>
           <Route path="show/:trackId" component={ShowsShow} onEnter={pingGoogleAnalytics}/>
+          <Route path="show/:trackId/track_markers" component={ShowsShowTrackMarkers} onEnter={pingGoogleAnalytics}/>
         </Route>
       </Route>
     </Route>
