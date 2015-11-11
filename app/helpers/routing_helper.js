@@ -18,17 +18,19 @@ export default {
       }
     },
     shows: {
-      new: function(context) {
-        return "/apps/shows/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/new";
-      },
-      create: function(context) {
-        return "/apps/shows/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/create";
-      },
-      show: function(context, trackId) {
-        return "/apps/shows/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/show/" + trackId;
-      },
-      showTrackMarkers: function(context, trackId) {
-        return "/apps/shows/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/show/" + trackId + "/track_markers";
+      files: {
+        index: function(context) {
+          return "/apps/shows/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/files/index";
+        },
+        create: function(context) {
+          return "/apps/shows/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/files/create";
+        },
+        show: function(context, trackId) {
+          return "/apps/shows/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/show/" + trackId;
+        },
+        showTrackMarkers: function(context, trackId) {
+          return "/apps/shows/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/show/" + trackId + "/track_markers";
+        }
       }
     }
   }

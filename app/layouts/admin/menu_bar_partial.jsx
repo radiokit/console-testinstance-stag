@@ -23,7 +23,7 @@ export default React.createClass({
             </Link>
           </li>
           <li>
-            <Link to={"/apps/shows/" + this.props.currentUserAccount.get("id") + "/index"}>
+            <Link to={RoutingHelper.apps.shows.files.index(this)}>
               <div className="gui-icon"><i className="mdi mdi-microphone" /></div>
               <Translate component="span" className="title" content="apps.shows.navigation.title"/>
             </Link>

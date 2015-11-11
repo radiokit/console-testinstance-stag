@@ -12,6 +12,20 @@ export default {
       show: {
         edit_track_markers: "Edytuj markery"
       },
+
+      files: {
+        index: {
+          loading: "Ładowanie listy plików",
+          none: "Nie ma żadnych plików",
+          header: "Pliki",
+          table: {
+            header: {
+              name: "Nazwa",
+            }
+          }
+        }
+      },
+
       widgets: {
         upload_widget: {
           upload_instructions: "Przeciągnij tu pliki lub kliknij by poszukać ich na Twoim urządzeniu",

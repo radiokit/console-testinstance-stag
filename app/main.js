@@ -14,11 +14,10 @@ import JointDevicesIndex from './apps/joint/devices_index_view.jsx';
 import JointDevicesCreate from './apps/joint/devices_create_view.jsx';
 import JointDevicesAdd from './apps/joint/devices_add_view.jsx';
 import ShowsApp from './apps/shows/app.jsx';
-import ShowsIndex from './apps/shows/index.jsx';
-import ShowsNew from './apps/shows/new.jsx';
-import ShowsCreate from './apps/shows/create.jsx';
-import ShowsShow from './apps/shows/show.jsx';
-import ShowsShowTrackMarkers from './apps/shows/show_track_markers.jsx';
+import ShowsFilesIndex from './apps/shows/files_index_view.jsx';
+import ShowsFilesCreate from './apps/shows/files_create_view.jsx';
+import ShowsFilesShow from './apps/shows/show.jsx';
+import ShowsFilesShowTrackMarkers from './apps/shows/show_track_markers.jsx';
 
 Counterpart.registerTranslations("en", require('./locales/en/general.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/joint.js'));
@@ -77,11 +76,10 @@ React.render((
           <Route path="devices/add/:role" component={JointDevicesAdd} onEnter={pingGoogleAnalytics}/>
         </Route>
         <Route path="shows/:userAccountId" component={ShowsApp}>
-          <Route path="index" component={ShowsIndex} onEnter={pingGoogleAnalytics}/>
-          <Route path="new" component={ShowsNew} onEnter={pingGoogleAnalytics}/>
-          <Route path="create" component={ShowsCreate} onEnter={pingGoogleAnalytics}/>
-          <Route path="show/:trackId" component={ShowsShow} onEnter={pingGoogleAnalytics}/>
-          <Route path="show/:trackId/track_markers" component={ShowsShowTrackMarkers} onEnter={pingGoogleAnalytics}/>
+          <Route path="files/index" component={ShowsFilesIndex} onEnter={pingGoogleAnalytics}/>
+          <Route path="files/create" component={ShowsFilesCreate} onEnter={pingGoogleAnalytics}/>
+          <Route path="show/:trackId" component={ShowsFilesShow} onEnter={pingGoogleAnalytics}/>
+          <Route path="show/:trackId/track_markers" component={ShowsFilesShowTrackMarkers} onEnter={pingGoogleAnalytics}/>
         </Route>
       </Route>
     </Route>

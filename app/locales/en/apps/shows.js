@@ -12,6 +12,21 @@ export default {
       show: {
         edit_track_markers: "Edit Track Markers"
       },
+
+      files: {
+        index: {
+          loading: "Fetching list of files",
+          none: "There are no files",
+          header: "Files",
+          table: {
+            header: {
+              name: "Name",
+            }
+          }
+        }
+      },
+
+
       widgets: {
         upload_widget: {
           upload_instructions: "Drop files here or click to browse them on your device",
