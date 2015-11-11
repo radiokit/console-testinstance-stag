@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 import Translate from 'react-translate-component';
 import Spinner from 'spin.js';
@@ -7,7 +8,7 @@ import '../../assets/stylesheets/widgets/general/loading.scss';
 
 
 export default React.createClass({
-  
+
 
   propTypes: {
     info: React.PropTypes.bool,
@@ -39,7 +40,7 @@ export default React.createClass({
       , position: 'absolute' // Element positioning
     }
 
-    this.spinner = new Spinner(opts).spin(React.findDOMNode(this.refs.spinner));
+    this.spinner = new Spinner(opts).spin(ReactDOM.findDOMNode(this.refs.spinner));
   },
 
 

@@ -1,10 +1,9 @@
 import React from 'react';
-
-
+import ReactDOM from 'react-dom';
 import Spinner from 'spin.js';
 
 export default React.createClass({
-  
+
 
 
   componentDidMount: function() {
@@ -31,7 +30,7 @@ export default React.createClass({
       , position: 'absolute' // Element positioning
     }
 
-    this.spinner = new Spinner(opts).spin(React.findDOMNode(this.refs.spinner));
+    this.spinner = new Spinner(opts).spin(ReactDOM.findDOMNode(this.refs.spinner));
   },
 
 

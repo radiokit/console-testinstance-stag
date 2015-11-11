@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Translate from 'react-translate-component';
 import { Link } from 'react-router';
 import Resumable from 'resumablejs';
@@ -85,8 +86,8 @@ export default React.createClass({
       this.setState({ loadingState: "not-supported" });
 
     } else {
-      this.resumable.assignBrowse(React.findDOMNode(this.refs.uploadDropzone));
-      this.resumable.assignDrop(React.findDOMNode(this.refs.uploadDropzone));
+      this.resumable.assignBrowse(ReactDOM.findDOMNode(this.refs.uploadDropzone));
+      this.resumable.assignDrop(ReactDOM.findDOMNode(this.refs.uploadDropzone));
       this.resumable.on("fileAdded", this.updateQueue);
       this.resumable.on("fileAdded", this.startUpload);
       this.resumable.on("fileProgress", this.updateQueue);

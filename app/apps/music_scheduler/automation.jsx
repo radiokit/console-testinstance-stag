@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import ReactTranslate from 'react-translate-component';
 import translate from 'counterpart';
 import { Link } from 'react-router';
@@ -91,10 +92,10 @@ export default React.createClass({
           if(fetchedEvent[attribute] != renderedEvent[attribute]) {
             if(attribute == "title" || attribute == "color" ) {
               renderedEvent[attribute] = fetchedEvent[attribute];
-              $(React.findDOMNode(self.refs.calendarContainer)).fullCalendar( 'rerenderEvents' );
+              $(ReactDOM.findDOMNode(self.refs.calendarContainer)).fullCalendar( 'rerenderEvents' );
             } else {
-              $(React.findDOMNode(self.refs.calendarContainer)).fullCalendar( 'removeEvents', fetchedEvent.id )
-              $(React.findDOMNode(self.refs.calendarContainer)).fullCalendar( 'renderEvent', fetchedEvent )
+              $(ReactDOM.findDOMNode(self.refs.calendarContainer)).fullCalendar( 'removeEvents', fetchedEvent.id )
+              $(ReactDOM.findDOMNode(self.refs.calendarContainer)).fullCalendar( 'renderEvent', fetchedEvent )
             };
           };
         });
