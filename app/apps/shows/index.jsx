@@ -4,7 +4,6 @@ import ButtonLinkWidget from '../../widgets/admin/button_link_widget.jsx';
 import RoutingHelper from '../../helpers/routing_helper.js';
 import AccountHelper from '../../helpers/account_helper.js';
 import { Link } from 'react-router';
-import Translate from 'react-translate-component';
 
 export default React.createClass({
   getInitialState: function() {
@@ -93,7 +92,7 @@ export default React.createClass({
       items['EpisodesLayout.TrackList.Row' + item.get("id")] = (<tr>
           <td><span className="md md-mic"></span></td>
           <td>
-            <Link to={RoutingHelper.apps.shows.index.show(this)} params={{showEpisodeId: item.get("id")}}>
+            <Link to={RoutingHelper.apps.shows.show(this, item.get("id"))}>
               {item.get("title")}
             </Link>
           </td>
@@ -110,7 +109,7 @@ export default React.createClass({
         <div className="section-body">
           <div className="container">
             <div className="col-lg-offset-1 col-lg-10 col-md-8">
-              <ButtonLinkWidget linkDest={RoutingHelper.apps.shows.index.new(this)} label="apps.shows.index.add_track.header"/>
+              <ButtonLinkWidget linkDest={RoutingHelper.apps.shows.new(this)} label="apps.shows.index.add_track.header"/>
               <div className="card">
                 <div className="card-body">
                   <table className="table table-hover no-margin">
