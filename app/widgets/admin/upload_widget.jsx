@@ -91,7 +91,6 @@ export default React.createClass({
 
 
   updateQueue: function() {
-    console.log(this.resumable.files);
     this.setState({ uploadQueue: Immutable.fromJS(this.resumable.files) });
   },
 
