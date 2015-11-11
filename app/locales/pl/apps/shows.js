@@ -31,6 +31,11 @@ export default {
           },
         },
       }
+    },
+    music_scheduler: {
+      navigation: {
+        title: "Music Scheduler"
+      }
     }
   }
 };

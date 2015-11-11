@@ -26,11 +26,14 @@ export default {
             select: {
               placeholder: "Click here to choose tags that are going to be associated with uploaded files",
               help: "Optional"
-
             }
           },
         },
-
+      }
+    },
+    music_scheduler: {
+      navigation: {
+        title: "Music Scheduler"
       }
     }
   }
