@@ -11,7 +11,7 @@ import FileSize from './../general/file_size_widget.jsx';
 export default React.createClass({
   propTypes: {
     repositoryRole: React.PropTypes.string.isRequired,
-    repositoryUserAccountId: React.PropTypes.object.isRequired
+    repositoryUserAccountId: React.PropTypes.string.isRequired
   },
 
 
