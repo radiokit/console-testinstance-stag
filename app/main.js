@@ -36,7 +36,8 @@ function getEnv() {
       apps: {
         "plumber" : { baseUrl: "http://localhost:4010" },
         "auth" : { baseUrl: "https://radiokit-auth-stag.herokuapp.com" },
-        "horn-gw" : {baseUrl: "https://radiokit-horn-gw-stag.herokuapp.com"}
+        "horn-gw" : {baseUrl: "https://radiokit-horn-gw-stag.herokuapp.com"},
+        "vault" : { baseUrl: "http://localhost:4060" }
       },
       verbose: true
     };

@@ -17,14 +17,9 @@ export default {
           upload_instructions: "Drop files here or click to browse them on your device",
           table: {
             header: {
-              name: "File name",
-              size: "Size",
+              file_name: "File name",
+              file_size: "Size",
               status: "Status"
-            },
-            steps: {
-              queue: "",
-              uploading: "Uploading",
-              uploaded: "Saving"
             }
           },
           tags: {
