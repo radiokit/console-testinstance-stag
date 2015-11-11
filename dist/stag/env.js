@@ -1,6 +1,6 @@
 window.ENV = {
   auth: {
-    clientId: "6a2747066a4d0aa563d8c609f3811563dac32bc22307854a5e359933b192e0995496d5b8a918fc80",
+    clientId: "4c3bfe14a4abbafa043c27892feff4cb966cb95436dd3823b1bdedbe55f33e8cd6e045b0f5a8609b",
     baseUrl: "https://radiokit-auth-stag.herokuapp.com"
   },
   apps: {
