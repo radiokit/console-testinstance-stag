@@ -18,13 +18,17 @@ import ShowsFilesIndex from './apps/shows/files_index_view.jsx';
 import ShowsFilesCreate from './apps/shows/files_create_view.jsx';
 import ShowsFilesShow from './apps/shows/files_show_view.jsx';
 import ShowsFilesShowTrackMarkers from './apps/shows/show_track_markers.jsx';
+import MusicSchedulerApp from './apps/music_scheduler/app.jsx';
+import MusicSchedulerAutomation from './apps/music_scheduler/automation.jsx';
 
 Counterpart.registerTranslations("en", require('./locales/en/general.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/joint.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/shows.js'));
+Counterpart.registerTranslations("en", require('./locales/en/apps/music_scheduler.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/general.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/joint.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/shows.js'));
+Counterpart.registerTranslations("pl", require('./locales/pl/apps/music_scheduler.js'));
 
 function getEnv() {
   if(typeof(ENV) === "object") {
@@ -44,12 +48,10 @@ function getEnv() {
   }
 }
 
-
 function requireAuth() {
   window.data.signIn("Editor");
   pingGoogleAnalytics();
 }
-
 
 function pingGoogleAnalytics() {
   if(typeof(ga) !== "undefined") {
@@ -57,13 +59,11 @@ function pingGoogleAnalytics() {
   }
 }
 
-
 window.ENV = getEnv();
 window.data = new RadioKit.Data.Interface(getEnv());
 // FIXME merge with official JS API
 window.plumberStream = new Socket(getEnv().apps.plumber.baseUrl.replace(/^http/, "ws") + "/api/stream/v1.0", { heartbeatIntervalMs: 1000 });
 window.plumberStream.connect();
-
 
 React.render((
   <Router history={createBrowserHistory()}>
@@ -80,6 +80,9 @@ React.render((
           <Route path="files/create" component={ShowsFilesCreate} onEnter={pingGoogleAnalytics}/>
           <Route path="files/show/:fileId" component={ShowsFilesShow} onEnter={pingGoogleAnalytics}/>
           <Route path="show/:trackId/track_markers" component={ShowsFilesShowTrackMarkers} onEnter={pingGoogleAnalytics}/>
+        </Route>
+        <Route path="music_scheduler/:userAccountId" component={MusicSchedulerApp}>
+          <Route path="automation" component={MusicSchedulerAutomation}/>
         </Route>
       </Route>
     </Route>

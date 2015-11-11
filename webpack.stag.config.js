@@ -20,6 +20,9 @@ var config = {
       exclude: [node_modules_dir],
       loader: 'babel'
     }, {
+      include: /\.json$/,
+      loaders: ['json-loader']
+    }, {
       test: /\.css$/,
       loader: 'style!css'
     }, {
