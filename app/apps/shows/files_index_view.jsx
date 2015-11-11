@@ -46,7 +46,7 @@ export default React.createClass({
 
             window.data
               .query("vault", "Record.File")
-              .select("name", "duration_total", "audio_rate")
+              .select("id", "name")
               .where("record_repository_id", "eq", query.getData().first().get("id"))
               .on("error", () => {
                 if(this.isMounted()) {
