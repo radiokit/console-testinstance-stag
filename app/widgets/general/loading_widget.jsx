@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactAddons from 'react/addons';
+
 import Translate from 'react-translate-component';
 import Spinner from 'spin.js';
 
@@ -7,7 +7,7 @@ import '../../assets/stylesheets/widgets/general/loading.scss';
 
 
 export default React.createClass({
-  mixins: [ReactAddons.addons.PureRenderMixin],
+  
 
   propTypes: {
     info: React.PropTypes.bool,

@@ -1,12 +1,12 @@
 import React from 'react';
-import ReactAddons from 'react/addons';
+
 import Translate from 'react-translate-component';
 
 import Section from './section_widget.jsx';
 
 
 export default React.createClass({
-  mixins: [ReactAddons.addons.PureRenderMixin],
+  
 
   propTypes: {
     type: React.PropTypes.string.isRequired,

@@ -1,10 +1,10 @@
 import React from 'react';
-import ReactAddons from 'react/addons';
+
 
 import Spinner from 'spin.js';
 
 export default React.createClass({
-  mixins: [ReactAddons.addons.PureRenderMixin],
+  
 
 
   componentDidMount: function() {

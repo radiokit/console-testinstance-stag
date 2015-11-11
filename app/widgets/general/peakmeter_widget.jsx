@@ -1,11 +1,11 @@
 import React from 'react';
-import ReactAddons from 'react/addons';
+
 
 import '../../assets/stylesheets/widgets/general/peakmeter.scss';
 
 
 export default React.createClass({
-  mixins: [ReactAddons.addons.PureRenderMixin],
+  
 
   propTypes: {
     peakValues: React.PropTypes.array.isRequired,
