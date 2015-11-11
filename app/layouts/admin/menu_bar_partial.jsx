@@ -28,12 +28,6 @@ export default React.createClass({
               <Translate component="span" className="title" content="apps.shows.navigation.title"/>
             </Link>
           </li>
-          <li>
-            <Link to={"/apps/music_scheduler/" + this.props.currentAccount.get("id") + "/full_calendar"}>
-              <div className="gui-icon"><i className="mdi mdi-remote" /></div>
-              <Translate component="span" className="title" content="apps.music_scheduler.navigation.title"/>
-            </Link>
-          </li>
         </ul>
       </div>
     </div>);
