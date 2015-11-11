@@ -1,13 +1,13 @@
 import React from 'react';
 import Translate from 'react-translate-component';
-
-var UploadWidget     = require('../../channel/widgets/upload_widget');
+import UploadWidget from '../../widgets/admin/upload_widget.jsx'
 
 export default React.createClass({
   render: function() {
+    console.log(this.props.uploadInterface);
     return (
       <section>
-        <UploadWidget dataInterface={this.props.dataInterface} uploadInterface={this.props.uploadInterface} currentChannel={this.props.currentChannel} kind="episode"/>
+        <UploadWidget uploadInterface={this.props.uploadInterface} kind="episode"/>
       </section>
     );
   }

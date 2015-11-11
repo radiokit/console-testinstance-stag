@@ -1,5 +1,4 @@
 import React from 'react';
-
 import LoadingLayout from './layouts/loading_layout.jsx';
 import AdminLayout from './layouts/admin_layout.jsx';
 import Alert from './widgets/admin/alert_widget.jsx';
@@ -32,15 +31,15 @@ export default React.createClass({
       .query("auth", "User.Account")
       .select("name_custom")
       .on("error", () => {
-        if(this.isMounted()) { 
-          this.setState({ 
+        if(this.isMounted()) {
+          this.setState({
             loadingError: true
           });
         }
       })
       .on("update", (_, query) => {
-        if(this.isMounted()) { 
-          this.setState({ 
+        if(this.isMounted()) {
+          this.setState({
             loadedAccounts: true,
             availableAccounts: query.getData(),
             currentAccount: query.getData().first()
@@ -49,7 +48,7 @@ export default React.createClass({
 
           if(query.getData().size != 0) {
             this.loadChannels(query.getData().first().get("id"))
-          
+
           } else {
             this.setState({
               loadedChannels: true,
@@ -69,14 +68,14 @@ export default React.createClass({
       .select("name")
       .where("user_account_id", "eq", userAccountId)
       .on("error", () => {
-        if(this.isMounted()) { 
-          this.setState({ 
+        if(this.isMounted()) {
+          this.setState({
             loadingError: true
           });
         }
       })
       .on("update", (_, query) => {
-        if(this.isMounted()) { 
+        if(this.isMounted()) {
           this.setState({
             loadedChannels: true,
             availableChannels: query.getData(),
@@ -93,18 +92,18 @@ export default React.createClass({
       .query("auth", "Editor")
       .method("me") // FIXME methods should be deprecated in favour of tokens
       .on("error", () => {
-        if(this.isMounted()) { 
-          this.setState({ 
+        if(this.isMounted()) {
+          this.setState({
             loadingError: true
           });
         }
       })
       .on("update", (_, query) => {
-        if(this.isMounted()) { 
+        if(this.isMounted()) {
           this.initializeGoogleAnalytics(query.getData().first());
-          this.setState({ 
-            loadedEditor: true, 
-            currentEditor: query.getData().first() 
+          this.setState({
+            loadedEditor: true,
+            currentEditor: query.getData().first()
           });
         }
       })
@@ -117,7 +116,6 @@ export default React.createClass({
     this.loadEditor();
   },
 
-
   render: function() {
     if(this.state.loadingError) {
       return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.communication.general" />);
@@ -125,7 +123,7 @@ export default React.createClass({
     } else {
       if(this.state.loadedEditor === false || this.state.loadedAccounts === false || this.state.loadedChannels === false) {
         return (<LoadingLayout />);
-    
+
       } else {
         if(this.state.availableAccounts.size === 0) {
           return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.authentication.no_accounts"/>);
@@ -135,7 +133,11 @@ export default React.createClass({
 
         } else {
           return (
-            <AdminLayout availableAccounts={this.state.availableAccounts} availableChannels={this.state.availableChannels} currentAccount={this.state.currentAccount} currentChannel={this.state.currentChannel} currentEditor={this.state.currentEditor}>
+            <AdminLayout availableAccounts={this.state.availableAccounts}
+                         availableChannels={this.state.availableChannels}
+                         currentAccount={this.state.currentAccount}
+                         currentChannel={this.state.currentChannel}
+                         currentEditor={this.state.currentEditor}>
               {this.props.children}
             </AdminLayout>
           );

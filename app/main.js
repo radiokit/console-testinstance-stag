@@ -15,7 +15,7 @@ import JointDevicesCreate from './apps/joint/devices_create_view.jsx';
 import JointDevicesAdd from './apps/joint/devices_add_view.jsx';
 import ShowsApp from './apps/shows/app.jsx';
 import ShowsIndex from './apps/shows/index.jsx';
-import ShowsNew from './apps/shows/create.jsx';
+import ShowsNew from './apps/shows/new.jsx';
 import ShowsCreate from './apps/shows/create.jsx';
 import ShowsShow from './apps/shows/show.jsx';
 
@@ -78,7 +78,7 @@ React.render((
           <Route path="index" component={ShowsIndex} onEnter={pingGoogleAnalytics}/>
           <Route path="new" component={ShowsNew} onEnter={pingGoogleAnalytics}/>
           <Route path="create" component={ShowsCreate} onEnter={pingGoogleAnalytics}/>
-          <Route path="show" component={ShowsShow} onEnter={pingGoogleAnalytics}/>
+          <Route path="show/:trackId" component={ShowsShow} onEnter={pingGoogleAnalytics}/>
         </Route>
       </Route>
     </Route>
