@@ -27,7 +27,7 @@ export default React.createClass({
 
   // public
   getValue: function() {
-    return this.refs.input.getDOMNode().value;
+    return this.refs.input.value;
   },
 
 

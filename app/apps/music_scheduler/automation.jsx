@@ -37,7 +37,7 @@ export default React.createClass({
             scheduling_regions: query.getData()
           });
           this.forceUpdate();
-          $(this.refs.calendarContainer.getDOMNode()).fullCalendar( 'unselect' );
+          $(this.refs.calendarContainer).fullCalendar( 'unselect' );
         }
       }).fetch();
   },
@@ -48,7 +48,7 @@ export default React.createClass({
 
     this.renderCalendar();
 
-    var renderedEvents = $(this.refs.calendarContainer.getDOMNode()).fullCalendar( 'clientEvents' );
+    var renderedEvents = $(this.refs.calendarContainer).fullCalendar( 'clientEvents' );
 
     var fetchedEventsIds = $.map(fetchedEvents, function(fetchedEvent, index) {
       return fetchedEvent.id + fetchedEvent.day;
@@ -155,7 +155,7 @@ export default React.createClass({
 
   prepareCorrectWeekHash: function() {
     var week_hash = {};
-    var tds       = $(this.refs.calendarCardBody.getDOMNode().getElementsByClassName("fc-day"))
+    var tds       = $(this.refs.calendarCardBody.getElementsByClassName("fc-day"))
 
     $.each(tds, function(index, td) {
       momentDate = moment($(td).data("date"));
@@ -171,10 +171,10 @@ export default React.createClass({
     var firstDayOfWeek = this.transformFirstDayOfWeekToInt("monday");
 
     if(this.oldFirstDayOfWeek != firstDayOfWeek){
-      $(this.refs.calendarContainer.getDOMNode()).fullCalendar("destroy");
+      $(this.refs.calendarContainer).fullCalendar("destroy");
     };
 
-    $(this.refs.calendarContainer.getDOMNode()).fullCalendar({
+    $(this.refs.calendarContainer).fullCalendar({
       defaultView: 'agendaWeek',
       columnFormat: 'dddd',
       firstDay: firstDayOfWeek,
@@ -293,12 +293,12 @@ export default React.createClass({
   updateCalendar: function(eventsToRemove, eventsToAdd, eventsToUpdate) {
     var self = this;
     $.each(eventsToRemove, function(index, event) {
-      $(self.refs.calendarContainer.getDOMNode()).fullCalendar( 'removeEvents', function(evt) {
+      $(self.refs.calendarContainer).fullCalendar( 'removeEvents', function(evt) {
         return evt.id + evt.day == event[1];
       });
     });
     $.each(eventsToAdd, function(index, event) {
-      $(self.refs.calendarContainer.getDOMNode()).fullCalendar( 'renderEvent', event )
+      $(self.refs.calendarContainer).fullCalendar( 'renderEvent', event )
     });
   },
 
