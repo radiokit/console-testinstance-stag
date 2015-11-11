@@ -10,7 +10,7 @@ export default React.createClass({
       currentEditor:     null,
       loadedAccounts:    false,
       availableAccounts: null,
-      currentAccount:    null,
+      currentUserAccount:    null,
       loadedChannels:    false,
       availableChannels: null,
       currentChannel:    null,
@@ -42,7 +42,7 @@ export default React.createClass({
           this.setState({
             loadedAccounts: true,
             availableAccounts: query.getData(),
-            currentAccount: query.getData().first()
+            currentUserAccount: query.getData().first()
           });
 
 
@@ -135,7 +135,7 @@ export default React.createClass({
           return (
             <AdminLayout availableAccounts={this.state.availableAccounts}
                          availableChannels={this.state.availableChannels}
-                         currentAccount={this.state.currentAccount}
+                         currentUserAccount={this.state.currentUserAccount}
                          currentChannel={this.state.currentChannel}
                          currentEditor={this.state.currentEditor}>
               {this.props.children}

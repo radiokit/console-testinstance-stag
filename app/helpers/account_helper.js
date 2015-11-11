@@ -1,7 +1,7 @@
 export default {
   getCurrentAccountIdFromContext: function(context) {
-    if(context.props.hasOwnProperty("currentAccount")) {
-      return context.props.currentAccount.get("id");
+    if(context.props.hasOwnProperty("currentUserAccount")) {
+      return context.props.currentUserAccount.get("id");
 
     } else if(context.props.hasOwnProperty("params")) {
       return context.props.params.userAccountId;

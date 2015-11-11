@@ -1,23 +1,25 @@
 import React from 'react';
 import Immutable from 'immutable';
+import { Link } from 'react-router';
+
 import ButtonLinkWidget from '../../widgets/admin/button_link_widget.jsx';
 import RoutingHelper from '../../helpers/routing_helper.js';
 import AccountHelper from '../../helpers/account_helper.js';
-import { Link } from 'react-router';
 
 export default React.createClass({
   getInitialState: function() {
     return {
-      tracks: new Immutable.Seq().toIndexedSeq()
+      recordRepository: null,
+      recordFiles: new Immutable.Seq().toIndexedSeq()
     };
   },
 
   componentDidMount: function() {
     window.data
-      .query("horn-gw", "Track")
-      .select("duration_total", "title", "rate")
-     // .where("channel_id", "eq", AccountHelper.getCurrentAccountIdFromContext(this))
-      .where("kind", "eq", "episode")
+      .query("vault", "Record.Repository")
+      .select("id")
+      .where("references", "deq", "user_account_id", AccountHelper.getCurrentAccountIdFromContext(this))
+      .where("references", "deq", "role", "shows")
       .on("error", () => {
         if(this.isMounted()) {
           this.setState({
@@ -26,17 +28,44 @@ export default React.createClass({
         }
       }).on("update", (_, query) => {
         if(this.isMounted()) {
-          this.setState({
-            tracks: query.getData()
-          })
+
+          if(query.getData().count() != 0) {
+            this.setState({
+              recordRepository: query.getData().first()
+            });
+
+            window.data
+              .query("vault", "Record.File")
+              .select("name", "duration_total", "audio_rate")
+              .where("record_repository_id", "eq", query.getData().first().get("id"))
+              .on("error", () => {
+                if(this.isMounted()) {
+                  this.setState({
+                    loadingError: true
+                  })
+                }
+              }).on("update", (_, query) => {
+                if(this.isMounted()) {
+                  this.setState({
+                    recordFiles: query.getData()
+                  })
+                }
+              }).fetch();
+
+          } else {
+            this.setState({
+              loadingError: true
+            })
+          }
         }
       }).fetch();
+
   },
 
   renderEpisodes: function() {
     var items = {};
 
-    this.state.tracks.forEach(item => {
+    this.state.recordFiles.forEach(item => {
       if(item.waveform_image_url != null) {
         var waveformImageUrl           = item.waveform_image_url.fit1024x72;
       }

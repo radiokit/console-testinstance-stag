@@ -9,27 +9,64 @@ import Loading from './../general/loading_widget.jsx';
 import FileSize from './../general/file_size_widget.jsx';
 
 export default React.createClass({
+  propTypes: {
+    repositoryRole: React.PropTypes.string.isRequired,
+    repositoryUserAccountId: React.PropTypes.object.isRequired
+  },
+
+
   getInitialState: function() {
     return {
-      resumableState: "null",
-      queue: new Immutable.Seq().toIndexedSeq()
+      loadingState: null,
+      loadingError: false,
+      recordRepository: null,
+      uploadQueue: new Immutable.Seq().toIndexedSeq()
     }
   },
 
 
   componentDidMount: function() {
+    window.data
+      .query("vault", "Record.Repository")
+      .select("id")
+      .where("references", "deq", "user_account_id", this.props.repositoryUserAccountId)
+      .where("references", "deq", "role", this.props.repositoryRole)
+      .on("error", () => {
+        if(this.isMounted()) {
+          this.setState({
+            loadingError: true
+          })
+        }
+      }).on("update", (_, query) => {
+        if(this.isMounted()) {
+
+          if(query.getData().count() != 0) {
+            this.initializeResumable(query.getData().first().get("id"));
+
+          } else {
+            this.setState({
+              loadingError: true
+            })
+          }
+        }
+      }).fetch();
+  },
+
+
+  initializeResumable: function(recordRepositoryId) {
     this.resumable = new Resumable({
       testChunks: false,
       forceChunkSize: true,
       chunkSize: 524288, // 512 kb should be enough even for Africa
       target: window.ENV.apps.vault.baseUrl + '/api/upload/v1.0/resumablejs',
       headers: window.data.options.auth.getHeaders(),
+      query: { record_repository_id: recordRepositoryId },
       minFileSize: 1
     });
 
 
     if(!this.resumable.support) {
-      this.setState({ resumableState: "not-supported" });
+      this.setState({ loadingState: "not-supported" });
 
     } else {
       this.resumable.assignBrowse(React.findDOMNode(this.refs.uploadDropzone));
@@ -40,19 +77,22 @@ export default React.createClass({
       this.resumable.on("fileRetry", this.updateQueue);
       this.resumable.on("fileError", this.updateQueue);
 
-      this.setState({ resumableState: "ready" });
+      this.setState({ loadingState: "ready" });
     }
   },
 
 
   componentWillUnmount: function() {
-    this.resumable.cancel();
-    delete this.resumable;
+    if(this.resumable) {
+      this.resumable.cancel();
+      delete this.resumable;
+    }
   },
 
 
   updateQueue: function() {
-    this.setState({ queue: Immutable.fromJS(this.resumable.files) });
+    console.log(this.resumable.files);
+    this.setState({ uploadQueue: Immutable.fromJS(this.resumable.files) });
   },
 
 
@@ -74,8 +114,8 @@ export default React.createClass({
 
 
   renderQueue: function() {
-    if(this.state.queue.size != 0) {
-      if(this.state.queue.size <= 7) {
+    if(this.state.uploadQueue.size != 0) {
+      if(this.state.uploadQueue.size <= 7) {
         var cardClassName = "card-body no-padding";
 
       } else {
@@ -104,7 +144,7 @@ export default React.createClass({
   },
 
   renderQueueRows: function() {
-    return this.state.queue.map((file, i) => {
+    return this.state.uploadQueue.map((file, i) => {
       let badge = null;
       if(file.isUploading()) {
         badge = <span className="badge style-accent-light">{parseInt(file.progress(false) * 100)}%</span>;
@@ -137,34 +177,18 @@ export default React.createClass({
   },
 
   render: function() {
-    if(this.state.resumableState === "ready") {
-      return (
-      	<section>
-      	  <div className="section-body">
-      	    <div className="row">
-      	      <div className="col-lg-8 col-lg-offset-2">
-      	        {this.renderDropzone()}
-                {this.renderQueue()}
-                {this.renderTags()}
-              </div>
-      	    </div>
-      	  </div>
-      	</section>
-      );
-
-    } else {
-      return (
-      	<section>
-      	  <div className="section-body">
-      	    <div className="row">
-      	      <div className="col-lg-8 col-lg-offset-2">
-      	        {this.renderDropzone()}
-                {this.renderTags()}
-              </div>
-      	    </div>
-      	  </div>
-      	</section>
-      );
-    }
+    return (
+    	<section>
+    	  <div className="section-body">
+    	    <div className="row">
+    	      <div className="col-lg-8 col-lg-offset-2">
+    	        {this.renderDropzone()}
+    	        {this.renderQueue()}
+              {this.renderTags()}
+            </div>
+    	    </div>
+    	  </div>
+    	</section>
+    );
   }
 });

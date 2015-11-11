@@ -5,7 +5,7 @@ import Gravatar from 'gravatar-api';
 
 export default React.createClass({
   propTypes: {
-    currentAccount: React.PropTypes.object.isRequired,
+    currentUserAccount: React.PropTypes.object.isRequired,
     availableAccounts: React.PropTypes.object.isRequired,
     currentEditor: React.PropTypes.object.isRequired,
     currentChannel: React.PropTypes.object.isRequired,
@@ -32,7 +32,7 @@ export default React.createClass({
         <li className="header-nav-brand">
           <div className="brand-holder">
             <span className="header-nav-breadcrumb-separator mdi mdi-chevron-right"/>
-            <span className="header-nav-breadcrumb-label">{this.props.currentAccount.get("name_custom")}</span>
+            <span className="header-nav-breadcrumb-label">{this.props.currentUserAccount.get("name_custom")}</span>
           </div>
         </li>);
     }

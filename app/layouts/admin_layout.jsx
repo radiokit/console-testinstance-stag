@@ -10,7 +10,7 @@ import '../../vendor/assets/stylesheets/materialadmin/material-design-iconic-fon
 
 export default React.createClass({
   propTypes: {
-    currentAccount: React.PropTypes.object.isRequired,
+    currentUserAccount: React.PropTypes.object.isRequired,
     availableAccounts: React.PropTypes.object.isRequired,
     currentEditor: React.PropTypes.object.isRequired,
     currentChannel: React.PropTypes.object.isRequired,
@@ -22,13 +22,13 @@ export default React.createClass({
     return (
       <div>
         <Background />
-        <TopBar availableAccounts={this.props.availableAccounts} currentAccount={this.props.currentAccount} availableChannels={this.props.availableChannels} currentChannel={this.props.currentChannel} currentEditor={this.props.currentEditor} />
+        <TopBar availableAccounts={this.props.availableAccounts} currentUserAccount={this.props.currentUserAccount} availableChannels={this.props.availableChannels} currentChannel={this.props.currentChannel} currentEditor={this.props.currentEditor} />
 
         <div id="base">
           <div id="content">
             {this.props.children}
           </div>
-          <MenuBar currentAccount={this.props.currentAccount} />
+          <MenuBar currentUserAccount={this.props.currentUserAccount} />
         </div>
       </div>
     );
