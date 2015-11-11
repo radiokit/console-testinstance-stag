@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 import { Router, Route, IndexRoute } from 'react-router';
 import Counterpart from 'counterpart';
@@ -65,7 +66,7 @@ window.data = new RadioKit.Data.Interface(getEnv());
 window.plumberStream = new Socket(getEnv().apps.plumber.baseUrl.replace(/^http/, "ws") + "/api/stream/v1.0", { heartbeatIntervalMs: 1000 });
 window.plumberStream.connect();
 
-React.render((
+ReactDOM.render((
   <Router history={createBrowserHistory()}>
     <Route path="/" component={Root} onEnter={requireAuth}>
       <Route path="apps" component={AppsIndex} onEnter={pingGoogleAnalytics}>
