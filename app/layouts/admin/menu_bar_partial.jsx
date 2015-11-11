@@ -24,7 +24,7 @@ export default React.createClass({
           </li>
           <li>
             <Link to={"/apps/shows/" + this.props.currentUserAccount.get("id") + "/index"}>
-              <div className="gui-icon"><i className="mdi mdi-remote" /></div>
+              <div className="gui-icon"><i className="mdi mdi-microphone" /></div>
               <Translate component="span" className="title" content="apps.shows.navigation.title"/>
             </Link>
           </li>
