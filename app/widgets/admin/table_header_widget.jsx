@@ -20,12 +20,14 @@ export default React.createClass({
 
   render: function() {
     return (<thead>
-      {Object.keys(this.props.attributes).map((attribute) => {
-        return <Translate key={"cell-" + attribute} component="th" content={this.props.contentPrefix + ".header." + attribute} />
-      })}
-      {this.props.actions.map((action) => {
-        return <th key={"action-" + action} />
-      })}
+      <tr>
+        {Object.keys(this.props.attributes).map((attribute) => {
+          return <Translate key={"cell-" + attribute} component="th" content={this.props.contentPrefix + ".header." + attribute} />
+        })}
+        {this.props.actions.map((action) => {
+          return <th key={"action-" + action} />
+        })}
+      </tr>
     </thead>);
   }
 });
