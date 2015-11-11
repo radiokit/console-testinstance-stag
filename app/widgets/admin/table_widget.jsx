@@ -4,11 +4,19 @@ import TableBody from './table_body_widget.jsx';
 import TableHeader from './table_header_widget.jsx';
 
 
-export default React.createClass({  
+export default React.createClass({
   propTypes: {
-    attributes: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
+    attributes: React.PropTypes.object.isRequired,
+    actions: React.PropTypes.arrayOf(React.PropTypes.element),
     contentPrefix: React.PropTypes.string.isRequired,
     records: React.PropTypes.object.isRequired
+  },
+
+
+  getDefaultProps: function() {
+    return {
+      actions: []
+    }
   },
 
 

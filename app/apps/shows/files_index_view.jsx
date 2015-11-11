@@ -8,6 +8,7 @@ import CardHeader from '../../widgets/admin/card_header_widget.jsx';
 import CardToolBar from '../../widgets/admin/card_tool_bar_widget.jsx';
 import CardToolBarCreate from '../../widgets/admin/card_tool_bar_create_widget.jsx';
 import Table from '../../widgets/admin/table_widget.jsx';
+import TableActionShow from '../../widgets/admin/table_action_show.jsx';
 import Alert from '../../widgets/admin/alert_widget.jsx';
 import Section from '../../widgets/admin/section_widget.jsx';
 import Loading from '../../widgets/general/loading_widget.jsx';
@@ -86,6 +87,7 @@ export default React.createClass({
         return (<Alert type="error" fullscreen={true} infoTextKey="apps.shows.files.index.none"/>);
 
       } else {
+        var that = this;
         return (
           <Section>
             <GridRow>
@@ -97,7 +99,7 @@ export default React.createClass({
                     </CardToolBar>
                   </CardHeader>
                   <CardBody>
-                    <Table attributes={["name"]} contentPrefix="apps.shows.files.index.table" records={this.state.availableFiles} />
+                    <Table attributes={{ name: { renderer: "text", props: { context: this, link: RoutingHelper.apps.shows.files.show } }}} actions={[]} contentPrefix="apps.shows.files.index.table" records={this.state.availableFiles} />
                   </CardBody>
                 </Card>
               </GridCell>

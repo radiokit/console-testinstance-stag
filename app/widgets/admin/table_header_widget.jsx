@@ -2,16 +2,29 @@ import React from 'react';
 import Translate from 'react-translate-component';
 
 
-export default React.createClass({  
+
+export default React.createClass({
   propTypes: {
-    attributes: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
+    attributes: React.PropTypes.object.isRequired,
+    actions: React.PropTypes.arrayOf(React.PropTypes.string),
     contentPrefix: React.PropTypes.string.isRequired
   },
 
+
+  getDefaultProps: function() {
+    return {
+      actions: []
+    }
+  },
+
+
   render: function() {
     return (<thead>
-      {this.props.attributes.map((attribute) => {
-        return <Translate key={attribute} component="th" content={this.props.contentPrefix + ".header." + attribute} />
+      {Object.keys(this.props.attributes).map((attribute) => {
+        return <Translate key={"cell-" + attribute} component="th" content={this.props.contentPrefix + ".header." + attribute} />
+      })}
+      {this.props.actions.map((action) => {
+        return <th key={"action-" + action} />
       })}
     </thead>);
   }

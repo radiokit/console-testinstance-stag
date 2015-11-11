@@ -16,7 +16,7 @@ import JointDevicesAdd from './apps/joint/devices_add_view.jsx';
 import ShowsApp from './apps/shows/app.jsx';
 import ShowsFilesIndex from './apps/shows/files_index_view.jsx';
 import ShowsFilesCreate from './apps/shows/files_create_view.jsx';
-import ShowsFilesShow from './apps/shows/show.jsx';
+import ShowsFilesShow from './apps/shows/files_show_view.jsx';
 import ShowsFilesShowTrackMarkers from './apps/shows/show_track_markers.jsx';
 
 Counterpart.registerTranslations("en", require('./locales/en/general.js'));
@@ -78,7 +78,7 @@ React.render((
         <Route path="shows/:userAccountId" component={ShowsApp}>
           <Route path="files/index" component={ShowsFilesIndex} onEnter={pingGoogleAnalytics}/>
           <Route path="files/create" component={ShowsFilesCreate} onEnter={pingGoogleAnalytics}/>
-          <Route path="show/:trackId" component={ShowsFilesShow} onEnter={pingGoogleAnalytics}/>
+          <Route path="files/show/:fileId" component={ShowsFilesShow} onEnter={pingGoogleAnalytics}/>
           <Route path="show/:trackId/track_markers" component={ShowsFilesShowTrackMarkers} onEnter={pingGoogleAnalytics}/>
         </Route>
       </Route>

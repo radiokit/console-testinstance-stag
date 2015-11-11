@@ -196,10 +196,11 @@ export default React.createClass({
 	},
 
   render: function() {
-    return (
-      <section>
-        {this.renderEpisode()}
-      </section>
-    );
+    return <div>TEST</div>;
+    // return (
+    //   <section>
+    //     {this.renderEpisode()}
+    //   </section>
+    // );
   }
 });

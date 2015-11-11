@@ -25,8 +25,8 @@ export default {
         create: function(context) {
           return "/apps/shows/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/files/create";
         },
-        show: function(context, trackId) {
-          return "/apps/shows/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/show/" + trackId;
+        show: function(context, track) {
+          return "/apps/shows/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/files/show/" + track.get("id");
         },
         showTrackMarkers: function(context, trackId) {
           return "/apps/shows/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/show/" + trackId + "/track_markers";
