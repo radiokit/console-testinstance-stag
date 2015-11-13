@@ -23,6 +23,7 @@ export default {
           table: {
             header: {
               name: "Nazwa",
+              duration_total: "Czas trwania",
             }
           }
         }

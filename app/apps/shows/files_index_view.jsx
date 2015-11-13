@@ -44,6 +44,8 @@ export default React.createClass({
 
     this.setState({ selectedTagItemIds: selectedTagItemIds }, () => {
       this.loadFiles();
+      // FIXME fast clicking can cause that requests come in reverse order than clicked
+      // and not the last one will be shown but the last that came
     });
   },
 
@@ -177,7 +179,10 @@ export default React.createClass({
 
                       <div className="col-sm-8 col-md-9 col-lg-10">
                         <div className="small-padding">
-                          <Table attributes={{ name: { renderer: "text", props: { context: this, link: RoutingHelper.apps.shows.files.show } }}} actions={[]} contentPrefix="apps.shows.files.index.table" records={this.state.availableFiles} />
+                          <Table attributes={{
+                            name:           { renderer: "text", props: { linkFunc: (item) => { return RoutingHelper.apps.shows.files.show(this, item); } } },
+                            duration_total: { renderer: "text" },
+                          }} actions={[]} contentPrefix="apps.shows.files.index.table" records={this.state.availableFiles} />
                         </div>
                       </div>
                     </div>
