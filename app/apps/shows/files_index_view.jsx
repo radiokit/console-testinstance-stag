@@ -124,7 +124,7 @@ export default React.createClass({
                   <CardBody>
                     <div className="row">
                       <div className="col-sm-4 col-md-3 col-lg-2">
-                        <TagSelector categories={this.state.availableCategories}/>
+                        <TagSelector categories={this.state.availableCategories} path={RoutingHelper.apps.shows.files.index(this)}/>
                       </div>
 
                       <div className="col-sm-8 col-md-9 col-lg-10">
