@@ -21,6 +21,7 @@ import ShowsFilesShow from './apps/shows/files_show_view.jsx';
 import ShowsFilesShowTrackMarkers from './apps/shows/show_track_markers.jsx';
 import MusicSchedulerApp from './apps/music_scheduler/app.jsx';
 import MusicSchedulerAutomation from './apps/music_scheduler/automation.jsx';
+import MusicSchedulerAutomationRegionsShow from './apps/music_scheduler/automation_regions_show.jsx';
 
 Counterpart.registerTranslations("en", require('./locales/en/general.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/joint.js'));
@@ -42,7 +43,8 @@ function getEnv() {
         "plumber" : { baseUrl: "http://localhost:4010" },
         "auth" : { baseUrl: "https://radiokit-auth-stag.herokuapp.com" },
         "horn-gw" : {baseUrl: "https://radiokit-horn-gw-stag.herokuapp.com"},
-        "vault" : { baseUrl: "http://localhost:4060" }
+        "vault" : { baseUrl: "http://localhost:4060" },
+        "agenda": { baseUrl: "https://radiokit-agenda-stag.herokuapp.com" }
       },
       verbose: true
     };
@@ -84,6 +86,7 @@ ReactDOM.render((
         </Route>
         <Route path="music_scheduler/:userAccountId" component={MusicSchedulerApp}>
           <Route path="automation" component={MusicSchedulerAutomation}/>
+          <Route path="automation_regions_show/:schedulingItemId" component={MusicSchedulerAutomationRegionsShow}/>
         </Route>
       </Route>
     </Route>

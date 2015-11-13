@@ -1,12 +1,31 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import ReactTranslate from 'react-translate-component';
 import translate from 'counterpart';
 import { Link } from 'react-router';
-import moment from 'moment';
-import momentTz from 'moment-timezone';
+
+import RoutingHelper from '../../helpers/routing_helper.js';
+import AccountHelper from '../../helpers/account_helper.js';
+import Section from '../../widgets/admin/section_widget.jsx';
+import GridRow from '../../widgets/admin/grid_row_widget.jsx';
+import GridCell from '../../widgets/admin/grid_cell_widget.jsx';
+import Alert from '../../widgets/admin/alert_widget.jsx';
+import Card from '../../widgets/admin/card_widget.jsx';
+import CardBody from '../../widgets/admin/card_body_widget.jsx';
+import CardHeader from '../../widgets/admin/card_header_widget.jsx';
+import CardToolBar from '../../widgets/admin/card_tool_bar_widget.jsx';
+import CardToolBarCreate from '../../widgets/admin/card_tool_bar_create_widget.jsx';
+import Loading from '../../widgets/general/loading_widget.jsx';
 
 export default React.createClass({
+
+  itemsQuery: null,
+
+  getInitialState: function() {
+    return {
+      loadingError: false,
+      scheduling_items: null,
+      schedule_weekly_plan: null
+    };
+  },
 
   oldFirstDayOfWeek: null,
 
@@ -22,9 +41,10 @@ export default React.createClass({
     this.setOldFirstDayOfWeek(this.transformFirstDayOfWeekToInt("monday"));
 
     window.data
-      .query("horn-gw", "ChannelSchedulingRegion")
-      .select("time_start", "time_stop", "name", "color")
-      // .where("channel_id", "eq", AccountHelper.getCurrentAccountIdFromContext(this))
+      .query("agenda", "Schedule.Weekly.Plan")
+      .select("id")
+      .where("references", "deq", "user_account_id", AccountHelper.getCurrentAccountIdFromContext(this))
+      .where("references", "deq", "role", "music")
       .on("error", () => {
         if(this.isMounted()) {
           this.setState({
@@ -33,78 +53,112 @@ export default React.createClass({
         }
       }).on("update", (_, query) => {
         if(this.isMounted()) {
-          this.setState({
-            scheduling_regions: query.getData()
-          });
-          this.forceUpdate();
-          $(this.refs.calendarContainer).fullCalendar( 'unselect' );
+          if(query.getData().count() != 0) {
+            this.setState({
+              schedule_weekly_plan: query.getData().first()
+            });
+
+            this.itemsQuery = window.data
+              .query("agenda", "Schedule.Weekly.Item")
+              .select("id", "time_start", "time_stop", "name", "extra" ,"on_monday", "on_tuesday", "on_wednesday", "on_thursday", "on_friday", "on_saturday", "on_sunday")
+              .where("schedule_weekly_plan_id", "eq", query.getData().first().get("id"))
+              .on("error", () => {
+                if(this.isMounted()) {
+                  this.setState({
+                    loadingError: true
+                  })
+                }
+              }).on("update", (_, query) => {
+                if(this.isMounted()) {
+                  this.setState({
+                    scheduling_items: query.getData(),
+                  })
+                  //this.forceUpdate();
+                  $(this.refs.calendarContainer).fullCalendar( 'unselect' );
+                }
+              })
+              .enableAutoUpdate();
+          } else {
+            this.setState({
+              loadingError: true
+            })
+          }
         }
       }).fetch();
   },
 
+  componentWillUnmount: function() {
+    this.itemsQuery.teardown();
+  },
+
   componentDidUpdate: function() {
-    var self = this;
-    var fetchedEvents = this.prepareEventsArray();
+    if(!this.state.loadingError) {
+      var self = this;
+      var fetchedEvents = this.prepareEventsArray();
 
-    this.renderCalendar();
+      this.renderCalendar();
 
+<<<<<<< HEAD
     var renderedEvents = $(this.refs.calendarContainer).fullCalendar( 'clientEvents' );
+=======
+      var renderedEvents = $(this.refs.calendarContainer).fullCalendar( 'clientEvents' );
+>>>>>>> Automation Show Item view added
 
-    var fetchedEventsIds = $.map(fetchedEvents, function(fetchedEvent, index) {
-      return fetchedEvent.id + fetchedEvent.day;
-    });
-    var renderedEventsIds = $.map(renderedEvents, function(renderedEvent, index) {
-      return renderedEvent.id + renderedEvent.day;
-    });
+      var fetchedEventsIds = $.map(fetchedEvents, function(fetchedEvent, index) {
+        return fetchedEvent.id + fetchedEvent.day;
+      });
+      var renderedEventsIds = $.map(renderedEvents, function(renderedEvent, index) {
+        return renderedEvent.id + renderedEvent.day;
+      });
 
-    var eventsToAdd = [];
-    $.each(fetchedEvents, function(index, fetchedEvent) {
-      key = fetchedEvent.id+fetchedEvent.day;
+      var eventsToAdd = [];
+      $.each(fetchedEvents, function(index, fetchedEvent) {
+        var key = fetchedEvent.id+fetchedEvent.day;
 
-      if($.inArray(key, renderedEventsIds) == -1) {
-        eventsToAdd.push(fetchedEvent);
-      };
-    });
+        if($.inArray(key, renderedEventsIds) == -1) {
+          eventsToAdd.push(fetchedEvent);
+        };
+      });
 
-    var eventsToRemove = [];
-    $.each(renderedEvents, function(index, renderedEvent) {
-      key = renderedEvent.id+renderedEvent.day;
+      var eventsToRemove = [];
+      $.each(renderedEvents, function(index, renderedEvent) {
+        var key = renderedEvent.id+renderedEvent.day;
 
-      if($.inArray(key, fetchedEventsIds) == -1) {
-        eventsToRemove.push([renderedEvent, key]);
-      };
-    });
+        if($.inArray(key, fetchedEventsIds) == -1) {
+          eventsToRemove.push([renderedEvent, key]);
+        };
+      });
 
-    var eventsToUpdate = [];
-    $.each(fetchedEvents, function(index, fetchedEvent) {
-      key = fetchedEvent.id+fetchedEvent.day;
+      var eventsToUpdate = [];
+      $.each(fetchedEvents, function(index, fetchedEvent) {
+        var key = fetchedEvent.id+fetchedEvent.day;
 
-      if($.inArray(key, renderedEventsIds) != -1) {
-        renderedEvent = $.grep(renderedEvents, function(e){ return e.id + e.day == key; })[0];
-        data_attributes_to_compare = [
-          "time_start",
-          "time_stop",
-          "title",
-          "color"
-        ];
+        if($.inArray(key, renderedEventsIds) != -1) {
+          var renderedEvent = $.grep(renderedEvents, function(e){ return e.id + e.day == key; })[0];
+          var data_attributes_to_compare = [
+            "time_start",
+            "time_stop",
+            "title"
+          ];
 
-        $.each(data_attributes_to_compare, function(index, attribute) {
-          if(fetchedEvent[attribute] != renderedEvent[attribute]) {
-            if(attribute == "title" || attribute == "color" ) {
-              renderedEvent[attribute] = fetchedEvent[attribute];
-              $(ReactDOM.findDOMNode(self.refs.calendarContainer)).fullCalendar( 'rerenderEvents' );
-            } else {
-              $(ReactDOM.findDOMNode(self.refs.calendarContainer)).fullCalendar( 'removeEvents', fetchedEvent.id )
-              $(ReactDOM.findDOMNode(self.refs.calendarContainer)).fullCalendar( 'renderEvent', fetchedEvent )
+          $.each(data_attributes_to_compare, function(index, attribute) {
+            if(fetchedEvent[attribute] != renderedEvent[attribute]) {
+              if(attribute == "title" || attribute == "color" ) {
+                renderedEvent[attribute] = fetchedEvent[attribute];
+                $(self.refs.calendarContainer).fullCalendar( 'rerenderEvents' );
+              } else {
+                $(self.refs.calendarContainer).fullCalendar( 'removeEvents', fetchedEvent.id )
+                $(self.refs.calendarContainer).fullCalendar( 'renderEvent', fetchedEvent )
+              };
             };
-          };
-        });
-      };
-    });
+          });
+        };
+      });
 
-    if(eventsToRemove.length != 0 || eventsToAdd.length != 0 || eventsToUpdate.length != 0) {
-      this.updateCalendar(eventsToRemove, eventsToAdd, eventsToUpdate);
-    };
+      if(eventsToRemove.length != 0 || eventsToAdd.length != 0 || eventsToUpdate.length != 0) {
+        this.updateCalendar(eventsToRemove, eventsToAdd, eventsToUpdate);
+      };
+    }
   },
 
   prepareEventsArray: function() {
@@ -112,39 +166,39 @@ export default React.createClass({
     var week_hash = this.prepareCorrectWeekHash();
     var events = [];
 
-    if (this.state.scheduling_regions == null) return [];
+    if (this.state.scheduling_items == null) return [];
 
-    this.state.scheduling_regions.map(function(item) {
+    this.state.scheduling_items.forEach(function(item) {
       var days_to_include = []
 
       $.each(self.days, function(index, day) {
         var attr_name = "on_" + day
-        if(item[attr_name]) {
+        if(item.get(attr_name)) {
           days_to_include.push(day);
         };
       });
 
-      time_start           = moment.parseZone(item.get("time_start"));
-      time_stop            = moment.parseZone(item.get("time_stop"));
-      time_title_formatted = time_start.format("HH:mm") + " - " + time_stop.add(1, "s").format("HH:mm")
-      title =
-        item.name ? item.name + " (" + time_title_formatted + ")" : time_title_formatted;
+      var time_start           = moment.parseZone("2015-11-12T" + item.get("time_start") + "Z");
+      var time_stop            = moment.parseZone("2015-11-12T" + item.get("time_stop") + "Z");
+      var time_title_formatted = time_start.format("HH:mm") + " - " + time_stop.add(1, "s").format("HH:mm")
+      var title =
+        item.get("name") ? item.get("name") + " (" + time_title_formatted + ")" : time_title_formatted;
 
       $.each(days_to_include, function(index, day) {
-        event_attributes = {
+        var event_attributes = {
           id         : item.get("id"),
           title      : title,
           time_start : time_start.format("HH:mm:ss"),
           time_stop  : time_stop.format("HH:mm:ss"),
-          start      : week_hash[day] + "T" + moment.parseZone(item.time_start).format("HH:mm:ss"),
-          end        : week_hash[day] + "T" + moment.parseZone(item.time_stop).format("HH:mm:ss"),
+          start      : week_hash[day] + "T" + moment.parseZone("2015-11-12T" + item.get("time_start") +"Z").format("HH:mm:ss"),
+          end        : week_hash[day] + "T" + moment.parseZone("2015-11-12T" + item.get("time_stop") + "Z").format("HH:mm:ss"),
           day        : day,
-          color      : item.get("color")
+          color      : "#0076ff"
         };
 
         $.each(self.days, function(index, day) {
-          day_attribute = "on_" + day;
-          event_attributes[day_attribute] = item[day_attribute];
+          var day_attribute = "on_" + day;
+          event_attributes[day_attribute] = item.get(day_attribute);
         });
 
         events.push(event_attributes);
@@ -158,9 +212,9 @@ export default React.createClass({
     var tds       = $(this.refs.calendarCardBody.getElementsByClassName("fc-day"))
 
     $.each(tds, function(index, td) {
-      momentDate = moment($(td).data("date"));
-      day        = momentDate.format("dddd").toLowerCase();
-      date       = momentDate.format("YYYY-MM-DD");
+      var momentDate = moment($(td).data("date"));
+      var day        = momentDate.format("dddd").toLowerCase();
+      var date       = momentDate.format("YYYY-MM-DD");
       week_hash[day] = date;
     });
     return week_hash;
@@ -178,7 +232,7 @@ export default React.createClass({
       defaultView: 'agendaWeek',
       columnFormat: 'dddd',
       firstDay: firstDayOfWeek,
-      defaultDate: '2000-01-01',
+      defaultDate: '2015-11-01',
       header: false,
       allDaySlot: false,
       height: "auto",
@@ -233,7 +287,7 @@ export default React.createClass({
       },
 
       eventClick: function( event, jsEvent, view ) {
-        self.transitionTo('channelMusicAutomationRegionsShow', {channelAlias: self.getParams().channelAlias, showRegionId: event.id});
+        self.props.history.pushState(null, RoutingHelper.apps.music_scheduler.automation_regions_show(self, event.id));
       },
       selectHelper: true
     });
@@ -271,7 +325,7 @@ export default React.createClass({
     var create_attributes = {
       time_start: start.format("HH:mm:ss"),
       time_stop: adjusted_time_stop,
-      //channel_id: self.props.currentChannel.id
+      schedule_weekly_plan_id: self.state.schedule_weekly_plan.get("id")
     };
 
     var day = moment(start).format("dddd").toLowerCase();
@@ -279,8 +333,8 @@ export default React.createClass({
     create_attributes[day_attribute] = true
 
     window.data
-    .record("horn-gw","SchedulingRegion")
-    .on("warning", function(eventName, record) {
+    .record("agenda","Schedule.Weekly.Item")
+    .on("error", function(eventName, record) {
       element = $(jsEvent.target).parent()
       element.css({
         "background": "#f40000",
@@ -317,20 +371,28 @@ export default React.createClass({
   },
 
   render: function() {
-    return (
-      <section>
-        <div className="section-body">
-          <div className="row">
-            <div className="col-sm-12">
-              <div className="card style-default-light">
-                <div ref="calendarCardBody" className="card-body style-default-bright">
-                  <div ref="calendarContainer" className="calendar-container"/>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
+    if(this.state.loadingError) {
+      return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.communication.general" />);
+    } else {
+      var that = this;
+      return (
+        <Section>
+          <GridRow>
+            <GridCell size="medium" center={true}>
+              <Card>
+                <CardHeader headerTextKey="apps.music_scheduler.automation.header">
+                  <CardToolBar/>
+                </CardHeader>
+                <CardBody>
+                  <div ref="calendarCardBody" className="card-body style-default-bright">
+                    <div ref="calendarContainer" className="calendar-container"/>
+                  </div>
+                </CardBody>
+              </Card>
+            </GridCell>
+          </GridRow>
+        </Section>
+      );
+    }
   }
 });

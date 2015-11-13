@@ -32,6 +32,14 @@ export default {
           return "/apps/shows/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/show/" + trackId + "/track_markers";
         }
       }
+    },
+    music_scheduler: {
+      automation_regions_show: function(context, schedulingItemId) {
+          return "/apps/music_scheduler/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/automation_regions_show/" + schedulingItemId;
+      },
+      automation: function(context) {
+          return "/apps/music_scheduler/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/automation";
+      }
     }
   }
 }

@@ -11,7 +11,6 @@ export default React.createClass({
     currentUserAccount: React.PropTypes.object.isRequired
   },
 
-
   render: function() {
     return (<div id="menubar" className="menubar-inverse animate" onMouseOver={AdminHelper.showMenuBar}>
       <div className="menubar-scroll-panel">

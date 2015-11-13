@@ -20,7 +20,8 @@ export default React.createClass({
     return {
       recordRepository: null,
       availableFiles: null,
-      loadedFiles: false
+      loadedFiles: false,
+      loadingError: false
     };
   },
 
@@ -71,7 +72,6 @@ export default React.createClass({
           }
         }
       }).fetch();
-
   },
 
 
