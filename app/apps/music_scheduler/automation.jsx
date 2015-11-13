@@ -98,12 +98,7 @@ export default React.createClass({
 
       this.renderCalendar();
 
-<<<<<<< HEAD
-    var renderedEvents = $(this.refs.calendarContainer).fullCalendar( 'clientEvents' );
-=======
       var renderedEvents = $(this.refs.calendarContainer).fullCalendar( 'clientEvents' );
->>>>>>> Automation Show Item view added
-
       var fetchedEventsIds = $.map(fetchedEvents, function(fetchedEvent, index) {
         return fetchedEvent.id + fetchedEvent.day;
       });
