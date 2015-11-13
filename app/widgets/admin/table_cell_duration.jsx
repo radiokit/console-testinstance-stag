@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Duration from '../general/duration_widget.jsx';
+
 export default React.createClass({
   propTypes: {
     record: React.PropTypes.object.isRequired,
@@ -9,6 +11,6 @@ export default React.createClass({
 
 
   render: function() {
-    return (<span>{this.props.value}</span>);
+    return (<span><Duration duration={this.props.value} /></span>);
   }
 });
