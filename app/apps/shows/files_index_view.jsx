@@ -155,7 +155,7 @@ export default React.createClass({
 
   buildTableAttributes: function() {
     let attributes = {
-      name: { renderer: "string", linkFunc: (item) => { return RoutingHelper.apps.shows.files.show(this, item); } },
+      name: { renderer: "string", linkFunc: (record) => { return RoutingHelper.apps.shows.files.show(this, record); } },
     };
 
     return this.state.currentRepository.get("metadata_schemas").reduce((acc, metadataSchema) => {
