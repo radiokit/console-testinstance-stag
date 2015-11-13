@@ -34,7 +34,8 @@ export default React.createClass({
     } else {
       return (
         <div className="card-head">
-          <Translate content={this.props.headerTextKey} component="header" />
+          <Translate content={this.context.contentPrefix + ".header"} component="header" />
+
           {this.props.children}
         </div>
       );

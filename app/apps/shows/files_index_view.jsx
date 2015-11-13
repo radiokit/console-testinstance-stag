@@ -93,7 +93,7 @@ export default React.createClass({
           <Section>
             <GridRow>
               <GridCell size="medium" center={true}>
-                <Card tabs={["a", "b"]} contentPrefix="apps.shows.files.index">
+                <Card contentPrefix="apps.shows.files.index">
                   <CardHeader>
                     <CardToolBar>
                       <CardToolBarCreate path={RoutingHelper.apps.shows.files.create(this)} hintTooltipKey="apps.shows.files.create.form.header" />
