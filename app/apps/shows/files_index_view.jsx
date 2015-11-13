@@ -20,7 +20,8 @@ import AccountHelper from '../../helpers/account_helper.js';
 export default React.createClass({
   getInitialState: function() {
     return {
-      recordRepository: null,
+      currentRepository: null,
+      loadedRepository: false,
       availableFiles: null,
       loadedFiles: false,
       availableCategories: null,
@@ -41,11 +42,30 @@ export default React.createClass({
       selectedTagItemIds.push(tagItemId);
     }
 
-    this.setState({ selectedTagItemIds: selectedTagItemIds });
+    this.setState({ selectedTagItemIds: selectedTagItemIds }, () => {
+      this.loadFiles();
+    });
+  },
+
+
+  componentDidUpdate: function() {
+    if(this.state.loadedRepository) {
+      if(!this.state.loadedFiles) {
+        this.loadFiles();
+      }
+      if(!this.state.loadedCategories) {
+        this.loadCategories();
+      }
+    }
   },
 
 
   componentDidMount: function() {
+    this.loadRepository();
+  },
+
+
+  loadRepository: function() {
     window.data
       .query("vault", "Record.Repository")
       .select("id")
@@ -57,36 +77,14 @@ export default React.createClass({
             loadingError: true
           })
         }
-      }).on("update", (_, query) => {
+      }).on("update", (_, response) => {
         if(this.isMounted()) {
 
-          if(query.getData().count() != 0) {
+          if(response.getData().count() != 0) {
             this.setState({
-              recordRepository: query.getData().first()
+              currentRepository: response.getData().first(),
+              loadedRepository: true
             });
-
-            window.data
-              .query("vault", "Tag.Category")
-              .select("id", "name", "tag_items")
-              .joins("tag_items")
-              .where("record_repository_id", "eq", query.getData().first().get("id"))
-              .order("name", "asc")
-              .on("error", () => {
-                if(this.isMounted()) {
-                  this.setState({
-                    loadingError: true
-                  })
-                }
-              }).on("update", (_, query) => {
-                if(this.isMounted()) {
-                  this.setState({
-                    availableCategories: query.getData(),
-                    loadedCategories: true
-                  })
-                }
-              }).fetch();
-
-            this.executeFilesQuery();
 
           } else {
             this.setState({
@@ -98,31 +96,57 @@ export default React.createClass({
   },
 
 
-  executeFilesQuery: function() {
+  loadCategories: function() {
     window.data
-      .query("vault", "Record.File")
-      .select("id", "name")
-      .where("record_repository_id", "eq", this.state.recordRepository.get("id"))
+      .query("vault", "Tag.Category")
+      .select("id", "name", "tag_items")
+      .joins("tag_items")
+      .where("record_repository_id", "eq", this.state.currentRepository.get("id"))
+      .order("name", "asc")
       .on("error", () => {
         if(this.isMounted()) {
           this.setState({
             loadingError: true
           })
         }
-      }).on("update", (_, query) => {
+      }).on("update", (_, response) => {
         if(this.isMounted()) {
           this.setState({
-            availableFiles: query.getData(),
-            loadedFiles: true
+            availableCategories: response.getData(),
+            loadedCategories: true
           })
         }
       }).fetch();
   },
 
 
-  // componentWillUpdate: function() {
-  //   this.executeFilesQuery();
-  // },
+  loadFiles: function() {
+    let query =
+      window.data
+      .query("vault", "Record.File")
+      .select("id", "name")
+      .where("record_repository_id", "eq", this.state.currentRepository.get("id"))
+      .on("error", () => {
+        if(this.isMounted()) {
+          this.setState({
+            loadingError: true
+          })
+        }
+      }).on("update", (_, response) => {
+        if(this.isMounted()) {
+          this.setState({
+            availableFiles: response.getData(),
+            loadedFiles: true
+          })
+        }
+      });
+
+    if(this.state.selectedTagItemIds.length !== 0) {
+      query.where("tag_associations.id", "in", ...this.state.selectedTagItemIds);
+    }
+
+    query.fetch();
+  },
 
 
   render: function() {
@@ -130,7 +154,7 @@ export default React.createClass({
       return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.communication.general" />);
 
     } else {
-      if(this.state.loadedFiles === false || this.state.loadedCategories === false) {
+      if(this.state.loadedRepository === false || this.state.loadedFiles === false || this.state.loadedCategories === false) {
         return (<Loading info={true} infoTextKey="apps.shows.files.index.loading"/>);
 
       } else {
