@@ -42,6 +42,15 @@ export default {
             all_day_checkbox_label: "All day"
           }
         },
+        header: "Edit Scheduling Item",
+        tabs: {
+          headers: {
+            general: "General",
+            timesettings: "Occurence",
+            associations: "Content",
+            delete: "Delete"
+          }
+        },
         tables: {
           associations: {
             frequency_header: "Frequency"

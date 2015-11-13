@@ -373,7 +373,7 @@ export default React.createClass({
       return (
         <Section>
           <GridRow>
-            <GridCell size="medium" center={true}>
+            <GridCell size="large" center={true}>
               <Card>
                 <CardHeader headerTextKey="apps.music_scheduler.automation.header">
                   <CardToolBar/>

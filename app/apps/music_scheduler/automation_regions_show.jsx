@@ -19,6 +19,7 @@ import CardToolBar from '../../widgets/admin/card_tool_bar_widget.jsx';
 import CardToolBarCreate from '../../widgets/admin/card_tool_bar_create_widget.jsx';
 import Loading from '../../widgets/general/loading_widget.jsx';
 import RoutingHelper from '../../helpers/routing_helper.js';
+import AccountHelper from '../../helpers/account_helper.js';
 
 export default React.createClass({
 
@@ -27,8 +28,10 @@ export default React.createClass({
   getInitialState: function() {
     return {
       currentSchedulingItem: null,
+      categories: [],
       loadingError: false,
-      loadedItem: false
+      everythingLoaded: false,
+      loadingError: false
     };
   },
 
@@ -39,20 +42,25 @@ export default React.createClass({
       days.push(days_translations[key].toLowerCase());
     };
     this.days = days;
-
     this.callSchedulingItemQuery();
-    //this.callTrackTagsQuery();
-    //this.callTrackAlbumsQuery();
-    //this.callTrackArtistsQuery();
   },
 
   componentWillUnmount: function() {
     this.itemQuery.teardown();
   },
 
+  componentDidMount: function() {
+
+  },
+
   componentDidUpdate: function() {
+    this.state.categories.forEach(function(category) {
+      category.get("tag_items").forEach(function(item) {
+        $("#slider-" + item.get("id")).slider({range: "min", value: 50, min: 0, max: 100});
+      });
+    });
     this.setSelect2();
-    this.setSliders();
+    /*this.setSliders();*/
     this.setRegionColor();
     this.setDonutChart();
     this.setColorPicker();
@@ -63,15 +71,64 @@ export default React.createClass({
       .query('agenda', "Schedule.Weekly.Item")
       .select("id", "time_start", "time_stop", "name", "extra" ,"on_monday", "on_tuesday", "on_wednesday", "on_thursday", "on_friday", "on_saturday", "on_sunday")
       .where("id", "eq", this.props.params.schedulingItemId)
-      .on("update", (_, query) => {
+      .on("error", () => {
+        if(this.isMounted()) {
+          this.setState({
+            loadingError: true
+          })
+        }
+      }).on("update", (_, query) => {
         if(this.isMounted()) {
           this.setState({
             currentSchedulingItem: query.getData().first(),
-            loadedItem: true
           });
         }
       })
       .fetch();
+    window.data
+      .query("vault", "Record.Repository")
+      .select("id")
+      .where("references", "deq", "user_account_id", AccountHelper.getCurrentAccountIdFromContext(this))
+      .where("references", "deq", "role", "music")
+      .on("error", () => {
+        if(this.isMounted()) {
+          this.setState({
+            loadingError: true
+          })
+        }
+      }).on("update", (_, query) => {
+        if(this.isMounted()) {
+          if(query.getData().count() != 0) {
+            this.setState({
+              recordRepository: query.getData().first()
+            });
+
+            window.data
+              .query("vault", "Tag.Category")
+              .select("id", "name", "tag_items")
+              .where("record_repository_id", "eq", query.getData().first().get("id"))
+              .joins("tag_items")
+              .on("error", () => {
+                if(this.isMounted()) {
+                    this.setState({
+                      loadingError: true
+                    })
+                  }
+              }).on("update", (_, query) => {
+                if(this.isMounted()) {
+                  this.setState({
+                    categories: query.getData(),
+                    everythingLoaded: true
+                  })
+                }
+              }).fetch();
+          } else {
+            this.setState({
+              loadingError: true
+            })
+          }
+        }
+      }).fetch();
   },
 
 /*  onDataSchedulingRegionFetch: function(records) {
@@ -83,36 +140,6 @@ export default React.createClass({
     this.setState({ currentRegion: records[0], associatedItems: associatied_items });
     this.forceUpdate();
   }, */
-
-  callTrackTagsQuery: function() {
-    //FIXME - DB structure for this is to be changed
-    /*window.data
-      .query('horn-gw', "TrackTag")
-      .where("parent_id", "notnull")
-      .enableAutoUpdate()
-      .on("update", (_, query) => {
-        if(this.isMounted()) {
-          this.Snapshot = query.getData();
-        }
-      })
-      .fetch();*/
-  },
-
-  callTrackAlbumsQuery: function() {
-    //FIXME - DB structure for this is to be changed
-    /*window.data
-      .query('horn-gw', "TrackAlbum")
-      .enableAutoUpdate()
-      .fetch(); */
-  },
-
-  callTrackArtistsQuery: function() {
-    //FIXME - DB structure for this is to be changed
-    /*window.data
-      .query('horn-gw', "TrackArtist")
-      .enableAutoUpdate()
-      .fetch(); */
-  },
 
   renderGeneralForm: function() {
     return (
@@ -245,7 +272,7 @@ export default React.createClass({
 
   prepareChartData: function() {
     var self = this;
-    var associations = this.prepareAssociations();
+    var associations = []
     var data = [];
     var total = 0;
     var weights = associations.map(function(a) {return a[1].weight} )
@@ -271,35 +298,13 @@ export default React.createClass({
   },
 
   setColor: function(item_type) {
+
     switch(item_type) {
       case "Tag":    var color = "#671f7d"; break;
       case "Album":  var color = "#2b98f0"; break;
       case "Artist": var color = "#50ae54"; break;
     };
     return color;
-  },
-
-  prepareAssociations: function() {
-    var self = this;
-    var associations = [];
-
-    // FIXME: DB structure for this is to be cahnged
-    // this.props.dataInterface.getSnapshot().SchedulingRegionShowLayout_associations.map(function(item) {
-    [].map(function(item) {
-      self.state.associatedItems.map(function(item) {
-        var association = self.findAssociation(item.id, item.type);
-
-        associations.push([item, association]);
-      });
-    });
-
-    associations.sort(function(a, b){
-      var aName = a[0].name.toLowerCase();
-      var bName = b[0].name.toLowerCase();
-      return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
-    })
-
-    return associations;
   },
 
   setAllDayCheckboxButton: function() {
@@ -484,16 +489,6 @@ export default React.createClass({
     }).update(update_attributes);
   },
 
-  deleteAssociation: function(e) {
-    e.preventDefault();
-
-    var self = this;
-    var resourceName = "Scheduling::Music::Shuffle::Track" + $(e.target).parent().data("item-type") + "RegionAssociation"
-
-    window.data.record('horn-gw', resourceName, $(e.target).parent().data("association-id")).destroy();
-    $(e.target).closest("tr").hide();
-  },
-
   renderTypeBadge: function(association) {
     return(<span className="badge badge-primary" style={{background: this.setColor(association.type)}}>{association.type}</span>);
   },
@@ -544,102 +539,57 @@ export default React.createClass({
     this.props.history.pushState(null, RoutingHelper.apps.music_scheduler.automation(this));
   },
 
-  renderAssociationTable: function() {
-    var associations = this.prepareAssociations();
-
-    if(associations.length > 0){
-      return (
-        <table className="table no-margin associations-table">
-          <tbody>
-            {this.renderAssociationRows()}
-          </tbody>
-        </table>
+  renderSliderForms: function() {
+    if (this.state.categories.size > 0) {
+      var forms = [];
+      console.log("categories: ", this.state.categories);
+      this.state.categories.forEach( (category)  =>
+        forms.push(
+          <div>
+            <div className="col-sm-9">
+              <div clasName="table-responsive">
+                {this.renderSliderForm(category)}
+              </div>
+            </div>
+          </div>)
       );
-    };
-  },
-
-  renderAssociationRows: function() {
-    var self = this;
-    var association_elements = [];
-    var associations = this.prepareAssociations();
-
-    associations.map(function(item) {
-      associated_item = item[0];
-      association     = item[1];
-
-      association_elements.push(
-      <tr key={'SchedulingRegionShowLayout.Associations.Row' + associated_item.id + association.id}>
-        <td style={{width: "50px"}}>{self.renderTypeBadge(associated_item)}</td>
-        {self.renderAssociationName(associated_item)}
-        <td className="slider-cell">
-          <div ref="association_slider" data-slide="false" data-item-type={associated_item.type} data-item-id={associated_item.id}
-               data-weight={association.weight} className="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
-            <div className="ui-slider-range ui-widget-header ui-corner-all ui-slider-range-min" style={{width: "50%"}}></div>
-            <span className="ui-slider-handle ui-state-default ui-corner-all" tabIndex="0" style={{left: "50%"}}></span>
-          </div>
-        </td>
-        <td style={{width: "10px"}}>
-          <div className="input-group-addon">
-            <a href="#" style={{position: "relative", top: "4px", color: "red"}} data-item-type={associated_item.type}
-              data-item-id={associated_item.id} data-association-id={association.id} onClick={self.deleteAssociation}>
-              <i className="fa fa-fw fa-times text-danenger"></i>
-            </a>
-          </div>
-        </td>
-      </tr>)
-    });
-
-    return association_elements;
-  },
-
-  renderAssociationName: function(associated_item) {
-    if(associated_item.type == "Album") {
-      return (
-        <td style={{width: "300px"}}>
-          {associated_item.name}
-          <span className="track-album-artist"
-                style={{color: "#989a9a", fontSize: "10px", position: "relative", bottom: "1px", left: "5px"}}>({associated_item.track_artist_name})</span>
-        </td>
-      )
+      return forms;
     } else {
-      return (
-        <td style={{width: "300px"}}>{associated_item.name}</td>
-      )
+      return (<div></div>);
     }
   },
 
-  renderAssociationsForm: function() {
+  renderSliderForm: function(category) {
+    var categoryName = category.get("name");
     return (
       <div>
-        <div className="col-sm-9">
+        <div><b>Category: {categoryName}</b></div>
+        <div className="form" style={{width: '100%'}}>
           <div className="form-group">
-            <select ref="associations_select" className="form-control associations-select">
-              <option></option>
-              {this.createOptGroup("Tags")}
-              {this.createOptGroup("Albums")}
-              {this.createOptGroup("Artists")}
-            </select>
-          </div>
-          <div clasName="table-responsive">
-            {this.renderAssociationTable()}
-          </div>
-        </div>
-
-        <div className="col-sm-3" style={{position: "relative", bottom: "9px"}}>
-          <ul className="nav nav-tabs tabs-center" data-toggle="tabs">
-            <li>
-              <span style={{textTransform: "uppercase", lineHeight: "46px", marginRight: "2px", borderBottom: "2px solid transparent",
-                    opacity: "0.55", fontWeight: "500"}}>
-                <Translate content="apps.music_scheduler.scheduling_region.tables.associations.frequency_header" />
-              </span>
-            </li>
-          </ul>
-          <div id="associations-chart" className="associations-chart" ref="associations_chart"
-               style={{width: "235px", height: "235px", marginRight: "auto", marginLeft: "auto"}}>
+            {this.renderSliderRows(category.get("tag_items"))}
           </div>
         </div>
       </div>
-    )
+    );
+  },
+
+  renderSliderRows: function(tag_items) {
+    console.log("tag_items: ", tag_items);
+    var rows = [];
+    return tag_items.map((item) => {
+      return (
+        <div key={item.get("id")} className="input-group" style={{width: '100%', padding: '5px'}}>
+          <div style={{width: '20%', display: 'inline-block'}}>{item.get("name")}</div>
+          <div className="input-group-content form-control-static" style={{width: '75%', display: 'inline-block'}}>
+            <div className="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" id={"slider-" + item.get("id")} key={'CategoryItem.Row.' + item.get("id")}>
+              <div style={{width: '50%'}} className="ui-slider-range ui-widget-header ui-corner-all ui-slider-range-min"/>
+              <span style={{left: '50%'}} className="ui-slider-handle ui-state-default ui-corner-all" tabIndex="0"></span>
+            </div>
+          </div>
+          <br/>
+        </div>)
+    }
+    );
   },
 
   getRegionName: function() {
@@ -672,49 +622,29 @@ export default React.createClass({
     if(this.state.loadingError) {
       return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.communication.general" />);
     } else {
-      if(this.state.loadedItem == false) {
+      if(this.state.everythingLoaded == false) {
         return (<Loading info={true} infoTextKey="apps.music_scheduler.scheduling_region.loading"/>);
       } else {
         return (
           <Section>
             <GridRow>
               <GridCell size="medium" center={true}>
-                <div className="card card-underline alert alert-callout alert-info no-margin scheduling-region-card">
-                  <div className="card-head">
-                    <ul className="nav nav-tabs" data-toggle="tabs">
-                      <li className="active">
-                        <a href="#general">
-                          <Translate content="apps.music_scheduler.scheduling_region.tabs.general" />
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#time-settings">
-                          <Translate content="apps.music_scheduler.scheduling_region.tabs.time_settings" />
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#associations">
-                          <Translate content="apps.music_scheduler.scheduling_region.tabs.associations" />
-                        </a>
-                      </li>
-                      <li className="pull-right">
-                        <a href="#delete">
-                          <Translate content="apps.music_scheduler.scheduling_region.tabs.delete_region" />
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="card-body tab-content">
-                    <div className="tab-pane active" id="general">
+                <Card tabs={["general", "timesettings", "associations", "delete"]} contentPrefix="apps.music_scheduler.scheduling_region">
+                  <CardHeader>
+                    <CardToolBar>
+                    </CardToolBar>
+                  </CardHeader>
+                  <CardBody>
+                    <div className="tab-pane" id="general">
                       {this.renderGeneralForm()}
                     </div>
 
-                    <div className="tab-pane" id="time-settings">
+                    <div className="tab-pane" id="timesettings">
                       {this.renderTimeSettingsForm()}
                     </div>
 
-                    <div className="tab-pane" id="associations">
-                      {this.renderAssociationsForm()}
+                    <div className="tab-pane active" id="associations">
+                      {this.renderSliderForms()}
                     </div>
 
                     <div className="tab-pane" id="delete">
@@ -723,8 +653,8 @@ export default React.createClass({
                                           recordId={this.state.currentSchedulingItem.get("id")}
                                           onSuccessFunction={this.onRegionDeleted} />
                     </div>
-                  </div>
-                </div>
+                  </CardBody>
+                </Card>
               </GridCell>
             </GridRow>
           </Section>
