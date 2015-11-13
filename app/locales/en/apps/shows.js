@@ -26,6 +26,16 @@ export default {
               duration_total: "Duration",
             }
           }
+        },
+
+        show: {
+          loading: "Fetching show information",
+          tabs: {
+            headers: {
+              overview: "Overview",
+              metadata: "Metadata"
+            }
+          }
         }
       },
 

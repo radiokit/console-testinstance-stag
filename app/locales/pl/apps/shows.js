@@ -26,6 +26,10 @@ export default {
               duration_total: "Czas trwania",
             }
           }
+        },
+
+        show: {
+          loading: "Ładowanie informacji o audycji",
         }
       },
 

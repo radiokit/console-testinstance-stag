@@ -1,11 +1,13 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Translate from 'react-translate-component';
 
 
 export default React.createClass({
   contextTypes: {
     cardTabs: React.PropTypes.arrayOf(React.PropTypes.string),
-    contentPrefix: React.PropTypes.string
+    contentPrefix: React.PropTypes.string,
+    headerText: React.PropTypes.string
   },
 
 
@@ -15,17 +17,33 @@ export default React.createClass({
   },
 
 
+  renderHeader: function() {
+    if(this.props.headerText) {
+      return <header>{this.props.headerText}</header>
+    } else {
+      return <Translate content={this.context.contentPrefix + ".header"} component="header" />
+    }
+  },
+
+
+  componentDidMount: function() {
+    if(this.context.cardTabs && this.context.cardTabs.length !== 0) {
+      $(ReactDOM.findDOMNode(this.refs.tabLink0)).tab('show');
+    }
+  },
+
+
   render: function() {
-    if(this.context.cardTabs) {
+    if(this.context.cardTabs && this.context.cardTabs.length !== 0) {
       return (
         <div className="card-head">
-          <Translate content={this.context.contentPrefix + ".header"} component="header" />
+          {this.renderHeader()}
 
           {this.props.children}
 
           <ul className="nav nav-tabs pull-right" data-toggle="tabs">
-            {this.context.cardTabs.map((tab) => {
-              return <li key={tab}><Translate content={this.context.contentPrefix + ".tabs.headers." + tab} component="a" href={"#tab-" + tab} onClick={this.onTabClick} /></li>;
+            {this.context.cardTabs.map((tab, i) => {
+              return <li key={tab}><Translate ref={"tabLink" + i} content={this.context.contentPrefix + ".tabs.headers." + tab} component="a" href={"#tab-" + tab} onClick={this.onTabClick} /></li>;
             })}
           </ul>
         </div>
@@ -34,7 +52,7 @@ export default React.createClass({
     } else {
       return (
         <div className="card-head">
-          <Translate content={this.context.contentPrefix + ".header"} component="header" />
+          {this.renderHeader()}
 
           {this.props.children}
         </div>
