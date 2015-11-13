@@ -17,9 +17,7 @@ export default {
         }
       },
 
-      automation: {
-        header: "Music Scheduler"
-      },
+      header: "Music Scheduler",
 
       scheduling_region: {
         tabs: {

@@ -629,29 +629,19 @@ export default React.createClass({
           <Section>
             <GridRow>
               <GridCell size="medium" center={true}>
-                <Card tabs={["general", "timesettings", "associations", "delete"]} contentPrefix="apps.music_scheduler.scheduling_region">
-                  <CardHeader>
+                <Card cardTabs={["general", "timesettings", "associations", "delete"]} contentPrefix="apps.music_scheduler.scheduling_region">
+                  <CardHeader headerText={this.state.currentSchedulingItem.get("name")}>
                     <CardToolBar>
                     </CardToolBar>
                   </CardHeader>
                   <CardBody>
-                    <div className="tab-pane" id="general">
-                      {this.renderGeneralForm()}
-                    </div>
-
-                    <div className="tab-pane" id="timesettings">
-                      {this.renderTimeSettingsForm()}
-                    </div>
-
-                    <div className="tab-pane active" id="associations">
-                      {this.renderSliderForms()}
-                    </div>
-
-                    <div className="tab-pane" id="delete">
-                      <DeleteButtonWidget repo="agenda"
-                                          model="Schedule.Weekly.Item"
-                                          recordId={this.state.currentSchedulingItem.get("id")}
-                                          onSuccessFunction={this.onRegionDeleted} />
+                    <div> {this.renderGeneralForm()} </div>
+                    <div> {this.renderTimeSettingsForm()} </div>
+                    <div> {this.renderSliderForms()} </div>
+                    <div> <DeleteButtonWidget repo="agenda"
+                                              model="Schedule.Weekly.Item"
+                                              recordId={this.state.currentSchedulingItem.get("id")}
+                                              onSuccessFunction={this.onRegionDeleted} />
                     </div>
                   </CardBody>
                 </Card>

@@ -16,11 +16,7 @@ export default {
           sunday: "Sunday"
         }
       },
-
-      automation: {
-        header: "Music Scheduler"
-      },
-
+      header: "Music Scheduler",
       scheduling_region: {
         tabs: {
           general: "General",

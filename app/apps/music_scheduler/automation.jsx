@@ -374,8 +374,8 @@ export default React.createClass({
         <Section>
           <GridRow>
             <GridCell size="large" center={true}>
-              <Card>
-                <CardHeader headerTextKey="apps.music_scheduler.automation.header">
+              <Card contentPrefix="apps.music_scheduler">
+                <CardHeader>
                   <CardToolBar/>
                 </CardHeader>
                 <CardBody>

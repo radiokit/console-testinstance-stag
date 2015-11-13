@@ -63,8 +63,8 @@ export default React.createClass({
       <Section>
         <GridRow>
           <GridCell size="medium">
-            <Card>
-              <CardHeader headerTextKey="apps.joint.control_room.transmissions.header">
+            <Card contentPrefix="apps.joint.control_room.transmissions">
+              <CardHeader>
                 <CardToolBar>
                   <CardToolBarCreate path={RoutingHelper.apps.joint.devices.add(this, "transmissions")} hintTooltipKey="apps.joint.devices.create.form.header" />
                 </CardToolBar>
@@ -77,8 +77,8 @@ export default React.createClass({
           </GridCell>
 
           <GridCell size="xsmall">
-            <Card>
-              <CardHeader headerTextKey="apps.joint.control_room.talkbacks.header">
+            <Card contentPrefix="apps.joint.control_room.talkbacks">
+              <CardHeader>
                 <CardToolBar>
                   <CardToolBarCreate path={RoutingHelper.apps.joint.devices.add(this, "talbacks")} hintTooltipKey="apps.joint.devices.create.form.header" />
                 </CardToolBar>
@@ -91,8 +91,8 @@ export default React.createClass({
           </GridCell>
 
           <GridCell size="xsmall">
-            <Card>
-              <CardHeader headerTextKey="apps.joint.control_room.onair.header">
+            <Card contentPrefix="apps.joint.control_room.onair">
+              <CardHeader>
                 <CardToolBar>
                   <CardToolBarCreate path={RoutingHelper.apps.joint.devices.add(this, "onair")} hintTooltipKey="apps.joint.devices.create.form.header" />
                 </CardToolBar>
