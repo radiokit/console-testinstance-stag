@@ -3,15 +3,23 @@ import React from 'react';
 
 export default React.createClass({
   contextTypes: {
-    tabs: React.PropTypes.arrayOf(React.PropTypes.string)
+    cardTabs: React.PropTypes.arrayOf(React.PropTypes.string),
+    cardPadding: React.PropTypes.bool
   },
 
 
   render: function() {
-    if(this.context.tabs) {
+    let klass;
+    if(this.context.cardPadding) {
+      klass = "card-body style-default-bright";
+    } else {
+      klass = "card-body style-default-bright no-padding";
+    }
+
+    if(this.context.cardTabs) {
       return (
-        <div className="card-body style-default-bright tab-content">
-          {this.context.tabs.map((tab, i) => {
+        <div className={klass + " tab-content"}>
+          {this.context.cardTabs.map((tab, i) => {
             return (
               <div key={tab} className="tab-pane" id={"tab-" + tab}>
                 {React.Children.toArray(this.props.children)[i]}
@@ -23,7 +31,7 @@ export default React.createClass({
 
     } else {
       return (
-        <div className="card-body style-default-bright">
+        <div className={klass}>
           {this.props.children}
         </div>
       );

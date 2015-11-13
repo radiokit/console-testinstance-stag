@@ -15,9 +15,11 @@ export default {
 
       files: {
         index: {
-          loading: "Fetching list of files",
-          none: "There are no files",
-          header: "Files",
+          loading: "Fetching shows library",
+          header: "Shows library",
+          actions: {
+            create: "Upload new shows"
+          },
           table: {
             header: {
               name: "Name",

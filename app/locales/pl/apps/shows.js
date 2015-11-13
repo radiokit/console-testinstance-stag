@@ -15,9 +15,11 @@ export default {
 
       files: {
         index: {
-          loading: "Ładowanie listy plików",
-          none: "Nie ma żadnych plików",
-          header: "Pliki",
+          loading: "Ładowanie biblioteki audycji",
+          header: "Biblioteka audycji",
+          actions: {
+            create: "Wyślij nowe audycje"
+          },
           table: {
             header: {
               name: "Nazwa",

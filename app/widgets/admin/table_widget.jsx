@@ -21,7 +21,7 @@ export default React.createClass({
 
 
   render: function() {
-    return (<table className="table">
+    return (<table className="table table-hover">
       <TableHeader attributes={this.props.attributes} contentPrefix={this.props.contentPrefix} />
       <TableBody attributes={this.props.attributes} records={this.props.records} />
     </table>);

@@ -3,22 +3,32 @@ import React from 'react';
 
 export default React.createClass({
   propTypes: {
-    tabs: React.PropTypes.arrayOf(React.PropTypes.string),
-    contentPrefix: React.PropTypes.string.isRequired
+    cardTabs: React.PropTypes.arrayOf(React.PropTypes.string),
+    contentPrefix: React.PropTypes.string.isRequired,
+    cardPadding: React.PropTypes.bool
   },
 
 
   childContextTypes: {
-    tabs: React.PropTypes.arrayOf(React.PropTypes.string),
-    contentPrefix: React.PropTypes.string
+    cardTabs: React.PropTypes.arrayOf(React.PropTypes.string),
+    contentPrefix: React.PropTypes.string,
+    cardPadding: React.PropTypes.bool,
   },
 
 
   getChildContext: function() {
     return {
-      tabs: this.props.tabs,
-      contentPrefix: this.props.contentPrefix
+      cardTabs: this.props.cardTabs,
+      contentPrefix: this.props.contentPrefix,
+      cardPadding: this.props.cardPadding
     };
+  },
+
+
+  getDefaultProps: function() {
+    return {
+      cardPadding: true
+    }
   },
 
 

@@ -12,6 +12,7 @@ import TableActionShow from '../../widgets/admin/table_action_show.jsx';
 import Alert from '../../widgets/admin/alert_widget.jsx';
 import Section from '../../widgets/admin/section_widget.jsx';
 import Loading from '../../widgets/general/loading_widget.jsx';
+import TagSelector from '../../widgets/vault/tag_selector_widget.jsx';
 import RoutingHelper from '../../helpers/routing_helper.js';
 import AccountHelper from '../../helpers/account_helper.js';
 
@@ -21,6 +22,8 @@ export default React.createClass({
       recordRepository: null,
       availableFiles: null,
       loadedFiles: false,
+      availableCategories: null,
+      loadedCategories: false,
       loadingError: false
     };
   },
@@ -29,8 +32,7 @@ export default React.createClass({
   componentDidMount: function() {
     window.data
       .query("vault", "Record.Repository")
-      .select("id", "tag_categories")
-      .joins("tag_categories")
+      .select("id")
       .where("references", "deq", "user_account_id", AccountHelper.getCurrentAccountIdFromContext(this))
       .where("references", "deq", "role", "shows")
       .on("error", () => {
@@ -46,6 +48,27 @@ export default React.createClass({
             this.setState({
               recordRepository: query.getData().first()
             });
+
+            window.data
+              .query("vault", "Tag.Category")
+              .select("id", "name", "tag_items")
+              .joins("tag_items")
+              .where("record_repository_id", "eq", query.getData().first().get("id"))
+              .order("name", "asc")
+              .on("error", () => {
+                if(this.isMounted()) {
+                  this.setState({
+                    loadingError: true
+                  })
+                }
+              }).on("update", (_, query) => {
+                if(this.isMounted()) {
+                  this.setState({
+                    availableCategories: query.getData(),
+                    loadedCategories: true
+                  })
+                }
+              }).fetch();
 
             window.data
               .query("vault", "Record.File")
@@ -76,31 +99,40 @@ export default React.createClass({
   },
 
 
+
+
   render: function() {
     if(this.state.loadingError) {
       return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.communication.general" />);
 
     } else {
-      if(this.state.loadedFiles === false) {
+      if(this.state.loadedFiles === false || this.state.loadedCategories === false) {
         return (<Loading info={true} infoTextKey="apps.shows.files.index.loading"/>);
-
-      } else if(this.state.availableFiles.size === 0) {
-        return (<Alert type="error" fullscreen={true} infoTextKey="apps.shows.files.index.none"/>);
 
       } else {
         var that = this;
         return (
           <Section>
             <GridRow>
-              <GridCell size="medium" center={true}>
-                <Card contentPrefix="apps.shows.files.index">
+              <GridCell size="large" center={true}>
+                <Card contentPrefix="apps.shows.files.index" cardPadding={false}>
                   <CardHeader>
                     <CardToolBar>
-                      <CardToolBarCreate path={RoutingHelper.apps.shows.files.create(this)} hintTooltipKey="apps.shows.files.create.form.header" />
+                      <CardToolBarCreate path={RoutingHelper.apps.shows.files.create(this)} hintTooltipKey="apps.shows.files.index.actions.create" />
                     </CardToolBar>
                   </CardHeader>
                   <CardBody>
-                    <Table attributes={{ name: { renderer: "text", props: { context: this, link: RoutingHelper.apps.shows.files.show } }}} actions={[]} contentPrefix="apps.shows.files.index.table" records={this.state.availableFiles} />
+                    <div className="row">
+                      <div className="col-sm-4 col-md-3 col-lg-2">
+                        <TagSelector categories={this.state.availableCategories}/>
+                      </div>
+
+                      <div className="col-sm-8 col-md-9 col-lg-10">
+                        <div className="small-padding">
+                          <Table attributes={{ name: { renderer: "text", props: { context: this, link: RoutingHelper.apps.shows.files.show } }}} actions={[]} contentPrefix="apps.shows.files.index.table" records={this.state.availableFiles} />
+                        </div>
+                      </div>
+                    </div>
                   </CardBody>
                 </Card>
               </GridCell>
