@@ -70,7 +70,8 @@ export default React.createClass({
   loadRepository: function() {
     window.data
       .query("vault", "Record.Repository")
-      .select("id")
+      .select("id", "metadata_schemas")
+      .joins("metadata_schemas")
       .where("references", "deq", "user_account_id", AccountHelper.getCurrentAccountIdFromContext(this))
       .where("references", "deq", "role", "shows")
       .on("error", () => {
@@ -126,7 +127,8 @@ export default React.createClass({
     let query =
       window.data
       .query("vault", "Record.File")
-      .select("id", "name")
+      .select("id", "name", "metadata_items")
+      .joins("metadata_items")
       .where("record_repository_id", "eq", this.state.currentRepository.get("id"))
       .on("error", () => {
         if(this.isMounted()) {
@@ -148,6 +150,29 @@ export default React.createClass({
     }
 
     query.fetch();
+  },
+
+
+  buildTableAttributes: function() {
+    let attributes = {
+      name: { renderer: "string", linkFunc: (item) => { return RoutingHelper.apps.shows.files.show(this, item); } },
+    };
+
+    return this.state.currentRepository.get("metadata_schemas").reduce((acc, metadataSchema) => {
+      acc[metadataSchema.get("key")] = {
+        renderer: metadataSchema.get("kind"),
+        headerText: metadataSchema.get("name"),
+        valueFunc: (record, attribute) => {
+          let metadataItem = record.get("metadata_items").find((metadataItem) => { return metadataItem.get("metadata_schema_id") === metadataSchema.get("id") })
+
+          if(metadataItem) {
+            return metadataItem.get("value_" + metadataSchema.get("kind"));
+          }
+        }
+      };
+      return acc;
+
+    }, attributes);
   },
 
 
@@ -179,10 +204,7 @@ export default React.createClass({
 
                       <div className="col-sm-8 col-md-9 col-lg-10">
                         <div className="small-padding">
-                          <Table attributes={{
-                            name:           { renderer: "text", props: { linkFunc: (item) => { return RoutingHelper.apps.shows.files.show(this, item); } } },
-                            duration_total: { renderer: "text" },
-                          }} actions={[]} contentPrefix="apps.shows.files.index.table" records={this.state.availableFiles} />
+                          <Table attributes={this.buildTableAttributes()} actions={[]} contentPrefix="apps.shows.files.index.table" records={this.state.availableFiles} />
                         </div>
                       </div>
                     </div>
