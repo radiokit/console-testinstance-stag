@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 
 import GridRow from '../../widgets/admin/grid_row_widget.jsx';
 import GridCell from '../../widgets/admin/grid_cell_widget.jsx';
@@ -24,8 +25,23 @@ export default React.createClass({
       loadedFiles: false,
       availableCategories: null,
       loadedCategories: false,
-      loadingError: false
+      loadingError: false,
+      selectedTagItemIds: []
     };
+  },
+
+
+  onTagItemChange: function(tagItemId, newState) {
+    let selectedTagItemIds = this.state.selectedTagItemIds.slice(); // Shallow copy
+
+    if(newState === false) {
+      selectedTagItemIds.splice(selectedTagItemIds.indexOf(tagItemId), 1);
+
+    } else {
+      selectedTagItemIds.push(tagItemId);
+    }
+
+    this.setState({ selectedTagItemIds: selectedTagItemIds });
   },
 
 
@@ -70,24 +86,7 @@ export default React.createClass({
                 }
               }).fetch();
 
-            window.data
-              .query("vault", "Record.File")
-              .select("id", "name")
-              .where("record_repository_id", "eq", query.getData().first().get("id"))
-              .on("error", () => {
-                if(this.isMounted()) {
-                  this.setState({
-                    loadingError: true
-                  })
-                }
-              }).on("update", (_, query) => {
-                if(this.isMounted()) {
-                  this.setState({
-                    availableFiles: query.getData(),
-                    loadedFiles: true
-                  })
-                }
-              }).fetch();
+            this.executeFilesQuery();
 
           } else {
             this.setState({
@@ -99,6 +98,31 @@ export default React.createClass({
   },
 
 
+  executeFilesQuery: function() {
+    window.data
+      .query("vault", "Record.File")
+      .select("id", "name")
+      .where("record_repository_id", "eq", this.state.recordRepository.get("id"))
+      .on("error", () => {
+        if(this.isMounted()) {
+          this.setState({
+            loadingError: true
+          })
+        }
+      }).on("update", (_, query) => {
+        if(this.isMounted()) {
+          this.setState({
+            availableFiles: query.getData(),
+            loadedFiles: true
+          })
+        }
+      }).fetch();
+  },
+
+
+  // componentWillUpdate: function() {
+  //   this.executeFilesQuery();
+  // },
 
 
   render: function() {
@@ -124,7 +148,7 @@ export default React.createClass({
                   <CardBody>
                     <div className="row">
                       <div className="col-sm-4 col-md-3 col-lg-2">
-                        <TagSelector categories={this.state.availableCategories} path={RoutingHelper.apps.shows.files.index(this)}/>
+                        <TagSelector onTagItemChange={this.onTagItemChange} selectedTagItemIds={this.state.selectedTagItemIds} tagCategoriesWithItems={this.state.availableCategories}/>
                       </div>
 
                       <div className="col-sm-8 col-md-9 col-lg-10">

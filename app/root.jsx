@@ -19,18 +19,6 @@ export default React.createClass({
   },
 
 
-  childContextTypes: {
-    location: React.PropTypes.object,
-  },
-
-
-  getChildContext: function() {
-    return {
-      location: this.props.location
-    };
-  },
-
-
   initializeGoogleAnalytics: function(currentEditor) {
     if(typeof(ga) !== "undefined") {
       ga('create', ENV.external.googleAnalyticsID, { 'userId' : "Editor#" + currentEditor.get("id") });
