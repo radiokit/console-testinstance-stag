@@ -29,7 +29,8 @@ export default React.createClass({
   componentDidMount: function() {
     window.data
       .query("vault", "Record.Repository")
-      .select("id")
+      .select("id", "tag_categories")
+      .joins("tag_categories")
       .where("references", "deq", "user_account_id", AccountHelper.getCurrentAccountIdFromContext(this))
       .where("references", "deq", "role", "shows")
       .on("error", () => {
@@ -92,8 +93,8 @@ export default React.createClass({
           <Section>
             <GridRow>
               <GridCell size="medium" center={true}>
-                <Card>
-                  <CardHeader headerTextKey="apps.shows.files.index.header">
+                <Card tabs={["a", "b"]} contentPrefix="apps.shows.files.index">
+                  <CardHeader>
                     <CardToolBar>
                       <CardToolBarCreate path={RoutingHelper.apps.shows.files.create(this)} hintTooltipKey="apps.shows.files.create.form.header" />
                     </CardToolBar>
