@@ -11,8 +11,7 @@ import FileSize from './../general/file_size_widget.jsx';
 
 export default React.createClass({
   propTypes: {
-    repositoryRole: React.PropTypes.string.isRequired,
-    repositoryUserAccountId: React.PropTypes.string.isRequired
+    repository: React.PropTypes.object.isRequired,
   },
 
 
@@ -27,41 +26,18 @@ export default React.createClass({
 
 
   componentDidMount: function() {
-    window.data
-      .query("vault", "Record.Repository")
-      .select("id")
-      .where("references", "deq", "user_account_id", this.props.repositoryUserAccountId)
-      .where("references", "deq", "role", this.props.repositoryRole)
-      .on("error", () => {
-        if(this.isMounted()) {
-          this.setState({
-            loadingError: true
-          })
-        }
-      }).on("update", (_, query) => {
-        if(this.isMounted()) {
-
-          if(query.getData().count() != 0) {
-            this.initializeResumable(query.getData().first().get("id"));
-
-          } else {
-            this.setState({
-              loadingError: true
-            })
-          }
-        }
-      }).fetch();
+    this.initializeResumable();
   },
 
 
-  initializeResumable: function(recordRepositoryId) {
+  initializeResumable: function() {
     this.resumable = new Resumable({
       testChunks: false,
       forceChunkSize: true,
       chunkSize: 524288, // 512 kb should be enough even for Africa
       target: window.ENV.apps.vault.baseUrl + '/api/upload/v1.0/resumablejs',
       headers: window.data.options.auth.getHeaders(),
-      query: { record_repository_id: recordRepositoryId },
+      query: { record_repository_id: this.props.repository.get("id") },
       simultaneousUploads: 1,
       minFileSize: 1,
       generateUniqueIdentifier: () => {
@@ -144,10 +120,12 @@ export default React.createClass({
             <div className="nano-content">
               <table className="table">
                 <thead>
-                  <th/>
-                  <Translate content="apps.shows.widgets.upload_widget.table.header.file_name" component="th"/>
-                  <Translate content="apps.shows.widgets.upload_widget.table.header.file_size" component="th" className="text-right"/>
-                  <Translate content="apps.shows.widgets.upload_widget.table.header.status" component="th" style={{width: "20ex"}}/>
+                  <tr>
+                    <th/>
+                    <Translate content="apps.shows.widgets.upload_widget.table.header.file_name" component="th"/>
+                    <Translate content="apps.shows.widgets.upload_widget.table.header.file_size" component="th" className="text-right"/>
+                    <Translate content="apps.shows.widgets.upload_widget.table.header.status" component="th" style={{width: "20ex"}}/>
+                  </tr>
                 </thead>
                 <tbody>
                   {this.renderQueueRows()}
