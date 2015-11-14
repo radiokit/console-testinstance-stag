@@ -536,7 +536,7 @@ export default React.createClass({
   },
 
   onRegionDeleted: function() {
-    this.props.history.pushState(null, RoutingHelper.apps.music.automation(this));
+    this.props.history.pushState(null, RoutingHelper.apps.music.schedule.index(this));
   },
 
   renderSliderForms: function() {

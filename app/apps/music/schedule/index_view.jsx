@@ -282,7 +282,7 @@ export default React.createClass({
       },
 
       eventClick: function( event, jsEvent, view ) {
-        self.props.history.pushState(null, RoutingHelper.apps.music.automation_regions_show(self, event.id));
+        self.props.history.pushState(null, RoutingHelper.apps.music.schedule.show(self, event.id));
       },
       selectHelper: true
     });

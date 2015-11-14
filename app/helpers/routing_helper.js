@@ -55,8 +55,8 @@ export default {
         showTrackMarkers: function(context, trackId) {
           return "/apps/music/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/show/" + trackId + "/track_markers";
         },
-
-      }, schedule: {
+      },
+      schedule: {
         index: function(context) {
           return "/apps/music/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/schedule/index";
         },
