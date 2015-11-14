@@ -2,18 +2,18 @@ import React from 'react';
 import translate from 'counterpart';
 import { Link } from 'react-router';
 
-import RoutingHelper from '../../helpers/routing_helper.js';
-import AccountHelper from '../../helpers/account_helper.js';
-import Section from '../../widgets/admin/section_widget.jsx';
-import GridRow from '../../widgets/admin/grid_row_widget.jsx';
-import GridCell from '../../widgets/admin/grid_cell_widget.jsx';
-import Alert from '../../widgets/admin/alert_widget.jsx';
-import Card from '../../widgets/admin/card_widget.jsx';
-import CardBody from '../../widgets/admin/card_body_widget.jsx';
-import CardHeader from '../../widgets/admin/card_header_widget.jsx';
-import CardToolBar from '../../widgets/admin/card_tool_bar_widget.jsx';
-import CardToolBarCreate from '../../widgets/admin/card_tool_bar_create_widget.jsx';
-import Loading from '../../widgets/general/loading_widget.jsx';
+import RoutingHelper from '../../../helpers/routing_helper.js';
+import AccountHelper from '../../../helpers/account_helper.js';
+import Section from '../../../widgets/admin/section_widget.jsx';
+import GridRow from '../../../widgets/admin/grid_row_widget.jsx';
+import GridCell from '../../../widgets/admin/grid_cell_widget.jsx';
+import Alert from '../../../widgets/admin/alert_widget.jsx';
+import Card from '../../../widgets/admin/card_widget.jsx';
+import CardBody from '../../../widgets/admin/card_body_widget.jsx';
+import CardHeader from '../../../widgets/admin/card_header_widget.jsx';
+import CardToolBar from '../../../widgets/admin/card_tool_bar_widget.jsx';
+import CardToolBarCreate from '../../../widgets/admin/card_tool_bar_create_widget.jsx';
+import Loading from '../../../widgets/general/loading_widget.jsx';
 
 export default React.createClass({
 
@@ -282,7 +282,7 @@ export default React.createClass({
       },
 
       eventClick: function( event, jsEvent, view ) {
-        self.props.history.pushState(null, RoutingHelper.apps.shows.files.automation_item_show(self, event.id));
+        self.props.history.pushState(null, RoutingHelper.apps.shows.schedule.show(self, event.id));
       },
       selectHelper: true
     });

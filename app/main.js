@@ -15,15 +15,15 @@ import JointDevicesIndex from './apps/joint/devices_index_view.jsx';
 import JointDevicesCreate from './apps/joint/devices_create_view.jsx';
 import JointDevicesAdd from './apps/joint/devices_add_view.jsx';
 import ShowsApp from './apps/shows/app.jsx';
-import ShowsFilesIndex from './apps/shows/files_index_view.jsx';
-import ShowsFilesCreate from './apps/shows/files_create_view.jsx';
-import ShowsFilesShow from './apps/shows/files_show_view.jsx';
+import ShowsFilesIndex from './apps/shows/files/index_view.jsx';
+import ShowsFilesCreate from './apps/shows/files/create_view.jsx';
+import ShowsFilesShow from './apps/shows/files/show_view.jsx';
 import ShowsFilesShowTrackMarkers from './apps/shows/show_track_markers.jsx';
+import ShowsScheduleIndex from './apps/shows/schedule/index_view.jsx';
+import ShowsScheduleShow from './apps/shows/schedule/show_view.jsx';
 import MusicSchedulerApp from './apps/music_scheduler/app.jsx';
 import MusicSchedulerAutomation from './apps/music_scheduler/automation.jsx';
 import MusicSchedulerAutomationRegionsShow from './apps/music_scheduler/automation_regions_show.jsx';
-import ShowsAutomation from './apps/shows/automation.jsx';
-import ShowsAutomationItem from './apps/shows/automation_item_show.jsx';
 
 Counterpart.registerTranslations("en", require('./locales/en/general.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/joint.js'));
@@ -84,9 +84,9 @@ ReactDOM.render((
           <Route path="files/index" component={ShowsFilesIndex} onEnter={pingGoogleAnalytics}/>
           <Route path="files/create" component={ShowsFilesCreate} onEnter={pingGoogleAnalytics}/>
           <Route path="files/show/:fileId" component={ShowsFilesShow} onEnter={pingGoogleAnalytics}/>
+          <Route path="schedule/index" component={ShowsScheduleIndex}/>
+          <Route path="schedule/show/:schedulingItemId" component={ShowsScheduleShow}/>
           <Route path="show/:trackId/track_markers" component={ShowsFilesShowTrackMarkers} onEnter={pingGoogleAnalytics}/>
-          <Route path="automation" component={ShowsAutomation}/>
-          <Route path="automation_item_show/:schedulingItemId" component={ShowsAutomationItem}/>
         </Route>
         <Route path="music_scheduler/:userAccountId" component={MusicSchedulerApp}>
           <Route path="automation" component={MusicSchedulerAutomation}/>

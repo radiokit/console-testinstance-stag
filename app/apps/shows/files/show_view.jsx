@@ -1,25 +1,25 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-import GridRow from '../../widgets/admin/grid_row_widget.jsx';
-import GridCell from '../../widgets/admin/grid_cell_widget.jsx';
-import Card from '../../widgets/admin/card_widget.jsx';
-import CardBody from '../../widgets/admin/card_body_widget.jsx';
-import CardHeader from '../../widgets/admin/card_header_widget.jsx';
-import CardToolBar from '../../widgets/admin/card_tool_bar_widget.jsx';
-import CardToolBarCreate from '../../widgets/admin/card_tool_bar_create_widget.jsx';
-import Table from '../../widgets/admin/table_widget.jsx';
-import TableActionShow from '../../widgets/admin/table_action_show.jsx';
-import Alert from '../../widgets/admin/alert_widget.jsx';
-import Section from '../../widgets/admin/section_widget.jsx';
-import Loading from '../../widgets/general/loading_widget.jsx';
-import TagSelector from '../../widgets/vault/tag_selector_widget.jsx';
+import GridRow from '../../../widgets/admin/grid_row_widget.jsx';
+import GridCell from '../../../widgets/admin/grid_cell_widget.jsx';
+import Card from '../../../widgets/admin/card_widget.jsx';
+import CardBody from '../../../widgets/admin/card_body_widget.jsx';
+import CardHeader from '../../../widgets/admin/card_header_widget.jsx';
+import CardToolBar from '../../../widgets/admin/card_tool_bar_widget.jsx';
+import CardToolBarCreate from '../../../widgets/admin/card_tool_bar_create_widget.jsx';
+import Table from '../../../widgets/admin/table_widget.jsx';
+import TableActionShow from '../../../widgets/admin/table_action_show.jsx';
+import Alert from '../../../widgets/admin/alert_widget.jsx';
+import Section from '../../../widgets/admin/section_widget.jsx';
+import Loading from '../../../widgets/general/loading_widget.jsx';
+import TagSelector from '../../../widgets/vault/tag_selector_widget.jsx';
 
-import RoutingHelper from '../../helpers/routing_helper.js';
-import VaultHelper from '../../helpers/vault_helper.js';
+import RoutingHelper from '../../../helpers/routing_helper.js';
+import VaultHelper from '../../../helpers/vault_helper.js';
 
-import OverviewTab from './files_show_overview_tab.jsx';
-import MetadataTab from './files_show_metadata_tab.jsx';
+import OverviewTab from './show_overview_tab.jsx';
+import MetadataTab from './show_metadata_tab.jsx';
 
 export default React.createClass({
   getInitialState: function() {

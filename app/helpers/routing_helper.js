@@ -31,11 +31,13 @@ export default {
         showTrackMarkers: function(context, trackId) {
           return "/apps/shows/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/show/" + trackId + "/track_markers";
         },
-        automation: function(context) {
-          return "/apps/shows/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/automation";
+        
+      }, schedule: {
+        index: function(context) {
+          return "/apps/shows/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/schedule/index";
         },
-        automation_item_show: function(context, schedulingItemId) {
-            return "/apps/shows/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/automation_item_show/" + schedulingItemId;
+        show: function(context, schedulingItemId) {
+            return "/apps/shows/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/schedule/show/" + schedulingItemId;
         },
       }
     },

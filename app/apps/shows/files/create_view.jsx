@@ -1,11 +1,11 @@
 import React from 'react';
 
-import Alert from '../../widgets/admin/alert_widget.jsx';
-import Section from '../../widgets/admin/section_widget.jsx';
-import Loading from '../../widgets/general/loading_widget.jsx';
-import Upload from '../../widgets/admin/upload_widget.jsx'
+import Alert from '../../../widgets/admin/alert_widget.jsx';
+import Section from '../../../widgets/admin/section_widget.jsx';
+import Loading from '../../../widgets/general/loading_widget.jsx';
+import Upload from '../../../widgets/admin/upload_widget.jsx'
 
-import VaultHelper from '../../helpers/vault_helper.js';
+import VaultHelper from '../../../helpers/vault_helper.js';
 
 export default React.createClass({
   getInitialState: function() {
