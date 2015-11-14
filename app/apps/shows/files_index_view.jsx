@@ -14,8 +14,9 @@ import Alert from '../../widgets/admin/alert_widget.jsx';
 import Section from '../../widgets/admin/section_widget.jsx';
 import Loading from '../../widgets/general/loading_widget.jsx';
 import TagSelector from '../../widgets/vault/tag_selector_widget.jsx';
+
+import VaultHelper from '../../helpers/vault_helper.js';
 import RoutingHelper from '../../helpers/routing_helper.js';
-import AccountHelper from '../../helpers/account_helper.js';
 
 export default React.createClass({
   getInitialState: function() {
@@ -63,40 +64,10 @@ export default React.createClass({
 
 
   componentDidMount: function() {
-    this.loadRepository();
+    VaultHelper.loadRepository(this, "shows");
   },
 
 
-  loadRepository: function() {
-    window.data
-      .query("vault", "Record.Repository")
-      .select("id", "metadata_schemas")
-      .joins("metadata_schemas")
-      .where("references", "deq", "user_account_id", AccountHelper.getCurrentAccountIdFromContext(this))
-      .where("references", "deq", "role", "shows")
-      .on("error", () => {
-        if(this.isMounted()) {
-          this.setState({
-            loadingError: true
-          })
-        }
-      }).on("update", (_, response) => {
-        if(this.isMounted()) {
-
-          if(response.getData().count() != 0) {
-            this.setState({
-              currentRepository: response.getData().first(),
-              loadedRepository: true
-            });
-
-          } else {
-            this.setState({
-              loadingError: true
-            })
-          }
-        }
-      }).fetch();
-  },
 
 
   loadCategories: function() {

@@ -14,8 +14,9 @@ import Alert from '../../widgets/admin/alert_widget.jsx';
 import Section from '../../widgets/admin/section_widget.jsx';
 import Loading from '../../widgets/general/loading_widget.jsx';
 import TagSelector from '../../widgets/vault/tag_selector_widget.jsx';
+
 import RoutingHelper from '../../helpers/routing_helper.js';
-import AccountHelper from '../../helpers/account_helper.js';
+import VaultHelper from '../../helpers/vault_helper.js';
 
 import OverviewTab from './files_show_overview_tab.jsx';
 import MetadataTab from './files_show_metadata_tab.jsx';
@@ -23,6 +24,8 @@ import MetadataTab from './files_show_metadata_tab.jsx';
 export default React.createClass({
   getInitialState: function() {
     return {
+      currentRepository: null,
+      loadedRepository: false,
       currentFile: null,
       loadedFile: false,
       loadingError: false,
@@ -31,6 +34,7 @@ export default React.createClass({
 
 
   componentDidMount: function() {
+    VaultHelper.loadRepository(this, "shows");
     this.loadFile();
   },
 
@@ -70,7 +74,7 @@ export default React.createClass({
       return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.communication.general" />);
 
     } else {
-      if(this.state.loadedFile === false) {
+      if(this.state.loadedRepository === false || this.state.loadedFile === false) {
         return (<Loading info={true} infoTextKey="apps.shows.files.show.loading"/>);
 
       } else {
@@ -82,8 +86,8 @@ export default React.createClass({
                 <Card contentPrefix="apps.shows.files.show" cardTabs={["overview", "metadata"]}>
                   <CardHeader headerText={this.state.currentFile.get("name")} />
                   <CardBody>
-                    <OverviewTab currentFile={this.state.currentFile} />
-                    <MetadataTab currentFile={this.state.currentFile} />
+                    <OverviewTab currentFile={this.state.currentFile} currentRepository={this.state.currentRepository} />
+                    <MetadataTab currentFile={this.state.currentFile} currentRepository={this.state.currentRepository} />
                   </CardBody>
                 </Card>
               </GridCell>
