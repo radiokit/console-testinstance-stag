@@ -30,7 +30,13 @@ export default {
         },
         showTrackMarkers: function(context, trackId) {
           return "/apps/shows/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/show/" + trackId + "/track_markers";
-        }
+        },
+        automation: function(context) {
+          return "/apps/shows/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/automation";
+        },
+        automation_item_show: function(context, schedulingItemId) {
+            return "/apps/shows/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/automation_item_show/" + schedulingItemId;
+        },
       }
     },
     music_scheduler: {

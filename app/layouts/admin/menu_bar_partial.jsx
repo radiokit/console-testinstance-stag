@@ -51,7 +51,7 @@ export default React.createClass({
                 </Link>
               </li>
               <li>
-                <Link to="/">
+                <Link to={RoutingHelper.apps.shows.files.automation(this)}>
                   <Translate content="apps.shows.navigation.subheader2" className="title" />
                 </Link>
               </li>
