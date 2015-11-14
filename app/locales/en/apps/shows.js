@@ -3,8 +3,12 @@ export default {
     shows: {
       navigation: {
         title: "Shows",
-        subheader1: "Library",
-        subheader2: "Schedule"
+        files: {
+          title: "Library"
+        },
+        schedule: {
+          title: "Schedule"
+        },
       },
       index: {
       	add_track: {

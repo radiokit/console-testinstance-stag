@@ -3,8 +3,12 @@ export default {
     shows: {
       navigation: {
         title: "Audycje",
-        subheader1: "Library",
-        subheader2: "Schedule"
+        files: {
+          title: "Biblioteka"
+        },
+        schedule: {
+          tutke: "Ramówka"
+        },
       },
       index: {
       	add_track: {

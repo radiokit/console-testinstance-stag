@@ -5,21 +5,21 @@ import { Link } from 'react-router';
 import moment from 'moment';
 import momentTz from 'moment-timezone';
 
-import LoadingWidget from '../../widgets/general/loading_widget.jsx';
-import AutoUpdateTextFieldWidget from '../../widgets/admin/auto_update_text_field_widget.jsx';
-import DeleteButtonWidget from '../../widgets/admin/delete_button_widget.jsx'
-import Section from '../../widgets/admin/section_widget.jsx';
-import GridRow from '../../widgets/admin/grid_row_widget.jsx';
-import GridCell from '../../widgets/admin/grid_cell_widget.jsx';
-import Alert from '../../widgets/admin/alert_widget.jsx';
-import Card from '../../widgets/admin/card_widget.jsx';
-import CardBody from '../../widgets/admin/card_body_widget.jsx';
-import CardHeader from '../../widgets/admin/card_header_widget.jsx';
-import CardToolBar from '../../widgets/admin/card_tool_bar_widget.jsx';
-import CardToolBarCreate from '../../widgets/admin/card_tool_bar_create_widget.jsx';
-import Loading from '../../widgets/general/loading_widget.jsx';
-import RoutingHelper from '../../helpers/routing_helper.js';
-import AccountHelper from '../../helpers/account_helper.js';
+import LoadingWidget from '../../../widgets/general/loading_widget.jsx';
+import AutoUpdateTextFieldWidget from '../../../widgets/admin/auto_update_text_field_widget.jsx';
+import DeleteButtonWidget from '../../../widgets/admin/delete_button_widget.jsx'
+import Section from '../../../widgets/admin/section_widget.jsx';
+import GridRow from '../../../widgets/admin/grid_row_widget.jsx';
+import GridCell from '../../../widgets/admin/grid_cell_widget.jsx';
+import Alert from '../../../widgets/admin/alert_widget.jsx';
+import Card from '../../../widgets/admin/card_widget.jsx';
+import CardBody from '../../../widgets/admin/card_body_widget.jsx';
+import CardHeader from '../../../widgets/admin/card_header_widget.jsx';
+import CardToolBar from '../../../widgets/admin/card_tool_bar_widget.jsx';
+import CardToolBarCreate from '../../../widgets/admin/card_tool_bar_create_widget.jsx';
+import Loading from '../../../widgets/general/loading_widget.jsx';
+import RoutingHelper from '../../../helpers/routing_helper.js';
+import AccountHelper from '../../../helpers/account_helper.js';
 
 export default React.createClass({
 
@@ -37,7 +37,7 @@ export default React.createClass({
 
   componentWillMount: function() {
     var days = []
-    var days_translations = counterpart.translate("apps.music_scheduler.calendar.days");
+    var days_translations = counterpart.translate("apps.music.calendar.days");
     for(var key in days_translations) {
       days.push(days_translations[key].toLowerCase());
     };
@@ -145,7 +145,7 @@ export default React.createClass({
     return (
       <div className="form">
         <form className="form">
-          <AutoUpdateTextFieldWidget labelContent="apps.music_scheduler.scheduling_region.forms.general.name"
+          <AutoUpdateTextFieldWidget labelContent="apps.music.scheduling_region.forms.general.name"
                                      repo="agenda"
                                      model="Schedule.Weekly.Item"
                                      recordId={this.state.currentSchedulingItem.get("id")}
@@ -154,7 +154,7 @@ export default React.createClass({
                                      defaultValue={this.state.currentSchedulingItem.get("name")}
                                      helpBlockContent="optional" />
           <span className="color-picker" ref="color_picker">
-            <AutoUpdateTextFieldWidget labelContent="apps.music_scheduler.scheduling_region.forms.general.color"
+            <AutoUpdateTextFieldWidget labelContent="apps.music.scheduling_region.forms.general.color"
                                        repo="agenda"
                                        model="Schedule.Weekly.Item"
                                        recordId={this.state.currentSchedulingItem.get("id")}
@@ -173,7 +173,7 @@ export default React.createClass({
 
     var select = $(this.refs.associations_select);
     if(select != undefined && select.data('select2') == undefined) {
-      select.select2({ placeholder: counterpart.translate("apps.music_scheduler.scheduling_region.select.associations.placeholder")})
+      select.select2({ placeholder: counterpart.translate("apps.music.scheduling_region.select.associations.placeholder")})
       .on("select2-selecting", function(e) {
         self.createAssociation(e.choice);
       });
@@ -312,7 +312,7 @@ export default React.createClass({
     var time_stop  = moment.parseZone("2015-11-12T" + this.state.currentSchedulingItem.get("time_stop") + "Z").add(1, "s").format("HHmm");
     var active     = time_start == "0000" && time_stop == "0000" ? "active" : "";
     var className  = "all-day-checkbox-btn btn ink-reaction btn-primary " + active;
-    var label      = counterpart.translate("apps.music_scheduler.scheduling_region.forms.time_settings.all_day_checkbox_label");
+    var label      = counterpart.translate("apps.music.scheduling_region.forms.time_settings.all_day_checkbox_label");
 
     return (
       <label className={className} onClick={this.onAllDayCheckboxChanged}>
@@ -399,7 +399,7 @@ export default React.createClass({
     return (
       <div className="form">
         <div className="col-sm-5">
-          <AutoUpdateTextFieldWidget labelContent="apps.music_scheduler.scheduling_region.forms.time_settings.time_start"
+          <AutoUpdateTextFieldWidget labelContent="apps.music.scheduling_region.forms.time_settings.time_start"
                                      repo="agenda"
                                      model="ChannelSchedulingRegion"
                                      recordId={this.state.currentSchedulingItem.get("id")}
@@ -408,7 +408,7 @@ export default React.createClass({
                                      defaultValue={time_start} />
         </div>
         <div className="col-sm-5">
-          <AutoUpdateTextFieldWidget labelContent="apps.music_scheduler.scheduling_region.forms.time_settings.time_stop"
+          <AutoUpdateTextFieldWidget labelContent="apps.music.scheduling_region.forms.time_settings.time_stop"
                                      repo="agenda"
                                      model="ChannelSchedulingRegion"
                                      recordId={this.state.currentSchedulingItem.get("id")}
@@ -426,7 +426,7 @@ export default React.createClass({
           <div className="btn-group days" data-toggle="buttons">
             <div className="form-group" style={{padding: 0}}>
               <label style={{position: "relative", top: "10px"}}>
-                <Translate content="apps.music_scheduler.scheduling_region.forms.time_settings.days.label" />
+                <Translate content="apps.music.scheduling_region.forms.time_settings.days.label" />
               </label>
             </div>
             {this.appendDayCheckboxes()}
@@ -536,7 +536,7 @@ export default React.createClass({
   },
 
   onRegionDeleted: function() {
-    this.props.history.pushState(null, RoutingHelper.apps.music_scheduler.automation(this));
+    this.props.history.pushState(null, RoutingHelper.apps.music.automation(this));
   },
 
   renderSliderForms: function() {
@@ -623,13 +623,13 @@ export default React.createClass({
       return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.communication.general" />);
     } else {
       if(this.state.everythingLoaded == false) {
-        return (<Loading info={true} infoTextKey="apps.music_scheduler.scheduling_region.loading"/>);
+        return (<Loading info={true} infoTextKey="apps.music.scheduling_region.loading"/>);
       } else {
         return (
           <Section>
             <GridRow>
               <GridCell size="medium" center={true}>
-                <Card cardTabs={["general", "timesettings", "associations", "delete"]} contentPrefix="apps.music_scheduler.scheduling_region">
+                <Card cardTabs={["general", "timesettings", "associations", "delete"]} contentPrefix="apps.music.scheduling_region">
                   <CardHeader headerText={this.state.currentSchedulingItem.get("name")}>
                     <CardToolBar>
                     </CardToolBar>

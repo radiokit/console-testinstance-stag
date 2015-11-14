@@ -31,7 +31,7 @@ export default React.createClass({
 
   componentWillMount: function() {
     var days = [];
-    var days_translations = translate("apps.music_scheduler.calendar.days");
+    var days_translations = translate("apps.music.calendar.days");
 
     for(var key in days_translations) {
       days.push(days_translations[key].toLowerCase());
@@ -374,7 +374,7 @@ export default React.createClass({
         <Section>
           <GridRow>
             <GridCell size="large" center={true}>
-              <Card contentPrefix="apps.music_scheduler">
+              <Card contentPrefix="apps.music">
                 <CardHeader>
                   <CardToolBar/>
                 </CardHeader>

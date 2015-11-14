@@ -1,26 +1,28 @@
 export default {
   apps: {
-    music_scheduler: {
+    music: {
       navigation: {
-        title: "Music Scheduler",
-        subheader1: "Library",
-        subheader2: "Schedule"
+        title: "Music",
+        files: {
+          title: "Library"
+        },
+        schedule: {
+          title: "Schedule"
+        },
       },
 
       calendar: {
         days: {
-          monday: "Poniedziałek",
-          tuesday: "Wtorek",
-          wednesday: "Środa",
-          thursday: "Czwartek",
-          friday: "Piątek",
-          saturday: "Sobota",
-          sunday: "Niedziela"
+          monday: "Monday",
+          tuesday: "Tuesday",
+          wednesday: "Wednesday",
+          thursday: "Thursday",
+          friday: "Friday",
+          saturday: "Saturday",
+          sunday: "Sunday"
         }
       },
-
       header: "Music Scheduler",
-
       scheduling_region: {
         tabs: {
           general: "General",

@@ -18,21 +18,23 @@ import ShowsApp from './apps/shows/app.jsx';
 import ShowsFilesIndex from './apps/shows/files/index_view.jsx';
 import ShowsFilesCreate from './apps/shows/files/create_view.jsx';
 import ShowsFilesShow from './apps/shows/files/show_view.jsx';
-import ShowsFilesShowTrackMarkers from './apps/shows/show_track_markers.jsx';
 import ShowsScheduleIndex from './apps/shows/schedule/index_view.jsx';
 import ShowsScheduleShow from './apps/shows/schedule/show_view.jsx';
-import MusicSchedulerApp from './apps/music_scheduler/app.jsx';
-import MusicSchedulerAutomation from './apps/music_scheduler/automation.jsx';
-import MusicSchedulerAutomationRegionsShow from './apps/music_scheduler/automation_regions_show.jsx';
+import MusicApp from './apps/music/app.jsx';
+import MusicFilesIndex from './apps/music/files/index_view.jsx';
+import MusicFilesCreate from './apps/music/files/create_view.jsx';
+import MusicFilesShow from './apps/music/files/show_view.jsx';
+import MusicScheduleIndex from './apps/music/schedule/index_view.jsx';
+import MusicScheduleShow from './apps/music/schedule/show_view.jsx';
 
 Counterpart.registerTranslations("en", require('./locales/en/general.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/joint.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/shows.js'));
-Counterpart.registerTranslations("en", require('./locales/en/apps/music_scheduler.js'));
+Counterpart.registerTranslations("en", require('./locales/en/apps/music.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/general.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/joint.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/shows.js'));
-Counterpart.registerTranslations("pl", require('./locales/pl/apps/music_scheduler.js'));
+Counterpart.registerTranslations("pl", require('./locales/pl/apps/music.js'));
 
 function getEnv() {
   if(typeof(ENV) === "object") {
@@ -86,11 +88,13 @@ ReactDOM.render((
           <Route path="files/show/:fileId" component={ShowsFilesShow} onEnter={pingGoogleAnalytics}/>
           <Route path="schedule/index" component={ShowsScheduleIndex}/>
           <Route path="schedule/show/:schedulingItemId" component={ShowsScheduleShow}/>
-          <Route path="show/:trackId/track_markers" component={ShowsFilesShowTrackMarkers} onEnter={pingGoogleAnalytics}/>
         </Route>
-        <Route path="music_scheduler/:userAccountId" component={MusicSchedulerApp}>
-          <Route path="automation" component={MusicSchedulerAutomation}/>
-          <Route path="automation_regions_show/:schedulingItemId" component={MusicSchedulerAutomationRegionsShow}/>
+        <Route path="music/:userAccountId" component={MusicApp}>
+          <Route path="files/index" component={MusicFilesIndex} onEnter={pingGoogleAnalytics}/>
+          <Route path="files/create" component={MusicFilesCreate} onEnter={pingGoogleAnalytics}/>
+          <Route path="files/show/:fileId" component={MusicFilesShow} onEnter={pingGoogleAnalytics}/>
+          <Route path="schedule/index" component={MusicScheduleIndex}/>
+          <Route path="schedule/show/:schedulingItemId" component={MusicScheduleShow}/>
         </Route>
       </Route>
     </Route>

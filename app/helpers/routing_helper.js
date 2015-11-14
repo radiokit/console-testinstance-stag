@@ -31,7 +31,7 @@ export default {
         showTrackMarkers: function(context, trackId) {
           return "/apps/shows/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/show/" + trackId + "/track_markers";
         },
-        
+
       }, schedule: {
         index: function(context) {
           return "/apps/shows/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/schedule/index";
@@ -41,13 +41,29 @@ export default {
         },
       }
     },
-    music_scheduler: {
-      automation_regions_show: function(context, schedulingItemId) {
-          return "/apps/music_scheduler/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/automation_regions_show/" + schedulingItemId;
-      },
-      automation: function(context) {
-          return "/apps/music_scheduler/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/automation";
+    music: {
+      files: {
+        index: function(context) {
+          return "/apps/music/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/files/index";
+        },
+        create: function(context) {
+          return "/apps/music/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/files/create";
+        },
+        show: function(context, track) {
+          return "/apps/music/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/files/show/" + track.get("id");
+        },
+        showTrackMarkers: function(context, trackId) {
+          return "/apps/music/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/show/" + trackId + "/track_markers";
+        },
+
+      }, schedule: {
+        index: function(context) {
+          return "/apps/music/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/schedule/index";
+        },
+        show: function(context, schedulingItemId) {
+            return "/apps/music/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/schedule/show/" + schedulingItemId;
+        },
       }
-    }
+    },
   }
 }

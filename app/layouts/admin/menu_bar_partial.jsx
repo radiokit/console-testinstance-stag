@@ -47,12 +47,12 @@ export default React.createClass({
             <ul>
               <li>
                 <Link to={RoutingHelper.apps.shows.files.index(this)}>
-                  <Translate content="apps.shows.navigation.subheader1" className="title" />
+                  <Translate content="apps.shows.navigation.files.title" className="title" />
                 </Link>
               </li>
               <li>
                 <Link to={RoutingHelper.apps.shows.schedule.index(this)}>
-                  <Translate content="apps.shows.navigation.subheader2" className="title" />
+                  <Translate content="apps.shows.navigation.schedule.title" className="title" />
                 </Link>
               </li>
             </ul>
@@ -60,17 +60,17 @@ export default React.createClass({
           <li className="gui-folder">
             <a onClick={this.onMenuRootItemClick}>
               <div className="gui-icon"><i className="mdi mdi-guitar"/></div>
-              <Translate content="apps.music_scheduler.navigation.title" className="title" />
+              <Translate content="apps.music.navigation.title" className="title" />
             </a>
             <ul>
               <li>
-                <Link to="/">
-                  <Translate content="apps.music_scheduler.navigation.subheader1" className="title" />
+                <Link to={RoutingHelper.apps.music.files.index(this)}>
+                  <Translate content="apps.music.navigation.files.title" className="title" />
                 </Link>
               </li>
               <li>
-                <Link to={"/apps/music_scheduler/" + this.props.currentUserAccount.get("id") + "/automation"}>
-                  <Translate content="apps.music_scheduler.navigation.subheader2" className="title" />
+                <Link to={RoutingHelper.apps.music.schedule.index(this)}>
+                  <Translate content="apps.music.navigation.schedule.title" className="title" />
                 </Link>
               </li>
             </ul>
