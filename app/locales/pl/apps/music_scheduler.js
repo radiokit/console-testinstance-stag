@@ -2,7 +2,9 @@ export default {
   apps: {
     music_scheduler: {
       navigation: {
-        title: "Music Scheduler"
+        title: "Music Scheduler",
+        subheader1: "Library",
+        subheader2: "Schedule"
       },
 
       calendar: {

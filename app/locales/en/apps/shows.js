@@ -2,7 +2,9 @@ export default {
   apps: {
     shows: {
       navigation: {
-        title: "Shows"
+        title: "Shows",
+        subheader1: "Library",
+        subheader2: "Schedule"
       },
       index: {
       	add_track: {
