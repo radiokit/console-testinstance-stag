@@ -22,7 +22,7 @@ export default React.createClass({
 
   loadVariantWaveform: function() {
     window.data
-      .query("vault", "Record.Variant")
+      .query("vault", "Data.Record.Variant")
       .select("public_url")
       .where("record_file_id", "eq", this.props.currentFile.get("id"))
       .where("filter", "eq", "visualisation.waveform")

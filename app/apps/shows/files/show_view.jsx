@@ -41,7 +41,7 @@ export default React.createClass({
 
   loadFile: function() {
     window.data
-      .query("vault", "Record.File")
+      .query("vault", "Data.Record.File")
       .select("id", "name")
       .where("id", "eq", this.props.params.fileId)
       .on("error", () => {

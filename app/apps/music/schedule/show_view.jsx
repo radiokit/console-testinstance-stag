@@ -86,7 +86,7 @@ export default React.createClass({
       })
       .fetch();
     window.data
-      .query("vault", "Record.Repository")
+      .query("vault", "Data.Record.Repository")
       .select("id")
       .where("references", "deq", "user_account_id", AccountHelper.getCurrentAccountIdFromContext(this))
       .where("references", "deq", "role", "music")

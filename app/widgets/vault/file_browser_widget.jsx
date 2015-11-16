@@ -107,7 +107,7 @@ export default React.createClass({
   loadFiles: function() {
     let query =
       window.data
-      .query("vault", "Record.File")
+      .query("vault", "Data.Record.File")
       .select("id", "name", "metadata_items")
       .joins("metadata_items")
       .where("record_repository_id", "eq", this.state.currentRepository.get("id"))

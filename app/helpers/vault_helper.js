@@ -3,7 +3,7 @@ import AccountHelper from './account_helper.js';
 export default {
   loadRepository: function(context, role) {
     window.data
-      .query("vault", "Record.Repository")
+      .query("vault", "Data.Record.Repository")
       .select("id", "metadata_schemas")
       .joins("metadata_schemas")
       .where("references", "deq", "user_account_id", AccountHelper.getCurrentAccountIdFromContext(context))
