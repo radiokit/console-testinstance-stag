@@ -82,7 +82,7 @@ export default React.createClass({
 
   loadCategories: function() {
     window.data
-      .query("vault", "Tag.Category")
+      .query("vault", "Data.Tag.Category")
       .select("id", "name", "tag_items")
       .joins("tag_items")
       .where("record_repository_id", "eq", this.state.currentRepository.get("id"))

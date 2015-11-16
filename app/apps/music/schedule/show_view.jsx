@@ -104,7 +104,7 @@ export default React.createClass({
             });
 
             window.data
-              .query("vault", "Tag.Category")
+              .query("vault", "Data.Tag.Category")
               .select("id", "name", "tag_items")
               .where("record_repository_id", "eq", query.getData().first().get("id"))
               .joins("tag_items")
