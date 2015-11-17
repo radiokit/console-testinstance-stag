@@ -9,21 +9,35 @@ export default React.createClass({
     attributes: React.PropTypes.object.isRequired,
     actions: React.PropTypes.arrayOf(React.PropTypes.element),
     contentPrefix: React.PropTypes.string.isRequired,
-    records: React.PropTypes.object.isRequired
+    records: React.PropTypes.object.isRequired,
+    selectable: React.PropTypes.bool
   },
 
 
   getDefaultProps: function() {
     return {
-      actions: []
+      actions: [],
+      selectable: false
     }
+  },
+
+
+  getInitialState: function() {
+    return {
+      headerSelected: false
+    }
+  },
+
+
+  onHeaderSelect: function(state) {
+    this.setState({ headerSelected: true });
   },
 
 
   render: function() {
     return (<table className="table table-hover">
-      <TableHeader attributes={this.props.attributes} contentPrefix={this.props.contentPrefix} />
-      <TableBody attributes={this.props.attributes} records={this.props.records} />
+      <TableHeader attributes={this.props.attributes} contentPrefix={this.props.contentPrefix} selectable={this.props.selectable} onHeaderSelect={this.onHeaderSelect} />
+      <TableBody attributes={this.props.attributes} records={this.props.records} selectable={this.props.selectable} headerSelected={this.state.headerSelected} />
     </table>);
   }
 });

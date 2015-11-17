@@ -182,7 +182,7 @@ export default React.createClass({
 
                 <div className="col-sm-8 col-md-9 col-lg-10">
                   <div className="small-padding">
-                    <Table attributes={this.buildTableAttributes()} actions={[]} contentPrefix="apps.shows.files.index.table" records={this.state.availableFiles} />
+                    <Table selectable={true} attributes={this.buildTableAttributes()} actions={[]} contentPrefix="apps.shows.files.index.table" records={this.state.availableFiles} />
                   </div>
                 </div>
               </div>
