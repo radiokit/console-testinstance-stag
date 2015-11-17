@@ -7,7 +7,7 @@ export default React.createClass({
     attributes: React.PropTypes.object.isRequired,
     actions: React.PropTypes.arrayOf(React.PropTypes.string),
     selectable: React.PropTypes.bool,
-    headerSelected: React.PropTypes.bool,
+    selectedRowIds: React.PropTypes.object,
     onRowSelect: React.PropTypes.func,
     records: React.PropTypes.object.isRequired
   },
@@ -17,7 +17,6 @@ export default React.createClass({
     return {
       actions: [],
       selectable: false,
-      headerSelected: false
     }
   },
 
@@ -32,7 +31,7 @@ export default React.createClass({
   render: function() {
     return (
       <tbody>
-        {this.props.records.map((record) => { return <TableRow key={record.get("id")} onRowSelect={this.onRowSelect} record={record} attributes={this.props.attributes} actions={this.props.actions} selectable={this.props.selectable} />; })}
+        {this.props.records.map((record) => { return <TableRow key={record.get("id")} onRowSelect={this.onRowSelect} selected={this.props.selectedRowIds.includes(record.get("id"))} record={record} attributes={this.props.attributes} actions={this.props.actions} headerSelected={this.props.headerSelected} selectable={this.props.selectable} />; })}
       </tbody>
     );
   }

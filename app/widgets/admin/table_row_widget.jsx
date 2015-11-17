@@ -8,6 +8,7 @@ export default React.createClass({
     attributes: React.PropTypes.object.isRequired,
     actions: React.PropTypes.arrayOf(React.PropTypes.string),
     selectable: React.PropTypes.bool,
+    selected: React.PropTypes.bool,
     onRowSelect: React.PropTypes.func,
     record: React.PropTypes.object.isRequired
   },
@@ -16,7 +17,8 @@ export default React.createClass({
   getDefaultProps: function() {
     return {
       actions: [],
-      selectable: false
+      selectable: false,
+      selected: false
     }
   },
 
@@ -30,7 +32,7 @@ export default React.createClass({
 
   renderSelector: function(record) {
     if(this.props.selectable) {
-      return (<TableSelector onSelect={this.onSelect} />);
+      return (<TableSelector onSelect={this.onSelect} selected={this.props.selected} />);
     }
   },
 

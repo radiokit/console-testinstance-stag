@@ -8,6 +8,7 @@ export default React.createClass({
   propTypes: {
     attributes: React.PropTypes.object.isRequired,
     selectable: React.PropTypes.bool,
+    headerSelected: React.PropTypes.bool,
     onHeaderSelect: React.PropTypes.func,
     actions: React.PropTypes.arrayOf(React.PropTypes.string),
   },
@@ -16,7 +17,8 @@ export default React.createClass({
   getDefaultProps: function() {
     return {
       actions: [],
-      selectable: false
+      selectable: false,
+      headerSelected: false,
     }
   },
 
@@ -30,7 +32,7 @@ export default React.createClass({
 
   renderSelector: function(record) {
     if(this.props.selectable) {
-      return (<TableSelector onSelect={this.onSelect} />);
+      return (<TableSelector header={true} onSelect={this.onSelect} selected={this.props.headerSelected} />);
     }
   },
 
