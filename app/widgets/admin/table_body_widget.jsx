@@ -22,10 +22,17 @@ export default React.createClass({
   },
 
 
+  onRowSelect: function(state, record) {
+    if(this.props.onRowSelect) {
+      this.props.onRowSelect(state, record);
+    }
+  },
+
+
   render: function() {
     return (
       <tbody>
-        {this.props.records.map((record) => { return <TableRow key={record.get("id")} record={record} attributes={this.props.attributes} actions={this.props.actions} selectable={this.props.selectable} />; })}
+        {this.props.records.map((record) => { return <TableRow key={record.get("id")} onRowSelect={this.onRowSelect} record={record} attributes={this.props.attributes} actions={this.props.actions} selectable={this.props.selectable} />; })}
       </tbody>
     );
   }

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import TableCell from './table_cell_widget.jsx';
+import TableSelector from './table_selector_widget.jsx';
 
 export default React.createClass({
   propTypes: {
@@ -20,9 +21,16 @@ export default React.createClass({
   },
 
 
+  onSelect: function(state) {
+    if(this.props.onRowSelect) {
+      this.props.onRowSelect(state, this.props.record);
+    }
+  },
+
+
   renderSelector: function(record) {
     if(this.props.selectable) {
-      return (<td className="selector"><input type="checkbox" checked={this.props.headerSelected} onChange={(e) => { if(this.props.onRowSelect) { this.props.onRowSelect(e.target.checked, record); } }} /></td>);
+      return (<TableSelector onSelect={this.onSelect} />);
     }
   },
 

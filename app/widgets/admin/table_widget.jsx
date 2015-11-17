@@ -30,14 +30,23 @@ export default React.createClass({
 
 
   onHeaderSelect: function(state) {
-    this.setState({ headerSelected: true });
+    console.log("HEADER");
+    console.log(state);
+    // this.setState({ headerSelected: true });
+  },
+
+
+  onRowSelect: function(state, record) {
+    console.log("ROW");
+    console.log(state);
+    console.log(record.toJS());
   },
 
 
   render: function() {
     return (<table className="table table-hover">
       <TableHeader attributes={this.props.attributes} contentPrefix={this.props.contentPrefix} selectable={this.props.selectable} onHeaderSelect={this.onHeaderSelect} />
-      <TableBody attributes={this.props.attributes} records={this.props.records} selectable={this.props.selectable} headerSelected={this.state.headerSelected} />
+      <TableBody attributes={this.props.attributes} records={this.props.records} selectable={this.props.selectable} headerSelected={this.state.headerSelected} onRowSelect={this.onRowSelect} />
     </table>);
   }
 });

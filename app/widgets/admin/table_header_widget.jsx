@@ -1,6 +1,7 @@
 import React from 'react';
 import Translate from 'react-translate-component';
 
+import TableSelector from './table_selector_widget.jsx';
 
 
 export default React.createClass({
@@ -20,9 +21,16 @@ export default React.createClass({
   },
 
 
-  renderSelector: function() {
+  onSelect: function(state) {
+    if(this.props.onHeaderSelect) {
+      this.props.onHeaderSelect(state);
+    }
+  },
+
+
+  renderSelector: function(record) {
     if(this.props.selectable) {
-      return (<th className="selector"><input type="checkbox" onChange={(e) => { if(this.props.onHeaderSelect) { this.props.onHeaderSelect(e.target.checked); } }} /></th>);
+      return (<TableSelector onSelect={this.onSelect} />);
     }
   },
 
