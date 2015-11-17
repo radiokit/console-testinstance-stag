@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import Immutable from 'immutable';
 
 import GridRow from '../../widgets/admin/grid_row_widget.jsx';
 import GridCell from '../../widgets/admin/grid_cell_widget.jsx';
@@ -38,7 +39,8 @@ export default React.createClass({
       availableCategories: null,
       loadedCategories: false,
       loadingError: false,
-      selectedTagItemIds: []
+      selectedTagItemIds: [],
+      selectedRecords: new Immutable.Seq().toIndexedSeq(),
     };
   },
 
@@ -78,6 +80,26 @@ export default React.createClass({
   },
 
 
+  onFileSelect: function(selectedRecords) {
+    this.setState({
+      selectedRecords: selectedRecords
+    });
+  },
+
+
+  onTagClick: function() {
+
+  },
+
+
+  onDownloadClick: function() {
+    alert("Not implemented yet"); // TODO
+  },
+
+
+  onDeleteClick: function() {
+    alert("Not implemented yet"); // TODO
+  },
 
 
   loadCategories: function() {
@@ -182,7 +204,14 @@ export default React.createClass({
 
                 <div className="col-sm-8 col-md-9 col-lg-10">
                   <div className="small-padding">
-                    <Table selectable={true} attributes={this.buildTableAttributes()} actions={[]} contentPrefix="apps.shows.files.index.table" records={this.state.availableFiles} />
+                    <div className="btn-toolbar margin-bottom-xl">
+                      <div className="btn-group">
+                        <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onTagClick}><i className="mdi mdi-folder"/></button>
+                        <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onDownloadClick}><i className="mdi mdi-download"/></button>
+                        <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onDeleteClick}><i className="mdi mdi-delete"/></button>
+                      </div>
+                    </div>
+                    <Table onSelect={this.onFileSelect} selectable={true} attributes={this.buildTableAttributes()} actions={[]} contentPrefix="apps.shows.files.index.table" records={this.state.availableFiles} />
                   </div>
                 </div>
               </div>

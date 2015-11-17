@@ -51,8 +51,13 @@ export default React.createClass({
 
 
   render: function() {
+    let klass;
+    if(this.props.selected) {
+      klass = "warning";
+    }
+
     return (
-      <tr>
+      <tr className={klass}>
         {this.renderSelector()}
         {Object.keys(this.props.attributes).map((attribute) => { return <TableCell key={attribute} attributeName={attribute} attributeConfig={this.props.attributes[attribute]} record={this.props.record} />; })}
         {this.props.actions.map((action) => { return this.renderAction(this.props.record, action) })}

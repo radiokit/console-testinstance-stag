@@ -18,10 +18,10 @@ export default React.createClass({
 
   render: function() {
     if(this.props.header) {
-      return (<th className="selector"><input type="checkbox" checked={this.props.selected} onChange={(e) => { if(this.props.onSelect) { this.props.onSelect(e.target.checked); } }} /></th>);
+      return (<th style={{width: "1ex"}}><input type="checkbox" checked={this.props.selected} onChange={(e) => { if(this.props.onSelect) { this.props.onSelect(e.target.checked); } }} /></th>);
 
     } else {
-      return (<td className="selector"><input type="checkbox" checked={this.props.selected} onChange={(e) => { if(this.props.onSelect) { this.props.onSelect(e.target.checked); } }} /></td>);
+      return (<td style={{width: "1ex"}}><input type="checkbox" checked={this.props.selected} onChange={(e) => { if(this.props.onSelect) { this.props.onSelect(e.target.checked); } }} /></td>);
     }
   },
 });

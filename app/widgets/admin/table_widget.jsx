@@ -11,7 +11,8 @@ export default React.createClass({
     actions: React.PropTypes.arrayOf(React.PropTypes.element),
     contentPrefix: React.PropTypes.string.isRequired,
     records: React.PropTypes.object.isRequired,
-    selectable: React.PropTypes.bool
+    selectable: React.PropTypes.bool,
+    onSelect: React.PropTypes.func
   },
 
 
@@ -25,7 +26,7 @@ export default React.createClass({
 
   getInitialState: function() {
     return {
-      selectedRowIds: new Immutable.Seq().toIndexedSeq(),
+      selectedRecordIds: new Immutable.Seq().toIndexedSeq(),
     }
   },
 
@@ -35,37 +36,44 @@ export default React.createClass({
   },
 
 
+  callOnSelect: function() {
+    if(this.props.onSelect) {
+      this.props.onSelect(this.props.records.filter((record) => { return this.state.selectedRecordIds.includes(record.get("id")); }));
+    }
+  },
+
+
   onHeaderSelect: function(state) {
     if(state === true) {
       this.setState({
-        selectedRowIds: this.getAllRowIds(),
+        selectedRecordIds: this.getAllRowIds(),
         headerSelected: true
-      });
+      }, () => { this.callOnSelect() });
 
     } else {
       this.setState({
-        selectedRowIds: new Immutable.Seq().toIndexedSeq(),
+        selectedRecordIds: new Immutable.Seq().toIndexedSeq(),
         headerSelected: false
-      });
+      }, () => { this.callOnSelect() });
     }
   },
 
 
   onRowSelect: function(state, record) {
     if(state === true) {
-      let newSelectedRowIds = this.state.selectedRowIds.concat(Immutable.Seq.of(record.get("id")));
+      let newSelectedRowIds = this.state.selectedRecordIds.concat(Immutable.Seq.of(record.get("id")));
       let allRowIds = this.getAllRowIds();
 
       this.setState({
-        selectedRowIds: newSelectedRowIds,
+        selectedRecordIds: newSelectedRowIds,
         headerSelected: allRowIds.sort().equals(newSelectedRowIds.sort())
-      });
+      }, () => { this.callOnSelect() });
 
     } else {
       this.setState({
-        selectedRowIds: this.state.selectedRowIds.filterNot((id) => { return id === record.get("id"); }),
+        selectedRecordIds: this.state.selectedRecordIds.filterNot((id) => { return id === record.get("id"); }),
         headerSelected: false
-      });
+      }, () => { this.callOnSelect() });
     }
   },
 
@@ -73,7 +81,7 @@ export default React.createClass({
   render: function() {
     return (<table className="table table-hover">
       <TableHeader attributes={this.props.attributes} contentPrefix={this.props.contentPrefix} selectable={this.props.selectable} headerSelected={this.state.headerSelected} onHeaderSelect={this.onHeaderSelect} />
-      <TableBody attributes={this.props.attributes} records={this.props.records} selectable={this.props.selectable} selectedRowIds={this.state.selectedRowIds} onRowSelect={this.onRowSelect} />
+      <TableBody attributes={this.props.attributes} records={this.props.records} selectable={this.props.selectable} selectedRecordIds={this.state.selectedRecordIds} onRowSelect={this.onRowSelect} />
     </table>);
   }
 });
