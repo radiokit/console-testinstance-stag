@@ -65,5 +65,12 @@ export default {
         },
       }
     },
+    onair: {
+      playlist: {
+        index: function(context) {
+          return "/apps/onair/" +  AccountHelper.getCurrentAccountIdFromContext(context) + "/playlist/index";
+        },
+      },
+    },
   }
 }

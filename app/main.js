@@ -26,15 +26,19 @@ import MusicFilesCreate from './apps/music/files/create_view.jsx';
 import MusicFilesShow from './apps/music/files/show_view.jsx';
 import MusicScheduleIndex from './apps/music/schedule/index_view.jsx';
 import MusicScheduleShow from './apps/music/schedule/show_view.jsx';
+import OnAirApp from './apps/onair/app.jsx';
+import OnAirPlaylistIndex from './apps/onair/playlist/index_view.jsx';
 
 Counterpart.registerTranslations("en", require('./locales/en/general.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/joint.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/shows.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/music.js'));
+Counterpart.registerTranslations("en", require('./locales/en/apps/onair.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/general.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/joint.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/shows.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/music.js'));
+Counterpart.registerTranslations("pl", require('./locales/pl/apps/onair.js'));
 
 function getEnv() {
   if(typeof(ENV) === "object") {
@@ -76,6 +80,9 @@ ReactDOM.render((
   <Router history={createBrowserHistory()}>
     <Route path="/" component={Root} onEnter={requireAuth}>
       <Route path="apps" component={AppsIndex} onEnter={pingGoogleAnalytics}>
+        <Route path="onair/:userAccountId" component={OnAirApp}>
+          <Route path="playlist/index" component={OnAirPlaylistIndex} onEnter={pingGoogleAnalytics}/>
+        </Route>
         <Route path="joint/:userAccountId" component={JointApp}>
           <Route path="control_room" component={JointControlRoom} onEnter={pingGoogleAnalytics}/>
           <Route path="devices/create" component={JointDevicesCreate} onEnter={pingGoogleAnalytics}/>

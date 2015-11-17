@@ -41,6 +41,19 @@ export default React.createClass({
 
           <li className="gui-folder">
             <a onClick={this.onMenuRootItemClick}>
+              <div className="gui-icon"><i className="mdi mdi-radio-tower"/></div>
+              <Translate content="apps.onair.navigation.title" className="title" />
+            </a>
+            <ul>
+              <li>
+                <Link to={RoutingHelper.apps.onair.playlist.index(this)}>
+                  <Translate content="apps.onair.navigation.playlist.title" className="title" />
+                </Link>
+              </li>
+            </ul>
+          </li>
+          <li className="gui-folder">
+            <a onClick={this.onMenuRootItemClick}>
               <div className="gui-icon"><i className="mdi mdi-microphone"/></div>
               <Translate content="apps.shows.navigation.title" className="title" />
             </a>
