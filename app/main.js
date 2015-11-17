@@ -34,11 +34,13 @@ Counterpart.registerTranslations("en", require('./locales/en/apps/joint.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/shows.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/music.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/onair.js'));
+Counterpart.registerTranslations("en", require('./locales/en/widgets/vault/file_browser.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/general.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/joint.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/shows.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/music.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/onair.js'));
+Counterpart.registerTranslations("pl", require('./locales/pl/widgets/vault/file_browser.js'));
 
 function getEnv() {
   if(typeof(ENV) === "object") {

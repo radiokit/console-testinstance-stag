@@ -31,6 +31,16 @@ export default React.createClass({
   },
 
 
+  componentWillReceiveProps: function(nextProps) {
+    if(nextProps.records !== this.props.records) {
+      this.setState({
+        selectedRecordIds: new Immutable.Seq().toIndexedSeq(),
+        headerSelected: false
+      });
+    }
+  },
+
+
   getAllRowIds: function() {
     return this.props.records.map((record) => { return record.get("id"); });
   },

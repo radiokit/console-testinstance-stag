@@ -14,7 +14,9 @@ import TableActionShow from '../../widgets/admin/table_action_show.jsx';
 import Alert from '../../widgets/admin/alert_widget.jsx';
 import Section from '../../widgets/admin/section_widget.jsx';
 import Loading from '../../widgets/general/loading_widget.jsx';
-import TagSelector from '../../widgets/vault/tag_selector_widget.jsx';
+
+import TagSelector from './tag_selector_widget.jsx';
+import TagModal from './tag_modal.jsx';
 
 import VaultHelper from '../../helpers/vault_helper.js';
 import RoutingHelper from '../../helpers/routing_helper.js';
@@ -55,7 +57,11 @@ export default React.createClass({
       selectedTagItemIds.push(tagItemId);
     }
 
-    this.setState({ selectedTagItemIds: selectedTagItemIds }, () => {
+
+    this.setState({
+      selectedRecords: new Immutable.Seq().toIndexedSeq(),
+      selectedTagItemIds: selectedTagItemIds
+    }, () => {
       this.loadFiles();
       // FIXME fast clicking can cause that requests come in reverse order than clicked
       // and not the last one will be shown but the last that came
@@ -88,7 +94,7 @@ export default React.createClass({
 
 
   onTagClick: function() {
-
+    this.refs.tagModal.show();
   },
 
 
@@ -130,8 +136,9 @@ export default React.createClass({
     let query =
       window.data
       .query("vault", "Data.Record.File")
-      .select("id", "name", "metadata_items")
+      .select("id", "name", "metadata_items", "tag_items")
       .joins("metadata_items")
+      .joins("tag_items")
       .where("record_repository_id", "eq", this.state.currentRepository.get("id"))
       .on("error", () => {
         if(this.isMounted()) {
@@ -190,33 +197,37 @@ export default React.createClass({
       } else {
         var that = this;
         return (
-          <Card contentPrefix="apps.shows.files.index" cardPadding={false}>
-            <CardHeader>
-              <CardToolBar>
-                <CardToolBarCreate path={RoutingHelper.apps.shows.files.create(this)} hintTooltipKey="apps.shows.files.index.actions.create" />
-              </CardToolBar>
-            </CardHeader>
-            <CardBody>
-              <div className="row">
-                <div className="col-sm-4 col-md-3 col-lg-2">
-                  <TagSelector onTagItemChange={this.onTagItemChange} selectedTagItemIds={this.state.selectedTagItemIds} tagCategoriesWithItems={this.state.availableCategories}/>
-                </div>
+          <div>
+            <TagModal ref="tagModal" tagCategoriesWithItems={this.state.availableCategories} selectedRecords={this.state.selectedRecords} />
 
-                <div className="col-sm-8 col-md-9 col-lg-10">
-                  <div className="small-padding">
-                    <div className="btn-toolbar margin-bottom-xl">
-                      <div className="btn-group">
-                        <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onTagClick}><i className="mdi mdi-folder"/></button>
-                        <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onDownloadClick}><i className="mdi mdi-download"/></button>
-                        <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onDeleteClick}><i className="mdi mdi-delete"/></button>
+            <Card contentPrefix="apps.shows.files.index" cardPadding={false}>
+              <CardHeader>
+                <CardToolBar>
+                  <CardToolBarCreate path={RoutingHelper.apps.shows.files.create(this)} hintTooltipKey="apps.shows.files.index.actions.create" />
+                </CardToolBar>
+              </CardHeader>
+              <CardBody>
+                <div className="row">
+                  <div className="col-sm-4 col-md-3 col-lg-2">
+                    <TagSelector onTagItemChange={this.onTagItemChange} selectedTagItemIds={this.state.selectedTagItemIds} tagCategoriesWithItems={this.state.availableCategories}/>
+                  </div>
+
+                  <div className="col-sm-8 col-md-9 col-lg-10">
+                    <div className="small-padding">
+                      <div className="btn-toolbar margin-bottom-xl">
+                        <div className="btn-group">
+                          <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onTagClick}><i className="mdi mdi-folder"/></button>
+                          <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onDownloadClick}><i className="mdi mdi-download"/></button>
+                          <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onDeleteClick}><i className="mdi mdi-delete"/></button>
+                        </div>
                       </div>
+                      <Table onSelect={this.onFileSelect} selectable={true} attributes={this.buildTableAttributes()} actions={[]} contentPrefix="apps.shows.files.index.table" records={this.state.availableFiles} />
                     </div>
-                    <Table onSelect={this.onFileSelect} selectable={true} attributes={this.buildTableAttributes()} actions={[]} contentPrefix="apps.shows.files.index.table" records={this.state.availableFiles} />
                   </div>
                 </div>
-              </div>
-            </CardBody>
-          </Card>
+              </CardBody>
+            </Card>
+          </div>
         );
       }
     }
