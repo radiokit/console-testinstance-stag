@@ -1,4 +1,6 @@
 import React from 'react';
+import Translate from 'react-translate-component';
+import Counterpart from 'counterpart';
 
 import Table from '../../widgets/admin/table_widget.jsx';
 import Loading from '../../widgets/general/loading_widget.jsx';
@@ -123,11 +125,9 @@ export default React.createClass({
               {this.props.children}
 
               <div className="btn-group pull-right">
-                <div className="btn">
-                  Records {this.buildRangeStart()}-{this.buildRangeStop()} of {this.state.countRecords}
-                </div>
-                <button type="button" className="btn btn-default-light" onClick={this.onPreviousPageClick} disabled={this.state.offset === 0}><i className="mdi mdi-chevron-left"/></button>
-                <button type="button" className="btn btn-default-light" onClick={this.onNextPageClick} disabled={this.buildRangeStop() === this.state.countRecords}><i className="mdi mdi-chevron-right"/></button>
+                <Translate className="btn" style={{cursor: "default"}} content="widgets.admin.table_browser.pagination.current.label" rangeStart={this.buildRangeStart()} rangeStop={this.buildRangeStop()} rangeTotal={this.state.countRecords} component="div" />
+                <button type="button" className="btn btn-default-light" onClick={this.onPreviousPageClick} disabled={this.state.offset === 0} title={Counterpart.translate("widgets.admin.table_browser.pagination.next.title")}><i className="mdi mdi-chevron-left"/></button>
+                <button type="button" className="btn btn-default-light" onClick={this.onNextPageClick} disabled={this.buildRangeStop() === this.state.countRecords} title={Counterpart.translate("widgets.admin.table_browser.pagination.previous.title")}><i className="mdi mdi-chevron-right"/></button>
               </div>
             </div>
 
@@ -135,11 +135,9 @@ export default React.createClass({
 
             <div className="btn-toolbar margin-bottom-xl">
               <div className="btn-group pull-right">
-                <div className="btn">
-                  Records {this.buildRangeStart()}-{this.buildRangeStop()} of {this.state.countRecords}
-                </div>
-                <button type="button" className="btn btn-default-light" onClick={this.onPreviousPageClick} disabled={this.state.offset === 0}><i className="mdi mdi-chevron-left"/></button>
-                <button type="button" className="btn btn-default-light" onClick={this.onNextPageClick} disabled={this.buildRangeStop() === this.state.countRecords}><i className="mdi mdi-chevron-right"/></button>
+                <Translate className="btn" style={{cursor: "default"}} content="widgets.admin.table_browser.pagination.current.label" rangeStart={this.buildRangeStart()} rangeStop={this.buildRangeStop()} rangeTotal={this.state.countRecords} component="div" />
+                <button type="button" className="btn btn-default-light" onClick={this.onPreviousPageClick} disabled={this.state.offset === 0} title={Counterpart.translate("widgets.admin.table_browser.pagination.next.title")}><i className="mdi mdi-chevron-left"/></button>
+                <button type="button" className="btn btn-default-light" onClick={this.onNextPageClick} disabled={this.buildRangeStop() === this.state.countRecords} title={Counterpart.translate("widgets.admin.table_browser.pagination.previous.title")}><i className="mdi mdi-chevron-right"/></button>
               </div>
             </div>
           </div>
