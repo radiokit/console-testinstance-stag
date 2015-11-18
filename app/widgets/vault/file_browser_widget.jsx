@@ -8,6 +8,7 @@ import CardBody from '../../widgets/admin/card_body_widget.jsx';
 import CardHeader from '../../widgets/admin/card_header_widget.jsx';
 import CardToolBar from '../../widgets/admin/card_tool_bar_widget.jsx';
 import CardToolBarCreate from '../../widgets/admin/card_tool_bar_create_widget.jsx';
+import CardSidebar from '../../widgets/admin/card_sidebar_widget.jsx';
 import TableBrowser from '../../widgets/admin/table_browser_widget.jsx';
 import Alert from '../../widgets/admin/alert_widget.jsx';
 import Section from '../../widgets/admin/section_widget.jsx';
@@ -178,27 +179,22 @@ export default React.createClass({
                 </CardToolBar>
               </CardHeader>
               <CardBody>
-                <div className="row">
-                  <div className="col-sm-4 col-md-3 col-lg-2">
-                    <TagSelector onTagItemChange={this.onTagItemChange} selectedTagItemIds={this.state.selectedTagItemIds} tagCategoriesWithItems={this.state.availableCategories}/>
-                  </div>
+                <CardSidebar>
+                  <TagSelector onTagItemChange={this.onTagItemChange} selectedTagItemIds={this.state.selectedTagItemIds} tagCategoriesWithItems={this.state.availableCategories}/>
+                  <TableBrowser onSelect={this.onFileSelect} selectable={true} attributes={this.buildTableAttributes()} actions={[]} contentPrefix="apps.shows.files.index.table" query={this.buildTableQuery()}>
+                    <div className="btn-group">
+                      <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onTagClick}><i className="mdi mdi-folder"/></button>
+                    </div>
 
-                  <div className="col-sm-8 col-md-9 col-lg-10">
-                    <TableBrowser onSelect={this.onFileSelect} selectable={true} attributes={this.buildTableAttributes()} actions={[]} contentPrefix="apps.shows.files.index.table" query={this.buildTableQuery()}>
-                      <div className="btn-group">
-                        <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onTagClick}><i className="mdi mdi-folder"/></button>
-                      </div>
+                    <div className="btn-group">
+                      <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onDownloadClick}><i className="mdi mdi-download"/></button>
+                    </div>
 
-                      <div className="btn-group">
-                        <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onDownloadClick}><i className="mdi mdi-download"/></button>
-                      </div>
-
-                      <div className="btn-group">
-                        <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onDeleteClick}><i className="mdi mdi-delete"/></button>
-                      </div>
-                    </TableBrowser>
-                  </div>
-                </div>
+                    <div className="btn-group">
+                      <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onDeleteClick}><i className="mdi mdi-delete"/></button>
+                    </div>
+                  </TableBrowser>
+                </CardSidebar>
               </CardBody>
             </Card>
           </div>
