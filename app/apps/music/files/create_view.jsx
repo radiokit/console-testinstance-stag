@@ -18,7 +18,7 @@ export default React.createClass({
 
 
   componentDidMount: function() {
-    VaultHelper.loadRepository(this, "shows");
+    VaultHelper.loadRepository(this, "music");
   },
 
 

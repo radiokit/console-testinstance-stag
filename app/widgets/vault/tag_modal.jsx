@@ -83,20 +83,22 @@ export default React.createClass({
         {this.props.tagCategoriesWithItems.map((category) => {
           if(category.get("tag_items").size !== 0) {
             return (
-              <ul key={category.get("id")} className="nav nav-pills nav-stacked">
-                <li className="tag-category"><small>{category.get("name")}</small></li>
-                {category.get("tag_items").map((item) => {
-                  return (<li key={item.get("id")}>
-                    <label>
+              category.get("tag_items").map((item) => {
+                return (
+                  <div className="row small-padding" key={item.get("id")}>
+                    <div className="col-md-6">
                       {item.get("name")}
-                    </label>
-                  </li>);
-                })}
-              </ul>
+                    </div>
+                    <div class="col-md-6">
+                      <input type="radio" />
+                      <input type="radio" />
+                      <input type="radio" />
+                    </div>
+                  </div>);
+              })
             )
           }
         })}
-
       </Modal>
     );
   }
