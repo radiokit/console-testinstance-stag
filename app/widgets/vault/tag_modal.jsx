@@ -89,7 +89,7 @@ export default React.createClass({
                     <div className="col-md-6">
                       {item.get("name")}
                     </div>
-                    <div class="col-md-6">
+                    <div className="col-md-6">
                       <input type="radio" />
                       <input type="radio" />
                       <input type="radio" />
