@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router';
 import Immutable from 'immutable';
 
 import GridRow from '../../widgets/admin/grid_row_widget.jsx';
@@ -9,8 +8,7 @@ import CardBody from '../../widgets/admin/card_body_widget.jsx';
 import CardHeader from '../../widgets/admin/card_header_widget.jsx';
 import CardToolBar from '../../widgets/admin/card_tool_bar_widget.jsx';
 import CardToolBarCreate from '../../widgets/admin/card_tool_bar_create_widget.jsx';
-import Table from '../../widgets/admin/table_widget.jsx';
-import TableActionShow from '../../widgets/admin/table_action_show.jsx';
+import TableBrowser from '../../widgets/admin/table_browser_widget.jsx';
 import Alert from '../../widgets/admin/alert_widget.jsx';
 import Section from '../../widgets/admin/section_widget.jsx';
 import Loading from '../../widgets/general/loading_widget.jsx';
@@ -36,8 +34,6 @@ export default React.createClass({
     return {
       currentRepository: null,
       loadedRepository: false,
-      availableFiles: null,
-      loadedFiles: false,
       availableCategories: null,
       loadedCategories: false,
       loadingError: false,
@@ -62,7 +58,7 @@ export default React.createClass({
       selectedRecords: new Immutable.Seq().toIndexedSeq(),
       selectedTagItemIds: selectedTagItemIds
     }, () => {
-      this.loadFiles();
+      // this.loadFiles();
       // FIXME fast clicking can cause that requests come in reverse order than clicked
       // and not the last one will be shown but the last that came
     });
@@ -71,9 +67,6 @@ export default React.createClass({
 
   componentDidUpdate: function() {
     if(this.state.loadedRepository) {
-      if(!this.state.loadedFiles) {
-        this.loadFiles();
-      }
       if(!this.state.loadedCategories) {
         this.loadCategories();
       }
@@ -132,37 +125,13 @@ export default React.createClass({
   },
 
 
-  loadFiles: function() {
-    let query =
-      window.data
+  buildTableQuery: function() {
+    return window.data
       .query("vault", "Data.Record.File")
       .select("id", "name", "metadata_items", "tag_items")
       .joins("metadata_items")
       .joins("tag_items")
       .where("record_repository_id", "eq", this.state.currentRepository.get("id"))
-      .countTotal()
-      .limit(0, 100)
-      .on("error", () => {
-        if(this.isMounted()) {
-          this.setState({
-            loadingError: true
-          })
-        }
-      }).on("fetch", (_event, _query, data, meta) => {
-        if(this.isMounted()) {
-          this.setState({
-            availableFiles: data,
-            loadedFiles: true,
-            countFiles: meta.get("count_total")
-          })
-        }
-      });
-
-    if(this.state.selectedTagItemIds.length !== 0) {
-      query.where("tag_associations.id", "in", ...this.state.selectedTagItemIds);
-    }
-
-    query.fetch();
   },
 
 
@@ -194,11 +163,10 @@ export default React.createClass({
       return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.communication.general" />);
 
     } else {
-      if(this.state.loadedRepository === false || this.state.loadedFiles === false || this.state.loadedCategories === false) {
+      if(this.state.loadedRepository === false || this.state.loadedCategories === false) {
         return (<Loading info={true} infoTextKey="apps.shows.files.index.loading"/>);
 
       } else {
-        var that = this;
         return (
           <div>
             <TagModal ref="tagModal" tagCategoriesWithItems={this.state.availableCategories} selectedRecords={this.state.selectedRecords} />
@@ -216,24 +184,19 @@ export default React.createClass({
                   </div>
 
                   <div className="col-sm-8 col-md-9 col-lg-10">
-                    <div className="small-padding">
-                      <div className="btn-toolbar margin-bottom-xl">
-                        <div className="btn-group">
-                          <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onTagClick}><i className="mdi mdi-folder"/></button>
-                          <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onDownloadClick}><i className="mdi mdi-download"/></button>
-                          <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onDeleteClick}><i className="mdi mdi-delete"/></button>
-                        </div>
-                        <div className="btn-group pull-right">
-                          <p>
-                            Records ... from {this.state.countFiles} ...
-                          </p>
-                          <button type="button" className="btn btn-default-light"><i className="mdi mdi-chevron-left"/></button>
-                          <button type="button" className="btn btn-default-light"><i className="mdi mdi-chevron-right"/></button>
-                        </div>
+                    <TableBrowser onSelect={this.onFileSelect} selectable={true} attributes={this.buildTableAttributes()} actions={[]} contentPrefix="apps.shows.files.index.table" query={this.buildTableQuery()}>
+                      <div className="btn-group">
+                        <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onTagClick}><i className="mdi mdi-folder"/></button>
                       </div>
 
-                      <Table onSelect={this.onFileSelect} selectable={true} attributes={this.buildTableAttributes()} actions={[]} contentPrefix="apps.shows.files.index.table" records={this.state.availableFiles} />
-                    </div>
+                      <div className="btn-group">
+                        <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onDownloadClick}><i className="mdi mdi-download"/></button>
+                      </div>
+
+                      <div className="btn-group">
+                        <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onDeleteClick}><i className="mdi mdi-delete"/></button>
+                      </div>
+                    </TableBrowser>
                   </div>
                 </div>
               </CardBody>
