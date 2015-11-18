@@ -9,6 +9,11 @@ export default React.createClass({
 
 
   render: function() {
-    return (<span>{this.props.value}&nbsp;dB</span>);
+    if(this.props.value) {
+      return (<span>{Math.round(this.props.value*100) / 100}&nbsp;dB</span>);
+      
+    } else {
+      return <span />
+    }
   }
 });
