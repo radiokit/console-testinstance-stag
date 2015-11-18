@@ -1,20 +1,32 @@
 var path = require('path');
+var webpack = require('webpack');
 
 var node_modules_dir = path.resolve(__dirname, 'node_modules');
 
 var config = {
-  entry: path.resolve(__dirname, 'app/main.js'),
+  devtool: 'eval',
+
+  entry: [
+    'webpack-dev-server/client?http://0.0.0.0:8080', // WebpackDevServer host and port
+    'webpack/hot/only-dev-server', // "only" prevents reload on syntax errors
+    path.resolve(__dirname, 'app/main.js')
+  ],
+
+  plugins: [
+    new webpack.HotModuleReplacementPlugin()
+  ],
 
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: 'bundle.js'
+    filename: 'bundle.js',
+    publicPath: '/',
   },
 
   module: {
     loaders: [{
       test: /\.jsx$/,
       exclude: [node_modules_dir],
-      loader: 'babel'
+      loaders: ['react-hot', 'babel']
     }, {
       test: /\.js$/,
       exclude: [node_modules_dir],

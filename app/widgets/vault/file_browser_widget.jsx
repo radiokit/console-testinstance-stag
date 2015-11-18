@@ -140,6 +140,8 @@ export default React.createClass({
       .joins("metadata_items")
       .joins("tag_items")
       .where("record_repository_id", "eq", this.state.currentRepository.get("id"))
+      .countTotal()
+      .limit(0, 100)
       .on("error", () => {
         if(this.isMounted()) {
           this.setState({
@@ -220,7 +222,12 @@ export default React.createClass({
                           <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onDownloadClick}><i className="mdi mdi-download"/></button>
                           <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onDeleteClick}><i className="mdi mdi-delete"/></button>
                         </div>
+                        <div className="btn-group pull-right">
+                          <button type="button" className="btn btn-default-light"><i className="mdi mdi-chevron-left"/></button>
+                          <button type="button" className="btn btn-default-light"><i className="mdi mdi-chevron-right"/></button>
+                        </div>
                       </div>
+
                       <Table onSelect={this.onFileSelect} selectable={true} attributes={this.buildTableAttributes()} actions={[]} contentPrefix="apps.shows.files.index.table" records={this.state.availableFiles} />
                     </div>
                   </div>
