@@ -37,17 +37,17 @@ export default React.createClass({
           });
         }
       })
-      .on("update", (_, query) => {
+      .on("fetch", (_event, _query, data) => {
         if(this.isMounted()) {
           this.setState({
             loadedAccounts: true,
-            availableAccounts: query.getData(),
-            currentUserAccount: query.getData().first()
+            availableAccounts: data,
+            currentUserAccount: data.first()
           });
 
 
-          if(query.getData().size != 0) {
-            this.loadChannels(query.getData().first().get("id"))
+          if(data.size != 0) {
+            this.loadChannels(data.first().get("id"))
 
           } else {
             this.setState({
@@ -74,12 +74,12 @@ export default React.createClass({
           });
         }
       })
-      .on("update", (_, query) => {
+      .on("fetch", (_event, _query, data) => {
         if(this.isMounted()) {
           this.setState({
             loadedChannels: true,
-            availableChannels: query.getData(),
-            currentChannel: query.getData().first()
+            availableChannels: data,
+            currentChannel: data.first()
           });
         }
       })
@@ -98,12 +98,12 @@ export default React.createClass({
           });
         }
       })
-      .on("update", (_, query) => {
+      .on("fetch", (_event, _query, data) => {
         if(this.isMounted()) {
-          this.initializeGoogleAnalytics(query.getData().first());
+          this.initializeGoogleAnalytics(data.first());
           this.setState({
             loadedEditor: true,
-            currentEditor: query.getData().first()
+            currentEditor: data.first()
           });
         }
       })

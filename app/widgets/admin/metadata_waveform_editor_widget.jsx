@@ -31,10 +31,10 @@ export default React.createClass({
             loadingError: true
           })
         }
-      }).on("update", (_, query) => {
+      }).on("fetch", (_event, _query, data) => {
         if(this.isMounted()) {
           this.setState({
-            track: query.getData()
+            track: data
           })
         }
       }).fetch();
@@ -50,10 +50,10 @@ export default React.createClass({
             loadingError: true
           })
         }
-      }).on("update", (_, query) => {
+      }).on("fetch", (_event, _query, data) => {
         if(this.isMounted()) {
           this.setState({
-            track_markers: query.getData()
+            track_markers: data
           })
         }
       }).fetch();

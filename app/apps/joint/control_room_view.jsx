@@ -27,14 +27,14 @@ export default React.createClass({
       .query("plumber", "Media.Input.Stream.RTP")
       .select("id", "extra")
       // .where("references", "deq", "broadcast_channel", this.props.broadcastChannel.get("id"))
-      .on("update", (_, query) => {if(this.isMounted()) { this.setState({ inputsRtp: query.getData() }) }})
+      .on("fetch", (_event, _query, data) => {if(this.isMounted()) { this.setState({ inputsRtp: data }) }})
       .enableAutoUpdate(10000);
 
     this.inputsHttpQuery = window.data
       .query("plumber", "Media.Input.Stream.HTTP")
       .select("id", "extra")
       // .where("references", "deq", "broadcast_channel", this.props.broadcastChannel.get("id"))
-      .on("update", (_, query) => {if(this.isMounted()) { this.setState({ inputsHttp: query.getData() }) }})
+      .on("fetch", (_event, _query, data) => {if(this.isMounted()) { this.setState({ inputsHttp: data }) }})
       .enableAutoUpdate(10000);
   },
 

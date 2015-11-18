@@ -50,12 +50,12 @@ export default React.createClass({
             loadingError: true
           })
         }
-      }).on("update", (_, response) => {
+      }).on("fetch", (_event, _query, data) => {
         if(this.isMounted()) {
 
-          if(response.getData().count() != 0) {
+          if(data.count() != 0) {
             this.setState({
-              currentFile: response.getData().first(),
+              currentFile: data.first(),
               loadedFile: true
             });
 

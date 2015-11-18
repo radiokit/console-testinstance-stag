@@ -32,12 +32,12 @@ export default React.createClass({
             loadingError: true
           })
         }
-      }).on("update", (_, response) => {
+      }).on("fetch", (_event, _query, data) => {
         if(this.isMounted()) {
 
-          if(response.getData().count() != 0) {
+          if(data.count() != 0) {
             this.setState({
-              currentVariantWaveform: response.getData().first(),
+              currentVariantWaveform: data.first(),
               loadedVariantWaveform: true
             });
 

@@ -77,10 +77,10 @@ export default React.createClass({
             loadingError: true
           })
         }
-      }).on("update", (_, query) => {
+      }).on("fetch", (_event, _query, data) => {
         if(this.isMounted()) {
           this.setState({
-            currentSchedulingItem: query.getData().first(),
+            currentSchedulingItem: data.first(),
           });
         }
       })
@@ -96,17 +96,17 @@ export default React.createClass({
             loadingError: true
           })
         }
-      }).on("update", (_, query) => {
+      }).on("fetch", (_event, _query, data) => {
         if(this.isMounted()) {
-          if(query.getData().count() != 0) {
+          if(data.count() != 0) {
             this.setState({
-              recordRepository: query.getData().first()
+              recordRepository: data.first()
             });
 
             window.data
               .query("vault", "Data.Tag.Category")
               .select("id", "name", "tag_items")
-              .where("record_repository_id", "eq", query.getData().first().get("id"))
+              .where("record_repository_id", "eq", data.first().get("id"))
               .joins("tag_items")
               .on("error", () => {
                 if(this.isMounted()) {
@@ -114,10 +114,10 @@ export default React.createClass({
                       loadingError: true
                     })
                   }
-              }).on("update", (_, query) => {
+              }).on("fetch", (_event, _query, data) => {
                 if(this.isMounted()) {
                   this.setState({
-                    categories: query.getData(),
+                    categories: data,
                     everythingLoaded: true
                   })
                 }

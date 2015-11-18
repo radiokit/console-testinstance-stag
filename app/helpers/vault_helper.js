@@ -14,12 +14,11 @@ export default {
             loadingError: true
           })
         }
-      }).on("update", (_, response) => {
+      }).on("fetch", (_event, _query, data) => {
         if(context.isMounted()) {
-
-          if(response.getData().count() != 0) {
+          if(data.count() != 0) {
             context.setState({
-              currentRepository: response.getData().first(),
+              currentRepository: data.first(),
               loadedRepository: true
             });
 

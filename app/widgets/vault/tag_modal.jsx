@@ -88,7 +88,6 @@ export default React.createClass({
                 {category.get("tag_items").map((item) => {
                   return (<li key={item.get("id")}>
                     <label>
-                      <IndeterminateCheckBox data-category-item-id={item.get("id")} defaultChecked={this.getCurrentItemState(item) === "checked"} indeterminate={this.getCurrentItemState(item) === "indeterminate"} onChange={this.onItemChange} />
                       {item.get("name")}
                     </label>
                   </li>);

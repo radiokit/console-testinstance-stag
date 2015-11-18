@@ -51,27 +51,27 @@ export default React.createClass({
             loadingError: true
           })
         }
-      }).on("update", (_, query) => {
+      }).on("fetch", (_event, _query, data) => {
         if(this.isMounted()) {
-          if(query.getData().count() != 0) {
+          if(data.count() != 0) {
             this.setState({
-              schedule_weekly_plan: query.getData().first()
+              schedule_weekly_plan: data.first()
             });
 
             this.itemsQuery = window.data
               .query("agenda", "Schedule.Weekly.Item")
               .select("id", "time_start", "time_stop", "name", "extra" ,"on_monday", "on_tuesday", "on_wednesday", "on_thursday", "on_friday", "on_saturday", "on_sunday")
-              .where("schedule_weekly_plan_id", "eq", query.getData().first().get("id"))
+              .where("schedule_weekly_plan_id", "eq", data.first().get("id"))
               .on("error", () => {
                 if(this.isMounted()) {
                   this.setState({
                     loadingError: true
                   })
                 }
-              }).on("update", (_, query) => {
+              }).on("fetch", (_event, _query, data) => {
                 if(this.isMounted()) {
                   this.setState({
-                    scheduling_items: query.getData(),
+                    scheduling_items: data,
                   })
                   //this.forceUpdate();
                   $(this.refs.calendarContainer).fullCalendar( 'unselect' );

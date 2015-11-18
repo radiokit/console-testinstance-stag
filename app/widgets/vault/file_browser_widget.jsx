@@ -121,10 +121,10 @@ export default React.createClass({
             loadingError: true
           })
         }
-      }).on("update", (_, response) => {
+      }).on("fetch", (_event, _query, data) => {
         if(this.isMounted()) {
           this.setState({
-            availableCategories: response.getData(),
+            availableCategories: data,
             loadedCategories: true
           })
         }
@@ -148,11 +148,12 @@ export default React.createClass({
             loadingError: true
           })
         }
-      }).on("update", (_, response) => {
+      }).on("fetch", (_event, _query, data, meta) => {
         if(this.isMounted()) {
           this.setState({
-            availableFiles: response.getData(),
-            loadedFiles: true
+            availableFiles: data,
+            loadedFiles: true,
+            countFiles: meta.get("count_total")
           })
         }
       });
@@ -223,6 +224,9 @@ export default React.createClass({
                           <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onDeleteClick}><i className="mdi mdi-delete"/></button>
                         </div>
                         <div className="btn-group pull-right">
+                          <p>
+                            Records ... from {this.state.countFiles} ...
+                          </p>
                           <button type="button" className="btn btn-default-light"><i className="mdi mdi-chevron-left"/></button>
                           <button type="button" className="btn btn-default-light"><i className="mdi mdi-chevron-right"/></button>
                         </div>

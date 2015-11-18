@@ -35,10 +35,10 @@ export default React.createClass({
           })
         }
       })
-      .on("update", (_, query) => {
+      .on("fetch", (_event, _query, data) => {
         if(this.isMounted()) { 
           this.setState({ 
-            availableDevices: query.getData(),
+            availableDevices: data,
             loadedDevices: true
           }) 
         }
