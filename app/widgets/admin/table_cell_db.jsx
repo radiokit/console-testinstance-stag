@@ -9,6 +9,6 @@ export default React.createClass({
 
 
   render: function() {
-    return (<span>{value}&nbsp;dB</span>);
+    return (<span>{this.props.value}&nbsp;dB</span>);
   }
 });
