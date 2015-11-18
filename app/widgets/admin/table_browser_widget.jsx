@@ -132,6 +132,16 @@ export default React.createClass({
             </div>
 
             <Table onSelect={this.onSelect} selectable={this.props.selectable} attributes={this.props.attributes} actions={this.props.actions} contentPrefix={this.props.contentPrefix} records={this.state.availableRecords} />
+
+            <div className="btn-toolbar margin-bottom-xl">
+              <div className="btn-group pull-right">
+                <div className="btn">
+                  Records {this.buildRangeStart()}-{this.buildRangeStop()} of {this.state.countRecords}
+                </div>
+                <button type="button" className="btn btn-default-light" onClick={this.onPreviousPageClick} disabled={this.state.offset === 0}><i className="mdi mdi-chevron-left"/></button>
+                <button type="button" className="btn btn-default-light" onClick={this.onNextPageClick} disabled={this.buildRangeStop() === this.state.countRecords}><i className="mdi mdi-chevron-right"/></button>
+              </div>
+            </div>
           </div>
         );
       }
