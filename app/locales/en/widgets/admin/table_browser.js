@@ -12,8 +12,8 @@ export default {
               message: "Please wait while loading information about all files matching current criteria…",
             },
             confirmation: {
-              message: "All files (%(count)s) matching current criteria are selected.",
-              action: "Clear selection.",
+              message: "All files (%(count)s) from the library matching current criteria are selected.",
+              action: "Select only files visible on the current page.",
             },
           }
         },

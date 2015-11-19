@@ -12,8 +12,8 @@ export default {
               message: "Proszę czekać na załadowanie informacji o wszystkich plikach pasujących do aktualnych kryteriów…",
             },
             confirmation: {
-              message: "Wszystkie pliki (%(count)s) pasujące do aktualnych kryterów są zaznaczone.",
-              action: "Wyczyść zaznaczenie.",
+              message: "Wszystkie pliki (%(count)s) z biblioteki pasujące do aktualnych kryterów są zaznaczone.",
+              action: "Zaznacz tylko pliki widoczne na tej stronie.",
             },
           },
         },
