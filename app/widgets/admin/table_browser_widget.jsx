@@ -1,6 +1,7 @@
 import React from 'react';
 import Translate from 'react-translate-component';
 import Counterpart from 'counterpart';
+import Immutable from 'immutable';
 
 import Table from '../../widgets/admin/table_widget.jsx';
 import TableBrowserToolbar from '../../widgets/admin/table_browser_toolbar_widget.jsx';
@@ -31,12 +32,13 @@ export default React.createClass({
   getInitialState: function() {
     return {
       loadingError: false,
-      availableRecords: null,
-      loadedRecords: false,
-      countRecords: null,
+      records: null,
+      recordsLoaded: false,
+      recordsCount: null,
       offset: 0,
-      headerSelected: false,
-      overSelected: false,
+      selectedRecordIds: new Immutable.Seq().toIndexedSeq(),
+      selectedAllMatchingCriteria: false,
+      selectedAll: false,
     };
   },
 
@@ -56,7 +58,6 @@ export default React.createClass({
 
 
   loadRecords: function() {
-    console.log("LOAD!");
     this.props.query
       .limit(this.state.offset, this.props.limit)
       .countTotal()
@@ -67,9 +68,9 @@ export default React.createClass({
   onQueryFetch: function(_event, _query, data, meta) {
     if(this.isMounted()) {
       this.setState({
-        loadedRecords: true,
-        availableRecords: data,
-        countRecords: meta.get("count_total")
+        recordsLoaded: true,
+        records: data,
+        recordsCount: meta.get("count_total")
       });
     }
   },
@@ -82,28 +83,33 @@ export default React.createClass({
 
   buildRangeStop: function() {
     let rangeStop = this.state.offset + this.props.limit;
-    if(rangeStop > this.state.countRecords) {
-      return this.state.countRecords;
+    if(rangeStop > this.state.recordsCount) {
+      return this.state.recordsCount;
     } else {
       return rangeStop;
     }
   },
 
 
-  onSelectRecord: function(state, record, selected) {
-    if(this.props.onSelect) {
-      this.props.onSelect(selected);
-    }
+  onSelectRecord: function(state, record, selectedRecordIds) {
+    this.setState({
+      selectedRecordIds: selectedRecordIds,
+    }, () => { // FIXME move callbacks to componentDidUpdate
+      if(this.props.onSelect) {
+        this.props.onSelect(selectedRecordIds);
+      }
+    });
   },
 
 
-  onSelectAll: function(state, selected) {
+  onSelectAll: function(state, selectedRecordIds) {
     this.setState({
-      headerSelected: state,
-      overSelected: false,
+      selectedAllMatchingCriteria: false,
+      selectedRecordIds: selectedRecordIds,
+      selectedAll: state,
     }, () => { // FIXME move callbacks to componentDidUpdate
       if(this.props.onSelect) {
-        this.props.onSelect(selected);
+        this.props.onSelect(selectedRecordIds);
       }
     })
   },
@@ -129,15 +135,15 @@ export default React.createClass({
 
   onOverSelectAllClick: function() {
     this.setState({
-      overSelected: true,
+      selectedAllMatchingCriteria: true,
     });
   },
 
 
   onOverClearClick: function() {
     this.setState({
-      headerSelected: false,
-      overSelected: false,
+      selectedRecordIds: new Immutable.Seq().toIndexedSeq(),
+      selectedAllMatchingCriteria: false,
     });
   },
 
@@ -147,7 +153,7 @@ export default React.createClass({
       return (<Alert type="error" infoTextKey="general.errors.communication.general" />);
 
     } else {
-      if(this.state.loadedRecords === false) {
+      if(this.state.recordsLoaded === false) {
         return (<Loading info={true} infoTextKey={this.props.contentPrefix + ".loading"} />);
 
       } else {
@@ -157,18 +163,18 @@ export default React.createClass({
               {this.props.children}
 
               <TableBrowserToolbarGroup position="right">
-                <Translate className="btn" style={{cursor: "default"}} content="widgets.admin.table_browser.pagination.current.label" rangeStart={this.buildRangeStart()} rangeStop={this.buildRangeStop()} rangeTotal={this.state.countRecords} component="div" />
+                <Translate className="btn" style={{cursor: "default"}} content="widgets.admin.table_browser.pagination.current.label" rangeStart={this.buildRangeStart()} rangeStop={this.buildRangeStop()} rangeTotal={this.state.recordsCount} component="div" />
                 <button type="button" className="btn btn-default-light" onClick={this.onPreviousPageClick} disabled={this.state.offset === 0} title={Counterpart.translate("widgets.admin.table_browser.pagination.next.title")}><i className="mdi mdi-chevron-left"/></button>
-                <button type="button" className="btn btn-default-light" onClick={this.onNextPageClick} disabled={this.buildRangeStop() === this.state.countRecords} title={Counterpart.translate("widgets.admin.table_browser.pagination.previous.title")}><i className="mdi mdi-chevron-right"/></button>
+                <button type="button" className="btn btn-default-light" onClick={this.onNextPageClick} disabled={this.buildRangeStop() === this.state.recordsCount} title={Counterpart.translate("widgets.admin.table_browser.pagination.previous.title")}><i className="mdi mdi-chevron-right"/></button>
               </TableBrowserToolbarGroup>
             </TableBrowserToolbar>
 
             {() => {
-              if(this.state.headerSelected && this.props.limit < this.state.countRecords) {
-                if(this.state.overSelected) {
+              if(this.state.selectedAll && this.props.limit < this.state.recordsCount) {
+                if(this.state.selectedAllMatchingCriteria) {
                   return (
                     <div className="alert alert-slim alert-warning text-center">
-                      <Translate component="span" content="widgets.admin.table_browser.selection.over.confirmation.message" count={this.state.countRecords} />
+                      <Translate component="span" content="widgets.admin.table_browser.selection.over.confirmation.message" count={this.state.recordsCount} />
                       <Translate component="a" content="widgets.admin.table_browser.selection.over.confirmation.action" onClick={this.onOverClearClick} />
                     </div>
                   );
@@ -184,13 +190,13 @@ export default React.createClass({
               }
             }()}
 
-            <Table onSelectRecord={this.onSelectRecord} onSelectAll={this.onSelectAll} selectable={this.props.selectable} attributes={this.props.attributes} actions={this.props.actions} contentPrefix={this.props.contentPrefix} records={this.state.availableRecords} />
+            <Table selectedRecordIds={this.state.selectedRecordIds} onSelectRecord={this.onSelectRecord} onSelectAll={this.onSelectAll} selectable={this.props.selectable} attributes={this.props.attributes} actions={this.props.actions} contentPrefix={this.props.contentPrefix} records={this.state.records} />
 
             <TableBrowserToolbar>
               <TableBrowserToolbarGroup position="right">
-                <Translate className="btn" style={{cursor: "default"}} content="widgets.admin.table_browser.pagination.current.label" rangeStart={this.buildRangeStart()} rangeStop={this.buildRangeStop()} rangeTotal={this.state.countRecords} component="div" />
+                <Translate className="btn" style={{cursor: "default"}} content="widgets.admin.table_browser.pagination.current.label" rangeStart={this.buildRangeStart()} rangeStop={this.buildRangeStop()} rangeTotal={this.state.recordsCount} component="div" />
                 <button type="button" className="btn btn-default-light" onClick={this.onPreviousPageClick} disabled={this.state.offset === 0} title={Counterpart.translate("widgets.admin.table_browser.pagination.previous.title")}><i className="mdi mdi-chevron-left"/></button>
-                <button type="button" className="btn btn-default-light" onClick={this.onNextPageClick} disabled={this.buildRangeStop() === this.state.countRecords} title={Counterpart.translate("widgets.admin.table_browser.pagination.next.title")}><i className="mdi mdi-chevron-right"/></button>
+                <button type="button" className="btn btn-default-light" onClick={this.onNextPageClick} disabled={this.buildRangeStop() === this.state.recordsCount} title={Counterpart.translate("widgets.admin.table_browser.pagination.next.title")}><i className="mdi mdi-chevron-right"/></button>
               </TableBrowserToolbarGroup>
             </TableBrowserToolbar>
           </div>
