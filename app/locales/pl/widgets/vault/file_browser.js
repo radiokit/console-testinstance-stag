@@ -12,9 +12,12 @@ export default {
           },
           delete: {
             title: "Kasowanie",
-            confirmation: "Czy na pewno chcesz usunąć zaznaczone pliki (%(count)s szt.)?",
-            acknowledgement: "Usunięto %(count)s plik(ów).",
-            progress: "Trwa kasowanie plików…",
+            message: {
+              confirmation: "Czy na pewno chcesz usunąć zaznaczone pliki (%(count)s szt.)?",
+              acknowledgement: "Usunięto %(count)s plik(ów).",
+              progress: "Trwa kasowanie plików…",
+              cancelled: "Część plików dla których operacje zostały już wykonane została skasowana, ale dalsze kasowanie zostało przerwane.",
+            },
             action: {
               proceed: "Skasuj",
               cancel: "Anuluj",

@@ -12,9 +12,12 @@ export default {
           },
           delete: {
             header: "Delete",
-            confirmation: "Are you sure that you want to delete %(count)s selected file(s)?",
-            acknowledgement: "Deleted %(count)s file(s).",
-            progress: "Deleting in progress…",
+            message: {
+              confirmation: "Are you sure that you want to delete %(count)s selected file(s)?",
+              acknowledgement: "Deleted %(count)s file(s).",
+              progress: "Deleting in progress…",
+              cancelled: "Some files for which operations were already undertaken are gone, but deleting was cancelled for the remaining part.",
+            },
             action: {
               proceed: "Delete",
               cancel: "Cancel",

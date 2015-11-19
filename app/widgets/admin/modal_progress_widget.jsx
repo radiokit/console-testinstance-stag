@@ -14,7 +14,7 @@ export default React.createClass({
     proceedType: React.PropTypes.oneOf(['primary', 'success', 'info', 'warning', 'danger']),
     progressCurrent: React.PropTypes.number,
     progressMax: React.PropTypes.number,
-    step: React.PropTypes.oneOf(['confirmation', 'progress', 'acknowledgement']).isRequired,
+    step: React.PropTypes.oneOf(['confirmation', 'progress', 'acknowledgement', 'cancelled']).isRequired,
   },
 
 
@@ -31,11 +31,7 @@ export default React.createClass({
 
 
   onConfirm: function() {
-    this.setState({
-      step: "progress",
-    }, () => {
-      this.props.onConfirm();
-    });
+    this.props.onConfirm();
   },
 
 
@@ -71,7 +67,24 @@ export default React.createClass({
                   }
 
                 case "acknowledgement":
-                  return React.Children.toArray(this.props.children)[2];
+                  if(this.props.progressCurrent && this.props.progressMax) {
+                    return (
+                      <div>
+                        {React.Children.toArray(this.props.children)[2]}
+                        <ProgressBar position={this.props.progressMax} max={this.props.progressMax} type={this.props.proceedType} />
+                      </div>
+                    );
+
+                  } else {
+                    return (
+                      <div>
+                        {React.Children.toArray(this.props.children)[2]}
+                      </div>
+                    );
+                  }
+
+                case "cancelled":
+                  return React.Children.toArray(this.props.children)[3];
               }
             }()}
           </div>
@@ -102,6 +115,13 @@ export default React.createClass({
                   );
 
                 case "acknowledgement":
+                  return (
+                    <div>
+                      <Translate component="button" content={this.props.contentPrefix + ".action.close"} role="button" className={"btn btn-" + this.props.proceedType} data-dismiss="modal" />
+                    </div>
+                  );
+
+                case "cancelled":
                   return (
                     <div>
                       <Translate component="button" content={this.props.contentPrefix + ".action.close"} role="button" className={"btn btn-" + this.props.proceedType} data-dismiss="modal" />

@@ -1,7 +1,7 @@
 import React from 'react';
 import Translate from 'react-translate-component';
 
-import ModalProgress from '../../widgets/admin/modal_progress_widget.jsx';
+import ModalForEach from '../../widgets/admin/modal_foreach_widget.jsx';
 
 
 export default React.createClass({
@@ -12,8 +12,7 @@ export default React.createClass({
 
   getInitialState: function() {
     return {
-      step: "confirmation",
-      currentRecordIndex: undefined,
+      index: 0
     }
   },
 
@@ -23,72 +22,40 @@ export default React.createClass({
   },
 
 
-  onConfirm: function() {
-    this.setState({
-      step: "progress",
-      currentRecordIndex: 0,
-    });
-  },
-
-
-  onCancel: function() {
-    this.setState({
-      currentRecordIndex: undefined,
-    });
-  },
-
-
   onDeleteSuccess: function(record) {
     this.setState({
-      currentRecordIndex: this.state.currentRecordIndex + 1
+      index: this.state.index + 1
     });
   },
 
 
-  componentDidUpdate: function(prevProps, prevState) {
-    if(typeof(this.state.currentRecordIndex) !== "undefined" && this.state.currentRecordIndex !== prevState.currentRecordIndex) {
-      if(this.state.currentRecordIndex < this.props.selectedRecordIds.count()) {
-        this.deleteRecord();
-
-      } else {
-        this.setState({
-          step: "acknowledgement"
-        });
-      }
-    }
-  },
-
-
-  deleteRecord: function() {
-    let currentRecordId = this.props.selectedRecordIds.get(this.state.currentRecordIndex);
-
-    window.data.record("vault", "Data.Record.File", currentRecordId)
+  onPerform: function(index, recordId) {
+    window.data.record("vault", "Data.Record.File", recordId)
       // .on("error", this.onDeleteError) // TODO
       .on("loaded", this.onDeleteSuccess)
       .destroy();
   },
 
 
-  isInProgress: function() {
-    return typeof(this.state.currentRecordIndex) !== "undefined";;
-  },
-
-
   render: function() {
     return (
-      <ModalProgress ref="modal" onConfirm={this.onConfirm} onCancel={this.onCancel} contentPrefix="widgets.vault.file_browser.modals.delete" warning="irreversible" proceedType="danger" step={this.state.step} progressCurrent={this.state.currentRecordIndex} progressMax={this.props.selectedRecordIds.count()}>
+      <ModalForEach ref="modal" onPerform={this.onPerform} contentPrefix="widgets.vault.file_browser.modals.delete" warning="irreversible" proceedType="danger" recordIds={this.props.selectedRecordIds} index={this.state.index}>
         <div>
-          <Translate component="p" content="widgets.vault.file_browser.modals.delete.confirmation" count={this.props.selectedRecordIds.count()} />
+          <Translate component="p" content="widgets.vault.file_browser.modals.delete.message.confirmation" count={this.props.selectedRecordIds.count()} />
         </div>
 
         <div>
-          <Translate component="p" content="widgets.vault.file_browser.modals.delete.progress" className="text-center" />
+          <Translate component="p" content="widgets.vault.file_browser.modals.delete.message.progress" />
         </div>
 
         <div>
-          <Translate component="p" content="widgets.vault.file_browser.modals.delete.acknowledgement" count={this.props.selectedRecordIds.count()} />
+          <Translate component="p" content="widgets.vault.file_browser.modals.delete.message.acknowledgement" count={this.props.selectedRecordIds.count()} />
         </div>
-      </ModalProgress>
+
+        <div>
+          <Translate component="p" content="widgets.vault.file_browser.modals.delete.message.cancelled" />
+        </div>
+      </ModalForEach>
     );
   }
 });
