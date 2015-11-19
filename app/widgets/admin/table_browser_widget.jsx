@@ -221,14 +221,14 @@ export default React.createClass({
 
                 } else if(this.state.loadingMatching) {
                   return (
-                    <div className="alert alert-slim alert-warning text-center">
+                    <div className="alert alert-slim alert-info text-center">
                       <Translate component="span" content="widgets.admin.table_browser.selection.over.loading.message" />
                     </div>
                   );
 
                 } else {
                   return (
-                    <div className="alert alert-slim alert-warning text-center">
+                    <div className="alert alert-slim alert-info text-center">
                       <Translate component="span" content="widgets.admin.table_browser.selection.over.warning.message" count={this.props.limit} />
                       <Translate component="a" content="widgets.admin.table_browser.selection.over.warning.action" onClick={this.onOverSelectAllClick} />
                     </div>
