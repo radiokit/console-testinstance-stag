@@ -4,8 +4,20 @@ export default {
       file_browser: {
         modals: {
           tag: {
-            title: "Tags"
-          }
+            header: "Tags",
+            action: {
+              proceed: "Assign tags",
+              cancel: "Cancel",
+            }
+          },
+          delete: {
+            header: "Delete",
+            confirmation: "Are you sure that you want to delete %(count)s selected file(s)?",
+            action: {
+              proceed: "Delete",
+              cancel: "Cancel",
+            }
+          },
         }
       }
     }

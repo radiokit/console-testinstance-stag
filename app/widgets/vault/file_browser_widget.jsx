@@ -20,6 +20,7 @@ import Loading from '../../widgets/general/loading_widget.jsx';
 
 import TagSelector from './tag_selector_widget.jsx';
 import TagModal from './tag_modal.jsx';
+import DeleteModal from './delete_modal.jsx';
 
 import VaultHelper from '../../helpers/vault_helper.js';
 import RoutingHelper from '../../helpers/routing_helper.js';
@@ -45,7 +46,7 @@ export default React.createClass({
       loadedCategories: false,
       loadingError: false,
       selectedTagItemIds: [],
-      selectedRecords: new Immutable.Seq().toIndexedSeq(),
+      selectedRecordIds: new Immutable.Seq().toIndexedSeq(),
       recordsQuery: null,
       recordIdsQuery: null,
     };
@@ -64,7 +65,7 @@ export default React.createClass({
 
 
     this.setState({
-      selectedRecords: new Immutable.Seq().toIndexedSeq(),
+      selectedRecordIds: new Immutable.Seq().toIndexedSeq(),
       selectedTagItemIds: selectedTagItemIds
     }, () => {
       // this.loadFiles();
@@ -96,9 +97,9 @@ export default React.createClass({
   },
 
 
-  onFileSelect: function(selectedRecords) {
+  onFileSelect: function(selectedRecordIds) {
     this.setState({
-      selectedRecords: selectedRecords
+      selectedRecordIds: selectedRecordIds
     });
   },
 
@@ -114,7 +115,7 @@ export default React.createClass({
 
 
   onDeleteClick: function() {
-    alert("Not implemented yet"); // TODO
+    this.refs.deleteModal.show();
   },
 
 
@@ -198,7 +199,8 @@ export default React.createClass({
       } else {
         return (
           <div>
-            <TagModal ref="tagModal" tagCategoriesWithItems={this.state.availableCategories} selectedRecords={this.state.selectedRecords} />
+            <TagModal ref="tagModal" tagCategoriesWithItems={this.state.availableCategories} selectedRecordIds={this.state.selectedRecordIds} />
+            <DeleteModal ref="deleteModal" selectedRecordIds={this.state.selectedRecordIds} />
 
             <Card contentPrefix={this.props.contentPrefix + ".index"} cardPadding={false}>
               <CardHeader/>
@@ -208,12 +210,12 @@ export default React.createClass({
                   <TableBrowser onSelect={this.onFileSelect} selectable={true} attributes={this.buildTableAttributes()} actions={[]} contentPrefix={this.props.contentPrefix + ".index.table"} recordsQuery={this.state.recordsQuery} recordIdsQuery={this.state.recordIdsQuery}>
                     <TableBrowserToolbarGroup>
                       <Link type="button" className="btn btn-default-light" to={this.props.routingPrefix.files.create(this)}><i className="mdi mdi-upload"/><Translate content={this.props.contentPrefix + ".index.actions.create"} component="span"/></Link>
-                      <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onDownloadClick}><i className="mdi mdi-download"/></button>
-                      <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onDeleteClick}><i className="mdi mdi-delete"/></button>
+                      <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecordIds.count() === 0} onClick={this.onDownloadClick}><i className="mdi mdi-download"/></button>
+                      <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecordIds.count() === 0} onClick={this.onDeleteClick}><i className="mdi mdi-delete"/></button>
                     </TableBrowserToolbarGroup>
 
                     <TableBrowserToolbarGroup>
-                      <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onTagClick}><i className="mdi mdi-folder"/><Translate content={this.props.contentPrefix + ".index.actions.tags"} component="span"/></button>
+                      <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecordIds.count() === 0} onClick={this.onTagClick}><i className="mdi mdi-folder"/><Translate content={this.props.contentPrefix + ".index.actions.tags"} component="span"/></button>
                     </TableBrowserToolbarGroup>
                   </TableBrowser>
                 </CardSidebar>
