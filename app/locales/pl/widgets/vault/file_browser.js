@@ -3,13 +3,6 @@ export default {
     vault: {
       file_browser: {
         modals: {
-          tag: {
-            title: "Etykiety",
-            action: {
-              proceed: "Ustaw etykiety",
-              cancel: "Anuluj",
-            }
-          },
           delete: {
             title: "Kasowanie",
             message: {
@@ -20,6 +13,21 @@ export default {
             },
             action: {
               proceed: "Skasuj",
+              cancel: "Anuluj",
+              cancel: "Zamknij",
+            }
+          },
+
+          tag: {
+            title: "Etykiety",
+            message: {
+              confirmation: "Wybierz etykiety, które zostaną przypisane do zaznaczonych plików (%(count)s szt.):",
+              acknowledgement: "Przypisano etykiety do %(count)s plik(ów).",
+              progress: "Trwa przypisywanie etykiet…",
+              cancelled: "Część plików dla których operacje zostały już wykonane będzie mieć przypisane nowe etykiety, ale dalsze przypisywanie zostało przerwane.",
+            },
+            action: {
+              proceed: "Przypisz etykiety",
               cancel: "Anuluj",
               cancel: "Zamknij",
             }

@@ -4,6 +4,8 @@ import Translate from 'react-translate-component';
 import ModalProgress from '../../widgets/admin/modal_progress_widget.jsx';
 
 /**
+// # Use case
+//
 // This component is intented to be used if you need a modal window that has
 // the following workflow:
 //
@@ -12,6 +14,8 @@ import ModalProgress from '../../widgets/admin/modal_progress_widget.jsx';
 // 2. Do the operation, which does the same operation for each record.
 // 3. Show acknowledgement when operation is done.
 // 4. Allow user to cancel the operation, show message if operation was cancelled.
+//
+// # Usage
 //
 // This component is intended to be wrapped by other component that contains
 // dialog-specific actions. This is the boilerplate code:
@@ -65,6 +69,17 @@ import ModalProgress from '../../widgets/admin/modal_progress_widget.jsx';
 // In success callback you have to increment the index by 1, when it gets passed
 // via props to ModalForEach the code will automatically launch procedure for the next
 // element.
+//
+// # Props
+//
+// * index - index of currently processed element from recordIds sequence
+// * recordIds - Immutable.js sequence to be processed
+// * contentPrefix - string applied as  prefix for locale keys
+// * onPerform - callback called for each of processed elements
+// * warning - if set to "irreversible", will show a warning in the dialog that
+//     undertaken operations are irreversible
+// * proceedType - sets color of elements, should be set to "danger" for dangerous
+//     operation such as deletion
 */
 export default React.createClass({
   propTypes: {
@@ -134,7 +149,7 @@ export default React.createClass({
 
   render: function() {
     return (
-      <ModalProgress ref="modal" onConfirm={this.onConfirm} onCancel={this.onCancel} contentPrefix="widgets.vault.file_browser.modals.delete" warning="irreversible" proceedType="danger" step={this.state.step} progressCurrent={this.props.index} progressMax={this.props.recordIds.count()}>
+      <ModalProgress ref="modal" onConfirm={this.onConfirm} onCancel={this.onCancel} contentPrefix={this.props.contentPrefix} warning={this.props.warning} proceedType={this.props.proceedType} step={this.state.step} progressCurrent={this.props.index} progressMax={this.props.recordIds.count()}>
         {this.props.children}
       </ModalProgress>
     );

@@ -3,13 +3,6 @@ export default {
     vault: {
       file_browser: {
         modals: {
-          tag: {
-            header: "Tags",
-            action: {
-              proceed: "Assign tags",
-              cancel: "Cancel",
-            }
-          },
           delete: {
             header: "Delete",
             message: {
@@ -20,6 +13,21 @@ export default {
             },
             action: {
               proceed: "Delete",
+              cancel: "Cancel",
+              close: "Close",
+            }
+          },
+
+          tag: {
+            header: "Tags",
+            message: {
+              confirmation: "Select tags to apply to %(count)s selected file(s):",
+              acknowledgement: "Applied tags to %(count)s file(s).",
+              progress: "Applying tags in progress…",
+              cancelled: "Some files for which operations were already undertaken will have new tags, but tagging was cancelled for the remaining part.",
+            },
+            action: {
+              proceed: "Apply tags",
               cancel: "Cancel",
               close: "Close",
             }
