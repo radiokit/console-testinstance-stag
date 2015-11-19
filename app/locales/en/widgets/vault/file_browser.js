@@ -32,6 +32,21 @@ export default {
               close: "Close",
             }
           },
+
+          metadata: {
+            header: "Metadata",
+            message: {
+              confirmation: "Edit metadata that should be applied to %(count)s selected file(s):",
+              acknowledgement: "Applied metadata to %(count)s file(s).",
+              progress: "Applying metadata in progress…",
+              cancelled: "Some files for which operations were already undertaken will have new metadata, but tagging was cancelled for the remaining part.",
+            },
+            action: {
+              proceed: "Apply metadata",
+              cancel: "Cancel",
+              close: "Close",
+            }
+          },
         }
       }
     }

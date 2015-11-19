@@ -24,7 +24,9 @@ export default {
           loading: "Ładowanie biblioteki audycji",
           header: "Biblioteka audycji",
           actions: {
-            create: "Wyślij nowe audycje"
+            create: "Wyślij nowe audycje",
+            tags: "Etykiety",
+            metadata: "Metadane",
           },
           table: {
             header: {

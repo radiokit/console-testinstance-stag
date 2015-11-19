@@ -32,6 +32,21 @@ export default {
               cancel: "Zamknij",
             }
           },
+
+          metadata: {
+            title: "Metadane",
+            message: {
+              confirmation: "Wybierz metadane, które zostaną przypisane do zaznaczonych plików (%(count)s szt.):",
+              acknowledgement: "Przypisano metadane do %(count)s plik(ów).",
+              progress: "Trwa przypisywanie metadanych…",
+              cancelled: "Część plików dla których operacje zostały już wykonane będzie mieć przypisane nowe metadane, ale dalsze przypisywanie zostało przerwane.",
+            },
+            action: {
+              proceed: "Przypisz metadane",
+              cancel: "Anuluj",
+              cancel: "Zamknij",
+            }
+          },
         }
       }
     }

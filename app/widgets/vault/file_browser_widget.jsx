@@ -19,6 +19,7 @@ import Section from '../../widgets/admin/section_widget.jsx';
 import Loading from '../../widgets/general/loading_widget.jsx';
 
 import TagSelector from './tag_selector_widget.jsx';
+import MetadataModal from './metadata_modal.jsx';
 import TagModal from './tag_modal.jsx';
 import DeleteModal from './delete_modal.jsx';
 
@@ -106,6 +107,11 @@ export default React.createClass({
 
   onTagClick: function() {
     this.refs.tagModal.show();
+  },
+
+
+  onMetadataClick: function() {
+    this.refs.metadataModal.show();
   },
 
 
@@ -200,6 +206,7 @@ export default React.createClass({
         return (
           <div>
             <TagModal ref="tagModal" tagCategoriesWithItems={this.state.availableCategories} selectedRecordIds={this.state.selectedRecordIds} />
+            <MetadataModal ref="metadataModal" selectedRecordIds={this.state.selectedRecordIds} />
             <DeleteModal ref="deleteModal" selectedRecordIds={this.state.selectedRecordIds} />
 
             <Card contentPrefix={this.props.contentPrefix + ".index"} cardPadding={false}>
@@ -216,6 +223,10 @@ export default React.createClass({
 
                     <TableBrowserToolbarGroup>
                       <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecordIds.count() === 0} onClick={this.onTagClick}><i className="mdi mdi-folder"/><Translate content={this.props.contentPrefix + ".index.actions.tags"} component="span"/></button>
+                    </TableBrowserToolbarGroup>
+
+                    <TableBrowserToolbarGroup>
+                      <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecordIds.count() === 0} onClick={this.onMetadataClick}><i className="mdi mdi-barcode"/><Translate content={this.props.contentPrefix + ".index.actions.metadata"} component="span"/></button>
                     </TableBrowserToolbarGroup>
                   </TableBrowser>
                 </CardSidebar>

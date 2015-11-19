@@ -18,6 +18,7 @@ export default {
           actions: {
             create: "Upload new shows",
             tags: "Tags",
+            metadata: "Metadata",
           },
           table: {
             header: {
