@@ -11,6 +11,10 @@ export default React.createClass({
 
 
   render: function() {
-    return (<span><Duration duration={this.props.value} /></span>);
+    if(this.props.value) {
+      return (<span><Duration duration={this.props.value} /></span>);
+    } else {
+      return (<span/>);
+    }
   }
 });
