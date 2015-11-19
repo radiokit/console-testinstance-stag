@@ -15,6 +15,7 @@ export default React.createClass({
     progressCurrent: React.PropTypes.number,
     progressMax: React.PropTypes.number,
     step: React.PropTypes.oneOf(['confirmation', 'progress', 'acknowledgement', 'cancelled']).isRequired,
+    size: React.PropTypes.oneOf(['normal', 'large']),
   },
 
 
@@ -42,7 +43,7 @@ export default React.createClass({
 
   render: function() {
     return (
-        <Modal ref="modal" contentPrefix={this.props.contentPrefix} onConfirm={this.onConfirm} onCancel={this.onCancel} warning={this.props.warning} proceedType={this.props.proceedType}>
+        <Modal ref="modal" size={this.props.size} contentPrefix={this.props.contentPrefix} onConfirm={this.onConfirm} onCancel={this.onCancel} warning={this.props.warning} proceedType={this.props.proceedType}>
           <div className="modal-body">
             {() => {
               switch(this.props.step) {

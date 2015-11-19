@@ -7,6 +7,7 @@ import ModalForEach from '../../widgets/admin/modal_foreach_widget.jsx';
 export default React.createClass({
   propTypes: {
     selectedRecordIds: React.PropTypes.object.isRequired,
+    metadataSchemas: React.PropTypes.object.isRequired,
   },
 
 
@@ -36,9 +37,31 @@ export default React.createClass({
 
   render: function() {
     return (
-      <ModalForEach ref="modal" onPerform={this.onPerform} contentPrefix="widgets.vault.file_browser.modals.metadata" recordIds={this.props.selectedRecordIds} index={this.state.index}>
+      <ModalForEach ref="modal" size="large" onPerform={this.onPerform} contentPrefix="widgets.vault.file_browser.modals.metadata" recordIds={this.props.selectedRecordIds} index={this.state.index}>
         <div>
           <Translate component="p" content="widgets.vault.file_browser.modals.metadata.message.confirmation" count={this.props.selectedRecordIds.count()} />
+
+          <form className="form-horizontal" role="form">
+            {this.props.metadataSchemas.map((metadataSchema) => {
+              return (
+                <div className="form-group">
+                  <label className="col-sm-3 control-label">
+                    {metadataSchema.get("key")}
+                  </label>
+                  <div className="col-sm-6">
+                    <input type="text" className="form-control" />
+                  </div>
+                  <div className="col-sm-3">
+                    <label>
+                      <input type="checkbox" />
+                      Do not change
+                    </label>
+                  </div>
+                </div>
+              );
+            })}
+          </form>
+
         </div>
 
         <div>

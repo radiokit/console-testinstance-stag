@@ -80,6 +80,7 @@ import ModalProgress from '../../widgets/admin/modal_progress_widget.jsx';
 //     undertaken operations are irreversible
 // * proceedType - sets color of elements, should be set to "danger" for dangerous
 //     operation such as deletion
+// * size - modal size
 */
 export default React.createClass({
   propTypes: {
@@ -89,6 +90,7 @@ export default React.createClass({
     onPerform: React.PropTypes.func.isRequired,
     warning: React.PropTypes.oneOf(['irreversible']),
     proceedType: React.PropTypes.oneOf(['primary', 'success', 'info', 'warning', 'danger']),
+    size: React.PropTypes.oneOf(['normal', 'large']),
   },
 
 
@@ -149,7 +151,7 @@ export default React.createClass({
 
   render: function() {
     return (
-      <ModalProgress ref="modal" onConfirm={this.onConfirm} onCancel={this.onCancel} contentPrefix={this.props.contentPrefix} warning={this.props.warning} proceedType={this.props.proceedType} step={this.state.step} progressCurrent={this.props.index} progressMax={this.props.recordIds.count()}>
+      <ModalProgress ref="modal" size={this.props.size} onConfirm={this.onConfirm} onCancel={this.onCancel} contentPrefix={this.props.contentPrefix} warning={this.props.warning} proceedType={this.props.proceedType} step={this.state.step} progressCurrent={this.props.index} progressMax={this.props.recordIds.count()}>
         {this.props.children}
       </ModalProgress>
     );

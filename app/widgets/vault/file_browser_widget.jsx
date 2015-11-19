@@ -206,7 +206,7 @@ export default React.createClass({
         return (
           <div>
             <TagModal ref="tagModal" tagCategoriesWithItems={this.state.availableCategories} selectedRecordIds={this.state.selectedRecordIds} />
-            <MetadataModal ref="metadataModal" selectedRecordIds={this.state.selectedRecordIds} />
+            <MetadataModal ref="metadataModal" metadataSchemas={this.state.currentRepository.get("metadata_schemas")} selectedRecordIds={this.state.selectedRecordIds} />
             <DeleteModal ref="deleteModal" selectedRecordIds={this.state.selectedRecordIds} />
 
             <Card contentPrefix={this.props.contentPrefix + ".index"} cardPadding={false}>
