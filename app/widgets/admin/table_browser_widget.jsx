@@ -90,11 +90,14 @@ export default React.createClass({
 
   onRecordIdsQueryFetch: function(_event, _query, data, meta) {
     if(this.isMounted()) {
-      this.setState({
-        selectedMatching: true,
-        recordsCount: data.count(),
-        selectedRecordIds: data.map((record) => { return record.get("id"); }),
-      });
+      if(this.state.loadingMatching) { // Check if that wasn't cancelled in the meantime
+        this.setState({
+          selectedMatching: true,
+          recordsCount: data.count(),
+          selectedRecordIds: data.map((record) => { return record.get("id"); }),
+          oldSelectedRecordIds: this.state.selectedRecordIds,
+        });
+      }
     }
   },
 
@@ -114,14 +117,28 @@ export default React.createClass({
   },
 
 
-  onSelectRecord: function(state, record, selectedRecordIds) {
-    this.setState({
-      selectedRecordIds: selectedRecordIds,
-    }, () => { // FIXME move callbacks to componentDidUpdate
-      if(this.props.onSelect) {
-        this.props.onSelect(selectedRecordIds);
-      }
-    });
+  onSelectRecord: function(state, recordId, selectedRecordIds) {
+    if(this.state.oldSelectedRecordIds && state === false) {
+      this.setState({
+        loadingMatching: false,
+        selectedMatching: false,
+        selectedRecordIds: this.state.oldSelectedRecordIds.filterNot((x) => { return x === recordId }),
+        oldSelectedRecordIds: undefined
+      }, () => { // FIXME move callbacks to componentDidUpdate
+        if(this.props.onSelect) {
+          this.props.onSelect(selectedRecordIds);
+        }
+      });
+
+    } else {
+      this.setState({
+        selectedRecordIds: selectedRecordIds,
+      }, () => { // FIXME move callbacks to componentDidUpdate
+        if(this.props.onSelect) {
+          this.props.onSelect(selectedRecordIds);
+        }
+      });
+    }
   },
 
 
