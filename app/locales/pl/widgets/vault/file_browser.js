@@ -13,10 +13,12 @@ export default {
           delete: {
             title: "Kasowanie",
             confirmation: "Czy na pewno chcesz usunąć zaznaczone pliki (%(count)s szt.)?",
+            acknowledgement: "Usunięto %(count)s plik(ów).",
             progress: "Trwa kasowanie plików…",
             action: {
               proceed: "Skasuj",
               cancel: "Anuluj",
+              cancel: "Zamknij",
             }
           },
         }

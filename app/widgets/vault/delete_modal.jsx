@@ -1,8 +1,7 @@
 import React from 'react';
 import Translate from 'react-translate-component';
 
-import ProgressBar from '../../widgets/admin/progress_bar_widget.jsx';
-import Modal from '../../widgets/admin/modal_widget.jsx';
+import ModalProgress from '../../widgets/admin/modal_progress_widget.jsx';
 
 
 export default React.createClass({
@@ -13,6 +12,7 @@ export default React.createClass({
 
   getInitialState: function() {
     return {
+      step: "confirmation",
       currentRecordIndex: undefined,
     }
   },
@@ -23,8 +23,9 @@ export default React.createClass({
   },
 
 
-  onProceed: function() {
+  onConfirm: function() {
     this.setState({
+      step: "progress",
       currentRecordIndex: 0,
     });
   },
@@ -48,6 +49,11 @@ export default React.createClass({
     if(typeof(this.state.currentRecordIndex) !== "undefined" && this.state.currentRecordIndex !== prevState.currentRecordIndex) {
       if(this.state.currentRecordIndex < this.props.selectedRecordIds.count()) {
         this.deleteRecord();
+
+      } else {
+        this.setState({
+          step: "acknowledgement"
+        });
       }
     }
   },
@@ -70,22 +76,19 @@ export default React.createClass({
 
   render: function() {
     return (
-      <Modal inProgress={this.isInProgress()} onProceed={this.onProceed} onCancel={this.onCancel} ref="modal" contentPrefix="widgets.vault.file_browser.modals.delete" warning="irreversible" proceedType="danger">
-        {() => {
-          if(this.isInProgress()) {
-            return (
-              <div>
-                <Translate component="p" content="widgets.vault.file_browser.modals.delete.progress" className="text-center" />
-                <ProgressBar position={this.state.currentRecordIndex} max={this.props.selectedRecordIds.count()} type="danger" />
-              </div>
-            );
-          } else {
-            return (
-              <Translate component="p" content="widgets.vault.file_browser.modals.delete.confirmation" count={this.props.selectedRecordIds.count()} />
-            );
-          }
-        }()}
-      </Modal>
+      <ModalProgress ref="modal" onConfirm={this.onConfirm} onCancel={this.onCancel} contentPrefix="widgets.vault.file_browser.modals.delete" warning="irreversible" proceedType="danger" step={this.state.step} progressCurrent={this.state.currentRecordIndex} progressMax={this.props.selectedRecordIds.count()}>
+        <div>
+          <Translate component="p" content="widgets.vault.file_browser.modals.delete.confirmation" count={this.props.selectedRecordIds.count()} />
+        </div>
+
+        <div>
+          <Translate component="p" content="widgets.vault.file_browser.modals.delete.progress" className="text-center" />
+        </div>
+
+        <div>
+          <Translate component="p" content="widgets.vault.file_browser.modals.delete.acknowledgement" count={this.props.selectedRecordIds.count()} />
+        </div>
+      </ModalProgress>
     );
   }
 });
