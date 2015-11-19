@@ -1,4 +1,5 @@
 import React from 'react';
+import Immutable from 'immutable';
 
 import TableRow from './table_row_widget.jsx';
 
@@ -17,6 +18,7 @@ export default React.createClass({
     return {
       actions: [],
       selectable: false,
+      selectedRecordIds: new Immutable.Seq().toIndexedSeq(),
     }
   },
 
@@ -31,7 +33,7 @@ export default React.createClass({
   render: function() {
     return (
       <tbody>
-        {this.props.records.map((record) => { return <TableRow key={record.get("id")} onRowSelect={this.onRowSelect} selected={this.props.selectedRecordIds.includes(record.get("id"))} record={record} attributes={this.props.attributes} actions={this.props.actions} headerSelected={this.props.headerSelected} selectable={this.props.selectable} />; })}
+        {this.props.records.map((record) => { return <TableRow key={record.get("id")} onSelect={this.onRowSelect} selected={this.props.selectedRecordIds.includes(record.get("id"))} record={record} attributes={this.props.attributes} actions={this.props.actions} headerSelected={this.props.headerSelected} selectable={this.props.selectable} />; })}
       </tbody>
     );
   }

@@ -9,7 +9,7 @@ export default React.createClass({
     actions: React.PropTypes.arrayOf(React.PropTypes.string),
     selectable: React.PropTypes.bool,
     selected: React.PropTypes.bool,
-    onRowSelect: React.PropTypes.func,
+    onSelect: React.PropTypes.func,
     record: React.PropTypes.object.isRequired
   },
 
@@ -24,8 +24,8 @@ export default React.createClass({
 
 
   onSelect: function(state) {
-    if(this.props.onRowSelect) {
-      this.props.onRowSelect(state, this.props.record);
+    if(this.props.onSelect) {
+      this.props.onSelect(state, this.props.record);
     }
   },
 

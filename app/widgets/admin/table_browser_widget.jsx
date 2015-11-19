@@ -3,6 +3,8 @@ import Translate from 'react-translate-component';
 import Counterpart from 'counterpart';
 
 import Table from '../../widgets/admin/table_widget.jsx';
+import TableBrowserToolbar from '../../widgets/admin/table_browser_toolbar_widget.jsx';
+import TableBrowserToolbarGroup from '../../widgets/admin/table_browser_toolbar_group_widget.jsx';
 import Loading from '../../widgets/general/loading_widget.jsx';
 
 export default React.createClass({
@@ -21,7 +23,7 @@ export default React.createClass({
     return {
       actions: [],
       selectable: false,
-      limit: 100
+      limit: 3,
     }
   },
 
@@ -33,6 +35,8 @@ export default React.createClass({
       loadedRecords: false,
       countRecords: null,
       offset: 0,
+      headerSelected: false,
+      overSelected: false,
     };
   },
 
@@ -52,6 +56,7 @@ export default React.createClass({
 
 
   loadRecords: function() {
+    console.log("LOAD!");
     this.props.query
       .limit(this.state.offset, this.props.limit)
       .countTotal()
@@ -85,10 +90,22 @@ export default React.createClass({
   },
 
 
-  onSelect: function(selected) {
+  onRowSelect: function(state, record, selected) {
     if(this.props.onSelect) {
       this.props.onSelect(selected);
     }
+  },
+
+
+  onHeaderSelect: function(state, selected) {
+    this.setState({
+      headerSelected: state,
+      overSelected: false,
+    }, () => { // FIXME move callbacks to componentDidUpdate
+      if(this.props.onSelect) {
+        this.props.onSelect(selected);
+      }
+    })
   },
 
 
@@ -110,36 +127,72 @@ export default React.createClass({
   },
 
 
+  onOverSelectAllClick: function() {
+    this.setState({
+      overSelected: true,
+    });
+  },
+
+
+  onOverClearClick: function() {
+    this.setState({
+      headerSelected: false,
+      overSelected: false,
+    });
+  },
+
+
   render: function() {
     if(this.state.loadingError) {
       return (<Alert type="error" infoTextKey="general.errors.communication.general" />);
 
     } else {
       if(this.state.loadedRecords === false) {
-        return (<Loading info={true} infoTextKey="apps.shows.files.index.loading"/>);
+        return (<Loading info={true} infoTextKey={this.props.contentPrefix + ".loading"} />);
 
       } else {
         return (
           <div className="small-padding">
-            <div className="btn-toolbar margin-bottom-xl">
+            <TableBrowserToolbar>
               {this.props.children}
 
-              <div className="btn-group pull-right">
+              <TableBrowserToolbarGroup position="right">
                 <Translate className="btn" style={{cursor: "default"}} content="widgets.admin.table_browser.pagination.current.label" rangeStart={this.buildRangeStart()} rangeStop={this.buildRangeStop()} rangeTotal={this.state.countRecords} component="div" />
                 <button type="button" className="btn btn-default-light" onClick={this.onPreviousPageClick} disabled={this.state.offset === 0} title={Counterpart.translate("widgets.admin.table_browser.pagination.next.title")}><i className="mdi mdi-chevron-left"/></button>
                 <button type="button" className="btn btn-default-light" onClick={this.onNextPageClick} disabled={this.buildRangeStop() === this.state.countRecords} title={Counterpart.translate("widgets.admin.table_browser.pagination.previous.title")}><i className="mdi mdi-chevron-right"/></button>
-              </div>
-            </div>
+              </TableBrowserToolbarGroup>
+            </TableBrowserToolbar>
 
-            <Table onSelect={this.onSelect} selectable={this.props.selectable} attributes={this.props.attributes} actions={this.props.actions} contentPrefix={this.props.contentPrefix} records={this.state.availableRecords} />
+            {() => {
+              if(this.state.headerSelected && this.props.limit < this.state.countRecords) {
+                if(this.state.overSelected) {
+                  return (
+                    <div className="alert alert-slim alert-warning text-center">
+                      <Translate component="span" content="widgets.admin.table_browser.selection.over.confirmation.message" count={this.state.countRecords} />
+                      <Translate component="a" content="widgets.admin.table_browser.selection.over.confirmation.action" onClick={this.onOverClearClick} />
+                    </div>
+                  );
 
-            <div className="btn-toolbar margin-bottom-xl">
-              <div className="btn-group pull-right">
+                } else {
+                  return (
+                    <div className="alert alert-slim alert-warning text-center">
+                      <Translate component="span" content="widgets.admin.table_browser.selection.over.warning.message" count={this.props.limit} />
+                      <Translate component="a" content="widgets.admin.table_browser.selection.over.warning.action" onClick={this.onOverSelectAllClick} />
+                    </div>
+                  );
+                }
+              }
+            }()}
+
+            <Table onRowSelect={this.onRowSelect} onHeaderSelect={this.onHeaderSelect} headerSelected={this.state.headerSelected} selectable={this.props.selectable} attributes={this.props.attributes} actions={this.props.actions} contentPrefix={this.props.contentPrefix} records={this.state.availableRecords} />
+
+            <TableBrowserToolbar>
+              <TableBrowserToolbarGroup position="right">
                 <Translate className="btn" style={{cursor: "default"}} content="widgets.admin.table_browser.pagination.current.label" rangeStart={this.buildRangeStart()} rangeStop={this.buildRangeStop()} rangeTotal={this.state.countRecords} component="div" />
-                <button type="button" className="btn btn-default-light" onClick={this.onPreviousPageClick} disabled={this.state.offset === 0} title={Counterpart.translate("widgets.admin.table_browser.pagination.next.title")}><i className="mdi mdi-chevron-left"/></button>
-                <button type="button" className="btn btn-default-light" onClick={this.onNextPageClick} disabled={this.buildRangeStop() === this.state.countRecords} title={Counterpart.translate("widgets.admin.table_browser.pagination.previous.title")}><i className="mdi mdi-chevron-right"/></button>
-              </div>
-            </div>
+                <button type="button" className="btn btn-default-light" onClick={this.onPreviousPageClick} disabled={this.state.offset === 0} title={Counterpart.translate("widgets.admin.table_browser.pagination.previous.title")}><i className="mdi mdi-chevron-left"/></button>
+                <button type="button" className="btn btn-default-light" onClick={this.onNextPageClick} disabled={this.buildRangeStop() === this.state.countRecords} title={Counterpart.translate("widgets.admin.table_browser.pagination.next.title")}><i className="mdi mdi-chevron-right"/></button>
+              </TableBrowserToolbarGroup>
+            </TableBrowserToolbar>
           </div>
         );
       }

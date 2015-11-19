@@ -13,6 +13,7 @@ import CardToolBarCreate from '../../widgets/admin/card_tool_bar_create_widget.j
 import CardToolBarSettings from '../../widgets/admin/card_tool_bar_settings_widget.jsx';
 import CardSidebar from '../../widgets/admin/card_sidebar_widget.jsx';
 import TableBrowser from '../../widgets/admin/table_browser_widget.jsx';
+import TableBrowserToolbarGroup from '../../widgets/admin/table_browser_toolbar_group_widget.jsx';
 import Alert from '../../widgets/admin/alert_widget.jsx';
 import Section from '../../widgets/admin/section_widget.jsx';
 import Loading from '../../widgets/general/loading_widget.jsx';
@@ -45,6 +46,7 @@ export default React.createClass({
       loadingError: false,
       selectedTagItemIds: [],
       selectedRecords: new Immutable.Seq().toIndexedSeq(),
+      tableQuery: null,
     };
   },
 
@@ -75,6 +77,9 @@ export default React.createClass({
     if(this.state.loadedRepository) {
       if(!this.state.loadedCategories) {
         this.loadCategories();
+      }
+      if(!this.state.tableQuery) {
+        this.buildTableQuery();
       }
     }
   },
@@ -132,12 +137,14 @@ export default React.createClass({
 
 
   buildTableQuery: function() {
-    return window.data
-      .query("vault", "Data.Record.File")
-      .select("id", "name", "metadata_items", "tag_items")
-      .joins("metadata_items")
-      .joins("tag_items")
-      .where("record_repository_id", "eq", this.state.currentRepository.get("id"))
+    this.setState({
+      tableQuery: window.data
+        .query("vault", "Data.Record.File")
+        .select("id", "name", "metadata_items", "tag_items")
+        .joins("metadata_items")
+        .joins("tag_items")
+        .where("record_repository_id", "eq", this.state.currentRepository.get("id"))
+    });
   },
 
 
@@ -169,7 +176,7 @@ export default React.createClass({
       return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.communication.general" />);
 
     } else {
-      if(this.state.loadedRepository === false || this.state.loadedCategories === false) {
+      if(this.state.loadedRepository === false || this.state.loadedCategories === false || this.state.tableQuery === null) {
         return (<Loading info={true} infoTextKey="apps.shows.files.index.loading"/>);
 
       } else {
@@ -182,16 +189,16 @@ export default React.createClass({
               <CardBody>
                 <CardSidebar>
                   <TagSelector onTagItemChange={this.onTagItemChange} selectedTagItemIds={this.state.selectedTagItemIds} tagCategoriesWithItems={this.state.availableCategories}/>
-                  <TableBrowser onSelect={this.onFileSelect} selectable={true} attributes={this.buildTableAttributes()} actions={[]} contentPrefix={this.props.contentPrefix + ".index.table"} query={this.buildTableQuery()}>
-                    <div className="btn-group">
+                  <TableBrowser onSelect={this.onFileSelect} selectable={true} attributes={this.buildTableAttributes()} actions={[]} contentPrefix={this.props.contentPrefix + ".index.table"} query={this.state.tableQuery}>
+                    <TableBrowserToolbarGroup>
                       <Link type="button" className="btn btn-default-light" to={this.props.routingPrefix.files.create(this)}><i className="mdi mdi-upload"/><Translate content={this.props.contentPrefix + ".index.actions.create"} component="span"/></Link>
                       <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onDownloadClick}><i className="mdi mdi-download"/></button>
                       <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onDeleteClick}><i className="mdi mdi-delete"/></button>
-                    </div>
+                    </TableBrowserToolbarGroup>
 
-                    <div className="btn-group">
+                    <TableBrowserToolbarGroup>
                       <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onTagClick}><i className="mdi mdi-folder"/><Translate content={this.props.contentPrefix + ".index.actions.tags"} component="span"/></button>
-                    </div>
+                    </TableBrowserToolbarGroup>
                   </TableBrowser>
                 </CardSidebar>
               </CardBody>

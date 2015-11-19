@@ -12,7 +12,10 @@ export default React.createClass({
     contentPrefix: React.PropTypes.string.isRequired,
     records: React.PropTypes.object.isRequired,
     selectable: React.PropTypes.bool,
-    onSelect: React.PropTypes.func
+    headerSelected: React.PropTypes.bool,
+    onRowSelect: React.PropTypes.func,
+    onHeaderSelect: React.PropTypes.func,
+    selectedRecordIds: React.PropTypes.object,
   },
 
 
@@ -26,7 +29,8 @@ export default React.createClass({
 
   getInitialState: function() {
     return {
-      selectedRecordIds: new Immutable.Seq().toIndexedSeq(),
+      headerSelected: this.props.headerSelected,
+      selectedRecordIds: this.props.headerSelected ? this.getAllRecordIds() : new Immutable.Seq().toIndexedSeq(),
     }
   },
 
@@ -35,36 +39,46 @@ export default React.createClass({
     if(nextProps.records !== this.props.records) {
       this.setState({
         selectedRecordIds: new Immutable.Seq().toIndexedSeq(),
-        headerSelected: false
+        headerSelected: false,
       });
     }
   },
 
 
-  getAllRowIds: function() {
-    return this.props.records.map((record) => { return record.get("id"); });
+  componentDidUpdate: function(prevProps, prevState) {
+    if(prevState.headerSelected !== this.state.headerSelected && this.props.onHeaderSelect) {
+      this.props.onHeaderSelect(this.state.headerSelected, this.state.selectedRecordIds);
+    }
+
+    if(prevState.selectedRecordIds !== this.state.selectedRecordIds && this.props.onRowSelect) {
+      this.state.selectedRecordIds.filterNot((recordId) => { return prevState.selectedRecordIds.includes(recordId); }).forEach((selectedRecordId) => {
+        this.props.onRowSelect(true, selectedRecordId, this.state.selectedRecordIds);
+      });
+
+      prevState.selectedRecordIds.filterNot((recordId) => { return this.state.selectedRecordIds.includes(recordId); }).forEach((deselectedRecordId) => {
+        this.props.onRowSelect(false, deselectedRecordId, this.state.selectedRecordIds);
+      });
+    }
   },
 
 
-  callOnSelect: function() {
-    if(this.props.onSelect) {
-      this.props.onSelect(this.props.records.filter((record) => { return this.state.selectedRecordIds.includes(record.get("id")); }));
-    }
+  getAllRecordIds: function() {
+    return this.props.records.map((record) => { return record.get("id"); });
   },
 
 
   onHeaderSelect: function(state) {
     if(state === true) {
       this.setState({
-        selectedRecordIds: this.getAllRowIds(),
+        selectedRecordIds: this.getAllRecordIds(),
         headerSelected: true
-      }, () => { this.callOnSelect() });
+      });
 
     } else {
       this.setState({
         selectedRecordIds: new Immutable.Seq().toIndexedSeq(),
         headerSelected: false
-      }, () => { this.callOnSelect() });
+      });
     }
   },
 
@@ -72,18 +86,18 @@ export default React.createClass({
   onRowSelect: function(state, record) {
     if(state === true) {
       let newSelectedRowIds = this.state.selectedRecordIds.concat(Immutable.Seq.of(record.get("id")));
-      let allRowIds = this.getAllRowIds();
+      let allRecordIds = this.getAllRecordIds();
 
       this.setState({
         selectedRecordIds: newSelectedRowIds,
-        headerSelected: allRowIds.sort().equals(newSelectedRowIds.sort())
-      }, () => { this.callOnSelect() });
+        headerSelected: allRecordIds.sort().equals(newSelectedRowIds.sort())
+      });
 
     } else {
       this.setState({
         selectedRecordIds: this.state.selectedRecordIds.filterNot((id) => { return id === record.get("id"); }),
         headerSelected: false
-      }, () => { this.callOnSelect() });
+      });
     }
   },
 

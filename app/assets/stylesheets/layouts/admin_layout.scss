@@ -13,3 +13,17 @@
 .btn i.mdi + span {
   margin-left: 1ex;
 }
+
+.alert {
+  a {
+    text-decoration: underline;
+    cursor: pointer;
+    margin-left: 1ex;
+    margin-right: 1ex;
+  }
+
+  &.alert-slim {
+    padding-top: 0.5ex;
+    padding-bottom: 0.5ex;
+  }
+}
