@@ -109,7 +109,7 @@ export default React.createClass({
                 case "progress":
                   return (
                     <div>
-                      <Translate component="button" content={this.props.contentPrefix + ".action.cancel"} role="button" className="btn btn-default" data-dismiss="modal" onClick={this.onCancel} />
+                      <Translate component="button" content={this.props.contentPrefix + ".action.cancel"} role="button" className="btn btn-default" onClick={this.onCancel} />
                       <Translate component="button" content={this.props.contentPrefix + ".action.proceed"} role="button" className={"btn btn-" + this.props.proceedType} disabled={true} />
                     </div>
                   );

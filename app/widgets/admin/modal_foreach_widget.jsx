@@ -3,7 +3,69 @@ import Translate from 'react-translate-component';
 
 import ModalProgress from '../../widgets/admin/modal_progress_widget.jsx';
 
-
+/**
+// This component is intented to be used if you need a modal window that has
+// the following workflow:
+//
+// 1. Show request to confirm the operation to the user. Operation is inteded
+//    to do the same thing on set of records (e.g. deletion of multiple records).
+// 2. Do the operation, which does the same operation for each record.
+// 3. Show acknowledgement when operation is done.
+// 4. Allow user to cancel the operation, show message if operation was cancelled.
+//
+// This component is intended to be wrapped by other component that contains
+// dialog-specific actions. This is the boilerplate code:
+//
+//     export default React.createClass({
+//       propTypes: {
+//         recordIds: React.PropTypes.object.isRequired,
+//       },
+//
+//       getInitialState: function() {
+//         return {
+//           index: 0
+//         }
+//       },
+//
+//       show: function() {
+//         this.refs.modal.show();
+//       },
+//
+//       onActionSucess: function(record) {
+//         this.setState({
+//           index: this.state.index + 1
+//         });
+//       },
+//
+//       onPerform: function(index, recordId) {
+//         // replace this with your code, this.onSuccess is a callback that
+//         // should be called when operation is done, feel free to rename it
+//         // or add more callbacks
+//         doSomethingMeaningFull(this.onSuccess);
+//       },
+//
+//       render: function() {
+//         return (
+//           <ModalForEach ref="modal" onPerform={this.onPerform} contentPrefix="my.content.modal" recordIds={this.props.recordIds} index={this.state.index}>
+//             <div>Content for confirmation step</div>
+//             <div>Content for progress step</div>
+//             <div>Content for acknowledgement step</div>
+//             <div>Content for cancelled step</div>
+//           </ModalForEach>
+//         );
+//       }
+//     });
+//
+// Than you have to implement onPerform and callback handler for successful operation.
+//
+// onPerform will get called back for each of the elements of Iterable sequence passed
+// as recordIds, where first parameter will be index of current element, second will
+// be the element itself.
+//
+// In success callback you have to increment the index by 1, when it gets passed
+// via props to ModalForEach the code will automatically launch procedure for the next
+// element.
+*/
 export default React.createClass({
   propTypes: {
     index: React.PropTypes.number.isRequired,
@@ -51,7 +113,7 @@ export default React.createClass({
         if(this.state.step === "progress") { // it may have been cancelled in the meantime
           let currentRecordId = this.props.recordIds.get(nextProps.index);
           nextProps.onPerform(nextProps.index, currentRecordId);
-        } 
+        }
 
       } else {
         this.setState({

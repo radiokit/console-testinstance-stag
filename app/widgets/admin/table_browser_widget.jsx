@@ -25,7 +25,7 @@ export default React.createClass({
     return {
       actions: [],
       selectable: false,
-      limit: 3,
+      limit: 100,
     }
   },
 
