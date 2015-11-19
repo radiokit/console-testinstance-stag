@@ -46,7 +46,8 @@ export default React.createClass({
       loadingError: false,
       selectedTagItemIds: [],
       selectedRecords: new Immutable.Seq().toIndexedSeq(),
-      tableQuery: null,
+      recordsQuery: null,
+      recordIdsQuery: null,
     };
   },
 
@@ -78,8 +79,13 @@ export default React.createClass({
       if(!this.state.loadedCategories) {
         this.loadCategories();
       }
-      if(!this.state.tableQuery) {
-        this.buildTableQuery();
+
+      if(!this.state.recordsQuery) {
+        this.buildRecordsQuery();
+      }
+
+      if(!this.state.recordIdsQuery) {
+        this.buildRecordIdsQuery();
       }
     }
   },
@@ -136,13 +142,23 @@ export default React.createClass({
   },
 
 
-  buildTableQuery: function() {
+  buildRecordsQuery: function() {
     this.setState({
-      tableQuery: window.data
+      recordsQuery: window.data
         .query("vault", "Data.Record.File")
         .select("id", "name", "metadata_items", "tag_items")
         .joins("metadata_items")
         .joins("tag_items")
+        .where("record_repository_id", "eq", this.state.currentRepository.get("id"))
+    });
+  },
+
+
+  buildRecordIdsQuery: function() {
+    this.setState({
+      recordIdsQuery: window.data
+        .query("vault", "Data.Record.File")
+        .select("id")
         .where("record_repository_id", "eq", this.state.currentRepository.get("id"))
     });
   },
@@ -176,7 +192,7 @@ export default React.createClass({
       return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.communication.general" />);
 
     } else {
-      if(this.state.loadedRepository === false || this.state.loadedCategories === false || this.state.tableQuery === null) {
+      if(this.state.loadedRepository === false || this.state.loadedCategories === false || this.state.recordsQuery === null) {
         return (<Loading info={true} infoTextKey="apps.shows.files.index.loading"/>);
 
       } else {
@@ -189,7 +205,7 @@ export default React.createClass({
               <CardBody>
                 <CardSidebar>
                   <TagSelector onTagItemChange={this.onTagItemChange} selectedTagItemIds={this.state.selectedTagItemIds} tagCategoriesWithItems={this.state.availableCategories}/>
-                  <TableBrowser onSelect={this.onFileSelect} selectable={true} attributes={this.buildTableAttributes()} actions={[]} contentPrefix={this.props.contentPrefix + ".index.table"} query={this.state.tableQuery}>
+                  <TableBrowser onSelect={this.onFileSelect} selectable={true} attributes={this.buildTableAttributes()} actions={[]} contentPrefix={this.props.contentPrefix + ".index.table"} recordsQuery={this.state.recordsQuery} recordIdsQuery={this.state.recordIdsQuery}>
                     <TableBrowserToolbarGroup>
                       <Link type="button" className="btn btn-default-light" to={this.props.routingPrefix.files.create(this)}><i className="mdi mdi-upload"/><Translate content={this.props.contentPrefix + ".index.actions.create"} component="span"/></Link>
                       <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onDownloadClick}><i className="mdi mdi-download"/></button>

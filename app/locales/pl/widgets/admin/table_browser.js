@@ -8,6 +8,9 @@ export default {
               message: "Wszystkie pliki (%(count)s) widoczne na tej stronie są zaznaczone ale jest więcej plików pasujących do aktualnych kryteriów.",
               action: "Zaznacz wszystkie.",
             },
+            loading: {
+              message: "Proszę czekać na załadowanie informacji o wszystkich plikach pasujących do aktualnych kryteriów…",
+            },
             confirmation: {
               message: "Wszystkie pliki (%(count)s) pasujące do aktualnych kryterów są zaznaczone.",
               action: "Wyczyść zaznaczenie.",

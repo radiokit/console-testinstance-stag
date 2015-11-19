@@ -50,8 +50,8 @@ export default React.createClass({
 
 
   componentDidUpdate: function(prevProps, prevState) {
-    let wasHeaderSelected = prevState.selectedRecordIds.count() === this.props.records.count();
-    let isHeaderSelected = this.state.selectedRecordIds.count() === this.props.records.count();
+    let wasHeaderSelected = prevState.selectedRecordIds.count() >= this.props.records.count();
+    let isHeaderSelected = this.state.selectedRecordIds.count() >= this.props.records.count();
     if(wasHeaderSelected !== isHeaderSelected && this.props.onSelectAll) {
       this.props.onSelectAll(isHeaderSelected, this.state.selectedRecordIds);
     }
@@ -100,7 +100,7 @@ export default React.createClass({
 
   render: function() {
     return (<table className="table table-hover">
-      <TableHeader attributes={this.props.attributes} contentPrefix={this.props.contentPrefix} selectable={this.props.selectable} headerSelected={this.state.selectedRecordIds.count() === this.props.records.count()} onSelectAll={this.onSelectAll} />
+      <TableHeader attributes={this.props.attributes} contentPrefix={this.props.contentPrefix} selectable={this.props.selectable} headerSelected={this.state.selectedRecordIds.count() >= this.props.records.count()} onSelectAll={this.onSelectAll} />
       <TableBody attributes={this.props.attributes} records={this.props.records} selectable={this.props.selectable} selectedRecordIds={this.state.selectedRecordIds} onSelectRecord={this.onSelectRecord} />
     </table>);
   }

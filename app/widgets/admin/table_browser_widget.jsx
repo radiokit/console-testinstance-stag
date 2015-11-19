@@ -16,7 +16,8 @@ export default React.createClass({
     selectable: React.PropTypes.bool,
     onSelect: React.PropTypes.func,
     limit: React.PropTypes.number.isRequired,
-    query: React.PropTypes.object.isRequired,
+    recordsQuery: React.PropTypes.object.isRequired,
+    recordIdsQuery: React.PropTypes.object.isRequired,
   },
 
 
@@ -37,40 +38,62 @@ export default React.createClass({
       recordsCount: null,
       offset: 0,
       selectedRecordIds: new Immutable.Seq().toIndexedSeq(),
-      selectedAllMatchingCriteria: false,
+      loadingMatching: false,
+      selectedMatching: false,
       selectedAll: false,
     };
   },
 
 
   componentDidMount: function() {
-    this.props.query
-      .on("fetch", this.onQueryFetch);
+    this.props.recordsQuery
+      .on("fetch", this.onRecordsQueryFetch);
+    this.props.recordIdsQuery
+      .on("fetch", this.onRecordIdsQueryFetch);
 
     this.loadRecords();
   },
 
 
   componentWillUnmount: function() {
-    this.props.query
-      .off("fetch", this.onQueryFetch);
+    this.props.recordsQuery
+      .off("fetch", this.onRecordsQueryFetch);
+    this.props.recordIdsQuery
+      .off("fetch", this.onRecordIdsQueryFetch);
   },
 
 
   loadRecords: function() {
-    this.props.query
+    this.props.recordsQuery
       .limit(this.state.offset, this.props.limit)
       .countTotal()
       .fetch();
   },
 
 
-  onQueryFetch: function(_event, _query, data, meta) {
+  loadRecordIds: function() {
+    this.props.recordIdsQuery
+      .fetch();
+  },
+
+
+  onRecordsQueryFetch: function(_event, _query, data, meta) {
     if(this.isMounted()) {
       this.setState({
         recordsLoaded: true,
         records: data,
         recordsCount: meta.get("count_total")
+      });
+    }
+  },
+
+
+  onRecordIdsQueryFetch: function(_event, _query, data, meta) {
+    if(this.isMounted()) {
+      this.setState({
+        selectedMatching: true,
+        recordsCount: data.count(),
+        selectedRecordIds: data.map((record) => { return record.get("id"); }),
       });
     }
   },
@@ -104,7 +127,7 @@ export default React.createClass({
 
   onSelectAll: function(state, selectedRecordIds) {
     this.setState({
-      selectedAllMatchingCriteria: false,
+      selectedMatching: false,
       selectedRecordIds: selectedRecordIds,
       selectedAll: state,
     }, () => { // FIXME move callbacks to componentDidUpdate
@@ -135,7 +158,10 @@ export default React.createClass({
 
   onOverSelectAllClick: function() {
     this.setState({
-      selectedAllMatchingCriteria: true,
+      selectedMatching: false,
+      loadingMatching: true,
+    }, () => {
+      this.loadRecordIds();
     });
   },
 
@@ -143,7 +169,8 @@ export default React.createClass({
   onOverClearClick: function() {
     this.setState({
       selectedRecordIds: new Immutable.Seq().toIndexedSeq(),
-      selectedAllMatchingCriteria: false,
+      selectedMatching: false,
+      loadingMatching: false,
     });
   },
 
@@ -171,11 +198,18 @@ export default React.createClass({
 
             {() => {
               if(this.state.selectedAll && this.props.limit < this.state.recordsCount) {
-                if(this.state.selectedAllMatchingCriteria) {
+                if(this.state.selectedMatching) {
                   return (
                     <div className="alert alert-slim alert-warning text-center">
                       <Translate component="span" content="widgets.admin.table_browser.selection.over.confirmation.message" count={this.state.recordsCount} />
                       <Translate component="a" content="widgets.admin.table_browser.selection.over.confirmation.action" onClick={this.onOverClearClick} />
+                    </div>
+                  );
+
+                } else if(this.state.loadingMatching) {
+                  return (
+                    <div className="alert alert-slim alert-warning text-center">
+                      <Translate component="span" content="widgets.admin.table_browser.selection.over.loading.message" />
                     </div>
                   );
 

@@ -8,6 +8,9 @@ export default {
               message: "All files (%(count)s) visible on this page are selected but there are more files matching current criteria.",
               action: "Select all of them.",
             },
+            loading: {
+              message: "Please wait while loading information about all files matching current criteria…",
+            },
             confirmation: {
               message: "All files (%(count)s) matching current criteria are selected.",
               action: "Clear selection.",
