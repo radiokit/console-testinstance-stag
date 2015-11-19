@@ -77,9 +77,19 @@ export default React.createClass({
   },
 
 
+  onProceed: function() {
+
+  },
+
+
+  onCancel: function() {
+
+  },
+
+
   render: function() {
     return (
-      <Modal ref="modal" contentPrefix="widgets.vault.file_browser.modals.tag" warning="irreversible">
+      <Modal ref="modal" contentPrefix="widgets.vault.file_browser.modals.tag" onProceed={this.onProceed} onCancel={this.onCancel}>
         {this.props.tagCategoriesWithItems.map((category) => {
           if(category.get("tag_items").size !== 0) {
             return (

@@ -4,12 +4,34 @@ import Translate from 'react-translate-component';
 export default React.createClass({
   propTypes: {
     contentPrefix: React.PropTypes.string.isRequired,
-    warning: React.PropTypes.oneOf(['irreversible'])
+    onProceed: React.PropTypes.func.isRequired,
+    onCancel: React.PropTypes.func.isRequired,
+    inProgress: React.PropTypes.bool,
+    warning: React.PropTypes.oneOf(['irreversible']),
+    proceedType: React.PropTypes.oneOf(['primary', 'danger']),
+  },
+
+
+  getDefaultProps: function() {
+    return {
+      proceedType: "primary",
+      inProgress: false,
+    }
   },
 
 
   show: function() {
     $(this.refs.modal).modal("show");
+  },
+
+
+  onProceed: function() {
+    this.props.onProceed();
+  },
+
+
+  onCancel: function() {
+    this.props.onCancel();
   },
 
 
@@ -33,8 +55,8 @@ export default React.createClass({
               }
             }()}
 
-            <Translate component="button" content={this.props.contentPrefix + ".action.cancel"} role="button" className="btn btn-default" data-dismiss="modal" />
-            <Translate component="button" content={this.props.contentPrefix + ".action.proceed"} role="button" className="btn btn-primary" />
+            <Translate component="button" content={this.props.contentPrefix + ".action.cancel"} role="button" className="btn btn-default" data-dismiss="modal" onClick={this.onCancel} />
+            <Translate component="button" content={this.props.contentPrefix + ".action.proceed"} role="button" className={"btn btn-" + this.props.proceedType} onClick={this.onProceed} disabled={this.props.inProgress} />
           </div>
         </div>
       </div>

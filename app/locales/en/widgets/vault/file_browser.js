@@ -13,6 +13,7 @@ export default {
           delete: {
             header: "Delete",
             confirmation: "Are you sure that you want to delete %(count)s selected file(s)?",
+            progress: "Deleting in progress…",
             action: {
               proceed: "Delete",
               cancel: "Cancel",

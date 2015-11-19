@@ -13,6 +13,7 @@ export default {
           delete: {
             title: "Kasowanie",
             confirmation: "Czy na pewno chcesz usunąć zaznaczone pliki (%(count)s szt.)?",
+            progress: "Trwa kasowanie plików…",
             action: {
               proceed: "Skasuj",
               cancel: "Anuluj",
