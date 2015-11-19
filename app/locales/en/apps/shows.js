@@ -10,26 +10,18 @@ export default {
           title: "Schedule"
         },
       },
-      index: {
-      	add_track: {
-      		header: "Add Track"
-      	}
-      },
-      show: {
-        edit_track_markers: "Edit Track Markers"
-      },
 
       files: {
         index: {
           loading: "Fetching shows library",
           header: "Shows library",
           actions: {
-            create: "Upload new shows"
+            create: "Upload new shows",
+            tags: "Tags",
           },
           table: {
             header: {
               name: "Name",
-              duration_total: "Duration",
             }
           }
         },

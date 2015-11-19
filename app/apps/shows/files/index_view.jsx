@@ -30,7 +30,7 @@ export default React.createClass({
       <Section>
         <GridRow>
           <GridCell size="large" center={true}>
-            <FileBrowser role="shows"/>
+            <FileBrowser repositoryRole="shows" contentPrefix="apps.shows.files" routingPrefix={RoutingHelper.apps.shows}/>
           </GridCell>
         </GridRow>
       </Section>

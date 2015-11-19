@@ -11,6 +11,32 @@ export default {
         },
       },
 
+      files: {
+        index: {
+          loading: "Fetching music library",
+          header: "Music library",
+          actions: {
+            create: "Upload new music",
+            tags: "Tags",
+          },
+          table: {
+            header: {
+              name: "Name",
+            }
+          }
+        },
+
+        show: {
+          loading: "Fetching music track information",
+          tabs: {
+            headers: {
+              overview: "Overview",
+              metadata: "Metadata"
+            }
+          }
+        }
+      },
+
       calendar: {
         days: {
           monday: "Monday",
@@ -66,6 +92,8 @@ export default {
         loading: "Loading..."
       }
     },
+
+
     widgets: {
       loading: {
         info: "Loading…"

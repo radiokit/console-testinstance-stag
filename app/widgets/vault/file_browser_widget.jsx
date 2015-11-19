@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router';
+import Translate from 'react-translate-component';
 import Immutable from 'immutable';
 
 import GridRow from '../../widgets/admin/grid_row_widget.jsx';
@@ -8,6 +10,7 @@ import CardBody from '../../widgets/admin/card_body_widget.jsx';
 import CardHeader from '../../widgets/admin/card_header_widget.jsx';
 import CardToolBar from '../../widgets/admin/card_tool_bar_widget.jsx';
 import CardToolBarCreate from '../../widgets/admin/card_tool_bar_create_widget.jsx';
+import CardToolBarSettings from '../../widgets/admin/card_tool_bar_settings_widget.jsx';
 import CardSidebar from '../../widgets/admin/card_sidebar_widget.jsx';
 import TableBrowser from '../../widgets/admin/table_browser_widget.jsx';
 import Alert from '../../widgets/admin/alert_widget.jsx';
@@ -22,7 +25,9 @@ import RoutingHelper from '../../helpers/routing_helper.js';
 
 export default React.createClass({
   propTypes: {
-    role: React.PropTypes.string.isRequired,
+    repositoryRole: React.PropTypes.string.isRequired,
+    contentPrefix: React.PropTypes.string.isRequired,
+    routingPrefix: React.PropTypes.object.isRequired,
   },
 
 
@@ -76,7 +81,7 @@ export default React.createClass({
 
 
   componentDidMount: function() {
-    VaultHelper.loadRepository(this, this.props.role);
+    VaultHelper.loadRepository(this, this.props.repositoryRole);
   },
 
 
@@ -172,26 +177,20 @@ export default React.createClass({
           <div>
             <TagModal ref="tagModal" tagCategoriesWithItems={this.state.availableCategories} selectedRecords={this.state.selectedRecords} />
 
-            <Card contentPrefix="apps.shows.files.index" cardPadding={false}>
-              <CardHeader>
-                <CardToolBar>
-                  <CardToolBarCreate path={RoutingHelper.apps.shows.files.create(this)} hintTooltipKey="apps.shows.files.index.actions.create" />
-                </CardToolBar>
-              </CardHeader>
+            <Card contentPrefix={this.props.contentPrefix + ".index"} cardPadding={false}>
+              <CardHeader/>
               <CardBody>
                 <CardSidebar>
                   <TagSelector onTagItemChange={this.onTagItemChange} selectedTagItemIds={this.state.selectedTagItemIds} tagCategoriesWithItems={this.state.availableCategories}/>
-                  <TableBrowser onSelect={this.onFileSelect} selectable={true} attributes={this.buildTableAttributes()} actions={[]} contentPrefix="apps.shows.files.index.table" query={this.buildTableQuery()}>
+                  <TableBrowser onSelect={this.onFileSelect} selectable={true} attributes={this.buildTableAttributes()} actions={[]} contentPrefix={this.props.contentPrefix + ".index.table"} query={this.buildTableQuery()}>
                     <div className="btn-group">
-                      <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onTagClick}><i className="mdi mdi-folder"/></button>
-                    </div>
-
-                    <div className="btn-group">
+                      <Link type="button" className="btn btn-default-light" to={this.props.routingPrefix.files.create(this)}><i className="mdi mdi-upload"/><Translate content={this.props.contentPrefix + ".index.actions.create"} component="span"/></Link>
                       <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onDownloadClick}><i className="mdi mdi-download"/></button>
+                      <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onDeleteClick}><i className="mdi mdi-delete"/></button>
                     </div>
 
                     <div className="btn-group">
-                      <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onDeleteClick}><i className="mdi mdi-delete"/></button>
+                      <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecords.count() === 0} onClick={this.onTagClick}><i className="mdi mdi-folder"/><Translate content={this.props.contentPrefix + ".index.actions.tags"} component="span"/></button>
                     </div>
                   </TableBrowser>
                 </CardSidebar>
