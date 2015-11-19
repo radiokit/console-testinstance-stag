@@ -65,7 +65,6 @@ export default React.createClass({
 
   componentDidUpdate: function(prevProps, prevState) {
     if(prevState.selectedRecordIds != this.state.selectedRecordIds && this.props.onSelect) {
-      console.log(this.state.selectedRecordIds.count());
       this.props.onSelect(this.state.selectedRecordIds);
     }
   },
