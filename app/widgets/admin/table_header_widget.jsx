@@ -9,7 +9,7 @@ export default React.createClass({
     attributes: React.PropTypes.object.isRequired,
     selectable: React.PropTypes.bool,
     headerSelected: React.PropTypes.bool,
-    onHeaderSelect: React.PropTypes.func,
+    onSelectAll: React.PropTypes.func,
     actions: React.PropTypes.arrayOf(React.PropTypes.string),
   },
 
@@ -24,8 +24,8 @@ export default React.createClass({
 
 
   onSelect: function(state) {
-    if(this.props.onHeaderSelect) {
-      this.props.onHeaderSelect(state);
+    if(this.props.onSelectAll) {
+      this.props.onSelectAll(state);
     }
   },
 

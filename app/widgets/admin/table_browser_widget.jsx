@@ -90,14 +90,14 @@ export default React.createClass({
   },
 
 
-  onRowSelect: function(state, record, selected) {
+  onSelectRecord: function(state, record, selected) {
     if(this.props.onSelect) {
       this.props.onSelect(selected);
     }
   },
 
 
-  onHeaderSelect: function(state, selected) {
+  onSelectAll: function(state, selected) {
     this.setState({
       headerSelected: state,
       overSelected: false,
@@ -184,7 +184,7 @@ export default React.createClass({
               }
             }()}
 
-            <Table onRowSelect={this.onRowSelect} onHeaderSelect={this.onHeaderSelect} headerSelected={this.state.headerSelected} selectable={this.props.selectable} attributes={this.props.attributes} actions={this.props.actions} contentPrefix={this.props.contentPrefix} records={this.state.availableRecords} />
+            <Table onSelectRecord={this.onSelectRecord} onSelectAll={this.onSelectAll} selectable={this.props.selectable} attributes={this.props.attributes} actions={this.props.actions} contentPrefix={this.props.contentPrefix} records={this.state.availableRecords} />
 
             <TableBrowserToolbar>
               <TableBrowserToolbarGroup position="right">
