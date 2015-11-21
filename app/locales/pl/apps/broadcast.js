@@ -5,7 +5,10 @@ export default {
         title: "Emisja",
         playlist: {
           title: "Playlista"
-        }
+        },
+        live: {
+          title: "Nadawanie na żywo"
+        },
       },
     }
   }

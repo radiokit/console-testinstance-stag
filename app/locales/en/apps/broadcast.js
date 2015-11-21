@@ -4,8 +4,11 @@ export default {
       navigation: {
         title: "Broadcast",
         playlist: {
-          title: "Playlist"
-        }
+          title: "Playlist",
+        },
+        live: {
+          title: "Live",
+        },
       },
     }
   }

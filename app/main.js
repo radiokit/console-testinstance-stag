@@ -29,6 +29,7 @@ import MusicScheduleIndex from './apps/music/schedule/index_view.jsx';
 import MusicScheduleShow from './apps/music/schedule/show_view.jsx';
 import BroadcastApp from './apps/broadcast/app.jsx';
 import BroadcastPlaylistIndex from './apps/broadcast/playlist/index_view.jsx';
+import BroadcastLiveIndex from './apps/broadcast/live/index_view.jsx';
 
 Counterpart.registerTranslations("en", require('./locales/en/general.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/joint.js'));
@@ -93,13 +94,18 @@ ReactDOM.render((
           <Route component={ScopeLayout} scope="broadcastChannel">
             <Route path="playlist/index" component={BroadcastPlaylistIndex} onEnter={pingGoogleAnalytics}/>
           </Route>
+          <Route component={ScopeLayout} scope="broadcastChannel">
+            <Route path="live/index" component={BroadcastLiveIndex} onEnter={pingGoogleAnalytics}/>
+          </Route>
         </Route>
+
         <Route path="joint" component={JointApp}>
           <Route path="control_room" component={JointControlRoom} onEnter={pingGoogleAnalytics}/>
           <Route path="devices/create" component={JointDevicesCreate} onEnter={pingGoogleAnalytics}/>
           <Route path="devices/index" component={JointDevicesIndex} onEnter={pingGoogleAnalytics}/>
           <Route path="devices/add/:role" component={JointDevicesAdd} onEnter={pingGoogleAnalytics}/>
         </Route>
+
         <Route path="shows" component={ShowsApp}>
           <Route component={ScopeLayout} scope="userAccount">
             <Route path="files/index" component={ShowsFilesIndex} onEnter={pingGoogleAnalytics}/>
@@ -111,6 +117,7 @@ ReactDOM.render((
             <Route path="schedule/show/:schedulingItemId" component={ShowsScheduleShow}/>
           </Route>
         </Route>
+
         <Route path="music" component={MusicApp}>
           <Route component={ScopeLayout} scope="userAccount">
             <Route path="files/index" component={MusicFilesIndex} onEnter={pingGoogleAnalytics}/>

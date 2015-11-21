@@ -46,6 +46,11 @@ export default React.createClass({
                   <Translate content="apps.broadcast.navigation.playlist.title" className="title" />
                 </Link>
               </li>
+              <li>
+                <Link to={RoutingHelper.apps.broadcast.live.index(this)}>
+                  <Translate content="apps.broadcast.navigation.live.title" className="title" />
+                </Link>
+              </li>
             </ul>
           </li>
           <li className="gui-folder">

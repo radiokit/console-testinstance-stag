@@ -71,6 +71,11 @@ export default {
           return "/apps/broadcast/playlist/index";
         },
       },
+      live: {
+        index: function(context) {
+          return "/apps/broadcast/live/index";
+        },
+      },
     },
   }
 }
