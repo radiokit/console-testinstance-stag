@@ -117,7 +117,7 @@ export default React.createClass({
 
   onJanusCreateSuccess: function(_eventName, _record, data) {
     this.janusGateway = new Janus({
-      server: ["https://vps-1138406-8984.cp.homecloud.pl:50000/janus"],//data.get("janus_endpoints").toJS(),
+      server: data.get("janus_endpoints").toJS(), //["https://vps-1138406-8984.cp.homecloud.pl:50000/janus"],
       success: this.onJanusGatewaySuccess,
       error: this.onJanusGatewayError,
       destroyed: this.onJanusGatewayDestroy,
