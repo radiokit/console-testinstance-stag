@@ -44,7 +44,7 @@ export default React.createClass({
           <form className="form-horizontal" role="form">
             {this.props.metadataSchemas.map((metadataSchema) => {
               return (
-                <div className="form-group">
+                <div key={metadataSchema.get("id")} className="form-group">
                   <label className="col-sm-3 control-label">
                     {metadataSchema.get("key")}
                   </label>
