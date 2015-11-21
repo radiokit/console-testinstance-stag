@@ -20,6 +20,11 @@ export default React.createClass({
 
   itemsQuery: null,
 
+  contextTypes: {
+    currentBroadcastChannel: React.PropTypes.object.isRequired,
+  },
+
+
   getInitialState: function() {
     return {
       loadingError: false,
@@ -44,7 +49,7 @@ export default React.createClass({
     window.data
       .query("agenda", "Schedule.Weekly.Plan")
       .select("id")
-      .where("references", "deq", "user_account_id", AccountHelper.getCurrentAccountIdFromContext(this))
+      .where("references", "deq", "broadcast_channel_id", this.context.currentBroadcastChannel.get("id"))
       .where("references", "deq", "role", "shows")
       .on("error", () => {
         if(this.isMounted()) {
@@ -372,24 +377,22 @@ export default React.createClass({
     } else {
       var that = this;
       return (
-        <Scope kind="broadcastChannel">
-          <Section>
-            <GridRow>
-              <GridCell size="large" center={true}>
-                <Card contentPrefix="apps.music">
-                  <CardHeader>
-                    <CardToolBar/>
-                  </CardHeader>
-                  <CardBody>
-                    <div ref="calendarCardBody" className="card-body style-default-bright">
-                      <div ref="calendarContainer" className="calendar-container"/>
-                    </div>
-                  </CardBody>
-                </Card>
-              </GridCell>
-            </GridRow>
-          </Section>
-        </Scope>
+        <Section>
+          <GridRow>
+            <GridCell size="large" center={true}>
+              <Card contentPrefix="apps.music">
+                <CardHeader>
+                  <CardToolBar/>
+                </CardHeader>
+                <CardBody>
+                  <div ref="calendarCardBody" className="card-body style-default-bright">
+                    <div ref="calendarContainer" className="calendar-container"/>
+                  </div>
+                </CardBody>
+              </Card>
+            </GridCell>
+          </GridRow>
+        </Section>
       );
     }
   }

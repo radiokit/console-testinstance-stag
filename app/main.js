@@ -8,6 +8,7 @@ import RadioKit from 'radiokit-api';
 import { Socket } from '../vendor/assets/javascripts/phoenixframework/socket.js';
 
 import Root from './root.jsx';
+import ScopeLayout from './layouts/scope_layout.jsx';
 import AppsIndex from './apps/apps_index.jsx';
 import JointApp from './apps/joint/app.jsx';
 import JointControlRoom from './apps/joint/control_room_view.jsx';
@@ -87,7 +88,9 @@ ReactDOM.render((
     <Route path="/" component={Root} onEnter={requireAuth}>
       <Route path="apps" component={AppsIndex} onEnter={pingGoogleAnalytics}>
         <Route path="onair" component={OnAirApp}>
-          <Route path="playlist/index" component={OnAirPlaylistIndex} onEnter={pingGoogleAnalytics}/>
+          <Route component={ScopeLayout} scope="broadcastChannel">
+            <Route path="playlist/index" component={OnAirPlaylistIndex} onEnter={pingGoogleAnalytics}/>
+          </Route>
         </Route>
         <Route path="joint" component={JointApp}>
           <Route path="control_room" component={JointControlRoom} onEnter={pingGoogleAnalytics}/>
@@ -96,18 +99,26 @@ ReactDOM.render((
           <Route path="devices/add/:role" component={JointDevicesAdd} onEnter={pingGoogleAnalytics}/>
         </Route>
         <Route path="shows" component={ShowsApp}>
-          <Route path="files/index" component={ShowsFilesIndex} onEnter={pingGoogleAnalytics}/>
-          <Route path="files/create" component={ShowsFilesCreate} onEnter={pingGoogleAnalytics}/>
-          <Route path="files/show/:fileId" component={ShowsFilesShow} onEnter={pingGoogleAnalytics}/>
-          <Route path="schedule/index" component={ShowsScheduleIndex}/>
-          <Route path="schedule/show/:schedulingItemId" component={ShowsScheduleShow}/>
+          <Route component={ScopeLayout} scope="userAccount">
+            <Route path="files/index" component={ShowsFilesIndex} onEnter={pingGoogleAnalytics}/>
+            <Route path="files/create" component={ShowsFilesCreate} onEnter={pingGoogleAnalytics}/>
+            <Route path="files/show/:fileId" component={ShowsFilesShow} onEnter={pingGoogleAnalytics}/>
+          </Route>
+          <Route component={ScopeLayout} scope="broadcastChannel">
+            <Route path="schedule/index" component={ShowsScheduleIndex}/>
+            <Route path="schedule/show/:schedulingItemId" component={ShowsScheduleShow}/>
+          </Route>
         </Route>
         <Route path="music" component={MusicApp}>
-          <Route path="files/index" component={MusicFilesIndex} onEnter={pingGoogleAnalytics}/>
-          <Route path="files/create" component={MusicFilesCreate} onEnter={pingGoogleAnalytics}/>
-          <Route path="files/show/:fileId" component={MusicFilesShow} onEnter={pingGoogleAnalytics}/>
-          <Route path="schedule/index" component={MusicScheduleIndex}/>
-          <Route path="schedule/show/:schedulingItemId" component={MusicScheduleShow}/>
+          <Route component={ScopeLayout} scope="userAccount">
+            <Route path="files/index" component={MusicFilesIndex} onEnter={pingGoogleAnalytics}/>
+            <Route path="files/create" component={MusicFilesCreate} onEnter={pingGoogleAnalytics}/>
+            <Route path="files/show/:fileId" component={MusicFilesShow} onEnter={pingGoogleAnalytics}/>
+          </Route>
+          <Route component={ScopeLayout} scope="broadcastChannel">
+            <Route path="schedule/index" component={MusicScheduleIndex}/>
+            <Route path="schedule/show/:schedulingItemId" component={MusicScheduleShow}/>
+          </Route>
         </Route>
       </Route>
     </Route>

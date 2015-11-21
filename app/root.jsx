@@ -6,43 +6,45 @@ import Alert from './widgets/admin/alert_widget.jsx';
 export default React.createClass({
   getInitialState: function() {
     return {
-      loadedEditor:                false,
-      currentEditor:               null,
-      loadedAccounts:              false,
-      availableUserAccounts:       null,
-      currentUserAccount:          null,
-      loadedBroadcastChannels:     false,
-      availableBroadcastChannels:  null,
-      currentBroadcastChannel:     null,
-      loadingError:                false,
+      loadedEditor:                    false,
+      currentEditor:                   null,
+      loadedAccounts:                  false,
+      availableUserAccounts:           null,
+      currentUserAccount:              null,
+      loadedBroadcastChannels:         false,
+      availableBroadcastChannels:      null,
+      currentBroadcastChannel:         null,
+      loadingError:                    false,
     };
   },
 
 
   childContextTypes: {
-    loadedEditor:                  React.PropTypes.bool,
-    currentEditor:                 React.PropTypes.object,
-    loadedAccounts:                React.PropTypes.bool,
-    availableUserAccounts:         React.PropTypes.object,
-    currentUserAccount:            React.PropTypes.object,
-    loadedBroadcastChannels:       React.PropTypes.bool,
-    availableBroadcastChannels:    React.PropTypes.object,
-    currentBroadcastChannel:       React.PropTypes.object,
-    onCurrentUserAccountChange:    React.PropTypes.func,
+    loadedEditor:                      React.PropTypes.bool,
+    currentEditor:                     React.PropTypes.object,
+    loadedAccounts:                    React.PropTypes.bool,
+    availableUserAccounts:             React.PropTypes.object,
+    currentUserAccount:                React.PropTypes.object,
+    loadedBroadcastChannels:           React.PropTypes.bool,
+    availableBroadcastChannels:        React.PropTypes.object,
+    currentBroadcastChannel:           React.PropTypes.object,
+    onCurrentUserAccountChange:        React.PropTypes.func,
+    onCurrentBroadcastChannelChange:   React.PropTypes.func,
   },
 
 
   getChildContext: function() {
     return {
-      loadedEditor:                this.state.loadedEditor,
-      currentEditor:               this.state.currentEditor,
-      loadedAccounts:              this.state.loadedAccounts,
-      availableUserAccounts:       this.state.availableUserAccounts,
-      currentUserAccount:          this.state.currentUserAccount,
-      loadedBroadcastChannels:     this.state.loadedBroadcastChannels,
-      availableBroadcastChannels:  this.state.availableBroadcastChannels,
-      currentBroadcastChannel:     this.state.currentBroadcastChannel,
-      onCurrentUserAccountChange:  this.onCurrentUserAccountChange,
+      loadedEditor:                    this.state.loadedEditor,
+      currentEditor:                   this.state.currentEditor,
+      loadedAccounts:                  this.state.loadedAccounts,
+      availableUserAccounts:           this.state.availableUserAccounts,
+      currentUserAccount:              this.state.currentUserAccount,
+      loadedBroadcastChannels:         this.state.loadedBroadcastChannels,
+      availableBroadcastChannels:      this.state.availableBroadcastChannels,
+      currentBroadcastChannel:         this.state.currentBroadcastChannel,
+      onCurrentUserAccountChange:      this.onCurrentUserAccountChange,
+      onCurrentBroadcastChannelChange: this.onCurrentBroadcastChannelChange,
     }
   },
 

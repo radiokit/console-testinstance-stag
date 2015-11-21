@@ -4,7 +4,6 @@ import { Link } from 'react-router';
 
 import RoutingHelper from '../../../helpers/routing_helper.js';
 import AccountHelper from '../../../helpers/account_helper.js';
-import Scope from '../../../widgets/admin/scope_widget.jsx';
 import Section from '../../../widgets/admin/section_widget.jsx';
 import GridRow from '../../../widgets/admin/grid_row_widget.jsx';
 import GridCell from '../../../widgets/admin/grid_cell_widget.jsx';
@@ -19,6 +18,10 @@ import Loading from '../../../widgets/general/loading_widget.jsx';
 export default React.createClass({
 
   itemsQuery: null,
+
+  contextTypes: {
+    currentBroadcastChannel: React.PropTypes.object.isRequired,
+  },
 
   getInitialState: function() {
     return {
@@ -44,7 +47,7 @@ export default React.createClass({
     window.data
       .query("agenda", "Schedule.Weekly.Plan")
       .select("id")
-      .where("references", "deq", "user_account_id", AccountHelper.getCurrentAccountIdFromContext(this))
+      .where("references", "deq", "broadcast_channel_id", this.context.currentBroadcastChannel.get("id"))
       .where("references", "deq", "role", "music")
       .on("error", () => {
         if(this.isMounted()) {
@@ -372,24 +375,22 @@ export default React.createClass({
     } else {
       var that = this;
       return (
-        <Scope kind="broadcastChannel">
-          <Section>
-            <GridRow>
-              <GridCell size="large" center={true}>
-                <Card contentPrefix="apps.music">
-                  <CardHeader>
-                    <CardToolBar/>
-                  </CardHeader>
-                  <CardBody>
-                    <div ref="calendarCardBody" className="card-body style-default-bright">
-                      <div ref="calendarContainer" className="calendar-container"/>
-                    </div>
-                  </CardBody>
-                </Card>
-              </GridCell>
-            </GridRow>
-          </Section>
-        </Scope>
+        <Section>
+          <GridRow>
+            <GridCell size="large" center={true}>
+              <Card contentPrefix="apps.music">
+                <CardHeader>
+                  <CardToolBar/>
+                </CardHeader>
+                <CardBody>
+                  <div ref="calendarCardBody" className="card-body style-default-bright">
+                    <div ref="calendarContainer" className="calendar-container"/>
+                  </div>
+                </CardBody>
+              </Card>
+            </GridCell>
+          </GridRow>
+        </Section>
       );
     }
   }

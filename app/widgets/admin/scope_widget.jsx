@@ -13,6 +13,7 @@ export default React.createClass({
     currentBroadcastChannel: React.PropTypes.object,
     availableBroadcastChannels: React.PropTypes.object.isRequired,
     onCurrentUserAccountChange: React.PropTypes.func,
+    onCurrentBroadcastChannelChange: React.PropTypes.func,
   },
 
 
