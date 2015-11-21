@@ -7,15 +7,8 @@ import GridCell from '../../widgets/admin/grid_cell_widget.jsx';
 import Card from '../../widgets/admin/card_widget.jsx';
 import CardBody from '../../widgets/admin/card_body_widget.jsx';
 import CardHeader from '../../widgets/admin/card_header_widget.jsx';
-import CardToolBar from '../../widgets/admin/card_tool_bar_widget.jsx';
-import CardToolBarCreate from '../../widgets/admin/card_tool_bar_create_widget.jsx';
-import CardToolBarSettings from '../../widgets/admin/card_tool_bar_settings_widget.jsx';
-import CardSidebar from '../../widgets/admin/card_sidebar_widget.jsx';
-import TableBrowser from '../../widgets/admin/table_browser_widget.jsx';
-import TableBrowserToolbarGroup from '../../widgets/admin/table_browser_toolbar_group_widget.jsx';
 import Alert from '../../widgets/admin/alert_widget.jsx';
 import Section from '../../widgets/admin/section_widget.jsx';
-import Loading from '../../widgets/general/loading_widget.jsx';
 
 
 export default React.createClass({
