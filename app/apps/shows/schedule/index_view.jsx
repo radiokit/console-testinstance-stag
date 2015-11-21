@@ -94,7 +94,9 @@ export default React.createClass({
   },
 
   componentWillUnmount: function() {
-    this.itemsQuery.teardown();
+    if(this.itemsQuery) {
+      this.itemsQuery.teardown();
+    }
   },
 
   componentDidUpdate: function() {
