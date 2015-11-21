@@ -6,7 +6,6 @@ window.ENV = {
   apps: {
     "plumber" : { baseUrl: "https://radiokit-plumber-prod.herokuapp.com" },
     "auth" : { baseUrl: "https://radiokit-auth-prod.herokuapp.com" },
-    "horn-gw" : { baseUrl: "https://radiokit-horn-gw-prod.herokuapp.com" },
     "vault" : { baseUrl: "https://radiokit-vault-prod.herokuapp.com" },
     "agenda": { baseUrl: "https://radiokit-agenda-prod.herokuapp.com" }
   },
