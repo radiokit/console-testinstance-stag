@@ -10,6 +10,9 @@ export default {
           title: "Live",
         },
       },
+      playlist: {
+        header: "Current Playlist"
+      }
     }
   }
 }
