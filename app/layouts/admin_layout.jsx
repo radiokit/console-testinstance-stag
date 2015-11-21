@@ -9,26 +9,17 @@ import '../../vendor/assets/stylesheets/materialadmin/materialadmin.css';
 import '../../vendor/assets/stylesheets/materialadmin/material-design-iconic-font.css';
 
 export default React.createClass({
-  propTypes: {
-    currentUserAccount: React.PropTypes.object.isRequired,
-    availableAccounts: React.PropTypes.object.isRequired,
-    currentEditor: React.PropTypes.object.isRequired,
-    currentChannel: React.PropTypes.object.isRequired,
-    availableChannels: React.PropTypes.object.isRequired,
-  },
-
-
   render: function() {
     return (
       <div>
         <Background />
-        <TopBar availableAccounts={this.props.availableAccounts} currentUserAccount={this.props.currentUserAccount} availableChannels={this.props.availableChannels} currentChannel={this.props.currentChannel} currentEditor={this.props.currentEditor} />
+        <TopBar />
 
         <div id="base">
           <div id="content">
             {this.props.children}
           </div>
-          <MenuBar currentUserAccount={this.props.currentUserAccount} />
+          <MenuBar />
         </div>
       </div>
     );

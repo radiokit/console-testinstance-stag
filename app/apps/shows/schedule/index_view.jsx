@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 
 import RoutingHelper from '../../../helpers/routing_helper.js';
 import AccountHelper from '../../../helpers/account_helper.js';
+import Scope from '../../../widgets/admin/scope_widget.jsx';
 import Section from '../../../widgets/admin/section_widget.jsx';
 import GridRow from '../../../widgets/admin/grid_row_widget.jsx';
 import GridCell from '../../../widgets/admin/grid_cell_widget.jsx';
@@ -371,22 +372,24 @@ export default React.createClass({
     } else {
       var that = this;
       return (
-        <Section>
-          <GridRow>
-            <GridCell size="large" center={true}>
-              <Card contentPrefix="apps.music">
-                <CardHeader>
-                  <CardToolBar/>
-                </CardHeader>
-                <CardBody>
-                  <div ref="calendarCardBody" className="card-body style-default-bright">
-                    <div ref="calendarContainer" className="calendar-container"/>
-                  </div>
-                </CardBody>
-              </Card>
-            </GridCell>
-          </GridRow>
-        </Section>
+        <Scope kind="broadcastChannel">
+          <Section>
+            <GridRow>
+              <GridCell size="large" center={true}>
+                <Card contentPrefix="apps.music">
+                  <CardHeader>
+                    <CardToolBar/>
+                  </CardHeader>
+                  <CardBody>
+                    <div ref="calendarCardBody" className="card-body style-default-bright">
+                      <div ref="calendarContainer" className="calendar-container"/>
+                    </div>
+                  </CardBody>
+                </Card>
+              </GridCell>
+            </GridRow>
+          </Section>
+        </Scope>
       );
     }
   }

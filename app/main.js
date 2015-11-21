@@ -86,23 +86,23 @@ ReactDOM.render((
   <Router history={createBrowserHistory()}>
     <Route path="/" component={Root} onEnter={requireAuth}>
       <Route path="apps" component={AppsIndex} onEnter={pingGoogleAnalytics}>
-        <Route path="onair/:userAccountId" component={OnAirApp}>
+        <Route path="onair" component={OnAirApp}>
           <Route path="playlist/index" component={OnAirPlaylistIndex} onEnter={pingGoogleAnalytics}/>
         </Route>
-        <Route path="joint/:userAccountId" component={JointApp}>
+        <Route path="joint" component={JointApp}>
           <Route path="control_room" component={JointControlRoom} onEnter={pingGoogleAnalytics}/>
           <Route path="devices/create" component={JointDevicesCreate} onEnter={pingGoogleAnalytics}/>
           <Route path="devices/index" component={JointDevicesIndex} onEnter={pingGoogleAnalytics}/>
           <Route path="devices/add/:role" component={JointDevicesAdd} onEnter={pingGoogleAnalytics}/>
         </Route>
-        <Route path="shows/:userAccountId" component={ShowsApp}>
+        <Route path="shows" component={ShowsApp}>
           <Route path="files/index" component={ShowsFilesIndex} onEnter={pingGoogleAnalytics}/>
           <Route path="files/create" component={ShowsFilesCreate} onEnter={pingGoogleAnalytics}/>
           <Route path="files/show/:fileId" component={ShowsFilesShow} onEnter={pingGoogleAnalytics}/>
           <Route path="schedule/index" component={ShowsScheduleIndex}/>
           <Route path="schedule/show/:schedulingItemId" component={ShowsScheduleShow}/>
         </Route>
-        <Route path="music/:userAccountId" component={MusicApp}>
+        <Route path="music" component={MusicApp}>
           <Route path="files/index" component={MusicFilesIndex} onEnter={pingGoogleAnalytics}/>
           <Route path="files/create" component={MusicFilesCreate} onEnter={pingGoogleAnalytics}/>
           <Route path="files/show/:fileId" component={MusicFilesShow} onEnter={pingGoogleAnalytics}/>

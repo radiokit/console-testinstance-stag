@@ -35,7 +35,7 @@ export default React.createClass({
 
 
   contextTypes: {
-    scopeUserAccountId: React.PropTypes.string
+    currentUserAccount: React.PropTypes.object.isRequired,
   },
 
 

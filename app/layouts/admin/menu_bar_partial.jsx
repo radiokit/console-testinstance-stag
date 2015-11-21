@@ -7,10 +7,6 @@ import RoutingHelper from '../../helpers/routing_helper.js';
 
 
 export default React.createClass({
-  propTypes: {
-    currentUserAccount: React.PropTypes.object.isRequired
-  },
-
   onMenuRootItemClick: function(event) {
     this.toggleMenuItemWithSubItems(event.target.closest("li"));
   },
@@ -33,7 +29,7 @@ export default React.createClass({
       <div className="menubar-scroll-panel">
         <ul id="main-menu" className="gui-controls gui-controls-tree">
           {/*<li>
-            <Link to={"/apps/joint/" + this.props.currentUserAccount.get("id") + "/control_room"}>
+            <Link to={"/apps/joint/control_room"}>
               <div className="gui-icon"><i className="mdi mdi-remote" /></div>
               <Translate component="span" className="title" content="apps.joint.navigation.title"/>
             </Link>

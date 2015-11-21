@@ -6,16 +6,59 @@ import Alert from './widgets/admin/alert_widget.jsx';
 export default React.createClass({
   getInitialState: function() {
     return {
-      loadedEditor:      false,
-      currentEditor:     null,
-      loadedAccounts:    false,
-      availableAccounts: null,
-      currentUserAccount:    null,
-      loadedChannels:    false,
-      availableChannels: null,
-      currentChannel:    null,
-      loadingError:      false
+      loadedEditor:                false,
+      currentEditor:               null,
+      loadedAccounts:              false,
+      availableUserAccounts:       null,
+      currentUserAccount:          null,
+      loadedBroadcastChannels:     false,
+      availableBroadcastChannels:  null,
+      currentBroadcastChannel:     null,
+      loadingError:                false,
     };
+  },
+
+
+  childContextTypes: {
+    loadedEditor:                  React.PropTypes.bool,
+    currentEditor:                 React.PropTypes.object,
+    loadedAccounts:                React.PropTypes.bool,
+    availableUserAccounts:         React.PropTypes.object,
+    currentUserAccount:            React.PropTypes.object,
+    loadedBroadcastChannels:       React.PropTypes.bool,
+    availableBroadcastChannels:    React.PropTypes.object,
+    currentBroadcastChannel:       React.PropTypes.object,
+    onCurrentUserAccountChange:    React.PropTypes.func,
+  },
+
+
+  getChildContext: function() {
+    return {
+      loadedEditor:                this.state.loadedEditor,
+      currentEditor:               this.state.currentEditor,
+      loadedAccounts:              this.state.loadedAccounts,
+      availableUserAccounts:       this.state.availableUserAccounts,
+      currentUserAccount:          this.state.currentUserAccount,
+      loadedBroadcastChannels:     this.state.loadedBroadcastChannels,
+      availableBroadcastChannels:  this.state.availableBroadcastChannels,
+      currentBroadcastChannel:     this.state.currentBroadcastChannel,
+      onCurrentUserAccountChange:  this.onCurrentUserAccountChange,
+    }
+  },
+
+
+  onCurrentUserAccountChange: function(userAccount) {
+    this.setState({
+      currentUserAccount: userAccount
+    });
+  },
+
+
+  onCurrentBroadcastChannelChange: function(broadcastChannel) {
+    this.setState({
+      currentUserAccount: this.state.availableUserAccounts.find((userAccount) => { return userAccount.get("id") === broadcastChannel.get("references").get("user_account_id") }),
+      currentBroadcastChannel: broadcastChannel,
+    });
   },
 
 
@@ -29,7 +72,7 @@ export default React.createClass({
   loadAccounts: function() {
     window.data
       .query("auth", "User.Account")
-      .select("name_custom")
+      .select("id", "name_custom")
       .on("error", () => {
         if(this.isMounted()) {
           this.setState({
@@ -41,32 +84,20 @@ export default React.createClass({
         if(this.isMounted()) {
           this.setState({
             loadedAccounts: true,
-            availableAccounts: data,
-            currentUserAccount: data.first()
+            availableUserAccounts: data
           });
 
-
-          if(data.size != 0) {
-            this.loadChannels(data.first().get("id"))
-
-          } else {
-            this.setState({
-              loadedChannels: true,
-              availableChannels: null,
-              currentChannel: null
-            });
-          }
+          this.loadBroadcastChannels();
         }
       })
       .fetch();
   },
 
 
-  loadChannels: function(userAccountId) {
+  loadBroadcastChannels: function() {
     window.data
-      .query("auth", "Broadcast.Channel")
-      .select("name")
-      .where("user_account_id", "eq", userAccountId)
+      .query("agenda", "Broadcast.Channel")
+      .select("id", "name", "references")
       .on("error", () => {
         if(this.isMounted()) {
           this.setState({
@@ -77,9 +108,8 @@ export default React.createClass({
       .on("fetch", (_event, _query, data) => {
         if(this.isMounted()) {
           this.setState({
-            loadedChannels: true,
-            availableChannels: data,
-            currentChannel: data.first()
+            loadedBroadcastChannels: true,
+            availableBroadcastChannels: data
           });
         }
       })
@@ -116,28 +146,25 @@ export default React.createClass({
     this.loadEditor();
   },
 
+
   render: function() {
     if(this.state.loadingError) {
       return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.communication.general" />);
 
     } else {
-      if(this.state.loadedEditor === false || this.state.loadedAccounts === false || this.state.loadedChannels === false) {
+      if(this.state.loadedEditor === false || this.state.loadedAccounts === false || this.state.loadedBroadcastChannels === false) {
         return (<LoadingLayout />);
 
       } else {
-        if(this.state.availableAccounts.size === 0) {
+        if(this.state.availableUserAccounts.size === 0) {
           return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.authentication.no_accounts"/>);
 
-        } else if(this.state.availableChannels.size === 0) {
+        } else if(this.state.availableBroadcastChannels.size === 0) {
           return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.authentication.no_channels"/>);
 
         } else {
           return (
-            <AdminLayout availableAccounts={this.state.availableAccounts}
-                         availableChannels={this.state.availableChannels}
-                         currentUserAccount={this.state.currentUserAccount}
-                         currentChannel={this.state.currentChannel}
-                         currentEditor={this.state.currentEditor}>
+            <AdminLayout>
               {this.props.children}
             </AdminLayout>
           );
