@@ -21,6 +21,7 @@ export default {
             metadata: "Metadata",
           },
           table: {
+            loading: "Fetching shows library",
             header: {
               name: "Name",
             }

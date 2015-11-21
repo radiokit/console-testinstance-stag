@@ -18,8 +18,10 @@ export default {
           actions: {
             create: "Upload new music",
             tags: "Tags",
+            metadata: "Metadata",
           },
           table: {
+            loading: "Fetching music library",
             header: {
               name: "Name",
             }
