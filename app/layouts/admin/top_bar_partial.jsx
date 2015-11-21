@@ -5,9 +5,9 @@ import Gravatar from 'gravatar-api';
 
 export default React.createClass({
   contextTypes: {
-    currentUserAccount: React.PropTypes.object.isRequired,
+    currentUserAccount: React.PropTypes.object,
+    currentBroadcastChannel: React.PropTypes.object,
     currentEditor: React.PropTypes.object.isRequired,
-    currentBroadcastChannel: React.PropTypes.object.isRequired,
   },
 
 

@@ -73,6 +73,7 @@ export default React.createClass({
     window.data
       .query("auth", "User.Account")
       .select("id", "name_custom")
+      .order("name_custom", "asc")
       .on("error", () => {
         if(this.isMounted()) {
           this.setState({
@@ -98,6 +99,7 @@ export default React.createClass({
     window.data
       .query("agenda", "Broadcast.Channel")
       .select("id", "name", "references")
+      .order("name", "asc")
       .on("error", () => {
         if(this.isMounted()) {
           this.setState({
