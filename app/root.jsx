@@ -30,6 +30,7 @@ export default React.createClass({
     currentBroadcastChannel:           React.PropTypes.object,
     onCurrentUserAccountChange:        React.PropTypes.func,
     onCurrentBroadcastChannelChange:   React.PropTypes.func,
+    routes:                            React.PropTypes.arrayOf(React.PropTypes.object),
   },
 
 
@@ -45,6 +46,7 @@ export default React.createClass({
       currentBroadcastChannel:         this.state.currentBroadcastChannel,
       onCurrentUserAccountChange:      this.onCurrentUserAccountChange,
       onCurrentBroadcastChannelChange: this.onCurrentBroadcastChannelChange,
+      routes: this.props.routes,
     }
   },
 

@@ -7,6 +7,7 @@ export default React.createClass({
   contextTypes: {
     currentUserAccount: React.PropTypes.object,
     currentBroadcastChannel: React.PropTypes.object,
+    routes: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
     currentEditor: React.PropTypes.object.isRequired,
   },
 
@@ -24,8 +25,19 @@ export default React.createClass({
   },
 
 
+  isScopePresentInCurrentRoute: function(scope) {
+    for(let i = 0; i < this.context.routes.length; i++) {
+      if(this.context.routes[i].hasOwnProperty("scope") && this.context.routes[i].scope === scope) {
+        return true;
+      }
+    }
+
+    return false;
+  },
+
+
   renderUserAccountDropdown: function() {
-    if(this.context.currentUserAccount) {
+    if((this.isScopePresentInCurrentRoute("userAccount") || this.isScopePresentInCurrentRoute("broadcastChannel")) && this.context.currentUserAccount) {
       return (
         <li className="header-nav-brand">
           <div className="brand-holder">
@@ -38,7 +50,7 @@ export default React.createClass({
 
 
   renderBroadcastChannelDropdown: function() {
-    if(this.context.currentBroadcastChannel) {
+    if(this.isScopePresentInCurrentRoute("broadcastChannel") && this.context.currentBroadcastChannel) {
       return (
         <li className="header-nav-brand">
           <div className="brand-holder">
