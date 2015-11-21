@@ -65,10 +65,10 @@ export default {
         },
       }
     },
-    onair: {
+    broadcast: {
       playlist: {
         index: function(context) {
-          return "/apps/onair/playlist/index";
+          return "/apps/broadcast/playlist/index";
         },
       },
     },

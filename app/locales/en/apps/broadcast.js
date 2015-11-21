@@ -1,6 +1,6 @@
 export default {
   apps: {
-    onair: {
+    broadcast: {
       navigation: {
         title: "Broadcast",
         playlist: {

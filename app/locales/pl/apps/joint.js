@@ -12,7 +12,7 @@ export default {
         transmissions: {
           header: "Transmisje",
         },
-        onair: {
+        broadcast: {
           header: "Antena",
         },
       },

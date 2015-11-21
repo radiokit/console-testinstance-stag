@@ -91,10 +91,10 @@ export default React.createClass({
           </GridCell>
 
           <GridCell size="xsmall">
-            <Card contentPrefix="apps.joint.control_room.onair">
+            <Card contentPrefix="apps.joint.control_room.broadcast">
               <CardHeader>
                 <CardToolBar>
-                  <CardToolBarCreate path={RoutingHelper.apps.joint.devices.add(this, "onair")} hintTooltipKey="apps.joint.devices.create.form.header" />
+                  <CardToolBarCreate path={RoutingHelper.apps.joint.devices.add(this, "broadcast")} hintTooltipKey="apps.joint.devices.create.form.header" />
                 </CardToolBar>
               </CardHeader>
 
