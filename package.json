@@ -39,7 +39,7 @@
     "moment-timezone": "^0.4.1",
     "node-sass": "^3.2.0",
     "query-string-object": "^0.2.2",
-    "radiokit-api": "git+https://radiokitrepo:pamparam@bitbucket.org/radiokit/api-js.git",
+    "radiokit-api": "^0.0.2",
     "react": "^0.14.2",
     "react-dom": "^0.14.2",
     "react-input-slider": "^1.3.1",
