@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router';
 import Gravatar from 'gravatar-api';
 
+import AdminHelper from '../../helpers/admin_helper.js';
+
 
 export default React.createClass({
   contextTypes: {
@@ -21,6 +23,24 @@ export default React.createClass({
           </Link>
         </div>
       </li>
+    );
+  },
+
+
+  onToggleVisibilityClick: function(e) {
+    e.preventDefault();
+    AdminHelper.toggleMenuBarVisibility();
+  },
+
+
+  renderToggle: function() {
+    // FIXME don't use font awesome, use mdi-menu instead
+    return (
+      <li className="hidden-md hidden-lg visibility-toggle">
+				<a className="btn btn-icon-toggle" onClick={this.onToggleVisibilityClick}>
+					<i className="fa fa-bars" />
+				</a>
+			</li>
     );
   },
 
@@ -82,6 +102,7 @@ export default React.createClass({
       <div className="headerbar">
         <div className="headerbar-left">
           <ul className="header-nav header-nav-options">
+            {this.renderToggle()}
             {this.renderLogo()}
             {this.renderUserAccountDropdown()}
             {this.renderBroadcastChannelDropdown()}

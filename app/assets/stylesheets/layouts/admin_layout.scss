@@ -4,6 +4,8 @@
   user-select: none;
 }
 
+
+/* Display hand icon only on active elements */
 :not(a), :not(.btn) {
   cursor: default;
 }
@@ -13,19 +15,90 @@ a, a *, .btn, .btn * {
 }
 
 
-/* Top bar FIXME move to widget's css */
+/* Top bar */
+.headerbar {
+  .header-nav-breadcrumb-label {
+    font-family: Roboto;
+    font-size: 145%;
+    text-transform: uppercase;
+    margin-left: 0.5ex;
+  }
 
-.header-nav-breadcrumb-label {
-  font-family: Roboto;
-  font-size: 145%;
-  text-transform: uppercase;
-  margin-left: 0.5ex;
+
+  .header-nav-breadcrumb-separator {
+    margin-left: 0.5ex;
+  }
+
+  .visibility-toggle {
+    margin-left: -10px;
+    margin-right: 12px;
+  }
 }
 
 
-.header-nav-breadcrumb-separator {
-  margin-left: 0.5ex;
+/* Menu bar */
+#menubar {
+  overflow-x: hidden;
 }
+
+
+#menubar {
+  .pin-toggle {
+    position: fixed;
+    top: 74px;
+    left: 200px;
+    z-index: 1000;
+    display: none;
+  }
+}
+
+@media (min-width: 992px) {
+
+  body:not(.menubar-visible), body:not(.menubar-pin) {
+    #menubar {
+      .pin-toggle {
+        display: none;
+      }
+    }
+  }
+
+
+  body.menubar-visible, body.menubar-pin {
+    #menubar {
+      .pin-toggle-off {
+        color: #fff;
+      }
+    }
+  }
+
+  body.menubar-pin {
+    #menubar {
+      .pin-toggle-on {
+        display: none;
+      }
+
+      .pin-toggle-off {
+        display: block;
+      }
+    }
+  }
+
+  body:not(.menubar-pin).menubar-visible {
+    #menubar {
+      .pin-toggle-on {
+        display: block;
+      }
+
+      .pin-toggle-off {
+        display: none;
+      }
+    }
+  }
+}
+
+
+
+/* TableBrowserWidget FIXME move to widget's css */
 
 .btn i.mdi + span {
   margin-left: 1ex;
