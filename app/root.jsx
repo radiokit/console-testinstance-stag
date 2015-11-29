@@ -20,6 +20,7 @@ export default React.createClass({
 
 
   childContextTypes: {
+    data:                              React.PropTypes.object,
     loadedEditor:                      React.PropTypes.bool,
     currentEditor:                     React.PropTypes.object,
     loadedAccounts:                    React.PropTypes.bool,
@@ -36,6 +37,7 @@ export default React.createClass({
 
   getChildContext: function() {
     return {
+      data:                            window.data,
       loadedEditor:                    this.state.loadedEditor,
       currentEditor:                   this.state.currentEditor,
       loadedAccounts:                  this.state.loadedAccounts,

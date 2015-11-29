@@ -1,9 +1,8 @@
 import React from 'react';
 
-
 export default React.createClass({
   propTypes: {
-    computingNode: React.PropTypes.object.isRequired,
+    computingNode: React.PropTypes.object,
   },
 
 
