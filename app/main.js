@@ -30,12 +30,16 @@ import MusicScheduleShow from './apps/music/schedule/show_view.jsx';
 import BroadcastApp from './apps/broadcast/app.jsx';
 import BroadcastPlaylistIndex from './apps/broadcast/playlist/index_view.jsx';
 import BroadcastLiveIndex from './apps/broadcast/live/index_view.jsx';
+import InfrastructureApp from './apps/infrastructure/app.jsx';
+import InfrastructureClientNodesIndex from './apps/infrastructure/client_nodes/index_view.jsx';
+import InfrastructureDiagramIndex from './apps/infrastructure/diagram/index_view.jsx';
 
 Counterpart.registerTranslations("en", require('./locales/en/general.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/joint.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/shows.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/music.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/broadcast.js'));
+Counterpart.registerTranslations("en", require('./locales/en/apps/infrastructure.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/vault/file_browser.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/table_browser.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/modal.js'));
@@ -45,6 +49,7 @@ Counterpart.registerTranslations("pl", require('./locales/pl/apps/joint.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/shows.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/music.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/broadcast.js'));
+Counterpart.registerTranslations("pl", require('./locales/pl/apps/infrastructure.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/vault/file_browser.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/table_browser.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/modal.js'));
@@ -95,6 +100,15 @@ ReactDOM.render((
           </Route>
           <Route component={ScopeLayout} scope="broadcastChannel">
             <Route path="live/index" component={BroadcastLiveIndex} onEnter={pingGoogleAnalytics}/>
+          </Route>
+        </Route>
+
+        <Route path="infrastructure" component={BroadcastApp}>
+          <Route component={ScopeLayout} scope="userAccount">
+            <Route path="client_nodes/index" component={InfrastructureClientNodesIndex} onEnter={pingGoogleAnalytics}/>
+          </Route>
+          <Route component={ScopeLayout} scope="userAccount">
+            <Route path="diagram/index" component={InfrastructureDiagramIndex} onEnter={pingGoogleAnalytics}/>
           </Route>
         </Route>
 

@@ -77,5 +77,17 @@ export default {
         },
       },
     },
+    infrastructure: {
+      clientNodes: {
+        index: function(context) {
+          return "/apps/infrastructure/client_nodes/index";
+        },
+      },
+      diagram: {
+        index: function(context) {
+          return "/apps/infrastructure/diagram/index";
+        },
+      },
+    },
   }
 }

@@ -89,6 +89,24 @@ export default React.createClass({
               </li>
             </ul>
           </li>
+          <li className="gui-folder">
+            <a onClick={this.onMenuRootItemClick}>
+              <div className="gui-icon"><i className="mdi mdi-server-network"/></div>
+              <Translate content="apps.infrastructure.navigation.title" className="title" />
+            </a>
+            <ul>
+              <li>
+                <Link to={RoutingHelper.apps.infrastructure.clientNodes.index(this)}>
+                  <Translate content="apps.infrastructure.navigation.client_nodes.title" className="title" />
+                </Link>
+              </li>
+              <li>
+                <Link to={RoutingHelper.apps.infrastructure.diagram.index(this)}>
+                  <Translate content="apps.infrastructure.navigation.diagram.title" className="title" />
+                </Link>
+              </li>
+            </ul>
+          </li>
         </ul>
       </div>
     </div>);
