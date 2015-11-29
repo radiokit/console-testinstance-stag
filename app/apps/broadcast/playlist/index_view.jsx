@@ -9,17 +9,18 @@ import CardHeader from '../../../widgets/admin/card_header_widget.jsx';
 import Alert from '../../../widgets/admin/alert_widget.jsx';
 
 export default React.createClass({
-
   contextTypes: {
     currentBroadcastChannel: React.PropTypes.object.isRequired,
   },
 
+
   getInitialState: function() {
     return {
-      loadedListOfFiles: false,
-      playlist_items: []
+      loadedFiles: false,
+      availableFiles: []
     }
   },
+
 
   componentDidMount: function() {
     window.data
@@ -33,14 +34,11 @@ export default React.createClass({
           })
         }
       }).on("fetch", (_event, _query, data) => {
-        console.log("YYY");
-        console.log(data);
-
         if(this.isMounted()) {
           if(data.count() != 0) {
             this.setState({
-              loadedListOfFiles: true,
-              playlist_items: data
+              loadedFiles: true,
+              availableFiles: data
             });
           } else {
             this.setState({
@@ -64,7 +62,7 @@ export default React.createClass({
                 <CardHeader/>
                 <CardBody>
                   <ul className="list divider-full-bleed">
-                    {this.state.playlist_items.map((item) => {
+                    {this.state.availableFiles.map((item) => {
                       return (
                         <li key={item.get("id")} className="tile">
                           <div className="tile-text">
@@ -85,7 +83,3 @@ export default React.createClass({
     }
   }
 });
-
-
-
-
