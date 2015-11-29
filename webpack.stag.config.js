@@ -21,13 +21,13 @@ var config = {
       loader: 'babel'
     }, {
       include: /\.json$/,
-      loaders: ['json-loader']
+      loader: 'json'
     }, {
       test: /\.css$/,
-      loader: 'style!css'
+      loader: 'style!css!autoprefixer'
     }, {
       test: /\.scss$/,
-      loader: 'style!css!sass'
+      loader: 'style!css!sass!autoprefixer'
     }, {
       test: /\.(png|jpg)$/,
       loader: 'url?limit=25000'

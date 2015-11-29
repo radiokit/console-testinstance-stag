@@ -1,3 +1,20 @@
+/* Disable selecting text */
+* {
+  touch-callout: none;
+  user-select: none;
+}
+
+:not(a), :not(.btn) {
+  cursor: default;
+}
+
+a, a *, .btn, .btn * {
+  cursor: pointer !important;
+}
+
+
+/* Top bar FIXME move to widget's css */
+
 .header-nav-breadcrumb-label {
   font-family: Roboto;
   font-size: 145%;
@@ -14,6 +31,7 @@
   margin-left: 1ex;
 }
 
+/* Alerts FIXME move to widget's css */
 .alert {
   a {
     text-decoration: underline;
