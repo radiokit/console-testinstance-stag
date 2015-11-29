@@ -107,9 +107,7 @@ ReactDOM.render((
           <Route component={ScopeLayout} scope="userAccount">
             <Route path="client_nodes/index" component={InfrastructureClientNodesIndex} onEnter={pingGoogleAnalytics}/>
           </Route>
-          <Route component={ScopeLayout} scope="userAccount">
-            <Route path="diagram/index" component={InfrastructureDiagramIndex} onEnter={pingGoogleAnalytics}/>
-          </Route>
+          <Route path="diagram/index" component={InfrastructureDiagramIndex} onEnter={pingGoogleAnalytics}/>
         </Route>
 
         <Route path="joint" component={JointApp}>

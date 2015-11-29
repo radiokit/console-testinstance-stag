@@ -1,4 +1,5 @@
 import React from 'react';
+import Immutable from 'immutable';
 
 import GridRow from '../../../widgets/admin/grid_row_widget.jsx';
 import GridCell from '../../../widgets/admin/grid_cell_widget.jsx';
@@ -17,7 +18,7 @@ export default React.createClass({
   getInitialState: function() {
     return {
       loadedFiles: false,
-      availableFiles: []
+      availableFiles: new Immutable.Seq().toIndexedSeq(),
     }
   },
 
