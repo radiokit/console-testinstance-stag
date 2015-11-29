@@ -4,7 +4,7 @@ import ComputingNode from './computing_node_partial.jsx';
 
 export default React.createClass({
   propTypes: {
-    records: React.PropTypes.object.isRequired,
+    records: React.PropTypes.object,
   },
 
 

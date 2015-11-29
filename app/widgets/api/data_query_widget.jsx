@@ -1,6 +1,9 @@
 import React from 'react';
 import Immutable from 'immutable';
 
+import Loading from '../../widgets/general/loading_widget.jsx';
+import Alert from '../../widgets/admin/alert_widget.jsx';
+
 
 export default React.createClass({
   propTypes: {
@@ -70,17 +73,11 @@ export default React.createClass({
 
   render: function() {
     if(this.state.loaded === false) {
-      return (
-        <div>
-          LOADING
-        </div>
-      );
+      return (<Loading />);
 
     } else {
       if(this.state.error === true) {
-        <div>
-          ERROR
-        </div>
+        return (<Alert type="error" infoTextKey="general.errors.communication.general" />);
 
       } else {
         if(this.props.children) {

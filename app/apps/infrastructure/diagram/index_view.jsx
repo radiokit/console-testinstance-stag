@@ -4,8 +4,6 @@ import Immutable from 'immutable';
 import GridRow from '../../../widgets/admin/grid_row_widget.jsx';
 import GridCell from '../../../widgets/admin/grid_cell_widget.jsx';
 import Section from '../../../widgets/admin/section_widget.jsx';
-import Loading from '../../../widgets/general/loading_widget.jsx';
-import Alert from '../../../widgets/admin/alert_widget.jsx';
 import DataQuery from '../../../widgets/api/data_query_widget.jsx';
 
 import ComputingNodeContainer from './partials/computing_node_container_partial.jsx';
