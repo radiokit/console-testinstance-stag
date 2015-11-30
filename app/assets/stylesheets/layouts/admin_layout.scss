@@ -53,7 +53,6 @@ a, a *, .btn, .btn * {
 }
 
 @media (min-width: 992px) {
-
   body:not(.menubar-visible), body:not(.menubar-pin) {
     #menubar {
       .pin-toggle {
@@ -97,6 +96,26 @@ a, a *, .btn, .btn * {
 }
 
 
+
+body:not(.menubar-visible) {
+  #menubar {
+    li.gui-folder.expanded > ul {
+      max-height: 0;
+      opacity: 0;
+      transition: all 0.5s;
+    }
+  }
+}
+
+body.menubar-visible, body.menubar-pin {
+  #menubar {
+    li.gui-folder.expanded > ul {
+      max-height: 100px;
+      opacity: 1;
+      transition: all 0.5s;
+    }
+  }
+}
 
 /* TableBrowserWidget FIXME move to widget's css */
 
