@@ -40,15 +40,28 @@ export default React.createClass({
       <table className="table table-banded table-hover widgets-admin-schedule-daily--container">
         <tbody>
           {hours.map((hour) => {
+            let hourStart;
+            if(this.props.firstHour > 0 && hour < this.props.firstHour) {
+              hourStart = this.props.now.clone().startOf("day").hour(hour).add(1, "day");
+            } else {
+              hourStart = this.props.now.clone().startOf("day").hour(hour);
+            }
+            let hourStop = hourStart.clone().add(1, "hour");
+
+            let hourKlass;
+            if(this.props.now.clone().subtract(1, "hour").isAfter(hourStart)) {
+              hourKlass = "past";
+            } else if(this.props.now.isBetween(hourStart, hourStop)) {
+              hourKlass = "current";
+            } else {
+              hourKlass = null;
+            }
+
             return (
-              <tr key={hour} ref={"hour" + hour}>
+              <tr key={hour} ref={"hour" + hour} className={hourKlass}>
                 <td className="text-right" className="expand-toggle">
-                  <a className="btn btn-icon-toggle toggle-on" onClick={this.onHourClick.bind(this, hour)}>
-                    <i className="mdi mdi-plus" />
-                  </a>
-                  <a className="btn btn-icon-toggle toggle-off" onClick={this.onHourClick.bind(this, hour)}>
-                    <i className="mdi mdi-minus" />
-                  </a>
+                  <a className="btn btn-icon-toggle toggle-on" onClick={this.onHourClick.bind(this, hour)}><i className="mdi mdi-plus" /></a>
+                  <a className="btn btn-icon-toggle toggle-off" onClick={this.onHourClick.bind(this, hour)}><i className="mdi mdi-minus" /></a>
                 </td>
 
                 <td className="text-right" className="hour">
@@ -57,7 +70,7 @@ export default React.createClass({
 
                 <td className="items">
                   {this.props.items.filter((item) => {
-                    return item.get("start_at").isBetween(this.props.now.clone().startOf("day").hour(hour), this.props.now.clone().startOf("day").hour(hour+1));
+                    return item.get("start_at").isBetween(hourStart, hourStop);
 
                   }).map((item) => {
                     if(item.get("stop_at").isAfter(item.get("start_at").clone().endOf("hour"))) {
@@ -87,8 +100,8 @@ export default React.createClass({
 
 
                   {this.props.items.filter((item) => {
-                    return item.get("start_at").isBefore(this.props.now.clone().startOf("day").hour(hour))
-                           && item.get("stop_at").isAfter(this.props.now.clone().startOf("day").hour(hour+1));
+                    return item.get("start_at").isBefore(hourStart)
+                           && item.get("stop_at").isAfter(hourStop);
 
                   }).map((item) => {
                     return (
@@ -98,8 +111,8 @@ export default React.createClass({
 
 
                   {this.props.items.filter((item) => {
-                    return item.get("start_at").isBefore(this.props.now.clone().startOf("day").hour(hour))
-                           && item.get("stop_at").isBetween(this.props.now.clone().startOf("day").hour(hour), this.props.now.clone().startOf("day").hour(hour+1));
+                    return item.get("start_at").isBefore(hourStart)
+                           && item.get("stop_at").isBetween(hourStart, hourStop);
 
                   }).map((item) => {
                     return (

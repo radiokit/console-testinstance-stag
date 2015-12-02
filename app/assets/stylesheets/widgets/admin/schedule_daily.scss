@@ -1,23 +1,32 @@
 .widgets-admin-schedule-daily--container {
   tr {
-    transition: all 1s;
-  }
+    transition: all 0.5s;
 
-  tr.expanded {
-    height: 400px;
+    &.expanded {
+      height: 400px;
 
-    a.toggle-on {
-      display: none;
+      a.toggle-on {
+        display: none;
+      }
+    }
+
+    &:not(.expanded) {
+      height: auto;
+
+      a.toggle-off {
+        display: none;
+      }
+    }
+
+    &.past {
+      color: #999;
+    }
+
+    &.current {
+      background: yellow;
     }
   }
 
-  tr:not(.expanded) {
-    height: auto;
-
-    a.toggle-off {
-      display: none;
-    }
-  }
 
   td.expand-toggle {
     width: 1ex;
