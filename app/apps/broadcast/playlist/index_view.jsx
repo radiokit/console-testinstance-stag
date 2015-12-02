@@ -1,5 +1,6 @@
 import React from 'react';
 import Immutable from 'immutable';
+import Moment from 'moment';
 
 import GridRow from '../../../widgets/admin/grid_row_widget.jsx';
 import GridCell from '../../../widgets/admin/grid_cell_widget.jsx';
@@ -7,7 +8,9 @@ import Section from '../../../widgets/admin/section_widget.jsx';
 import Card from '../../../widgets/admin/card_widget.jsx';
 import CardBody from '../../../widgets/admin/card_body_widget.jsx';
 import CardHeader from '../../../widgets/admin/card_header_widget.jsx';
+import CardSidebar from '../../../widgets/admin/card_sidebar_widget.jsx';
 import Alert from '../../../widgets/admin/alert_widget.jsx';
+import ScheduleDaily from '../../../widgets/admin/schedule_daily_widget.jsx';
 
 export default React.createClass({
   contextTypes: {
@@ -51,6 +54,12 @@ export default React.createClass({
   },
 
   render: function() {
+    let items = Immutable.fromJS([
+      {id: "1234", start_at: Moment.utc().clone().subtract(5, "minutes"), stop_at: Moment.utc().clone().add(5, "minutes")},
+      {id: "4556", start_at: Moment.utc().clone().add(60, "minutes"), stop_at: Moment.utc().clone().add(145, "minutes")},
+      {id: "7890", start_at: Moment.utc().clone().add(200, "minutes"), stop_at: Moment.utc().clone().add(400, "minutes")},
+    ]);
+
     if(this.state.loadingError) {
       return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.communication.general" />);
 
@@ -58,24 +67,18 @@ export default React.createClass({
       return (
         <Section>
           <GridRow>
-            <GridCell size="small" center={true}>
+            <GridCell size="large" center={true}>
               <Card contentPrefix="apps.broadcast.playlist" cardPadding={false}>
                 <CardHeader/>
                 <CardBody>
-                  <ul className="list divider-full-bleed">
-                    {this.state.availableFiles.map((item) => {
-                      return (
-                        <li key={item.get("id")} className="tile">
-                          <div className="tile-text">
-                            {item.get("id")}
-                            {item.get("start_at")}
-                            {item.get("stop_at")}
-                          </div>
-                        </li>
-                      )
-                    })}
-                  </ul>
-
+                  <CardSidebar>
+                    <div>
+                      Calendar
+                    </div>
+                    <div>
+                      <ScheduleDaily items={items}/>
+                    </div>
+                  </CardSidebar>
                 </CardBody>
               </Card>
             </GridCell>
