@@ -1,6 +1,7 @@
 import React from 'react';
 import Immutable from 'immutable';
 import Moment from 'moment';
+import Translate from 'react-translate-component';
 
 import GridRow from '../../../widgets/admin/grid_row_widget.jsx';
 import GridCell from '../../../widgets/admin/grid_cell_widget.jsx';
@@ -11,6 +12,7 @@ import CardHeader from '../../../widgets/admin/card_header_widget.jsx';
 import CardSidebar from '../../../widgets/admin/card_sidebar_widget.jsx';
 import Alert from '../../../widgets/admin/alert_widget.jsx';
 import ScheduleDaily from '../../../widgets/admin/schedule_daily_widget.jsx';
+import ScheduleDaySelector from '../../../widgets/admin/schedule_day_selector_widget.jsx';
 
 export default React.createClass({
   contextTypes: {
@@ -22,6 +24,7 @@ export default React.createClass({
     return {
       loadedFiles: false,
       availableFiles: new Immutable.Seq().toIndexedSeq(),
+      now: Moment.utc(),
     }
   },
 
@@ -53,6 +56,14 @@ export default React.createClass({
       }).fetch();
   },
 
+
+  onNowChange: function(newNow) {
+    this.setState({
+      now: newNow,
+    });
+  },
+
+
   render: function() {
     let items = Immutable.fromJS([
       {id: "1234", start_at: Moment.utc().clone().subtract(5, "minutes"), stop_at: Moment.utc().clone().add(5, "minutes")},
@@ -72,12 +83,8 @@ export default React.createClass({
                 <CardHeader/>
                 <CardBody>
                   <CardSidebar>
-                    <div>
-                      Calendar
-                    </div>
-                    <div>
-                      <ScheduleDaily items={items}/>
-                    </div>
+                    <ScheduleDaySelector now={this.state.now} onChange={this.onNowChange} />
+                    <ScheduleDaily now={this.state.now} items={items} />
                   </CardSidebar>
                 </CardBody>
               </Card>
