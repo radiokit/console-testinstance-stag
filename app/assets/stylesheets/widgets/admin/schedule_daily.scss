@@ -1,0 +1,41 @@
+.widgets-admin-schedule-daily--container {
+  tr {
+    transition: all 1s;
+  }
+
+  tr.expanded {
+    height: 400px;
+
+    a.toggle-on {
+      display: none;
+    }
+  }
+
+  tr:not(.expanded) {
+    height: auto;
+
+    a.toggle-off {
+      display: none;
+    }
+  }
+
+  td.expand-toggle {
+    width: 1ex;
+  }
+
+  td.hour {
+    width: 3ex;
+  }
+
+  td.items {
+    position: relative;
+
+    div.item {
+      background: red;
+      left: 12px;
+      right: 12px;
+      position: absolute;
+      min-height: 1px;
+    }
+  }
+}

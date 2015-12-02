@@ -3,6 +3,8 @@ import Immutable from 'immutable';
 import sprintf from 'tiny-sprintf';
 import Moment from 'moment';
 
+import '../../assets/stylesheets/widgets/admin/schedule_daily.scss';
+
 export default React.createClass({
   propTypes: {
     firstHour: React.PropTypes.oneOf([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]).isRequired,
@@ -20,6 +22,11 @@ export default React.createClass({
   },
 
 
+  onHourClick: function(hour) {
+    this.refs["hour" + hour].classList.toggle("expanded");
+  },
+
+
   render: function() {
     let hours;
 
@@ -30,23 +37,32 @@ export default React.createClass({
     }
 
     return (
-      <table className="table table-banded table-hover">
+      <table className="table table-banded table-hover widgets-admin-schedule-daily--container">
         <tbody>
           {hours.map((hour) => {
             return (
               <tr key={hour} ref={"hour" + hour}>
-                <td className="text-right" style={{width: "4ex"}}>
+                <td className="text-right" className="expand-toggle">
+                  <a className="btn btn-icon-toggle toggle-on" onClick={this.onHourClick.bind(this, hour)}>
+                    <i className="mdi mdi-plus" />
+                  </a>
+                  <a className="btn btn-icon-toggle toggle-off" onClick={this.onHourClick.bind(this, hour)}>
+                    <i className="mdi mdi-minus" />
+                  </a>
+                </td>
+
+                <td className="text-right" className="hour">
                   {sprintf("%02s:00", hour)}
                 </td>
 
-                <td style={{position: "relative"}}>
+                <td className="items">
                   {this.props.items.filter((item) => {
                     return item.get("start_at").isBetween(this.props.now.clone().startOf("day").hour(hour), this.props.now.clone().startOf("day").hour(hour+1));
 
                   }).map((item) => {
                     if(item.get("stop_at").isAfter(item.get("start_at").clone().endOf("hour"))) {
                       return (
-                        <div key={item.get("id")} style={{position: "absolute", background: "red", left: "12px", right: "12px", top: (item.get("start_at").minutes() / 59 * 100) + "%", bottom: "0" }}>
+                        <div key={item.get("id")} className="item item-start" style={{top: (item.get("start_at").minutes() / 59 * 100) + "%", bottom: "0" }}>
                           <header>
                             {item.get("id")}
                             / {item.get("start_at").format()}
@@ -58,7 +74,7 @@ export default React.createClass({
 
                     } else {
                       return (
-                        <div key={item.get("id")} style={{position: "absolute", background: "red", left: "12px", right: "12px", top: (item.get("start_at").minutes() / 59 * 100) + "%", bottom: (100 - item.get("stop_at").minutes() / 59 * 100) + "%" }}>
+                        <div key={item.get("id")} className="item item-overflow" style={{top: (item.get("start_at").minutes() / 59 * 100) + "%", bottom: (100 - item.get("stop_at").minutes() / 59 * 100) + "%" }}>
                           <header>
                             {item.get("id")}
                             / {item.get("start_at").format()}
@@ -76,7 +92,7 @@ export default React.createClass({
 
                   }).map((item) => {
                     return (
-                      <div key={item.get("id")} style={{position: "absolute", background: "green", left: "12px", right: "12px", bottom: "0", top: "-1px" }} />
+                      <div key={item.get("id")} className="item item-stop" style={{bottom: "0", top: "-1px" }} />
                     );
                   })}
 
@@ -87,7 +103,7 @@ export default React.createClass({
 
                   }).map((item) => {
                     return (
-                      <div key={item.get("id")} style={{position: "absolute", background: "blue", left: "12px", right: "12px", bottom: (100 - item.get("stop_at").minutes() / 59 * 100) + "%", top: "-1px" }} />
+                      <div key={item.get("id")} className="item item-stop" style={{bottom: (100 - item.get("stop_at").minutes() / 59 * 100) + "%", top: "-1px" }} />
                     );
                   })}
 
