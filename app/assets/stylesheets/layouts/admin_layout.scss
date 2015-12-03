@@ -22,6 +22,10 @@ input, textarea {
   cursor: text !important;
 }
 
+select, input[type=radio], input[type=checkbox] {
+  cursor: pointer !important;
+}
+
 
 /* Top bar */
 .headerbar {

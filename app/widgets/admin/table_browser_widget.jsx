@@ -191,6 +191,28 @@ export default React.createClass({
   },
 
 
+  renderPagination: function() {
+    if(this.state.recordsCount !== 0) {
+      return (
+        <ToolbarGroup position="right">
+          <Translate className="btn" style={{cursor: "default"}} content="widgets.admin.table_browser.pagination.current.label" rangeStart={this.buildRangeStart()} rangeStop={this.buildRangeStop()} rangeTotal={this.state.recordsCount} component="div" />
+          <button type="button" className="btn btn-default-light" onClick={this.onPreviousPageClick} disabled={this.state.offset === 0} title={Counterpart.translate("widgets.admin.table_browser.pagination.next.title")}><i className="mdi mdi-chevron-left"/></button>
+          <button type="button" className="btn btn-default-light" onClick={this.onNextPageClick} disabled={this.buildRangeStop() === this.state.recordsCount} title={Counterpart.translate("widgets.admin.table_browser.pagination.previous.title")}><i className="mdi mdi-chevron-right"/></button>
+        </ToolbarGroup>
+      );
+    }
+  },
+
+
+  renderTable: function() {
+    if(this.state.recordsCount !== 0) {
+      return (
+        <Table selectedRecordIds={this.state.selectedRecordIds} onSelectRecord={this.onSelectRecord} onSelectAll={this.onSelectAll} selectable={this.props.selectable} attributes={this.props.attributes} actions={this.props.actions} contentPrefix={this.props.contentPrefix} records={this.state.records} />
+      );
+    }
+  },
+
+
   render: function() {
     if(this.state.loadingError) {
       return (<Alert type="error" infoTextKey="general.errors.communication.general" />);
@@ -205,11 +227,7 @@ export default React.createClass({
             <Toolbar>
               {this.props.children}
 
-              <ToolbarGroup position="right">
-                <Translate className="btn" style={{cursor: "default"}} content="widgets.admin.table_browser.pagination.current.label" rangeStart={this.buildRangeStart()} rangeStop={this.buildRangeStop()} rangeTotal={this.state.recordsCount} component="div" />
-                <button type="button" className="btn btn-default-light" onClick={this.onPreviousPageClick} disabled={this.state.offset === 0} title={Counterpart.translate("widgets.admin.table_browser.pagination.next.title")}><i className="mdi mdi-chevron-left"/></button>
-                <button type="button" className="btn btn-default-light" onClick={this.onNextPageClick} disabled={this.buildRangeStop() === this.state.recordsCount} title={Counterpart.translate("widgets.admin.table_browser.pagination.previous.title")}><i className="mdi mdi-chevron-right"/></button>
-              </ToolbarGroup>
+              {this.renderPagination()}
             </Toolbar>
 
             {() => {
@@ -240,14 +258,10 @@ export default React.createClass({
               }
             }()}
 
-            <Table selectedRecordIds={this.state.selectedRecordIds} onSelectRecord={this.onSelectRecord} onSelectAll={this.onSelectAll} selectable={this.props.selectable} attributes={this.props.attributes} actions={this.props.actions} contentPrefix={this.props.contentPrefix} records={this.state.records} />
+            {this.renderTable()}
 
             <Toolbar>
-              <ToolbarGroup position="right">
-                <Translate className="btn" style={{cursor: "default"}} content="widgets.admin.table_browser.pagination.current.label" rangeStart={this.buildRangeStart()} rangeStop={this.buildRangeStop()} rangeTotal={this.state.recordsCount} component="div" />
-                <button type="button" className="btn btn-default-light" onClick={this.onPreviousPageClick} disabled={this.state.offset === 0} title={Counterpart.translate("widgets.admin.table_browser.pagination.previous.title")}><i className="mdi mdi-chevron-left"/></button>
-                <button type="button" className="btn btn-default-light" onClick={this.onNextPageClick} disabled={this.buildRangeStop() === this.state.recordsCount} title={Counterpart.translate("widgets.admin.table_browser.pagination.next.title")}><i className="mdi mdi-chevron-right"/></button>
-              </ToolbarGroup>
+              {this.renderPagination()}
             </Toolbar>
           </div>
         );

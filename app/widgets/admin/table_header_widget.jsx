@@ -11,6 +11,7 @@ export default React.createClass({
     headerSelected: React.PropTypes.bool,
     onSelectAll: React.PropTypes.func,
     actions: React.PropTypes.arrayOf(React.PropTypes.string),
+    records: React.PropTypes.object.isRequired
   },
 
 
@@ -32,7 +33,7 @@ export default React.createClass({
 
   renderSelector: function(record) {
     if(this.props.selectable) {
-      return (<TableSelector header={true} onSelect={this.onSelect} selected={this.props.headerSelected} />);
+      return (<TableSelector header={true} onSelect={this.onSelect} selected={this.records.count() !== 0 && this.props.headerSelected} />);
     }
   },
 

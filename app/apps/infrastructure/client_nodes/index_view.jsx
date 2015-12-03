@@ -4,7 +4,7 @@ import Immutable from 'immutable';
 import GridRow from '../../../widgets/admin/grid_row_widget.jsx';
 import GridCell from '../../../widgets/admin/grid_cell_widget.jsx';
 import Section from '../../../widgets/admin/section_widget.jsx';
-import Table from '../../../widgets/admin/table_widget.jsx';
+import TableBrowser from '../../../widgets/admin/table_browser_widget.jsx';
 import Card from '../../../widgets/admin/card_widget.jsx';
 import CardBody from '../../../widgets/admin/card_body_widget.jsx';
 import CardHeader from '../../../widgets/admin/card_header_widget.jsx';
@@ -18,6 +18,11 @@ import DeleteModal from './delete_modal.jsx';
 import RoutingHelper from '../../../helpers/routing_helper.js';
 
 export default React.createClass({
+  contextTypes: {
+    currentUserAccount: React.PropTypes.object.isRequired,
+  },
+
+
   getInitialState: function() {
     return {
       selectedRecordIds: new Immutable.Seq().toIndexedSeq(),
@@ -37,10 +42,18 @@ export default React.createClass({
   },
 
 
-  onSelectRecord: function(_state, _selectedRecordId, selectedRecordIds) {
+  onTableSelect: function(selectedRecordIds) {
     this.setState({
-      selectedRecordIds: selectedRecordIds,
-    })
+      selectedRecordIds: selectedRecordIds
+    });
+  },
+
+
+  buildRecordsQuery: function() {
+    return window.data
+      .query("plumber", "Resource.Architecture.ClientNode")
+      .select("id", "name")
+      .where("references", "deq", "user_account_id", this.context.currentUserAccount.get("id"));
   },
 
 
@@ -55,16 +68,12 @@ export default React.createClass({
             <Card contentPrefix="apps.infrastructure.client_nodes.index">
               <CardHeader/>
               <CardBody>
-                <ToolBar>
+                <TableBrowser onSelect={this.onTableSelect} selectable={true} attributes={{name: { renderer: "string" }}} actions={[]} contentPrefix="apps.infrastructure.client_nodes.index.table" recordsQuery={this.buildRecordsQuery()}>
                   <ToolBarGroup>
                     <ToolBarButton icon="plus" labelTextKey="apps.infrastructure.client_nodes.index.actions.create" onClick={this.onCreateButtonClick} />
                     <ToolBarButton icon="delete" hintTooltipKey="apps.infrastructure.client_nodes.index.actions.delete" onClick={this.onDeleteButtonClick} disabled={this.state.selectedRecordIds.count() === 0} />
                   </ToolBarGroup>
-                </ToolBar>
-
-                <DataQuery app="plumber" model="Resource.Architecture.ClientNode" select={["id", "name"]}>
-                  <Table selectable={true} onSelectRecord={this.onSelectRecord} selectedRecordIds={this.state.selectedRecordIds} attributes={{name: { renderer: "string" }}} actions={[]} contentPrefix="apps.infrastructure.client_nodes.index.table" />
-                </DataQuery>
+                </TableBrowser>
               </CardBody>
             </Card>
           </GridCell>
