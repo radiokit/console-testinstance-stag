@@ -12,9 +12,6 @@ import ScopeLayout from './layouts/scope_layout.jsx';
 import AppsIndex from './apps/apps_index.jsx';
 import JointApp from './apps/joint/app.jsx';
 import JointControlRoom from './apps/joint/control_room_view.jsx';
-import JointDevicesIndex from './apps/joint/devices_index_view.jsx';
-import JointDevicesCreate from './apps/joint/devices_create_view.jsx';
-import JointDevicesAdd from './apps/joint/devices_add_view.jsx';
 import ShowsApp from './apps/shows/app.jsx';
 import ShowsFilesIndex from './apps/shows/files/index_view.jsx';
 import ShowsFilesCreate from './apps/shows/files/create_view.jsx';
@@ -112,9 +109,6 @@ ReactDOM.render((
 
         <Route path="joint" component={JointApp}>
           <Route path="control_room" component={JointControlRoom} onEnter={pingGoogleAnalytics}/>
-          <Route path="devices/create" component={JointDevicesCreate} onEnter={pingGoogleAnalytics}/>
-          <Route path="devices/index" component={JointDevicesIndex} onEnter={pingGoogleAnalytics}/>
-          <Route path="devices/add/:role" component={JointDevicesAdd} onEnter={pingGoogleAnalytics}/>
         </Route>
 
         <Route path="shows" component={ShowsApp}>

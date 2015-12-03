@@ -3,19 +3,7 @@ import AccountHelper from './account_helper.js';
 export default {
   apps: {
     joint: {
-      devices: {
-        index: function(context) {
-          return "/apps/join/devices/index";
-        },
 
-        create: function(context) {
-          return "/apps/joint/devices/create";
-        },
-
-        add: function(context, role) {
-          return "/apps/joint/devices/add/" + role;
-        }
-      }
     },
     shows: {
       files: {
