@@ -14,11 +14,14 @@ export default {
 
       client_nodes: {
         index: {
-          loading: "Fetching list of audio devices",
           header: "Audio Devices",
           actions: {
             create: "Add new device",
             delete: "Remove selected devices",
+          },
+
+          table: {
+            loading: "Fetching list of audio devices",
           },
 
           modals: {

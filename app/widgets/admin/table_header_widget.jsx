@@ -33,7 +33,7 @@ export default React.createClass({
 
   renderSelector: function(record) {
     if(this.props.selectable) {
-      return (<TableSelector header={true} onSelect={this.onSelect} selected={this.records.count() !== 0 && this.props.headerSelected} />);
+      return (<TableSelector header={true} onSelect={this.onSelect} selected={this.props.records.count() !== 0 && this.props.headerSelected} />);
     }
   },
 

@@ -14,11 +14,14 @@ export default {
 
       client_nodes: {
         index: {
-          loading: "Ładowanie listy urządzeń audio",
           header: "Urządzenia audio",
           actions: {
             create: "Dodaj urządzenie",
             delete: "Usuń zaznaczone urządzenia",
+          },
+          
+          table: {
+            loading: "Ładowanie listy urządzeń audio",
           },
 
           modals: {
