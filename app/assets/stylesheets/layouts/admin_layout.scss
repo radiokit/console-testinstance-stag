@@ -10,10 +10,13 @@
   cursor: default;
 }
 
-a, a *, .btn, .btn * {
+a:not(:disabled), a:not(:disabled) *, .btn:not(:disabled), .btn:not(:disabled) * {
   cursor: pointer !important;
 }
 
+a:disabled, a:disabled *, .btn:disabled, .btn:disabled * {
+  cursor: not-allowed !important;
+}
 
 input, textarea {
   cursor: text !important;
