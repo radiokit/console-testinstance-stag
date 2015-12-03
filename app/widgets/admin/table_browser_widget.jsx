@@ -5,6 +5,7 @@ import Immutable from 'immutable';
 
 import Table from '../../widgets/admin/table_widget.jsx';
 import Toolbar from '../../widgets/admin/toolbar_widget.jsx';
+import ToolbarButton from '../../widgets/admin/toolbar_button_widget.jsx';
 import ToolbarGroup from '../../widgets/admin/toolbar_group_widget.jsx';
 import Loading from '../../widgets/general/loading_widget.jsx';
 
@@ -54,11 +55,10 @@ export default React.createClass({
     this.recordsQueryIds = this.props.recordsQuery
       .clone()
       .select("id")
-      .fetch();
 
     this.recordsQueryFull
       .on("fetch", this.onRecordsQueryFetch);
-    this.recordsQueryFull
+    this.recordsQueryIds
       .on("fetch", this.onRecordIdsQueryFetch);
 
     this.loadRecords();
@@ -67,7 +67,7 @@ export default React.createClass({
 
   componentWillUnmount: function() {
     this.recordsQueryFull.teardown();
-    this.recordsQueryFull.teardown();
+    this.recordsQueryIds.teardown();
   },
 
 
@@ -191,6 +191,11 @@ export default React.createClass({
   },
 
 
+  onRefreshClick: function() {
+    this.loadRecords();
+  },
+
+
   renderPagination: function() {
     if(this.state.recordsCount !== 0) {
       return (
@@ -201,6 +206,15 @@ export default React.createClass({
         </ToolbarGroup>
       );
     }
+  },
+
+
+  renderRefresh: function() {
+    return (
+      <ToolbarGroup position="right">
+        <ToolbarButton onClick={this.onRefreshClick} icon="reload" title={Counterpart.translate("widgets.admin.table_browser.refresh.title")}/>
+      </ToolbarGroup>
+    );
   },
 
 
@@ -228,6 +242,7 @@ export default React.createClass({
               {this.props.children}
 
               {this.renderPagination()}
+              {this.renderRefresh()}
             </Toolbar>
 
             {() => {
@@ -262,6 +277,7 @@ export default React.createClass({
 
             <Toolbar>
               {this.renderPagination()}
+              {this.renderRefresh()}
             </Toolbar>
           </div>
         );
