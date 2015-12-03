@@ -52,7 +52,8 @@ export default React.createClass({
         })
         .create({
           "references" : {
-            "user_account_id" : this.context.currentUserAccount.get("id")
+            "user_account_id" : this.context.currentUserAccount.get("id"),
+            "role" : "infrastructure",
           },
           "name" : this.refs.inputName.getValue(),
           "destroy_in" : 900000 // 15 minutes
