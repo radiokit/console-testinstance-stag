@@ -11,7 +11,6 @@ import CardHeader from '../../../widgets/admin/card_header_widget.jsx';
 import ToolBar from '../../../widgets/admin/toolbar_widget.jsx';
 import ToolBarGroup from '../../../widgets/admin/toolbar_group_widget.jsx';
 import ToolBarButton from '../../../widgets/admin/toolbar_button_widget.jsx';
-import DataQuery from '../../../widgets/api/data_query_widget.jsx';
 import CreateModal from './create_modal.jsx';
 import DeleteModal from './delete_modal.jsx';
 
