@@ -22,6 +22,9 @@ export default {
 
           table: {
             loading: "Ładowanie listy urządzeń audio",
+            header: {
+              name: "Nazwa",
+            }
           },
 
           modals: {
@@ -87,6 +90,19 @@ export default {
 
           table: {
             loading: "Ładowanie listy serwerów audio",
+            header: {
+              hostname: "Nazwa hosta",
+              provider: "Provider",
+              physical_location_country: "Kraj",
+              tcp_ports: "TCP ports",
+              udp_ports: "UDP ports",
+              media_input_stream_rtp: "IN (RTP)",
+              media_input_stream_http: "IN (HTTP)",
+              media_server_rtsp: "SRV (RTSP)",
+              media_output_stream_icecast2: "OUT (Ice2)",
+              media_routing_link: "ROU (Link)",
+              media_routing_mix_group: "ROU (MixGrp)",
+            }
           },
 
           modals: {

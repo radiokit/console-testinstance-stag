@@ -6,6 +6,7 @@ import TableSelector from './table_selector_widget.jsx';
 
 export default React.createClass({
   propTypes: {
+    contentPrefix: React.PropTypes.string.isRequired,
     attributes: React.PropTypes.object.isRequired,
     selectable: React.PropTypes.bool,
     headerSelected: React.PropTypes.bool,
@@ -46,12 +47,8 @@ export default React.createClass({
           if(this.props.attributes[attribute].headerText) {
             return (<th key={"cell-" + attribute}>{this.props.attributes[attribute].headerText}</th>);
 
-          // FIXME fix determining automatic name
-          // } else if(this.props.attributes[attribute].headerTextKey) {
-          //   return <Translate key={"cell-" + attribute} component="th" content={this.props.attributes[attribute].headerTextKey} />
-
           } else {
-            return (<th key={"cell-" + attribute}>{attribute}</th>);
+            return (<Translate key={"cell-" + attribute} component="th" content={this.props.contentPrefix + ".header." + attribute} />);
           }
         })}
 

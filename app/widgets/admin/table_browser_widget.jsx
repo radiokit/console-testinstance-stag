@@ -275,10 +275,16 @@ export default React.createClass({
 
             {this.renderTable()}
 
-            <Toolbar>
-              {this.renderPagination()}
-              {this.renderRefresh()}
-            </Toolbar>
+            {() => {
+              if(this.state.recordsCount !== 0) {
+                return (
+                  <Toolbar>
+                    {this.renderPagination()}
+                    {this.renderRefresh()}
+                  </Toolbar>
+                );
+              }
+            }()}
           </div>
         );
       }
