@@ -108,7 +108,7 @@ export default {
               header: "Add server",
               form: {
                 hostname: {
-                  label: "Nazwa hosta",
+                  label: "Hostname",
                 },
                 provider: {
                   label: "Provider",
