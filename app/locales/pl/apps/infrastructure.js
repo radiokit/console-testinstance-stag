@@ -7,8 +7,8 @@ export default {
           title: "Urządzenia audio",
         },
 
-        diagram: {
-          title: "Diagram",
+        computing_nodes: {
+          title: "Serwery audio",
         },
       },
 
@@ -19,7 +19,7 @@ export default {
             create: "Dodaj urządzenie",
             delete: "Usuń zaznaczone urządzenia",
           },
-          
+
           table: {
             loading: "Ładowanie listy urządzeń audio",
           },
@@ -69,6 +69,79 @@ export default {
 
               action: {
                 proceed: "Dodaj urządzenie",
+                cancel: "Anuluj",
+                close: "Zamknij",
+              }
+            }
+          }
+        },
+      },
+
+      computing_nodes: {
+        index: {
+          header: "Serwery audio",
+          actions: {
+            create: "Dodaj serwer",
+            delete: "Usuń zaznaczone serwery",
+          },
+
+          table: {
+            loading: "Ładowanie listy serwerów audio",
+          },
+
+          modals: {
+            delete: {
+              title: "Kasowanie",
+              message: {
+                confirmation: "Czy na pewno chcesz usunąć zaznaczone serwery (%(count)s szt.)?",
+                acknowledgement: "Usunięto %(count)s serwer(ów).",
+                progress: "Trwa kasowanie serwerów…",
+              },
+              action: {
+                proceed: "Skasuj",
+                cancel: "Anuluj",
+                cancel: "Zamknij",
+              }
+            },
+
+            create: {
+              header: "Dodaj serwer",
+              form: {
+                hostname: {
+                  label: "Nazwa hosta",
+                },
+                provider: {
+                  label: "Provider",
+                },
+                physical_location_country: {
+                  label: "Fizyczna lokalizacja (kod kraju)"
+                },
+                listen_port_tcp_min: {
+                  label: "Min port TCP",
+                },
+                listen_port_tcp_max: {
+                  label: "Max port TCP",
+                },
+                listen_port_udp_min: {
+                  label: "Min port UDP",
+                },
+                listen_port_udp_max: {
+                  label: "Max port UDP",
+                },
+                rtsp_port_min: {
+                  label: "Min port RTSP",
+                },
+                rtsp_port_max: {
+                  label: "Max port RTSP",
+                },
+              },
+
+              acknowledgement: {
+                info: "Pomyślnie dodano serwer",
+              },
+
+              action: {
+                proceed: "Dodaj serwer",
                 cancel: "Anuluj",
                 close: "Zamknij",
               }

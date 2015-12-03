@@ -18,11 +18,6 @@ import DeleteModal from './delete_modal.jsx';
 import RoutingHelper from '../../../helpers/routing_helper.js';
 
 export default React.createClass({
-  contextTypes: {
-    currentUserAccount: React.PropTypes.object.isRequired,
-  },
-
-
   getInitialState: function() {
     return {
       selectedRecordIds: new Immutable.Seq().toIndexedSeq(),
@@ -51,10 +46,25 @@ export default React.createClass({
 
   buildRecordsQuery: function() {
     return window.data
-      .query("plumber", "Resource.Architecture.ClientNode")
-      .select("id", "name")
-      .where("references", "deq", "user_account_id", this.context.currentUserAccount.get("id"))
+      .query("plumber", "Resource.Architecture.ComputingNode")
+      .select("id", "hostname", "provider", "physical_location_country", "listen_ports", "media_input_stream_http", "media_input_stream_rtp", "media_server_rtsp", "media_output_stream_icecast2", "media_routing_mix_group", "media_routing_link")
+      .joins("listen_ports")
+      .joins("media_input_stream_http")
+      .joins("media_input_stream_rtp")
+      .joins("media_server_rtsp")
+      .joins("media_output_stream_icecast2")
+      .joins("media_routing_mix_group")
+      .joins("media_routing_link")
       .where("references", "deq", "role", "infrastructure");
+  },
+
+
+  buildAttributes: function() {
+    return {
+      hostname: { renderer: "string" },
+      provider: { renderer: "string" },
+      physical_location_country: { renderer: "string" },
+    }
   },
 
 
@@ -66,13 +76,13 @@ export default React.createClass({
             <CreateModal ref="createModal" />
             <DeleteModal ref="deleteModal" selectedRecordIds={this.state.selectedRecordIds} />
 
-            <Card contentPrefix="apps.infrastructure.client_nodes.index">
+            <Card contentPrefix="apps.infrastructure.computing_nodes.index">
               <CardHeader/>
               <CardBody>
-                <TableBrowser onSelect={this.onTableSelect} selectable={true} attributes={{name: { renderer: "string" }}} actions={[]} contentPrefix="apps.infrastructure.client_nodes.index.table" recordsQuery={this.buildRecordsQuery()}>
+                <TableBrowser onSelect={this.onTableSelect} selectable={true} attributes={this.buildAttributes()} actions={[]} contentPrefix="apps.infrastructure.computing_nodes.index.table" recordsQuery={this.buildRecordsQuery()}>
                   <ToolBarGroup>
-                    <ToolBarButton icon="plus" labelTextKey="apps.infrastructure.client_nodes.index.actions.create" onClick={this.onCreateButtonClick} />
-                    <ToolBarButton icon="delete" hintTooltipKey="apps.infrastructure.client_nodes.index.actions.delete" onClick={this.onDeleteButtonClick} disabled={this.state.selectedRecordIds.count() === 0} />
+                    <ToolBarButton icon="plus" labelTextKey="apps.infrastructure.computing_nodes.index.actions.create" onClick={this.onCreateButtonClick} />
+                    <ToolBarButton icon="delete" hintTooltipKey="apps.infrastructure.computing_nodes.index.actions.delete" onClick={this.onDeleteButtonClick} disabled={this.state.selectedRecordIds.count() === 0} />
                   </ToolBarGroup>
                 </TableBrowser>
               </CardBody>

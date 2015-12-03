@@ -7,8 +7,8 @@ export default {
           title: "Audio Devices",
         },
 
-        diagram: {
-          title: "Diagram",
+        computing_nodes: {
+          title: "Audio Servers",
         },
       },
 
@@ -69,6 +69,79 @@ export default {
 
               action: {
                 proceed: "Add device",
+                cancel: "Cancel",
+                close: "Close",
+              }
+            }
+          }
+        },
+      },
+
+      computing_nodes: {
+        index: {
+          header: "Audio Servers",
+          actions: {
+            create: "Add new server",
+            delete: "Remove selected servers",
+          },
+
+          table: {
+            loading: "Fetching list of audio servers",
+          },
+
+          modals: {
+            delete: {
+              header: "Delete server",
+              message: {
+                confirmation: "Are you sure that you want to delete %(count)s selected server(s)?",
+                acknowledgement: "Deleted %(count)s server(s).",
+                progress: "Deleting in progress…",
+              },
+              action: {
+                proceed: "Delete",
+                cancel: "Cancel",
+                close: "Close",
+              }
+            },
+
+            create: {
+              header: "Add server",
+              form: {
+                hostname: {
+                  label: "Nazwa hosta",
+                },
+                provider: {
+                  label: "Provider",
+                },
+                physical_location_country: {
+                  label: "Physical location (country code)"
+                },
+                listen_port_tcp_min: {
+                  label: "Min port TCP",
+                },
+                listen_port_tcp_max: {
+                  label: "Max port TCP",
+                },
+                listen_port_udp_min: {
+                  label: "Min port UDP",
+                },
+                listen_port_udp_max: {
+                  label: "Max port UDP",
+                },
+                rtsp_port_min: {
+                  label: "Min port RTSP",
+                },
+                rtsp_port_max: {
+                  label: "Max port RTSP",
+                },
+              },
+
+              acknowledgement: {
+                info: "Server added succesfully",
+              },
+
+              action: {
+                proceed: "Add server",
                 cancel: "Cancel",
                 close: "Close",
               }

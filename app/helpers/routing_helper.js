@@ -83,9 +83,9 @@ export default {
           return "/apps/infrastructure/client_nodes/index";
         },
       },
-      diagram: {
+      computingNodes: {
         index: function(context) {
-          return "/apps/infrastructure/diagram/index";
+          return "/apps/infrastructure/computing_nodes/index";
         },
       },
     },

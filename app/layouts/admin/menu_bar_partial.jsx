@@ -128,8 +128,8 @@ export default React.createClass({
                   </Link>
                 </li>
                 <li>
-                  <Link to={RoutingHelper.apps.infrastructure.diagram.index(this)}>
-                    <Translate content="apps.infrastructure.navigation.diagram.title" className="title" />
+                  <Link to={RoutingHelper.apps.infrastructure.computingNodes.index(this)}>
+                    <Translate content="apps.infrastructure.navigation.computing_nodes.title" className="title" />
                   </Link>
                 </li>
               </ul>
