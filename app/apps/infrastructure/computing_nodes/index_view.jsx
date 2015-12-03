@@ -47,7 +47,7 @@ export default React.createClass({
   buildRecordsQuery: function() {
     return window.data
       .query("plumber", "Resource.Architecture.ComputingNode")
-      .select("id", "hostname", "provider", "physical_location_country", "listen_ports", "media_input_stream_http", "media_input_stream_rtp", "media_server_rtsp", "media_output_stream_icecast2", "media_routing_mix_group", "media_routing_link")
+      .select("id", "hostname", "listen_port_tcp_min", "listen_port_tcp_max", "listen_port_udp_min", "listen_port_udp_max", "provider", "physical_location_country", "listen_ports", "media_input_stream_http", "media_input_stream_rtp", "media_server_rtsp", "media_output_stream_icecast2", "media_routing_mix_group", "media_routing_link")
       .joins("listen_ports")
       .joins("media_input_stream_http")
       .joins("media_input_stream_rtp")
@@ -61,9 +61,25 @@ export default React.createClass({
 
   buildAttributes: function() {
     return {
-      hostname: { renderer: "string" },
-      provider: { renderer: "string" },
-      physical_location_country: { renderer: "string" },
+      hostname:                     { renderer: "string" },
+      provider:                     { renderer: "string" },
+      physical_location_country:    { renderer: "string" },
+      tcp_ports:                    { renderer: "string", valueFunc: (record) => {
+        let utilised = record.get("listen_ports").count((listenPort) => { return listenPort.get("protocol") === "tcp"; });
+        let total = new Immutable.Range(record.get("listen_port_tcp_min"), record.get("listen_port_tcp_max")).count();
+        return `${utilised} / ${total}`;
+      } },
+      udp_ports:                    { renderer: "string", valueFunc: (record) => {
+        let utilised = record.get("listen_ports").count((listenPort) => { return listenPort.get("protocol") === "udp"; });
+        let total = new Immutable.Range(record.get("listen_port_udp_min"), record.get("listen_port_udp_max")).count();
+        return `${utilised} / ${total}`;
+      } },
+      media_input_stream_rtp:       { renderer: "counter" },
+      media_input_stream_http:      { renderer: "counter" },
+      media_server_rtsp:            { renderer: "counter" },
+      media_output_stream_icecast2: { renderer: "counter" },
+      media_routing_mix_group:      { renderer: "counter" },
+      media_routing_link:           { renderer: "counter" },
     }
   },
 
