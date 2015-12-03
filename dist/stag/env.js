@@ -1,7 +1,7 @@
 window.ENV = {
   auth: {
     clientId: "b795703c0819217a78776c48c5613c5201c52a28609b7fdb28e5716d8a564eb82c961664e0c4cb31",
-    baseUrl: "https://radiokit-auth-stag.herokuapp.com"
+    baseUrl: "https://auth.radiokitapp-stag.org"
   },
   apps: {
     "plumber" : { baseUrl: "https://plumber.radiokitapp-stag.org" },
