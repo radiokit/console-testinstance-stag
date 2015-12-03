@@ -17,6 +17,9 @@ export default {
             },
           },
         },
+        refresh: {
+          title: "Odśwież",
+        },
         pagination: {
           current: {
             label: "Rekordy %(rangeStart)s-%(rangeStop)s z %(rangeTotal)s"

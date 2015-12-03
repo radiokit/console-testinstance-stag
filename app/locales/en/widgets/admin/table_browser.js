@@ -17,6 +17,9 @@ export default {
             },
           }
         },
+        refresh: {
+          title: "Refresh",
+        },
         pagination: {
           current: {
             label: "Records %(rangeStart)s-%(rangeStop)s of %(rangeTotal)s"
