@@ -94,7 +94,7 @@ export default React.createClass({
 
             <Card contentPrefix="apps.infrastructure.computing_nodes.index">
               <CardHeader/>
-              <CardBody>
+              <CardBody cardPadding={false}>
                 <TableBrowser onSelect={this.onTableSelect} selectable={true} attributes={this.buildAttributes()} actions={[]} contentPrefix="apps.infrastructure.computing_nodes.index.table" recordsQuery={this.buildRecordsQuery()}>
                   <ToolBarGroup>
                     <ToolBarButton icon="plus" labelTextKey="apps.infrastructure.computing_nodes.index.actions.create" onClick={this.onCreateButtonClick} />

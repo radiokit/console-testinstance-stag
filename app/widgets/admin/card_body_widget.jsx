@@ -4,13 +4,20 @@ import React from 'react';
 export default React.createClass({
   contextTypes: {
     cardTabs: React.PropTypes.arrayOf(React.PropTypes.string),
-    cardPadding: React.PropTypes.bool
+    cardPadding: React.PropTypes.bool.isRequired,
+  },
+
+
+  getDefaultProps: function() {
+    return {
+      cardPadding: true,
+    }
   },
 
 
   render: function() {
     let klass;
-    if(this.context.cardPadding) {
+    if(this.props.cardPadding === true) {
       klass = "card-body style-default-bright";
     } else {
       klass = "card-body style-default-bright no-padding";
