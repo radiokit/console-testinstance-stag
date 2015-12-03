@@ -276,7 +276,7 @@ export default React.createClass({
             {this.renderTable()}
 
             {() => {
-              if(this.state.recordsCount !== 0) {
+              if(this.state.recordsCount > 10) {
                 return (
                   <Toolbar>
                     {this.renderPagination()}
