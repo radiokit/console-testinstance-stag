@@ -4,13 +4,16 @@ import { Link } from 'react-router';
 import TableCellString from './table_cell_string.jsx';
 import TableCellDb from './table_cell_db.jsx';
 import TableCellUrl from './table_cell_url.jsx';
+import TableCellCounter from './table_cell_counter.jsx';
 import TableCellText from './table_cell_text.jsx';
 import TableCellFloat from './table_cell_float.jsx';
 import TableCellInteger from './table_cell_integer.jsx';
+import TableCellPercent from './table_cell_percent.jsx';
 import TableCellDuration from './table_cell_duration.jsx';
 import TableCellDate from './table_cell_date.jsx';
 import TableCellDateTime from './table_cell_datetime.jsx';
 import TableCellTime from './table_cell_time.jsx';
+import TableCellIcon from './table_cell_icon.jsx';
 
 export default React.createClass({
   propTypes: {
@@ -34,7 +37,7 @@ export default React.createClass({
 
       switch(this.props.attributeConfig.renderer) {
         case "counter":
-          cell = (<TableCellInteger {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value.count()}/>);
+          cell = (<TableCellInteger {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value}/>);
           break;
 
         case "string":
@@ -61,6 +64,10 @@ export default React.createClass({
           cell = (<TableCellInteger {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value} />);
           break;
 
+        case "percent":
+          cell = (<TableCellPercent {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value} />);
+          break;
+
         case "duration":
           cell = (<TableCellDuration {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value} />);
           break;
@@ -77,6 +84,9 @@ export default React.createClass({
           cell = (<TableCellTime {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value} />);
           break;
 
+        case "icon":
+          cell = (<TableCellIcon {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value} />);
+          break;
 
         default:
           throw new Error("Unknown table cell renderer '" + this.props.attributeConfig.renderer + "'");

@@ -24,6 +24,32 @@ export default {
             loading: "Fetching list of audio devices",
             header: {
               name: "Name",
+              os_type: "Operating system",
+              app_version: "App version",
+              cpu_load: "CPU",
+              memory_usage: "RAM",
+              network_type: "Network type",
+              network_strength: "Network strength",
+            },
+            cells: {
+              os_type: {
+                android: "Android",
+                windows: "Windows",
+                ios: "iOS",
+                macosx: "MacOS X",
+                linux: "Linux",
+                unknown: "Unknown",
+              },
+              network_type: {
+                bluetooth: "Bluetooth",
+                dummy: "Dummy",
+                ethernet: "Ethernet",
+                mobile: "Mobile",
+                vpn: "VPN",
+                wifi: "WiFi",
+                wimax: "WiMAX",
+                unknown: "Unknown",
+              }
             }
           },
 
