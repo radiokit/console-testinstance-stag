@@ -24,7 +24,6 @@ export default {
               confirmation: "Wybierz etykiety, które zostaną przypisane do zaznaczonych plików (%(count)s szt.):",
               acknowledgement: "Przypisano etykiety do %(count)s plik(ów).",
               progress: "Trwa przypisywanie etykiet…",
-              cancelled: "Część plików dla których operacje zostały już wykonane będzie mieć przypisane nowe etykiety, ale dalsze przypisywanie zostało przerwane.",
             },
             action: {
               proceed: "Przypisz etykiety",

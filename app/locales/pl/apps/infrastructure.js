@@ -22,6 +22,20 @@ export default {
           },
 
           modals: {
+            delete: {
+              title: "Kasowanie",
+              message: {
+                confirmation: "Czy na pewno chcesz usunąć zaznaczone urządzenia (%(count)s szt.)?",
+                acknowledgement: "Usunięto %(count)s urządzeń.",
+                progress: "Trwa kasowanie urządzeń…",
+              },
+              action: {
+                proceed: "Skasuj",
+                cancel: "Anuluj",
+                cancel: "Zamknij",
+              }
+            },
+
             create: {
               header: "Dodaj urządzenie",
               form: {

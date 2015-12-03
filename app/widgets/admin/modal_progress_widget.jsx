@@ -14,7 +14,7 @@ export default React.createClass({
     proceedType: React.PropTypes.oneOf(['primary', 'success', 'info', 'warning', 'danger']),
     progressCurrent: React.PropTypes.number,
     progressMax: React.PropTypes.number,
-    step: React.PropTypes.oneOf(['confirmation', 'progress', 'acknowledgement', 'cancelled']).isRequired,
+    step: React.PropTypes.oneOf(['confirmation', 'progress', 'acknowledgement', 'cancelled', 'error']).isRequired,
     size: React.PropTypes.oneOf(['normal', 'large']),
   },
 
@@ -85,7 +85,11 @@ export default React.createClass({
                   }
 
                 case "cancelled":
-                  return React.Children.toArray(this.props.children)[3];
+                  return <Translate content="general.errors.operation.cancelled.unsure" component="p" />;
+
+
+                case "error":
+                  return <Translate content="general.errors.communication.general" component="p" />;
               }
             }()}
           </div>
@@ -123,6 +127,13 @@ export default React.createClass({
                   );
 
                 case "cancelled":
+                  return (
+                    <div>
+                      <Translate component="button" content={this.props.contentPrefix + ".action.close"} role="button" className={"btn btn-" + this.props.proceedType} data-dismiss="modal" />
+                    </div>
+                  );
+
+                case "error":
                   return (
                     <div>
                       <Translate component="button" content={this.props.contentPrefix + ".action.close"} role="button" className={"btn btn-" + this.props.proceedType} data-dismiss="modal" />

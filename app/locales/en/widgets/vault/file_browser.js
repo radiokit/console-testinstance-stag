@@ -24,7 +24,6 @@ export default {
               confirmation: "Select tags to apply to %(count)s selected file(s):",
               acknowledgement: "Applied tags to %(count)s file(s).",
               progress: "Applying tags in progress…",
-              cancelled: "Some files for which operations were already undertaken will have new tags, but tagging was cancelled for the remaining part.",
             },
             action: {
               proceed: "Apply tags",

@@ -30,30 +30,26 @@ export default React.createClass({
 
 
   onPerform: function(index, recordId) {
-    // window.data.record("vault", "Data.Record.File", recordId)
-    //   // .on("error", this.onDeleteError) // TODO
-    //   .on("loaded", this.onDeleteSuccess)
-    //   .destroy();
+    window.data.record("plumber", "Resource.Architecture.ClientNode", recordId)
+      // .on("error", this.onDeleteError) // TODO
+      .on("loaded", this.onDeleteSuccess)
+      .destroy();
   },
 
 
   render: function() {
     return (
-      <ModalForEach ref="modal" onPerform={this.onPerform} contentPrefix="widgets.vault.file_browser.modals.delete" warning="irreversible" proceedType="danger" recordIds={this.props.selectedRecordIds} index={this.state.index}>
+      <ModalForEach ref="modal" onPerform={this.onPerform} contentPrefix="apps.infrastructure.client_nodes.index.modals.delete" warning="irreversible" proceedType="danger" recordIds={this.props.selectedRecordIds} index={this.state.index}>
         <div>
-          <Translate component="p" content="widgets.vault.file_browser.modals.delete.message.confirmation" count={this.props.selectedRecordIds.count()} />
+          <Translate component="p" content="apps.infrastructure.client_nodes.index.modals.delete.message.confirmation" count={this.props.selectedRecordIds.count()} />
         </div>
 
         <div>
-          <Translate component="p" content="widgets.vault.file_browser.modals.delete.message.progress" />
+          <Translate component="p" content="apps.infrastructure.client_nodes.index.modals.delete.message.progress" />
         </div>
 
         <div>
-          <Translate component="p" content="widgets.vault.file_browser.modals.delete.message.acknowledgement" count={this.props.selectedRecordIds.count()} />
-        </div>
-
-        <div>
-          <Translate component="p" content="widgets.vault.file_browser.modals.delete.message.cancelled" />
+          <Translate component="p" content="apps.infrastructure.client_nodes.index.modals.delete.message.acknowledgement" count={this.props.selectedRecordIds.count()} />
         </div>
       </ModalForEach>
     );

@@ -51,10 +51,6 @@ export default React.createClass({
         <div>
           <Translate component="p" content="widgets.vault.file_browser.modals.delete.message.acknowledgement" count={this.props.selectedRecordIds.count()} />
         </div>
-
-        <div>
-          <Translate component="p" content="widgets.vault.file_browser.modals.delete.message.cancelled" />
-        </div>
       </ModalForEach>
     );
   }
