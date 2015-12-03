@@ -24,6 +24,32 @@ export default {
             loading: "Ładowanie listy urządzeń audio",
             header: {
               name: "Nazwa",
+              os_type: "System operacyjny",
+              app_version: "Wersja aplikacji",
+              cpu_load: "CPU",
+              memory_usage: "RAM",
+              network_type: "Typ sieci",
+              network_strength: "Siła sieci",
+            },
+            cells: {
+              os_type: {
+                android: "Android",
+                windows: "Windows",
+                ios: "iOS",
+                macosx: "MacOS X",
+                linux: "Linux",
+                unknown: "Nieznany",
+              },
+              network_type: {
+                bluetooth: "Bluetooth",
+                dummy: "Testowy",
+                ethernet: "Ethernet",
+                mobile: "Sieć komórkowa",
+                vpn: "VPN",
+                wifi: "WiFi",
+                wimax: "WiMAX",
+                unknown: "Nieznany",
+              }
             }
           },
 

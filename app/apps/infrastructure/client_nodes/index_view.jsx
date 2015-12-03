@@ -70,53 +70,57 @@ export default React.createClass({
     return {
       name: { renderer: "string" },
       os_type: { renderer: "string", valueFunc: (record, attribute) => {
-        let osTypeHuman = Counterpart.translate(`apps.infrastructure.client_nodes.index.table.cells.os_type.${record.get("os_type")}`);
+        if(record.get("os_type")) {
+          let osTypeHuman = Counterpart.translate(`apps.infrastructure.client_nodes.index.table.cells.os_type.${record.get("os_type")}`);
 
-        if(record.get("os_version"))
-          return `${osTypeHuman} ${record.get("os_version")}`;
-        else {
-          return osTypeHuman;
+          if(record.get("os_version"))
+            return `${osTypeHuman} ${record.get("os_version")}`;
+          else {
+            return osTypeHuman;
+          }
         }
       } },
       app_version: { renderer: "string" },
       cpu_load: { renderer: "percent" },
       memory_usage: { renderer: "percent" },
       network_type: { renderer: "string", valueFunc: (record) => {
-        let networkTypeHuman = Counterpart.translate(`apps.infrastructure.client_nodes.index.table.cells.network_type.${record.get("current_network_interface_type")}`)
+        if(record.get("current_network_interface_type")) {
+          let networkTypeHuman = Counterpart.translate(`apps.infrastructure.client_nodes.index.table.cells.network_type.${record.get("current_network_interface_type")}`)
 
-        switch(record.get("current_network_interface_type")) {
-          case "mobile":
-            let generation;
+          switch(record.get("current_network_interface_type")) {
+            case "mobile":
+              let generation;
 
-            switch(record.get("current_network_mobile_type")) {
-              case "gprs":
-              case "edge":
-                generation = "2G"; break;
-              case "umts":
-              case "hsdpa":
-              case "hsupa":
-              case "hspa":
-              case "cdma":
-              case "evdo0":
-              case "evdoa":
-              case "evdob":
-              case "1xrtt":
-                generation = "3G"; break;
+              switch(record.get("current_network_mobile_type")) {
+                case "gprs":
+                case "edge":
+                  generation = "2G"; break;
+                case "umts":
+                case "hsdpa":
+                case "hsupa":
+                case "hspa":
+                case "cdma":
+                case "evdo0":
+                case "evdoa":
+                case "evdob":
+                case "1xrtt":
+                  generation = "3G"; break;
 
-              case "lte":
-              case "ehrpd":
-              case "iden":
-              case "hspap":
-                generation = "4G"; break;
+                case "lte":
+                case "ehrpd":
+                case "iden":
+                case "hspap":
+                  generation = "4G"; break;
 
-              default:
-                generation = "?G"; break;
-            }
+                default:
+                  generation = "?G"; break;
+              }
 
-            return `${networkTypeHuman} (${generation})`;
+              return `${networkTypeHuman} (${generation})`;
 
-          default:
-            return networkTypeHuman;
+            default:
+              return networkTypeHuman;
+          }
         }
       } },
       network_strength: { renderer: "percent" },
