@@ -13,7 +13,7 @@ import CardToolBarCreate from '../../widgets/admin/card_tool_bar_create_widget.j
 import CardToolBarSettings from '../../widgets/admin/card_tool_bar_settings_widget.jsx';
 import CardSidebar from '../../widgets/admin/card_sidebar_widget.jsx';
 import TableBrowser from '../../widgets/admin/table_browser_widget.jsx';
-import TableBrowserToolbarGroup from '../../widgets/admin/table_browser_toolbar_group_widget.jsx';
+import ToolbarGroup from '../../widgets/admin/toolbar_group_widget.jsx';
 import Alert from '../../widgets/admin/alert_widget.jsx';
 import Section from '../../widgets/admin/section_widget.jsx';
 import Loading from '../../widgets/general/loading_widget.jsx';
@@ -215,19 +215,19 @@ export default React.createClass({
                 <CardSidebar>
                   <TagSelector onTagItemChange={this.onTagItemChange} selectedTagItemIds={this.state.selectedTagItemIds} tagCategoriesWithItems={this.state.availableCategories}/>
                   <TableBrowser onSelect={this.onFileSelect} selectable={true} attributes={this.buildTableAttributes()} actions={[]} contentPrefix={this.props.contentPrefix + ".index.table"} recordsQuery={this.state.recordsQuery} recordIdsQuery={this.state.recordIdsQuery}>
-                    <TableBrowserToolbarGroup>
+                    <ToolbarGroup>
                       <Link type="button" className="btn btn-default-light" to={this.props.routingPrefix.files.create(this)}><i className="mdi mdi-upload"/><Translate content={this.props.contentPrefix + ".index.actions.create"} component="span"/></Link>
                       <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecordIds.count() === 0} onClick={this.onDownloadClick}><i className="mdi mdi-download"/></button>
                       <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecordIds.count() === 0} onClick={this.onDeleteClick}><i className="mdi mdi-delete"/></button>
-                    </TableBrowserToolbarGroup>
+                    </ToolbarGroup>
 
-                    <TableBrowserToolbarGroup>
+                    <ToolbarGroup>
                       <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecordIds.count() === 0} onClick={this.onTagClick}><i className="mdi mdi-folder"/><Translate content={this.props.contentPrefix + ".index.actions.tags"} component="span"/></button>
-                    </TableBrowserToolbarGroup>
+                    </ToolbarGroup>
 
-                    <TableBrowserToolbarGroup>
+                    <ToolbarGroup>
                       <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecordIds.count() === 0} onClick={this.onMetadataClick}><i className="mdi mdi-barcode"/><Translate content={this.props.contentPrefix + ".index.actions.metadata"} component="span"/></button>
-                    </TableBrowserToolbarGroup>
+                    </ToolbarGroup>
                   </TableBrowser>
                 </CardSidebar>
               </CardBody>

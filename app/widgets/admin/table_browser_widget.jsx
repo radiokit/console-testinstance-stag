@@ -4,8 +4,8 @@ import Counterpart from 'counterpart';
 import Immutable from 'immutable';
 
 import Table from '../../widgets/admin/table_widget.jsx';
-import TableBrowserToolbar from '../../widgets/admin/table_browser_toolbar_widget.jsx';
-import TableBrowserToolbarGroup from '../../widgets/admin/table_browser_toolbar_group_widget.jsx';
+import Toolbar from '../../widgets/admin/toolbar_widget.jsx';
+import ToolbarGroup from '../../widgets/admin/toolbar_group_widget.jsx';
 import Loading from '../../widgets/general/loading_widget.jsx';
 
 export default React.createClass({
@@ -198,15 +198,15 @@ export default React.createClass({
       } else {
         return (
           <div className="small-padding">
-            <TableBrowserToolbar>
+            <Toolbar>
               {this.props.children}
 
-              <TableBrowserToolbarGroup position="right">
+              <ToolbarGroup position="right">
                 <Translate className="btn" style={{cursor: "default"}} content="widgets.admin.table_browser.pagination.current.label" rangeStart={this.buildRangeStart()} rangeStop={this.buildRangeStop()} rangeTotal={this.state.recordsCount} component="div" />
                 <button type="button" className="btn btn-default-light" onClick={this.onPreviousPageClick} disabled={this.state.offset === 0} title={Counterpart.translate("widgets.admin.table_browser.pagination.next.title")}><i className="mdi mdi-chevron-left"/></button>
                 <button type="button" className="btn btn-default-light" onClick={this.onNextPageClick} disabled={this.buildRangeStop() === this.state.recordsCount} title={Counterpart.translate("widgets.admin.table_browser.pagination.previous.title")}><i className="mdi mdi-chevron-right"/></button>
-              </TableBrowserToolbarGroup>
-            </TableBrowserToolbar>
+              </ToolbarGroup>
+            </Toolbar>
 
             {() => {
               if(this.state.selectedAll && this.props.limit < this.state.recordsCount) {
@@ -238,13 +238,13 @@ export default React.createClass({
 
             <Table selectedRecordIds={this.state.selectedRecordIds} onSelectRecord={this.onSelectRecord} onSelectAll={this.onSelectAll} selectable={this.props.selectable} attributes={this.props.attributes} actions={this.props.actions} contentPrefix={this.props.contentPrefix} records={this.state.records} />
 
-            <TableBrowserToolbar>
-              <TableBrowserToolbarGroup position="right">
+            <Toolbar>
+              <ToolbarGroup position="right">
                 <Translate className="btn" style={{cursor: "default"}} content="widgets.admin.table_browser.pagination.current.label" rangeStart={this.buildRangeStart()} rangeStop={this.buildRangeStop()} rangeTotal={this.state.recordsCount} component="div" />
                 <button type="button" className="btn btn-default-light" onClick={this.onPreviousPageClick} disabled={this.state.offset === 0} title={Counterpart.translate("widgets.admin.table_browser.pagination.previous.title")}><i className="mdi mdi-chevron-left"/></button>
                 <button type="button" className="btn btn-default-light" onClick={this.onNextPageClick} disabled={this.buildRangeStop() === this.state.recordsCount} title={Counterpart.translate("widgets.admin.table_browser.pagination.next.title")}><i className="mdi mdi-chevron-right"/></button>
-              </TableBrowserToolbarGroup>
-            </TableBrowserToolbar>
+              </ToolbarGroup>
+            </Toolbar>
           </div>
         );
       }
