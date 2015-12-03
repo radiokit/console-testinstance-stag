@@ -15,6 +15,11 @@ a, a *, .btn, .btn * {
 }
 
 
+input, textarea {
+  cursor: text !important;
+}
+
+
 /* Top bar */
 .headerbar {
   .header-nav-breadcrumb-label {
