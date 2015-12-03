@@ -4,12 +4,20 @@ export default {
       navigation: {
         title: "Infrastructure",
         client_nodes: {
-          title: "End-User Devices",
+          title: "Audio Devices",
         },
+
         diagram: {
           title: "Diagram",
         },
       },
+
+      client_nodes: {
+        index: {
+          loading: "Fetching list of audio devices",
+          header: "Audio Devices",
+        },
+      }
     }
   }
 }

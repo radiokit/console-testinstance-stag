@@ -4,7 +4,7 @@ export default {
       navigation: {
         title: "Broadcast",
         playlist: {
-          title: "Playlist",
+          title: "Schedule",
         },
         live: {
           title: "Live",
