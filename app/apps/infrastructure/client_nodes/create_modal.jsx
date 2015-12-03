@@ -55,7 +55,7 @@ export default React.createClass({
             "user_account_id" : this.context.currentUserAccount.get("id"),
             "role" : "infrastructure",
           },
-          "name" : this.refs.inputName.getValue(),
+          "name" : this.refs.inputName.getValue().trim(),
           "destroy_in" : 900000 // 15 minutes
         });
 
