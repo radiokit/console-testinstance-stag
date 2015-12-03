@@ -50,7 +50,7 @@ export default React.createClass({
                 <GridCell size="small" center={true}>
                   <Card contentPrefix="widgets.admin.scope.user_account" cardPadding={false}>
                     <CardHeader/>
-                    <CardBody>
+                    <CardBody cardPadding={false}>
                       <ul className="list divider-full-bleed">
                         {this.context.availableUserAccounts.map((userAccount) => {
                           return (
@@ -86,7 +86,7 @@ export default React.createClass({
                 <GridCell size="small" center={true}>
                   <Card contentPrefix="widgets.admin.scope.broadcast_channel" cardPadding={false}>
                     <CardHeader/>
-                    <CardBody>
+                    <CardBody cardPadding={false}>
                       <ul className="list divider-full-bleed">
                         {this.context.availableBroadcastChannels.map((broadcastChannel) => {
                           return (

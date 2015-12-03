@@ -195,9 +195,9 @@ export default React.createClass({
             <MetadataModal ref="metadataModal" metadataSchemas={this.state.currentRepository.get("metadata_schemas")} selectedRecordIds={this.state.selectedRecordIds} />
             <DeleteModal ref="deleteModal" selectedRecordIds={this.state.selectedRecordIds} />
 
-            <Card contentPrefix={this.props.contentPrefix + ".index"} cardPadding={false}>
+            <Card contentPrefix={this.props.contentPrefix + ".index"}>
               <CardHeader/>
-              <CardBody>
+              <CardBody cardPadding={false}>
                 <CardSidebar>
                   <TagSelector onTagItemChange={this.onTagItemChange} selectedTagItemIds={this.state.selectedTagItemIds} tagCategoriesWithItems={this.state.availableCategories}/>
                   <TableBrowser onSelect={this.onTableSelect} selectable={true} attributes={this.buildTableAttributes()} actions={[]} contentPrefix="widgets.vault.file_browser.table" recordsQuery={this.state.recordsQuery}>
