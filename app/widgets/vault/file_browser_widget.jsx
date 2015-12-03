@@ -49,7 +49,6 @@ export default React.createClass({
       selectedTagItemIds: [],
       selectedRecordIds: new Immutable.Seq().toIndexedSeq(),
       recordsQuery: null,
-      recordIdsQuery: null,
     };
   },
 
@@ -84,10 +83,6 @@ export default React.createClass({
 
       if(!this.state.recordsQuery) {
         this.buildRecordsQuery();
-      }
-
-      if(!this.state.recordIdsQuery) {
-        this.buildRecordIdsQuery();
       }
     }
   },
@@ -161,15 +156,6 @@ export default React.createClass({
   },
 
 
-  buildRecordIdsQuery: function() {
-    this.setState({
-      recordIdsQuery: window.data
-        .query("vault", "Data.Record.File")
-        .select("id")
-        .where("record_repository_id", "eq", this.state.currentRepository.get("id"))
-    });
-  },
-
 
   buildTableAttributes: function() {
     let attributes = {
@@ -214,7 +200,7 @@ export default React.createClass({
               <CardBody>
                 <CardSidebar>
                   <TagSelector onTagItemChange={this.onTagItemChange} selectedTagItemIds={this.state.selectedTagItemIds} tagCategoriesWithItems={this.state.availableCategories}/>
-                  <TableBrowser onSelect={this.onFileSelect} selectable={true} attributes={this.buildTableAttributes()} actions={[]} contentPrefix={this.props.contentPrefix + ".index.table"} recordsQuery={this.state.recordsQuery} recordIdsQuery={this.state.recordIdsQuery}>
+                  <TableBrowser onSelect={this.onFileSelect} selectable={true} attributes={this.buildTableAttributes()} actions={[]} contentPrefix={this.props.contentPrefix + ".index.table"} recordsQuery={this.state.recordsQuery}>
                     <ToolbarGroup>
                       <Link type="button" className="btn btn-default-light" to={this.props.routingPrefix.files.create(this)}><i className="mdi mdi-upload"/><Translate content={this.props.contentPrefix + ".index.actions.create"} component="span"/></Link>
                       <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecordIds.count() === 0} onClick={this.onDownloadClick}><i className="mdi mdi-download"/></button>

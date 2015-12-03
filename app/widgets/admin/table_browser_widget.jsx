@@ -17,7 +17,6 @@ export default React.createClass({
     onSelect: React.PropTypes.func,
     limit: React.PropTypes.number.isRequired,
     recordsQuery: React.PropTypes.object.isRequired,
-    recordIdsQuery: React.PropTypes.object.isRequired,
   },
 
 
@@ -46,9 +45,20 @@ export default React.createClass({
 
 
   componentDidMount: function() {
-    this.props.recordsQuery
+    this.recordsQueryFull = this.props.recordsQuery
+      .clone()
+      .offset(this.state.offset) // FIXME update this on component update
+      .limit(this.props.limit)
+      .countTotal()
+
+    this.recordsQueryIds = this.props.recordsQuery
+      .clone()
+      .select("id")
+      .fetch();
+
+    this.recordsQueryFull
       .on("fetch", this.onRecordsQueryFetch);
-    this.props.recordIdsQuery
+    this.recordsQueryFull
       .on("fetch", this.onRecordIdsQueryFetch);
 
     this.loadRecords();
@@ -56,10 +66,8 @@ export default React.createClass({
 
 
   componentWillUnmount: function() {
-    this.props.recordsQuery
-      .off("fetch", this.onRecordsQueryFetch);
-    this.props.recordIdsQuery
-      .off("fetch", this.onRecordIdsQueryFetch);
+    this.recordsQueryFull.teardown();
+    this.recordsQueryFull.teardown();
   },
 
 
@@ -71,16 +79,12 @@ export default React.createClass({
 
 
   loadRecords: function() {
-    this.props.recordsQuery
-      .limit(this.state.offset, this.props.limit)
-      .countTotal()
-      .fetch();
+    this.recordsQueryFull.fetch();
   },
 
 
   loadRecordIds: function() {
-    this.props.recordIdsQuery
-      .fetch();
+    this.recordsQueryIds.fetch();
   },
 
 
