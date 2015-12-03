@@ -34,7 +34,7 @@ export default React.createClass({
 
       switch(this.props.attributeConfig.renderer) {
         case "counter":
-          cell = (<TableCellString {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value.count()}/>);
+          cell = (<TableCellInteger {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value.count()}/>);
           break;
 
         case "string":
