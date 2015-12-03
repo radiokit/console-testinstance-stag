@@ -60,9 +60,11 @@ export default React.createClass({
 
 
   render: function() {
-    return (<div className="widgets-general-loading--container">
-      <div ref="spinner"/>
-      {this.renderInfo()}
-    </div>);
+    return (
+      <div className="widgets-general-loading--container">
+        <div ref="spinner"/>
+        {this.renderInfo()}
+      </div>
+    );
   }
 });

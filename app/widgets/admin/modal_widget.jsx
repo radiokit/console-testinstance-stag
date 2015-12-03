@@ -5,6 +5,8 @@ export default React.createClass({
   propTypes: {
     contentPrefix: React.PropTypes.string.isRequired,
     size: React.PropTypes.oneOf(['normal', 'large']),
+    onShow: React.PropTypes.func,
+    onHide: React.PropTypes.func,
   },
 
 
@@ -17,6 +19,40 @@ export default React.createClass({
 
   show: function() {
     $(this.refs.modal).modal("show");
+  },
+
+
+  onShow: function() {
+    if(this.props.onShow) {
+      this.props.onHide(this);
+    }
+  },
+
+
+  componentDidMount: function() {
+    $(this.refs.modal).on("hide.bs.modal", this.onHide);
+  },
+
+
+  componentWillUnmount: function() {
+    $(this.refs.modal).off("hide.bs.modal", this.onHide);
+  },
+
+
+  onShow: function() {
+    if(this.props.onShow) {
+      this.props.onShow(this);
+    }
+  },
+
+
+  componentDidMount: function() {
+    $(this.refs.modal).on("show.bs.modal", this.onShow);
+  },
+
+
+  componentWillUnmount: function() {
+    $(this.refs.modal).off("show.bs.modal", this.onShow);
   },
 
 

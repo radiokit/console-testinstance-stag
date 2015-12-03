@@ -2,25 +2,28 @@ import React from 'react';
 import Translate from 'react-translate-component';
 
 
-export default React.createClass({  
+export default React.createClass({
   propTypes: {
     label: React.PropTypes.bool,
     labelTextKey: React.PropTypes.string,
     hint: React.PropTypes.bool,
     hintTextKey: React.PropTypes.string,
     size: React.PropTypes.oneOf(['small', 'large']),
-    autofocus: React.PropTypes.bool
+    autofocus: React.PropTypes.bool,
+    error: React.PropTypes.bool,
+    tabIndex: React.PropTypes.number,
   },
 
 
   getDefaultProps: function() {
-    return { 
-      label: false, 
-      labelTextKey: null, 
-      hint: false, 
-      hintTextKey: null, 
+    return {
+      label: false,
+      labelTextKey: null,
+      hint: false,
+      hintTextKey: null,
       size: null,
-      autofocus: false
+      autofocus: false,
+      error: false,
     };
   },
 
@@ -38,7 +41,7 @@ export default React.createClass({
       default:      var klass = "form-control"; break;
     }
 
-    return (<input ref="input" type="text" className={klass} autoFocus={this.props.autofocus} />);
+    return (<input ref="input" type="text" className={klass} autoFocus={this.props.autofocus} tabIndex={this.props.tabIndex} />);
   },
 
 
@@ -58,9 +61,15 @@ export default React.createClass({
 
 
   render: function() {
+    let klass;
+    if(this.props.error) {
+      klass = "form-group has-error";
+    } else {
+      klass = "form-group";
+    }
 
     return (
-      <div className="form-group">
+      <div className={klass}>
         {this.renderInput()}
         {this.renderLabel()}
         {this.renderHint()}

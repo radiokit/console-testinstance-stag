@@ -8,6 +8,11 @@ export default {
       communication: {
         general: "An error happened while communicating with our servers. Please try again and mail us at support@radiokit.org if the issue persists."
       },
+      operation: {
+        cancelled: {
+          unsure: "Operation was cancelled, but there's a chance that some data or commands was already delivered to the server."
+        }
+      },
       underconstruction: "Sorry, this part of the system is under construction."
     }
   }

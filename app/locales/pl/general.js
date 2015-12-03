@@ -8,6 +8,11 @@ export default {
       communication: {
         general: "Wystąpił błąd podczas połączenia z serwerem. Spróbuj ponownie a jeśli problem będzie się powtarzać skontaktuj się z nami poprzez wysłanie e-maila na adres support@radiokit.org."
       },
+      operation: {
+        cancelled: {
+          unsure: "Operacja została przerwana ale istnieje szansa, że jakieś dane lub komendy zostały wysłane już do serwera."
+        }
+      },
       underconstruction: "Sorry, this part of the system is under construction"
     }
   }
