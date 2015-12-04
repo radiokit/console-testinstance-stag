@@ -98,13 +98,13 @@ export default React.createClass({
       }
 
       if(typeof(this.props.attributeConfig.linkFunc) === "function") {
-        return (<td key={"cell-" + this.props.attributeName}><Link to={this.props.attributeConfig.linkFunc(this.props.record)}>{cell}</Link></td>);
+        return (<td className={`cell-${this.props.attributeConfig.renderer}`} key={"cell-" + this.props.attributeName}><Link to={this.props.attributeConfig.linkFunc(this.props.record)}>{cell}</Link></td>);
 
       } else {
-        return (<td key={"cell-" + this.props.attributeName}>{cell}</td>);
+        return (<td className={`cell-${this.props.attributeConfig.renderer}`} key={"cell-" + this.props.attributeName}>{cell}</td>);
       }
     } else {
-      return (<td key={"cell-" + this.props.attributeName}/>);
+      return (<td className={`cell-${this.props.attributeConfig.renderer}`} key={"cell-" + this.props.attributeName}/>);
     }
   }
 });

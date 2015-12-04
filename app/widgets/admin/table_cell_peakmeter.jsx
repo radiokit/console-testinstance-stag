@@ -1,4 +1,7 @@
 import React from 'react';
+import sprintf from 'tiny-sprintf';
+
+import '../../assets/stylesheets/widgets/admin/table_cell_peakmeter.scss';
 
 export default React.createClass({
   propTypes: {
@@ -33,11 +36,45 @@ export default React.createClass({
 
 
   onLevel: function(payload) {
-    this.setState({ peakValues: payload.params.decay, rmsValues: payload.params.rms });
+    this.setState({ peakValues: payload.params.peak, rmsValues: payload.params.rms });
+  },
+
+
+  renderBar: function(channel, channels) {
+    let peakmeterRange = -60;
+
+    return (
+      <div className="channel">
+        <div className="bar" style={{top: (100 / channels * channel) + "%", height: (100 / channels) + "%"}}>
+          <div className="low"/>
+          <div className="medium"/>
+          <div className="high"/>
+          <div className="overlay" style={{left: (this.state.peakValues[channel] <= peakmeterRange ? "0" : 100 - (this.state.peakValues[channel] / peakmeterRange * 100) + "%")}} />
+        </div>
+        <div className="value" style={{top: (100 / channels * channel) + "%", height: (100 / channels) + "%"}}>{sprintf("%-02.5s", this.state.peakValues[channel])}&nbsp;dB</div>
+      </div>
+    )
   },
 
 
   render: function() {
-    return (<span>{this.state.peakValues}</span>);
+    return (
+      <div className="widgets-admin-table-cell-peakmeter--container">
+        {() => {
+          switch(this.state.peakValues.length) {
+            case 1:
+              return this.renderBar(0, this.state.peakValues.length);
+
+            case 2:
+              return (
+                <div>
+                  {this.renderBar(0, this.state.peakValues.length)}
+                  {this.renderBar(1, this.state.peakValues.length)}
+                </div>
+              );
+          }
+        }()}
+      </div>
+    );
   }
 });

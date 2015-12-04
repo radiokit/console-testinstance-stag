@@ -1,0 +1,66 @@
+.widgets-admin-table-cell-peakmeter--container {
+  width: 260px;
+  height: 20px;
+  position: relative;
+
+  .channel {
+    position: absolute;
+    width: 260px;
+    height: 20px;
+
+    &:not(:first-child) {
+      margin-top: 1px;
+    }
+
+    .bar {
+      position: absolute;
+      background: #2b323a;
+      left: 0;
+      width: 200px;
+      overflow: hidden;
+
+
+      .low {
+        background: #4caf50;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+      }
+
+      .medium {
+        background: #ff9800;
+        position: absolute;
+        left: 75%;
+        right: 0;
+        bottom: 0;
+        top: 0;
+      }
+
+      .high {
+        background: #f44336;
+        position: absolute;
+        left: 90%;
+        right: 0;
+        bottom: 0;
+        top: 0;
+      }
+
+      .overlay {
+        background: #2b323a;
+        position: absolute;
+        transition: left 0.2s;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+      }
+    }
+
+    .value {
+      position: absolute;
+      left: 210px;
+      font-size: 5pt;
+    }
+  }
+}
