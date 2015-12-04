@@ -62,6 +62,7 @@ export default React.createClass({
   buildAttributes: function() {
     return {
       location: { renderer: "string" },
+      level: { renderer: "peakmeter", props: { model: "Media.Input.Stream.HTTP"} },
     }
   },
 

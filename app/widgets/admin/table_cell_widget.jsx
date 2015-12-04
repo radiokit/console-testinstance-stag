@@ -14,6 +14,7 @@ import TableCellDate from './table_cell_date.jsx';
 import TableCellDateTime from './table_cell_datetime.jsx';
 import TableCellTime from './table_cell_time.jsx';
 import TableCellIcon from './table_cell_icon.jsx';
+import TableCellPeakmeter from './table_cell_peakmeter.jsx';
 
 export default React.createClass({
   propTypes: {
@@ -32,7 +33,7 @@ export default React.createClass({
       value = this.props.record.get(this.props.attributeName);
     }
 
-    if(value) {
+    if(value || this.props.attributeConfig.renderer === "peakmeter") {
       let cell;
 
       switch(this.props.attributeConfig.renderer) {
@@ -86,6 +87,10 @@ export default React.createClass({
 
         case "icon":
           cell = (<TableCellIcon {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value} />);
+          break;
+
+        case "peakmeter":
+          cell = (<TableCellPeakmeter {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} />);
           break;
 
         default:

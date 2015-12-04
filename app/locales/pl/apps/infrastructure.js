@@ -204,6 +204,7 @@ export default {
             loading: "Pobieranie listy zewnętrznych źródeł dźwięku",
             header: {
               location: "Adres",
+              level: "Poziom",
             },
           },
 

@@ -208,6 +208,7 @@ export default {
             loading: "Fetching list of external audio inputs",
             header: {
               location: "Location",
+              level: "Level",
             },
           },
 
