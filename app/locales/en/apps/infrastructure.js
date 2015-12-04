@@ -10,13 +10,17 @@ export default {
         computing_nodes: {
           title: "Audio Servers",
         },
+
+        external_inputs: {
+          title: "External Audio Inputs",
+        },
       },
 
       client_nodes: {
         index: {
           header: "Audio Devices",
           actions: {
-            create: "Add new device",
+            create: "Add device",
             delete: "Remove selected devices",
           },
 
@@ -110,7 +114,7 @@ export default {
         index: {
           header: "Audio Servers",
           actions: {
-            create: "Add new server",
+            create: "Add server",
             delete: "Remove selected servers",
           },
 
@@ -190,7 +194,60 @@ export default {
             }
           }
         },
-      }
+      },
+
+      external_inputs: {
+        index: {
+          header: "External Audio Inputs",
+          actions: {
+            create: "Add input",
+            delete: "Remove selected inputs",
+          },
+
+          table: {
+            loading: "Fetching list of external audio inputs",
+            header: {
+              location: "Location",
+            },
+          },
+
+          modals: {
+            delete: {
+              header: "Delete input",
+              message: {
+                confirmation: "Are you sure that you want to delete %(count)s selected input(s)?",
+                acknowledgement: "Deleted %(count)s input(s).",
+                progress: "Deleting in progress…",
+              },
+              action: {
+                proceed: "Delete",
+                cancel: "Cancel",
+                close: "Close",
+              }
+            },
+
+            create: {
+              header: "Add input",
+              form: {
+                location: {
+                  label: "Location of the stream",
+                  hint: "It has to be a valid http:// or https:// address",
+                },
+              },
+
+              acknowledgement: {
+                info: "Input added succesfully",
+              },
+
+              action: {
+                proceed: "Add input",
+                cancel: "Cancel",
+                close: "Close",
+              }
+            }
+          }
+        },
+      },
     }
   }
 }

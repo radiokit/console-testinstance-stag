@@ -76,6 +76,11 @@ export default {
           return "/apps/infrastructure/computing_nodes/index";
         },
       },
+      externalInputs: {
+        index: function(context) {
+          return "/apps/infrastructure/external_inputs/index";
+        },
+      },
     },
   }
 }

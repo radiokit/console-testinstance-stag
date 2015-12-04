@@ -55,14 +55,14 @@ export default {
 
           modals: {
             delete: {
-              title: "Kasowanie",
+              title: "Usuwanie urządzeń audio",
               message: {
                 confirmation: "Czy na pewno chcesz usunąć zaznaczone urządzenia (%(count)s szt.)?",
                 acknowledgement: "Usunięto %(count)s urządzeń.",
-                progress: "Trwa kasowanie urządzeń…",
+                progress: "Trwa usuwanie urządzeń…",
               },
               action: {
-                proceed: "Skasuj",
+                proceed: "Usuń",
                 cancel: "Anuluj",
                 cancel: "Zamknij",
               }
@@ -133,14 +133,14 @@ export default {
 
           modals: {
             delete: {
-              title: "Kasowanie",
+              title: "Usuwanie serwerów audio",
               message: {
                 confirmation: "Czy na pewno chcesz usunąć zaznaczone serwery (%(count)s szt.)?",
                 acknowledgement: "Usunięto %(count)s serwer(ów).",
-                progress: "Trwa kasowanie serwerów…",
+                progress: "Trwa usuwanie serwerów…",
               },
               action: {
-                proceed: "Skasuj",
+                proceed: "Usuń",
                 cancel: "Anuluj",
                 cancel: "Zamknij",
               }
@@ -190,7 +190,60 @@ export default {
             }
           }
         },
-      }
+      },
+
+      external_inputs: {
+        index: {
+          header: "Zewnętrzne źrodła dźwięku",
+          actions: {
+            create: "Dodaj źródło dźwięku",
+            delete: "Usuń zaznaczone źródła dźwięku",
+          },
+
+          table: {
+            loading: "Pobieranie listy zewnętrznych źródeł dźwięku",
+            header: {
+              location: "Adres",
+            },
+          },
+
+          modals: {
+            delete: {
+              title: "Usuwanie zewnętrznych źródeł dźwięku",
+              message: {
+                confirmation: "Czy na pewno chcesz usunąć zaznaczone źródła dźwięku (%(count)s szt.)?",
+                acknowledgement: "Usunięto %(count)s źródeł dźwięku.",
+                progress: "Trwa usuwanie źródeł dźwięku…",
+              },
+              action: {
+                proceed: "Usuń",
+                cancel: "Anuluj",
+                cancel: "Zamknij",
+              }
+            },
+
+            create: {
+              header: "Dodaj źródło dźwięku",
+              form: {
+                location: {
+                  label: "Adres strumienia",
+                  hint: "To musi być poprawny adres http:// lub https://",
+                },
+              },
+
+              acknowledgement: {
+                info: "Pomyślnie dodano zewnętrzne źródło dźwięku.",
+              },
+
+              action: {
+                proceed: "Dodaj źródło dźwięku",
+                cancel: "Anuluj",
+                close: "Zamknij",
+              }
+            }
+          }
+        },
+      },
     }
   }
 }

@@ -132,6 +132,11 @@ export default React.createClass({
                     <Translate content="apps.infrastructure.navigation.computing_nodes.title" className="title" />
                   </Link>
                 </li>
+                <li>
+                  <Link to={RoutingHelper.apps.infrastructure.externalInputs.index(this)}>
+                    <Translate content="apps.infrastructure.navigation.external_inputs.title" className="title" />
+                  </Link>
+                </li>
               </ul>
             </li>
           </ul>
