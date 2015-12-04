@@ -5,7 +5,7 @@ import { Router, Route, IndexRoute } from 'react-router';
 import Counterpart from 'counterpart';
 import RadioKit from 'radiokit-api';
 
-import { Socket } from '../vendor/assets/javascripts/phoenixframework/socket.js';
+import { Socket } from 'phoenix-socket';
 
 import Root from './root.jsx';
 import ScopeLayout from './layouts/scope_layout.jsx';
