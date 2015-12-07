@@ -36,7 +36,9 @@ export default React.createClass({
 
 
   onLevel: function(payload) {
-    this.setState({ peakValues: payload.params.peak, rmsValues: payload.params.rms });
+    if(this.isMounted()) {
+      this.setState({ peakValues: payload.params.peak });
+    }
   },
 
 
