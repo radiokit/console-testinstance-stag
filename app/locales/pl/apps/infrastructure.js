@@ -69,7 +69,7 @@ export default {
             },
 
             create: {
-              header: "Dodaj urządzenie",
+              header: "Dodawanie urządzenia",
               form: {
                 name: {
                   label: "Nazwa urządzenia",
@@ -147,7 +147,7 @@ export default {
             },
 
             create: {
-              header: "Dodaj serwer",
+              header: "Dodawanie serwera",
               form: {
                 hostname: {
                   label: "Nazwa hosta",
@@ -224,7 +224,7 @@ export default {
             },
 
             create: {
-              header: "Dodaj źródło dźwięku",
+              header: "Dodawanie źródła dźwięku",
               form: {
                 location: {
                   label: "Adres strumienia",

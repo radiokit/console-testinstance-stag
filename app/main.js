@@ -27,6 +27,7 @@ import MusicScheduleShow from './apps/music/schedule/show_view.jsx';
 import BroadcastApp from './apps/broadcast/app.jsx';
 import BroadcastPlaylistIndex from './apps/broadcast/playlist/index_view.jsx';
 import BroadcastLiveIndex from './apps/broadcast/live/index_view.jsx';
+import BroadcastChannelsIndex from './apps/broadcast/channels/index_view.jsx';
 import InfrastructureApp from './apps/infrastructure/app.jsx';
 import InfrastructureClientNodesIndex from './apps/infrastructure/client_nodes/index_view.jsx';
 import InfrastructureComputingNodesIndex from './apps/infrastructure/computing_nodes/index_view.jsx';
@@ -98,6 +99,9 @@ ReactDOM.render((
           </Route>
           <Route component={ScopeLayout} scope="broadcastChannel">
             <Route path="live/index" component={BroadcastLiveIndex} onEnter={pingGoogleAnalytics}/>
+          </Route>
+          <Route component={ScopeLayout} scope="userAccount">
+            <Route path="channels/index" component={BroadcastChannelsIndex} onEnter={pingGoogleAnalytics}/>
           </Route>
         </Route>
 

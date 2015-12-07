@@ -64,6 +64,11 @@ export default {
           return "/apps/broadcast/live/index";
         },
       },
+      channels: {
+        index: function(context) {
+          return "/apps/broadcast/channels/index";
+        },
+      },
     },
     infrastructure: {
       clientNodes: {
