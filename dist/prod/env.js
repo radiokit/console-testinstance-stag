@@ -5,9 +5,10 @@ window.ENV = {
   },
   apps: {
     "plumber" : { baseUrl: "https://radiokit-plumber-prod.herokuapp.com" },
-    "auth" : { baseUrl: "https://radiokit-auth-prod.herokuapp.com" },
-    "vault" : { baseUrl: "https://radiokit-vault-prod.herokuapp.com" },
-    "agenda": { baseUrl: "https://radiokit-agenda-prod.herokuapp.com" }
+    "auth" : { baseUrl: "https://auth.radiokitapp.org" },
+    "vault" : { baseUrl: "https://vault.radiokitapp.org" },
+    "agenda": { baseUrl: "https://agenda.radiokitapp.org" },
+    "diffusor": { baseUrl: "https://diffusor.radiokitapp.org" },
   },
   external: {
     googleAnalyticsID: "UA-68358393-2"

@@ -66,6 +66,7 @@ function getEnv() {
         "auth" : { baseUrl: "https://radiokit-auth-stag.herokuapp.com" },
         "vault" : { baseUrl: "https://radiokit-vault-stag.herokuapp.com" },
         "agenda": { baseUrl: "https://radiokit-agenda-stag.herokuapp.com" },
+        "diffusor": { baseUrl: "https://radiokit-diffusor-stag.herokuapp.com" },
       },
       verbose: true
     };
