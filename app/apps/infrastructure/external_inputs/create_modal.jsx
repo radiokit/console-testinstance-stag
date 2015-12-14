@@ -16,6 +16,7 @@ export default React.createClass({
   getInitialState: function() {
     return {
       step: "form",
+      inputNameBlankError: false,
       inputLocationBlankError: false,
     }
   },
@@ -27,44 +28,50 @@ export default React.createClass({
 
 
   onConfirm: function() {
-    if(this.refs.inputLocation.getValue().trim() !== "") {
-      this.createQuery = window.data
-        .record("plumber", "Media.Input.Stream.HTTP")
-        .on("loading", () => {
-          if(this.isMounted()) {
-            this.setState({ step: "progress" });
-          }
-        })
-        .on("loaded", (_event, _record, data) => {
-          if(this.isMounted()) {
-            this.setState({ step: "acknowledgement" });
-          }
-        })
-        .on("warning", () => {
-          if(this.isMounted()) {
-            this.setState({ step: "error" });
-          }
-        })
-        .on("error", () => {
-          if(this.isMounted()) {
-            this.setState({ step: "error" });
-          }
-        })
-        .create({
-          "references" : {
-            "user_account_id" : this.context.currentUserAccount.get("id"),
-            "role" : "infrastructure",
-          },
-          "location" : this.refs.inputLocation.getValue().trim(),
-        });
+    if(this.refs.inputName.getValue().trim() === "") {
+      this.setState({
+        inputNameBlankError: true,
+      });
+      return;
+    }
 
-    } else {
+    if(this.refs.inputLocation.getValue().trim() === "") {
       this.setState({
         inputLocationBlankError: true,
-      }, () => {
-        ReactDOM.findDOMNode(this.refs.inputLocation).focus();
       });
+      return;
     }
+
+    this.createQuery = window.data
+      .record("plumber", "Media.Input.Stream.HTTP")
+      .on("loading", () => {
+        if(this.isMounted()) {
+          this.setState({ step: "progress" });
+        }
+      })
+      .on("loaded", (_event, _record, data) => {
+        if(this.isMounted()) {
+          this.setState({ step: "acknowledgement" });
+        }
+      })
+      .on("warning", () => {
+        if(this.isMounted()) {
+          this.setState({ step: "error" });
+        }
+      })
+      .on("error", () => {
+        if(this.isMounted()) {
+          this.setState({ step: "error" });
+        }
+      })
+      .create({
+        "references" : {
+          "user_account_id" : this.context.currentUserAccount.get("id"),
+          "role" : "infrastructure",
+        },
+        "location" : this.refs.inputLocation.getValue().trim(),
+        "name" : this.refs.inputName.getValue().trim(),
+      });
   },
 
 
@@ -84,6 +91,7 @@ export default React.createClass({
     return (
       <ModalForm ref="modal" contentPrefix="apps.infrastructure.external_inputs.index.modals.create" onConfirm={this.onConfirm} onCancel={this.onCancel} onShow={this.onShow} step={this.state.step}>
         <div>
+          <TextInput error={this.state.inputNameBlankError} ref="inputName" size="large" autofocus={true} label={true} labelTextKey="apps.infrastructure.external_inputs.index.modals.create.form.name.label" hint={true} hintTextKey="apps.infrastructure.external_inputs.index.modals.create.form.name.hint" />
           <TextInput error={this.state.inputLocationBlankError} ref="inputLocation" size="large" autofocus={true} label={true} labelTextKey="apps.infrastructure.external_inputs.index.modals.create.form.location.label" hint={true} hintTextKey="apps.infrastructure.external_inputs.index.modals.create.form.location.hint" />
         </div>
 

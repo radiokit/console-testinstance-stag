@@ -211,6 +211,7 @@ export default {
           table: {
             loading: "Pobieranie listy zewnętrznych źródeł dźwięku",
             header: {
+              name: "Nazwa",
               location: "Adres",
               level: "Poziom",
             },
@@ -234,6 +235,10 @@ export default {
             create: {
               header: "Dodawanie źródła dźwięku",
               form: {
+                location: {
+                  label: "Nazwa",
+                  hint: "Wybierz jakąkolwiek nazwę, która pozwoli Ci odróżnić to źródło dźwięku od innych",
+                },
                 location: {
                   label: "Adres strumienia",
                   hint: "To musi być poprawny adres http:// lub https://",

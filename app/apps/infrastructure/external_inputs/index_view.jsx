@@ -52,15 +52,16 @@ export default React.createClass({
   buildRecordsQuery: function() {
     return window.data
       .query("plumber", "Media.Input.Stream.HTTP")
-      .select("id", "location")
+      .select("id", "name", "location")
       .where("references", "deq", "user_account_id", this.context.currentUserAccount.get("id"))
       .where("references", "deq", "role", "infrastructure")
-      .order("location", "asc")
+      .order("name", "asc")
   },
 
 
   buildAttributes: function() {
     return {
+      name: { renderer: "string" },
       location: { renderer: "string" },
       level: { renderer: "peakmeter", props: { model: "Media.Input.Stream.HTTP"} },
     }

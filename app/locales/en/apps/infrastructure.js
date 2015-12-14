@@ -211,6 +211,7 @@ export default {
           table: {
             loading: "Fetching list of external audio inputs",
             header: {
+              name: "Name",
               location: "Location",
               level: "Level",
             },
@@ -234,6 +235,10 @@ export default {
             create: {
               header: "Add input",
               form: {
+                name: {
+                  label: "Name",
+                  hint: "Choose any name that will help you to distinguish this input from others",
+                },
                 location: {
                   label: "Location of the stream",
                   hint: "It has to be a valid http:// or https:// address",
