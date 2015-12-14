@@ -10,6 +10,14 @@ export default {
         computing_nodes: {
           title: "Serwery audio",
         },
+
+        external_inputs: {
+          title: "Zewnętrzne źródła dźwięku",
+        },
+
+        transmissions: {
+          title: "Transmisje",
+        },
       },
 
       client_nodes: {
@@ -243,6 +251,19 @@ export default {
               }
             }
           }
+        },
+      },
+
+      transmissions: {
+        index: {
+          header: "Transmisje",
+          table: {
+            loading: "Pobieranie listy transmisji",
+            header: {
+              device_name: "Urządzenie",
+              level: "Poziom",
+            },
+          },
         },
       },
     }

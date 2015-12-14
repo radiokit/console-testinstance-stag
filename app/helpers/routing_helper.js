@@ -86,6 +86,11 @@ export default {
           return "/apps/infrastructure/external_inputs/index";
         },
       },
+      transmissions: {
+        index: function(context) {
+          return "/apps/infrastructure/transmissions/index";
+        },
+      },
     },
   }
 }

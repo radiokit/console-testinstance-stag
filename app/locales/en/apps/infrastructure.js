@@ -14,6 +14,10 @@ export default {
         external_inputs: {
           title: "External Audio Inputs",
         },
+
+        transmissions: {
+          title: "Transmissions",
+        },
       },
 
       client_nodes: {
@@ -247,6 +251,19 @@ export default {
               }
             }
           }
+        },
+      },
+
+      transmissions: {
+        index: {
+          header: "Transmissions",
+          table: {
+            loading: "Fetching list of transmissions",
+            header: {
+              device_name: "Device",
+              level: "Level",
+            },
+          },
         },
       },
     }

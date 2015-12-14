@@ -32,6 +32,7 @@ import InfrastructureApp from './apps/infrastructure/app.jsx';
 import InfrastructureClientNodesIndex from './apps/infrastructure/client_nodes/index_view.jsx';
 import InfrastructureComputingNodesIndex from './apps/infrastructure/computing_nodes/index_view.jsx';
 import InfrastructureExternalInputsIndex from './apps/infrastructure/external_inputs/index_view.jsx';
+import InfrastructureTransmissionsIndex from './apps/infrastructure/transmissions/index_view.jsx';
 
 Counterpart.registerTranslations("en", require('./locales/en/general.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/joint.js'));
@@ -110,6 +111,7 @@ ReactDOM.render((
           <Route component={ScopeLayout} scope="userAccount">
             <Route path="client_nodes/index" component={InfrastructureClientNodesIndex} onEnter={pingGoogleAnalytics}/>
             <Route path="external_inputs/index" component={InfrastructureExternalInputsIndex} onEnter={pingGoogleAnalytics}/>
+            <Route path="transmissions/index" component={InfrastructureTransmissionsIndex} onEnter={pingGoogleAnalytics}/>
           </Route>
           <Route path="computing_nodes/index" component={InfrastructureComputingNodesIndex} onEnter={pingGoogleAnalytics}/>
         </Route>
