@@ -91,6 +91,11 @@ export default {
           return "/apps/infrastructure/transmissions/index";
         },
       },
+      patchbay: {
+        index: function(context) {
+          return "/apps/infrastructure/patchbay/index";
+        },
+      },
     },
   }
 }

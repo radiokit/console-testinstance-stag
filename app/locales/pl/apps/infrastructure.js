@@ -18,6 +18,10 @@ export default {
         transmissions: {
           title: "Transmisje",
         },
+
+        patchbay: {
+          title: "Krosownica",
+        },
       },
 
       client_nodes: {
@@ -200,6 +204,12 @@ export default {
         },
       },
 
+      patchbay: {
+        index: {
+          header: "Krosownica",
+        }
+      },
+      
       external_inputs: {
         index: {
           header: "Zewnętrzne źrodła dźwięku",

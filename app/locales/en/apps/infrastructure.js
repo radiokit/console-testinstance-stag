@@ -18,6 +18,10 @@ export default {
         transmissions: {
           title: "Transmissions",
         },
+
+        patchbay: {
+          title: "Patchbay",
+        },
       },
 
       client_nodes: {
@@ -198,6 +202,12 @@ export default {
             }
           }
         },
+      },
+
+      patchbay: {
+        index: {
+          header: "Patchbay",
+        }
       },
 
       external_inputs: {

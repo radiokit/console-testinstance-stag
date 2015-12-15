@@ -28,18 +28,6 @@ export default React.createClass({
   },
 
 
-  onCreateButtonClick: function(e) {
-    e.preventDefault();
-    this.refs.createModal.show();
-  },
-
-
-  onDeleteButtonClick: function(e) {
-    e.preventDefault();
-    this.refs.deleteModal.show();
-  },
-
-
   onTableSelect: function(selectedRecordIds) {
     this.setState({
       selectedRecordIds: selectedRecordIds

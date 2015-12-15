@@ -147,6 +147,11 @@ export default React.createClass({
                     <Translate content="apps.infrastructure.navigation.transmissions.title" className="title" />
                   </Link>
                 </li>
+                <li>
+                  <Link to={RoutingHelper.apps.infrastructure.patchbay.index(this)}>
+                    <Translate content="apps.infrastructure.navigation.patchbay.title" className="title" />
+                  </Link>
+                </li>
               </ul>
             </li>
           </ul>
