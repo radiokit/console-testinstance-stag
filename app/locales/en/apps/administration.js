@@ -107,7 +107,7 @@ export default {
               form: {
                 name: {
                   label: "Name of the channel",
-                  hint: "Choose any name that will help you to distinguish this channel from others",
+                  hint: "Choose any name that will help you to distinguish this channel from others.",
                 },
               },
 

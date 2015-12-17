@@ -85,7 +85,7 @@ export default {
               form: {
                 name: {
                   label: "Name of the device",
-                  hint: "Choose any name that will help you to distinguish this device from others",
+                  hint: "Choose any name that will help you to distinguish this device from others.",
                 },
               },
 
@@ -247,7 +247,7 @@ export default {
               form: {
                 name: {
                   label: "Name",
-                  hint: "Choose any name that will help you to distinguish this input from others",
+                  hint: "Choose any name that will help you to distinguish this input from others.",
                 },
                 location: {
                   label: "Location of the stream",
