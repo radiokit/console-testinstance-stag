@@ -17,6 +17,11 @@ export default React.createClass({
   },
 
 
+  contextTypes: {
+    currentUserAccount: React.PropTypes.object.isRequired,
+  },
+
+
   componentDidMount: function() {
     VaultHelper.loadRepository(this, "shows");
   },

@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Translate from 'react-translate-component';
 import { Link } from 'react-router';
-import Resumable from 'resumablejs';
 import Immutable from 'immutable';
 
 import Button from './button_widget.jsx';
@@ -20,76 +19,37 @@ export default React.createClass({
       loadingState: null,
       loadingError: false,
       recordRepository: null,
-      uploadQueue: new Immutable.Seq().toIndexedSeq()
+      uploadQueue: new Immutable.List()
     }
   },
 
 
   componentDidMount: function() {
-    this.initializeResumable();
+    this.initializeUpload();
   },
 
 
-  initializeResumable: function() {
-    this.resumable = new Resumable({
-      testChunks: false,
-      forceChunkSize: true,
-      chunkSize: 524288, // 512 kb should be enough even for Africa
-      target: window.ENV.apps.vault.baseUrl + '/api/upload/v1.0/resumablejs',
-      headers: window.data.options.auth.getHeaders(),
-      query: { record_repository_id: this.props.repository.get("id") },
-      simultaneousUploads: 1,
-      minFileSize: 1,
-      generateUniqueIdentifier: () => {
-        return ""
-          + parseInt(Math.random() * 10000000000000000)
-          + parseInt(Math.random() * 10000000000000000)
-          + parseInt(Math.random() * 10000000000000000)
-          + parseInt(Math.random() * 10000000000000000)
-          + parseInt(Math.random() * 10000000000000000)
-          + parseInt(Math.random() * 10000000000000000)
-          + parseInt(Math.random() * 10000000000000000)
-          + parseInt(Math.random() * 10000000000000000)
-          + parseInt(Math.random() * 10000000000000000)
-          + parseInt(Math.random() * 10000000000000000)
-          + parseInt(Math.random() * 10000000000000000)
-          + Date.now();
-      }
-    });
+  initializeUpload: function() {
+    this.upload = window.data.upload(this.props.repository.get("id"), { autoStart: true })
 
+    this.upload.assignBrowse(ReactDOM.findDOMNode(this.refs.uploadDropzone));
+    this.upload.assignDrop(ReactDOM.findDOMNode(this.refs.uploadDropzone));
+    this.upload.on("added", this.updateQueue);
+    this.upload.on("progress", this.updateQueue);
+    this.upload.on("retry", this.updateQueue);
+    this.upload.on("error", this.updateQueue);
 
-    if(!this.resumable.support) {
-      this.setState({ loadingState: "not-supported" });
-
-    } else {
-      this.resumable.assignBrowse(ReactDOM.findDOMNode(this.refs.uploadDropzone));
-      this.resumable.assignDrop(ReactDOM.findDOMNode(this.refs.uploadDropzone));
-      this.resumable.on("fileAdded", this.updateQueue);
-      this.resumable.on("fileAdded", this.startUpload);
-      this.resumable.on("fileProgress", this.updateQueue);
-      this.resumable.on("fileRetry", this.updateQueue);
-      this.resumable.on("fileError", this.updateQueue);
-
-      this.setState({ loadingState: "ready" });
-    }
+    this.setState({ loadingState: "ready" });
   },
 
 
   componentWillUnmount: function() {
-    if(this.resumable) {
-      this.resumable.cancel();
-      delete this.resumable;
-    }
+    this.upload.teardown();
   },
 
 
-  updateQueue: function() {
-    this.setState({ uploadQueue: Immutable.fromJS(this.resumable.files) });
-  },
-
-
-  startUpload: function() {
-    this.resumable.upload();
+  updateQueue: function(_event, upload) {
+    this.setState({ uploadQueue: upload.getQueue() });
   },
 
 
@@ -140,17 +100,17 @@ export default React.createClass({
   renderQueueRows: function() {
     return this.state.uploadQueue.map((file, i) => {
       let badge = null;
-      if(file.isUploading()) {
-        badge = <span className="badge style-accent-light">{parseInt(file.progress(false) * 100)}%</span>;
-      } else if (file.isComplete()) {
+      if(file.get("uploading")) {
+        badge = <span className="badge style-accent-light">{file.get("progress")}%</span>;
+      } else if (file.get("completed")) {
         badge = <span className="badge style-accent">100%</span>;
       }
 
       return (
-        <tr key={file.uniqueIdentifier}>
+        <tr key={file.get("id")}>
           <td className="text-right">{i+1}.</td>
-          <td>{file.fileName}</td>
-          <td className="text-right"><FileSize size={file.size}/></td>
+          <td>{file.get("name")}</td>
+          <td className="text-right"><FileSize size={file.get("size")}/></td>
           <td>{badge}</td>
         </tr>);
     });
