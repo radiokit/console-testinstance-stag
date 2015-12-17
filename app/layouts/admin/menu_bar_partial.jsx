@@ -48,11 +48,13 @@ export default React.createClass({
             <i className="mdi mdi-pin" />
           </a>
         </div>
+
         <div className="pin-toggle pin-toggle-off">
           <a className="btn btn-icon-toggle" onClick={this.onPinToggleOffClick}>
             <i className="mdi mdi-pin" />
           </a>
         </div>
+
         <div className="menubar-scroll-panel">
           <ul id="main-menu" className="gui-controls gui-controls-tree">
             <li className="gui-folder">
@@ -78,24 +80,7 @@ export default React.createClass({
                 </li>
               </ul>
             </li>
-            <li className="gui-folder">
-              <a onClick={this.onMenuRootItemClick}>
-                <div className="gui-icon"><i className="mdi mdi-microphone"/></div>
-                <Translate content="apps.shows.navigation.title" className="title" />
-              </a>
-              <ul>
-                <li>
-                  <Link to={RoutingHelper.apps.shows.files.index(this)}>
-                    <Translate content="apps.shows.navigation.files.title" className="title" />
-                  </Link>
-                </li>
-                <li>
-                  <Link to={RoutingHelper.apps.shows.schedule.index(this)}>
-                    <Translate content="apps.shows.navigation.schedule.title" className="title" />
-                  </Link>
-                </li>
-              </ul>
-            </li>
+
             <li className="gui-folder">
               <a onClick={this.onMenuRootItemClick}>
                 <div className="gui-icon"><i className="mdi mdi-guitar"/></div>
@@ -114,6 +99,7 @@ export default React.createClass({
                 </li>
               </ul>
             </li>
+
             <li className="gui-folder">
               <a onClick={this.onMenuRootItemClick}>
                 <div className="gui-icon"><i className="mdi mdi-server-network"/></div>

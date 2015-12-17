@@ -12,12 +12,6 @@ import ScopeLayout from './layouts/scope_layout.jsx';
 import AppsIndex from './apps/apps_index.jsx';
 import JointApp from './apps/joint/app.jsx';
 import JointControlRoom from './apps/joint/control_room_view.jsx';
-import ShowsApp from './apps/shows/app.jsx';
-import ShowsFilesIndex from './apps/shows/files/index_view.jsx';
-import ShowsFilesCreate from './apps/shows/files/create_view.jsx';
-import ShowsFilesShow from './apps/shows/files/show_view.jsx';
-import ShowsScheduleIndex from './apps/shows/schedule/index_view.jsx';
-import ShowsScheduleShow from './apps/shows/schedule/show_view.jsx';
 import MusicApp from './apps/music/app.jsx';
 import MusicFilesIndex from './apps/music/files/index_view.jsx';
 import MusicFilesCreate from './apps/music/files/create_view.jsx';
@@ -36,7 +30,6 @@ import InfrastructureTransmissionsIndex from './apps/infrastructure/transmission
 import InfrastructurePatchbayIndex from './apps/infrastructure/patchbay/index_view.jsx';
 
 Counterpart.registerTranslations("en", require('./locales/en/general.js'));
-Counterpart.registerTranslations("en", require('./locales/en/apps/shows.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/music.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/broadcast.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/infrastructure.js'));
@@ -45,7 +38,6 @@ Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/table
 Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/modal.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/scope.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/general.js'));
-Counterpart.registerTranslations("pl", require('./locales/pl/apps/shows.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/music.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/broadcast.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/infrastructure.js'));
@@ -114,18 +106,6 @@ ReactDOM.render((
             <Route path="patchbay/index" component={InfrastructurePatchbayIndex} onEnter={pingGoogleAnalytics}/>
           </Route>
           <Route path="computing_nodes/index" component={InfrastructureComputingNodesIndex} onEnter={pingGoogleAnalytics}/>
-        </Route>
-
-        <Route path="shows" component={ShowsApp}>
-          <Route component={ScopeLayout} scope="userAccount">
-            <Route path="files/index" component={ShowsFilesIndex} onEnter={pingGoogleAnalytics}/>
-            <Route path="files/create" component={ShowsFilesCreate} onEnter={pingGoogleAnalytics}/>
-            <Route path="files/show/:fileId" component={ShowsFilesShow} onEnter={pingGoogleAnalytics}/>
-          </Route>
-          <Route component={ScopeLayout} scope="broadcastChannel">
-            <Route path="schedule/index" component={ShowsScheduleIndex}/>
-            <Route path="schedule/show/:schedulingItemId" component={ShowsScheduleShow}/>
-          </Route>
         </Route>
 
         <Route path="music" component={MusicApp}>
