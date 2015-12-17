@@ -76,6 +76,11 @@ export default {
           return "/apps/organization/user_accounts/index";
         },
       },
+      editors: {
+        index: function(context) {
+          return "/apps/organization/editors/index";
+        },
+      },
     },
   }
 }

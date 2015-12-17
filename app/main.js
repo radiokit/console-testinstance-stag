@@ -30,6 +30,7 @@ import InfrastructureTransmissionsIndex from './apps/infrastructure/transmission
 import InfrastructurePatchbayIndex from './apps/infrastructure/patchbay/index_view.jsx';
 import OrganizationApp from './apps/organization/app.jsx';
 import OrganizationUserAccountsIndex from './apps/organization/user_accounts/index_view.jsx';
+import OrganizationEditorsIndex from './apps/organization/editors/index_view.jsx';
 
 Counterpart.registerTranslations("en", require('./locales/en/general.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/music.js'));
@@ -114,6 +115,7 @@ ReactDOM.render((
 
         <Route path="organization" component={OrganizationApp}>
           <Route path="user_accounts/index" component={OrganizationUserAccountsIndex} onEnter={pingGoogleAnalytics}/>
+          <Route path="editors/index" component={OrganizationEditorsIndex} onEnter={pingGoogleAnalytics}/>
         </Route>
 
         <Route path="music" component={MusicApp}>

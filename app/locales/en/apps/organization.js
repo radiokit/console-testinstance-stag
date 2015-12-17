@@ -6,6 +6,9 @@ export default {
         user_accounts: {
           title: "Accounts",
         },
+        editors: {
+          title: "Editors",
+        },
       },
 
       user_accounts: {
@@ -66,6 +69,58 @@ export default {
         },
       },
 
+      editors: {
+        index: {
+          header: "Editors",
+          actions: {
+            create: "Add editor",
+            delete: "Remove selected editors",
+          },
+
+          table: {
+            loading: "Fetching list of editors",
+            header: {
+              email: "e-mail",
+            },
+          },
+
+          modals: {
+            delete: {
+              header: "Delete editor",
+              message: {
+                confirmation: "Are you sure that you want to delete %(count)s selected editor(s)?",
+                acknowledgement: "Deleted %(count)s editor(s).",
+                progress: "Deleting in progress…",
+              },
+              action: {
+                proceed: "Delete",
+                cancel: "Cancel",
+                close: "Close",
+              }
+            },
+
+            create: {
+              header: "Add editor",
+              form: {
+                email: {
+                  label: "e-mail",
+                  hint: "Type editor's e-mail address. It will serve as login.",
+                },
+              },
+
+              acknowledgement: {
+                info: "Editor added succesfully",
+              },
+
+              action: {
+                proceed: "Add editor",
+                cancel: "Cancel",
+                close: "Close",
+              }
+            }
+          }
+        },
+      },
     }
   }
 }
