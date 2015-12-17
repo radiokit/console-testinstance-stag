@@ -72,14 +72,14 @@ export default React.createClass({
 
   render: function() {
     return (
-      <ModalForm ref="modal" contentPrefix="apps.organization.editors.index.modals.create" onConfirm={this.onConfirm} onCancel={this.onCancel} onShow={this.onShow} step={this.state.step}>
+      <ModalForm ref="modal" contentPrefix="apps.administration.editors.index.modals.create" onConfirm={this.onConfirm} onCancel={this.onCancel} onShow={this.onShow} step={this.state.step}>
         <div>
-          <TextInput error={this.state.inputEmailBlankError} ref="inputEmail" size="large" autofocus={true} label={true} labelTextKey="apps.organization.editors.index.modals.create.form.email.label" hint={true} hintTextKey="apps.organization.editors.index.modals.create.form.email.hint" />
+          <TextInput error={this.state.inputEmailBlankError} ref="inputEmail" size="large" autofocus={true} label={true} labelTextKey="apps.administration.editors.index.modals.create.form.email.label" hint={true} hintTextKey="apps.administration.editors.index.modals.create.form.email.hint" />
         </div>
 
         <div>
           <div>
-            <Translate component="p" className="text-center" content="apps.organization.editors.index.modals.create.acknowledgement.info" />
+            <Translate component="p" className="text-center" content="apps.administration.editors.index.modals.create.acknowledgement.info" />
           </div>
         </div>
       </ModalForm>

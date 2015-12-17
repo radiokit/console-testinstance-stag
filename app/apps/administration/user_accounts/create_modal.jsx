@@ -72,14 +72,14 @@ export default React.createClass({
 
   render: function() {
     return (
-      <ModalForm ref="modal" contentPrefix="apps.organization.user_accounts.index.modals.create" onConfirm={this.onConfirm} onCancel={this.onCancel} onShow={this.onShow} step={this.state.step}>
+      <ModalForm ref="modal" contentPrefix="apps.administration.user_accounts.index.modals.create" onConfirm={this.onConfirm} onCancel={this.onCancel} onShow={this.onShow} step={this.state.step}>
         <div>
-          <TextInput error={this.state.inputNameCustomBlankError} ref="inputNameCustom" size="large" autofocus={true} label={true} labelTextKey="apps.organization.user_accounts.index.modals.create.form.name_custom.label" hint={true} hintTextKey="apps.organization.user_accounts.index.modals.create.form.name_custom.hint" />
+          <TextInput error={this.state.inputNameCustomBlankError} ref="inputNameCustom" size="large" autofocus={true} label={true} labelTextKey="apps.administration.user_accounts.index.modals.create.form.name_custom.label" hint={true} hintTextKey="apps.administration.user_accounts.index.modals.create.form.name_custom.hint" />
         </div>
 
         <div>
           <div>
-            <Translate component="p" className="text-center" content="apps.organization.user_accounts.index.modals.create.acknowledgement.info" />
+            <Translate component="p" className="text-center" content="apps.administration.user_accounts.index.modals.create.acknowledgement.info" />
           </div>
         </div>
       </ModalForm>

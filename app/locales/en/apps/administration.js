@@ -1,8 +1,8 @@
 export default {
   apps: {
-    organization: {
+    administration: {
       navigation: {
-        title: "Organization",
+        title: "Administration",
         user_accounts: {
           title: "Accounts",
         },
@@ -51,7 +51,7 @@ export default {
                 },
                 name_formal: {
                   label: "Name (formal)",
-                  hint: "Type formal name of the client's organization or its full name if it's a person",
+                  hint: "Type formal name of the client's administration or its full name if it's a person",
                 },
               },
 

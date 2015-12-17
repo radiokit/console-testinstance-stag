@@ -117,18 +117,18 @@ export default React.createClass({
 
             <li className="gui-folder">
               <a onClick={this.onMenuRootItemClick}>
-                <div className="gui-icon"><i className="mdi mdi-account-multiple"/></div>
-                <Translate content="apps.organization.navigation.title" className="title" />
+                <div className="gui-icon"><i className="mdi mdi-settings"/></div>
+                <Translate content="apps.administration.navigation.title" className="title" />
               </a>
               <ul>
                 <li>
-                  <Link to={RoutingHelper.apps.organization.userAccounts.index(this)}>
-                    <Translate content="apps.organization.navigation.user_accounts.title" className="title" />
+                  <Link to={RoutingHelper.apps.administration.userAccounts.index(this)}>
+                    <Translate content="apps.administration.navigation.user_accounts.title" className="title" />
                   </Link>
                 </li>
                 <li>
-                  <Link to={RoutingHelper.apps.organization.editors.index(this)}>
-                    <Translate content="apps.organization.navigation.editors.title" className="title" />
+                  <Link to={RoutingHelper.apps.administration.editors.index(this)}>
+                    <Translate content="apps.administration.navigation.editors.title" className="title" />
                   </Link>
                 </li>
               </ul>

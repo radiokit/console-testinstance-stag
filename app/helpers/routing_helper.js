@@ -70,15 +70,15 @@ export default {
         },
       },
     },
-    organization: {
+    administration: {
       userAccounts: {
         index: function(context) {
-          return "/apps/organization/user_accounts/index";
+          return "/apps/administration/user_accounts/index";
         },
       },
       editors: {
         index: function(context) {
-          return "/apps/organization/editors/index";
+          return "/apps/administration/editors/index";
         },
       },
     },

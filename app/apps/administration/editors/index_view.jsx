@@ -67,13 +67,13 @@ export default React.createClass({
             <CreateModal ref="createModal" />
             <DeleteModal ref="deleteModal" selectedRecordIds={this.state.selectedRecordIds} />
 
-            <Card contentPrefix="apps.organization.editors.index">
+            <Card contentPrefix="apps.administration.editors.index">
               <CardHeader/>
               <CardBody cardPadding={false}>
-                <TableBrowser onSelect={this.onTableSelect} selectable={true} attributes={this.buildAttributes()} actions={[]} contentPrefix="apps.organization.editors.index.table" recordsQuery={this.buildRecordsQuery()}>
+                <TableBrowser onSelect={this.onTableSelect} selectable={true} attributes={this.buildAttributes()} actions={[]} contentPrefix="apps.administration.editors.index.table" recordsQuery={this.buildRecordsQuery()}>
                   <ToolBarGroup>
-                    <ToolBarButton icon="plus" labelTextKey="apps.organization.editors.index.actions.create" onClick={this.onCreateButtonClick} />
-                    <ToolBarButton icon="delete" hintTooltipKey="apps.organization.editors.index.actions.delete" onClick={this.onDeleteButtonClick} disabled={this.state.selectedRecordIds.count() === 0} />
+                    <ToolBarButton icon="plus" labelTextKey="apps.administration.editors.index.actions.create" onClick={this.onCreateButtonClick} />
+                    <ToolBarButton icon="delete" hintTooltipKey="apps.administration.editors.index.actions.delete" onClick={this.onDeleteButtonClick} disabled={this.state.selectedRecordIds.count() === 0} />
                   </ToolBarGroup>
                 </TableBrowser>
               </CardBody>

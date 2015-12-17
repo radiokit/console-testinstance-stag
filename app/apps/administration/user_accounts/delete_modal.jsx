@@ -39,17 +39,17 @@ export default React.createClass({
 
   render: function() {
     return (
-      <ModalForEach ref="modal" onPerform={this.onPerform} contentPrefix="apps.organization.user_accounts.index.modals.delete" warning="irreversible" proceedType="danger" recordIds={this.props.selectedRecordIds} index={this.state.index}>
+      <ModalForEach ref="modal" onPerform={this.onPerform} contentPrefix="apps.administration.user_accounts.index.modals.delete" warning="irreversible" proceedType="danger" recordIds={this.props.selectedRecordIds} index={this.state.index}>
         <div>
-          <Translate component="p" content="apps.organization.user_accounts.index.modals.delete.message.confirmation" count={this.props.selectedRecordIds.count()} />
+          <Translate component="p" content="apps.administration.user_accounts.index.modals.delete.message.confirmation" count={this.props.selectedRecordIds.count()} />
         </div>
 
         <div>
-          <Translate component="p" content="apps.organization.user_accounts.index.modals.delete.message.progress" />
+          <Translate component="p" content="apps.administration.user_accounts.index.modals.delete.message.progress" />
         </div>
 
         <div>
-          <Translate component="p" content="apps.organization.user_accounts.index.modals.delete.message.acknowledgement" count={this.props.selectedRecordIds.count()} />
+          <Translate component="p" content="apps.administration.user_accounts.index.modals.delete.message.acknowledgement" count={this.props.selectedRecordIds.count()} />
         </div>
       </ModalForEach>
     );

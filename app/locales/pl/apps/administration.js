@@ -1,8 +1,8 @@
 export default {
   apps: {
-    organization: {
+    administration: {
       navigation: {
-        title: "Organizacja",
+        title: "Administracja",
         user_accounts: {
           title: "Konta klientów",
         },

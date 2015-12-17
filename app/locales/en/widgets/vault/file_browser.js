@@ -29,7 +29,7 @@ export default {
             "description": "Description",
             "version": "Version",
             "isrc": "ISRC",
-            "organization": "Organization",
+            "administration": "Administration",
             "copyright": "Copyright",
             "copyright-uri": "Copyright (online address)",
             "encoded-by": "Encoded by",
