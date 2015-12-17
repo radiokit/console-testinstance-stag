@@ -106,6 +106,22 @@ export default {
                   label: "e-mail",
                   hint: "Type editor's e-mail address. It will serve as login.",
                 },
+                first_name: {
+                  label: "First name",
+                },
+                last_name: {
+                  label: "Last name",
+                },
+                phone: {
+                  label: "Phone",
+                },
+                locale: {
+                  label: "Language of the user interface",
+                  values: {
+                    en: "English",
+                    pl: "Polish",
+                  }
+                },
               },
 
               acknowledgement: {

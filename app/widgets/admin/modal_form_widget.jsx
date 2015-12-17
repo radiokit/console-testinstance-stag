@@ -17,6 +17,7 @@ export default React.createClass({
     proceedType: React.PropTypes.oneOf(['primary', 'success', 'info', 'warning', 'danger']),
     step: React.PropTypes.oneOf(['form', 'progress', 'acknowledgement', 'cancelled', 'error']).isRequired,
     size: React.PropTypes.oneOf(['normal', 'large']),
+    formFunc: React.PropTypes.func.isRequired,
   },
 
 
@@ -64,9 +65,7 @@ export default React.createClass({
               switch(this.props.step) {
                 case "form":
                   return (
-                    <Form onSubmit={this.onConfirm}>
-                      {React.Children.toArray(this.props.children)[0]}
-                    </Form>
+                    <Form onSubmit={this.onConfirm} formFunc={this.props.formFunc} contentPrefix={this.props.contentPrefix + ".form"}/>
                   );
 
 
@@ -81,7 +80,7 @@ export default React.createClass({
                 case "acknowledgement":
                   return (
                     <div>
-                      {React.Children.toArray(this.props.children)[1]}
+                      {React.Children.toArray(this.props.children)[0]}
                     </div>
                   );
 

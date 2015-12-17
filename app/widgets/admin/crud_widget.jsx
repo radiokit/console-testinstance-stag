@@ -19,6 +19,7 @@ export default React.createClass({
   propTypes: {
     contentPrefix: React.PropTypes.string.isRequired,
     queryFunc: React.PropTypes.func.isRequired,
+    formFunc: React.PropTypes.func.isRequired,
     attributesFunc: React.PropTypes.func.isRequired,
   },
 
@@ -64,7 +65,7 @@ export default React.createClass({
       <Section>
         <GridRow>
           <GridCell size="large" center={true}>
-            <CreateModal contentPrefix={this.props.contentPrefix + ".index.modals.create"} ref="createModal" />
+            <CreateModal contentPrefix={this.props.contentPrefix + ".index.modals.create"} formFunc={this.props.formFunc} ref="createModal" />
             <DeleteModal contentPrefix={this.props.contentPrefix + ".index.modals.delete"} ref="deleteModal" selectedRecordIds={this.state.selectedRecordIds} />
 
             <Card contentPrefix={`${this.props.contentPrefix}.index`}>

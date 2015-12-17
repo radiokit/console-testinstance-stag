@@ -106,6 +106,22 @@ export default {
                   label: "e-mail",
                   hint: "Podaj e-mail redaktora. Będzie służył jako nazwa użytkownika.",
                 },
+                first_name: {
+                  label: "Imię",
+                },
+                last_name: {
+                  label: "Nazwisko",
+                },
+                phone: {
+                  label: "Telefon",
+                },
+                locale: {
+                  label: "Język interfejsu użytkownika",
+                  values: {
+                    en: "Angielski",
+                    pl: "Polski",
+                  }
+                },
               },
 
               acknowledgement: {

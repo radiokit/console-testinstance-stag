@@ -18,9 +18,48 @@ export default React.createClass({
   },
 
 
+  buildForm: function() {
+    return {
+      email: {
+        type: "email",
+        hint: true,
+        validators: {
+          presence: true,
+        }
+      },
+
+      first_name: {
+        type: "string",
+        validators: {
+          presence: true,
+        }
+      },
+
+      last_name: {
+        type: "string",
+        validators: {
+          presence: true,
+        }
+      },
+
+      phone: {
+        type: "tel",
+      },
+
+      locale: {
+        type: "enum",
+        values: [ "en", "pl" ],
+        validators: {
+          presence: true,
+        }
+      },
+    }
+  },
+
+
   render: function() {
     return (
-      <CRUD contentPrefix="apps.administration.editors" queryFunc={this.buildQuery} attributesFunc={this.buildAttributes} />
+      <CRUD contentPrefix="apps.administration.editors" queryFunc={this.buildQuery} attributesFunc={this.buildAttributes} formFunc={this.buildForm} />
     );
   }
 });

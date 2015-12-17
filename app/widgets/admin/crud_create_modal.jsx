@@ -10,6 +10,7 @@ import TextInput from '../../widgets/admin/text_input_widget.jsx';
 export default React.createClass({
   propTypes: {
     contentPrefix: React.PropTypes.string.isRequired,
+    formFunc: React.PropTypes.func.isRequired,
   },
 
 
@@ -77,11 +78,7 @@ export default React.createClass({
 
   render: function() {
     return (
-      <ModalForm ref="modal" contentPrefix={this.props.contentPrefix} onConfirm={this.onConfirm} onCancel={this.onCancel} onShow={this.onShow} step={this.state.step}>
-        <div>
-          <TextInput error={this.state.inputEmailBlankError} ref="inputEmail" size="large" autofocus={true} label={true} labelTextKey={this.props.contentPrefix + ".form.email.label"} hint={true} hintTextKey={this.props.contentPrefix + ".form.email.hint"} />
-        </div>
-
+      <ModalForm ref="modal" contentPrefix={this.props.contentPrefix} onConfirm={this.onConfirm} onCancel={this.onCancel} onShow={this.onShow} step={this.state.step} formFunc={this.props.formFunc}>
         <div>
           <div>
             <Translate component="p" className="text-center" content={this.props.contentPrefix + ".acknowledgement.info"} />
