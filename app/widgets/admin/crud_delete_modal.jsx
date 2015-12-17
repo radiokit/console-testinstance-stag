@@ -1,11 +1,12 @@
 import React from 'react';
 import Translate from 'react-translate-component';
 
-import ModalForEach from '../../../widgets/admin/modal_foreach_widget.jsx';
+import ModalForEach from '../../widgets/admin/modal_foreach_widget.jsx';
 
 
 export default React.createClass({
   propTypes: {
+    contentPrefix: React.PropTypes.string.isRequired,
     selectedRecordIds: React.PropTypes.object.isRequired,
   },
 
@@ -39,17 +40,17 @@ export default React.createClass({
 
   render: function() {
     return (
-      <ModalForEach ref="modal" onPerform={this.onPerform} contentPrefix="apps.administration.editors.index.modals.delete" warning="irreversible" proceedType="danger" recordIds={this.props.selectedRecordIds} index={this.state.index}>
+      <ModalForEach ref="modal" onPerform={this.onPerform} contentPrefix={this.props.contentPrefix} warning="irreversible" proceedType="danger" recordIds={this.props.selectedRecordIds} index={this.state.index}>
         <div>
-          <Translate component="p" content="apps.administration.editors.index.modals.delete.message.confirmation" count={this.props.selectedRecordIds.count()} />
+          <Translate component="p" content={this.props.contentPrefix + ".message.confirmation"} count={this.props.selectedRecordIds.count()} />
         </div>
 
         <div>
-          <Translate component="p" content="apps.administration.editors.index.modals.delete.message.progress" />
+          <Translate component="p" content={this.props.contentPrefix + ".message.progress"} />
         </div>
 
         <div>
-          <Translate component="p" content="apps.administration.editors.index.modals.delete.message.acknowledgement" count={this.props.selectedRecordIds.count()} />
+          <Translate component="p" content={this.props.contentPrefix + ".message.acknowledgement"} count={this.props.selectedRecordIds.count()} />
         </div>
       </ModalForEach>
     );

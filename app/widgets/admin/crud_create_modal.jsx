@@ -2,12 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Translate from 'react-translate-component';
 
-import ModalForm from '../../../widgets/admin/modal_form_widget.jsx';
-import Form from '../../../widgets/admin/form_widget.jsx';
-import TextInput from '../../../widgets/admin/text_input_widget.jsx';
+import ModalForm from '../../widgets/admin/modal_form_widget.jsx';
+import Form from '../../widgets/admin/form_widget.jsx';
+import TextInput from '../../widgets/admin/text_input_widget.jsx';
 
 
 export default React.createClass({
+  propTypes: {
+    contentPrefix: React.PropTypes.string.isRequired,
+  },
+
+
   getInitialState: function() {
     return {
       step: "form",
@@ -72,14 +77,14 @@ export default React.createClass({
 
   render: function() {
     return (
-      <ModalForm ref="modal" contentPrefix="apps.administration.editors.index.modals.create" onConfirm={this.onConfirm} onCancel={this.onCancel} onShow={this.onShow} step={this.state.step}>
+      <ModalForm ref="modal" contentPrefix={this.props.contentPrefix} onConfirm={this.onConfirm} onCancel={this.onCancel} onShow={this.onShow} step={this.state.step}>
         <div>
-          <TextInput error={this.state.inputEmailBlankError} ref="inputEmail" size="large" autofocus={true} label={true} labelTextKey="apps.administration.editors.index.modals.create.form.email.label" hint={true} hintTextKey="apps.administration.editors.index.modals.create.form.email.hint" />
+          <TextInput error={this.state.inputEmailBlankError} ref="inputEmail" size="large" autofocus={true} label={true} labelTextKey={this.props.contentPrefix + ".form.email.label"} hint={true} hintTextKey={this.props.contentPrefix + ".form.email.hint"} />
         </div>
 
         <div>
           <div>
-            <Translate component="p" className="text-center" content="apps.administration.editors.index.modals.create.acknowledgement.info" />
+            <Translate component="p" className="text-center" content={this.props.contentPrefix + ".acknowledgement.info"} />
           </div>
         </div>
       </ModalForm>
