@@ -23,6 +23,7 @@ import AdministrationApp from './apps/administration/app.jsx';
 import AdministrationUserAccountsIndex from './apps/administration/user_accounts/index_view.jsx';
 import AdministrationBroadcastChannelsIndex from './apps/administration/broadcast_channels/index_view.jsx';
 import AdministrationEditorsIndex from './apps/administration/editors/index_view.jsx';
+import AdministrationFileRepositoriesIndex from './apps/administration/file_repositories/index_view.jsx';
 
 Counterpart.registerTranslations("en", require('./locales/en/general.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/music.js'));
@@ -106,6 +107,7 @@ ReactDOM.render((
           <Route path="broadcast_channels/index" component={AdministrationBroadcastChannelsIndex} onEnter={pingGoogleAnalytics}/>
           <Route path="user_accounts/index" component={AdministrationUserAccountsIndex} onEnter={pingGoogleAnalytics}/>
           <Route path="editors/index" component={AdministrationEditorsIndex} onEnter={pingGoogleAnalytics}/>
+          <Route path="file_repositories/index" component={AdministrationFileRepositoriesIndex} onEnter={pingGoogleAnalytics}/>
         </Route>
 
       </Route>

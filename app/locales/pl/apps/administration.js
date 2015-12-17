@@ -12,6 +12,9 @@ export default {
         broadcast_channels: {
           title: "Kanały"
         },
+        file_repositories: {
+          title: "Repozytoria plików"
+        },
       },
 
       user_accounts: {
@@ -71,7 +74,7 @@ export default {
           }
         },
       },
-      
+
       broadcast_channels: {
         index: {
           header: "Kanały",
@@ -107,7 +110,7 @@ export default {
               form: {
                 name: {
                   label: "Nazwa kanału",
-                  hint: "Wybierz jakąkolwiek nazwę, która pozwoli Ci odróżnić ten kanał od innych",
+                  hint: "Wybierz jakąkolwiek nazwę, która pozwoli Ci odróżnić ten kanał od innych.",
                 },
               },
 
@@ -117,6 +120,59 @@ export default {
 
               action: {
                 proceed: "Dodaj kanał",
+                cancel: "Anuluj",
+                close: "Zamknij",
+              }
+            }
+          }
+        },
+      },
+
+      file_repositories: {
+        index: {
+          header: "Repozytoria plików",
+          actions: {
+            create: "Dodaj repozytorium plików",
+            delete: "Usuń zaznaczone repozytoria plików",
+          },
+
+          table: {
+            loading: "Pobieranie listy repozytoriów plików",
+            header: {
+              name: "Nazwa",
+            },
+          },
+
+          modals: {
+            delete: {
+              header: "Usuwanie repozytoriów plików",
+              message: {
+                confirmation: "Czy na pewno chcesz usunąć zaznaczone repozytoria plików (%(count)s szt.)?",
+                acknowledgement: "Usunięto %(count)s repozytoriów plików.",
+                progress: "Trwa usuwanie repozytoriów plików…",
+              },
+              action: {
+                proceed: "Usuń",
+                cancel: "Anuluj",
+                close: "Zamknij",
+              }
+            },
+
+            create: {
+              header: "Dodawanie repozytorium plików",
+              form: {
+                name: {
+                  label: "Nazwa repozytorium",
+                  hint: "Wybierz jakąkolwiek nazwę, która pozwoli Ci odróżnić to repozytorium plików od innych.",
+                },
+              },
+
+              acknowledgement: {
+                info: "Pomyślnie dodano repozytorium plików",
+              },
+
+              action: {
+                proceed: "Dodaj repozytorium plików",
                 cancel: "Anuluj",
                 close: "Zamknij",
               }

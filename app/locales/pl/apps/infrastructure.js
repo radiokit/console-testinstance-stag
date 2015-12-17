@@ -85,7 +85,7 @@ export default {
               form: {
                 name: {
                   label: "Nazwa urządzenia",
-                  hint: "Wybierz jakąkolwiek nazwę, która pozwoli Ci odróżnić to urządzenie od innych",
+                  hint: "Wybierz jakąkolwiek nazwę, która pozwoli Ci odróżnić to urządzenie od innych.",
                 },
               },
 
@@ -247,7 +247,7 @@ export default {
               form: {
                 location: {
                   label: "Nazwa",
-                  hint: "Wybierz jakąkolwiek nazwę, która pozwoli Ci odróżnić to źródło dźwięku od innych",
+                  hint: "Wybierz jakąkolwiek nazwę, która pozwoli Ci odróżnić to źródło dźwięku od innych.",
                 },
                 location: {
                   label: "Adres strumienia",

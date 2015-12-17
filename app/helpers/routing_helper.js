@@ -81,6 +81,11 @@ export default {
           return "/apps/administration/editors/index";
         },
       },
+      fileRepositories: {
+        index: function(context) {
+          return "/apps/administration/file_repositories/index";
+        },
+      },
     },
   }
 }

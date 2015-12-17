@@ -12,6 +12,9 @@ export default {
         broadcast_channels: {
           title: "Broadcast Channels",
         },
+        file_repositories: {
+          title: "File Repositories",
+        },
       },
 
       user_accounts: {
@@ -50,7 +53,7 @@ export default {
               form: {
                 name_custom: {
                   label: "Name (custom)",
-                  hint: "Type name under which this account is publicly known",
+                  hint: "Type name under which this account is publicly known.",
                 },
                 name_formal: {
                   label: "Name (formal)",
@@ -117,6 +120,59 @@ export default {
 
               action: {
                 proceed: "Add channel",
+                cancel: "Cancel",
+                close: "Close",
+              }
+            }
+          }
+        },
+      },
+
+      file_repositories: {
+        index: {
+          header: "File Repositories",
+          actions: {
+            create: "Add file repository",
+            delete: "Remove selected file repositories",
+          },
+
+          table: {
+            loading: "Fetching list of file repositories",
+            header: {
+              name: "Name",
+            },
+          },
+
+          modals: {
+            delete: {
+              header: "Delete file repository",
+              message: {
+                confirmation: "Are you sure that you want to delete %(count)s selected file repository/repositories?",
+                acknowledgement: "Deleted %(count)s file repository/repositories.",
+                progress: "Deleting in progress…",
+              },
+              action: {
+                proceed: "Delete",
+                cancel: "Cancel",
+                close: "Close",
+              }
+            },
+
+            create: {
+              header: "Add file repository",
+              form: {
+                name: {
+                  label: "Name of the file repository",
+                  hint: "Choose any name that will help you to distinguish this file repository from others.",
+                },
+              },
+
+              acknowledgement: {
+                info: "File repository added succesfully",
+              },
+
+              action: {
+                proceed: "Add file repository",
                 cancel: "Cancel",
                 close: "Close",
               }

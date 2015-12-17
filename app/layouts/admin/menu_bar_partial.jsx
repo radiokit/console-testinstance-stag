@@ -131,6 +131,11 @@ export default React.createClass({
                     <Translate content="apps.administration.navigation.editors.title" className="title" />
                   </Link>
                 </li>
+                <li>
+                  <Link to={RoutingHelper.apps.administration.fileRepositories.index(this)}>
+                    <Translate content="apps.administration.navigation.file_repositories.title" className="title" />
+                  </Link>
+                </li>
               </ul>
             </li>
           </ul>

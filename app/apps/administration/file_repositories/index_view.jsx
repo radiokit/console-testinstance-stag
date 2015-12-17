@@ -31,7 +31,7 @@ export default React.createClass({
 
   render: function() {
     return (
-      <CRUD contentPrefix="apps.administration.broadcast_channels" app="agenda" model="Broadcast.Channel" attributes={this.buildAttributes()} form={this.buildForm()} indexQueryFunc={this.modifyIndexQuery} />
+      <CRUD contentPrefix="apps.administration.file_repositories" app="vault" model="Data.Record.Repository" attributes={this.buildAttributes()} form={this.buildForm()} indexQueryFunc={this.modifyIndexQuery} />
     );
   }
 });
