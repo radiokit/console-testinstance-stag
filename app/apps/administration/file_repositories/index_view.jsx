@@ -11,7 +11,8 @@ export default React.createClass({
 
   buildAttributes: function() {
     return {
-      name: { renderer: "string" },
+      name:         { renderer: "string" },
+      user_account: { renderer: "scope-user-account" },
     }
   },
 
@@ -21,6 +22,12 @@ export default React.createClass({
       name: {
         type: "string",
         hint: true,
+        validators: {
+          presence: true,
+        }
+      },
+      user_account: {
+        type: "scope-user-account",
         validators: {
           presence: true,
         }

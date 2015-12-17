@@ -140,6 +140,7 @@ export default {
             loading: "Fetching list of file repositories",
             header: {
               name: "Name",
+              user_account: "Client account"
             },
           },
 
@@ -165,6 +166,9 @@ export default {
                   label: "Name of the file repository",
                   hint: "Choose any name that will help you to distinguish this file repository from others.",
                 },
+                user_account: {
+                  label: "Client account",
+                }
               },
 
               acknowledgement: {

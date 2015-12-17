@@ -11,6 +11,12 @@ export default React.createClass({
   },
 
 
+  contextTypes: {
+    availableBroadcastChannels: React.PropTypes.object.isRequired,
+    availableUserAccounts: React.PropTypes.object.isRequired,
+  },
+
+
   getInitialState: function() {
     return {
       errors: {},
@@ -61,7 +67,29 @@ export default React.createClass({
     let values = {};
 
     Object.keys(this.props.form).map((fieldName) => {
-      values[fieldName] = this.refs[fieldName].value
+      let fieldConfig = this.props.form[fieldName];
+
+      switch(fieldConfig.type) {
+        case "scope-user-account":
+          if(values.hasOwnProperty("references")) {
+            values.references["user_account_id"] = this.refs[fieldName].value;
+          } else {
+            values.references = { user_account_id: this.refs[fieldName].value };
+          }
+          break;
+
+        case "scope-broadcast-channel":
+          if(values.hasOwnProperty("references")) {
+            values.references["broadcast_channel_id"] = this.refs[fieldName].value;
+          } else {
+            values.references = { broadcast_channel_id: this.refs[fieldName].value };
+          }
+          break;
+
+        default:
+          values[fieldName] = this.refs[fieldName].value
+          break;
+      }
     });
 
     return values;
@@ -104,6 +132,26 @@ export default React.createClass({
             <select className="form-control" id={fieldName} ref={fieldName} required={required}>
             {fieldConfig.values.map((value) => {
               return (<Translate key={value} value={value} component="option" content={`${this.props.contentPrefix}.${fieldName}.values.${value}`}/>);
+            })}
+            </select>
+          );
+          break;
+
+        case "scope-user-account":
+          input = (
+            <select className="form-control" id={fieldName} ref={fieldName} required={required}>
+            {this.context.availableUserAccounts.map((userAccount) => {
+              return (<option key={userAccount.get("id")} value={userAccount.get("id")}>{userAccount.get("name_custom")}</option>);
+            })}
+            </select>
+          );
+          break;
+
+        case "scope-broadcast-channel":
+          input = (
+            <select className="form-control" id={fieldName} ref={fieldName} required={required}>
+            {this.context.availableBroadcastChannels.map((broadcastChannel) => {
+              return (<option key={broadcastChannel.get("id")} value={broadcastChannel.get("id")}>{broadcastChannel.get("name")}</option>);
             })}
             </select>
           );

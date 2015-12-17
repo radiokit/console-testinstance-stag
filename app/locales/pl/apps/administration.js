@@ -140,6 +140,7 @@ export default {
             loading: "Pobieranie listy repozytoriów plików",
             header: {
               name: "Nazwa",
+              user_account: "Konto użytkownika",
             },
           },
 
@@ -165,6 +166,9 @@ export default {
                   label: "Nazwa repozytorium",
                   hint: "Wybierz jakąkolwiek nazwę, która pozwoli Ci odróżnić to repozytorium plików od innych.",
                 },
+                user_account: {
+                  label: "Konto użytkownika",
+                }
               },
 
               acknowledgement: {
