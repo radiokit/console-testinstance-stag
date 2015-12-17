@@ -37,7 +37,7 @@
     "gravatar-api": "^1.2.5",
     "history": "^1.11.1",
     "immutable": "^3.7.5",
-    "radiokit-api": "^0.1.0",
+    "radiokit-api": "^0.1.1",
     "react": "^0.14.2",
     "react-dom": "^0.14.2",
     "react-interpolate-component": "^0.8.0",
