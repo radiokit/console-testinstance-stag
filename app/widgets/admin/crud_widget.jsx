@@ -12,15 +12,17 @@ import CardHeader from '../../widgets/admin/card_header_widget.jsx';
 import ToolBar from '../../widgets/admin/toolbar_widget.jsx';
 import ToolBarGroup from '../../widgets/admin/toolbar_group_widget.jsx';
 import ToolBarButton from '../../widgets/admin/toolbar_button_widget.jsx';
-import CreateModal from './crud_create_modal.jsx';
-import DeleteModal from './crud_delete_modal.jsx';
+import CRUDCreateModal from './crud_create_modal.jsx';
+import CRUDDeleteModal from './crud_delete_modal.jsx';
 
 export default React.createClass({
   propTypes: {
     contentPrefix: React.PropTypes.string.isRequired,
-    queryFunc: React.PropTypes.func.isRequired,
-    formFunc: React.PropTypes.func.isRequired,
-    attributesFunc: React.PropTypes.func.isRequired,
+    indexQueryFunc: React.PropTypes.func,
+    app: React.PropTypes.string.isRequired,
+    model: React.PropTypes.string.isRequired,
+    form: React.PropTypes.object.isRequired,
+    attributes: React.PropTypes.object.isRequired,
   },
 
 
@@ -50,13 +52,15 @@ export default React.createClass({
   },
 
 
-  buildRecordsQuery: function() {
-    return this.props.queryFunc(window.data);
-  },
+  buildIndexQuery: function() {
+    let query = window.data.query(this.props.app, this.props.model);
+    query = query.select.apply(this, Object.keys(this.props.attributes));
 
+    if(this.props.indexQueryFunc) {
+      query = this.props.indexQueryFunc(query);
+    }
 
-  buildAttributes: function() {
-    return this.props.attributesFunc();
+    return query;
   },
 
 
@@ -65,13 +69,13 @@ export default React.createClass({
       <Section>
         <GridRow>
           <GridCell size="large" center={true}>
-            <CreateModal contentPrefix={this.props.contentPrefix + ".index.modals.create"} formFunc={this.props.formFunc} ref="createModal" />
-            <DeleteModal contentPrefix={this.props.contentPrefix + ".index.modals.delete"} ref="deleteModal" selectedRecordIds={this.state.selectedRecordIds} />
+            <CRUDCreateModal contentPrefix={this.props.contentPrefix + ".index.modals.create"} ref="createModal" form={this.props.form} app={this.props.app} model={this.props.model} />
+            <CRUDDeleteModal contentPrefix={this.props.contentPrefix + ".index.modals.delete"} ref="deleteModal" app={this.props.app} model={this.props.model} selectedRecordIds={this.state.selectedRecordIds} />
 
             <Card contentPrefix={`${this.props.contentPrefix}.index`}>
               <CardHeader/>
               <CardBody cardPadding={false}>
-                <TableBrowser onSelect={this.onTableSelect} selectable={true} attributes={this.buildAttributes()} actions={[]} contentPrefix={`${this.props.contentPrefix}.index.table`} recordsQuery={this.buildRecordsQuery()}>
+                <TableBrowser onSelect={this.onTableSelect} selectable={true} attributes={this.props.attributes} actions={[]} contentPrefix={`${this.props.contentPrefix}.index.table`} recordsQuery={this.buildIndexQuery()}>
                   <ToolBarGroup>
                     <ToolBarButton icon="plus" labelTextKey={`${this.props.contentPrefix}.index.actions.create`} onClick={this.onCreateButtonClick} />
                     <ToolBarButton icon="delete" hintTooltipKey={`${this.props.contentPrefix}.index.actions.delete`} onClick={this.onDeleteButtonClick} disabled={this.state.selectedRecordIds.count() === 0} />

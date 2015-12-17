@@ -33,6 +33,7 @@ Counterpart.registerTranslations("en", require('./locales/en/widgets/vault/file_
 Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/table_browser.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/modal.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/scope.js'));
+Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/form.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/general.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/music.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/broadcast.js'));
@@ -42,6 +43,7 @@ Counterpart.registerTranslations("pl", require('./locales/pl/widgets/vault/file_
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/table_browser.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/modal.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/scope.js'));
+Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/form.js'));
 
 function getEnv() {
   if(typeof(ENV) === "object") {

@@ -1,29 +1,85 @@
 import React from 'react';
 import Translate from 'react-translate-component';
+import Counterpart from 'counterpart';
 
 
 export default React.createClass({
   propTypes: {
-    onSubmit: React.PropTypes.func,
-    formFunc: React.PropTypes.func,
+    form: React.PropTypes.object.isRequired,
+    onSubmit: React.PropTypes.func.isRequired,
     contentPrefix: React.PropTypes.string,
   },
 
 
-  onSubmit: function(e) {
+  getInitialState: function() {
+    return {
+      errors: {},
+    }
+  },
+
+
+  submit: function() {
+    if(this.validate()) {
+      this.props.onSubmit(this.buildFieldValues());
+    }
+  },
+
+
+  isFieldRequired: function(fieldConfig) {
+    return fieldConfig.hasOwnProperty("validators") && fieldConfig.validators.hasOwnProperty("presence") && fieldConfig.validators.presence === true;
+  },
+
+
+  validate: function() {
+    let errors = {};
+
+    Object.keys(this.props.form).map((fieldName) => {
+      let fieldConfig = this.props.form[fieldName];
+
+      let required = this.isFieldRequired(fieldConfig);
+
+      if(required && this.refs[fieldName].value.trim() === "") {
+        if(errors.hasOwnProperty(fieldName)) {
+          errors[fieldName].push("presence");
+        } else {
+          errors[fieldName] = [ "presence" ];
+        }
+      }
+    });
+
+    if(Object.keys(errors).length === 0) {
+      return true;
+
+    } else {
+      this.setState({ errors: errors });
+      return false;
+    }
+  },
+
+
+  buildFieldValues: function() {
+    let values = {};
+
+    Object.keys(this.props.form).map((fieldName) => {
+      values[fieldName] = this.refs[fieldName].value
+    });
+
+    return values;
+  },
+
+
+  onFormSubmit: function(e) {
     e.preventDefault();
-    this.props.onSubmit(e);
+    this.submit();
   },
 
 
   renderForm: function() {
-    let fields = this.props.formFunc();
-
-    return Object.keys(fields).map((fieldName) => {
-      let fieldConfig = fields[fieldName];
+    return Object.keys(this.props.form).map((fieldName) => {
+      let fieldConfig = this.props.form[fieldName];
       let input;
       let hint;
-      let required = fieldConfig.hasOwnProperty("validators") && fieldConfig.validators.hasOwnProperty("presence") && fieldConfig.validators.presence === true;
+      let required = this.isFieldRequired(fieldConfig);
 
 
       switch(fieldConfig.type) {
@@ -58,11 +114,31 @@ export default React.createClass({
       }
 
       if(fieldConfig.hint) {
-        hint = (<Translate content={`${this.props.contentPrefix}.${fieldName}.hint`} component="p" className="help-block" />);
+        hint = Counterpart.translate(`${this.props.contentPrefix}.${fieldName}.hint`);
+      }
+
+      if(required) {
+        if(hint) {
+          hint = hint + " " + Counterpart.translate("widgets.admin.form.hints.required");
+        } else {
+          hint = Counterpart.translate("widgets.admin.form.hints.required");
+        }
+      }
+
+      if(hint) {
+        hint = (<p className="help-block">{hint}</p>);
+      }
+
+      let formGroupKlass;
+      formGroupKlass = "form-group has-error";
+      if(this.state.errors.hasOwnProperty(fieldName)) {
+        formGroupKlass = "form-group has-error";
+      } else {
+        formGroupKlass = "form-group";
       }
 
       return (
-        <div key={fieldName} className="form-group">
+        <div key={fieldName} className={formGroupKlass}>
           <Translate htmlFor={fieldName} component="label" content={`${this.props.contentPrefix}.${fieldName}.label`}/>
           {input}
           {hint}
@@ -72,15 +148,12 @@ export default React.createClass({
   },
 
 
+
   render: function() {
-    if(this.props.formFunc) {
-      return (<form className="form" role="form" onSubmit={this.onSubmit}>
+    return (
+      <form className="form" role="form" ref="form" onSubmit={this.onFormSubmit}>
         {this.renderForm()}
-      </form>);
-    } else {
-      return (<form className="form" role="form" onSubmit={this.onSubmit}>
-        {this.props.children}
-      </form>);
-    }
+      </form>
+    );
   }
 });

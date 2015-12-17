@@ -81,6 +81,9 @@ export default {
             loading: "Fetching list of editors",
             header: {
               email: "e-mail",
+              first_name: "First name",
+              last_name: "Last name",
+              phone: "Phone",
             },
           },
 

@@ -10,14 +10,15 @@ import TextInput from '../../widgets/admin/text_input_widget.jsx';
 export default React.createClass({
   propTypes: {
     contentPrefix: React.PropTypes.string.isRequired,
-    formFunc: React.PropTypes.func.isRequired,
+    form: React.PropTypes.object.isRequired,
+    app: React.PropTypes.string.isRequired,
+    model: React.PropTypes.string.isRequired,
   },
 
 
   getInitialState: function() {
     return {
       step: "form",
-      inputEmailBlankError: false,
     }
   },
 
@@ -27,17 +28,9 @@ export default React.createClass({
   },
 
 
-  onConfirm: function() {
-    if(this.refs.inputEmail.getValue().trim() === "") {
-      this.setState({
-        inputEmailBlankError: true,
-      });
-      return;
-    }
-
-
-    this.createQuery = window.data
-      .record("auth", "Editor")
+  onFormSubmit: function(fieldValues) {
+    this.recordCall = window.data
+      .record(this.props.app, this.props.model)
       .on("loading", () => {
         if(this.isMounted()) {
           this.setState({ step: "progress" });
@@ -58,15 +51,13 @@ export default React.createClass({
           this.setState({ step: "error" });
         }
       })
-      .create({
-        "email" : this.refs.inputEmail.getValue().trim(),
-      });
+      .create(fieldValues);
   },
 
 
   onCancel: function() {
-    if(this.createQuery) {
-      this.createQuery.teardown();
+    if(this.recordCall) {
+      this.recordCall.teardown();
     }
   },
 
@@ -78,7 +69,7 @@ export default React.createClass({
 
   render: function() {
     return (
-      <ModalForm ref="modal" contentPrefix={this.props.contentPrefix} onConfirm={this.onConfirm} onCancel={this.onCancel} onShow={this.onShow} step={this.state.step} formFunc={this.props.formFunc}>
+      <ModalForm ref="modal" contentPrefix={this.props.contentPrefix} onShow={this.onShow} step={this.state.step} form={this.props.form} onFormSubmit={this.onFormSubmit} onCancel={this.onCancel}>
         <div>
           <div>
             <Translate component="p" className="text-center" content={this.props.contentPrefix + ".acknowledgement.info"} />

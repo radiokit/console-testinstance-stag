@@ -3,17 +3,18 @@ import React from 'react';
 import CRUD from '../../../widgets/admin/crud_widget.jsx';
 
 export default React.createClass({
-  buildQuery: function() {
-    return window.data
-      .query("auth", "Editor")
-      .select("id", "email")
-      .order("email", "asc")
+  modifyIndexQuery: function(query) {
+    return query
+      .order("last_name", "asc");
   },
 
 
   buildAttributes: function() {
     return {
+      first_name: { renderer: "string" },
+      last_name: { renderer: "string" },
       email: { renderer: "string" },
+      phone: { renderer: "string" },
     }
   },
 
@@ -30,16 +31,10 @@ export default React.createClass({
 
       first_name: {
         type: "string",
-        validators: {
-          presence: true,
-        }
       },
 
       last_name: {
         type: "string",
-        validators: {
-          presence: true,
-        }
       },
 
       phone: {
@@ -59,7 +54,7 @@ export default React.createClass({
 
   render: function() {
     return (
-      <CRUD contentPrefix="apps.administration.editors" queryFunc={this.buildQuery} attributesFunc={this.buildAttributes} formFunc={this.buildForm} />
+      <CRUD contentPrefix="apps.administration.editors" app="auth" model="Editor" attributes={this.buildAttributes()} form={this.buildForm()} indexQueryFunc={this.modifyIndexQuery} />
     );
   }
 });

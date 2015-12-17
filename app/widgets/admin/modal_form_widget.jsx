@@ -10,14 +10,14 @@ import Loading from '../../widgets/general/loading_widget.jsx';
 export default React.createClass({
   propTypes: {
     contentPrefix: React.PropTypes.string.isRequired,
-    onConfirm: React.PropTypes.func.isRequired,
-    onCancel: React.PropTypes.func.isRequired,
     onShow: React.PropTypes.func,
     onHide: React.PropTypes.func,
     proceedType: React.PropTypes.oneOf(['primary', 'success', 'info', 'warning', 'danger']),
     step: React.PropTypes.oneOf(['form', 'progress', 'acknowledgement', 'cancelled', 'error']).isRequired,
     size: React.PropTypes.oneOf(['normal', 'large']),
-    formFunc: React.PropTypes.func.isRequired,
+    form: React.PropTypes.object.isRequired,
+    onFormSubmit: React.PropTypes.func.isRequired,
+    onCancel: React.PropTypes.func.isRequired,
   },
 
 
@@ -30,16 +30,6 @@ export default React.createClass({
 
   show: function() {
     this.refs.modal.show();
-  },
-
-
-  onConfirm: function() {
-    this.props.onConfirm();
-  },
-
-
-  onCancel: function() {
-    this.props.onConfirm();
   },
 
 
@@ -57,6 +47,21 @@ export default React.createClass({
   },
 
 
+  onProceed: function() {
+    this.refs.form.submit();
+  },
+
+
+  onFormSubmit: function(fieldValues) {
+    this.props.onFormSubmit(fieldValues);
+  },
+
+
+  onCancel: function() {
+    this.props.onCancel();
+  },
+
+
   render: function() {
     return (
         <Modal ref="modal" size={this.props.size} contentPrefix={this.props.contentPrefix} onShow={this.onShow} onHide={this.onHide}>
@@ -65,7 +70,7 @@ export default React.createClass({
               switch(this.props.step) {
                 case "form":
                   return (
-                    <Form onSubmit={this.onConfirm} formFunc={this.props.formFunc} contentPrefix={this.props.contentPrefix + ".form"}/>
+                    <Form ref="form" form={this.props.form} contentPrefix={this.props.contentPrefix + ".form"} onSubmit={this.onFormSubmit} />
                   );
 
 
@@ -108,7 +113,7 @@ export default React.createClass({
                   return (
                     <div>
                       <Translate component="button" content={this.props.contentPrefix + ".action.cancel"} role="button" className="btn btn-default" data-dismiss="modal" />
-                      <Translate component="button" content={this.props.contentPrefix + ".action.proceed"} role="button" className={"btn btn-" + this.props.proceedType} onClick={this.onConfirm} />
+                      <Translate component="button" content={this.props.contentPrefix + ".action.proceed"} role="button" className={"btn btn-" + this.props.proceedType} onClick={this.onProceed} />
                     </div>
                   );
 

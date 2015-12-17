@@ -81,6 +81,9 @@ export default {
             loading: "Ładowanie listy kont redaktorów",
             header: {
               email: "e-mail",
+              first_name: "Imię",
+              last_name: "Nazwisko",
+              phone: "Telefon",
             },
           },
 
