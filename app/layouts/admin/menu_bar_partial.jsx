@@ -55,13 +55,6 @@ export default React.createClass({
         </div>
         <div className="menubar-scroll-panel">
           <ul id="main-menu" className="gui-controls gui-controls-tree">
-            {/*<li>
-              <Link to={"/apps/joint/control_room"}>
-                <div className="gui-icon"><i className="mdi mdi-remote" /></div>
-                <Translate component="span" className="title" content="apps.joint.navigation.title"/>
-              </Link>
-            </li>*/}
-
             <li className="gui-folder">
               <a onClick={this.onMenuRootItemClick}>
                 <div className="gui-icon"><i className="mdi mdi-radio-tower"/></div>

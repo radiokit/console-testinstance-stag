@@ -36,7 +36,6 @@ import InfrastructureTransmissionsIndex from './apps/infrastructure/transmission
 import InfrastructurePatchbayIndex from './apps/infrastructure/patchbay/index_view.jsx';
 
 Counterpart.registerTranslations("en", require('./locales/en/general.js'));
-Counterpart.registerTranslations("en", require('./locales/en/apps/joint.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/shows.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/music.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/broadcast.js'));
@@ -46,7 +45,6 @@ Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/table
 Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/modal.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/scope.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/general.js'));
-Counterpart.registerTranslations("pl", require('./locales/pl/apps/joint.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/shows.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/music.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/broadcast.js'));
@@ -66,7 +64,7 @@ function getEnv() {
       apps: {
         "plumber" : { baseUrl: "https://radiokit-plumber-stag.herokuapp.com" },
         "auth" : { baseUrl: "https://radiokit-auth-stag.herokuapp.com" },
-        "vault" : { baseUrl: "https://radiokit-vault-stag.herokuapp.com" },
+        "vault" : { baseUrl: "http://localhost:4060" },
         "agenda": { baseUrl: "https://radiokit-agenda-stag.herokuapp.com" },
         "diffusor": { baseUrl: "https://radiokit-diffusor-stag.herokuapp.com" },
       },
@@ -116,10 +114,6 @@ ReactDOM.render((
             <Route path="patchbay/index" component={InfrastructurePatchbayIndex} onEnter={pingGoogleAnalytics}/>
           </Route>
           <Route path="computing_nodes/index" component={InfrastructureComputingNodesIndex} onEnter={pingGoogleAnalytics}/>
-        </Route>
-
-        <Route path="joint" component={JointApp}>
-          <Route path="control_room" component={JointControlRoom} onEnter={pingGoogleAnalytics}/>
         </Route>
 
         <Route path="shows" component={ShowsApp}>
