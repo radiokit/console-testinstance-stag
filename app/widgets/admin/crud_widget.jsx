@@ -116,12 +116,12 @@ export default React.createClass({
               if(this.props.createEnabled === true) {
                 return <CRUDCreateModal contentPrefix={this.props.contentPrefix + ".index.modals.create"} ref="createModal" form={this.props.form} app={this.props.app} model={this.props.model} />
               }
-            }}
+            }()}
             {() => {
               if(this.props.deleteEnabled === true) {
                 return <CRUDDeleteModal contentPrefix={this.props.contentPrefix + ".index.modals.delete"} ref="deleteModal" app={this.props.app} model={this.props.model} selectedRecordIds={this.state.selectedRecordIds} />
               }
-            }}
+            }()}
 
             <Card contentPrefix={`${this.props.contentPrefix}.index`}>
               <CardHeader/>
@@ -132,12 +132,12 @@ export default React.createClass({
                       if(this.props.createEnabled === true) {
                         return <ToolBarButton icon="plus" labelTextKey={`${this.props.contentPrefix}.index.actions.create`} onClick={this.onCreateButtonClick} />;
                       }
-                    }}
+                    }()}
                     {() => {
                       if(this.props.deleteEnabled === true) {
                         return <ToolBarButton icon="delete" hintTooltipKey={`${this.props.contentPrefix}.index.actions.delete`} onClick={this.onDeleteButtonClick} disabled={this.state.selectedRecordIds.count() === 0} />
                       }
-                    }}
+                    }()}
                   </ToolBarGroup>
                 </TableBrowser>
               </CardBody>
