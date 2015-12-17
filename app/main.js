@@ -13,7 +13,6 @@ import AppsIndex from './apps/apps_index.jsx';
 import BroadcastApp from './apps/broadcast/app.jsx';
 import BroadcastPlaylistIndex from './apps/broadcast/playlist/index_view.jsx';
 import BroadcastLiveIndex from './apps/broadcast/live/index_view.jsx';
-import BroadcastChannelsIndex from './apps/broadcast/channels/index_view.jsx';
 import InfrastructureApp from './apps/infrastructure/app.jsx';
 import InfrastructureClientNodesIndex from './apps/infrastructure/client_nodes/index_view.jsx';
 import InfrastructureComputingNodesIndex from './apps/infrastructure/computing_nodes/index_view.jsx';
@@ -22,6 +21,7 @@ import InfrastructureTransmissionsIndex from './apps/infrastructure/transmission
 import InfrastructurePatchbayIndex from './apps/infrastructure/patchbay/index_view.jsx';
 import AdministrationApp from './apps/administration/app.jsx';
 import AdministrationUserAccountsIndex from './apps/administration/user_accounts/index_view.jsx';
+import AdministrationBroadcastChannelsIndex from './apps/administration/broadcast_channels/index_view.jsx';
 import AdministrationEditorsIndex from './apps/administration/editors/index_view.jsx';
 
 Counterpart.registerTranslations("en", require('./locales/en/general.js'));
@@ -92,22 +92,18 @@ ReactDOM.render((
           <Route component={ScopeLayout} scope="broadcastChannel">
             <Route path="live/index" component={BroadcastLiveIndex} onEnter={pingGoogleAnalytics}/>
           </Route>
-          <Route component={ScopeLayout} scope="userAccount">
-            <Route path="channels/index" component={BroadcastChannelsIndex} onEnter={pingGoogleAnalytics}/>
-          </Route>
         </Route>
 
         <Route path="infrastructure" component={BroadcastApp}>
-          <Route component={ScopeLayout} scope="userAccount">
-            <Route path="client_nodes/index" component={InfrastructureClientNodesIndex} onEnter={pingGoogleAnalytics}/>
-            <Route path="external_inputs/index" component={InfrastructureExternalInputsIndex} onEnter={pingGoogleAnalytics}/>
-            <Route path="transmissions/index" component={InfrastructureTransmissionsIndex} onEnter={pingGoogleAnalytics}/>
-            <Route path="patchbay/index" component={InfrastructurePatchbayIndex} onEnter={pingGoogleAnalytics}/>
-          </Route>
+          <Route path="client_nodes/index" component={InfrastructureClientNodesIndex} onEnter={pingGoogleAnalytics}/>
+          <Route path="external_inputs/index" component={InfrastructureExternalInputsIndex} onEnter={pingGoogleAnalytics}/>
+          <Route path="transmissions/index" component={InfrastructureTransmissionsIndex} onEnter={pingGoogleAnalytics}/>
+          <Route path="patchbay/index" component={InfrastructurePatchbayIndex} onEnter={pingGoogleAnalytics}/>
           <Route path="computing_nodes/index" component={InfrastructureComputingNodesIndex} onEnter={pingGoogleAnalytics}/>
         </Route>
 
         <Route path="administration" component={AdministrationApp}>
+          <Route path="broadcast_channels/index" component={AdministrationBroadcastChannelsIndex} onEnter={pingGoogleAnalytics}/>
           <Route path="user_accounts/index" component={AdministrationUserAccountsIndex} onEnter={pingGoogleAnalytics}/>
           <Route path="editors/index" component={AdministrationEditorsIndex} onEnter={pingGoogleAnalytics}/>
         </Route>

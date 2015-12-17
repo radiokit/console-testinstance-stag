@@ -73,11 +73,6 @@ export default React.createClass({
                     <Translate content="apps.broadcast.navigation.live.title" className="title" />
                   </Link>
                 </li>
-                <li>
-                  <Link to={RoutingHelper.apps.broadcast.channels.index(this)}>
-                    <Translate content="apps.broadcast.navigation.channels.title" className="title" />
-                  </Link>
-                </li>
               </ul>
             </li>
 
@@ -124,6 +119,11 @@ export default React.createClass({
                 <li>
                   <Link to={RoutingHelper.apps.administration.userAccounts.index(this)}>
                     <Translate content="apps.administration.navigation.user_accounts.title" className="title" />
+                  </Link>
+                </li>
+                <li>
+                  <Link to={RoutingHelper.apps.administration.broadcastChannels.index(this)}>
+                    <Translate content="apps.administration.navigation.broadcast_channels.title" className="title" />
                   </Link>
                 </li>
                 <li>

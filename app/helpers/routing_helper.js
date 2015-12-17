@@ -37,11 +37,6 @@ export default {
           return "/apps/broadcast/live/index";
         },
       },
-      channels: {
-        index: function(context) {
-          return "/apps/broadcast/channels/index";
-        },
-      },
     },
     infrastructure: {
       clientNodes: {
@@ -74,6 +69,11 @@ export default {
       userAccounts: {
         index: function(context) {
           return "/apps/administration/user_accounts/index";
+        },
+      },
+      broadcastChannels: {
+        index: function(context) {
+          return "/apps/administration/broadcast_channels/index";
         },
       },
       editors: {

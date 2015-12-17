@@ -5,15 +5,13 @@ import CRUD from '../../../widgets/admin/crud_widget.jsx';
 export default React.createClass({
   modifyIndexQuery: function(query) {
     return query
-    .where("references", "deq", "role", "infrastructure")
-    .order("name", "asc")
+      .order("name", "asc")
   },
 
 
   buildAttributes: function() {
     return {
       name: { renderer: "string" },
-      level: { renderer: "peakmeter", props: { model: "Media.Input.Stream.RTP"} },
     }
   },
 
@@ -33,7 +31,7 @@ export default React.createClass({
 
   render: function() {
     return (
-      <CRUD contentPrefix="apps.infrastructure.transmissions" createEnabled={false} deleteEnabled={false} app="plumber" model="Media.Input.Stream.RTP" attributes={this.buildAttributes()} form={this.buildForm()} indexQueryFunc={this.modifyIndexQuery} />
+      <CRUD contentPrefix="apps.administration.broadcast_channels" app="agenda" model="Broadcast.Channel" attributes={this.buildAttributes()} form={this.buildForm()} indexQueryFunc={this.modifyIndexQuery} />
     );
   }
 });
