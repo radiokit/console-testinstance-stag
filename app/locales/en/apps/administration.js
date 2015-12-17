@@ -140,6 +140,8 @@ export default {
             loading: "Fetching list of file repositories",
             header: {
               name: "Name",
+              files_count: "Files count",
+              files_size_total: "Files' total size",
               user_account: "Client account"
             },
           },

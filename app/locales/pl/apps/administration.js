@@ -140,6 +140,8 @@ export default {
             loading: "Pobieranie listy repozytoriów plików",
             header: {
               name: "Nazwa",
+              files_count: "Ilość plików",
+              files_size_total: "Łączny rozmiar plików",
               user_account: "Konto użytkownika",
             },
           },

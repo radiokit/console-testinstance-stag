@@ -11,8 +11,10 @@ export default React.createClass({
 
   buildAttributes: function() {
     return {
-      name:         { renderer: "string" },
-      user_account: { renderer: "scope-user-account" },
+      name:             { renderer: "string" },
+      files_size_total: { renderer: "string" },
+      files_count:      { renderer: "integer" },
+      user_account:     { renderer: "scope-user-account" },
     }
   },
 
