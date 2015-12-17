@@ -70,5 +70,12 @@ export default {
         },
       },
     },
+    organization: {
+      userAccounts: {
+        index: function(context) {
+          return "/apps/organization/user_accounts/index";
+        },
+      },
+    },
   }
 }

@@ -28,11 +28,14 @@ import InfrastructureComputingNodesIndex from './apps/infrastructure/computing_n
 import InfrastructureExternalInputsIndex from './apps/infrastructure/external_inputs/index_view.jsx';
 import InfrastructureTransmissionsIndex from './apps/infrastructure/transmissions/index_view.jsx';
 import InfrastructurePatchbayIndex from './apps/infrastructure/patchbay/index_view.jsx';
+import OrganizationApp from './apps/organization/app.jsx';
+import OrganizationUserAccountsIndex from './apps/organization/user_accounts/index_view.jsx';
 
 Counterpart.registerTranslations("en", require('./locales/en/general.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/music.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/broadcast.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/infrastructure.js'));
+Counterpart.registerTranslations("en", require('./locales/en/apps/organization.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/vault/file_browser.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/table_browser.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/modal.js'));
@@ -41,6 +44,7 @@ Counterpart.registerTranslations("pl", require('./locales/pl/general.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/music.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/broadcast.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/infrastructure.js'));
+Counterpart.registerTranslations("pl", require('./locales/pl/apps/organization.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/vault/file_browser.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/table_browser.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/modal.js'));
@@ -106,6 +110,10 @@ ReactDOM.render((
             <Route path="patchbay/index" component={InfrastructurePatchbayIndex} onEnter={pingGoogleAnalytics}/>
           </Route>
           <Route path="computing_nodes/index" component={InfrastructureComputingNodesIndex} onEnter={pingGoogleAnalytics}/>
+        </Route>
+
+        <Route path="organization" component={OrganizationApp}>
+          <Route path="user_accounts/index" component={OrganizationUserAccountsIndex} onEnter={pingGoogleAnalytics}/>
         </Route>
 
         <Route path="music" component={MusicApp}>

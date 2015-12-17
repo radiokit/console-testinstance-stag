@@ -83,25 +83,6 @@ export default React.createClass({
 
             <li className="gui-folder">
               <a onClick={this.onMenuRootItemClick}>
-                <div className="gui-icon"><i className="mdi mdi-guitar"/></div>
-                <Translate content="apps.music.navigation.title" className="title" />
-              </a>
-              <ul>
-                <li>
-                  <Link to={RoutingHelper.apps.music.files.index(this)}>
-                    <Translate content="apps.music.navigation.files.title" className="title" />
-                  </Link>
-                </li>
-                <li>
-                  <Link to={RoutingHelper.apps.music.schedule.index(this)}>
-                    <Translate content="apps.music.navigation.schedule.title" className="title" />
-                  </Link>
-                </li>
-              </ul>
-            </li>
-
-            <li className="gui-folder">
-              <a onClick={this.onMenuRootItemClick}>
                 <div className="gui-icon"><i className="mdi mdi-server-network"/></div>
                 <Translate content="apps.infrastructure.navigation.title" className="title" />
               </a>
@@ -129,6 +110,20 @@ export default React.createClass({
                 <li>
                   <Link to={RoutingHelper.apps.infrastructure.patchbay.index(this)}>
                     <Translate content="apps.infrastructure.navigation.patchbay.title" className="title" />
+                  </Link>
+                </li>
+              </ul>
+            </li>
+
+            <li className="gui-folder">
+              <a onClick={this.onMenuRootItemClick}>
+                <div className="gui-icon"><i className="mdi mdi-account-multiple"/></div>
+                <Translate content="apps.organization.navigation.title" className="title" />
+              </a>
+              <ul>
+                <li>
+                  <Link to={RoutingHelper.apps.organization.userAccounts.index(this)}>
+                    <Translate content="apps.organization.navigation.user_accounts.title" className="title" />
                   </Link>
                 </li>
               </ul>
