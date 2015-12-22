@@ -1,7 +1,7 @@
 import React from 'react';
 import Translate from 'react-translate-component';
 
-import ModalForEach from '../../widgets/admin/modal_foreach_widget.jsx';
+import ModalForEach from '../../../widgets/admin/modal_foreach_widget.jsx';
 
 
 export default React.createClass({

@@ -18,6 +18,13 @@ export default {
       },
 
       user_accounts: {
+        show: {
+          actions: {
+            back: "Powrót do spisu kont klientów",
+            delete: "Usuń to konto klienta",
+          },
+        },
+
         index: {
           header: "Konta klientów",
           actions: {
@@ -76,6 +83,13 @@ export default {
       },
 
       broadcast_channels: {
+        show: {
+          actions: {
+            back: "Powrót do spisu kanałów",
+            delete: "Usuń ten kanał",
+          },
+        },
+
         index: {
           header: "Kanały",
           actions: {
@@ -129,6 +143,21 @@ export default {
       },
 
       file_repositories: {
+        show: {
+          actions: {
+            back: "Powrót do spisu repozytoriów plików",
+            delete: "Usuń to repozytorium plików",
+          },
+
+          tabs: {
+            headers: {
+              metadata: "Winiety",
+              processing: "Przetwarzanie",
+              tags: "Etykiety",
+            },
+          },
+        },
+
         index: {
           header: "Repozytoria plików",
           actions: {
@@ -188,6 +217,13 @@ export default {
       },
 
       editors: {
+        show: {
+          actions: {
+            back: "Powrót do spisu kont redaktorów",
+            delete: "Usuń to konto redaktora",
+          },
+        },
+
         index: {
           header: "Konta redaktorów",
           actions: {

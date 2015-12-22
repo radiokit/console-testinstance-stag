@@ -1,6 +1,6 @@
 import React from 'react';
 
-import CRUD from '../../../widgets/admin/crud_widget.jsx';
+import Index from '../../../widgets/admin/crud/index_widget.jsx';
 
 export default React.createClass({
   modifyIndexQuery: function(query) {
@@ -91,7 +91,7 @@ export default React.createClass({
 
   render: function() {
     return (
-      <CRUD contentPrefix="apps.infrastructure.client_nodes" app="plumber" model="Resource.Architecture.ClientNode" attributes={this.buildAttributes()} form={this.buildForm()} indexQueryFunc={this.modifyIndexQuery} />
+      <Index contentPrefix="apps.infrastructure.client_nodes" app="plumber" model="Resource.Architecture.ClientNode" attributes={this.buildAttributes()} form={this.buildForm()} indexQueryFunc={this.modifyIndexQuery} />
     );
   }
 });

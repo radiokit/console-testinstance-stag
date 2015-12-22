@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Translate from 'react-translate-component';
 
-import ModalForm from '../../widgets/admin/modal_form_widget.jsx';
-import Form from '../../widgets/admin/form_widget.jsx';
-import TextInput from '../../widgets/admin/text_input_widget.jsx';
+import ModalForm from '../../../widgets/admin/modal_form_widget.jsx';
+import Form from '../../../widgets/admin/form_widget.jsx';
+import TextInput from '../../../widgets/admin/text_input_widget.jsx';
 
 
 export default React.createClass({

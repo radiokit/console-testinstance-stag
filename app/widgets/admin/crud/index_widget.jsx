@@ -2,18 +2,18 @@ import React from 'react';
 import Immutable from 'immutable';
 import Counterpart from 'counterpart';
 
-import GridRow from '../../widgets/admin/grid_row_widget.jsx';
-import GridCell from '../../widgets/admin/grid_cell_widget.jsx';
-import Section from '../../widgets/admin/section_widget.jsx';
-import TableBrowser from '../../widgets/admin/table_browser_widget.jsx';
-import Card from '../../widgets/admin/card_widget.jsx';
-import CardBody from '../../widgets/admin/card_body_widget.jsx';
-import CardHeader from '../../widgets/admin/card_header_widget.jsx';
-import ToolBar from '../../widgets/admin/toolbar_widget.jsx';
-import ToolBarGroup from '../../widgets/admin/toolbar_group_widget.jsx';
-import ToolBarButton from '../../widgets/admin/toolbar_button_widget.jsx';
-import CRUDCreateModal from './crud_create_modal.jsx';
-import CRUDDeleteModal from './crud_delete_modal.jsx';
+import GridRow from '../../../widgets/admin/grid_row_widget.jsx';
+import GridCell from '../../../widgets/admin/grid_cell_widget.jsx';
+import Section from '../../../widgets/admin/section_widget.jsx';
+import TableBrowser from '../../../widgets/admin/table_browser_widget.jsx';
+import Card from '../../../widgets/admin/card_widget.jsx';
+import CardBody from '../../../widgets/admin/card_body_widget.jsx';
+import CardHeader from '../../../widgets/admin/card_header_widget.jsx';
+import ToolBar from '../../../widgets/admin/toolbar_widget.jsx';
+import ToolBarGroup from '../../../widgets/admin/toolbar_group_widget.jsx';
+import ToolBarButton from '../../../widgets/admin/toolbar_button_widget.jsx';
+import CreateModal from './create_modal.jsx';
+import DeleteModal from './delete_modal.jsx';
 
 export default React.createClass({
   propTypes: {
@@ -138,12 +138,12 @@ export default React.createClass({
           <GridCell size="large" center={true}>
             {() => {
               if(this.props.createEnabled === true) {
-                return <CRUDCreateModal contentPrefix={this.props.contentPrefix + ".index.modals.create"} ref="createModal" form={this.props.form} app={this.props.app} model={this.props.model} />
+                return <CreateModal contentPrefix={this.props.contentPrefix + ".index.modals.create"} ref="createModal" form={this.props.form} app={this.props.app} model={this.props.model} />
               }
             }()}
             {() => {
               if(this.props.deleteEnabled === true) {
-                return <CRUDDeleteModal contentPrefix={this.props.contentPrefix + ".index.modals.delete"} ref="deleteModal" app={this.props.app} model={this.props.model} selectedRecordIds={this.state.selectedRecordIds} />
+                return <DeleteModal contentPrefix={this.props.contentPrefix + ".index.modals.delete"} ref="deleteModal" app={this.props.app} model={this.props.model} selectedRecordIds={this.state.selectedRecordIds} />
               }
             }()}
 

@@ -25,6 +25,13 @@ export default {
       },
 
       client_nodes: {
+        show: {
+          actions: {
+            back: "Back to the audio devices index",
+            delete: "Delete this audio device",
+          },
+        },
+
         index: {
           header: "Audio Devices",
           actions: {
@@ -119,6 +126,13 @@ export default {
       },
 
       computing_nodes: {
+        show: {
+          actions: {
+            back: "Back to the audio servers index",
+            delete: "Delete this audio server",
+          },
+        },
+
         index: {
           header: "Audio Servers",
           actions: {
@@ -270,6 +284,13 @@ export default {
       },
 
       transmissions: {
+        show: {
+          actions: {
+            back: "Back to the tranmissions index",
+            delete: "Delete this transmission",
+          },
+        },
+
         index: {
           header: "Transmissions",
           table: {

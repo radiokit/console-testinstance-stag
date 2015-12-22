@@ -18,11 +18,18 @@ export default {
       },
 
       user_accounts: {
+        show: {
+          actions: {
+            back: "Back to the accounts index",
+            delete: "Delete this account",
+          },
+        },
+
         index: {
           header: "Accounts",
           actions: {
             create: "Add account",
-            delete: "Remove selected accounts",
+            delete: "Delete selected accounts",
           },
 
           table: {
@@ -76,11 +83,18 @@ export default {
       },
 
       broadcast_channels: {
+        show: {
+          actions: {
+            back: "Back to the channels index",
+            delete: "Delete this channel",
+          },
+        },
+
         index: {
           header: "Channels",
           actions: {
             create: "Add channel",
-            delete: "Remove selected channels",
+            delete: "Delete selected channels",
           },
 
           table: {
@@ -129,11 +143,26 @@ export default {
       },
 
       file_repositories: {
+        show: {
+          actions: {
+            back: "Back to the file repositories index",
+            delete: "Delete this file repository",
+          },
+
+          tabs: {
+            headers: {
+              metadata: "Metadata",
+              processing: "Processing",
+              tags: "Tags",
+            },
+          },
+        },
+
         index: {
           header: "File Repositories",
           actions: {
             create: "Add file repository",
-            delete: "Remove selected file repositories",
+            delete: "Delete selected file repositories",
           },
 
           table: {
@@ -188,11 +217,19 @@ export default {
       },
 
       editors: {
+        show: {
+          actions: {
+            back: "Back to the editors index",
+            delete: "Delete this editor",
+          },
+        },
+
+
         index: {
           header: "Editors",
           actions: {
             create: "Add editor",
-            delete: "Remove selected editors",
+            delete: "Delete selected editors",
           },
 
           table: {
