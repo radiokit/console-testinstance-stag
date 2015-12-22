@@ -122,7 +122,7 @@ body:not(.menubar-visible) {
 body.menubar-visible, body.menubar-pin {
   #menubar {
     li.gui-folder.expanded > ul {
-      max-height: 100px;
+      max-height: 150px;
       opacity: 1;
       transition: all 0.5s;
     }
