@@ -5,14 +5,14 @@ import CRUD from '../../../widgets/admin/crud_widget.jsx';
 export default React.createClass({
   modifyIndexQuery: function(query) {
     return query
-    .where("references", "deq", "role", "infrastructure")
-    .order("name", "asc")
+    .select("client_node")
+    .joins("client_node");
   },
 
 
   buildAttributes: function() {
     return {
-      name: { renderer: "string" },
+      device_name: { renderer: "string", valueFunc: (record) => { return record.get("client_node").get("name") } },
       level: { renderer: "peakmeter", props: { model: "Media.Input.Stream.RTP"} },
     }
   },
