@@ -23,13 +23,21 @@ export default React.createClass({
     model: React.PropTypes.string.isRequired,
     form: React.PropTypes.object.isRequired,
     attributes: React.PropTypes.object.isRequired,
+    readEnabled: React.PropTypes.bool.isRequired,
     createEnabled: React.PropTypes.bool.isRequired,
     deleteEnabled: React.PropTypes.bool.isRequired,
   },
 
 
+  contextTypes: {
+    history: React.PropTypes.object.isRequired,
+    location: React.PropTypes.object.isRequired,
+  },
+
+
   getDefaultProps: function() {
     return {
+      readEnabled: true,
       createEnabled: true,
       deleteEnabled: true,
     }
@@ -52,6 +60,17 @@ export default React.createClass({
   onDeleteButtonClick: function(e) {
     e.preventDefault();
     this.refs.deleteModal.show();
+  },
+
+
+  /**
+   * Callback called when user clicked a row in the table.
+   */
+  onRecordClick: function(record) {
+    let currentLocation = this.context.location.pathname.split("/");
+    currentLocation.pop();
+    let newLocation = currentLocation.join("/") + "/show/" + record.get("id");
+    this.context.history.replaceState(null, newLocation);
   },
 
 
@@ -131,7 +150,7 @@ export default React.createClass({
             <Card contentPrefix={`${this.props.contentPrefix}.index`}>
               <CardHeader/>
               <CardBody cardPadding={false}>
-                <TableBrowser onSelect={this.onTableSelect} selectable={true} attributes={this.props.attributes} actions={[]} contentPrefix={`${this.props.contentPrefix}.index.table`} recordsQuery={this.buildIndexQuery()}>
+                <TableBrowser onSelect={this.onTableSelect} selectable={true} attributes={this.props.attributes} contentPrefix={`${this.props.contentPrefix}.index.table`} recordsQuery={this.buildIndexQuery()} recordsLinkFunc={this.props.readEnabled === true ? this.onRecordClick : undefined}>
                   <ToolBarGroup>
                     {() => {
                       if(this.props.createEnabled === true) {

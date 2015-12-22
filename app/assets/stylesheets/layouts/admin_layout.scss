@@ -137,6 +137,11 @@ body.menubar-visible, body.menubar-pin {
   margin-left: 1ex;
 }
 
+td.clickable {
+  cursor: pointer;
+}
+
+
 /* Alerts FIXME move to widget's css */
 .alert {
   a {

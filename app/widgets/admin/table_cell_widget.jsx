@@ -23,12 +23,20 @@ export default React.createClass({
   propTypes: {
     attributeName: React.PropTypes.string.isRequired,
     attributeConfig: React.PropTypes.object.isRequired,
-    record: React.PropTypes.object.isRequired
+    record: React.PropTypes.object.isRequired,
+    onClick: React.PropTypes.func,
   },
 
 
   render: function() {
     let value;
+    let cellKlass = `cell-${this.props.attributeConfig.renderer}`;
+    let cellKey = `cell-${this.props.attributeName}`;
+    if(this.props.onClick) {
+      cellKlass += " clickable";
+    }
+
+
     if(typeof(this.props.attributeConfig.valueFunc) === "function") {
       value = this.props.attributeConfig.valueFunc(this.props.record, this.props.attributeName);
 
@@ -112,14 +120,10 @@ export default React.createClass({
           throw new Error("Unknown table cell renderer '" + this.props.attributeConfig.renderer + "'");
       }
 
-      if(typeof(this.props.attributeConfig.linkFunc) === "function") {
-        return (<td className={`cell-${this.props.attributeConfig.renderer}`} key={"cell-" + this.props.attributeName}><Link to={this.props.attributeConfig.linkFunc(this.props.record)}>{cell}</Link></td>);
+      return (<td onClick={this.props.onClick} className={cellKlass} key={cellKey}>{cell}</td>);
 
-      } else {
-        return (<td className={`cell-${this.props.attributeConfig.renderer}`} key={"cell-" + this.props.attributeName}>{cell}</td>);
-      }
     } else {
-      return (<td className={`cell-${this.props.attributeConfig.renderer}`} key={"cell-" + this.props.attributeName}/>);
+      return (<td onClick={this.props.onClick} className={cellKlass} key={cellKey}/>);
     }
   }
 });

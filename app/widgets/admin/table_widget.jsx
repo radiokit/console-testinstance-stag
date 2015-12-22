@@ -8,9 +8,9 @@ import TableHeader from './table_header_widget.jsx';
 export default React.createClass({
   propTypes: {
     attributes: React.PropTypes.object.isRequired,
-    actions: React.PropTypes.arrayOf(React.PropTypes.element),
     contentPrefix: React.PropTypes.string.isRequired,
     records: React.PropTypes.object.isRequired,
+    linkFunc: React.PropTypes.func,
     selectable: React.PropTypes.bool,
     selectedRecordIds: React.PropTypes.object,
     onSelectRecord: React.PropTypes.func,
@@ -20,7 +20,6 @@ export default React.createClass({
 
   getDefaultProps: function() {
     return {
-      actions: [],
       selectable: false,
       selectedRecordIds: new Immutable.Seq().toIndexedSeq(),
     }
@@ -101,7 +100,7 @@ export default React.createClass({
   render: function() {
     return (<table className="table table-hover">
       <TableHeader attributes={this.props.attributes} records={this.props.records} contentPrefix={this.props.contentPrefix} selectable={this.props.selectable} headerSelected={this.state.selectedRecordIds.count() >= this.props.records.count()} onSelectAll={this.onSelectAll} />
-      <TableBody attributes={this.props.attributes} records={this.props.records} selectable={this.props.selectable} selectedRecordIds={this.state.selectedRecordIds} onSelectRecord={this.onSelectRecord} />
+      <TableBody linkFunc={this.props.linkFunc} attributes={this.props.attributes} records={this.props.records} selectable={this.props.selectable} selectedRecordIds={this.state.selectedRecordIds} onSelectRecord={this.onSelectRecord} />
     </table>);
   }
 });

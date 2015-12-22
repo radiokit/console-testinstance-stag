@@ -200,7 +200,7 @@ export default React.createClass({
               <CardBody cardPadding={false}>
                 <CardSidebar>
                   <TagSelector onTagItemChange={this.onTagItemChange} selectedTagItemIds={this.state.selectedTagItemIds} tagCategoriesWithItems={this.state.availableCategories}/>
-                  <TableBrowser onSelect={this.onTableSelect} selectable={true} attributes={this.buildTableAttributes()} actions={[]} contentPrefix="widgets.vault.file_browser.table" recordsQuery={this.state.recordsQuery}>
+                  <TableBrowser onSelect={this.onTableSelect} selectable={true} attributes={this.buildTableAttributes()} contentPrefix="widgets.vault.file_browser.table" recordsQuery={this.state.recordsQuery}>
                     <ToolbarGroup>
                       <Link type="button" className="btn btn-default-light" to={this.props.routingPrefix.files.create(this)}><i className="mdi mdi-upload"/><Translate content={this.props.contentPrefix + ".index.actions.create"} component="span"/></Link>
                       <button type="button" className="btn btn-default-light" disabled={this.state.selectedRecordIds.count() === 0} onClick={this.onDownloadClick}><i className="mdi mdi-download"/></button>

@@ -10,7 +10,8 @@ export default React.createClass({
     selectable: React.PropTypes.bool,
     selectedRecordIds: React.PropTypes.object,
     onSelectRecord: React.PropTypes.func,
-    records: React.PropTypes.object.isRequired
+    records: React.PropTypes.object.isRequired,
+    linkFunc: React.PropTypes.func,
   },
 
 
@@ -33,7 +34,7 @@ export default React.createClass({
   render: function() {
     return (
       <tbody>
-        {this.props.records.map((record) => { return <TableRow key={record.get("id")} onSelect={this.onSelectRecord} selected={this.props.selectedRecordIds.includes(record.get("id"))} record={record} attributes={this.props.attributes} actions={this.props.actions} headerSelected={this.props.headerSelected} selectable={this.props.selectable} />; })}
+        {this.props.records.map((record) => { return <TableRow key={record.get("id")} linkFunc={this.props.linkFunc} onSelect={this.onSelectRecord} selected={this.props.selectedRecordIds.includes(record.get("id"))} record={record} attributes={this.props.attributes} actions={this.props.actions} headerSelected={this.props.headerSelected} selectable={this.props.selectable} />; })}
       </tbody>
     );
   }

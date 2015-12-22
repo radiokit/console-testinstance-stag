@@ -12,18 +12,17 @@ import Loading from '../../widgets/general/loading_widget.jsx';
 export default React.createClass({
   propTypes: {
     attributes: React.PropTypes.object.isRequired,
-    actions: React.PropTypes.arrayOf(React.PropTypes.element),
     contentPrefix: React.PropTypes.string.isRequired,
     selectable: React.PropTypes.bool,
     onSelect: React.PropTypes.func,
     limit: React.PropTypes.number.isRequired,
     recordsQuery: React.PropTypes.object.isRequired,
+    recordsLinkFunc: React.PropTypes.func,
   },
 
 
   getDefaultProps: function() {
     return {
-      actions: [],
       selectable: false,
       limit: 100,
     }
@@ -222,7 +221,7 @@ export default React.createClass({
   renderTable: function() {
     if(this.state.recordsCount !== 0) {
       return (
-        <Table selectedRecordIds={this.state.selectedRecordIds} onSelectRecord={this.onSelectRecord} onSelectAll={this.onSelectAll} selectable={this.props.selectable} attributes={this.props.attributes} actions={this.props.actions} contentPrefix={this.props.contentPrefix} records={this.state.records} />
+        <Table linkFunc={this.props.recordsLinkFunc} selectedRecordIds={this.state.selectedRecordIds} onSelectRecord={this.onSelectRecord} onSelectAll={this.onSelectAll} selectable={this.props.selectable} attributes={this.props.attributes} contentPrefix={this.props.contentPrefix} records={this.state.records} />
       );
     }
   },
