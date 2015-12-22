@@ -8,6 +8,8 @@ export default React.createClass({
   propTypes: {
     contentPrefix: React.PropTypes.string.isRequired,
     selectedRecordIds: React.PropTypes.object.isRequired,
+    app: React.PropTypes.string.isRequired,
+    model: React.PropTypes.string.isRequired,
   },
 
 
@@ -31,7 +33,7 @@ export default React.createClass({
 
 
   onPerform: function(index, recordId) {
-    window.data.record("auth", "Editor", recordId)
+    window.data.record(this.props.app, this.props.model, recordId)
       // .on("error", this.onDeleteError) // TODO
       .on("loaded", this.onDeleteSuccess)
       .destroy();
