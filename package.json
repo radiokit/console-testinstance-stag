@@ -33,10 +33,15 @@
     "webpack-dev-server": "^1.12.0"
   },
   "dependencies": {
+    "clone": "^1.0.2",
     "counterpart": "^0.17.0",
+    "filesize": "^3.1.5",
     "gravatar-api": "^1.2.5",
     "history": "^1.11.1",
     "immutable": "^3.7.5",
+    "moment": "^2.10.6",
+    "moment-timezone": "^0.4.1",
+    "phoenix-socket": "^1.0.4",
     "radiokit-api": "^0.1.2",
     "react": "^0.14.2",
     "react-dom": "^0.14.2",
@@ -44,11 +49,7 @@
     "react-router": "^1.0.0",
     "react-translate-component": "^0.10.0",
     "spin.js": "^2.3.2",
-    "tiny-sprintf": "^0.3.0",
-    "phoenix-socket": "^1.0.4",
-    "moment": "^2.10.6",
-    "moment-timezone": "^0.4.1",
-    "clone": "^1.0.2"
+    "tiny-sprintf": "^0.3.0"
   },
   "engines": {
     "node": "0.12.x",

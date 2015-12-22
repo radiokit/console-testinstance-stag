@@ -14,6 +14,7 @@ import TableCellDate from './table_cell_date.jsx';
 import TableCellDateTime from './table_cell_datetime.jsx';
 import TableCellTime from './table_cell_time.jsx';
 import TableCellIcon from './table_cell_icon.jsx';
+import TableCellFileSize from './table_cell_filesize.jsx';
 import TableCellPeakmeter from './table_cell_peakmeter.jsx';
 import TableCellScopeUserAccount from './table_cell_scope_user_account.jsx';
 import TableCellScopeBroadcastChannel from './table_cell_scope_broadcast_channel.jsx';
@@ -35,7 +36,7 @@ export default React.createClass({
       value = this.props.record.get(this.props.attributeName);
     }
 
-    if(value || this.props.attributeConfig.renderer === "peakmeter" || this.props.attributeConfig.renderer === "scope-user-account" || this.props.attributeConfig.renderer === "scope-broadcast-channel") {
+    if(value !== null || this.props.attributeConfig.renderer === "peakmeter" || this.props.attributeConfig.renderer === "scope-user-account" || this.props.attributeConfig.renderer === "scope-broadcast-channel") {
       let cell;
 
       switch(this.props.attributeConfig.renderer) {
@@ -93,6 +94,10 @@ export default React.createClass({
 
         case "peakmeter":
           cell = (<TableCellPeakmeter {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} />);
+          break;
+
+        case "filesize":
+          cell = (<TableCellFileSize {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value} />);
           break;
 
         case "scope-user-account":

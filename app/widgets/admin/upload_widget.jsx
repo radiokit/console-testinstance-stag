@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom';
 import Translate from 'react-translate-component';
 import { Link } from 'react-router';
 import Immutable from 'immutable';
+import filesize from 'filesize';
 
 import Button from './button_widget.jsx';
 import Loading from './../general/loading_widget.jsx';
-import FileSize from './../general/file_size_widget.jsx';
 
 export default React.createClass({
   propTypes: {
@@ -110,7 +110,7 @@ export default React.createClass({
         <tr key={file.get("id")}>
           <td className="text-right">{i+1}.</td>
           <td>{file.get("name")}</td>
-          <td className="text-right"><FileSize size={file.get("size")}/></td>
+          <td className="text-right">{filesize(file.get("size"))}/></td>
           <td>{badge}</td>
         </tr>);
     });
