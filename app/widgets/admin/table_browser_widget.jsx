@@ -54,6 +54,7 @@ export default React.createClass({
 
     this.recordsQueryIds = this.props.recordsQuery
       .clone()
+      .clearSelect()
       .select("id")
 
     this.recordsQueryFull
