@@ -1,10 +1,12 @@
 import React from 'react';
 
+import CardSidebar from './card_sidebar_widget.jsx';
+
 
 export default React.createClass({
   contextTypes: {
-    cardTabs: React.PropTypes.arrayOf(React.PropTypes.string),
     cardPadding: React.PropTypes.bool.isRequired,
+    contentPrefix: React.PropTypes.string,
   },
 
 
@@ -23,25 +25,10 @@ export default React.createClass({
       klass = "card-body style-default-bright no-padding";
     }
 
-    if(this.context.cardTabs) {
-      return (
-        <div className={klass + " tab-content"}>
-          {this.context.cardTabs.map((tab, i) => {
-            return (
-              <div key={tab} className="tab-pane" id={"tab-" + tab}>
-                {React.Children.toArray(this.props.children)[i]}
-              </div>
-            );
-          })}
-        </div>
-      );
-
-    } else {
-      return (
-        <div className={klass}>
-          {this.props.children}
-        </div>
-      );
-    }
+    return (
+      <div className={klass}>
+        {this.props.children}
+      </div>
+    );
   }
 });

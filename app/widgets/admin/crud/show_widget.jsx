@@ -19,7 +19,6 @@ export default React.createClass({
     contentPrefix: React.PropTypes.string.isRequired,
     app: React.PropTypes.string.isRequired,
     model: React.PropTypes.string.isRequired,
-    tabs: React.PropTypes.arrayOf(React.PropTypes.string),
   },
 
 
@@ -94,7 +93,7 @@ export default React.createClass({
           <Section>
             <GridRow>
               <GridCell size="large" center={true}>
-                <Card contentPrefix={`${this.props.contentPrefix}.show`} cardTabs={this.props.tabs}>
+                <Card contentPrefix={`${this.props.contentPrefix}.show`}>
                   <CardHeader headerText={this.state.record.get("name")} />
                   <CardBody>
                     <ToolBarGroup>
