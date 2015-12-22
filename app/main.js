@@ -56,7 +56,7 @@ function getEnv() {
       apps: {
         "plumber" : { baseUrl: "https://radiokit-plumber-stag.herokuapp.com" },
         "auth" : { baseUrl: "https://radiokit-auth-stag.herokuapp.com" },
-        "vault" : { baseUrl: "http://localhost:4060" },
+        "vault" : { baseUrl: "https://radiokit-vault-stag.herokuapp.com" },
         "agenda": { baseUrl: "https://radiokit-agenda-stag.herokuapp.com" },
         "diffusor": { baseUrl: "https://radiokit-diffusor-stag.herokuapp.com" },
       },
