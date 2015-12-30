@@ -7,13 +7,14 @@ import Upload from '../../../widgets/admin/upload_widget.jsx';
 
 export default React.createClass({
   propTypes: {
+    contentPrefix: React.PropTypes.string.isRequired,
     repository: React.PropTypes.object.isRequired,
   },
 
 
   render: function() {
     return (
-      <Modal ref="modal" size="large" contentPrefix="widgets.vault.file_browser.modals.upload">
+      <Modal ref="modal" size="large" contentPrefix={this.props.contentPrefix}>
         <Upload repository={this.props.repository} />
       </Modal>
     );

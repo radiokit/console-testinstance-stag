@@ -151,9 +151,8 @@ export default {
 
           tabs: {
             headers: {
-              metadata: "Metadata",
-              processing: "Processing",
-              tags: "Tags",
+              metadata_schema: "Metadata",
+              tags_schema: "Tags",
             },
           },
         },

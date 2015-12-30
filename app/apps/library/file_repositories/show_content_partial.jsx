@@ -69,9 +69,9 @@ export default React.createClass({
 
   render: function() {
     return (
-      <TableBrowser onSelect={this.onTableSelect} selectable={true} attributes={this.buildTableAttributes()} contentPrefix="widgets.vault.file_browser.table" recordsQuery={this.buildTableRecordsQuery()}>
+      <TableBrowser onSelect={this.onTableSelect} selectable={true} attributes={this.buildTableAttributes()} contentPrefix={this.props.contentPrefix + ".index.table"} recordsQuery={this.buildTableRecordsQuery()}>
         <ToolbarGroup>
-          <ToolbarButtonModal icon="upload" labelTextKey={this.props.contentPrefix + ".show.actions.upload"} modalElement={UploadModal} modalProps={{ repository: this.props.record }} />
+          <ToolbarButtonModal icon="upload" labelTextKey={this.props.contentPrefix + ".show.actions.upload"} modalElement={UploadModal} modalProps={{ contentPrefix: this.props.contentPrefix + ".show.modals.upload", repository: this.props.record }} />
           <ToolbarButton icon="download" disabled={this.state.selectedRecordIds.count() === 0} onClick={this.onDownloadClick}/>
           <ToolbarButton icon="delete" disabled={this.state.selectedRecordIds.count() === 0} onClick={this.onDeleteClick}/>
         </ToolbarGroup>

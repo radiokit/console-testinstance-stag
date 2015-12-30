@@ -1,5 +1,7 @@
 import React from 'react';
 
+import RenderHelper from '../../helpers/render_helper.js';
+
 import CardSidebar from './card_sidebar_widget.jsx';
 import CardHeader from './card_header_widget.jsx';
 import CardToolBar from './card_tool_bar_widget.jsx';
@@ -12,15 +14,13 @@ export default React.createClass({
     contentPrefix: React.PropTypes.string.isRequired,
     cardPadding: React.PropTypes.bool,
     headerText: React.PropTypes.string,
-    contentElementClass: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.func]),
-    sidebarElementClass: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.func]),
-    contentElement: React.PropTypes.element,
-    sidebarElement: React.PropTypes.element,
-    toolbarElement: React.PropTypes.element,
+    contentElement: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.func, React.PropTypes.element]).isRequired,
+    sidebarElement: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.func, React.PropTypes.element]),
+    toolbarElement: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.func, React.PropTypes.element]),
     contentProps: React.PropTypes.object,
     sidebarProps: React.PropTypes.object,
+    toolbarProps: React.PropTypes.object,
   },
-
 
 
   getDefaultProps: function() {
@@ -30,12 +30,44 @@ export default React.createClass({
   },
 
 
+  getInitialState: function() {
+    if(this.hasTabs()) {
+      return {
+        selectedTab: Object.keys(this.props.contentElement)[0]
+      };
+    } else {
+      return {};
+    }
+  },
+
+
+  hasTabs: function() {
+    return RenderHelper.containsNestedElements(this.props.contentElement);
+  },
+
+
+  buildTabHeaders: function() {
+    if(this.hasTabs()) {
+      return Object.keys(this.props.contentElement);
+    } else {
+      return null;
+    }
+  },
+
+
+  onTabClick: function(tab) {
+    this.setState({
+      selectedTab: tab
+    });
+  },
+
+
   renderContentPartial: function() {
     if(this.props.toolbarElement) {
       return (
         <div>
           <CardToolBar>
-            {this.props.toolbarElement}
+            {RenderHelper.renderDelegatedComponent(this.props.toolbarElement, this.props.toolbarProps)}
           </CardToolBar>
 
           {this.renderContentElement()}
@@ -47,53 +79,44 @@ export default React.createClass({
   },
 
 
-  renderContentElement: function() {
-    if(this.props.contentElement) {
-      return this.props.contentElement;
-    } else if(this.props.contentElementClass){
-      return React.createElement(this.props.contentElementClass, this.props.contentProps);
+  onPostRenderNestedContentElement: function(key, element, props) {
+    if(key !== this.state.selectedTab) {
+      return (<div key={key} style={{display: "none"}}>{element}</div>);
     } else {
-      throw new Error("Neither contentElement nor contentElementClass was passed.");
+      return element;
     }
+  },
+
+
+  renderContentElement: function() {
+    return RenderHelper.renderDelegatedComponent(this.props.contentElement, this.props.contentProps, null, this.onPostRenderNestedContentElement);
   },
 
 
   renderSidebarElement: function() {
-    if(this.props.sidebarElement) {
-      return this.props.sidebarElement;
-    } else if(this.props.sidebarElementClass){
-      return React.createElement(this.props.sidebarElementClass, this.props.sidebarProps);
-    } else {
-      throw new Error("Neither sidebarElement nor sidebarElementClass was passed.");
-    }
+    return RenderHelper.renderDelegatedComponent(this.props.sidebarElement, this.props.sidebarProps);
   },
 
 
   render: function() {
-    if(!this.props.contentElement && !this.props.contentElementClass) {
-      // FIXME deprecated usage
-      throw new Error("Deprecated usage of CardWidget, pass contentElementClass props instead of setting children manually");
-
-    } else {
-      return (
-        <div className="card card-underline style-gray-dark2">
-          <CardHeader contentPrefix={this.props.contentPrefix} headerText={this.props.headerText} />
-          <CardBody cardPadding={this.props.cardPadding && (this.props.sidebarElement || this.props.sidebarElementClass)}>
-            {() => {
-              if(this.props.sidebarElement || this.props.sidebarElementClass) {
-                return (
-                  <CardSidebar>
-                    {this.renderSidebarElement()}
-                    {this.renderContentElement()}
-                  </CardSidebar>
-                )
-              } else {
-                return this.renderContentPartial();
-              }
-            }()}
-          </CardBody>
-        </div>
-      );
-    }
+    return (
+      <div className="card card-underline style-gray-dark2">
+        <CardHeader contentPrefix={this.props.contentPrefix} headerText={this.props.headerText} tabs={this.buildTabHeaders()} selectedTab={this.state.selectedTab} onTabClick={this.onTabClick} />
+        <CardBody cardPadding={this.props.cardPadding && (this.props.sidebarElement || this.props.sidebarElement)}>
+          {() => {
+            if(this.props.sidebarElement || this.props.sidebarElement) {
+              return (
+                <CardSidebar>
+                  {this.renderSidebarElement()}
+                  {this.renderContentElement()}
+                </CardSidebar>
+              )
+            } else {
+              return this.renderContentPartial();
+            }
+          }()}
+        </CardBody>
+      </div>
+    );
   }
 });

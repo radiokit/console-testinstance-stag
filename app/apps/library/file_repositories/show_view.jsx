@@ -18,7 +18,7 @@ export default React.createClass({
 
   render: function() {
     return (
-      <Show contentPrefix="apps.library.file_repositories" app="vault" model="Data.Record.Repository" showQueryFunc={this.modifyShowQuery} sidebarElementClass={SidebarPartial} contentElementClass={ContentPartial} deleteEnabled={false} />
+      <Show contentPrefix="apps.library.file_repositories" app="vault" model="Data.Record.Repository" showQueryFunc={this.modifyShowQuery} sidebarElement={SidebarPartial} contentElement={ContentPartial} deleteEnabled={false} />
     );
   }
 });

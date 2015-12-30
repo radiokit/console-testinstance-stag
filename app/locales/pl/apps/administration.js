@@ -151,9 +151,8 @@ export default {
 
           tabs: {
             headers: {
-              metadata: "Winiety",
-              processing: "Przetwarzanie",
-              tags: "Etykiety",
+              metadata_schema: "Winiety",
+              tags_schema: "Etykiety",
             },
           },
         },
