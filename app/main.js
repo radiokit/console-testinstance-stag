@@ -30,8 +30,8 @@ import AdministrationFileRepositoriesIndex from './apps/administration/file_repo
 import AdministrationFileRepositoriesShow from './apps/administration/file_repositories/show_view.jsx';
 
 Counterpart.registerTranslations("en", require('./locales/en/general.js'));
-Counterpart.registerTranslations("en", require('./locales/en/apps/music.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/broadcast.js'));
+Counterpart.registerTranslations("en", require('./locales/en/apps/library.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/infrastructure.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/administration.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/vault/file_browser.js'));
@@ -40,8 +40,8 @@ Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/modal
 Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/scope.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/form.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/general.js'));
-Counterpart.registerTranslations("pl", require('./locales/pl/apps/music.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/broadcast.js'));
+Counterpart.registerTranslations("pl", require('./locales/pl/apps/library.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/infrastructure.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/administration.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/vault/file_browser.js'));
@@ -100,11 +100,11 @@ ReactDOM.render((
         </Route>
 
         <Route path="library" component={LibraryApp}>
-          <Route component={ScopeLayout} scope="userAccount">
-            <Route path="file_repositories">
+          <Route path="file_repositories">
+            <Route component={ScopeLayout} scope="userAccount">
               <Route path="index" component={LibraryFileRepositoriesIndex} onEnter={pingGoogleAnalytics}/>
-              <Route path="show/:id" component={LibraryFileRepositoriesShow} onEnter={pingGoogleAnalytics}/>
             </Route>
+            <Route path="show/:id" component={LibraryFileRepositoriesShow} onEnter={pingGoogleAnalytics}/>
           </Route>
         </Route>
 

@@ -178,16 +178,13 @@ export default React.createClass({
       break;
 
       case "list":
+        let contentElement = <ListBrowser attributes={this.props.attributes} contentPrefix={`${this.props.contentPrefix}.index.table`} recordsQuery={this.buildIndexQuery()} recordsLinkFunc={this.props.readEnabled === true ? this.onRecordClick : undefined}/>;
+
         return (
           <Section>
             <GridRow>
               <GridCell size="small" center={true}>
-                <Card contentPrefix={`${this.props.contentPrefix}.index`} cardPadding={false}>
-                  <CardHeader/>
-                  <CardBody cardPadding={false}>
-                    <ListBrowser attributes={this.props.attributes} contentPrefix={`${this.props.contentPrefix}.index.table`} recordsQuery={this.buildIndexQuery()} recordsLinkFunc={this.props.readEnabled === true ? this.onRecordClick : undefined}/>
-                  </CardBody>
-                </Card>
+                <Card contentPrefix={`${this.props.contentPrefix}.index`} cardPadding={false} contentElement={contentElement}/>
               </GridCell>
             </GridRow>
           </Section>

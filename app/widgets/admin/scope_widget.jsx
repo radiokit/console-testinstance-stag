@@ -44,29 +44,27 @@ export default React.createClass({
           return (<div>{this.props.children}</div>);
 
         } else {
+          let contentElement = (
+            <ul className="list divider-full-bleed">
+              {this.context.availableUserAccounts.map((userAccount) => {
+                return (
+                  <li key={userAccount.get("id")} className="tile">
+                    <a onClick={this.onUserAccountClick.bind(this, userAccount)} className="tile-content" style={{cursor: "pointer"}}>
+                      <div className="tile-text">
+                        {userAccount.get("name_custom")}
+                      </div>
+                    </a>
+                  </li>
+                )
+              })}
+            </ul>
+          );
+
           return (
             <Section>
               <GridRow>
                 <GridCell size="small" center={true}>
-                  <Card contentPrefix="widgets.admin.scope.user_account" cardPadding={false}>
-                    <CardHeader/>
-                    <CardBody cardPadding={false}>
-                      <ul className="list divider-full-bleed">
-                        {this.context.availableUserAccounts.map((userAccount) => {
-                          return (
-                            <li key={userAccount.get("id")} className="tile">
-                              <a onClick={this.onUserAccountClick.bind(this, userAccount)} className="tile-content" style={{cursor: "pointer"}}>
-                                <div className="tile-text">
-                                  {userAccount.get("name_custom")}
-                                </div>
-                              </a>
-                            </li>
-                          )
-                        })}
-                      </ul>
-
-                    </CardBody>
-                  </Card>
+                  <Card contentPrefix="widgets.admin.scope.user_account" cardPadding={false} contentElement={contentElement}/>
                 </GridCell>
               </GridRow>
             </Section>
@@ -80,29 +78,27 @@ export default React.createClass({
           return (<div>{this.props.children}</div>);
 
         } else {
+          let contentElement = (
+            <ul className="list divider-full-bleed">
+              {this.context.availableBroadcastChannels.map((broadcastChannel) => {
+                return (
+                  <li key={broadcastChannel.get("id")} className="tile">
+                    <a onClick={this.onBroadcastChannelClick.bind(this, broadcastChannel)} className="tile-content">
+                      <div className="tile-text">
+                        {broadcastChannel.get("name")}
+                      </div>
+                    </a>
+                  </li>
+                )
+              })}
+            </ul>
+          );
+
           return (
             <Section>
               <GridRow>
                 <GridCell size="small" center={true}>
-                  <Card contentPrefix="widgets.admin.scope.broadcast_channel" cardPadding={false}>
-                    <CardHeader/>
-                    <CardBody cardPadding={false}>
-                      <ul className="list divider-full-bleed">
-                        {this.context.availableBroadcastChannels.map((broadcastChannel) => {
-                          return (
-                            <li key={broadcastChannel.get("id")} className="tile">
-                              <a onClick={this.onBroadcastChannelClick.bind(this, broadcastChannel)} className="tile-content">
-                                <div className="tile-text">
-                                  {broadcastChannel.get("name")}
-                                </div>
-                              </a>
-                            </li>
-                          )
-                        })}
-                      </ul>
-
-                    </CardBody>
-                  </Card>
+                  <Card contentPrefix="widgets.admin.scope.broadcast_channel" cardPadding={false} contentElement={contentElement}/>
                 </GridCell>
               </GridRow>
             </Section>

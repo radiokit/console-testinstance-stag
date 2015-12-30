@@ -5,11 +5,7 @@ import Alert from '../../../widgets/admin/alert_widget.jsx';
 import GridRow from '../../../widgets/admin/grid_row_widget.jsx';
 import GridCell from '../../../widgets/admin/grid_cell_widget.jsx';
 import Section from '../../../widgets/admin/section_widget.jsx';
-import TableBrowser from '../../../widgets/admin/table_browser_widget.jsx';
 import Card from '../../../widgets/admin/card_widget.jsx';
-import CardBody from '../../../widgets/admin/card_body_widget.jsx';
-import CardHeader from '../../../widgets/admin/card_header_widget.jsx';
-import ToolBar from '../../../widgets/admin/toolbar_widget.jsx';
 import ToolBarGroup from '../../../widgets/admin/toolbar_group_widget.jsx';
 import ToolBarButton from '../../../widgets/admin/toolbar_button_widget.jsx';
 
@@ -19,6 +15,10 @@ export default React.createClass({
     contentPrefix: React.PropTypes.string.isRequired,
     app: React.PropTypes.string.isRequired,
     model: React.PropTypes.string.isRequired,
+    showQueryFunc: React.PropTypes.func,
+    deleteEnabled: React.PropTypes.bool.isRequired,
+    contentElement: React.PropTypes.oneOfType([React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]).isRequired,
+    sidebarElement: React.PropTypes.oneOfType([React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]),
   },
 
 
@@ -26,6 +26,13 @@ export default React.createClass({
     history: React.PropTypes.object.isRequired,
     location: React.PropTypes.object.isRequired,
     params: React.PropTypes.object.isRequired,
+  },
+
+
+  getDefaultProps: function() {
+    return {
+      deleteEnabled: true,
+    }
   },
 
 
@@ -48,21 +55,27 @@ export default React.createClass({
   },
 
 
+  buildShowQuery: function() {
+    let query = window.data
+      .query(this.props.app, this.props.model)
+      .select("id", "name")
+      .where("id", "eq", this.context.params.id);
+
+    if(this.props.showQueryFunc) {
+      query = this.props.showQueryFunc(query);
+    }
+
+    return query;
+  },
+
+
   componentDidMount: function() {
-    this.recordQuery = window.data
-      .record(this.props.app, this.props.model, this.context.params.id)
-      .on("loaded", (_eventName, _record, data) => {
+    this.recordQuery = this.buildShowQuery()
+      .on("fetch", (_eventName, _record, data) => {
         if(this.isMounted()) {
           this.setState({
-            record: data,
+            record: data.first(),
             loaded: true,
-          });
-        }
-      })
-      .on("loading", () => {
-        if(this.isMounted()) {
-          this.setState({
-            loaded: false,
           });
         }
       })
@@ -74,12 +87,32 @@ export default React.createClass({
           });
         }
       })
-      .show();
+      .fetch();
   },
 
 
   componentWillUnmount: function() {
     this.recordQuery.teardown();
+  },
+
+
+  renderPrimaryToolbar: function() {
+    return (
+      <div>
+        <ToolBarGroup>
+          <ToolBarButton icon="keyboard-backspace" labelTextKey={`${this.props.contentPrefix}.show.actions.back`} onClick={this.onBackClick} />
+        </ToolBarGroup>
+        {() => {
+          if(this.props.deleteEnabled === true) {
+            return (
+              <ToolBarGroup>
+                <ToolBarButton icon="delete" labelTextKey={`${this.props.contentPrefix}.show.actions.delete`} onClick={this.onDeleteButtonClick} />
+              </ToolBarGroup>
+            );
+          }
+        }()}
+      </div>
+    );
   },
 
 
@@ -93,17 +126,7 @@ export default React.createClass({
           <Section>
             <GridRow>
               <GridCell size="large" center={true}>
-                <Card contentPrefix={`${this.props.contentPrefix}.show`}>
-                  <CardHeader headerText={this.state.record.get("name")} />
-                  <CardBody>
-                    <ToolBarGroup>
-                      <ToolBarButton icon="keyboard-backspace" labelTextKey={`${this.props.contentPrefix}.show.actions.back`} onClick={this.onBackClick} />
-                    </ToolBarGroup>
-                    <ToolBarGroup>
-                      <ToolBarButton icon="delete" labelTextKey={`${this.props.contentPrefix}.show.actions.delete`} onClick={this.onDeleteButtonClick} />
-                    </ToolBarGroup>
-                  </CardBody>
-                </Card>
+                <Card contentPrefix={`${this.props.contentPrefix}.show`} headerText={this.state.record.get("name")} sidebarElement={React.createElement(this.props.sidebarElement, { contentPrefix: this.props.contentPrefix, app: this.props.app, model: this.props.model, record: this.state.record })} contentElement={React.createElement(this.props.contentElement, { contentPrefix: this.props.contentPrefix, app: this.props.app, model: this.props.model, record: this.state.record })} toolbarPrimaryElement={this.renderPrimaryToolbar()} />
               </GridCell>
             </GridRow>
           </Section>

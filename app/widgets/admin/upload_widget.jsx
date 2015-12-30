@@ -1,11 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Translate from 'react-translate-component';
-import { Link } from 'react-router';
 import Immutable from 'immutable';
 import filesize from 'filesize';
 
-import Button from './button_widget.jsx';
 import Loading from './../general/loading_widget.jsx';
 
 export default React.createClass({

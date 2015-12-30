@@ -76,18 +76,11 @@ export default React.createClass({
               </ul>
             </li>
 
-            <li className="gui-folder">
-              <a onClick={this.onMenuRootItemClick}>
-                <div className="gui-icon"><i className="mdi mdi-library-music"/></div>
-                <Translate content="apps.library.navigation.title" className="title" />
-              </a>
-              <ul>
-                <li>
-                  <Link to={RoutingHelper.apps.library.fileRepositories.index(this)}>
-                    <Translate content="apps.library.navigation.file_repositories.title" className="title" />
-                  </Link>
-                </li>
-              </ul>
+            <li>
+              <Link to={RoutingHelper.apps.library.fileRepositories.index(this)}>
+              <div className="gui-icon"><i className="mdi mdi-library-music"/></div>
+                <Translate content="apps.library.navigation.file_repositories.title" className="title" />
+              </Link>
             </li>
 
             <li className="gui-folder">
