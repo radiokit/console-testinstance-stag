@@ -12,26 +12,15 @@ export default React.createClass({
     contentPrefix: React.PropTypes.string.isRequired,
     cardPadding: React.PropTypes.bool,
     headerText: React.PropTypes.string,
-    contentElement: React.PropTypes.element, // FIXME should be mandatory
+    contentElementClass: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.func]),
+    sidebarElementClass: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.func]),
+    contentElement: React.PropTypes.element,
     sidebarElement: React.PropTypes.element,
-    toolbarPrimaryElement: React.PropTypes.element,
+    toolbarElement: React.PropTypes.element,
+    contentProps: React.PropTypes.object,
+    sidebarProps: React.PropTypes.object,
   },
 
-
-  // FIXME deprecated
-  childContextTypes: {
-    contentPrefix: React.PropTypes.string,
-    cardPadding: React.PropTypes.bool,
-  },
-
-
-  // FIXME deprecated
-  getChildContext: function() {
-    return {
-      contentPrefix: this.props.contentPrefix,
-      cardPadding: this.props.cardPadding
-    };
-  },
 
 
   getDefaultProps: function() {
@@ -41,48 +30,65 @@ export default React.createClass({
   },
 
 
-  renderContent: function() {
-    if(this.props.toolbarPrimaryElement) {
+  renderContentPartial: function() {
+    if(this.props.toolbarElement) {
       return (
         <div>
           <CardToolBar>
-            {this.props.toolbarPrimaryElement}
+            {this.props.toolbarElement}
           </CardToolBar>
 
-          {this.props.contentElement}
+          {this.renderContentElement()}
         </div>
       );
     } else {
+      return this.renderContentElement();
+    }
+  },
+
+
+  renderContentElement: function() {
+    if(this.props.contentElement) {
       return this.props.contentElement;
+    } else if(this.props.contentElementClass){
+      return React.createElement(this.props.contentElementClass, this.props.contentProps);
+    } else {
+      throw new Error("Neither contentElement nor contentElementClass was passed.");
+    }
+  },
+
+
+  renderSidebarElement: function() {
+    if(this.props.sidebarElement) {
+      return this.props.sidebarElement;
+    } else if(this.props.sidebarElementClass){
+      return React.createElement(this.props.sidebarElementClass, this.props.sidebarProps);
+    } else {
+      throw new Error("Neither sidebarElement nor sidebarElementClass was passed.");
     }
   },
 
 
   render: function() {
-    if(!this.props.contentElement) {
+    if(!this.props.contentElement && !this.props.contentElementClass) {
       // FIXME deprecated usage
-      console.warn("Deprecated usage of CardWidget, pass contentElement props instead of setting children manually");
-      return (
-        <div className="card card-underline style-gray-dark2">
-          {this.props.children}
-        </div>
-      );
+      throw new Error("Deprecated usage of CardWidget, pass contentElementClass props instead of setting children manually");
 
     } else {
       return (
         <div className="card card-underline style-gray-dark2">
           <CardHeader contentPrefix={this.props.contentPrefix} headerText={this.props.headerText} />
-          <CardBody cardPadding={this.props.sidebarElement ? false : true}>
+          <CardBody cardPadding={this.props.cardPadding && (this.props.sidebarElement || this.props.sidebarElementClass)}>
             {() => {
-              if(this.props.sidebarElement) {
+              if(this.props.sidebarElement || this.props.sidebarElementClass) {
                 return (
                   <CardSidebar>
-                    {this.props.sidebarElement}
-                    {this.renderContent()}
+                    {this.renderSidebarElement()}
+                    {this.renderContentElement()}
                   </CardSidebar>
                 )
               } else {
-                return this.renderContent();
+                return this.renderContentPartial();
               }
             }()}
           </CardBody>

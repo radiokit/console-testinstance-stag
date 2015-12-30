@@ -4,7 +4,7 @@ import Translate from 'react-translate-component';
 
 
 export default React.createClass({
-  contextTypes: {
+  propTypes: {
     contentPrefix: React.PropTypes.string,
     headerText: React.PropTypes.string
   },
@@ -14,7 +14,7 @@ export default React.createClass({
     if(this.props.headerText) {
       return <header>{this.props.headerText}</header>
     } else {
-      return <Translate content={this.context.contentPrefix + ".header"} component="header" />
+      return <Translate content={this.props.contentPrefix + ".header"} component="header" />
     }
   },
 

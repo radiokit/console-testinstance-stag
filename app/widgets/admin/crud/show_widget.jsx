@@ -17,8 +17,8 @@ export default React.createClass({
     model: React.PropTypes.string.isRequired,
     showQueryFunc: React.PropTypes.func,
     deleteEnabled: React.PropTypes.bool.isRequired,
-    contentElement: React.PropTypes.oneOfType([React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]).isRequired,
-    sidebarElement: React.PropTypes.oneOfType([React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]),
+    contentElementClass: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]).isRequired,
+    sidebarElementClass: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]),
   },
 
 
@@ -96,7 +96,7 @@ export default React.createClass({
   },
 
 
-  renderPrimaryToolbar: function() {
+  renderToolbar: function() {
     return (
       <div>
         <ToolBarGroup>
@@ -126,7 +126,7 @@ export default React.createClass({
           <Section>
             <GridRow>
               <GridCell size="large" center={true}>
-                <Card contentPrefix={`${this.props.contentPrefix}.show`} headerText={this.state.record.get("name")} sidebarElement={React.createElement(this.props.sidebarElement, { contentPrefix: this.props.contentPrefix, app: this.props.app, model: this.props.model, record: this.state.record })} contentElement={React.createElement(this.props.contentElement, { contentPrefix: this.props.contentPrefix, app: this.props.app, model: this.props.model, record: this.state.record })} toolbarPrimaryElement={this.renderPrimaryToolbar()} />
+                <Card contentPrefix={`${this.props.contentPrefix}.show`} headerText={this.state.record.get("name")} sidebarElementClass={this.props.sidebarElementClass} sidebarProps={{ contentPrefix: this.props.contentPrefix, app: this.props.app, model: this.props.model, record: this.state.record }} contentElementClass={this.props.contentElementClass} contentProps={{ contentPrefix: this.props.contentPrefix, app: this.props.app, model: this.props.model, record: this.state.record }} toolbarElement={this.renderToolbar()} />
               </GridCell>
             </GridRow>
           </Section>

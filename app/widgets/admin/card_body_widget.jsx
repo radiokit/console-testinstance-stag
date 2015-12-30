@@ -4,7 +4,7 @@ import CardSidebar from './card_sidebar_widget.jsx';
 
 
 export default React.createClass({
-  contextTypes: {
+  propTypes: {
     cardPadding: React.PropTypes.bool.isRequired,
     contentPrefix: React.PropTypes.string,
   },

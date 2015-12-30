@@ -13,6 +13,7 @@ import CardHeader from '../../../widgets/admin/card_header_widget.jsx';
 import ToolBar from '../../../widgets/admin/toolbar_widget.jsx';
 import ToolBarGroup from '../../../widgets/admin/toolbar_group_widget.jsx';
 import ToolBarButton from '../../../widgets/admin/toolbar_button_widget.jsx';
+import ToolBarButtonModal from '../../../widgets/admin/toolbar_button_modal_widget.jsx';
 import CreateModal from './create_modal.jsx';
 import DeleteModal from './delete_modal.jsx';
 
@@ -135,42 +136,32 @@ export default React.createClass({
 
 
   render: function() {
+    let contentElement;
+
     switch(this.props.type) {
       case "tableBrowser":
+        contentElement = (
+          <TableBrowser onSelect={this.onTableSelect} selectable={true} attributes={this.props.attributes} contentPrefix={`${this.props.contentPrefix}.index.table`} recordsQuery={this.buildIndexQuery()} recordsLinkFunc={this.props.readEnabled === true ? this.onRecordClick : undefined}>
+            <ToolBarGroup>
+              {() => {
+                if(this.props.createEnabled === true) {
+                  return <ToolBarButtonModal icon="plus" labelTextKey={`${this.props.contentPrefix}.index.actions.create`} modalElement={CreateModal} modalProps={{contentPrefix: this.props.contentPrefix + ".index.modals.create", selectedRecordIds: this.state.selectedRecordIds, form: this.props.form, app: this.props.app, model: this.props.model}} />;
+                }
+              }()}
+              {() => {
+                if(this.props.deleteEnabled === true) {
+                  return <ToolBarButtonModal icon="delete" hintTooltipKey={`${this.props.contentPrefix}.index.actions.delete`} modalElement={DeleteModal} modalProps={{contentPrefix: this.props.contentPrefix + ".index.modals.delete", selectedRecordIds: this.state.selectedRecordIds, form: this.props.form, app: this.props.app, model: this.props.model}} disabled={this.state.selectedRecordIds.count() === 0} />
+                }
+              }()}
+            </ToolBarGroup>
+          </TableBrowser>
+        );
+
         return (
           <Section>
             <GridRow>
               <GridCell size="large" center={true}>
-                {() => {
-                  if(this.props.createEnabled === true) {
-                    return <CreateModal contentPrefix={this.props.contentPrefix + ".index.modals.create"} ref="createModal" form={this.props.form} app={this.props.app} model={this.props.model} />
-                  }
-                }()}
-                {() => {
-                  if(this.props.deleteEnabled === true) {
-                    return <DeleteModal contentPrefix={this.props.contentPrefix + ".index.modals.delete"} ref="deleteModal" app={this.props.app} model={this.props.model} selectedRecordIds={this.state.selectedRecordIds} />
-                  }
-                }()}
-
-                <Card contentPrefix={`${this.props.contentPrefix}.index`}>
-                  <CardHeader/>
-                  <CardBody cardPadding={false}>
-                    <TableBrowser onSelect={this.onTableSelect} selectable={true} attributes={this.props.attributes} contentPrefix={`${this.props.contentPrefix}.index.table`} recordsQuery={this.buildIndexQuery()} recordsLinkFunc={this.props.readEnabled === true ? this.onRecordClick : undefined}>
-                      <ToolBarGroup>
-                        {() => {
-                          if(this.props.createEnabled === true) {
-                            return <ToolBarButton icon="plus" labelTextKey={`${this.props.contentPrefix}.index.actions.create`} onClick={this.onCreateButtonClick} />;
-                          }
-                        }()}
-                        {() => {
-                          if(this.props.deleteEnabled === true) {
-                            return <ToolBarButton icon="delete" hintTooltipKey={`${this.props.contentPrefix}.index.actions.delete`} onClick={this.onDeleteButtonClick} disabled={this.state.selectedRecordIds.count() === 0} />
-                          }
-                        }()}
-                      </ToolBarGroup>
-                    </TableBrowser>
-                  </CardBody>
-                </Card>
+                <Card contentPrefix={`${this.props.contentPrefix}.index`} cardPadding={false} contentElement={contentElement}/>
               </GridCell>
             </GridRow>
           </Section>
@@ -178,7 +169,7 @@ export default React.createClass({
       break;
 
       case "list":
-        let contentElement = <ListBrowser attributes={this.props.attributes} contentPrefix={`${this.props.contentPrefix}.index.table`} recordsQuery={this.buildIndexQuery()} recordsLinkFunc={this.props.readEnabled === true ? this.onRecordClick : undefined}/>;
+        contentElement = <ListBrowser attributes={this.props.attributes} contentPrefix={`${this.props.contentPrefix}.index.table`} recordsQuery={this.buildIndexQuery()} recordsLinkFunc={this.props.readEnabled === true ? this.onRecordClick : undefined}/>;
 
         return (
           <Section>
