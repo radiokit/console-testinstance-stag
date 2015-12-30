@@ -87,5 +87,12 @@ export default {
         },
       },
     },
+    library: {
+      fileRepositories: {
+        index: function(context) {
+          return "/apps/library/file_repositories/index";
+        },
+      },
+    },
   }
 }

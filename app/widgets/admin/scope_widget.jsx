@@ -91,7 +91,7 @@ export default React.createClass({
                         {this.context.availableBroadcastChannels.map((broadcastChannel) => {
                           return (
                             <li key={broadcastChannel.get("id")} className="tile">
-                              <a onClick={this.onBroadcastChannelClick.bind(this, broadcastChannel)} className="tile-content" style={{cursor: "pointer"}}>
+                              <a onClick={this.onBroadcastChannelClick.bind(this, broadcastChannel)} className="tile-content">
                                 <div className="tile-text">
                                   {broadcastChannel.get("name")}
                                 </div>

@@ -19,6 +19,9 @@ import InfrastructureComputingNodesIndex from './apps/infrastructure/computing_n
 import InfrastructureExternalInputsIndex from './apps/infrastructure/external_inputs/index_view.jsx';
 import InfrastructureTransmissionsIndex from './apps/infrastructure/transmissions/index_view.jsx';
 import InfrastructurePatchbayIndex from './apps/infrastructure/patchbay/index_view.jsx';
+import LibraryApp from './apps/library/app.jsx';
+import LibraryFileRepositoriesIndex from './apps/library/file_repositories/index_view.jsx';
+import LibraryFileRepositoriesShow from './apps/library/file_repositories/show_view.jsx';
 import AdministrationApp from './apps/administration/app.jsx';
 import AdministrationUserAccountsIndex from './apps/administration/user_accounts/index_view.jsx';
 import AdministrationBroadcastChannelsIndex from './apps/administration/broadcast_channels/index_view.jsx';
@@ -93,6 +96,15 @@ ReactDOM.render((
           </Route>
           <Route component={ScopeLayout} scope="broadcastChannel">
             <Route path="live/index" component={BroadcastLiveIndex} onEnter={pingGoogleAnalytics}/>
+          </Route>
+        </Route>
+
+        <Route path="library" component={LibraryApp}>
+          <Route component={ScopeLayout} scope="userAccount">
+            <Route path="file_repositories">
+              <Route path="index" component={LibraryFileRepositoriesIndex} onEnter={pingGoogleAnalytics}/>
+              <Route path="show/:id" component={LibraryFileRepositoriesShow} onEnter={pingGoogleAnalytics}/>
+            </Route>
           </Route>
         </Route>
 

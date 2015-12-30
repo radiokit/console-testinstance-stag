@@ -6,6 +6,7 @@ import GridRow from '../../../widgets/admin/grid_row_widget.jsx';
 import GridCell from '../../../widgets/admin/grid_cell_widget.jsx';
 import Section from '../../../widgets/admin/section_widget.jsx';
 import TableBrowser from '../../../widgets/admin/table_browser_widget.jsx';
+import ListBrowser from '../../../widgets/admin/list_browser_widget.jsx';
 import Card from '../../../widgets/admin/card_widget.jsx';
 import CardBody from '../../../widgets/admin/card_body_widget.jsx';
 import CardHeader from '../../../widgets/admin/card_header_widget.jsx';
@@ -22,6 +23,7 @@ export default React.createClass({
     app: React.PropTypes.string.isRequired,
     model: React.PropTypes.string.isRequired,
     form: React.PropTypes.object.isRequired,
+    type: React.PropTypes.oneOf(['tableBrowser', 'list']).isRequired,
     attributes: React.PropTypes.object.isRequired,
     readEnabled: React.PropTypes.bool.isRequired,
     createEnabled: React.PropTypes.bool.isRequired,
@@ -40,6 +42,7 @@ export default React.createClass({
       readEnabled: true,
       createEnabled: true,
       deleteEnabled: true,
+      type: "tableBrowser",
     }
   },
 
@@ -132,43 +135,64 @@ export default React.createClass({
 
 
   render: function() {
-    return (
-      <Section>
-        <GridRow>
-          <GridCell size="large" center={true}>
-            {() => {
-              if(this.props.createEnabled === true) {
-                return <CreateModal contentPrefix={this.props.contentPrefix + ".index.modals.create"} ref="createModal" form={this.props.form} app={this.props.app} model={this.props.model} />
-              }
-            }()}
-            {() => {
-              if(this.props.deleteEnabled === true) {
-                return <DeleteModal contentPrefix={this.props.contentPrefix + ".index.modals.delete"} ref="deleteModal" app={this.props.app} model={this.props.model} selectedRecordIds={this.state.selectedRecordIds} />
-              }
-            }()}
+    switch(this.props.type) {
+      case "tableBrowser":
+        return (
+          <Section>
+            <GridRow>
+              <GridCell size="large" center={true}>
+                {() => {
+                  if(this.props.createEnabled === true) {
+                    return <CreateModal contentPrefix={this.props.contentPrefix + ".index.modals.create"} ref="createModal" form={this.props.form} app={this.props.app} model={this.props.model} />
+                  }
+                }()}
+                {() => {
+                  if(this.props.deleteEnabled === true) {
+                    return <DeleteModal contentPrefix={this.props.contentPrefix + ".index.modals.delete"} ref="deleteModal" app={this.props.app} model={this.props.model} selectedRecordIds={this.state.selectedRecordIds} />
+                  }
+                }()}
 
-            <Card contentPrefix={`${this.props.contentPrefix}.index`}>
-              <CardHeader/>
-              <CardBody cardPadding={false}>
-                <TableBrowser onSelect={this.onTableSelect} selectable={true} attributes={this.props.attributes} contentPrefix={`${this.props.contentPrefix}.index.table`} recordsQuery={this.buildIndexQuery()} recordsLinkFunc={this.props.readEnabled === true ? this.onRecordClick : undefined}>
-                  <ToolBarGroup>
-                    {() => {
-                      if(this.props.createEnabled === true) {
-                        return <ToolBarButton icon="plus" labelTextKey={`${this.props.contentPrefix}.index.actions.create`} onClick={this.onCreateButtonClick} />;
-                      }
-                    }()}
-                    {() => {
-                      if(this.props.deleteEnabled === true) {
-                        return <ToolBarButton icon="delete" hintTooltipKey={`${this.props.contentPrefix}.index.actions.delete`} onClick={this.onDeleteButtonClick} disabled={this.state.selectedRecordIds.count() === 0} />
-                      }
-                    }()}
-                  </ToolBarGroup>
-                </TableBrowser>
-              </CardBody>
-            </Card>
-          </GridCell>
-        </GridRow>
-      </Section>
-    );
+                <Card contentPrefix={`${this.props.contentPrefix}.index`}>
+                  <CardHeader/>
+                  <CardBody cardPadding={false}>
+                    <TableBrowser onSelect={this.onTableSelect} selectable={true} attributes={this.props.attributes} contentPrefix={`${this.props.contentPrefix}.index.table`} recordsQuery={this.buildIndexQuery()} recordsLinkFunc={this.props.readEnabled === true ? this.onRecordClick : undefined}>
+                      <ToolBarGroup>
+                        {() => {
+                          if(this.props.createEnabled === true) {
+                            return <ToolBarButton icon="plus" labelTextKey={`${this.props.contentPrefix}.index.actions.create`} onClick={this.onCreateButtonClick} />;
+                          }
+                        }()}
+                        {() => {
+                          if(this.props.deleteEnabled === true) {
+                            return <ToolBarButton icon="delete" hintTooltipKey={`${this.props.contentPrefix}.index.actions.delete`} onClick={this.onDeleteButtonClick} disabled={this.state.selectedRecordIds.count() === 0} />
+                          }
+                        }()}
+                      </ToolBarGroup>
+                    </TableBrowser>
+                  </CardBody>
+                </Card>
+              </GridCell>
+            </GridRow>
+          </Section>
+        );
+      break;
+
+      case "list":
+        return (
+          <Section>
+            <GridRow>
+              <GridCell size="small" center={true}>
+                <Card contentPrefix={`${this.props.contentPrefix}.index`} cardPadding={false}>
+                  <CardHeader/>
+                  <CardBody cardPadding={false}>
+                    <ListBrowser attributes={this.props.attributes} contentPrefix={`${this.props.contentPrefix}.index.table`} recordsQuery={this.buildIndexQuery()} recordsLinkFunc={this.props.readEnabled === true ? this.onRecordClick : undefined}/>
+                  </CardBody>
+                </Card>
+              </GridCell>
+            </GridRow>
+          </Section>
+        );
+        break;
+    }
   }
 });
