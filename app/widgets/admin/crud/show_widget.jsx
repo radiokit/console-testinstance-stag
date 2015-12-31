@@ -96,26 +96,6 @@ export default React.createClass({
   },
 
 
-  renderToolbar: function() {
-    return (
-      <div>
-        <ToolBarGroup>
-          <ToolBarButton icon="keyboard-backspace" labelTextKey={`${this.props.contentPrefix}.show.actions.back`} onClick={this.onBackClick} />
-        </ToolBarGroup>
-        {() => {
-          if(this.props.deleteEnabled === true) {
-            return (
-              <ToolBarGroup>
-                <ToolBarButton icon="delete" labelTextKey={`${this.props.contentPrefix}.show.actions.delete`} onClick={this.onDeleteButtonClick} />
-              </ToolBarGroup>
-            );
-          }
-        }()}
-      </div>
-    );
-  },
-
-
   render: function() {
     if(this.state.loaded === false) {
       return <Loading />;
@@ -126,7 +106,7 @@ export default React.createClass({
           <Section>
             <GridRow>
               <GridCell size="large" center={true}>
-                <Card contentPrefix={`${this.props.contentPrefix}.show`} headerText={this.state.record.get("name")} sidebarElement={this.props.sidebarElement} sidebarProps={{ contentPrefix: this.props.contentPrefix, app: this.props.app, model: this.props.model, record: this.state.record }} contentElement={this.props.contentElement} contentProps={{ contentPrefix: this.props.contentPrefix, app: this.props.app, model: this.props.model, record: this.state.record }} toolbarElement={this.renderToolbar()} />
+                <Card contentPrefix={`${this.props.contentPrefix}.show`} headerText={this.state.record.get("name")} sidebarElement={this.props.sidebarElement} sidebarProps={{ contentPrefix: this.props.contentPrefix + ".show", app: this.props.app, model: this.props.model, record: this.state.record }} contentElement={this.props.contentElement} contentProps={{ contentPrefix: this.props.contentPrefix + ".show", app: this.props.app, model: this.props.model, record: this.state.record }} />
               </GridCell>
             </GridRow>
           </Section>

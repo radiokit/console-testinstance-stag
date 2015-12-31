@@ -41,14 +41,15 @@ export default React.createClass({
 
     Object.keys(this.props.form).map((fieldName) => {
       let fieldConfig = this.props.form[fieldName];
+      if(fieldConfig.type !== "hidden") {
+        let required = this.isFieldRequired(fieldConfig);
 
-      let required = this.isFieldRequired(fieldConfig);
-
-      if(required && this.refs[fieldName].value.trim() === "") {
-        if(errors.hasOwnProperty(fieldName)) {
-          errors[fieldName].push("presence");
-        } else {
-          errors[fieldName] = [ "presence" ];
+        if(required && this.refs[fieldName].value.trim() === "") {
+          if(errors.hasOwnProperty(fieldName)) {
+            errors[fieldName].push("presence");
+          } else {
+            errors[fieldName] = [ "presence" ];
+          }
         }
       }
     });
@@ -84,6 +85,10 @@ export default React.createClass({
           } else {
             values.references = { broadcast_channel_id: this.refs[fieldName].value };
           }
+          break;
+
+        case "hidden":
+          values[fieldName] = fieldConfig.value;
           break;
 
         default:
@@ -128,9 +133,20 @@ export default React.createClass({
           break;
 
         case "enum":
+          let valuesSorted;
+          if(fieldConfig.hasOwnProperty("sorted") && fieldConfig.sorted === false) {
+            valuesSorted = fieldConfig.values.sort((a,b) => {
+              let translatedA = Counterpart.translate(`${this.props.contentPrefix}.${fieldName}.values.${a}`);
+              let translatedB = Counterpart.translate(`${this.props.contentPrefix}.${fieldName}.values.${b}`);
+              return translatedA == translatedB ? 0 : (translatedA < translatedB ? -1 : 1);
+            });
+          } else {
+            valuesSorted = fieldConfig.values;
+          }
+
           input = (
             <select className="form-control" id={fieldName} ref={fieldName} required={required}>
-            {fieldConfig.values.map((value) => {
+            {valuesSorted.map((value) => {
               return (<Translate key={value} value={value} component="option" content={`${this.props.contentPrefix}.${fieldName}.values.${value}`}/>);
             })}
             </select>
@@ -155,6 +171,10 @@ export default React.createClass({
             })}
             </select>
           );
+          break;
+
+        case "hidden":
+          // Render nothing
           break;
 
         default:
@@ -185,13 +205,15 @@ export default React.createClass({
         formGroupKlass = "form-group";
       }
 
-      return (
-        <div key={fieldName} className={formGroupKlass}>
-          <Translate htmlFor={fieldName} component="label" content={`${this.props.contentPrefix}.${fieldName}.label`}/>
-          {input}
-          {hint}
-        </div>
-      );
+      if(fieldConfig.type !== "hidden") {
+        return (
+          <div key={fieldName} className={formGroupKlass}>
+            <Translate htmlFor={fieldName} component="label" content={`${this.props.contentPrefix}.${fieldName}.label`}/>
+            {input}
+            {hint}
+          </div>
+        );
+      }
     });
   },
 

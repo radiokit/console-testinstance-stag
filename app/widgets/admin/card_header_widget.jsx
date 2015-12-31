@@ -34,7 +34,14 @@ export default React.createClass({
       return (
         <ul className="nav nav-tabs pull-right" data-toggle="tabs">
           {this.props.tabs.map((tab) => {
-            return <li key={tab} className={tab === this.props.selectedTab ? "active" : null}><Translate content={this.props.contentPrefix + ".tabs.headers." + tab} component="a" title={Counterpart.translate(this.props.contentPrefix + ".tabs.hints." + tab)} onClick={this.onTabClick.bind(this, tab)} /></li>;
+            let hint;
+            if(Counterpart.translate(this.props.contentPrefix + ".tabs.hints." + tab, { fallback: "_notfound_" }) !== "_notfound_") {
+              hint = Counterpart.translate(this.props.contentPrefix + ".tabs.hints." + tab);
+              
+            } else {
+              hint = null;
+            }
+            return <li key={tab} className={tab === this.props.selectedTab ? "active" : null}><Translate content={this.props.contentPrefix + ".tabs.headers." + tab} component="a" title={hint} onClick={this.onTabClick.bind(this, tab)} /></li>;
           })}
         </ul>
       );

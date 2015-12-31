@@ -10,10 +10,10 @@ export default React.createClass({
   buildTabs: function() {
     return {
       metadata_schema: {
-        element: MetadataSchemaPartial, props: {},
+        element: MetadataSchemaPartial, props: { contentPrefix: "apps.administration.file_repositories.show.tabs.body.metadata_schema" },
       },
       tags_schema: {
-        element: TagsSchemaPartial, props: {},
+        element: TagsSchemaPartial, props: { contentPrefix: "apps.administration.file_repositories.show.tabs.body.tags_schema" },
       },
     }
   },

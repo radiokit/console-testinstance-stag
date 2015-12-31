@@ -3,7 +3,7 @@ export default {
     library: {
       navigation: {
         file_repositories: {
-          title: "Library",
+          title: "Biblioteka",
         },
       },
 
@@ -11,15 +11,21 @@ export default {
       file_repositories: {
         show: {
           actions: {
-            back: "Back to the library index",
+            upload: "Załaduj pliki",
           },
 
           tabs: {
             headers: {
-              incoming: "Incoming",
-              ready: "Ready",
-              archive: "Archive",
-              trash: "Trash",
+              incoming: "Nowe",
+              ready: "Gotowe",
+              archive: "Archiwum",
+              trash: "Kosz",
+            },
+            hints: {
+              incoming: "Pliki, które zostały załadowane ale nie zostały jeszcze oznaczone jako gotowe do publikacji",
+              ready: "Pliki gotowe do publikacji",
+              archive: "Pliki, które nie są już potrzebne albo nie są już opublikowane, ale powinny zostać zachowane",
+              trash: "Pliki przeznaczone do skasowania, są automatycznie czyszczone po 30 dniach",
             },
           },
         },
