@@ -7,7 +7,7 @@ export default React.createClass({
   propTypes: {
     form: React.PropTypes.object.isRequired,
     onSubmit: React.PropTypes.func.isRequired,
-    contentPrefix: React.PropTypes.string,
+    contentPrefix: React.PropTypes.string.isRequired,
   },
 
 
