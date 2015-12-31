@@ -16,6 +16,7 @@ export default React.createClass({
     app: React.PropTypes.string.isRequired,
     model: React.PropTypes.string.isRequired,
     contentPrefix: React.PropTypes.string.isRequired,
+    stage: React.PropTypes.oneOf(['incoming', 'ready', 'archive', 'trash']).isRequired,
   },
 
 
@@ -63,6 +64,7 @@ export default React.createClass({
       .select("id", "name", "metadata_items", "tag_items")
       .joins("metadata_items")
       .joins("tag_items")
+      .where("stage", "eq", this.props.stage)
       .where("record_repository_id", "eq", this.props.record.get("id"));
   },
 
@@ -71,7 +73,11 @@ export default React.createClass({
     return (
       <TableBrowser onSelect={this.onTableSelect} selectable={true} attributes={this.buildTableAttributes()} contentPrefix={this.props.contentPrefix + ".index.table"} recordsQuery={this.buildTableRecordsQuery()}>
         <ToolbarGroup>
-          <ToolbarButtonModal icon="upload" labelTextKey={this.props.contentPrefix + ".show.actions.upload"} modalElement={UploadModal} modalProps={{ contentPrefix: this.props.contentPrefix + ".show.modals.upload", repository: this.props.record }} />
+          {() => {
+            if(this.props.stage === "incoming") {
+              return (<ToolbarButtonModal icon="upload" labelTextKey={this.props.contentPrefix + ".show.actions.upload"} modalElement={UploadModal} modalProps={{ contentPrefix: this.props.contentPrefix + ".show.modals.upload", repository: this.props.record }} />);
+            }
+          }()}
           <ToolbarButton icon="download" disabled={this.state.selectedRecordIds.count() === 0} onClick={this.onDownloadClick}/>
           <ToolbarButton icon="delete" disabled={this.state.selectedRecordIds.count() === 0} onClick={this.onDeleteClick}/>
         </ToolbarGroup>

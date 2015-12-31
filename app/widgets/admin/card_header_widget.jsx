@@ -1,6 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Translate from 'react-translate-component';
+import Counterpart from 'counterpart';
 
 
 export default React.createClass({
@@ -34,7 +34,7 @@ export default React.createClass({
       return (
         <ul className="nav nav-tabs pull-right" data-toggle="tabs">
           {this.props.tabs.map((tab) => {
-            return <li key={tab} className={tab === this.props.selectedTab ? "active" : null}><Translate content={this.props.contentPrefix + ".tabs.headers." + tab} component="a" onClick={this.onTabClick.bind(this, tab)} /></li>;
+            return <li key={tab} className={tab === this.props.selectedTab ? "active" : null}><Translate content={this.props.contentPrefix + ".tabs.headers." + tab} component="a" title={Counterpart.translate(this.props.contentPrefix + ".tabs.hints." + tab)} onClick={this.onTabClick.bind(this, tab)} /></li>;
           })}
         </ul>
       );

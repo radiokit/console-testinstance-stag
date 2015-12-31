@@ -39,26 +39,40 @@ export default {
   renderDelegatedComponent: function(element, props, preRenderCallback, postRenderCallback) {
     if(typeof(element) === "object") {
       if(!this.containsNestedElements(element)) {
-        // Single already rendered element
+        // element argument is a single, already rendered element
         return element;
 
       } else {
-        // Hash of nested elements
+        // element argument is an object containing definition of nested elements
+        // to be rendered
         let nestedElements = Object.keys(element).map((key) => {
           let value = element[key];
           if(!value.hasOwnProperty("element")) {
             throw new Error("Missing 'element' key in one of values of object passed to renderDelegatedComponent, passed object was " + JSON.stringify(element));
           }
 
-          let nestedProps = value.hasOwnProperty("props") ? value.props : {};
+          // Merge props passed to renderDelegatedComponent with props passed
+          // to hash specyfing component structure, and then set the 'key' prop.
+          let nestedProps = {};
+          if(typeof(props) === "object") {
+            for(let attr in props) { nestedProps[attr] = props[attr]; }
+          }
+          if(value.hasOwnProperty("props")) {
+            for(let attr in value.props) { nestedProps[attr] = value.props[attr]; }
+          }
           nestedProps.key = key;
 
+          // Call preRenderCallback if it's present, expect that modified props
+          // will be returned.
           if(typeof(preRenderCallback) === "function") {
             nestedProps = preRenderCallback(key, value.element, nestedProps);
           }
 
+          // Do the actual rendering
           let renderedElement = this.renderDelegatedComponent(value.element, nestedProps);
 
+          // Call postRenderCallback if it's present, expect that modified element
+          // will be returned.
           if(typeof(postRenderCallback) === "function") {
             return postRenderCallback(key, renderedElement, nestedProps);
           } else {
@@ -74,7 +88,7 @@ export default {
       }
 
     } else {
-      // Element constructor (class)
+      // element argument is a react component class that we have to instantiate
       return React.createElement(element, props);
     }
   },

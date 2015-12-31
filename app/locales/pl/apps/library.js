@@ -13,6 +13,15 @@ export default {
           actions: {
             back: "Back to the library index",
           },
+
+          tabs: {
+            headers: {
+              incoming: "Incoming",
+              ready: "Ready",
+              archive: "Archive",
+              trash: "Trash",
+            },
+          },
         },
 
         index: {

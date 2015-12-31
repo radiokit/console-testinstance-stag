@@ -11,10 +11,22 @@ export default {
       file_repositories: {
         show: {
           actions: {
-            back: "Back to the library index",
-            upload: "Upload files",
-            tags: "Tags",
-            metadata: "Metadata",
+            upload: "Upload new files",
+          },
+
+          tabs: {
+            headers: {
+              incoming: "Incoming",
+              ready: "Ready",
+              archive: "Archive",
+              trash: "Trash",
+            },
+            hints: {
+              incoming: "Files that were uploaded but are not marked as ready for publication yet",
+              ready: "Files that are ready for publication",
+              archive: "Files that are not longer necessary or publicly available but we want to keep them for the future",
+              trash: "Files that are supposed to be deleted, purged automatically after 30 days",
+            },
           },
         },
 
