@@ -134,7 +134,7 @@ export default React.createClass({
 
         case "enum":
           let valuesSorted;
-          if(fieldConfig.hasOwnProperty("sorted") && fieldConfig.sorted === false) {
+          if(!fieldConfig.hasOwnProperty("sorted") || fieldConfig.sorted === false) {
             valuesSorted = fieldConfig.values.sort((a,b) => {
               let translatedA = Counterpart.translate(`${this.props.contentPrefix}.${fieldName}.values.${a}`);
               let translatedB = Counterpart.translate(`${this.props.contentPrefix}.${fieldName}.values.${b}`);
