@@ -1,15 +1,7 @@
 import React from 'react';
 import Immutable from 'immutable';
-import Counterpart from 'counterpart';
 
-import GridRow from '../../../widgets/admin/grid_row_widget.jsx';
-import GridCell from '../../../widgets/admin/grid_cell_widget.jsx';
-import Section from '../../../widgets/admin/section_widget.jsx';
 import TableBrowser from '../../../widgets/admin/table_browser_widget.jsx';
-import ListBrowser from '../../../widgets/admin/list_browser_widget.jsx';
-import Card from '../../../widgets/admin/card_widget.jsx';
-import CardBody from '../../../widgets/admin/card_body_widget.jsx';
-import CardHeader from '../../../widgets/admin/card_header_widget.jsx';
 import ToolBar from '../../../widgets/admin/toolbar_widget.jsx';
 import ToolBarGroup from '../../../widgets/admin/toolbar_group_widget.jsx';
 import ToolBarButton from '../../../widgets/admin/toolbar_button_widget.jsx';
@@ -43,7 +35,6 @@ export default React.createClass({
       readEnabled: true,
       createEnabled: true,
       deleteEnabled: true,
-      type: "tableBrowser",
     }
   },
 

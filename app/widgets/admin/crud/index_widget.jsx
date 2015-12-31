@@ -16,6 +16,8 @@ import ToolBarButton from '../../../widgets/admin/toolbar_button_widget.jsx';
 import ToolBarButtonModal from '../../../widgets/admin/toolbar_button_modal_widget.jsx';
 
 import IndexTableBrowser from './index_table_browser_widget.jsx';
+import IndexListBrowser from './index_list_browser_widget.jsx';
+
 
 export default React.createClass({
   propTypes: {
@@ -59,13 +61,11 @@ export default React.createClass({
       break;
 
       case "list":
-        contentElement = <ListBrowser attributes={this.props.attributes} contentPrefix={`${this.props.contentPrefix}.index.table`} recordsQuery={this.buildIndexQuery()} recordsLinkFunc={this.props.readEnabled === true ? this.onRecordClick : undefined}/>;
-
         return (
           <Section>
             <GridRow>
               <GridCell size="small" center={true}>
-                <Card contentPrefix={`${this.props.contentPrefix}.index`} cardPadding={false} contentElement={contentElement}/>
+                <Card contentPrefix={`${this.props.contentPrefix}.index`} cardPadding={false} contentElement={IndexListBrowser} contentProps={{attributes: this.props.attributes, contentPrefix: this.props.contentPrefix, readEnabled: this.props.readEnabled, deleteEnabled: this.props.deleteEnabled, createEnabled: this.props.createEnabled, form: this.props.form, app: this.props.app, model: this.props.model}}/>
               </GridCell>
             </GridRow>
           </Section>
