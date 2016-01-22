@@ -5,7 +5,6 @@ import Index from '../../../widgets/admin/crud/index_widget.jsx';
 export default React.createClass({
   modifyIndexQuery: function(query) {
     return query
-    .where("references", "deq", "role", "infrastructure")
     .order("name", "asc")
   },
 

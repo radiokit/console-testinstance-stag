@@ -19,7 +19,6 @@ export default React.createClass({
       .select("media_output_stream_icecast2")
       .select("media_routing_mix_group")
       .select("media_routing_link")
-      .where("references", "deq", "role", "infrastructure")
       .order("hostname", "asc");
   },
 
