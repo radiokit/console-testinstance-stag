@@ -209,7 +209,7 @@ export default {
           header: "Krosownica",
         }
       },
-      
+
       external_inputs: {
         index: {
           header: "Zewnętrzne źrodła dźwięku",
@@ -276,6 +276,7 @@ export default {
             loading: "Pobieranie listy transmisji",
             header: {
               device_name: "Urządzenie",
+              audio_interface_name: "Interfejs Audio",
               level: "Poziom",
             },
           },

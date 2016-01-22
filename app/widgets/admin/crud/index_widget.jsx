@@ -53,7 +53,7 @@ export default React.createClass({
           <Section>
             <GridRow>
               <GridCell size="large" center={true}>
-                <Card contentPrefix={`${this.props.contentPrefix}.index`} cardPadding={false} contentElement={IndexTableBrowser} contentProps={{attributes: this.props.attributes, contentPrefix: this.props.contentPrefix, readEnabled: this.props.readEnabled, deleteEnabled: this.props.deleteEnabled, createEnabled: this.props.createEnabled, form: this.props.form, app: this.props.app, model: this.props.model}} />
+                <Card contentPrefix={`${this.props.contentPrefix}.index`} cardPadding={false} contentElement={IndexTableBrowser} contentProps={{attributes: this.props.attributes, contentPrefix: this.props.contentPrefix, indexQueryFunc: this.props.indexQueryFunc, readEnabled: this.props.readEnabled, deleteEnabled: this.props.deleteEnabled, createEnabled: this.props.createEnabled, form: this.props.form, app: this.props.app, model: this.props.model}} />
               </GridCell>
             </GridRow>
           </Section>
@@ -65,7 +65,7 @@ export default React.createClass({
           <Section>
             <GridRow>
               <GridCell size="small" center={true}>
-                <Card contentPrefix={`${this.props.contentPrefix}.index`} cardPadding={false} contentElement={IndexListBrowser} contentProps={{attributes: this.props.attributes, contentPrefix: this.props.contentPrefix, readEnabled: this.props.readEnabled, deleteEnabled: this.props.deleteEnabled, createEnabled: this.props.createEnabled, form: this.props.form, app: this.props.app, model: this.props.model}}/>
+                <Card contentPrefix={`${this.props.contentPrefix}.index`} cardPadding={false} contentElement={IndexListBrowser} contentProps={{attributes: this.props.attributes, contentPrefix: this.props.contentPrefix, indexQueryFunc: this.props.indexQueryFunc, readEnabled: this.props.readEnabled, deleteEnabled: this.props.deleteEnabled, createEnabled: this.props.createEnabled, form: this.props.form, app: this.props.app, model: this.props.model}}/>
               </GridCell>
             </GridRow>
           </Section>

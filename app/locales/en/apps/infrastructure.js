@@ -297,6 +297,7 @@ export default {
             loading: "Fetching list of transmissions",
             header: {
               device_name: "Device",
+              audio_interface_name: "Audio Interface",
               level: "Level",
             },
           },
