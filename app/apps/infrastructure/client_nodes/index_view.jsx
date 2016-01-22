@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Index from '../../../widgets/admin/crud/index_widget.jsx';
+import CreateAcknowledgement from './create_acknowledgement.jsx';
 
 export default React.createClass({
   modifyIndexQuery: function(query) {
@@ -90,7 +91,7 @@ export default React.createClass({
 
   render: function() {
     return (
-      <Index contentPrefix="apps.infrastructure.client_nodes" app="plumber" model="Resource.Architecture.ClientNode" attributes={this.buildAttributes()} form={this.buildForm()} indexQueryFunc={this.modifyIndexQuery} />
+      <Index createAcknowledgementElement={CreateAcknowledgement} contentPrefix="apps.infrastructure.client_nodes" app="plumber" model="Resource.Architecture.ClientNode" attributes={this.buildAttributes()} form={this.buildForm()} indexQueryFunc={this.modifyIndexQuery} />
     );
   }
 });

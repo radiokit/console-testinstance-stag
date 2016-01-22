@@ -18,6 +18,8 @@ export default React.createClass({
     form: React.PropTypes.object.isRequired,
     onFormSubmit: React.PropTypes.func.isRequired,
     onCancel: React.PropTypes.func.isRequired,
+    acknowledgementElement: React.PropTypes.oneOfType([React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]),
+    record: React.PropTypes.object,
   },
 
 
@@ -85,7 +87,14 @@ export default React.createClass({
                 case "acknowledgement":
                   return (
                     <div>
-                      {React.Children.toArray(this.props.children)[0]}
+                    {() => {
+                      if(this.props.acknowledgementElement) {
+                        return React.createElement(this.props.acknowledgementElement, {record: this.props.record});
+
+                      } else {
+                        return <div>OK</div>; // FIXME <Translate component="p" className="text-center" content={this.props.contentPrefix + ".acknowledgement.info"} />;
+                      }
+                    }()}
                     </div>
                   );
 

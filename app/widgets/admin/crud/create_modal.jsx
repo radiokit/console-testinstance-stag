@@ -13,12 +13,14 @@ export default React.createClass({
     form: React.PropTypes.object.isRequired,
     app: React.PropTypes.string.isRequired,
     model: React.PropTypes.string.isRequired,
+    acknowledgementElement: React.PropTypes.oneOfType([React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]),
   },
 
 
   getInitialState: function() {
     return {
       step: "form",
+      record: null,
     }
   },
 
@@ -38,7 +40,7 @@ export default React.createClass({
       })
       .on("loaded", (_event, _record, data) => {
         if(this.isMounted()) {
-          this.setState({ step: "acknowledgement" });
+          this.setState({ step: "acknowledgement", record: data });
         }
       })
       .on("warning", () => {
@@ -69,13 +71,7 @@ export default React.createClass({
 
   render: function() {
     return (
-      <ModalForm ref="modal" contentPrefix={this.props.contentPrefix} onShow={this.onShow} step={this.state.step} form={this.props.form} onFormSubmit={this.onFormSubmit} onCancel={this.onCancel}>
-        <div>
-          <div>
-            <Translate component="p" className="text-center" content={this.props.contentPrefix + ".acknowledgement.info"} />
-          </div>
-        </div>
-      </ModalForm>
+      <ModalForm ref="modal" acknowledgementElement={this.props.acknowledgementElement} contentPrefix={this.props.contentPrefix} onShow={this.onShow} step={this.state.step} record={this.state.record} form={this.props.form} onFormSubmit={this.onFormSubmit} onCancel={this.onCancel}/>
     );
   }
 });
