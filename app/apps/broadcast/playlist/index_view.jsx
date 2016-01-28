@@ -79,15 +79,7 @@ export default React.createClass({
         <Section>
           <GridRow>
             <GridCell size="large" center={true}>
-              <Card contentPrefix="apps.broadcast.playlist" cardPadding={false}>
-                <CardHeader/>
-                <CardBody>
-                  <CardSidebar>
-                    <ScheduleDaySelector now={this.state.now} onChange={this.onNowChange} />
-                    <ScheduleDaily now={this.state.now} items={items} />
-                  </CardSidebar>
-                </CardBody>
-              </Card>
+              <Card contentPrefix="apps.broadcast.playlist" contentElement={ScheduleDaily} contentProps={{now: this.state.now, items: items}} />
             </GridCell>
           </GridRow>
         </Section> )
