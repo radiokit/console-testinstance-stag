@@ -14,7 +14,7 @@ export default React.createClass({
     contentPrefix: React.PropTypes.string.isRequired,
     cardPadding: React.PropTypes.bool,
     headerText: React.PropTypes.string,
-    contentElement: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.func, React.PropTypes.element]).isRequired,
+    contentElement: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.func, React.PropTypes.element]),
     sidebarElement: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.func, React.PropTypes.element]),
     toolbarElement: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.func, React.PropTypes.element]),
     contentProps: React.PropTypes.object,
@@ -89,7 +89,12 @@ export default React.createClass({
 
 
   renderContentElement: function() {
-    return RenderHelper.renderDelegatedComponent(this.props.contentElement, this.props.contentProps, null, this.onPostRenderNestedContentElement);
+    if(this.props.children.length !== 0) {
+      return this.props.children;
+
+    } else {
+      return RenderHelper.renderDelegatedComponent(this.props.contentElement, this.props.contentProps, null, this.onPostRenderNestedContentElement);
+    }
   },
 
 

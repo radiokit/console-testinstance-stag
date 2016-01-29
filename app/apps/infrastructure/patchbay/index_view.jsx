@@ -19,9 +19,9 @@ import ToolBarButton from '../../../widgets/admin/toolbar_button_widget.jsx';
 import RoutingHelper from '../../../helpers/routing_helper.js';
 
 export default React.createClass({
-  contextTypes: {
-    currentUserAccount: React.PropTypes.object.isRequired,
-  },
+  // contextTypes: {
+  //   currentUserAccount: React.PropTypes.object.isRequired,
+  // },
 
 
   getInitialState: function() {
@@ -164,51 +164,48 @@ export default React.createClass({
           <GridRow>
             <GridCell size="large" center={true}>
               <Card contentPrefix="apps.infrastructure.patchbay.index">
-                <CardHeader/>
-                <CardBody cardPadding={false}>
-                  <table className="vertical" style={{width: 300 + 24 * this.state.availableServersRtsp.count() + "px"}}>
-                    <thead>
-                      <tr>
-                        <th style={{width: "300px"}}></th>
-                        {this.state.availableServersRtsp.map((output) => {
-                          return (
-                            <th key={`head-output-rtsp-${output.get("id")}`} className="vertical"><p>{output.get("client_node").get("name")}</p></th>
-                          );
-                        })}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {this.state.availableInputsRtp.map((input) => {
+                <table className="vertical" style={{width: 300 + 24 * this.state.availableServersRtsp.count() + "px"}}>
+                  <thead>
+                    <tr>
+                      <th style={{width: "300px"}}></th>
+                      {this.state.availableServersRtsp.map((output) => {
                         return (
-                          <tr key={`head-input-rtp-${input.get("id")}`}>
-                            <th className="text-right">{input.get("client_node").get("name")}</th>
-                            {this.state.availableServersRtsp.map((output) => {
-                              return (
-                                <td style={{width: "24px", height: "24px"}} key={`patch-rtsp-${input.get("id")}-${output.get("id")}`}>
-                                  <input type="checkbox" disabled={this.state.updatingPatches} onChange={this.onCrossChange.bind(this, true, "input_stream_rtp", input, "server_rtsp", output)}/>
-                                </td>
-                              );
-                            })}
-                          </tr>
+                          <th key={`head-output-rtsp-${output.get("id")}`} className="vertical"><p>{output.has("client_node") && output.get("client_node") !== null ? output.get("client_node").get("name") : output.get("id")}</p></th>
                         );
                       })}
-                      {this.state.availableInputsHttp.map((input) => {
-                        return (
-                          <tr key={`head-input-http-${input.get("id")}`}>
-                            <th className="text-right">{input.get("name")}</th>
-                            {this.state.availableServersRtsp.map((output) => {
-                              return (
-                                <td style={{width: "24px", height: "24px"}} key={`patch-rtsp-${input.get("id")}-${output.get("id")}`}>
-                                <input type="checkbox" disabled={this.state.updatingPatches} onChange={this.onCrossChange.bind(this, true, "input_stream_http", input, "server_rtsp", output)}/>
-                                </td>
-                              );
-                            })}
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </CardBody>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {this.state.availableInputsRtp.map((input) => {
+                      return (
+                        <tr key={`head-input-rtp-${input.get("id")}`}>
+                          <th className="text-right">{input.has("client_node") && input.get("client_node") !== null ? input.get("client_node").get("name") : input.get("id")}</th>
+                          {this.state.availableServersRtsp.map((output) => {
+                            return (
+                              <td style={{width: "24px", height: "24px"}} key={`patch-rtsp-${input.get("id")}-${output.get("id")}`}>
+                                <input type="checkbox" disabled={this.state.updatingPatches} onChange={this.onCrossChange.bind(this, true, "input_stream_rtp", input, "server_rtsp", output)}/>
+                              </td>
+                            );
+                          })}
+                        </tr>
+                      );
+                    })}
+                    {this.state.availableInputsHttp.map((input) => {
+                      return (
+                        <tr key={`head-input-http-${input.get("id")}`}>
+                          <th className="text-right">{input.get("name")}</th>
+                          {this.state.availableServersRtsp.map((output) => {
+                            return (
+                              <td style={{width: "24px", height: "24px"}} key={`patch-rtsp-${input.get("id")}-${output.get("id")}`}>
+                              <input type="checkbox" disabled={this.state.updatingPatches} onChange={this.onCrossChange.bind(this, true, "input_stream_http", input, "server_rtsp", output)}/>
+                              </td>
+                            );
+                          })}
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </Card>
             </GridCell>
           </GridRow>
