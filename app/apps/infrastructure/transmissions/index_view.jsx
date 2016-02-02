@@ -14,12 +14,12 @@ export default React.createClass({
   buildAttributes: function() {
     return {
       device_name: { renderer: "string", valueFunc: (record) => {
-        if(record.has("client_node")) {
+        if(record.has("client_node") && record.get("client_node")) {
           return record.get("client_node").get("name") }
         }
       },
       audio_interface_name: { renderer: "string", valueFunc: (record) => {
-        if(record.has("audio_interface")) {
+        if(record.has("audio_interface") && record.get("audio_interface")) {
           return record.get("audio_interface").get("name") }
         }
       },
