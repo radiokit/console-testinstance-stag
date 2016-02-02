@@ -89,7 +89,7 @@ export default React.createClass({
 
 
   renderContentElement: function() {
-    if(this.props.children.length !== 0) {
+    if(this.props.children && this.props.children.length !== 0) {
       return this.props.children;
 
     } else {
