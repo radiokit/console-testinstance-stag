@@ -10,7 +10,7 @@ export default React.createClass({
     currentUserAccount: React.PropTypes.object,
     currentBroadcastChannel: React.PropTypes.object,
     routes: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-    currentEditor: React.PropTypes.object.isRequired,
+    currentUser: React.PropTypes.object.isRequired,
   },
 
 
@@ -62,7 +62,7 @@ export default React.createClass({
         <li className="header-nav-brand">
           <div className="brand-holder">
             <span className="header-nav-breadcrumb-separator mdi mdi-chevron-right"/>
-            <span className="header-nav-breadcrumb-label">{this.context.currentUserAccount.get("name_custom")}</span>
+            <span className="header-nav-breadcrumb-label">{this.context.currentUserAccount.get("name")}</span>
           </div>
         </li>);
     }
@@ -82,14 +82,14 @@ export default React.createClass({
   },
 
 
-  renderEditorDropdown: function() {
+  renderUserDropdown: function() {
     return (
       <ul className="header-nav header-nav-profile">
         <li className="dropdown">
           <a aria-expanded="false" className="dropdown-toggle ink-reaction" data-toggle="dropdown">
-            <img src={Gravatar.imageUrl({ email: this.context.currentEditor.get("email"), parameters: { s: "40", d: "mm" }, secure: true })} alt="" />
+            <img src={Gravatar.imageUrl({ email: this.context.currentUser.get("email"), parameters: { s: "40", d: "mm" }, secure: true })} alt="" />
             <span className="profile-info">
-              {this.context.currentEditor.get("email")}
+              {this.context.currentUser.get("email")}
             </span>
           </a>
         </li>
@@ -111,7 +111,7 @@ export default React.createClass({
 
 
         <div className="headerbar-right">
-          {this.renderEditorDropdown()}
+          {this.renderUserDropdown()}
         </div>
       </div>
     </header>);

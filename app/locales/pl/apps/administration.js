@@ -35,7 +35,7 @@ export default {
           table: {
             loading: "Ładowanie listy kont klientów",
             header: {
-              name_custom: "Nazwa (zwyczajowa)",
+              name: "Nazwa (zwyczajowa)",
               name_formal: "Nazwa (formalna)",
             },
           },
@@ -58,7 +58,7 @@ export default {
             create: {
               header: "Dodaj konto klienta",
               form: {
-                name_custom: {
+                name: {
                   label: "Nazwa (zwyczajowa)",
                   hint: "Podaj nazwę pod którą ten klient jest publicznie znany",
                 },

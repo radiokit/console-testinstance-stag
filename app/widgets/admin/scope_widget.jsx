@@ -51,7 +51,7 @@ export default React.createClass({
                   <li key={userAccount.get("id")} className="tile">
                     <a onClick={this.onUserAccountClick.bind(this, userAccount)} className="tile-content" style={{cursor: "pointer"}}>
                       <div className="tile-text">
-                        {userAccount.get("name_custom")}
+                        {userAccount.get("name")}
                       </div>
                     </a>
                   </li>

@@ -135,8 +135,8 @@ export default React.createClass({
     }
   },
 
-  renderStoredEditorMarkers: function() {
-    var list = this.props.dataInterface.getSnapshot().MetadataWaveformEditorWidget_TrackMarkers;
+  renderStoredUserMarkers: function() {
+    var list = this.props.dataInterface.getSnapshot().MetadataWaveformUserWidget_TrackMarkers;
     if (list == null) return "";
     trackMarkers = {};
     list.map( function(trackMarker) {
@@ -191,7 +191,7 @@ export default React.createClass({
                 <div className="line"/>
                 <div className="triangle bottom"/>
               </div>
-              //{this.renderStoredEditorMarkers()}
+              //{this.renderStoredUserMarkers()}
             </div>
           </div>
         </div>

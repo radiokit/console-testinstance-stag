@@ -7,7 +7,7 @@ export default {
           title: "Clients' Accounts",
         },
         editors: {
-          title: "Editors' Accounts",
+          title: "Users' Accounts",
         },
         broadcast_channels: {
           title: "Broadcast Channels",
@@ -35,7 +35,7 @@ export default {
           table: {
             loading: "Fetching list of accounts",
             header: {
-              name_custom: "Name (custom)",
+              name: "Name (custom)",
               name_formal: "Name (formal)",
             },
           },
@@ -58,7 +58,7 @@ export default {
             create: {
               header: "Add account",
               form: {
-                name_custom: {
+                name: {
                   label: "Name (custom)",
                   hint: "Type name under which this account is publicly known.",
                 },
@@ -284,7 +284,7 @@ export default {
 
 
         index: {
-          header: "Editors",
+          header: "Users",
           actions: {
             create: "Add editor",
             delete: "Delete selected editors",
@@ -341,7 +341,7 @@ export default {
               },
 
               acknowledgement: {
-                info: "Editor added succesfully",
+                info: "User added succesfully",
               },
 
               action: {

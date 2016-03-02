@@ -54,7 +54,7 @@ export default React.createClass({
 
   render: function() {
     return (
-      <Index contentPrefix="apps.administration.editors" app="auth" model="Editor" attributes={this.buildAttributes()} form={this.buildForm()} indexQueryFunc={this.modifyIndexQuery} />
+      <Index contentPrefix="apps.administration.editors" app="auth" model="User" attributes={this.buildAttributes()} form={this.buildForm()} indexQueryFunc={this.modifyIndexQuery} />
     );
   }
 });

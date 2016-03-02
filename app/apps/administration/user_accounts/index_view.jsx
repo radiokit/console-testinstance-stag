@@ -5,20 +5,20 @@ import Index from '../../../widgets/admin/crud/index_widget.jsx';
 export default React.createClass({
   modifyIndexQuery: function(query) {
     return query
-      .order("name_custom", "asc");
+      .order("name", "asc");
   },
 
 
   buildAttributes: function() {
     return {
-      name_custom: { renderer: "string" },
+      name: { renderer: "string" },
     }
   },
 
 
   buildForm: function() {
     return {
-      name_custom: {
+      name: {
         type: "string",
         hint: true,
         validators: {

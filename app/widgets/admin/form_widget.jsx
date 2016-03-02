@@ -157,7 +157,7 @@ export default React.createClass({
           input = (
             <select className="form-control" id={fieldName} ref={fieldName} required={required}>
             {this.context.availableUserAccounts.map((userAccount) => {
-              return (<option key={userAccount.get("id")} value={userAccount.get("id")}>{userAccount.get("name_custom")}</option>);
+              return (<option key={userAccount.get("id")} value={userAccount.get("id")}>{userAccount.get("name")}</option>);
             })}
             </select>
           );

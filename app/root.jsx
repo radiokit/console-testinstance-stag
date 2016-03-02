@@ -6,8 +6,8 @@ import Alert from './widgets/admin/alert_widget.jsx';
 export default React.createClass({
   getInitialState: function() {
     return {
-      loadedEditor:                    false,
-      currentEditor:                   null,
+      loadedUser:                    false,
+      currentUser:                   null,
       loadedAccounts:                  false,
       availableUserAccounts:           null,
       currentUserAccount:              null,
@@ -21,8 +21,8 @@ export default React.createClass({
 
   childContextTypes: {
     data:                              React.PropTypes.object,
-    loadedEditor:                      React.PropTypes.bool,
-    currentEditor:                     React.PropTypes.object,
+    loadedUser:                      React.PropTypes.bool,
+    currentUser:                     React.PropTypes.object,
     loadedAccounts:                    React.PropTypes.bool,
     availableUserAccounts:             React.PropTypes.object,
     currentUserAccount:                React.PropTypes.object,
@@ -39,8 +39,8 @@ export default React.createClass({
   getChildContext: function() {
     return {
       data:                            window.data,
-      loadedEditor:                    this.state.loadedEditor,
-      currentEditor:                   this.state.currentEditor,
+      loadedUser:                    this.state.loadedUser,
+      currentUser:                   this.state.currentUser,
       loadedAccounts:                  this.state.loadedAccounts,
       availableUserAccounts:           this.state.availableUserAccounts,
       currentUserAccount:              this.state.currentUserAccount,
@@ -70,18 +70,18 @@ export default React.createClass({
   },
 
 
-  initializeGoogleAnalytics: function(currentEditor) {
+  initializeGoogleAnalytics: function(currentUser) {
     if(typeof(ga) !== "undefined") {
-      ga('create', ENV.external.googleAnalyticsID, { 'userId' : "Editor#" + currentEditor.get("id") });
+      ga('create', ENV.external.googleAnalyticsID, { 'userId' : "User#" + currentUser.get("id") });
     }
   },
 
 
   loadAccounts: function() {
     window.data
-      .query("auth", "User.Account")
-      .select("id", "name_custom")
-      .order("name_custom", "asc")
+      .query("auth", "Account")
+      .select("id", "name")
+      .order("name", "asc")
       .on("error", () => {
         if(this.isMounted()) {
           this.setState({
@@ -127,9 +127,9 @@ export default React.createClass({
   },
 
 
-  loadEditor: function() {
+  loadUser: function() {
     window.data
-      .query("auth", "Editor")
+      .query("auth", "User")
       .method("me") // FIXME methods should be deprecated in favour of tokens
       .on("error", () => {
         if(this.isMounted()) {
@@ -142,8 +142,8 @@ export default React.createClass({
         if(this.isMounted()) {
           this.initializeGoogleAnalytics(data.first());
           this.setState({
-            loadedEditor: true,
-            currentEditor: data.first()
+            loadedUser: true,
+            currentUser: data.first()
           });
         }
       })
@@ -153,7 +153,7 @@ export default React.createClass({
 
   componentDidMount: function() {
     this.loadAccounts();
-    this.loadEditor();
+    this.loadUser();
   },
 
 
@@ -162,7 +162,7 @@ export default React.createClass({
       return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.communication.general" />);
 
     } else {
-      if(this.state.loadedEditor === false || this.state.loadedAccounts === false || this.state.loadedBroadcastChannels === false) {
+      if(this.state.loadedUser === false || this.state.loadedAccounts === false || this.state.loadedBroadcastChannels === false) {
         return (<LoadingLayout />);
 
       } else {
