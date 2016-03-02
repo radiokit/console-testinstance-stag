@@ -1,6 +1,6 @@
 window.ENV = {
   auth: {
-    clientId: "a13664ee292cf396fdfc260e00c350df8095da91bc4cd4e40d520c3df72c7a1d02d9f6479e1490fd",
+    clientId: "5ae8ec19f68ad074a212053b1550c96e497a6fd559e01b4c1c1708386153951b",
     baseUrl: "https://auth.radiokitapp.org"
   },
   apps: {
