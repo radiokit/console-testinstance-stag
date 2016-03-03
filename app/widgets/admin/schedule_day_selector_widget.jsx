@@ -21,7 +21,11 @@ export default React.createClass({
     }
   },
 
-
+  componentWillUpdate: function(nextProps, nextState) {
+    if (nextState.now !== this.state.now) {
+      this.props.onChange(nextState.now);
+    }
+  },
 
   onDayPreviousClick: function(e) {
     console.log("!");
@@ -100,27 +104,27 @@ export default React.createClass({
     return (
       <div className="text-center">
         <div className="btn-group margin-bottom-lg" role="group">
-          <button type="button" className="btn btn-default-light"><i className="mdi mdi-chevron-left" onClick={this.onDayPreviousClick} /></button>
+          <button type="button" className="btn btn-default-light" onClick={this.onDayPreviousClick}><i className="mdi mdi-chevron-left" /></button>
           <div className="btn btn-default-light">{this.state.now.clone().startOf("day").format("Mo (ddd)")}</div>
-          <button type="button" className="btn btn-default-light"><i className="mdi mdi-chevron-right" onClick={this.onDayNextClick} /></button>
+          <button type="button" className="btn btn-default-light" onClick={this.onDayNextClick}><i className="mdi mdi-chevron-right" /></button>
         </div>
 
         <div className="btn-group margin-bottom-lg">
-          <button type="button" className="btn btn-default-light"><i className="mdi mdi-chevron-left" onClick={this.onWeekPreviousClick} /></button>
+          <button type="button" className="btn btn-default-light" onClick={this.onWeekPreviousClick}><i className="mdi mdi-chevron-left" /></button>
           <div className="btn btn-default-light">{this.state.now.clone().startOf("day").format("w")}</div>
-          <button type="button" className="btn btn-default-light"><i className="mdi mdi-chevron-right" onClick={this.onWeekNextClick} /></button>
+          <button type="button" className="btn btn-default-light" onClick={this.onWeekNextClick}><i className="mdi mdi-chevron-right" /></button>
         </div>
 
         <div className="btn-group margin-bottom-lg">
-          <button type="button" className="btn btn-default-light"><i className="mdi mdi-chevron-left" onClick={this.onMonthPreviousClick} /></button>
+          <button type="button" className="btn btn-default-light" onClick={this.onMonthPreviousClick}><i className="mdi mdi-chevron-left" /></button>
           <div className="btn btn-default-light">{this.state.now.clone().startOf("day").format("MMMM")}</div>
-          <button type="button" className="btn btn-default-light"><i className="mdi mdi-chevron-right" onClick={this.onMonthNextClick} /></button>
+          <button type="button" className="btn btn-default-light" onClick={this.onMonthNextClick}><i className="mdi mdi-chevron-right" /></button>
         </div>
 
         <div className="btn-group margin-bottom-lg">
-          <button type="button" className="btn btn-default-light"><i className="mdi mdi-chevron-left" onClick={this.onYearPreviousClick} /></button>
+          <button type="button" className="btn btn-default-light" onClick={this.onYearPreviousClick}><i className="mdi mdi-chevron-left" /></button>
           <div className="btn btn-default-light">{this.state.now.clone().startOf("day").format("YYYY")}</div>
-          <button type="button" className="btn btn-default-light"><i className="mdi mdi-chevron-right" onClick={this.onYearNextClick} /></button>
+          <button type="button" className="btn btn-default-light" onClick={this.onYearNextClick}><i className="mdi mdi-chevron-right" /></button>
         </div>
       </div>
     );
