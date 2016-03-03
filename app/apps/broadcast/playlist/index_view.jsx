@@ -17,6 +17,7 @@ import ScheduleDaySelector from '../../../widgets/admin/schedule_day_selector_wi
 export default React.createClass({
   contextTypes: {
     currentBroadcastChannel: React.PropTypes.object.isRequired,
+    data: React.PropTypes.object.isRequired,
   },
 
 
@@ -30,7 +31,7 @@ export default React.createClass({
 
 
   componentDidMount: function() {
-    window.data
+    this.context.data
       .query("plumber", "Media.Input.File.Http")
       .select("id", "start_at", "stop_at")
       .where("references","deq", "broadcast_channel_id", this.context.currentBroadcastChannel.get("id"))
@@ -79,7 +80,7 @@ export default React.createClass({
         <Section>
           <GridRow>
             <GridCell size="large" center={true}>
-              <Card contentPrefix="apps.broadcast.playlist" contentElement={ScheduleDaily} contentProps={{now: this.state.now, items: items}} />
+              <Card contentPrefix="apps.broadcast.playlist" sidebarElement={ScheduleDaySelector} sidebarProps={{now: this.state.now, onChange: this.onNowChange }} contentElement={ScheduleDaily} contentProps={{now: this.state.now, items: items}} />
             </GridCell>
           </GridRow>
         </Section> )
