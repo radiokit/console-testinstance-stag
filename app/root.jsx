@@ -6,8 +6,9 @@ import Alert from './widgets/admin/alert_widget.jsx';
 export default React.createClass({
   getInitialState: function() {
     return {
-      loadedUser:                    false,
-      currentUser:                   null,
+      authenticationState:             null,
+      loadedUser:                      false,
+      currentUser:                     null,
       loadedAccounts:                  false,
       availableUserAccounts:           null,
       currentUserAccount:              null,
@@ -152,34 +153,59 @@ export default React.createClass({
 
 
   componentDidMount: function() {
-    this.loadAccounts();
-    this.loadUser();
+    window.data.on("auth::success", (_eventName, redirect) => {
+      this.setState({ authenticationState: "success" }, () => {
+        this.props.history.replaceState(null, redirect);
+      });
+    });
+
+    window.data.on("auth::failure", () => {
+      this.setState({ authenticationState: "failure" });
+    });
+
+    window.data.signIn();
+  },
+
+
+  componentWillUpdate: function(nextProps, nextState) {
+    if(this.state.authenticationState !== "success" && nextState.authenticationState === "success") {
+      this.loadAccounts();
+      this.loadUser();
+    }
   },
 
 
   render: function() {
-    if(this.state.loadingError) {
-      return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.communication.general" />);
+    if(this.state.authenticationState == null) {
+      return (<LoadingLayout />);
+    }
 
-    } else {
+    if(this.state.authenticationState === "failure") {
+      return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.authentication.general" />);
+    }
+
+    if(this.state.authenticationState === "success") {
+      if(this.state.loadingError) {
+        return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.communication.general" />);
+      }
+
       if(this.state.loadedUser === false || this.state.loadedAccounts === false || this.state.loadedBroadcastChannels === false) {
         return (<LoadingLayout />);
-
-      } else {
-        if(this.state.availableUserAccounts.size === 0) {
-          return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.authentication.no_accounts"/>);
-
-        } else if(this.state.availableBroadcastChannels.size === 0) {
-          return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.authentication.no_channels"/>);
-
-        } else {
-          return (
-            <AdminLayout>
-              {this.props.children}
-            </AdminLayout>
-          );
-        }
       }
+
+      if(this.state.availableUserAccounts.size === 0) {
+        return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.authentication.no_accounts"/>);
+      }
+
+      if(this.state.availableBroadcastChannels.size === 0) {
+        return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.authentication.no_channels"/>);
+      }
+
+      return (
+        <AdminLayout>
+          {this.props.children}
+        </AdminLayout>
+      );
     }
   }
 });

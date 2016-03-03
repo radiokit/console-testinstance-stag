@@ -69,11 +69,6 @@ function getEnv() {
   }
 }
 
-function requireAuth() {
-  window.data.signIn("Editor"); // FIXME role should be no longer needed
-  pingGoogleAnalytics();
-}
-
 function pingGoogleAnalytics() {
   if(typeof(ga) !== "undefined") {
     ga('send', 'pageview');
@@ -88,7 +83,7 @@ window.plumberStream.connect();
 
 ReactDOM.render((
   <Router history={createBrowserHistory()}>
-    <Route path="/" component={Root} onEnter={requireAuth}>
+    <Route path="/" component={Root} onEnter={pingGoogleAnalytics}>
       <Route path="apps" component={AppsIndex} onEnter={pingGoogleAnalytics}>
         <Route path="broadcast" component={BroadcastApp}>
           <Route component={ScopeLayout} scope="broadcastChannel">
