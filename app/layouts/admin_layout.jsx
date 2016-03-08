@@ -1,12 +1,12 @@
 import React from 'react';
 
+import '../assets/stylesheets/layouts/admin_layout.scss';
+import '../../vendor/assets/stylesheets/materialadmin/materialadmin.css';
+import '../../vendor/assets/stylesheets/materialadmin/material-design-iconic-font.css';
 import MenuBar from './admin/menu_bar_partial.jsx';
 import TopBar from './admin/top_bar_partial.jsx';
 import Background from './admin/background_partial.jsx';
 
-import '../assets/stylesheets/layouts/admin_layout.scss';
-import '../../vendor/assets/stylesheets/materialadmin/materialadmin.css';
-import '../../vendor/assets/stylesheets/materialadmin/material-design-iconic-font.css';
 
 export default React.createClass({
   render: function() {
