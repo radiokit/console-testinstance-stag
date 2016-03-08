@@ -1,7 +1,13 @@
-/* Disable selecting text */
+/* Disable selecting text except explicitly marked elements */
 * {
   touch-callout: none;
   user-select: none;
+}
+
+.selectable {
+  cursor: text !important;
+  touch-callout: default !important;
+  user-select: text !important;
 }
 
 

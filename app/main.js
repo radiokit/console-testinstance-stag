@@ -13,6 +13,8 @@ import AppsIndex from './apps/apps_index.jsx';
 import BroadcastApp from './apps/broadcast/app.jsx';
 import BroadcastPlaylistIndex from './apps/broadcast/playlist/index_view.jsx';
 import BroadcastLiveIndex from './apps/broadcast/live/index_view.jsx';
+import ElectronApp from './apps/electron/app.jsx';
+import ElectronDevicesIndex from './apps/electron/devices/index_view.jsx';
 import InfrastructureApp from './apps/infrastructure/app.jsx';
 import InfrastructureClientNodesIndex from './apps/infrastructure/client_nodes/index_view.jsx';
 import InfrastructureComputingNodesIndex from './apps/infrastructure/computing_nodes/index_view.jsx';
@@ -32,6 +34,7 @@ import AdministrationFileRepositoriesShow from './apps/administration/file_repos
 Counterpart.registerTranslations("en", require('./locales/en/general.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/broadcast.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/library.js'));
+Counterpart.registerTranslations("en", require('./locales/en/apps/electron.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/infrastructure.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/administration.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/vault/file_browser.js'));
@@ -42,6 +45,7 @@ Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/form.
 Counterpart.registerTranslations("pl", require('./locales/pl/general.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/broadcast.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/library.js'));
+Counterpart.registerTranslations("pl", require('./locales/pl/apps/electron.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/infrastructure.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/administration.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/vault/file_browser.js'));
@@ -100,6 +104,12 @@ ReactDOM.render((
               <Route path="index" component={LibraryFileRepositoriesIndex} onEnter={pingGoogleAnalytics}/>
             </Route>
             <Route path="show/:id" component={LibraryFileRepositoriesShow} onEnter={pingGoogleAnalytics}/>
+          </Route>
+        </Route>
+
+        <Route path="electron" component={ElectronApp}>
+          <Route component={ScopeLayout} scope="userAccount">
+            <Route path="devices/index" component={ElectronDevicesIndex} onEnter={pingGoogleAnalytics}/>
           </Route>
         </Route>
 
