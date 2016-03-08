@@ -13,7 +13,9 @@ var config = {
   ],
 
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    // This will force moment to load only specified languages.
+    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /pl|en/)
   ],
 
   output: {

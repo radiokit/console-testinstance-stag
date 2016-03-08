@@ -14,6 +14,10 @@ var config = {
     chunkFilename: "[id].[hash].bundle.js"
   },
 
+  plugins: [
+    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en|pl/)
+  ],
+
   module: {
     loaders: [{
       test: /\.jsx?$/,
