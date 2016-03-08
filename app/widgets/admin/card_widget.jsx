@@ -11,8 +11,9 @@ import CardBody from './card_body_widget.jsx';
 
 export default React.createClass({
   propTypes: {
-    contentPrefix: React.PropTypes.string.isRequired,
+    contentPrefix: React.PropTypes.string,
     cardPadding: React.PropTypes.bool,
+    headerVisible: React.PropTypes.bool,
     headerText: React.PropTypes.string,
     contentElement: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.func, React.PropTypes.element]),
     sidebarElement: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.func, React.PropTypes.element]),
@@ -25,7 +26,8 @@ export default React.createClass({
 
   getDefaultProps: function() {
     return {
-      cardPadding: true
+      cardPadding: true,
+      headerVisible: true,
     }
   },
 
@@ -106,7 +108,11 @@ export default React.createClass({
   render: function() {
     return (
       <div className="card card-underline style-gray-dark2">
-        <CardHeader contentPrefix={this.props.contentPrefix} headerText={this.props.headerText} tabs={this.buildTabHeaders()} selectedTab={this.state.selectedTab} onTabClick={this.onTabClick} />
+        {() => {
+          if(this.props.headerVisible === true) {
+            return <CardHeader contentPrefix={this.props.contentPrefix} headerText={this.props.headerText} tabs={this.buildTabHeaders()} selectedTab={this.state.selectedTab} onTabClick={this.onTabClick} />
+          }
+        }()}
         <CardBody cardPadding={this.props.cardPadding && (this.props.sidebarElement || this.props.sidebarElement)}>
           {() => {
             if(this.props.sidebarElement || this.props.sidebarElement) {

@@ -2,6 +2,8 @@ export default {
   apps: {
     library: {
       navigation: {
+        title: "Library",
+        subtitle: "Storage for all of your audio files",
         file_repositories: {
           title: "Library",
         },

@@ -1,4 +1,5 @@
 import React from 'react';
+import Immutable from 'immutable';
 import Translate from 'react-translate-component';
 import { Link } from 'react-router';
 
@@ -7,6 +8,11 @@ import RoutingHelper from '../../helpers/routing_helper.js';
 
 
 export default React.createClass({
+  contextTypes: {
+    currentUser: React.PropTypes.object.isRequired,
+  },
+
+
   onMenuRootItemClick: function(e) {
     e.preventDefault();
     this.toggleMenuItemWithSubItems(e.target.closest("li"));
@@ -57,108 +63,35 @@ export default React.createClass({
 
         <div className="menubar-scroll-panel">
           <ul id="main-menu" className="gui-controls gui-controls-tree">
-            <li className="gui-folder">
-              <a onClick={this.onMenuRootItemClick}>
-                <div className="gui-icon"><i className="mdi mdi-blur-radial"/></div>
-                <Translate content="apps.electron.navigation.title" className="title" />
-              </a>
-              <ul>
-                <li>
-                  <Link to={RoutingHelper.apps.electron.devices.index(this)}>
-                    <Translate content="apps.electron.navigation.devices.title" className="title" />
-                  </Link>
-                </li>
-              </ul>
-            </li>
+            {() => {
+              return this.context.currentUser.get("apps_available").map((appName) => {
+                return (
 
-            <li className="gui-folder">
-              <a onClick={this.onMenuRootItemClick}>
-                <div className="gui-icon"><i className="mdi mdi-radio-tower"/></div>
-                <Translate content="apps.broadcast.navigation.title" className="title" />
-              </a>
-              <ul>
-                <li>
-                  <Link to={RoutingHelper.apps.broadcast.playlist.index(this)}>
-                    <Translate content="apps.broadcast.navigation.playlist.title" className="title" />
-                  </Link>
-                </li>
-                <li>
-                  <Link to={RoutingHelper.apps.broadcast.live.index(this)}>
-                    <Translate content="apps.broadcast.navigation.live.title" className="title" />
-                  </Link>
-                </li>
-              </ul>
-            </li>
+                  <li className="gui-folder">
+                    <a onClick={this.onMenuRootItemClick}>
+                      <div className="gui-icon"><i className={`mdi mdi-${RoutingHelper.apps[appName].icon}`} /></div>
+                      <Translate content={`apps.${appName}.navigation.title`} className="title" />
+                    </a>
+                    <ul>
+                      {() => {
+                        return Immutable.fromJS(Object.keys(RoutingHelper.apps[appName]))
+                          .filterNot((subAppName) => { return subAppName === "icon"; })
+                          .map((subAppName) => {
+                            return (
+                              <li>
+                                <Link to={RoutingHelper.apps[appName][subAppName].index(this)}>
+                                  <Translate content={`apps.${appName}.navigation.${subAppName}.title`} className="title" />
+                                </Link>
+                              </li>
+                            );
+                        });
 
-            <li>
-              <Link to={RoutingHelper.apps.library.fileRepositories.index(this)}>
-              <div className="gui-icon"><i className="mdi mdi-library-music"/></div>
-                <Translate content="apps.library.navigation.file_repositories.title" className="title" />
-              </Link>
-            </li>
-
-            <li className="gui-folder">
-              <a onClick={this.onMenuRootItemClick}>
-                <div className="gui-icon"><i className="mdi mdi-server-network"/></div>
-                <Translate content="apps.infrastructure.navigation.title" className="title" />
-              </a>
-              <ul>
-                <li>
-                  <Link to={RoutingHelper.apps.infrastructure.clientNodes.index(this)}>
-                    <Translate content="apps.infrastructure.navigation.client_nodes.title" className="title" />
-                  </Link>
-                </li>
-                <li>
-                  <Link to={RoutingHelper.apps.infrastructure.computingNodes.index(this)}>
-                    <Translate content="apps.infrastructure.navigation.computing_nodes.title" className="title" />
-                  </Link>
-                </li>
-                <li>
-                  <Link to={RoutingHelper.apps.infrastructure.externalInputs.index(this)}>
-                    <Translate content="apps.infrastructure.navigation.external_inputs.title" className="title" />
-                  </Link>
-                </li>
-                <li>
-                  <Link to={RoutingHelper.apps.infrastructure.transmissions.index(this)}>
-                    <Translate content="apps.infrastructure.navigation.transmissions.title" className="title" />
-                  </Link>
-                </li>
-                <li>
-                  <Link to={RoutingHelper.apps.infrastructure.patchbay.index(this)}>
-                    <Translate content="apps.infrastructure.navigation.patchbay.title" className="title" />
-                  </Link>
-                </li>
-              </ul>
-            </li>
-
-            <li className="gui-folder">
-              <a onClick={this.onMenuRootItemClick}>
-                <div className="gui-icon"><i className="mdi mdi-settings"/></div>
-                <Translate content="apps.administration.navigation.title" className="title" />
-              </a>
-              <ul>
-                <li>
-                  <Link to={RoutingHelper.apps.administration.userAccounts.index(this)}>
-                    <Translate content="apps.administration.navigation.user_accounts.title" className="title" />
-                  </Link>
-                </li>
-                <li>
-                  <Link to={RoutingHelper.apps.administration.broadcastChannels.index(this)}>
-                    <Translate content="apps.administration.navigation.broadcast_channels.title" className="title" />
-                  </Link>
-                </li>
-                <li>
-                  <Link to={RoutingHelper.apps.administration.editors.index(this)}>
-                    <Translate content="apps.administration.navigation.editors.title" className="title" />
-                  </Link>
-                </li>
-                <li>
-                  <Link to={RoutingHelper.apps.administration.fileRepositories.index(this)}>
-                    <Translate content="apps.administration.navigation.file_repositories.title" className="title" />
-                  </Link>
-                </li>
-              </ul>
-            </li>
+                      }()}
+                    </ul>
+                  </li>
+                );
+              });
+            }()}
           </ul>
         </div>
       </div>
