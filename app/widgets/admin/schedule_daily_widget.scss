@@ -1,0 +1,38 @@
+.ScheduleDailyWidget {
+  .ScheduleDailyWidget-CalendarRow {
+    transition: all 0.5s;
+    height: auto;
+    &.ScheduleDailyWidget-CalendarRow--expanded {
+      height: 400px;
+    }
+
+    &.ScheduleDailyWidget-CalendarRow--past {
+      color: #999;
+    }
+
+    &.ScheduleDailyWidget-CalendarRow--current {
+      background: yellow;
+    }
+  }
+
+
+  .ScheduleDailyWidget-CalendarRow-expandToggle {
+    width: 1ex;
+  }
+
+  .ScheduleDailyWidget-CalendarRow-hour {
+    width: 3ex;
+  }
+
+  .ScheduleDailyWidget-CalendarRow-items {
+    position: relative;
+
+    .ScheduleDailyWidget-CalendarRow-item {
+      background: red;
+      left: 12px;
+      right: 12px;
+      position: absolute;
+      min-height: 1px;
+    }
+  }
+}
