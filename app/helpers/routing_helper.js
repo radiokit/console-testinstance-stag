@@ -27,6 +27,7 @@ export default {
       }
     },
     electron: {
+      icon: "blur-radial",
       devices: {
         index: function(context) {
           return "/apps/electron/devices/index";

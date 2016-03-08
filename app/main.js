@@ -8,6 +8,7 @@ import RadioKit from 'radiokit-api';
 import { Socket } from 'phoenix-socket';
 
 import Root from './root.jsx';
+import Dashboard from './dashboard.jsx';
 import ScopeLayout from './layouts/scope_layout.jsx';
 import AppsIndex from './apps/apps_index.jsx';
 import BroadcastApp from './apps/broadcast/app.jsx';
@@ -88,6 +89,7 @@ window.plumberStream.connect();
 ReactDOM.render((
   <Router history={createBrowserHistory()}>
     <Route path="/" component={Root} onEnter={pingGoogleAnalytics}>
+      <IndexRoute component={Dashboard} />
       <Route path="apps" component={AppsIndex} onEnter={pingGoogleAnalytics}>
         <Route path="broadcast" component={BroadcastApp}>
           <Route component={ScopeLayout} scope="broadcastChannel">
