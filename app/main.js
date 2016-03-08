@@ -17,7 +17,6 @@ import BroadcastLiveIndex from './apps/broadcast/live/index_view.jsx';
 import ElectronApp from './apps/electron/app.jsx';
 import ElectronDevicesIndex from './apps/electron/devices/index_view.jsx';
 import InfrastructureApp from './apps/infrastructure/app.jsx';
-import InfrastructureClientNodesIndex from './apps/infrastructure/client_nodes/index_view.jsx';
 import InfrastructureComputingNodesIndex from './apps/infrastructure/computing_nodes/index_view.jsx';
 import InfrastructureExternalInputsIndex from './apps/infrastructure/external_inputs/index_view.jsx';
 import InfrastructureTransmissionsIndex from './apps/infrastructure/transmissions/index_view.jsx';
@@ -116,7 +115,6 @@ ReactDOM.render((
         </Route>
 
         <Route path="infrastructure" component={BroadcastApp}>
-          <Route path="client_nodes/index" component={InfrastructureClientNodesIndex} onEnter={pingGoogleAnalytics}/>
           <Route path="external_inputs/index" component={InfrastructureExternalInputsIndex} onEnter={pingGoogleAnalytics}/>
           <Route path="transmissions/index" component={InfrastructureTransmissionsIndex} onEnter={pingGoogleAnalytics}/>
           <Route path="patchbay/index" component={InfrastructurePatchbayIndex} onEnter={pingGoogleAnalytics}/>
