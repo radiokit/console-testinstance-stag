@@ -3,6 +3,7 @@ export default {
     electron: {
       navigation: {
         title: "Electron",
+        subtitle: "Make audio transmissions",
         devices: {
           title: "Connected devices",
         },

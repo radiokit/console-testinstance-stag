@@ -3,6 +3,7 @@ export default {
     infrastructure: {
       navigation: {
         title: "Infrastruktura",
+        subtitle: "Konfiguracja i monitoring sieci",
         client_nodes: {
           title: "Urządzenia audio",
         },

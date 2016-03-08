@@ -3,6 +3,7 @@ export default {
     broadcast: {
       navigation: {
         title: "Emisja",
+        subtitle: "Wszystko związane ze emisją w strumieniu",
         playlist: {
           title: "Ramówka"
         },

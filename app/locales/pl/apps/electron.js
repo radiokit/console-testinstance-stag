@@ -3,12 +3,13 @@ export default {
     electron: {
       navigation: {
         title: "Electron",
-        client_nodes: {
+        subtitle: "Transmisje dźwięku",
+        devices: {
           title: "Podłączone urządzenia",
         },
       },
 
-      client_nodes: {
+      devices: {
         index: {
           header: "Podłączone urządzenia",
           actions: {

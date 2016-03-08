@@ -3,6 +3,7 @@ export default {
     administration: {
       navigation: {
         title: "Administration",
+        subtitle: "Control panel",
         user_accounts: {
           title: "Clients' Accounts",
         },
