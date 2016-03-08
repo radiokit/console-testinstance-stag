@@ -1,6 +1,6 @@
 export default {
   apps: {
-    infrastructure: {
+    electron: {
       navigation: {
         title: "Electron",
         client_nodes: {
