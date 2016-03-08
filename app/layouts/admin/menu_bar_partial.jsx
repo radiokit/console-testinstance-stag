@@ -59,6 +59,20 @@ export default React.createClass({
           <ul id="main-menu" className="gui-controls gui-controls-tree">
             <li className="gui-folder">
               <a onClick={this.onMenuRootItemClick}>
+                <div className="gui-icon"><i className="mdi mdi-blur-radial"/></div>
+                <Translate content="apps.electron.navigation.title" className="title" />
+              </a>
+              <ul>
+                <li>
+                  <Link to={RoutingHelper.apps.electron.devices.index(this)}>
+                    <Translate content="apps.electron.navigation.devices.title" className="title" />
+                  </Link>
+                </li>
+              </ul>
+            </li>
+
+            <li className="gui-folder">
+              <a onClick={this.onMenuRootItemClick}>
                 <div className="gui-icon"><i className="mdi mdi-radio-tower"/></div>
                 <Translate content="apps.broadcast.navigation.title" className="title" />
               </a>

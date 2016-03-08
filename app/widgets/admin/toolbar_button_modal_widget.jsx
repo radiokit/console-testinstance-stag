@@ -9,6 +9,7 @@ export default React.createClass({
     icon: React.PropTypes.string.isRequired,
     labelTextKey: React.PropTypes.string,
     hintTooltipKey: React.PropTypes.string,
+    contentPrefix: React.PropTypes.string,
     disabled: React.PropTypes.bool,
     modalElement: React.PropTypes.oneOfType([React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]).isRequired,
     modalProps: React.PropTypes.object,
