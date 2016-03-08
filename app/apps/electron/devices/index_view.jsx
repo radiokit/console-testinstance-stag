@@ -10,8 +10,8 @@ export default React.createClass({
 
 
   modifyIndexQuery: function(query) {
-    // TODO .where("application", "eq", "radiokit-electron")
     return query
+      .where("application", "eq", "electron")
       .where("account_id", "eq", this.context.currentUserAccount.get("id"))
       .order("name", "asc")
   },
