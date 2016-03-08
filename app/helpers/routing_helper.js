@@ -26,6 +26,13 @@ export default {
         },
       }
     },
+    electron: {
+      devices: {
+        index: function(context) {
+          return "/apps/electron/devices/index";
+        },
+      },
+    },
     broadcast: {
       playlist: {
         index: function(context) {
