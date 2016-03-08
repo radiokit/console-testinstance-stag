@@ -1,4 +1,5 @@
 import React from 'react';
+import Counterpart from 'counterpart';
 import LoadingLayout from './layouts/loading_layout.jsx';
 import AdminLayout from './layouts/admin_layout.jsx';
 import Alert from './widgets/admin/alert_widget.jsx';
@@ -145,6 +146,8 @@ export default React.createClass({
           this.setState({
             loadedUser: true,
             currentUser: data.first()
+          }, () => {
+            Counterpart.setLocale(this.state.currentUser.get("locale"));
           });
         }
       })
