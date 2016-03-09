@@ -3,7 +3,7 @@ import React from 'react';
 import AdminHelper from '../../helpers/admin_helper.js';
 
 
-export default React.createClass({  
+export default React.createClass({
   propTypes: {
     header: React.PropTypes.bool,
     headerText: React.PropTypes.string,
@@ -23,7 +23,7 @@ export default React.createClass({
 
 
   render: function() {
-    return (<section onMouseOver={AdminHelper.hideMenuBar}>
+    return (<section {...this.props} onMouseOver={AdminHelper.hideMenuBar}>
       <div className="section-body">
         {this.renderHeader()}
         {this.props.children}

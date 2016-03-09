@@ -44,7 +44,7 @@ var config = {
       test: /\.(png|jpg)$/,
       loader: 'url?limit=25000'
     }, {
-      test: /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
+      test: /\.(ttf|eot|svg|woff(2)?)([\?].*)?$/,
       loader: 'file-loader'
     }]
   }

@@ -39,6 +39,7 @@
     "gravatar-api": "^1.2.5",
     "history": "^1.11.1",
     "immutable": "^3.7.5",
+    "mdi": "^1.5.54",
     "moment": "^2.10.6",
     "moment-timezone": "^0.4.1",
     "phoenix-socket": "^1.0.4",

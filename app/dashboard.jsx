@@ -11,6 +11,9 @@ import List from './widgets/admin/list_widget.jsx';
 import Card from './widgets/admin/card_widget.jsx';
 import RoutingHelper from './helpers/routing_helper.js';
 
+require("./dashboard.scss");
+
+
 export default React.createClass({
   contextTypes: {
     currentUser: React.PropTypes.object.isRequired,
@@ -35,14 +38,14 @@ export default React.createClass({
   render: function() {
     if(this.state.selectedApp == null) {
       return (
-        <Section>
+        <Section className="dashboard">
           <GridRow>
             {() => {
               return this.context.currentUser.get("apps_available").map((appName) => {
                 return (
                   <div key={appName} className="col-md-3">
                     <Card cardPadding={false} headerVisible={false}>
-                      <a className="btn btn-block btn-default text-center small-padding" style={{border: "none"}} onClick={this.onAppClick.bind(this, appName)}>
+                      <a className="btn btn-block btn-default text-center small-padding" onClick={this.onAppClick.bind(this, appName)}>
                         <i className={`text-xxxxl mdi mdi-${RoutingHelper.apps[appName].icon}`} />
                         <Translate component="h2" content={`apps.${appName}.navigation.title`}/>
                         <Translate component="small" content={`apps.${appName}.navigation.subtitle`}/>
@@ -58,7 +61,7 @@ export default React.createClass({
 
     } else {
       return (
-        <Section>
+        <Section className="dashboard">
           <GridRow>
             <GridCell size="small" center={true}>
               <div className="text-center small-padding">

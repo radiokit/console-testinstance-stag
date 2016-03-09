@@ -4,6 +4,8 @@ import LoadingLayout from './layouts/loading_layout.jsx';
 import AdminLayout from './layouts/admin_layout.jsx';
 import Alert from './widgets/admin/alert_widget.jsx';
 
+require("../node_modules/mdi/css/materialdesignicons.css");
+
 export default React.createClass({
   getInitialState: function() {
     return {

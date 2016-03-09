@@ -32,8 +32,8 @@ var config = {
       test: /\.(png|jpg)$/,
       loader: 'url?limit=25000'
     }, {
-      test: /\.(woff|ttf|eot|woff2|svg)$/,
-      loader: 'url?limit=100000'
+      test: /\.(ttf|eot|svg|woff(2)?)([\?].*)?$/,
+      loader: 'file-loader'
     }]
   }
 };
