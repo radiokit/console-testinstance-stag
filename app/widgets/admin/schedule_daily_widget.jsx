@@ -48,16 +48,25 @@ const CalendarRow = React.createClass({
     let hourStop = hourStart.clone().add(1, "hour");
 
     let hourKlass;
+    let hourMarker;
     if(now.clone().subtract(1, "hour").isAfter(hourStart)) {
-      hourKlass = "past";
+      hourKlass = "ScheduleDailyWidget-CalendarRow--past";
     } else if(now.isBetween(hourStart, hourStop)) {
-      hourKlass = "current";
+      hourKlass = "ScheduleDailyWidget-CalendarRow--current";
+      hourMarker = (
+        <hr className="ScheduleDailyWidget-CalendarRow-currentTime"
+          style={{top: (now.minutes() / 60)*100+"%"}}/>
+      );
     } else {
       hourKlass = null;
     }
 
     return (
-      <tr className={classnames("ScheduleDailyWidget-CalendarRow", hourKlass, {'ScheduleDailyWidget-CalendarRow--expanded': expanded})}>
+      <tr className={classnames(
+          "ScheduleDailyWidget-CalendarRow",
+          hourKlass,
+          {'ScheduleDailyWidget-CalendarRow--expanded': expanded}
+        )}>
         <td className="ScheduleDailyWidget-CalendarRow-expandToggle">
           <button className="btn btn-icon-toggle " onClick={expanded?this.onCollapse:this.onExpand}>
             <i className={classnames('mdi', {'mdi-plus':!expanded,'mdi-minus':expanded})}  />
@@ -69,13 +78,17 @@ const CalendarRow = React.createClass({
         </td>
 
         <td className="ScheduleDailyWidget-CalendarRow-items">
+          {hourMarker}
           {items.filter((item) => {
             return item.get("start_at").isBetween(hourStart, hourStop);
 
           }).map((item) => {
             if(item.get("stop_at").isAfter(item.get("start_at").clone().endOf("hour"))) {
               return (
-                <div key={item.get("id")} className="item item-start" style={{top: (item.get("start_at").minutes() / 59 * 100) + "%", bottom: "0" }}>
+                <div
+                    key={item.get("id")}
+                    className="ScheduleDailyWidget-CalendarRow-item"
+                    style={{top: (item.get("start_at").minutes() / 59 * 100) + "%", bottom: "0" }}>
                   <header>
                     {item.get("id")}
                     / {item.get("start_at").format()}
@@ -87,7 +100,7 @@ const CalendarRow = React.createClass({
 
             } else {
               return (
-                <div key={item.get("id")} className="item item-overflow" style={{top: (item.get("start_at").minutes() / 59 * 100) + "%", bottom: (100 - item.get("stop_at").minutes() / 59 * 100) + "%" }}>
+                <div key={item.get("id")} className="ScheduleDailyWidget-CalendarRow-item" style={{top: (item.get("start_at").minutes() / 59 * 100) + "%", bottom: (100 - item.get("stop_at").minutes() / 59 * 100) + "%" }}>
                   <header>
                     {item.get("id")}
                     / {item.get("start_at").format()}
@@ -105,7 +118,7 @@ const CalendarRow = React.createClass({
 
           }).map((item) => {
             return (
-              <div key={item.get("id")} className="item item-stop" style={{bottom: "0", top: "-1px" }} />
+              <div key={item.get("id")} className="ScheduleDailyWidget-CalendarRow-item" style={{bottom: "0", top: "-1px" }} />
             );
           })}
 

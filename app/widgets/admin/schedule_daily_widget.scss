@@ -15,6 +15,15 @@
     }
   }
 
+  .ScheduleDailyWidget-CalendarRow-currentTime {
+    position: absolute;
+    left:0;
+    right:0;
+    background-color: red;
+    padding: 0;
+    margin: 0;
+    z-index: 1;
+  }
 
   .ScheduleDailyWidget-CalendarRow-expandToggle {
     width: 1ex;
@@ -28,7 +37,7 @@
     position: relative;
 
     .ScheduleDailyWidget-CalendarRow-item {
-      background: red;
+      background: orange;
       left: 12px;
       right: 12px;
       position: absolute;
