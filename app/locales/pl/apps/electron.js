@@ -26,6 +26,7 @@ export default {
                         name: "Nazwa",
                         os_name: "Nazwa w systemie",
                         direction: "Rodzaj",
+                        transmission_enabled: "Transmisja",
                       }
                     }
                   }

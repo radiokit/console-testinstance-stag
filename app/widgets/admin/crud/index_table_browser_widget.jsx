@@ -105,6 +105,10 @@ export default React.createClass({
 
       if(attributeConfig.renderer === "scope-user-account" || attributeConfig.renderer === "scope-broadcast-channel") {
         attributesForSelect.push("references");
+
+      } else if(attributeConfig.hasOwnProperty("attribute") && typeof(attributeConfig.attribute) === "string") {
+        attributesForSelect.push(attributeConfig.attribute);
+
       } else if(typeof(attributeConfig.valueFunc) !== "function" && attributeConfig.renderer !== "peakmeter") {
         attributesForSelect.push(attributeName)
       }

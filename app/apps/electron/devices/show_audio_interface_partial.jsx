@@ -31,9 +31,28 @@ export default React.createClass({
 
   buildAttributes: function() {
     return {
-      name:         { renderer: "string" },
-      os_name:      { renderer: "string" },
-      direction:    { renderer: "string" },
+      name:                 { renderer: "string" },
+      os_name:              { renderer: "string" },
+      direction:            { renderer: "string" },
+      transmission_enabled: { renderer: "toggle",
+                              attribute: "extra",
+                              valueFunc: (record, attribute) => {
+                                if(!record.has("extra")) return false;
+                                if(record.get("extra") === null) return false;
+                                if(!record.get("extra").has("electron")) return false;
+                                if(record.get("extra").get("electron") === null) return false;
+                                if(!record.get("extra").get("electron").has("transmission_enabled")) return false;
+                                if(typeof(record.get("extra").get("electron").get("transmission_enabled")) !== "boolean") return false;
+                                return record.get("extra").get("electron").get("transmission_enabled");
+                              },
+                              props: {
+                                toggleFunc: (record, attribute, value) => {
+                                  window.data
+                                    .record("plumber", "Resource.Architecture.AudioInterface", record.get("id"))
+                                    .update({ extra: { electron: { transmission_enabled: !value } } });
+                                }
+                              }
+                            },
     }
   },
 

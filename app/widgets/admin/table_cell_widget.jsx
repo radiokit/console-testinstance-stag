@@ -14,6 +14,7 @@ import TableCellDate from './table_cell_date.jsx';
 import TableCellDateTime from './table_cell_datetime.jsx';
 import TableCellTime from './table_cell_time.jsx';
 import TableCellIcon from './table_cell_icon.jsx';
+import TableCellToggle from './table_cell_toggle.jsx';
 import TableCellFileSize from './table_cell_filesize.jsx';
 import TableCellPeakmeter from './table_cell_peakmeter.jsx';
 import TableCellScopeUserAccount from './table_cell_scope_user_account.jsx';
@@ -98,6 +99,10 @@ export default React.createClass({
 
         case "icon":
           cell = (<TableCellIcon {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value} />);
+          break;
+
+        case "toggle":
+          cell = (<TableCellToggle {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value} />);
           break;
 
         case "peakmeter":
