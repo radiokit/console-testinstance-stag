@@ -13,10 +13,10 @@ import ToolBarButton from '../../../widgets/admin/toolbar_button_widget.jsx';
 export default React.createClass({
   propTypes: {
     contentPrefix: React.PropTypes.string.isRequired,
-    app: React.PropTypes.string.isRequired,
-    model: React.PropTypes.string.isRequired,
+    app: React.PropTypes.string, // You must pass app+model or record
+    model: React.PropTypes.string,
+    record: React.PropTypes.object,
     showQueryFunc: React.PropTypes.func,
-    deleteEnabled: React.PropTypes.bool.isRequired,
     contentElement: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.func, React.PropTypes.element]).isRequired,
     sidebarElement: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.func, React.PropTypes.element]),
   },
@@ -29,16 +29,9 @@ export default React.createClass({
   },
 
 
-  getDefaultProps: function() {
-    return {
-      deleteEnabled: true,
-    }
-  },
-
-
   getInitialState: function() {
     return {
-      record: null,
+      record: this.props.record,
       loaded: false,
       error: false,
     }
@@ -70,34 +63,38 @@ export default React.createClass({
 
 
   componentDidMount: function() {
-    this.recordQuery = this.buildShowQuery()
-      .on("fetch", (_eventName, _record, data) => {
-        if(this.isMounted()) {
-          this.setState({
-            record: data.first(),
-            loaded: true,
-          });
-        }
-      })
-      .on("error", () => {
-        if(this.isMounted()) {
-          this.setState({
-            loaded: true,
-            error: true,
-          });
-        }
-      })
-      .fetch();
+    if(!this.props.record) {
+      this.recordQuery = this.buildShowQuery()
+        .on("fetch", (_eventName, _record, data) => {
+          if(this.isMounted()) {
+            this.setState({
+              record: data.first(),
+              loaded: true,
+            });
+          }
+        })
+        .on("error", () => {
+          if(this.isMounted()) {
+            this.setState({
+              loaded: true,
+              error: true,
+            });
+          }
+        })
+        .fetch();
+    }
   },
 
 
   componentWillUnmount: function() {
-    this.recordQuery.teardown();
+    if(!this.props.record) {
+      this.recordQuery.teardown();
+    }
   },
 
 
   render: function() {
-    if(this.state.loaded === false) {
+    if(!this.props.record && this.state.loaded === false) {
       return <Loading />;
 
     } else {

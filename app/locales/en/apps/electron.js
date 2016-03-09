@@ -10,13 +10,6 @@ export default {
       },
 
       devices: {
-        show: {
-          actions: {
-            back: "Back to the connected devices index",
-            delete: "Delete this audio device",
-          },
-        },
-
         index: {
           header: "Audio Devices",
           actions: {

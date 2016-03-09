@@ -67,7 +67,7 @@ export default React.createClass({
               return this.context.currentUser.get("apps_available").map((appName) => {
                 return (
 
-                  <li className="gui-folder">
+                  <li key={appName} className="gui-folder">
                     <a onClick={this.onMenuRootItemClick}>
                       <div className="gui-icon"><i className={`mdi mdi-${RoutingHelper.apps[appName].icon}`} /></div>
                       <Translate content={`apps.${appName}.navigation.title`} className="title" />
@@ -78,7 +78,7 @@ export default React.createClass({
                           .filterNot((subAppName) => { return subAppName === "icon"; })
                           .map((subAppName) => {
                             return (
-                              <li>
+                              <li key={subAppName}>
                                 <Link to={RoutingHelper.apps[appName][subAppName].index(this)}>
                                   <Translate content={`apps.${appName}.navigation.${subAppName}.title`} className="title" />
                                 </Link>

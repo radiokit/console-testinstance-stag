@@ -35,11 +35,7 @@ export default React.createClass({
       },
       application: {
         type: "hidden",
-        value: "radiokit-electron",
-      },
-      application: {
-        type: "hidden",
-        value: "radiokit-electron",
+        value: "electron",
       },
       account_id: {
         type: "hidden",
