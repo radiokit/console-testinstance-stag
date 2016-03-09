@@ -20,7 +20,9 @@ export default React.createClass({
     attributes: React.PropTypes.object.isRequired,
     readEnabled: React.PropTypes.bool.isRequired,
     createEnabled: React.PropTypes.bool.isRequired,
+    readEnabled: React.PropTypes.bool.isRequired,
     deleteEnabled: React.PropTypes.bool.isRequired,
+    selectable: React.PropTypes.bool.isRequired,
     createAcknowledgementElement: React.PropTypes.oneOfType([React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]),
   },
 
@@ -35,7 +37,9 @@ export default React.createClass({
     return {
       readEnabled: true,
       createEnabled: true,
+      readEnabled: true,
       deleteEnabled: true,
+      selectable: true,
     }
   },
 
@@ -117,7 +121,7 @@ export default React.createClass({
 
   render: function() {
     return (
-      <TableBrowser onSelect={this.onTableSelect} selectable={true} attributes={this.props.attributes} contentPrefix={`${this.props.contentPrefix}.index.table`} recordsQuery={this.buildIndexQuery()} recordsLinkFunc={this.props.readEnabled === true ? this.onRecordClick : undefined}>
+      <TableBrowser onSelect={this.onTableSelect} selectable={this.props.selectable} attributes={this.props.attributes} contentPrefix={`${this.props.contentPrefix}.index.table`} recordsQuery={this.buildIndexQuery()} recordsLinkFunc={this.props.readEnabled === true ? this.onRecordClick : undefined}>
         <ToolBarGroup>
           {() => {
             if(this.props.createEnabled === true) {

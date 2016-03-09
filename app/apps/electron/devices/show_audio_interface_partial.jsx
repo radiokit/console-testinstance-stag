@@ -40,7 +40,7 @@ export default React.createClass({
 
   render: function() {
     return (
-      <IndexTableBrowser contentPrefix={this.props.contentPrefix + ".table"} app="plumber" model="Resource.Architecture.AudioInterface" form={this.buildForm()} attributes={this.buildAttributes()} indexQueryFunc={this.modifyIndexQuery} createEnabled={false} deleteEnabled={false} />
+      <IndexTableBrowser contentPrefix={this.props.contentPrefix + ".table"} app="plumber" model="Resource.Architecture.AudioInterface" form={this.buildForm()} attributes={this.buildAttributes()} indexQueryFunc={this.modifyIndexQuery} readEnabled={false} createEnabled={false} deleteEnabled={false} selectable={false} />
     );
   }
 });
