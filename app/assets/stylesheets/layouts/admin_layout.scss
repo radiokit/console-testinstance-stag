@@ -11,6 +11,11 @@
 }
 
 
+/* Fonts */
+* {
+  font-family: "Roboto", "Arial", "Helvetica", sans-serif;
+}
+
 /* Display hand icon only on active elements */
 :not(a), :not(.btn) {
   cursor: default;
@@ -36,7 +41,6 @@ select, input[type=radio], input[type=checkbox] {
 /* Top bar */
 .headerbar {
   .header-nav-breadcrumb-label {
-    font-family: Roboto;
     font-size: 145%;
     text-transform: uppercase;
     margin-left: 0.5ex;

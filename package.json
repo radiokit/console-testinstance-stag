@@ -49,6 +49,7 @@
     "react-interpolate-component": "^0.8.0",
     "react-router": "^1.0.0",
     "react-translate-component": "^0.10.0",
+    "roboto-fontface": "^0.4.5",
     "spin.js": "^2.3.2",
     "tiny-sprintf": "^0.3.0"
   },

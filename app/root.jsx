@@ -5,6 +5,8 @@ import AdminLayout from './layouts/admin_layout.jsx';
 import Alert from './widgets/admin/alert_widget.jsx';
 
 require("../node_modules/mdi/css/materialdesignicons.css");
+require("../node_modules/roboto-fontface/css/roboto-fontface-regular.scss");
+require("../node_modules/roboto-fontface/css/roboto-fontface-bold.scss");
 
 export default React.createClass({
   getInitialState: function() {
