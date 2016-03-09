@@ -200,10 +200,6 @@ export default React.createClass({
         return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.authentication.no_accounts"/>);
       }
 
-      if(this.state.availableBroadcastChannels.size === 0) {
-        return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.authentication.no_channels"/>);
-      }
-
       return (
         <AdminLayout>
           {this.props.children}
