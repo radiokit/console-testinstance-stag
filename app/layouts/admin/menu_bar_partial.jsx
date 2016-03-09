@@ -6,7 +6,7 @@ import { Link } from 'react-router';
 import AdminHelper from '../../helpers/admin_helper.js';
 import RoutingHelper from '../../helpers/routing_helper.js';
 
-
+import "./menu_bar_partial.scss";
 export default React.createClass({
   contextTypes: {
     currentUser: React.PropTypes.object.isRequired,

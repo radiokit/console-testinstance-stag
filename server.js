@@ -6,7 +6,15 @@ new WebpackDevServer(webpack(config), {
   contentBase: config.output.path,
   publicPath: config.output.publicPath,
   hot: true,
-  historyApiFallback: true
+  historyApiFallback: true,
+  stats: {
+    colors: true,
+    hash: true,
+    timings: true,
+    chunks: false,
+    chunkModules: false,
+    modules: false,
+  },
 }).listen(8080, 'localhost', function (err, result) {
   if (err) {
     console.log(err);

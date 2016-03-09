@@ -1,4 +1,5 @@
 var path = require('path');
+var webpack = require('webpack');
 
 var node_modules_dir = path.resolve(__dirname, 'node_modules');
 
@@ -13,6 +14,10 @@ var config = {
     filename: "output.[hash].bundle.js",
     chunkFilename: "[id].[hash].bundle.js"
   },
+
+  plugins: [
+    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en|pl/)
+  ],
 
   module: {
     loaders: [{
