@@ -129,7 +129,6 @@ export default React.createClass({
             availableUserAccounts: data.first().get("accounts")
           }, () => {
             Counterpart.setLocale(this.state.currentUser.get("locale"));
-            this.loadBroadcastChannels();
           });
         }
       })
@@ -173,7 +172,7 @@ export default React.createClass({
         return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.communication.general" />);
       }
 
-      if(this.state.loadedUser === false || this.state.loadedAccounts === false || this.state.loadedBroadcastChannels === false) {
+      if(this.state.loadedUser === false || this.state.loadedAccounts === false) {
         return (<LoadingLayout />);
       }
 
