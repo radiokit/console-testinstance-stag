@@ -83,32 +83,6 @@ export default React.createClass({
   },
 
 
-  loadAccounts: function() {
-    window.data
-      .query("auth", "Account")
-      .select("id", "name")
-      .order("name", "asc")
-      .on("error", () => {
-        if(this.isMounted()) {
-          this.setState({
-            loadingError: true
-          });
-        }
-      })
-      .on("fetch", (_event, _query, data) => {
-        if(this.isMounted()) {
-          this.setState({
-            loadedAccounts: true,
-            availableUserAccounts: data
-          });
-
-          this.loadBroadcastChannels();
-        }
-      })
-      .fetch();
-  },
-
-
   loadBroadcastChannels: function() {
     window.data
       .query("agenda", "Broadcast.Channel")
@@ -136,6 +110,7 @@ export default React.createClass({
   loadUser: function() {
     window.data
       .query("auth", "User")
+      .joins("accounts")
       .method("me") // FIXME methods should be deprecated in favour of tokens
       .on("error", () => {
         if(this.isMounted()) {
@@ -149,9 +124,12 @@ export default React.createClass({
           this.initializeGoogleAnalytics(data.first());
           this.setState({
             loadedUser: true,
-            currentUser: data.first()
+            currentUser: data.first(),
+            loadedAccounts: true,
+            availableUserAccounts: data.first().get("accounts")
           }, () => {
             Counterpart.setLocale(this.state.currentUser.get("locale"));
+            this.loadBroadcastChannels();
           });
         }
       })
@@ -176,7 +154,6 @@ export default React.createClass({
 
   componentWillUpdate: function(nextProps, nextState) {
     if(this.state.authenticationState !== "success" && nextState.authenticationState === "success") {
-      this.loadAccounts();
       this.loadUser();
     }
   },
