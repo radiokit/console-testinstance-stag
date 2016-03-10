@@ -34,11 +34,10 @@ export default React.createClass({
 
 
   renderToggle: function() {
-    // FIXME don't use font awesome, use mdi-menu instead
     return (
       <li className="hidden-md hidden-lg visibility-toggle">
 				<a className="btn btn-icon-toggle" onClick={this.onToggleVisibilityClick}>
-					<i className="fa fa-bars" />
+					<i className="mdi mdi-menu" />
 				</a>
 			</li>
     );
