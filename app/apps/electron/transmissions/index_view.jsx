@@ -75,7 +75,7 @@ export default React.createClass({
           });
         }
       })
-      .fetch();
+      .enableAutoUpdate();
   },
 
 
