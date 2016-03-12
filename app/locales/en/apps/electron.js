@@ -7,6 +7,16 @@ export default {
         devices: {
           title: "Connected devices",
         },
+        transmissions: {
+          title: "Transmissions",
+        },
+      },
+
+      transmissions: {
+        loading: "Fetching list of transmissions",
+        errors: {
+          no_transmissions: "Currently there are no transmissions",
+        },
       },
 
       devices: {

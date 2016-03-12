@@ -9,6 +9,11 @@ export default {
           return "/apps/electron/devices/index";
         },
       },
+      transmissions: {
+        index: function(context) {
+          return "/apps/electron/transmissions/index";
+        },
+      },
     },
 
     broadcast: {

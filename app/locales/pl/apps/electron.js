@@ -5,7 +5,17 @@ export default {
         title: "Electron",
         subtitle: "Transmisje dźwięku",
         devices: {
-          title: "Podłączone urządzenia",
+          title: "Urządzenia",
+        },
+        transmissions: {
+          title: "Transmisje",
+        },
+      },
+
+      transmissions: {
+        loading: "Ładowanie listy transmisji",
+        errors: {
+          no_transmissions: "Obecnie nie odbywają się żadne transmisje",
         },
       },
 

@@ -147,6 +147,8 @@ export default React.createClass({
       this.setState({ authenticationState: "failure" });
     });
 
+    // TODO bind to error events globally
+    
     window.data.signIn();
   },
 
