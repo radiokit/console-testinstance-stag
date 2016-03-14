@@ -75,7 +75,7 @@ export default React.createClass({
         <ToolbarGroup>
           {() => {
             if(this.props.stage === "incoming") {
-              return (<ToolbarButtonModal icon="upload" labelTextKey={this.props.contentPrefix + ".show.actions.upload"} modalElement={UploadModal} modalProps={{ contentPrefix: this.props.contentPrefix + ".show.modals.upload", repository: this.props.record }} />);
+              return (<ToolbarButtonModal icon="upload" labelTextKey={this.props.contentPrefix + ".actions.upload"} modalElement={UploadModal} modalProps={{ contentPrefix: this.props.contentPrefix + ".modals.upload", repository: this.props.record }} />);
             }
           }()}
           <ToolbarButton icon="download" disabled={this.state.selectedRecordIds.count() === 0} onClick={this.onDownloadClick}/>
@@ -86,7 +86,7 @@ export default React.createClass({
           if(this.props.record.get("tag_categories").count() !== 0) {
             return (
               <ToolbarGroup>
-                <ToolbarButtonModal icon="folder" labelTextKey={this.props.contentPrefix + ".show.actions.tags"} disabled={this.state.selectedRecordIds.count() === 0} modalElement={TagModal} modalProps={{ selectedRecordIds: this.state.selectedRecordIds, tagCategories: this.props.record.get("tag_categories") }} />
+                <ToolbarButtonModal icon="folder" labelTextKey={this.props.contentPrefix + ".actions.tags"} disabled={this.state.selectedRecordIds.count() === 0} modalElement={TagModal} modalProps={{ selectedRecordIds: this.state.selectedRecordIds, tagCategories: this.props.record.get("tag_categories") }} />
               </ToolbarGroup>
             );
           }
@@ -96,7 +96,7 @@ export default React.createClass({
           if(this.props.record.get("metadata_schemas").count() !== 0) {
             return (
               <ToolbarGroup>
-                <ToolbarButtonModal icon="barcode" labelTextKey={this.props.contentPrefix + ".show.actions.metadata"} disabled={this.state.selectedRecordIds.count() === 0} modalElement={MetadataModal} modalProps={{ selectedRecordIds: this.state.selectedRecordIds, metadataSchemas: this.props.record.get("metadata_schemas") }} />
+                <ToolbarButtonModal icon="barcode" labelTextKey={this.props.contentPrefix + ".actions.metadata"} disabled={this.state.selectedRecordIds.count() === 0} modalElement={MetadataModal} modalProps={{ selectedRecordIds: this.state.selectedRecordIds, metadataSchemas: this.props.record.get("metadata_schemas") }} />
               </ToolbarGroup>
             );
           }
