@@ -43,7 +43,7 @@ export default React.createClass({
     return this.props.record.get("metadata_schemas").reduce((acc, metadataSchema) => {
       acc[metadataSchema.get("key")] = {
         renderer: metadataSchema.get("kind"),
-        headerText: metadataSchema.get("name"),
+        // headerText: metadataSchema.get("name"),
         valueFunc: (record, attribute) => {
           let metadataItem = record.get("metadata_items").find((metadataItem) => { return metadataItem.get("metadata_schema_id") === metadataSchema.get("id") })
 
@@ -71,11 +71,11 @@ export default React.createClass({
 
   render: function() {
     return (
-      <TableBrowser onSelect={this.onTableSelect} selectable={true} attributes={this.buildTableAttributes()} contentPrefix={this.props.contentPrefix + ".index.table"} recordsQuery={this.buildTableRecordsQuery()}>
+      <TableBrowser onSelect={this.onTableSelect} selectable={true} attributes={this.buildTableAttributes()} contentPrefix="widgets.vault.file_browser.table" recordsQuery={this.buildTableRecordsQuery()}>
         <ToolbarGroup>
           {() => {
             if(this.props.stage === "incoming") {
-              return (<ToolbarButtonModal icon="upload" labelTextKey={this.props.contentPrefix + ".actions.upload"} modalElement={UploadModal} modalProps={{ contentPrefix: this.props.contentPrefix + ".modals.upload", repository: this.props.record }} />);
+              return (<ToolbarButtonModal icon="upload" labelTextKey={this.props.contentPrefix + ".actions.upload"} modalElement={UploadModal} modalProps={{repository: this.props.record }} />);
             }
           }()}
           <ToolbarButton icon="download" disabled={this.state.selectedRecordIds.count() === 0} onClick={this.onDownloadClick}/>
@@ -96,7 +96,7 @@ export default React.createClass({
           if(this.props.record.get("metadata_schemas").count() !== 0) {
             return (
               <ToolbarGroup>
-                <ToolbarButtonModal icon="barcode" labelTextKey={this.props.contentPrefix + ".actions.metadata"} disabled={this.state.selectedRecordIds.count() === 0} modalElement={MetadataModal} modalProps={{ selectedRecordIds: this.state.selectedRecordIds, metadataSchemas: this.props.record.get("metadata_schemas") }} />
+                <ToolbarButtonModal icon="barcode" labelTextKey="widgets.vault.file_browser.modals.metadata.header" disabled={this.state.selectedRecordIds.count() === 0} modalElement={MetadataModal} modalProps={{ selectedRecordIds: this.state.selectedRecordIds, metadataSchemas: this.props.record.get("metadata_schemas") }} />
               </ToolbarGroup>
             );
           }

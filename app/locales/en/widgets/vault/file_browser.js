@@ -111,7 +111,17 @@ export default {
               close: "Close",
             }
           },
-
+          upload:{
+            header: "Upload files",
+            instruction: "Choose files",
+            table: {
+              header: {
+                file_name: "File name",
+                file_size: "Size",
+                status: "Status",
+              },
+            }
+          },
           tag: {
             header: "Tags",
             message: {
@@ -128,6 +138,7 @@ export default {
 
           metadata: {
             header: "Metadata",
+            immutable: "Do not change",
             message: {
               confirmation: "Edit metadata that should be applied to %(count)s selected file(s):",
               acknowledgement: "Applied metadata to %(count)s file(s).",

@@ -14,7 +14,7 @@ export default React.createClass({
 
   render: function() {
     return (
-      <Modal ref="modal" size="large" contentPrefix={this.props.contentPrefix}>
+      <Modal ref="modal" size="large" contentPrefix="widgets.vault.file_browser.modals.upload">
         <Upload repository={this.props.repository} />
       </Modal>
     );

@@ -98,7 +98,7 @@ export default {
 
         modals: {
           delete: {
-            title: "Kasowanie",
+            header: "Kasowanie",
             message: {
               confirmation: "Czy na pewno chcesz usunąć zaznaczone pliki (%(count)s szt.)?",
               acknowledgement: "Usunięto %(count)s plik(ów).",
@@ -108,12 +108,22 @@ export default {
             action: {
               proceed: "Skasuj",
               cancel: "Anuluj",
-              cancel: "Zamknij",
+              close: "Zamknij",
             }
           },
-
+          upload:{
+            header: "Załaduj pliki",
+            instruction: "Wybierz pliki",
+            table: {
+              header: {
+                file_name: "Nazwa",
+                file_size: "Rozmiar",
+                status: "Status",
+              },
+            }
+          },
           tag: {
-            title: "Etykiety",
+            header: "Etykiety",
             message: {
               confirmation: "Wybierz etykiety, które zostaną przypisane do zaznaczonych plików (%(count)s szt.):",
               acknowledgement: "Przypisano etykiety do %(count)s plik(ów).",
@@ -122,12 +132,13 @@ export default {
             action: {
               proceed: "Przypisz etykiety",
               cancel: "Anuluj",
-              cancel: "Zamknij",
+              close: "Zamknij",
             }
           },
 
           metadata: {
-            title: "Metadane",
+            header: "Metadane",
+            immutable: "Nie zmieniaj",
             message: {
               confirmation: "Wybierz metadane, które zostaną przypisane do zaznaczonych plików (%(count)s szt.):",
               acknowledgement: "Przypisano metadane do %(count)s plik(ów).",
@@ -137,7 +148,7 @@ export default {
             action: {
               proceed: "Przypisz metadane",
               cancel: "Anuluj",
-              cancel: "Zamknij",
+              close: "Zamknij",
             }
           },
         }

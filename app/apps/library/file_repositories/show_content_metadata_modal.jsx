@@ -54,7 +54,7 @@ export default React.createClass({
                   <div className="col-sm-3">
                     <label>
                       <input type="checkbox" />
-                      Do not change
+                      <Translate component="p" content="widgets.vault.file_browser.modals.metadata.immutable" />
                     </label>
                   </div>
                 </div>

@@ -56,7 +56,7 @@ export default React.createClass({
       <div className="card style-primary upload-dropzone" ref="uploadDropzone">
         <div className="card-body">
           <form className="upload-dropzone" ref="uploadButton" className="upload-button">
-            <Translate content="apps.shows.widgets.upload_widget.upload_instructions" component="h3"/>
+            <Translate content="widgets.vault.file_browser.modals.upload.instruction" component="h3"/>
           </form>
         </div>
       </div>);
@@ -80,9 +80,9 @@ export default React.createClass({
                 <thead>
                   <tr>
                     <th/>
-                    <Translate content="apps.shows.widgets.upload_widget.table.header.file_name" component="th"/>
-                    <Translate content="apps.shows.widgets.upload_widget.table.header.file_size" component="th" className="text-right"/>
-                    <Translate content="apps.shows.widgets.upload_widget.table.header.status" component="th" style={{width: "20ex"}}/>
+                    <Translate content="widgets.vault.file_browser.modals.upload.table.header.file_name" component="th"/>
+                    <Translate content="widgets.vault.file_browser.modals.upload.table.header.file_size" component="th" className="text-right"/>
+                    <Translate content="widgets.vault.file_browser.modals.upload.table.header.status" component="th" style={{width: "20ex"}}/>
                   </tr>
                 </thead>
                 <tbody>
