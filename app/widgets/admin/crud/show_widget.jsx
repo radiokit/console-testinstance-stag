@@ -57,7 +57,6 @@ export default React.createClass({
     if(this.props.showQueryFunc) {
       query = this.props.showQueryFunc(query);
     }
-
     return query;
   },
 

@@ -14,6 +14,7 @@ export default {
         show: {
           actions: {
             upload: "Upload new files",
+            tags: "Modify tags",
           },
 
           tabs: {

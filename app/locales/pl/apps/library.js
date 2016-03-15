@@ -15,6 +15,7 @@ export default {
         show: {
           actions: {
             upload: "Załaduj pliki",
+            tags: "Etykiety",
           },
 
           tabs: {

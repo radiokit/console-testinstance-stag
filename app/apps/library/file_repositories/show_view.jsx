@@ -7,15 +7,34 @@ import ContentPartial from './show_content_partial.jsx';
 
 
 export default React.createClass({
-  buildTabs: function() {
+
+  getInitialState: function(){
     return {
-      incoming: { element: ContentPartial, props: { stage: "incoming" } },
-      ready:    { element: ContentPartial, props: { stage: "ready" } },
-      archive:  { element: ContentPartial, props: { stage: "archive" } },
-      trash:    { element: ContentPartial, props: { stage: "trash" } },
+        filter: "*",
+        tags:["test","chleb","zosia"],
     }
   },
 
+  onFilterUpdate: function(f){
+
+    this.setState({
+      filter: f
+    });
+  },
+
+  buildTabs: function() {
+    return {
+      incoming: { element: ContentPartial, props: { stage: "incoming", filter: this.state.filter }},
+      ready:    { element: ContentPartial, props: { stage: "ready",  filter: this.state.filter }},
+      archive:  { element: ContentPartial, props: { stage: "archive", filter: this.state.filter }},
+      trash:    { element: ContentPartial, props: { stage: "trash", filter: this.state.filter }},
+    }
+  },
+  buildSideBar : function(){
+    return {
+      test: { element: SidebarPartial, props: { tags: this.state.tags, selectedTag:this.state.filter, onFilterUpdate: this.onFilterUpdate }},
+    }
+  },
 
   modifyShowQuery: function(query) {
     return query
@@ -28,7 +47,7 @@ export default React.createClass({
 
   render: function() {
     return (
-      <Show contentPrefix="apps.library.file_repositories" app="vault" model="Data.Record.Repository" showQueryFunc={this.modifyShowQuery} sidebarElement={SidebarPartial} contentElement={this.buildTabs()} deleteEnabled={false} />
+      <Show contentPrefix="apps.library.file_repositories" app="vault" model="Data.Record.Repository" showQueryFunc={this.modifyShowQuery} sidebarElement={this.buildSideBar()} contentElement={this.buildTabs()} deleteEnabled={false} />
     );
   }
 });

@@ -6,18 +6,40 @@ export default React.createClass({
     app: React.PropTypes.string.isRequired,
     model: React.PropTypes.string.isRequired,
     contentPrefix: React.PropTypes.string.isRequired,
+    tags: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
+    selectedTag: React.PropTypes.string,
+    onFilterUpdate: React.PropTypes.func.isRequired,
   },
 
+  onTagSelected: function(tag){
+    this.props.onFilterUpdate(tag);
+    console.log("clicked " + tag);
+  },
+  onRestoreDefaults: function(){
+    this.props.onFilterUpdate("*");
+  },
 
   render: function() {
+
     return (
       <div>
         <ul className="nav nav-pills nav-stacked">
-          <li><small>LOCATION</small></li>
-          <li><a>INCOMING</a></li>
-          <li><a>READY</a></li>
-          <li><a>ARCHIVE</a></li>
-          <li><a>TRASH</a></li>
+          <li key={"all"} onClick={this.onRestoreDefaults} className="nav-item">
+            <a href="#">
+              ALL
+            </a>
+          </li>
+          {
+            this.props.tags.map((tag) => {
+
+              let onTagClickedLister = this.onTagSelected.bind(this, tag);
+              return (
+                <li key={tag} onClick={onTagClickedLister} className="nav-item">
+                  <a className="nav-link active" href="#">{tag}</a>
+                </li>
+              )
+            })
+          }
         </ul>
       </div>
     );

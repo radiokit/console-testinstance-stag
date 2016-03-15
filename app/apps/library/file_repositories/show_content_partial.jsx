@@ -17,6 +17,7 @@ export default React.createClass({
     model: React.PropTypes.string.isRequired,
     contentPrefix: React.PropTypes.string.isRequired,
     stage: React.PropTypes.oneOf(['incoming', 'ready', 'archive', 'trash']).isRequired,
+    filter: React.PropTypes.string.isRequired,
   },
 
 
@@ -57,7 +58,7 @@ export default React.createClass({
     }, attributes);
   },
 
-
+//TODO modify query to filter items matching tag
   buildTableRecordsQuery: function() {
     return window.data
       .query("vault", "Data.Record.File")
@@ -65,7 +66,7 @@ export default React.createClass({
       .joins("metadata_items")
       .joins("tag_items")
       .where("stage", "eq", this.props.stage)
-      .where("record_repository_id", "eq", this.props.record.get("id"));
+      .where("record_repository_id", "eq", this.props.record.get("id"))
   },
 
 
@@ -83,14 +84,16 @@ export default React.createClass({
         </ToolbarGroup>
 
         {() => {
-          if(this.props.record.get("tag_categories").count() !== 0) {
+          // if(this.props.record.get("tag_categories").count() !== 0) {
             return (
               <ToolbarGroup>
                 <ToolbarButtonModal icon="folder" labelTextKey={this.props.contentPrefix + ".actions.tags"} disabled={this.state.selectedRecordIds.count() === 0} modalElement={TagModal} modalProps={{ selectedRecordIds: this.state.selectedRecordIds, tagCategories: this.props.record.get("tag_categories") }} />
-              </ToolbarGroup>
+            </ToolbarGroup>
             );
-          }
+
+          // }
         }()}
+
 
         {() => {
           if(this.props.record.get("metadata_schemas").count() !== 0) {
