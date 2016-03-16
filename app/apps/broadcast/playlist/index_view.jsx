@@ -14,6 +14,9 @@ import Alert from '../../../widgets/admin/alert_widget.jsx';
 import ScheduleDaily from '../../../widgets/admin/schedule_daily_widget.jsx';
 import ScheduleDaySelector from '../../../widgets/admin/schedule_day_selector_widget.jsx';
 
+import ToolbarButtonModal from '../../../widgets/admin/toolbar_button_modal_widget.jsx';
+import CreateModal from '../../../widgets/admin/crud/create_modal.jsx';
+
 export default React.createClass({
   contextTypes: {
     currentBroadcastChannel: React.PropTypes.object.isRequired,
@@ -64,6 +67,22 @@ export default React.createClass({
     });
   },
 
+  buildForm: function() {
+    return {
+        location: {
+          type: "string"
+        },
+        name: {
+          type: "string"
+        },
+        start_at: {
+          type: "datetime"
+        },
+        stop_at: {
+          type: "datetime"
+        },
+      }
+    },
 
   render: function() {
     let items = Immutable.fromJS([
@@ -80,8 +99,31 @@ export default React.createClass({
         <Section>
           <GridRow>
             <GridCell size="large" center={true}>
-              <Card contentPrefix="apps.broadcast.playlist" sidebarElement={ScheduleDaySelector} sidebarProps={{now: this.state.now, onChange: this.onNowChange }} contentElement={ScheduleDaily} contentProps={{now: this.state.now, items: items}} />
-            </GridCell>
+              <Card
+                  contentPrefix="apps.broadcast.playlist"
+                  toolbarElement={ToolbarButtonModal}
+                  toolbarProps={{
+                    icon: "folder",
+                    labelTextKey: "apps.broadcast.playlist.button",
+                    modalElement: CreateModal,
+                    modalProps: {
+                      contentPrefix: "apps.broadcast.playlist.button",
+                      form: this.buildForm(),
+                      app: "plumber",
+                      model: "Media.Input.File.Http"
+                    }
+                  }}
+                  sidebarElement={ScheduleDaySelector}
+                  sidebarProps={{
+                    now: this.state.now,
+                    onChange: this.onNowChange
+                  }}
+                  contentElement={ScheduleDaily}
+                  contentProps={{
+                    now: this.state.now,
+                    items: items
+                  }} />
+          </GridCell>
           </GridRow>
         </Section> )
     }

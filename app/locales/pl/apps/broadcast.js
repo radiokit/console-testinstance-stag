@@ -14,6 +14,7 @@ export default {
 
       playlist: {
         header: "Ramówka",
+        button: "Dodaj utwór"
       },
 
 

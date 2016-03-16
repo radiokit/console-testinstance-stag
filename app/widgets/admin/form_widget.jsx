@@ -2,6 +2,8 @@ import React from 'react';
 import Translate from 'react-translate-component';
 import Counterpart from 'counterpart';
 import clone from 'clone';
+import Moment from 'moment';
+import DateTimePicker from './date_time_picker.jsx';
 
 const FormWidget = React.createClass({
   propTypes: {
@@ -130,6 +132,12 @@ const FormWidget = React.createClass({
 
       case "hidden":
         values[fieldName] = fieldConfig.value;
+        break;
+
+      case "datetime":
+        // Pulling date value from input and parsing to ISO8601 format
+        let dateString = this.refs[fieldName].refs.datetime.refs.input.value;
+        values[fieldName] = moment(dateString).toISOString();
         break;
 
       default:
@@ -263,6 +271,12 @@ const FormWidget = React.createClass({
                         </option>);
               }) }
           </select>
+        );
+        break;
+
+      case "datetime":
+        input = (
+          <DateTimePicker ref={fieldName} required={required} />
         );
         break;
 

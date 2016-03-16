@@ -129,6 +129,7 @@ export default React.createClass({
             availableUserAccounts: data.first().get("accounts")
           }, () => {
             Counterpart.setLocale(this.state.currentUser.get("locale"));
+            this.loadBroadcastChannels();
           });
         }
       })
@@ -148,7 +149,7 @@ export default React.createClass({
     });
 
     // TODO bind to error events globally
-    
+
     window.data.signIn();
   },
 

@@ -37,7 +37,7 @@ export default React.createClass({
             let hint;
             if(Counterpart.translate(this.props.contentPrefix + ".tabs.hints." + tab, { fallback: "_notfound_" }) !== "_notfound_") {
               hint = Counterpart.translate(this.props.contentPrefix + ".tabs.hints." + tab);
-              
+
             } else {
               hint = null;
             }
