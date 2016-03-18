@@ -88,9 +88,14 @@ export default React.createClass({
       return (<Loading info={true} infoTextKey={this.props.contentPrefix + ".loading"} />);
     }
 
+    if(this.state.availableClients.size === 0) {
+      return (<Alert type="warning" fullscreen={true} infoTextKey={`${this.props.contentPrefix}.errors.no_clients`} />);
+    }
+
     if(this.state.availableInputsRtp.size === 0) {
       return (<Alert type="warning" fullscreen={true} infoTextKey={`${this.props.contentPrefix}.errors.no_transmissions`} />);
     }
+
     return (
       <Section>
         {() => {
