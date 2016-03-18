@@ -101,9 +101,11 @@ export default React.createClass({
       <Section>
         {() => {
           return this.state.availableInputsRtp.map((input) => {
-            let clientGlobalID = Data.buildRecordGlobalID("auth", "Client.Standalone", client.get("id"));
             let audioInterfaceOwnerGlobalID = input.get("audio_interface").get("references").get("owner");
-            let audioInterfaceOwner = this.state.availableClients.find((client) => { return clientGlobalID === audioInterfaceOwnerGlobalID });
+            let audioInterfaceOwner = this.state.availableClients.find((client) => {
+              let clientGlobalID = Data.buildRecordGlobalID("auth", "Client.Standalone", client.get("id"));
+              return clientGlobalID === audioInterfaceOwnerGlobalID;
+            });
 
             let clientName = audioInterfaceOwner.get("name");
             let audioInterfaceName = input.get("audio_interface").get("name");
