@@ -1,4 +1,5 @@
 import React from 'react';
+import Immutable from 'immutable';
 import { Data } from 'radiokit-api';
 
 import GridRow from '../../../widgets/admin/grid_row_widget.jsx';
@@ -31,9 +32,9 @@ export default React.createClass({
   getInitialState: function() {
     return {
       loadedClients: false,
-      availableClients: null,
+      availableClients: new Immutable.Seq().toIndexedSeq(),
       loadedInputsRtp: false,
-      availableInputsRtp: null,
+      availableInputsRtp: new Immutable.Seq().toIndexedSeq(),
     };
   },
 
@@ -100,7 +101,11 @@ export default React.createClass({
       <Section>
         {() => {
           return this.state.availableInputsRtp.map((input) => {
-            let clientName = this.state.availableClients.find((client) => { return Data.buildRecordGlobalID("auth", "Client.Standalone", client.get("id")) === input.get("audio_interface").get("references").get("owner") }).get("name");
+            let clientGlobalID = Data.buildRecordGlobalID("auth", "Client.Standalone", client.get("id"));
+            let audioInterfaceOwnerGlobalID = input.get("audio_interface").get("references").get("owner");
+            let audioInterfaceOwner = this.state.availableClients.find((client) => { return clientGlobalID === audioInterfaceOwnerGlobalID });
+
+            let clientName = audioInterfaceOwner.get("name");
             let audioInterfaceName = input.get("audio_interface").get("name");
             let name = `${clientName}: ${audioInterfaceName}`;
 
