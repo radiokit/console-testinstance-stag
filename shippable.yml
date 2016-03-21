@@ -1,16 +1,7 @@
 language: node_js
 
 node_js:
-  - 0.12
+  - 4.2.3
 
-before_install:
-  - source ~/.nvm/nvm.sh && nvm install $SHIPPABLE_NODE_VERSION
-  - npm install -g npm
-  - node --version
-  - npm --version
-
-install:
-  - npm install
-
-script:
+ci:
   - npm run prod
