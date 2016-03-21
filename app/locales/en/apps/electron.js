@@ -5,7 +5,10 @@ export default {
         title: "Electron",
         subtitle: "Make audio transmissions",
         devices: {
-          title: "Connected devices",
+          title: "Devices",
+        },
+        patchbay: {
+          title: "Patchbay",
         },
         transmissions: {
           title: "Transmissions",

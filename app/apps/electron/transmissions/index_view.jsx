@@ -64,7 +64,7 @@ export default React.createClass({
 
 
   loadInputs: function() {
-    window.data
+    this.inputsQuery = window.data
       .query("plumber", "Media.Input.Stream.RTP")
       .select("id", "audio_interface")
       .joins("audio_interface")
@@ -77,6 +77,13 @@ export default React.createClass({
         }
       })
       .enableAutoUpdate();
+  },
+
+
+  componentWillUnmount: function() {
+    if(this.inputsQuery) {
+      this.inputsQuery.teardown();
+    }
   },
 
 

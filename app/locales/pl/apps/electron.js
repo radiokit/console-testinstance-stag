@@ -7,6 +7,9 @@ export default {
         devices: {
           title: "Urządzenia",
         },
+        patchbay: {
+          title: "Krosownica",
+        },
         transmissions: {
           title: "Transmisje",
         },
