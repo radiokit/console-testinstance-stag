@@ -276,7 +276,7 @@ const FormWidget = React.createClass({
 
       case "datetime":
         input = (
-          <DateTimePicker ref={fieldName} required={required} />
+          <DateTimePicker ref={fieldName} required={required} value={fieldConfig.value} />
         );
         break;
 

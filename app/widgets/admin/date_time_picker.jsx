@@ -6,16 +6,22 @@ import './date_time_picker.scss';
 
 var DateTimePicker = React.createClass({
   propTypes: {
-    required: React.PropTypes.bool
+    required: React.PropTypes.bool,
+    value: React.PropTypes.string
   },
   getInput: function() {
     return this.refs.datetime.refs.input;
   },
   render: function() {
+    let value;
+    if (this.props.value) {
+      value = Moment.utc(this.props.value);
+    } else {
+      value = Moment.utc();
+    }
     return <Datetime
       ref="datetime"
-      defaultValue={Moment.utc()}
-      isValidDate={this.valid}
+      defaultValue={value}
       timeFormat="HH:mm:ss.SSS"
       inputProps={{ref: "input", className: "form-control", required: this.props.required }} />
   }

@@ -3,6 +3,7 @@ import Immutable from 'immutable';
 import Moment from 'moment';
 import Translate from 'react-translate-component';
 
+import { Data } from 'radiokit-api';
 import GridRow from '../../../widgets/admin/grid_row_widget.jsx';
 import GridCell from '../../../widgets/admin/grid_cell_widget.jsx';
 import Section from '../../../widgets/admin/section_widget.jsx';
@@ -20,6 +21,7 @@ import CreateModal from '../../../widgets/admin/crud/create_modal.jsx';
 export default React.createClass({
   contextTypes: {
     currentBroadcastChannel: React.PropTypes.object.isRequired,
+    availableUserAccounts: React.PropTypes.object.isRequired,
     data: React.PropTypes.object.isRequired,
   },
 
@@ -28,12 +30,26 @@ export default React.createClass({
     return {
       loadedFiles: false,
       availableFiles: new Immutable.Seq().toIndexedSeq(),
+      availableVaultFiles: new Immutable.Seq().toIndexedSeq(),
       now: Moment.utc(),
     }
   },
 
 
   componentDidMount: function() {
+    this.fetchPlumberFiles();
+    this.fetchVaultFiles();
+  },
+
+
+  onNowChange: function(newNow) {
+    this.setState({
+      now: newNow,
+    });
+  },
+
+
+  fetchPlumberFiles: function() {
     this.context.data
       .query("plumber", "Media.Input.File.Http")
       .select("id", "start_at", "stop_at")
@@ -46,6 +62,7 @@ export default React.createClass({
         }
       }).on("fetch", (_event, _query, data) => {
         if(this.isMounted()) {
+          debugger;
           if(data.count() != 0) {
             this.setState({
               loadedFiles: true,
@@ -53,33 +70,59 @@ export default React.createClass({
             });
           } else {
             this.setState({
-              laodedListOfFiles: true,
+              loadedListOfFiles: true,
             })
           }
         }
       }).fetch();
   },
 
+  fetchVaultFiles: function() {
+    window.data
+      .query("vault", "Data.Record.File")
+      .select("id", "name")
+      .on("error", () => {
+        if(this.isMounted()) {
+          this.setState({
+            loadingError: true
+          })
+        }
+      }).on("fetch", (_event, _query, data) => {
+        if (this.isMounted()) {
+          if (data.count() != 0) {
+            this.setState({
+              availableVaultFiles: data.toIndexedSeq()
+            });
+          }
+        }
+      }).fetch()
+  },
 
-  onNowChange: function(newNow) {
-    this.setState({
-      now: newNow,
+  getFilesData: function() {
+    return this.state.availableVaultFiles.toList().map(file => {
+      return {
+        id: Data.buildRecordGlobalID("vault", "Data.Record.File", file.get("id")),
+        name: file.get("name")
+      };
     });
   },
 
   buildForm: function() {
     return {
         location: {
-          type: "string"
+          type: "object",
+          values: this.getFilesData()
         },
         name: {
           type: "string"
         },
         start_at: {
-          type: "datetime"
+          type: "datetime",
+          value: Moment.utc().toISOString()
         },
         stop_at: {
-          type: "datetime"
+          type: "datetime",
+          value: Moment.utc().clone().add(1, "minute").toISOString()
         },
       }
     },
