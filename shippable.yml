@@ -3,6 +3,11 @@ language: node_js
 node_js:
   - 4.2.3
 
+pre_ci_boot:
+  image_name: drydock/u14nod
+  image_tag: prod
+  pull: true
+
 ci:
   - npm install
   - npm run prod
