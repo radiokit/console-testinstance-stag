@@ -7,7 +7,6 @@ import Upload from '../../../widgets/admin/upload_widget.jsx';
 
 export default React.createClass({
   propTypes: {
-    contentPrefix: React.PropTypes.string.isRequired,
     repository: React.PropTypes.object.isRequired,
   },
 

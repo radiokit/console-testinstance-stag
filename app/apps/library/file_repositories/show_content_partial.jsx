@@ -44,7 +44,7 @@ export default React.createClass({
     return this.props.record.get("metadata_schemas").reduce((acc, metadataSchema) => {
       acc[metadataSchema.get("key")] = {
         renderer: metadataSchema.get("kind"),
-        // headerText: metadataSchema.get("name"),
+        headerText: metadataSchema.get("name"),
         valueFunc: (record, attribute) => {
           let metadataItem = record.get("metadata_items").find((metadataItem) => { return metadataItem.get("metadata_schema_id") === metadataSchema.get("id") })
 
@@ -58,7 +58,6 @@ export default React.createClass({
     }, attributes);
   },
 
-//TODO modify query to filter items matching tag
   buildTableRecordsQuery: function() {
     return window.data
       .query("vault", "Data.Record.File")
@@ -87,7 +86,7 @@ export default React.createClass({
           // if(this.props.record.get("tag_categories").count() !== 0) {
             return (
               <ToolbarGroup>
-                <ToolbarButtonModal icon="folder" labelTextKey={this.props.contentPrefix + ".actions.tags"} disabled={this.state.selectedRecordIds.count() === 0} modalElement={TagModal} modalProps={{ selectedRecordIds: this.state.selectedRecordIds, tagCategories: this.props.record.get("tag_categories") }} />
+                <ToolbarButtonModal icon="folder" labelTextKey={this.props.contentPrefix + ".actions.tags.assignTags"} disabled={this.state.selectedRecordIds.count() === 0} modalElement={TagModal} modalProps={{ selectedRecordIds: this.state.selectedRecordIds, tagCategories: this.props.record.get("tag_categories") }} />
             </ToolbarGroup>
             );
 

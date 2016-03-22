@@ -15,7 +15,11 @@ export default {
         show: {
           actions: {
             upload: "Załaduj pliki",
-            tags: "Etykiety",
+            tags:{
+              allTags: "Wszystkie",
+              assignTags: "Przypisz etykiety",
+              manageTags: "Zarządzaj etykietami",
+            }
           },
 
           tabs: {

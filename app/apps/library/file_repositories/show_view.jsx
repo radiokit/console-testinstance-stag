@@ -10,12 +10,12 @@ export default React.createClass({
 
   getInitialState: function(){
     return {
-        filter: "*",
-        tags:["test","chleb","zosia"],
+        filter: null,
+        tags:[],
     }
   },
 
-  onFilterUpdate: function(f){
+  onTagFilterUpdate: function(f){
 
     this.setState({
       filter: f
@@ -32,7 +32,7 @@ export default React.createClass({
   },
   buildSideBar : function(){
     return {
-      test: { element: SidebarPartial, props: { tags: this.state.tags, selectedTag:this.state.filter, onFilterUpdate: this.onFilterUpdate }},
+      test: { element: SidebarPartial, props: { tags: this.state.tags, selectedTag:this.state.filter, onTagFilterUpdate: this.onTagFilterUpdate }},
     }
   },
 

@@ -14,7 +14,11 @@ export default {
         show: {
           actions: {
             upload: "Upload new files",
-            tags: "Modify tags",
+            tags:{
+              allTags: "All",
+              assignTags: "Assign tags",
+              manageTags: "Manage tags",
+            }
           },
 
           tabs: {
