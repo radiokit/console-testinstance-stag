@@ -135,9 +135,8 @@ const FormWidget = React.createClass({
         break;
 
       case "datetime":
-        // Pulling date value from input and parsing to ISO8601 format
         let dateString = this.refs[fieldName].refs.datetime.refs.input.value;
-        values[fieldName] = moment(dateString).toISOString();
+        values[fieldName] = Moment(dateString).toISOString();
         break;
 
       default:

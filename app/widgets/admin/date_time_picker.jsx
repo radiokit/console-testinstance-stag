@@ -22,7 +22,8 @@ var DateTimePicker = React.createClass({
     return <Datetime
       ref="datetime"
       defaultValue={value}
-      timeFormat="HH:mm:ss.SSS"
+      dateFormat="Y-MM-DD"
+      timeFormat="HH:mm:ss.SSS[Z]"
       inputProps={{ref: "input", className: "form-control", required: this.props.required }} />
   }
 });

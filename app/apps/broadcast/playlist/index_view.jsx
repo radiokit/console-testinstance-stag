@@ -53,7 +53,7 @@ export default React.createClass({
     this.context.data
       .query("plumber", "Media.Input.File.Http")
       .select("id", "start_at", "stop_at")
-      .where("references","deq", "broadcast_channel_id", this.context.currentBroadcastChannel.get("id"))
+      // .where("references","deq", "broadcast_channel_id", this.context.currentBroadcastChannel.get("id"))
       .on("error", () => {
         if(this.isMounted()) {
           this.setState({
@@ -62,11 +62,10 @@ export default React.createClass({
         }
       }).on("fetch", (_event, _query, data) => {
         if(this.isMounted()) {
-          debugger;
           if(data.count() != 0) {
             this.setState({
               loadedFiles: true,
-              availableFiles: data
+              availableFiles: this.getItems(data).toList()
             });
           } else {
             this.setState({
@@ -95,7 +94,7 @@ export default React.createClass({
             });
           }
         }
-      }).fetch()
+      }).fetch();
   },
 
   getFilesData: function() {
@@ -104,6 +103,15 @@ export default React.createClass({
         id: Data.buildRecordGlobalID("vault", "Data.Record.File", file.get("id")),
         name: file.get("name")
       };
+    });
+  },
+
+  getItems: function(data) {
+    return data.map(entry => {
+      return Immutable.Map()
+        .set("id", entry.get("id"))
+        .set("start_at", Moment.utc(entry.get("start_at")))
+        .set("stop_at", Moment.utc(entry.get("stop_at")))
     });
   },
 
@@ -128,11 +136,6 @@ export default React.createClass({
     },
 
   render: function() {
-    let items = Immutable.fromJS([
-      {id: "1234", start_at: Moment.utc().clone().subtract(5, "minutes"), stop_at: Moment.utc().clone().add(5, "minutes")},
-      {id: "4556", start_at: Moment.utc().clone().add(60, "minutes"), stop_at: Moment.utc().clone().add(145, "minutes")},
-      {id: "7890", start_at: Moment.utc().clone().add(200, "minutes"), stop_at: Moment.utc().clone().add(400, "minutes")},
-    ]);
 
     if(this.state.loadingError) {
       return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.communication.general" />);
@@ -164,7 +167,7 @@ export default React.createClass({
                   contentElement={ScheduleDaily}
                   contentProps={{
                     now: this.state.now,
-                    items: items
+                    items: this.state.availableFiles
                   }} />
           </GridCell>
           </GridRow>
