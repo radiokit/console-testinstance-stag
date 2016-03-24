@@ -13,7 +13,7 @@ export default React.createClass({
         element: MetadataSchemaPartial, props: { contentPrefix: "apps.administration.file_repositories.show.tabs.body.metadata_schema" },
       },
       tags_schema: {
-        element: TagsSchemaPartial, props: { contentPrefix: "apps.administration.file_repositories.show.tabs.body.tags_schema" },
+        element: TagsSchemaPartial, props: { contentPrefix: "apps.administration.file_repositories.tags_schema" },
       },
     }
   },

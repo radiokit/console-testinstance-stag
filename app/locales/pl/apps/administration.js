@@ -158,6 +158,12 @@ export default {
           },
         },
 
+        tags_schema:{
+          actions:{
+            add_category: "Dodaj kategorię",
+          }
+        },
+
         index: {
           header: "Repozytoria plików",
           actions: {

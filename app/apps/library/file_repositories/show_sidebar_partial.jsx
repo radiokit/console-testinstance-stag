@@ -21,60 +21,61 @@ export default React.createClass({
     };
   },
 
+
   componentDidMount: function () {
     this.queryTagCategories();
   },
 
   queryTagCategories: function () {
 
-    window.data
-      .query("vault", "Data.Tag.Category")
-      .select("id", "name", "tag_items")
-      .joins("tag_items")
-      .where("record_repository_id", "eq", this.props.record.get("id"))
-      .on("fetch", (_eventName, _record, data) => {
+    // window.data
+    //   .query("vault", "Data.Tag.Category")
+    //   .select("id", "name", "tag_items")
+    //   .joins("tag_items")
+    //   .where("record_repository_id", "eq", this.props.record.get("id"))
+    //   .on("fetch", (_eventName, _record, data) => {
+    //
+    //     if (this.isMounted()) {
+    //
+    //       console.log(JSON.stringify(data));
+    //       this.setState({
+    //         categories: data,
+    //         loaded: true,
+    //       });
+    //     }
+    //   })
+    //   .on("error", () => {
+    //
+    //     if (this.isMounted()) {
+    //       this.setState({
+    //         loaded: true,
+    //         error: true,
+    //       });
+    //     }
+    //   })
+    //   .fetch();
 
-        if (this.isMounted()) {
-
-          console.log(JSON.stringify(data));
-          this.setState({
-            categories: data,
-            loaded: true,
-          });
-        }
-      })
-      .on("error", () => {
-
-        if (this.isMounted()) {
-          this.setState({
-            loaded: true,
-            error: true,
-          });
-        }
-      })
-      .fetch();
-
-  //   window.data
-  // .record("vault", "Vault.Data.Tag.Item")
-  // .on("error", () => {
-  //
-  //   if(this.isMounted()) {
-  //     this.setState({
-  //       createError: true
-  //     });
-  //   }
-  // })
-  // .on("loaded", () => {
-  //   if(this.isMounted()) {
-  //     this.setState({
-  //       createSuccess: true
-  //     });
-  //   }
-  // })
-  // .create({
-  //   "tag_category": "5ca8cf4d-dac4-4708-b056-10b571b871b7",
-  //   "name":"pies"
-  // });
+    // window.data
+    // .record("vault", "Data.Tag.Item")
+    // .on("error", () => {
+    //
+    //   if(this.isMounted()) {
+    //     this.setState({
+    //       createError: true
+    //     });
+    //   }
+    // })
+    // .on("loaded", () => {
+    //   if(this.isMounted()) {
+    //     this.setState({
+    //       createSuccess: true
+    //     });
+    //   }
+    // })
+    // .create({
+    //   "tag_category_id": "416e3869-8475-4bac-b6c1-4a0d1c255efa",
+    //   "name":"kaczki",
+    // });
   },
 
   onTagCategorySelected: function (tag) {

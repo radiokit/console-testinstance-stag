@@ -150,6 +150,13 @@ export default {
             delete: "Delete this file repository",
           },
 
+          tags_schema:{
+            actions:{
+              add_category: "Add category",
+            }
+          },
+
+
           tabs: {
             headers: {
               metadata_schema: "Metadata",
