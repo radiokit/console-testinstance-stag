@@ -2,14 +2,18 @@ import React from 'react';
 import ToolbarGroup from '../../../widgets/admin/toolbar_group_widget.jsx';
 import ToolbarButton from '../../../widgets/admin/toolbar_button_widget.jsx';
 import ToolbarButtonModal from '../../../widgets/admin/toolbar_button_modal_widget.jsx';
-import AddCategoryModal from './add_category_modal.jsx';
-import Loading from '../../../widgets/general/loading_widget.jsx';
+import DeleteItemModal from './delete_item_modal.jsx';
 
-export default React.createClass({
+import Loading from '../../../widgets/general/loading_widget.jsx';
+import CreateModal from '../../../widgets/admin/crud/create_modal.jsx';
+
+
+const ShowTagsSchemaPartial = React.createClass({
 
   propTypes: {
     app: React.PropTypes.string.isRequired,
     contentPrefix: React.PropTypes.string.isRequired,
+    record: React.PropTypes.object.isRequired,
   },
 
   getInitialState: function(){
@@ -19,6 +23,8 @@ export default React.createClass({
   },
   componentDidMount: function(){
     this.queryTagCategories();
+    console.log("AAA");
+    console.log(this.props.record);
   },
   queryTagCategories: function () {
 
@@ -49,6 +55,43 @@ export default React.createClass({
     })
     .fetch();
   },
+  showDeleteModal: function(item){
+    this.refs.deleteModal.show();
+  },
+
+  buildNewCategoryForm: function() {
+    return {
+      name: {
+        type: "string",
+        hint: true,
+        validators: {
+          presence: true,
+        }
+      },
+      record_repository_id: {
+        type: "hidden",
+        value: this.props.record.get("id"),
+      }
+    }
+  },
+
+  buildNewTagForm: function(category) {
+    return {
+      name: {
+        type: "string",
+        hint: true,
+        validators: {
+          presence: true,
+        }
+      },
+      tag_category_id: {
+        type: "hidden",
+        value: category.id,
+      }
+    }
+  },
+
+
   renderCategoryTags: function(category){
 
     if(this.state.loaded === false) {
@@ -57,17 +100,13 @@ export default React.createClass({
       return(
         <div>
           <ul className="list">
-            {console.log("category: " + category.name + " has " + category.tag_items.length + " tags")}
-            {console.log(category.tag_items)}
-
             {category.tag_items.map((tag) =>{
-              console.log("rendering tag");
               return (
                 <li key={tag.id} className ="">
                   <div className="card-head card-head-sm">
-                      <header>{tag.name}</header>
+                    <header>{tag.name}</header>
                     <div className="tools">
-                      <a className="btn btn-flat ink-reaction btn-default">
+                      <a className="btn btn-flat ink-reaction btn-default" onClick={this.showDeleteModal}>
                         <i className="mdi mdi-delete"/>
                       </a>
                     </div>
@@ -80,14 +119,28 @@ export default React.createClass({
       }
     },
 
+    showNewTagModal: function(category){
+
+      console.log("show sdsad");
+      console.log(category);
+      this.refs.newTagModal.form = this.buildNewCategoryForm(category);
+      this.refs.newTagModal.show();
+    },
+
     render: function() {
       return (
-        <div>
+        <div className="ShowTagsSchemaPartial">
+
+          <CreateModal ref="newTagModal" contentPrefix={this.props.contentPrefix + ".modals.create_tag"} app="vault" model="Data.Tag.Item" form={{}}/>
+
           <ToolbarGroup>
-            <ToolbarButtonModal icon="plus" labelTextKey={this.props.contentPrefix+".actions.add_category"} modalElement={AddCategoryModal} modalProps={{contentPrefix: this.props.contentPrefix+".tagSchema"}}/>
+            <ToolbarButtonModal icon="plus" labelTextKey={this.props.contentPrefix+".actions.add_category"} modalElement={CreateModal} modalProps={{ contentPrefix: this.props.contentPrefix + ".modals.create_category", form: this.buildNewCategoryForm(),  app: "vault", model: "Data.Tag.Category"}}/>
+
           </ToolbarGroup>
 
           {this.state.categories.size > 0 && this.state.categories.toJS().map((category) =>{
+
+            let handleNewTagClick = this.showNewTagModal.bind(this, category);
             return (
               <div id={category.name}>
                 <div className="expanded">
@@ -97,6 +150,8 @@ export default React.createClass({
                     </a>
                     <header>{category.name}</header>
                     <div className="tools">
+                      <a className="btn btn-icon" onClick={handleNewTagClick}>
+                        <i className="mdi mdi-library-plus"></i></a>
                       <a className="btn btn-icon"><i className="mdi mdi-delete"></i></a>
                     </div>
                   </div>
@@ -112,3 +167,5 @@ export default React.createClass({
       );
     }
   });
+
+  export default ShowTagsSchemaPartial;

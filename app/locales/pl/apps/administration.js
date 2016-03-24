@@ -144,6 +144,62 @@ export default {
       },
 
       file_repositories: {
+
+        tags_schema:{
+          actions:{
+            add_category: "Dodaj kategorię",
+          },
+          modals:{
+
+            delete: {
+              header: "Usuwanie elementu",
+              message: {
+                confirmation: "Czy na pewno chcesz usunąć wybrany element ?",
+                acknowledgement: "Usunięto element.",
+                progress: "Trwa usuwanie elementu…",
+              },
+              action: {
+                proceed: "Usuń",
+                cancel: "Anuluj",
+                close: "Zamknij",
+              }
+            },
+
+            create_category: {
+              header: "Tworzenie kategorii",
+              form:{
+                name:{
+                  label:"Nazwa kategorii",
+                  hint:"Wpisz nazwę nowej kategorii"
+                },
+              },
+              message: {
+                acknowledgement: "Utworzono kategorię.",
+                progress: "Trwa tworzenie kategorii…",
+              },
+              action: {
+                proceed: "Dodaj",
+                cancel: "Anuluj",
+                close: "Zamknij",
+              }
+            },
+
+            create_tag: {
+              header: "Tworzenie etykiety",
+              message: {
+                acknowledgement: "Utworzono etykietę.",
+                progress: "Trwa tworzenie etykiety…",
+              },
+              action: {
+                proceed: "Dodaj",
+                cancel: "Anuluj",
+                close: "Zamknij",
+              }
+            },
+
+          },
+        },
+
         show: {
           actions: {
             back: "Powrót do spisu repozytoriów plików",
@@ -156,12 +212,6 @@ export default {
               tags_schema: "Etykiety",
             },
           },
-        },
-
-        tags_schema:{
-          actions:{
-            add_category: "Dodaj kategorię",
-          }
         },
 
         index: {

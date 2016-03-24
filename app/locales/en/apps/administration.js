@@ -144,18 +144,68 @@ export default {
       },
 
       file_repositories: {
+
+        tags_schema:{
+          actions:{
+            add_category: "Add category",
+          },
+          modals:{
+
+            delete: {
+              header: "Delete item",
+              message: {
+                confirmation: "Do you want to delete this item?",
+                acknowledgement: "Item deleted.",
+                progress: "Deleting item…",
+              },
+              action: {
+                proceed: "Delete",
+                cancel: "Cancel",
+                close: "Close",
+              }
+            },
+
+            create_category: {
+              header: "Create category",
+              form:{
+                name:{
+                  label:"Category name",
+                  hint:"Type new category name"
+                },
+              },
+              message: {
+                acknowledgement: "Category created.",
+                progress: "Creating category…",
+              },
+              action: {
+                proceed: "Create",
+                cancel: "Cancel",
+                close: "Close",
+              }
+            },
+
+            create_tag: {
+              header: "Create tag",
+              message: {
+                acknowledgement: "Tag created.",
+                progress: "Creating tag…",
+              },
+              action: {
+                proceed: "Create",
+                cancel: "Cancel",
+                close: "Close",
+              }
+            },
+
+          },
+        },
+
+
         show: {
           actions: {
             back: "Back to the file repositories index",
             delete: "Delete this file repository",
           },
-
-          tags_schema:{
-            actions:{
-              add_category: "Add category",
-            }
-          },
-
 
           tabs: {
             headers: {
@@ -280,6 +330,7 @@ export default {
             }
           }
         },
+
       },
 
       editors: {
