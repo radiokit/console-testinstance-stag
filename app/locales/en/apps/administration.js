@@ -145,18 +145,31 @@ export default {
 
       file_repositories: {
 
-        tags_schema:{
-          actions:{
+        tags_schema: {
+          actions: {
             add_category: "Add category",
           },
-          modals:{
+          modals: {
 
-            delete: {
-              header: "Delete item",
+            delete_category: {
+              header: "Delete category",
               message: {
-                confirmation: "Do you want to delete this item?",
-                acknowledgement: "Item deleted.",
-                progress: "Deleting item…",
+                confirmation: "Do you want to delete this category?",
+                acknowledgement: "Category deleted.",
+                progress: "Deleting category",
+              },
+              action: {
+                proceed: "Delete",
+                cancel: "Cancel",
+                close: "Close",
+              }
+            },
+            delete_tag: {
+              header: "Delete tag",
+              message: {
+                confirmation: "Do you want to delete this tag?",
+                acknowledgement: "Tag deleted.",
+                progress: "Deleting tag",
               },
               action: {
                 proceed: "Delete",
@@ -167,10 +180,10 @@ export default {
 
             create_category: {
               header: "Create category",
-              form:{
-                name:{
-                  label:"Category name",
-                  hint:"Type new category name"
+              form: {
+                name: {
+                  label: "Category name",
+                  hint: "Type new category name"
                 },
               },
               message: {
@@ -186,10 +199,10 @@ export default {
 
             create_tag: {
               header: "Create tag",
-               form:{
-                name:{
-                  label:"Tag name",
-                  hint:"Type new tag name"
+              form: {
+                name: {
+                  label: "Tag name",
+                  hint: "Type new tag name"
                 },
               },
               message: {

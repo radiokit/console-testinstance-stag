@@ -91,6 +91,7 @@ export default React.createClass({
     warning: React.PropTypes.oneOf(['irreversible']),
     proceedType: React.PropTypes.oneOf(['primary', 'success', 'info', 'warning', 'danger']),
     size: React.PropTypes.oneOf(['normal', 'large']),
+    onSuccess: React.PropTypes.func,
   },
 
 
@@ -99,7 +100,6 @@ export default React.createClass({
       step: "confirmation"
     }
   },
-
 
   show: function() {
     this.setState({
@@ -151,7 +151,7 @@ export default React.createClass({
 
   render: function() {
     return (
-      <ModalProgress ref="modal" size={this.props.size} onConfirm={this.onConfirm} onCancel={this.onCancel} contentPrefix={this.props.contentPrefix} warning={this.props.warning} proceedType={this.props.proceedType} step={this.state.step} progressCurrent={this.props.index} progressMax={this.props.recordIds.count()}>
+      <ModalProgress ref="modal" size={this.props.size} onConfirm={this.onConfirm} onCancel={this.onCancel} contentPrefix={this.props.contentPrefix} warning={this.props.warning} proceedType={this.props.proceedType} step={this.state.step} progressCurrent={this.props.index} progressMax={this.props.recordIds.count()} onSuccess={this.props.onSuccess}>
         {this.props.children}
       </ModalProgress>
     );

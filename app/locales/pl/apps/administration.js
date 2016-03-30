@@ -151,12 +151,26 @@ export default {
           },
           modals: {
 
-            delete: {
-              header: "Usuwanie elementu",
+            delete_category: {
+              header: "Usuwanie kategorii",
               message: {
-                confirmation: "Czy na pewno chcesz usunąć wybrany element ?",
-                acknowledgement: "Usunięto element.",
-                progress: "Trwa usuwanie elementu…",
+                confirmation: "Czy na pewno chcesz usunąć wybraną kategorię ?",
+                acknowledgement: "Usunięto kategorię.",
+                progress: "Trwa usuwanie kategorii…",
+              },
+              action: {
+                proceed: "Usuń",
+                cancel: "Anuluj",
+                close: "Zamknij",
+              }
+            },
+
+            delete_tag: {
+              header: "Usuwanie etykiety",
+              message: {
+                confirmation: "Czy na pewno chcesz usunąć wybraną etykietę ?",
+                acknowledgement: "Usunięto etykietę.",
+                progress: "Trwa usuwanie etykiety…",
               },
               action: {
                 proceed: "Usuń",

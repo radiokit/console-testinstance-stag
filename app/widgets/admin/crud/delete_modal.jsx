@@ -4,12 +4,13 @@ import Translate from 'react-translate-component';
 import ModalForEach from '../../../widgets/admin/modal_foreach_widget.jsx';
 
 
-export default React.createClass({
+const DeleteModal = React.createClass({
   propTypes: {
     contentPrefix: React.PropTypes.string.isRequired,
     selectedRecordIds: React.PropTypes.object.isRequired,
     app: React.PropTypes.string.isRequired,
     model: React.PropTypes.string.isRequired,
+    onSuccess: React.PropTypes.func
   },
 
 
@@ -31,6 +32,10 @@ export default React.createClass({
     });
   },
 
+  onSuccess: function() {
+    console.log("onSuccess in delete_modal");
+    this.props.onSuccess && this.props.onSuccess();
+  },
 
   onPerform: function(index, recordId) {
     window.data.record(this.props.app, this.props.model, recordId)
@@ -39,22 +44,22 @@ export default React.createClass({
       .destroy();
   },
 
-
   render: function() {
     return (
-      <ModalForEach ref="modal" onPerform={this.onPerform} contentPrefix={this.props.contentPrefix} warning="irreversible" proceedType="danger" recordIds={this.props.selectedRecordIds} index={this.state.index}>
+      <ModalForEach ref="modal" onPerform={ this.onPerform } contentPrefix={ this.props.contentPrefix } warning="irreversible" proceedType="danger" recordIds={ this.props.selectedRecordIds }
+        index={ this.state.index } onSuccess={ this.onSuccess }>
         <div>
-          <Translate component="p" content={this.props.contentPrefix + ".message.confirmation"} count={this.props.selectedRecordIds.count()} />
+          <Translate component="p" content={ this.props.contentPrefix + ".message.confirmation" } count={ this.props.selectedRecordIds.count() } />
         </div>
-
         <div>
-          <Translate component="p" content={this.props.contentPrefix + ".message.progress"} />
+          <Translate component="p" content={ this.props.contentPrefix + ".message.progress" } />
         </div>
-
         <div>
-          <Translate component="p" content={this.props.contentPrefix + ".message.acknowledgement"} count={this.props.selectedRecordIds.count()} />
+          <Translate component="p" content={ this.props.contentPrefix + ".message.acknowledgement" } count={ this.props.selectedRecordIds.count() } />
         </div>
       </ModalForEach>
-    );
+      );
   }
 });
+
+export default DeleteModal;

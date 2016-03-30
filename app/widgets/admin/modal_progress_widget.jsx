@@ -16,6 +16,7 @@ export default React.createClass({
     progressMax: React.PropTypes.number,
     step: React.PropTypes.oneOf(['confirmation', 'progress', 'acknowledgement', 'cancelled', 'error']).isRequired,
     size: React.PropTypes.oneOf(['normal', 'large']),
+    onSuccess: React.PropTypes.func,
   },
 
 
@@ -24,7 +25,6 @@ export default React.createClass({
       proceedType: "primary",
     }
   },
-
 
   show: function() {
     this.refs.modal.show();
@@ -122,7 +122,7 @@ export default React.createClass({
                 case "acknowledgement":
                   return (
                     <div>
-                      <Translate component="button" content={this.props.contentPrefix + ".action.close"} role="button" className={"btn btn-" + this.props.proceedType} data-dismiss="modal" />
+                      <Translate component="button" content={this.props.contentPrefix + ".action.close"} role="button" className={"btn btn-" + this.props.proceedType} data-dismiss="modal" onClick = {this.props.onSuccess || null} />
                     </div>
                   );
 

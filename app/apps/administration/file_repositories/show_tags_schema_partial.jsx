@@ -38,8 +38,6 @@ const ShowTagsSchemaPartial = React.createClass({
       .on("fetch", (_eventName, _record, data) => {
 
         if (this.isMounted()) {
-
-          console.log(JSON.stringify(data));
           this.setState({
             categories: data,
             loaded: true,
@@ -105,14 +103,19 @@ const ShowTagsSchemaPartial = React.createClass({
         <div>
           <ul className="list">
             { category.tag_items.map((tag) => {
+
+                let onDeleteTagListener = this.showDeleteTagModal.bind(this, tag);
+
                 return (
                   <li key={ tag.id } className="">
+                    <DeleteModal ref={ "deleteTagModal-" + tag.name } contentPrefix={ this.props.contentPrefix + ".modals.delete_tag" } app="vault" model="Data.Tag.Item" selectedRecordIds={ Immutable.List.of(tag.id) } onSuccess={ this.refreshData }/>
+
                     <div className="card-head card-head-sm">
                       <header>
                         { tag.name }
                       </header>
                       <div className="tools">
-                        <a className="btn btn-flat ink-reaction btn-default" onClick={ this.showDeleteModal }>
+                        <a className="btn btn-flat ink-reaction btn-default" onClick={ onDeleteTagListener }>
                           <i className="mdi mdi-delete" />
                         </a>
                       </div>
@@ -124,13 +127,15 @@ const ShowTagsSchemaPartial = React.createClass({
         </div>);
     }
   },
- showDeleteModal: function(category) {
-  console.log(category);
+  showDeleteTagModal: function(tag) {
+    this.refs["deleteTagModal-" + tag.name].show();
+  },
+
+  showDeleteCategoryModal: function(category) {
     this.refs["deleteCategoryModal-" + category.name].show();
   },
 
   showNewTagModal: function(category) {
-    console.log("show new tag modal invoked for category " + category.name);
     this.refs["newTagModal-" + category.name].show();
   },
 
@@ -145,13 +150,12 @@ const ShowTagsSchemaPartial = React.createClass({
         { this.state.categories.size > 0 && this.state.categories.toJS().map((category) => {
 
             let onNewTagListener = this.showNewTagModal.bind(this, category);
-            let onDeleteCategoryListener = this.showDeleteModal.bind(this, category);
+            let onDeleteCategoryListener = this.showDeleteCategoryModal.bind(this, category);
 
             return (
               <div id={ category.name }>
-                <CreateModal ref={ "newTagModal-" + category.name } contentPrefix={ this.props.contentPrefix + ".modals.create_tag" } app="vault" model="Data.Tag.Item" form={ this.buildNewTagForm(category) } onSuccess={ this.refreshData }/>
-                <DeleteModal ref={ "deleteCategoryModal-" + category.name } contentPrefix={ this.props.contentPrefix + ".modals.delete_category" } app="vault" model="Data.Tag.Category"  selectedRecordIds={new Immutable.Seq().toIndexedSeq()} />
-
+                <CreateModal ref={ "newTagModal-" + category.name } contentPrefix={ this.props.contentPrefix + ".modals.create_tag" } app="vault" model="Data.Tag.Item" form={ this.buildNewTagForm(category) } onSuccess={ this.refreshData } />
+                <DeleteModal ref={ "deleteCategoryModal-" + category.name } contentPrefix={ this.props.contentPrefix + ".modals.delete_category" } app="vault" model="Data.Tag.Category" selectedRecordIds={ Immutable.List.of(category.id) } onSuccess={ this.refreshData } />
                 <div className="expanded">
                   <div className="card-head" aria-expanded="true">
                     <a className="btn btn-flat ink-reaction btn-icon-toggle" data-toggle="collapse" data-parent={ "#" + category.name } data-target={ "#" + category.name + "-tagList" }>
@@ -164,7 +168,7 @@ const ShowTagsSchemaPartial = React.createClass({
                       <a className="btn btn-icon" onClick={ onNewTagListener }>
                         <i className="mdi mdi-library-plus"></i>
                       </a>
-                      <a className="btn btn-icon" onClick={onDeleteCategoryListener}>
+                      <a className="btn btn-icon" onClick={ onDeleteCategoryListener }>
                         <i className="mdi mdi-delete"></i>
                       </a>
                     </div>
