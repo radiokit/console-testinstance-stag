@@ -129,22 +129,25 @@ export default React.createClass({
         <ToolBarGroup>
           {() => {
             if(this.props.createEnabled === true) {
-              return <ToolBarButtonModal
-                  icon="plus"
-                  labelTextKey={`${this.props.contentPrefix}.index.actions.create`}
-                  modalElement={CreateModal}
-                  modalProps={{
-                    acknowledgementElement: this.props.createAcknowledgementElement,
-                    contentPrefix: this.props.contentPrefix + ".index.modals.create",
-                    selectedRecordIds: this.state.selectedRecordIds,
-                    form: this.props.form,
-                    app: this.props.app,
-                    model: this.props.model}} />;
+              return (
+                <ToolBarButtonModal
+                    icon="plus"
+                    labelTextKey={`${this.props.contentPrefix}.index.actions.create`}
+                    modalElement={CreateModal}
+                    modalProps={{
+                      acknowledgementElement: this.props.createAcknowledgementElement,
+                      contentPrefix: this.props.contentPrefix + ".index.modals.create",
+                      selectedRecordIds: this.state.selectedRecordIds,
+                      form: this.props.form,
+                      app: this.props.app,
+                      model: this.props.model}} />
+                  );
                 }
               }()}
           {() => {
             if(this.props.deleteEnabled === true) {
-              return <ToolBarButtonModal
+              return (
+                <ToolBarButtonModal
                   icon="delete"
                   hintTooltipKey={`${this.props.contentPrefix}.index.actions.delete`}
                   modalElement={DeleteModal}
@@ -156,6 +159,7 @@ export default React.createClass({
                     app: this.props.app,
                     model: this.props.model}}
                   disabled={this.state.selectedRecordIds.count() === 0} />
+              );
             }
           }()}
         </ToolBarGroup>

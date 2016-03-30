@@ -91,7 +91,7 @@ export default React.createClass({
 
 
   renderContentElement: function() {
-    if(this.props.children && this.props.children.length !== 0) {
+    if(this.props.children && React.Children.count(this.props.children) !== 0) {
       return this.props.children;
 
     } else {
@@ -108,7 +108,13 @@ export default React.createClass({
   render: function() {
     return (
       <div className="card card-underline style-gray-dark2">
-        <CardHeader contentPrefix={this.props.contentPrefix} headerText={this.props.headerText} tabs={this.buildTabHeaders()} selectedTab={this.state.selectedTab} onTabClick={this.onTabClick} />
+        <CardHeader
+            contentPrefix={this.props.contentPrefix}
+            headerText={this.props.headerText}
+            tabs={this.buildTabHeaders()}
+            selectedTab={this.state.selectedTab}
+            onTabClick={this.onTabClick} />
+
         <CardBody cardPadding={this.props.cardPadding && this.props.sidebarElement}>
           {() => {
             if (this.props.sidebarElement) {

@@ -7,28 +7,38 @@ import './date_time_picker.scss';
 const DateTimePicker = React.createClass({
   propTypes: {
     required: React.PropTypes.bool,
-    value: React.PropTypes.string
+    defaultValue: React.PropTypes.string
   },
+
+  getInitialState: function() {
+    return {
+      defaultValue: Moment.utc()
+    };
+  },
+
   getInput: function() {
-    return this.refs.datetime.refs.input;
+    return Moment(this.refs.datetime.refs.input.value).toISOString();
   },
+
   render: function() {
     let value;
-    if (this.props.value) {
-      value = Moment.utc(this.props.value);
+    if (this.props.defaultValue) {
+      value = Moment.utc(this.props.defaultValue);
     } else {
-      value = Moment.utc();
+      value = this.state.defaultValue;
     }
-    return <Datetime
-      ref="datetime"
-      defaultValue={value}
-      dateFormat="Y-MM-DD"
-      timeFormat="HH:mm:ss.SSS[Z]"
-      inputProps={{
-        ref: "input",
-        className: "form-control",
-        required: this.props.required
-      }} />;
+    return (
+      <Datetime
+        ref="datetime"
+        defaultValue={value}
+        dateFormat="Y-MM-DD"
+        timeFormat="HH:mm:ss.SSS[Z]"
+        inputProps={{
+          ref: "input",
+          className: "form-control",
+          required: this.props.required
+        }} />
+    );
   }
 });
 

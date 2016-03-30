@@ -135,8 +135,7 @@ const FormWidget = React.createClass({
         break;
 
       case "datetime":
-        let dateString = this.refs[fieldName].refs.datetime.refs.input.value;
-        values[fieldName] = Moment(dateString).toISOString();
+        values[fieldName] = this.refs[fieldName].getInput();
         break;
 
       default:

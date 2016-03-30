@@ -86,6 +86,7 @@ const ScheduleDayCrudButtons = React.createClass({
 
   buildEditForm: function() {
     // TODO: returning proper form
+    console.error('buildEditForm not implemented')
     return this.buildNewForm();
   },
 
