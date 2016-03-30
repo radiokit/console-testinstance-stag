@@ -186,6 +186,12 @@ export default {
 
             create_tag: {
               header: "Create tag",
+               form:{
+                name:{
+                  label:"Tag name",
+                  hint:"Type new tag name"
+                },
+              },
               message: {
                 acknowledgement: "Tag created.",
                 progress: "Creating tag…",

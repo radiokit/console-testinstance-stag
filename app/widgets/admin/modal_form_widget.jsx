@@ -17,6 +17,7 @@ export default React.createClass({
     size: React.PropTypes.oneOf(['normal', 'large']),
     form: React.PropTypes.object.isRequired,
     onFormSubmit: React.PropTypes.func.isRequired,
+    onSuccess:React.PropTypes.func,
     onCancel: React.PropTypes.func.isRequired,
     acknowledgementElement: React.PropTypes.oneOfType([React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]),
     record: React.PropTypes.object,
@@ -41,6 +42,9 @@ export default React.createClass({
     }
   },
 
+  onSuccess: function(){
+    this.props.onSuccess && this.props.onSuccess();
+  },
 
   onHide: function() {
     if(this.props.onHide) {
@@ -137,7 +141,7 @@ export default React.createClass({
                 case "acknowledgement":
                   return (
                     <div>
-                      <Translate component="button" content={this.props.contentPrefix + ".action.close"} role="button" className={"btn btn-" + this.props.proceedType} data-dismiss="modal" />
+                      <Translate component="button" content={this.props.contentPrefix + ".action.close"} role="button" className={"btn btn-" + this.props.proceedType} data-dismiss="modal"  onClick={this.onSuccess}/>
                     </div>
                   );
 

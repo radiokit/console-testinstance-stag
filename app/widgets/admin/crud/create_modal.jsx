@@ -13,6 +13,7 @@ export default React.createClass({
     form: React.PropTypes.object.isRequired,
     app: React.PropTypes.string.isRequired,
     model: React.PropTypes.string.isRequired,
+    onSuccess: React.PropTypes.func,
     acknowledgementElement: React.PropTypes.oneOfType([React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]),
   },
 
@@ -34,31 +35,43 @@ export default React.createClass({
     this.recordCall = window.data
       .record(this.props.app, this.props.model)
       .on("loading", () => {
-        if(this.isMounted()) {
-          this.setState({ step: "progress" });
+        if (this.isMounted()) {
+          this.setState({
+            step: "progress"
+          });
         }
       })
       .on("loaded", (_event, _record, data) => {
-        if(this.isMounted()) {
-          this.setState({ step: "acknowledgement", record: data });
+        if (this.isMounted()) {
+          this.setState({
+            step: "acknowledgement",
+            record: data
+          });
         }
       })
       .on("warning", () => {
-        if(this.isMounted()) {
-          this.setState({ step: "error" });
+        if (this.isMounted()) {
+          this.setState({
+            step: "error"
+          });
         }
       })
       .on("error", () => {
-        if(this.isMounted()) {
-          this.setState({ step: "error" });
+        if (this.isMounted()) {
+          this.setState({
+            step: "error"
+          });
         }
       })
       .create(fieldValues);
   },
 
+  onSuccess: function(){
+    this.props.onSuccess && this.props.onSuccess();
+  },
 
   onCancel: function() {
-    if(this.recordCall) {
+    if (this.recordCall) {
       this.recordCall.teardown();
     }
   },
@@ -71,7 +84,8 @@ export default React.createClass({
 
   render: function() {
     return (
-      <ModalForm ref="modal" acknowledgementElement={this.props.acknowledgementElement} contentPrefix={this.props.contentPrefix} onShow={this.onShow} step={this.state.step} record={this.state.record} form={this.props.form} onFormSubmit={this.onFormSubmit} onCancel={this.onCancel}/>
-    );
+      <ModalForm ref="modal" acknowledgementElement={ this.props.acknowledgementElement } contentPrefix={ this.props.contentPrefix } onShow={ this.onShow } step={ this.state.step } record={ this.state.record }
+        form={ this.props.form } onFormSubmit={ this.onFormSubmit } onCancel={ this.onCancel } onSuccess={ this.props.onSuccess || null } />
+      );
   }
 });

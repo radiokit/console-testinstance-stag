@@ -145,11 +145,11 @@ export default {
 
       file_repositories: {
 
-        tags_schema:{
-          actions:{
+        tags_schema: {
+          actions: {
             add_category: "Dodaj kategorię",
           },
-          modals:{
+          modals: {
 
             delete: {
               header: "Usuwanie elementu",
@@ -167,10 +167,10 @@ export default {
 
             create_category: {
               header: "Tworzenie kategorii",
-              form:{
-                name:{
-                  label:"Nazwa kategorii",
-                  hint:"Wpisz nazwę nowej kategorii"
+              form: {
+                name: {
+                  label: "Nazwa kategorii",
+                  hint: "Wpisz nazwę nowej kategorii"
                 },
               },
               message: {
@@ -186,6 +186,12 @@ export default {
 
             create_tag: {
               header: "Tworzenie etykiety",
+              form: {
+                name: {
+                  label: "Nazwa etykiety",
+                  hint: "Wpisz nazwę etykiety"
+                },
+              },
               message: {
                 acknowledgement: "Utworzono etykietę.",
                 progress: "Trwa tworzenie etykiety…",

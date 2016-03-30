@@ -2,7 +2,7 @@ import React from 'react';
 
 import IndexTableBrowser from '../../../widgets/admin/crud/index_table_browser_widget.jsx';
 
-export default React.createClass({
+const ShowMetadataSchema = React.createClass({
   propTypes: {
     contentPrefix: React.PropTypes.string.isRequired,
     record: React.PropTypes.object.isRequired,
@@ -34,7 +34,7 @@ export default React.createClass({
       },
       kind: {
         type: "enum",
-        values: [ "string", "db", "integer", "text", "float", "date", "time", "datetime", "url" ,"duration" ],
+        values: ["string", "db", "integer", "text", "float", "date", "time", "datetime", "url", "duration"],
         hint: false,
         validators: {
           presence: true,
@@ -50,16 +50,25 @@ export default React.createClass({
 
   buildAttributes: function() {
     return {
-      name:             { renderer: "string" },
-      key:              { renderer: "string" },
-      kind:             { renderer: "string" },
+      name: {
+        renderer: "string"
+      },
+      key: {
+        renderer: "string"
+      },
+      kind: {
+        renderer: "string"
+      },
     }
   },
 
 
   render: function() {
     return (
-      <IndexTableBrowser contentPrefix={this.props.contentPrefix + ".table"} app="vault" model="Data.Metadata.Schema" form={this.buildForm()} attributes={this.buildAttributes()} indexQueryFunc={this.modifyIndexQuery} />
-    );
+      <IndexTableBrowser contentPrefix={ this.props.contentPrefix + ".table" } app="vault" model="Data.Metadata.Schema" form={ this.buildForm() } attributes={ this.buildAttributes() } indexQueryFunc={ this.modifyIndexQuery }
+      />
+      );
   }
 });
+
+export default ShowMetadataSchema;

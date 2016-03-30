@@ -6,22 +6,29 @@ import MetadataSchemaPartial from './show_metadata_schema_partial.jsx';
 import TagsSchemaPartial from './show_tags_schema_partial.jsx';
 
 
-export default React.createClass({
+const ShowView = React.createClass({
   buildTabs: function() {
     return {
       metadata_schema: {
-        element: MetadataSchemaPartial, props: { contentPrefix: "apps.administration.file_repositories.show.tabs.body.metadata_schema" },
+        element: MetadataSchemaPartial,
+        props: {
+          contentPrefix: "apps.administration.file_repositories.show.tabs.body.metadata_schema"
+        },
       },
       tags_schema: {
-        element: TagsSchemaPartial, props: { contentPrefix: "apps.administration.file_repositories.tags_schema" },
+        element: TagsSchemaPartial,
+        props: {
+          contentPrefix: "apps.administration.file_repositories.tags_schema"
+        },
       },
     }
   },
 
-
   render: function() {
     return (
-      <Show contentPrefix="apps.administration.file_repositories" app="vault" model="Data.Record.Repository" contentElement={this.buildTabs()} />
-    );
+      <Show contentPrefix="apps.administration.file_repositories" app="vault" model="Data.Record.Repository" contentElement={ this.buildTabs() } />
+      );
   }
 });
+
+export default ShowView;
