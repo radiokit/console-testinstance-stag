@@ -151,6 +151,26 @@ export default {
           },
           modals: {
 
+             edit_category: {
+              header: "Edycja kategorii",
+               form: {
+                name: {
+                  label: "Nazwa kategorii",
+                  hint: "Zmień nazwę kategorii"
+                },
+              },
+              message: {
+                confirmation: "Czy na pewno chcesz edytować wybraną kategorię ?",
+                acknowledgement: "Edytowano kategorię.",
+                progress: "Trwa edytowanie kategorii…",
+              },
+              action: {
+                proceed: "Edytuj",
+                cancel: "Anuluj",
+                close: "Zamknij",
+              }
+            },
+
             delete_category: {
               header: "Usuwanie kategorii",
               message: {

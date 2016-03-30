@@ -151,6 +151,25 @@ export default {
           },
           modals: {
 
+            edit_category: {
+              header: "Edit category",
+               form: {
+                name: {
+                  label: "Category name",
+                  hint: "Type new category name"
+                },
+              },
+              message: {
+                confirmation: "Do you want to edit this category",
+                acknowledgement: "Category edited.",
+                progress: "Editing category…",
+              },
+              action: {
+                proceed: "Edytuj",
+                cancel: "Anuluj",
+                close: "Zamknij",
+              }
+            },
             delete_category: {
               header: "Delete category",
               message: {

@@ -10,6 +10,7 @@ import Loading from '../../../widgets/general/loading_widget.jsx';
 import CreateModal from '../../../widgets/admin/crud/create_modal.jsx';
 import DeleteModal from '../../../widgets/admin/crud/delete_modal.jsx';
 
+import './ShowTagsSchemaPartial.scss';
 
 const ShowTagsSchemaPartial = React.createClass({
 
@@ -88,6 +89,30 @@ const ShowTagsSchemaPartial = React.createClass({
     }
   },
 
+  // buildEditCategoryForm: function(category) {
+
+  //   console.log("building form ");
+  //   console.log(category.name);
+  //   return {
+  //     name: {
+  //       type: "string",
+  //       hint: true,
+  //       validators: {
+  //         presence: true,
+  //       }
+  //     },
+  //     id: {
+  //       type: "hidden",
+  //       value: category.id,
+  //     },
+  //     record_repository_id: {
+  //       type: "hidden",
+  //       value: this.props.record.get("id"),
+  //     },
+  //   }
+  // },
+
+
   refreshData: function() {
     this.queryTagCategories();
     this.setState(this.state);
@@ -105,16 +130,19 @@ const ShowTagsSchemaPartial = React.createClass({
             { category.tag_items.map((tag) => {
 
                 let onDeleteTagListener = this.showDeleteTagModal.bind(this, tag);
+                // let onEditTagListener = this.showEditTagModal.bind(this, tag);
 
                 return (
                   <li key={ tag.id } className="">
-                    <DeleteModal ref={ "deleteTagModal-" + tag.name } contentPrefix={ this.props.contentPrefix + ".modals.delete_tag" } app="vault" model="Data.Tag.Item" selectedRecordIds={ Immutable.List.of(tag.id) } onSuccess={ this.refreshData }/>
-
+                    <DeleteModal ref={ "deleteTagModal-" + tag.name } contentPrefix={ this.props.contentPrefix + ".modals.delete_tag" } app="vault" model="Data.Tag.Item" selectedRecordIds={ Immutable.List.of(tag.id) } onSuccess={ this.refreshData } />
                     <div className="card-head card-head-sm">
                       <header>
                         { tag.name }
                       </header>
                       <div className="tools">
+                        <a className="btn btn-icon">
+                          <i className="mdi mdi-border-color"/>
+                        </a>
                         <a className="btn btn-flat ink-reaction btn-default" onClick={ onDeleteTagListener }>
                           <i className="mdi mdi-delete" />
                         </a>
@@ -139,9 +167,16 @@ const ShowTagsSchemaPartial = React.createClass({
     this.refs["newTagModal-" + category.name].show();
   },
 
+  // showEditTagModal: function(tag) {
+  //   this.refs["ediTagModal-" + tag.name].show();
+  // },
+
+  // showEditCategoryModal: function(category) {
+  //   this.refs["editCategoryModal-" + category.name].show();
+  // },
+
   render: function() {
 
-    console.log("rendering...");
     return (
       <div className="ShowTagsSchemaPartial">
         <ToolbarGroup>
@@ -151,15 +186,17 @@ const ShowTagsSchemaPartial = React.createClass({
 
             let onNewTagListener = this.showNewTagModal.bind(this, category);
             let onDeleteCategoryListener = this.showDeleteCategoryModal.bind(this, category);
+            // let onEditCategoryListener = this.showEditCategoryModal.bind(this, category);
 
             return (
               <div id={ category.name }>
                 <CreateModal ref={ "newTagModal-" + category.name } contentPrefix={ this.props.contentPrefix + ".modals.create_tag" } app="vault" model="Data.Tag.Item" form={ this.buildNewTagForm(category) } onSuccess={ this.refreshData } />
-                <DeleteModal ref={ "deleteCategoryModal-" + category.name } contentPrefix={ this.props.contentPrefix + ".modals.delete_category" } app="vault" model="Data.Tag.Category" selectedRecordIds={ Immutable.List.of(category.id) } onSuccess={ this.refreshData } />
+                <DeleteModal ref={ "deleteCategoryModal-" + category.name } contentPrefix={ this.props.contentPrefix + ".modals.delete_category" } app="vault" model="Data.Tag.Category" selectedRecordIds={ Immutable.List.of(category.id) } onSuccess={ this.refreshData }/>
+                { /*CreateModal ref={ "editCategoryModal-" + category.name } contentPrefix={ this.props.contentPrefix + ".modals.edit_category" } app="vault" model="Data.Tag.Category" form={ this.buildEditCategoryForm(category) } onSuccess={ this.refreshData }/> */ }
                 <div className="expanded">
                   <div className="card-head" aria-expanded="true">
-                    <a className="btn btn-flat ink-reaction btn-icon-toggle" data-toggle="collapse" data-parent={ "#" + category.name } data-target={ "#" + category.name + "-tagList" }>
-                      <i className="mdi mdi-chevron-right fa fa-angle-down" />
+                    <a className="btn btn-flat ink-reaction btn-icon-toggle tag-toggle" data-toggle="collapse" data-parent={ "#" + category.name } data-target={ "#" + category.name + "-tagList" }>
+                      <i className="mdi mdi-chevron-right" />
                     </a>
                     <header>
                       { category.name }
@@ -167,6 +204,9 @@ const ShowTagsSchemaPartial = React.createClass({
                     <div className="tools">
                       <a className="btn btn-icon" onClick={ onNewTagListener }>
                         <i className="mdi mdi-library-plus"></i>
+                      </a>
+                      <a className="btn btn-icon">
+                        <i className="mdi mdi-border-color"></i>
                       </a>
                       <a className="btn btn-icon" onClick={ onDeleteCategoryListener }>
                         <i className="mdi mdi-delete"></i>
