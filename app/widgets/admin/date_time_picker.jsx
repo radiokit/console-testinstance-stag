@@ -4,7 +4,7 @@ import Moment from 'moment';
 
 import './date_time_picker.scss';
 
-var DateTimePicker = React.createClass({
+const DateTimePicker = React.createClass({
   propTypes: {
     required: React.PropTypes.bool,
     value: React.PropTypes.string
@@ -24,7 +24,11 @@ var DateTimePicker = React.createClass({
       defaultValue={value}
       dateFormat="Y-MM-DD"
       timeFormat="HH:mm:ss.SSS[Z]"
-      inputProps={{ref: "input", className: "form-control", required: this.props.required }} />
+      inputProps={{
+        ref: "input",
+        className: "form-control",
+        required: this.props.required
+      }} />;
   }
 });
 

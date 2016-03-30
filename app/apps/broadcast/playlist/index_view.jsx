@@ -14,7 +14,7 @@ import CardSidebar from '../../../widgets/admin/card_sidebar_widget.jsx';
 import Alert from '../../../widgets/admin/alert_widget.jsx';
 import ScheduleDaily from '../../../widgets/admin/schedule_daily_widget.jsx';
 import ScheduleDaySelector from '../../../widgets/admin/schedule_day_selector_widget.jsx';
-
+import ScheduleDayCrudButtons from '../../../widgets/admin/schedule_day_crud_buttons.jsx';
 import ToolbarButtonModal from '../../../widgets/admin/toolbar_button_modal_widget.jsx';
 import CreateModal from '../../../widgets/admin/crud/create_modal.jsx';
 
@@ -30,30 +30,15 @@ export default React.createClass({
     return {
       loadedFiles: false,
       availableFiles: new Immutable.Seq().toIndexedSeq(),
-      availableVaultFiles: new Immutable.Seq().toIndexedSeq(),
       now: Moment.utc(),
     }
   },
 
 
   componentDidMount: function() {
-    this.fetchPlumberFiles();
-    this.fetchVaultFiles();
-  },
-
-
-  onNowChange: function(newNow) {
-    this.setState({
-      now: newNow,
-    });
-  },
-
-
-  fetchPlumberFiles: function() {
     this.context.data
       .query("plumber", "Media.Input.File.Http")
       .select("id", "start_at", "stop_at")
-      // .where("references","deq", "broadcast_channel_id", this.context.currentBroadcastChannel.get("id"))
       .on("error", () => {
         if(this.isMounted()) {
           this.setState({
@@ -76,33 +61,10 @@ export default React.createClass({
       }).fetch();
   },
 
-  fetchVaultFiles: function() {
-    window.data
-      .query("vault", "Data.Record.File")
-      .select("id", "name")
-      .on("error", () => {
-        if(this.isMounted()) {
-          this.setState({
-            loadingError: true
-          })
-        }
-      }).on("fetch", (_event, _query, data) => {
-        if (this.isMounted()) {
-          if (data.count() != 0) {
-            this.setState({
-              availableVaultFiles: data.toIndexedSeq()
-            });
-          }
-        }
-      }).fetch();
-  },
 
-  getFilesData: function() {
-    return this.state.availableVaultFiles.toList().map(file => {
-      return {
-        id: Data.buildRecordGlobalID("vault", "Data.Record.File", file.get("id")),
-        name: file.get("name")
-      };
+  onNowChange: function(newNow) {
+    this.setState({
+      now: newNow,
     });
   },
 
@@ -114,26 +76,6 @@ export default React.createClass({
         .set("stop_at", Moment.utc(entry.get("stop_at")))
     });
   },
-
-  buildForm: function() {
-    return {
-        location: {
-          type: "object",
-          values: this.getFilesData()
-        },
-        name: {
-          type: "string"
-        },
-        start_at: {
-          type: "datetime",
-          value: Moment.utc().toISOString()
-        },
-        stop_at: {
-          type: "datetime",
-          value: Moment.utc().clone().add(1, "minute").toISOString()
-        },
-      }
-    },
 
   render: function() {
 
@@ -147,17 +89,9 @@ export default React.createClass({
             <GridCell size="large" center={true}>
               <Card
                   contentPrefix="apps.broadcast.playlist"
-                  toolbarElement={ToolbarButtonModal}
+                  toolbarElement={ScheduleDayCrudButtons}
                   toolbarProps={{
-                    icon: "folder",
-                    labelTextKey: "apps.broadcast.playlist.button",
-                    modalElement: CreateModal,
-                    modalProps: {
-                      contentPrefix: "apps.broadcast.playlist.button",
-                      form: this.buildForm(),
-                      app: "plumber",
-                      model: "Media.Input.File.Http"
-                    }
+                    availablePlumberFiles: this.state.availableFiles
                   }}
                   sidebarElement={ScheduleDaySelector}
                   sidebarProps={{
