@@ -26,7 +26,6 @@ const ShowTagsSchemaPartial = React.createClass({
   },
   componentDidMount: function() {
     this.queryTagCategories();
-    console.log(this.props.record);
   },
   queryTagCategories: function() {
 
@@ -117,6 +116,17 @@ const ShowTagsSchemaPartial = React.createClass({
     this.setState(this.state);
   },
 
+  sort: function(list){
+    return list.sort((a, b) => {
+      if (a.name > b.name) {
+        return 1;
+      }
+      if (a.name < b.name) {
+        return -1;
+      }
+      return 0;
+    });
+  },
 
   renderCategoryTags: function(category) {
 
@@ -126,7 +136,7 @@ const ShowTagsSchemaPartial = React.createClass({
       return (
         <div>
           <ul className="list">
-            { category.tag_items.map((tag) => {
+            { this.sort(category.tag_items).map((tag) => {
 
                 let onDeleteTagListener = this.showDeleteTagModal.bind(this, tag);
                 // let onEditTagListener = this.showEditTagModal.bind(this, tag);
@@ -181,7 +191,7 @@ const ShowTagsSchemaPartial = React.createClass({
         <ToolbarGroup>
           <ToolbarButtonModal icon="plus" labelTextKey={ this.props.contentPrefix + ".actions.add_category" } modalElement={ CreateModal } modalProps={ { contentPrefix: this.props.contentPrefix + ".modals.create_category", onSuccess: this.refreshData, form: this.buildNewCategoryForm(), app: "vault", model: "Data.Tag.Category" } } />
         </ToolbarGroup>
-        { this.state.categories.size > 0 && this.state.categories.toJS().map((category) => {
+        { this.state.categories.size > 0 && this.sort(this.state.categories.toJS()).map((category) => {
 
             let onNewTagListener = this.showNewTagModal.bind(this, category);
             let onDeleteCategoryListener = this.showDeleteCategoryModal.bind(this, category);
@@ -194,8 +204,9 @@ const ShowTagsSchemaPartial = React.createClass({
                 { /*CreateModal ref={ "editCategoryModal-" + category.name } contentPrefix={ this.props.contentPrefix + ".modals.edit_category" } app="vault" model="Data.Tag.Category" form={ this.buildEditCategoryForm(category) } onSuccess={ this.refreshData }/> */ }
                 <div className="expanded">
                   <div className="card-head" aria-expanded="true">
-                    <a className="btn btn-flat ink-reaction btn-icon-toggle tag-toggle" data-toggle="collapse" data-parent={ "#" + category.name } data-target={ "#" + category.name + "-tagList" }>
-                      <i className="mdi mdi-chevron-right" />
+
+                    <a className={"btn btn-flat ink-reaction btn-icon-toggle " + (category.tag_items.length === 0 ? "disabled": "")} data-toggle="collapse" data-parent={ "#" + category.name } data-target={ "#" + category.name + "-tagList" }>
+                      <i className="mdi mdi-chevron-right"/>
                     </a>
                     <header>
                       { category.name }
