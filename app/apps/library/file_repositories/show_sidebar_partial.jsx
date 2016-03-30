@@ -28,54 +28,31 @@ export default React.createClass({
 
   queryTagCategories: function () {
 
-    // window.data
-    //   .query("vault", "Data.Tag.Category")
-    //   .select("id", "name", "tag_items")
-    //   .joins("tag_items")
-    //   .where("record_repository_id", "eq", this.props.record.get("id"))
-    //   .on("fetch", (_eventName, _record, data) => {
-    //
-    //     if (this.isMounted()) {
-    //
-    //       console.log(JSON.stringify(data));
-    //       this.setState({
-    //         categories: data,
-    //         loaded: true,
-    //       });
-    //     }
-    //   })
-    //   .on("error", () => {
-    //
-    //     if (this.isMounted()) {
-    //       this.setState({
-    //         loaded: true,
-    //         error: true,
-    //       });
-    //     }
-    //   })
-    //   .fetch();
+    window.data
+      .query("vault", "Data.Tag.Category")
+      .select("id", "name", "tag_items")
+      .joins("tag_items")
+      .where("record_repository_id", "eq", this.props.record.get("id"))
+      .on("fetch", (_eventName, _record, data) => {
 
-    // window.data
-    // .record("vault", "Data.Tag.Item")
-    // .on("error", () => {
-    //
-    //   if(this.isMounted()) {
-    //     this.setState({
-    //       createError: true
-    //     });
-    //   }
-    // })
-    // .on("loaded", () => {
-    //   if(this.isMounted()) {
-    //     this.setState({
-    //       createSuccess: true
-    //     });
-    //   }
-    // })
-    // .create({
-    //   "tag_category_id": "416e3869-8475-4bac-b6c1-4a0d1c255efa",
-    //   "name":"kaczki",
-    // });
+        if (this.isMounted()) {
+
+          this.setState({
+            categories: data,
+            loaded: true,
+          });
+        }
+      })
+      .on("error", () => {
+
+        if (this.isMounted()) {
+          this.setState({
+            loaded: true,
+            error: true,
+          });
+        }
+      })
+      .fetch();
   },
 
   onTagCategorySelected: function (tag) {
@@ -93,7 +70,7 @@ export default React.createClass({
     return (
       <div>
         <ul className="nav nav-pills nav-stacked">
-          <li key={"all"} onClick={this.onRestoreDefaults} className="nav-item">
+          <li key="all" onClick={this.onRestoreDefaults} className="nav-item">
             <Translate component="a" content={this.props.contentPrefix + ".actions.tags.allTags"}/>
           </li>
           {

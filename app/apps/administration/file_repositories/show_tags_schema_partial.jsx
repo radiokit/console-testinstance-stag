@@ -4,7 +4,6 @@ import Immutable from 'immutable';
 import ToolbarGroup from '../../../widgets/admin/toolbar_group_widget.jsx';
 import ToolbarButton from '../../../widgets/admin/toolbar_button_widget.jsx';
 import ToolbarButtonModal from '../../../widgets/admin/toolbar_button_modal_widget.jsx';
-import DeleteItemModal from './delete_item_modal.jsx';
 
 import Loading from '../../../widgets/general/loading_widget.jsx';
 import CreateModal from '../../../widgets/admin/crud/create_modal.jsx';
