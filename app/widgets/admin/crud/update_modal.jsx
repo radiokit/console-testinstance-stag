@@ -31,13 +31,7 @@ const UpdateModal =  React.createClass({
     this.refs.modal.show();
   },
 
-
   onFormSubmit: function(fieldValues) {
-
-    console.log("submitting form");
-    console.log(fieldValues);
-    console.log("record");
-    console.log(this.props.recordId);
 
     this.recordCall = window.data
       .record(this.props.app, this.props.model, this.props.recordId)

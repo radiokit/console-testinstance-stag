@@ -166,7 +166,7 @@ const ShowTagsSchemaPartial = React.createClass({
                       </div>
                     </div>
                   </li>
-                  );
+                );
               }) }
           </ul>
         </div>);
@@ -207,10 +207,8 @@ const ShowTagsSchemaPartial = React.createClass({
 
             return (
               <div id={ category.name }>
-                <CreateModal ref={ "newTagModal-" + category.name } contentPrefix={ this.props.contentPrefix + ".modals.create_tag" } app="vault" model="Data.Tag.Item" form={ this.buildNewTagForm(category) } onSuccess={ this.refreshData }
-                />
-                <DeleteModal ref={ "deleteCategoryModal-" + category.name } contentPrefix={ this.props.contentPrefix + ".modals.delete_category" } app="vault" model="Data.Tag.Category" selectedRecordIds={ Immutable.List.of(category.id) } onSuccess={ this.refreshData }
-                />
+                <CreateModal ref={ "newTagModal-" + category.name } contentPrefix={ this.props.contentPrefix + ".modals.create_tag" } app="vault" model="Data.Tag.Item" form={ this.buildNewTagForm(category) } onSuccess={ this.refreshData }/>
+                <DeleteModal ref={ "deleteCategoryModal-" + category.name } contentPrefix={ this.props.contentPrefix + ".modals.delete_category" } app="vault" model="Data.Tag.Category" selectedRecordIds={ Immutable.List.of(category.id) } onSuccess={ this.refreshData }/>
                 <UpdateModal ref={ "editCategoryModal-" + category.name } contentPrefix={ this.props.contentPrefix + ".modals.edit_category" } app="vault" model="Data.Tag.Category" recordId={ category.id } form={ this.buildEditCategoryForm(category) }
                   onSuccess={ this.refreshData } />
                 <div className="expanded">
