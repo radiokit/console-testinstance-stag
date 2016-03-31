@@ -11,6 +11,7 @@ import Card from '../../../widgets/admin/card_widget.jsx';
 import Alert from '../../../widgets/admin/alert_widget.jsx';
 import VolumeTracker from '../../../widgets/general/volume_tracker_widget.jsx';
 
+import ClientLinkDiagram from './ClientLinkDiagram.jsx';
 
 export default React.createClass({
   contextTypes: {
@@ -25,21 +26,25 @@ export default React.createClass({
   },
 
   handleFetch(_event, _query, data) {
-    data = Immutable.List(data);
+    data = Immutable.Map(data.map(i => [i.get('id'), i]))
     this.setState({data})
-    for(let idx = 0; idx < data.size; idx++) {
-      let client = data.get(idx);
+    for(let [id, client] of data) {
       window.data.query("plumber", "Resource.Architecture.AudioInterface")
         .where("references", "deq", "owner", Data.buildRecordGlobalID("auth", "Client.Standalone", client.get("id")))
         .select("id", "name", "direction", "transmission_enabled", "os_name")
         .on("fetch", (_event, _query, interfaces) => {
-          this.setState({data: this.state.data.set(idx, client.set("interfaces", interfaces))});
+          this.setState({
+            data: this.state.data.setIn(
+              [id, "interfaces"],
+              Immutable.Map(interfaces.map(i => [i.get('id'), i]))
+            )});
         }).fetch()
     }
   },
 
   initData() {
-
+    console.log("DUPA");
+    this.setState({data: undefined});
     this._query = window.data.query('auth', 'Client.Standalone').select('id', 'name').on('fetch', this.handleFetch).fetch()
 
   },
@@ -88,7 +93,8 @@ export default React.createClass({
   render: function() {
     return (
       <div>
-        <button onClick={this.initData}>Refresh</button>
+        <ClientLinkDiagram data={this.state.data}/>
+        <button onClick={this.initData}>Refresh!</button>
         <div>{JSON.stringify(this.state.data)}</div>
         {this.renderList()}
       </div>
