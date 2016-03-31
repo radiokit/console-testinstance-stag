@@ -47,7 +47,14 @@ export default React.createClass({
 
   render: function() {
     return (
-      <Index createAcknowledgementElement={CreateAcknowledgement} contentPrefix="apps.electron.devices" app="auth" model="Client.Standalone" attributes={this.buildAttributes()} form={this.buildForm()} indexQueryFunc={this.modifyIndexQuery} />
+      <Index
+        createAcknowledgementElement={CreateAcknowledgement}
+        contentPrefix="apps.electron.devices"
+        app="auth"
+        model="Client.Standalone"
+        attributes={this.buildAttributes()}
+        form={this.buildForm()}
+        indexQueryFunc={this.modifyIndexQuery} />
     );
   }
 });

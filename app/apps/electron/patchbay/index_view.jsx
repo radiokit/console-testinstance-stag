@@ -16,45 +16,82 @@ export default React.createClass({
   contextTypes: {
     currentUserAccount: React.PropTypes.object.isRequired,
   },
-
-
   propTypes: {
     contentPrefix: React.PropTypes.string.isRequired,
   },
 
-
-  componentDidMount: function() {
-    let graph = new Joint.dia.Graph();
-
-    let paper = new Joint.dia.Paper({
-        el: this.refs.paper,
-        width: 1000,
-        height: 400,
-        model: graph,
-        gridSize: 1
-    });
-
-    let rect = new Joint.shapes.basic.Rect({
-        position: { x: 100, y: 30 },
-        size: { width: 100, height: 30 },
-        attrs: { rect: { fill: 'blue' }, text: { text: 'my box', fill: 'white' } }
-    });
-
-    let rect2 = rect.clone();
-    rect2.translate(300);
-
-    let link = new Joint.dia.Link({
-        source: { id: rect.id },
-        target: { id: rect2.id }
-    });
-
-    graph.addCells([rect, rect2, link]);
+  getInitialState() {
+    return {};
   },
 
+  handleFetch(_event, _query, data) {
+    data = Immutable.List(data);
+    this.setState({data})
+    for(let idx = 0; idx < data.size; idx++) {
+      let client = data.get(idx);
+      window.data.query("plumber", "Resource.Architecture.AudioInterface")
+        .where("references", "deq", "owner", Data.buildRecordGlobalID("auth", "Client.Standalone", client.get("id")))
+        .select("id", "name", "direction", "transmission_enabled", "os_name")
+        .on("fetch", (_event, _query, interfaces) => {
+          this.setState({data: this.state.data.set(idx, client.set("interfaces", interfaces))});
+        }).fetch()
+    }
+  },
 
+  initData() {
+
+    this._query = window.data.query('auth', 'Client.Standalone').select('id', 'name').on('fetch', this.handleFetch).fetch()
+
+  },
+  componentWillMount() {
+    this.setState({data: undefined});
+    this.initData()
+  },
+  componentWillUnmount() {
+    this._query.teardown();
+  },
+
+  getDiagramData() {
+    return this.state.data;
+  },
+  renderInterfaces(item, idx) {
+    if(!item.get('interfaces')) {
+      return <div>Loading interfaces...</div>;
+    }
+    return (
+      <ul>
+
+        {item.get('interfaces').map((iface, idx) => (
+          <li key={idx}>
+            {iface.get('direction')}: {iface.get('name')}
+          </li>
+        ))}
+      </ul>
+    )
+  },
+  renderList() {
+    let data = this.getDiagramData();
+    if(!data) {
+      return <div>Loading...</div>;
+    }
+    return (
+      <ul>
+        {data.map((item, idx) => (
+          <li key={idx}>
+            <h5>{item.get('name')}</h5>
+            {this.renderInterfaces(item, idx)}
+          </li>
+        ))}
+      </ul>
+    )
+  },
   render: function() {
     return (
-      <div ref="paper" style={{width: "100%", height: "400px", background: "yellow"}}/>
+      <div>
+        <button onClick={this.initData}>Refresh</button>
+        <div>{JSON.stringify(this.state.data)}</div>
+        {this.renderList()}
+      </div>
     );
 
   }
