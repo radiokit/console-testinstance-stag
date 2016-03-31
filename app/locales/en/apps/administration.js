@@ -153,7 +153,7 @@ export default {
 
             edit_category: {
               header: "Edit category",
-               form: {
+              form: {
                 name: {
                   label: "Category name",
                   hint: "Type new category name"
@@ -165,11 +165,33 @@ export default {
                 progress: "Editing category…",
               },
               action: {
-                proceed: "Edytuj",
-                cancel: "Anuluj",
-                close: "Zamknij",
+                proceed: "Edit",
+                cancel: "Cancel",
+                close: "Close",
               }
             },
+
+
+            edit_tag: {
+              header: "Edit tag",
+              form: {
+                name: {
+                  label: "Tag name",
+                  hint: "Edit tag name"
+                },
+              },
+              message: {
+                confirmation: "Do you want to edit this tag",
+                acknowledgement: "Tag edited.",
+                progress: "Editing tag…",
+              },
+              action: {
+                proceed: "Edit",
+                cancel: "Cancel",
+                close: "Close",
+              }
+            },
+
             delete_category: {
               header: "Delete category",
               message: {

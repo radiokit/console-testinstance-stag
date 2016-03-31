@@ -151,9 +151,9 @@ export default {
           },
           modals: {
 
-             edit_category: {
+            edit_category: {
               header: "Edycja kategorii",
-               form: {
+              form: {
                 name: {
                   label: "Nazwa kategorii",
                   hint: "Zmień nazwę kategorii"
@@ -163,6 +163,25 @@ export default {
                 confirmation: "Czy na pewno chcesz edytować wybraną kategorię ?",
                 acknowledgement: "Edytowano kategorię.",
                 progress: "Trwa edytowanie kategorii…",
+              },
+              action: {
+                proceed: "Edytuj",
+                cancel: "Anuluj",
+                close: "Zamknij",
+              }
+            },
+            edit_tag: {
+              header: "Edycja etykiety",
+              form: {
+                name: {
+                  label: "Nazwa etykiety",
+                  hint: "Zmień nazwę etykiety"
+                },
+              },
+              message: {
+                confirmation: "Czy na pewno chcesz edytować wybraną etykietę ?",
+                acknowledgement: "Edytowano etykietę.",
+                progress: "Trwa edytowanie etykiety…",
               },
               action: {
                 proceed: "Edytuj",

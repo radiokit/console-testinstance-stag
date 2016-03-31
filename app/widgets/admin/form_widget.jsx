@@ -3,7 +3,7 @@ import Translate from 'react-translate-component';
 import Counterpart from 'counterpart';
 
 
-export default React.createClass({
+const FormWidget = React.createClass({
   propTypes: {
     form: React.PropTypes.object.isRequired,
     onSubmit: React.PropTypes.func.isRequired,
@@ -38,6 +38,9 @@ export default React.createClass({
 
   validate: function() {
     let errors = {};
+    console.log("refs:");
+    console.log(this.refs);
+
 
     Object.keys(this.props.form).map((fieldName) => {
       let fieldConfig = this.props.form[fieldName];
@@ -113,11 +116,12 @@ export default React.createClass({
       let input;
       let hint;
       let required = this.isFieldRequired(fieldConfig);
+      let defaultVal = fieldConfig.value;
 
 
       switch(fieldConfig.type) {
         case "string":
-          input = (<input className="form-control" type="text" id={fieldName} ref={fieldName} required={required} />);
+          input = (<Input className="form-control" type="text" id={fieldName} ref={fieldName} required={required} value={defaultVal} />);
           break;
 
         case "number":
@@ -227,3 +231,27 @@ export default React.createClass({
     );
   }
 });
+
+const Input  = React.createClass({
+
+  propTypes:{
+    className: React.PropTypes.string.isRequired,
+    type: React.PropTypes.string.isRequired,
+    id: React.PropTypes.string.isRequired,
+    required: React.PropTypes.bool.isRequired,
+    value: React.PropTypes.string,
+  },
+  value : "" ,
+  getInitialState: function(){
+    return { value: this.props.value}
+  },
+  onFieldChange: function(e){
+    this.value = e.target.value;
+    this.setState({value:e.target.value});
+  },
+  render: function(){
+    return <input className={this.props.className} type={this.props.type} id={ this.props.id } ref={ this.props.id } required={ this.props.required } value={ this.state.value } onChange={this.onFieldChange} />;
+  }
+});
+
+export default FormWidget;

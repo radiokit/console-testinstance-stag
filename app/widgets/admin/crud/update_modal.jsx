@@ -7,12 +7,13 @@ import Form from '../../../widgets/admin/form_widget.jsx';
 import TextInput from '../../../widgets/admin/text_input_widget.jsx';
 
 
-export default React.createClass({
+const UpdateModal =  React.createClass({
   propTypes: {
     contentPrefix: React.PropTypes.string.isRequired,
     form: React.PropTypes.object.isRequired,
     app: React.PropTypes.string.isRequired,
     model: React.PropTypes.string.isRequired,
+    recordId: React.PropTypes.string.isRequired,
     onSuccess: React.PropTypes.func,
     acknowledgementElement: React.PropTypes.oneOfType([React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]),
   },
@@ -32,8 +33,14 @@ export default React.createClass({
 
 
   onFormSubmit: function(fieldValues) {
+
+    console.log("submitting form");
+    console.log(fieldValues);
+    console.log("record");
+    console.log(this.props.recordId);
+
     this.recordCall = window.data
-      .record(this.props.app, this.props.model)
+      .record(this.props.app, this.props.model, this.props.recordId)
       .on("loading", () => {
         if (this.isMounted()) {
           this.setState({
@@ -63,7 +70,7 @@ export default React.createClass({
           });
         }
       })
-      .create(fieldValues);
+      .update(fieldValues);
   },
 
   onSuccess: function(){
@@ -89,3 +96,5 @@ export default React.createClass({
       );
   }
 });
+
+export default UpdateModal;

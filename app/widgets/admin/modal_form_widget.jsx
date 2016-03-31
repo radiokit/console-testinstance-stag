@@ -96,7 +96,7 @@ export default React.createClass({
                         return React.createElement(this.props.acknowledgementElement, {contentPrefix: this.props.contentPrefix, record: this.props.record});
 
                       } else {
-                        return <div>OK</div>; // FIXME <Translate component="p" className="text-center" content={this.props.contentPrefix + ".acknowledgement.info"} />;
+                        return <Translate component="p" className="text-center" content={this.props.contentPrefix + ".message.acknowledgement"} />;
                       }
                     }()}
                     </div>
