@@ -92,7 +92,7 @@ const ShowTagsSchemaPartial = React.createClass({
 
     return {
       name: {
-        type: "number",
+        type: "string",
         hint: true,
         value: category.name,
         validators: {
