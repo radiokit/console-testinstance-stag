@@ -4,7 +4,7 @@ import Joint from 'jointjs';
 import Immutable from 'immutable';
 import { Data } from 'radiokit-api';
 
-const CLIENTS_PER_COL = 6;
+const CLIENTS_PER_COL = 4;
 
 const ClientLinkDiagram = React.createClass({
   propTypes: {
@@ -28,15 +28,15 @@ const ClientLinkDiagram = React.createClass({
     let idx = this._clientCounter || 0;
     this._clientCounter = idx+1;
     return {
-      x: 10 + Math.floor(idx/CLIENTS_PER_COL) * 120,
-      y: 10 + idx%CLIENTS_PER_COL*100
+      x: 140 + Math.floor(idx/CLIENTS_PER_COL) * 220,
+      y: 10 + idx%CLIENTS_PER_COL*150
     }
   },
   addClient(neu) {
     let interfaces = neu.get('interfaces') || Immutable.Seq();
     let model = new Joint.shapes.devs.Model({
       position: this.reservePosition(),
-      size: {width: 100, height: 80},
+      size: {width: 120, height: 130},
       inPorts: interfaces.filter(i=>i.get('direction') === 'capture').map(i=>i.get('name')).toJS(),
       outPorts: interfaces.filter(i=>i.get('direction') === 'playback').map(i=>i.get('name')).toJS(),
       attrs: {
@@ -44,7 +44,7 @@ const ClientLinkDiagram = React.createClass({
         rect: { fill: '#2ECC71' },
         '.inPorts circle': { fill: '#16A085', magnet: 'passive', type: 'input' },
         '.outPorts circle': { fill: '#E74C3C', type: 'output' }
-    }
+      }
     });
     this.graph.addCell(model);
     this._clients.set(neu.get("id"), model);
@@ -61,14 +61,23 @@ const ClientLinkDiagram = React.createClass({
     let element = this._clients.get(id);
 
 
-    let interfaces = neu.get('interfaces') || Immutable.Seq();
-    element.set('inPorts', interfaces.filter(i=>i.get('direction') === 'capture').toJS());
-    element.set('outPorts', interfaces.filter(i=>i.get('direction') === 'playback').toJS());
+    let interfaces = neu.get('interfaces');
+    if(interfaces) {
+      interfaces = interfaces.valueSeq();
+    } else {
+      interfaces = Immutable.Seq();
+    }
+    element.set('inPorts', interfaces.filter(i=>i.get('direction') === 'capture').map(i=>i.get('name')).toJS());
+    element.set('outPorts', interfaces.filter(i=>i.get('direction') === 'playback').map(i=>i.get('name')).toJS());
+    //element.updatePortsAttrs();
   },
 
   updateGraph(oldData, data) {
-    console.log("update", oldData.size, data.size)
+    if(data.size === 0) {
+      this._clientCounter = 0;
+    }
     let clientIDs = Immutable.Set(Immutable.Seq(data.keys()).concat(Immutable.Seq(oldData.keys())));
+
     for (let id of clientIDs) {
       let old = oldData.get(id);
       let neu = data.get(id);
