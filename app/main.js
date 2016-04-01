@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 import { Router, Route, IndexRoute } from 'react-router';
 import Counterpart from 'counterpart';
-import RadioKit from 'radiokit-api';
 
-import { Socket } from 'phoenix-socket';
+import './services/RadioKit'; // for legacy window binding
+import './services/plumber'; // for legacy window binding
 
 import Root from './root.jsx';
 import Dashboard from './dashboard.jsx';
@@ -57,36 +57,11 @@ Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/modal
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/scope.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/form.js'));
 
-function getEnv() {
-  if(typeof(ENV) === "object") {
-    return ENV;
-
-  } else {
-    return {
-      auth: { clientId: "123", baseUrl: "https://radiokit-auth-stag.herokuapp.com" },
-      apps: {
-        "plumber" : { baseUrl: "https://radiokit-plumber-stag.herokuapp.com" },
-        "auth" : { baseUrl: "https://radiokit-auth-stag.herokuapp.com" },
-        "vault" : { baseUrl: "https://radiokit-vault-stag.herokuapp.com" },
-        "agenda": { baseUrl: "https://radiokit-agenda-stag.herokuapp.com" },
-        "diffusor": { baseUrl: "https://radiokit-diffusor-stag.herokuapp.com" },
-      },
-      verbose: false
-    };
-  }
-}
-
 function pingGoogleAnalytics() {
   if(typeof(ga) !== "undefined") {
     ga('send', 'pageview');
   }
 }
-
-window.ENV = getEnv();
-window.data = new RadioKit.Data.Interface(getEnv());
-// FIXME merge with official JS API
-window.plumberStream = new Socket(getEnv().apps.plumber.baseUrl.replace(/^http/, "ws") + "/api/stream/v1.0", { heartbeatIntervalMs: 1000 });
-window.plumberStream.connect();
 
 ReactDOM.render((
   <Router history={createBrowserHistory()}>
