@@ -84,6 +84,7 @@ const CalendarRow = React.createClass({
 
           }).map((item) => {
             if(item.get("stop_at").isAfter(item.get("start_at").clone().endOf("hour"))) {
+              debugger;
               return (
                 <div
                     key={item.get("id")}

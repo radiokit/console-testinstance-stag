@@ -36,6 +36,10 @@ export default React.createClass({
 
 
   componentDidMount: function() {
+    this.fetchPlumberFiles();
+  },
+
+  fetchPlumberFiles: function() {
     this.context.data
       .query("plumber", "Media.Input.File.Http")
       .select("id", "start_at", "stop_at")
@@ -60,7 +64,6 @@ export default React.createClass({
         }
       }).fetch();
   },
-
 
   onNowChange: function(newNow) {
     this.setState({
@@ -91,7 +94,8 @@ export default React.createClass({
                   contentPrefix="apps.broadcast.playlist"
                   toolbarElement={ScheduleDayCrudButtons}
                   toolbarProps={{
-                    availablePlumberFiles: this.state.availableFiles
+                    availablePlumberFiles: this.state.availableFiles,
+                    afterFormSubmit: this.fetchPlumberFiles
                   }}
                   sidebarElement={ScheduleDaySelector}
                   sidebarProps={{
@@ -103,7 +107,7 @@ export default React.createClass({
                     now: this.state.now,
                     items: this.state.availableFiles
                   }} />
-          </GridCell>
+            </GridCell>
           </GridRow>
         </Section> )
     }

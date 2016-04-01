@@ -4,6 +4,7 @@ import Moment from 'moment';
 import { Data } from 'radiokit-api';
 
 import CreateModal from './crud/create_modal.jsx';
+import EditModal from './crud/edit_modal.jsx';
 import DeleteModalWithSelect from './crud/delete_modal_with_select.jsx';
 import ToolbarGroup from './toolbar_group_widget.jsx';
 import ToolbarButtonModal from './toolbar_button_modal_widget.jsx';
@@ -14,7 +15,8 @@ const ScheduleDayCrudButtons = React.createClass({
   },
 
   propTypes: {
-    availablePlumberFiles: React.PropTypes.object.isRequired
+    availablePlumberFiles: React.PropTypes.object.isRequired,
+    afterFormSubmit: React.PropTypes.func
   },
 
   getInitialState: function() {
@@ -85,9 +87,23 @@ const ScheduleDayCrudButtons = React.createClass({
   },
 
   buildEditForm: function() {
-    // TODO: returning proper form
-    console.error('buildEditForm not implemented')
-    return this.buildNewForm();
+    return {
+      recordId: {
+        type: "object",
+        values: this.preparePlumberFiles(this.props.availablePlumberFiles)
+      },
+      name: {
+        type: "string"
+      },
+      start_at: {
+        type: "datetime",
+        value: Moment.utc().toISOString()
+      },
+      stop_at: {
+        type: "datetime",
+        value: Moment.utc().clone().add(1, "minute").toISOString()
+      }
+    };
   },
 
   buildDeleteForm: function() {
@@ -96,7 +112,7 @@ const ScheduleDayCrudButtons = React.createClass({
         type: "object",
         values: this.preparePlumberFiles(this.props.availablePlumberFiles)
       }
-    }
+    };
   },
 
   render: function() {
@@ -110,18 +126,20 @@ const ScheduleDayCrudButtons = React.createClass({
               contentPrefix: "apps.broadcast.playlist.add_button",
               form: this.buildNewForm(),
               app: "plumber",
-              model: "Media.Input.File.Http"
+              model: "Media.Input.File.Http",
+              afterFormSubmit: this.props.afterFormSubmit
             }} />
 
         <ToolbarButtonModal
             icon="folder"
             labelTextKey="apps.broadcast.playlist.update_button"
-            modalElement={CreateModal}
+            modalElement={EditModal}
             modalProps={{
               contentPrefix: "apps.broadcast.playlist.edit_button",
               form: this.buildEditForm(),
               app: "plumber",
-              model: "Media.Input.File.Http"
+              model: "Media.Input.File.Http",
+              afterFormSubmit: this.props.afterFormSubmit
             }} />
 
         <ToolbarButtonModal
@@ -133,6 +151,7 @@ const ScheduleDayCrudButtons = React.createClass({
               form: this.buildDeleteForm(),
               app: "plumber",
               model: "Media.Input.File.Http",
+              afterFormSubmit: this.props.afterFormSubmit
             }} />
       </ToolbarGroup>
     );

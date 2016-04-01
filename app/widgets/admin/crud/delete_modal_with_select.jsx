@@ -11,8 +11,9 @@ const DeleteModalWithSelect = React.createClass({
     contentPrefix: React.PropTypes.string.isRequired,
     form: React.PropTypes.object.isRequired,
     app: React.PropTypes.string.isRequired,
-    model: React.PropTypes.isRequired,
+    model: React.PropTypes.string.isRequired,
     acknowledgementElement: React.PropTypes.oneOfType([React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]),
+    afterFormSubmit: React.PropTypes.func
   },
 
   getInitialState: function() {
@@ -37,6 +38,7 @@ const DeleteModalWithSelect = React.createClass({
       .on("loaded", (_event, _record, data) => {
         if (this.isMounted()) {
           this.setState({step: "acknowledgement", record: data});
+          this.props.afterFormSubmit();
         }
       })
       .on("warning", () => {
