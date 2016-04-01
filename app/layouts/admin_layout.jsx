@@ -3,9 +3,9 @@ import React from 'react';
 import '../assets/stylesheets/layouts/admin_layout.scss';
 import '../../vendor/assets/stylesheets/materialadmin/materialadmin.css';
 import '../../vendor/assets/stylesheets/materialadmin/material-design-iconic-font.css';
-import MenuBar from './admin/menu_bar_partial.jsx';
-import TopBar from './admin/top_bar_partial.jsx';
-import Background from './admin/background_partial.jsx';
+import MenuBar from './menu_bar/menu_bar_partial.jsx';
+import TopBar from './top_bar/top_bar.jsx';
+import Background from './background/background_partial.jsx';
 
 
 export default React.createClass({
