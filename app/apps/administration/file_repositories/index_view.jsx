@@ -48,9 +48,8 @@ const IndexView = React.createClass({
 
   render: function() {
     return (
-      <Index contentPrefix="apps.administration.file_repositories" app="vault" model="Data.Record.Repository" attributes={ this.buildAttributes() } form={ this.buildForm() }
-        indexQueryFunc={ this.modifyIndexQuery } />
-      );
+      <Index contentPrefix="apps.administration.file_repositories" app="vault" model="Data.Record.Repository" attributes={ this.buildAttributes() } form={ this.buildForm() } indexQueryFunc={ this.modifyIndexQuery } />
+    );
   }
 });
 

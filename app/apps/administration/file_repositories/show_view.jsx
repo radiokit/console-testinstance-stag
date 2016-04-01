@@ -27,7 +27,7 @@ const ShowView = React.createClass({
   render: function() {
     return (
       <Show contentPrefix="apps.administration.file_repositories" app="vault" model="Data.Record.Repository" contentElement={ this.buildTabs() } />
-      );
+    );
   }
 });
 

@@ -81,11 +81,10 @@ export default React.createClass({
     this.setState(this.getInitialState());
   },
 
-
   render: function() {
     return (
       <ModalForm ref="modal" acknowledgementElement={ this.props.acknowledgementElement } contentPrefix={ this.props.contentPrefix } onShow={ this.onShow } step={ this.state.step } record={ this.state.record }
         form={ this.props.form } onFormSubmit={ this.onFormSubmit } onCancel={ this.onCancel } onSuccess={ this.props.onSuccess } />
-      );
+    );
   }
 });

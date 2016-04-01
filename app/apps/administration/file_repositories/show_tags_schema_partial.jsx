@@ -148,8 +148,7 @@ const ShowTagsSchemaPartial = React.createClass({
 
                 return (
                   <li key={ tag.id } className="">
-                    <DeleteModal ref={ "deleteTagModal-" + tag.name } contentPrefix={ this.props.contentPrefix + ".modals.delete_tag" } app="vault" model="Data.Tag.Item" selectedRecordIds={ Immutable.List.of(tag.id) } onSuccess={ this.refreshData }
-                    />
+                    <DeleteModal ref={ "deleteTagModal-" + tag.name } contentPrefix={ this.props.contentPrefix + ".modals.delete_tag" } app="vault" model="Data.Tag.Item" selectedRecordIds={ Immutable.List.of(tag.id) } onSuccess={ this.refreshData }/>
                     <UpdateModal ref={ "editTagModal-" + tag.name } contentPrefix={ this.props.contentPrefix + ".modals.edit_tag" } app="vault" model="Data.Tag.Item" recordId={ tag.id } form={ this.buildEditTagForm(tag) }
                       onSuccess={ this.refreshData } />
                     <div className="card-head card-head-sm">
@@ -169,7 +168,8 @@ const ShowTagsSchemaPartial = React.createClass({
                 );
               }) }
           </ul>
-        </div>);
+        </div>
+      );
     }
   },
   showDeleteTagModal: function(tag) {
@@ -209,8 +209,7 @@ const ShowTagsSchemaPartial = React.createClass({
               <div id={ category.name }>
                 <CreateModal ref={ "newTagModal-" + category.name } contentPrefix={ this.props.contentPrefix + ".modals.create_tag" } app="vault" model="Data.Tag.Item" form={ this.buildNewTagForm(category) } onSuccess={ this.refreshData }/>
                 <DeleteModal ref={ "deleteCategoryModal-" + category.name } contentPrefix={ this.props.contentPrefix + ".modals.delete_category" } app="vault" model="Data.Tag.Category" selectedRecordIds={ Immutable.List.of(category.id) } onSuccess={ this.refreshData }/>
-                <UpdateModal ref={ "editCategoryModal-" + category.name } contentPrefix={ this.props.contentPrefix + ".modals.edit_category" } app="vault" model="Data.Tag.Category" recordId={ category.id } form={ this.buildEditCategoryForm(category) }
-                  onSuccess={ this.refreshData } />
+                <UpdateModal ref={ "editCategoryModal-" + category.name } contentPrefix={ this.props.contentPrefix + ".modals.edit_category" } app="vault" model="Data.Tag.Category" recordId={ category.id } form={ this.buildEditCategoryForm(category) } onSuccess={ this.refreshData } />
                 <div className="expanded">
                   <div className="card-head" aria-expanded="true">
                     <a className={ "btn btn-flat ink-reaction btn-icon-toggle " + (category.tag_items.length === 0 ? "disabled" : "") } data-toggle="collapse" data-parent={ "#" + category.name } data-target={ "#" + category.name + "-tagList" }>

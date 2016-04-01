@@ -13,18 +13,15 @@ const DeleteModal = React.createClass({
     onSuccess: React.PropTypes.func
   },
 
-
   getInitialState: function() {
     return {
       index: 0
     }
   },
 
-
   show: function() {
     this.refs.modal.show();
   },
-
 
   onDeleteSuccess: function(record) {
     this.setState({
@@ -33,7 +30,6 @@ const DeleteModal = React.createClass({
   },
 
   onSuccess: function() {
-    console.log("onSuccess in delete_modal");
     this.props.onSuccess && this.props.onSuccess();
   },
 
@@ -47,7 +43,7 @@ const DeleteModal = React.createClass({
   render: function() {
     return (
       <ModalForEach ref="modal" onPerform={ this.onPerform } contentPrefix={ this.props.contentPrefix } warning="irreversible" proceedType="danger" recordIds={ this.props.selectedRecordIds }
-        index={ this.state.index } onSuccess={ this.onSuccess }>
+                    index={ this.state.index } onSuccess={ this.onSuccess }>
         <div>
           <Translate component="p" content={ this.props.contentPrefix + ".message.confirmation" } count={ this.props.selectedRecordIds.count() } />
         </div>
@@ -58,7 +54,7 @@ const DeleteModal = React.createClass({
           <Translate component="p" content={ this.props.contentPrefix + ".message.acknowledgement" } count={ this.props.selectedRecordIds.count() } />
         </div>
       </ModalForEach>
-      );
+    );
   }
 });
 
