@@ -12,7 +12,8 @@ export default React.createClass({
 
   getInitialState() {
     return {
-      index: 0
+      index: 0,
+      selectedTagIds:[],
     }
   },
 
@@ -30,7 +31,31 @@ export default React.createClass({
     this.onTagAppliedSucess();
   },
 
+  renderCategoryTags: function(category) {
+      return (
+        <div>
+          <ul className="list">
+            {category.tag_items && _.sortBy(category.tag_items,'name').map((tag) => {
+                return (
+                  <li key={ tag.id }>
+                    <div className="card-head card-head-xs">
+                      <header>
+                        { tag.name }
+                      </header>
+                      <div className="tools">
+                        <input type="checkbox" />
+                      </div>
+                    </div>
+                  </li>
+                );
+              }) }
+          </ul>
+        </div>
+      );
+  },
+
   render() {
+    let categories = this.props.tagCategories.toJS();
     return (
       <ModalForEach
         ref="modal"
@@ -43,17 +68,31 @@ export default React.createClass({
             component="p"
             content="widgets.vault.file_browser.modals.tag.message.confirmation"
             count={this.props.selectedRecordIds.count()} />
-
-          {this.props.tagCategories.map((tag) => {
-            return (
-              <div key={tag.get("id")} className="form-group">
-                  <label>
-                    <input type="checkbox" />
-                    test
-                  </label>
+          {categories.length > 0 && _.sortBy(categories,'name').map((category) => {
+            if(category.tag_items.length === 0){
+              return null;
+            } else return (
+              <div id={ category.name + "-modal"}>
+                <div className="expanded">
+                  <div className="card-head" aria-expanded="true">
+                    <a className={ "btn btn-flat ink-reaction btn-icon-toggle " + (category.tag_items.length === 0 ? "disabled" : "") }
+                      data-toggle="collapse" data-parent={ "#" + category.name + "-modal" }
+                      data-target={ "#" + category.name + "-tagList-modal" }>
+                      <i className="mdi mdi-chevron-right" />
+                    </a>
+                    <header>
+                      { category.name }
+                    </header>
+                  </div>
+                  <div id={ category.name + "-tagList-modal" }
+                    className="collapse in"
+                    aria-expanded="true">
+                    { this.renderCategoryTags(category) }
+                  </div>
                 </div>
-              );
-            })}
+              </div>
+            )
+          }) }
         </div>
         <div>
           <Translate

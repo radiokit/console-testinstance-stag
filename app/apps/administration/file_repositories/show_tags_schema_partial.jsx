@@ -191,7 +191,11 @@ const ShowTagsSchemaPartial = React.createClass({
             icon="plus"
             labelTextKey={ this.props.contentPrefix + ".actions.add_category" }
             modalElement={ CreateModal }
-            modalProps={ { contentPrefix: this.props.contentPrefix + ".modals.create_category", onSuccess: this.refreshData, form: this.buildNewCategoryForm(), app: "vault", model: "Data.Tag.Category" } } />
+            modalProps={ {  contentPrefix: this.props.contentPrefix + ".modals.create_category",
+                            onSuccess: this.refreshData,
+                            form: this.buildNewCategoryForm(),
+                            app: "vault",
+                            model: "Data.Tag.Category" } } />
         </ToolbarGroup>
         { this.state.categories.size > 0 && _.sortBy(this.state.categories.toJS(),'name').map((category) => {
 

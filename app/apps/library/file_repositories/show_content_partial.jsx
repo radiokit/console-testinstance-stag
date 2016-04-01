@@ -34,6 +34,7 @@ export default React.createClass({
   },
 
   buildTableAttributes() {
+
     let attributes = {
       name: { renderer: "string" },
     };
@@ -63,7 +64,7 @@ export default React.createClass({
       .where("record_repository_id", "eq", this.props.record.get("id"));
   },
 
-  render() {
+  render() {;
     return (
       <TableBrowser
         onSelect={this.onTableSelect}
