@@ -3,19 +3,18 @@ import React from 'react';
 import Index from '../../../widgets/admin/crud/index_widget.jsx';
 
 export default React.createClass({
+
   contextTypes: {
     currentUserAccount: React.PropTypes.object.isRequired,
   },
 
-
-  modifyIndexQuery: function(query) {
+  modifyIndexQuery(query) {
     return query
       .where("references", "deq", "user_account_id", this.context.currentUserAccount.get("id"))
       .order("name", "asc")
   },
 
-
-  buildAttributes: function() {
+  buildAttributes() {
     return {
       name:             { renderer: "string" },
       files_size_total: { renderer: "filesize" },
@@ -24,8 +23,7 @@ export default React.createClass({
     }
   },
 
-
-  buildForm: function() {
+  buildForm() {
     return {
       name: {
         type: "string",
@@ -43,10 +41,18 @@ export default React.createClass({
     }
   },
 
-
-  render: function() {
+  render() {
     return (
-      <Index type="list" contentPrefix="apps.library.file_repositories" app="vault" model="Data.Record.Repository" attributes={this.buildAttributes()} form={this.buildForm()} indexQueryFunc={this.modifyIndexQuery} createEnabled={false} deleteEnabled={false} />
+      <Index
+        type="list"
+        contentPrefix="apps.library.file_repositories"
+        app="vault"
+        model="Data.Record.Repository"
+        attributes={this.buildAttributes()}
+        form={this.buildForm()}
+        indexQueryFunc={this.modifyIndexQuery}
+        createEnabled={false}
+        deleteEnabled={false} />
     );
   }
 });

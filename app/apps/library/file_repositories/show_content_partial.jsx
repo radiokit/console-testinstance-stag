@@ -11,6 +11,7 @@ import MetadataModal from './show_content_metadata_modal.jsx';
 import TagModal from './show_content_tag_modal.jsx';
 
 export default React.createClass({
+
   propTypes: {
     record: React.PropTypes.object.isRequired,
     app: React.PropTypes.string.isRequired,
@@ -20,27 +21,22 @@ export default React.createClass({
     filter: React.PropTypes.string.isRequired,
   },
 
-
-  getInitialState: function() {
+  getInitialState() {
     return {
       selectedRecordIds: new Immutable.Seq().toIndexedSeq(),
     };
   },
 
-
-  onTableSelect: function(selectedRecordIds) {
+  onTableSelect(selectedRecordIds) {
     this.setState({
       selectedRecordIds: selectedRecordIds
     });
   },
 
-
-
-  buildTableAttributes: function() {
+  buildTableAttributes() {
     let attributes = {
       name: { renderer: "string" },
     };
-
     return this.props.record.get("metadata_schemas").reduce((acc, metadataSchema) => {
       acc[metadataSchema.get("key")] = {
         renderer: metadataSchema.get("kind"),
@@ -54,56 +50,76 @@ export default React.createClass({
         }
       };
       return acc;
-
     }, attributes);
   },
 
-  buildTableRecordsQuery: function() {
+  buildTableRecordsQuery() {
     return window.data
       .query("vault", "Data.Record.File")
       .select("id", "name", "metadata_items", "tag_items")
       .joins("metadata_items")
       .joins("tag_items")
       .where("stage", "eq", this.props.stage)
-      .where("record_repository_id", "eq", this.props.record.get("id"))
+      .where("record_repository_id", "eq", this.props.record.get("id"));
   },
 
-
-  render: function() {
+  render() {
     return (
-      <TableBrowser onSelect={this.onTableSelect} selectable={true} attributes={this.buildTableAttributes()} contentPrefix="widgets.vault.file_browser.table" recordsQuery={this.buildTableRecordsQuery()}>
+      <TableBrowser
+        onSelect={this.onTableSelect}
+        selectable={true}
+        attributes={this.buildTableAttributes()}
+        contentPrefix="widgets.vault.file_browser.table"
+        recordsQuery={this.buildTableRecordsQuery()}>
         <ToolbarGroup>
           {() => {
             if(this.props.stage === "incoming") {
-              return (<ToolbarButtonModal icon="upload" labelTextKey={this.props.contentPrefix + ".actions.upload"} modalElement={UploadModal} modalProps={{repository: this.props.record }} />);
+              return (
+                <ToolbarButtonModal
+                  icon="upload"
+                  labelTextKey={this.props.contentPrefix + ".actions.upload"}
+                  modalElement={UploadModal}
+                  modalProps={{repository: this.props.record }} />
+              );
             }
           }()}
-          <ToolbarButton icon="download" disabled={this.state.selectedRecordIds.count() === 0} onClick={this.onDownloadClick}/>
-          <ToolbarButton icon="delete" disabled={this.state.selectedRecordIds.count() === 0} onClick={this.onDeleteClick}/>
+          <ToolbarButton
+            icon="download"
+            disabled={this.state.selectedRecordIds.count() === 0}
+            onClick={this.onDownloadClick}/>
+          <ToolbarButton
+            icon="delete"
+            disabled={this.state.selectedRecordIds.count() === 0}
+            onClick={this.onDeleteClick}/>
         </ToolbarGroup>
 
         {() => {
-          // if(this.props.record.get("tag_categories").count() !== 0) {
             return (
               <ToolbarGroup>
-                <ToolbarButtonModal icon="folder" labelTextKey={this.props.contentPrefix + ".actions.tags.assignTags"} disabled={this.state.selectedRecordIds.count() === 0} modalElement={TagModal} modalProps={{ selectedRecordIds: this.state.selectedRecordIds, tagCategories: this.props.record.get("tag_categories") }} />
-            </ToolbarGroup>
+                <ToolbarButtonModal
+                  icon="folder"
+                  labelTextKey={this.props.contentPrefix + ".actions.tags.assignTags"}
+                  disabled={this.state.selectedRecordIds.count() === 0}
+                  modalElement={TagModal}
+                  modalProps={{ selectedRecordIds: this.state.selectedRecordIds, tagCategories: this.props.record.get("tag_categories") }} />
+              </ToolbarGroup>
             );
-
-          // }
         }()}
-
 
         {() => {
           if(this.props.record.get("metadata_schemas").count() !== 0) {
             return (
               <ToolbarGroup>
-                <ToolbarButtonModal icon="barcode" labelTextKey="widgets.vault.file_browser.modals.metadata.header" disabled={this.state.selectedRecordIds.count() === 0} modalElement={MetadataModal} modalProps={{ selectedRecordIds: this.state.selectedRecordIds, metadataSchemas: this.props.record.get("metadata_schemas") }} />
+                <ToolbarButtonModal
+                  icon="barcode"
+                  labelTextKey="widgets.vault.file_browser.modals.metadata.header"
+                  disabled={this.state.selectedRecordIds.count() === 0}
+                  modalElement={MetadataModal}
+                  modalProps={{ selectedRecordIds: this.state.selectedRecordIds, metadataSchemas: this.props.record.get("metadata_schemas") }} />
               </ToolbarGroup>
             );
           }
         }()}
-
       </TableBrowser>
     );
   }

@@ -3,31 +3,22 @@ import React from 'react';
 import Index from '../../../widgets/admin/crud/index_widget.jsx';
 
 const IndexView = React.createClass({
-  modifyIndexQuery: function(query) {
+
+  modifyIndexQuery(query) {
     return query
       .order("name", "asc")
   },
 
-
-  buildAttributes: function() {
+  buildAttributes() {
     return {
-      name: {
-        renderer: "string"
-      },
-      files_size_total: {
-        renderer: "filesize"
-      },
-      files_count: {
-        renderer: "integer"
-      },
-      user_account: {
-        renderer: "scope-user-account"
-      },
+      name: { renderer: "string" },
+      files_size_total: { renderer: "filesize" },
+      files_count: { renderer: "integer" },
+      user_account: { renderer: "scope-user-account" },
     }
   },
 
-
-  buildForm: function() {
+  buildForm() {
     return {
       name: {
         type: "string",
@@ -45,10 +36,15 @@ const IndexView = React.createClass({
     }
   },
 
-
-  render: function() {
+  render() {
     return (
-      <Index contentPrefix="apps.administration.file_repositories" app="vault" model="Data.Record.Repository" attributes={ this.buildAttributes() } form={ this.buildForm() } indexQueryFunc={ this.modifyIndexQuery } />
+      <Index
+        contentPrefix="apps.administration.file_repositories"
+        app="vault"
+        model="Data.Record.Repository"
+        attributes={ this.buildAttributes() }
+        form={ this.buildForm() }
+        indexQueryFunc={ this.modifyIndexQuery } />
     );
   }
 });

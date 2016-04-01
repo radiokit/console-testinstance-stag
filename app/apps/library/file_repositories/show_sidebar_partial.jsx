@@ -4,6 +4,7 @@ import Translate from 'react-translate-component';
 
 
 export default React.createClass({
+
   propTypes: {
     record: React.PropTypes.object.isRequired,
     app: React.PropTypes.string.isRequired,
@@ -14,29 +15,24 @@ export default React.createClass({
     onFilterUpdate: React.PropTypes.func.isRequired,
   },
 
-  getInitialState: function () {
-
+  getInitialState() {
     return {
       categories: []
     };
   },
 
-
-  componentDidMount: function () {
+  componentDidMount() {
     this.queryTagCategories();
   },
 
-  queryTagCategories: function () {
-
+  queryTagCategories() {
     window.data
       .query("vault", "Data.Tag.Category")
       .select("id", "name", "tag_items")
       .joins("tag_items")
       .where("record_repository_id", "eq", this.props.record.get("id"))
       .on("fetch", (_eventName, _record, data) => {
-
         if (this.isMounted()) {
-
           this.setState({
             categories: data,
             loaded: true,
@@ -44,7 +40,6 @@ export default React.createClass({
         }
       })
       .on("error", () => {
-
         if (this.isMounted()) {
           this.setState({
             loaded: true,
@@ -55,29 +50,35 @@ export default React.createClass({
       .fetch();
   },
 
-  onTagCategorySelected: function (tag) {
+  onTagCategorySelected(tag) {
     this.props.onTagFilterUpdate(tag);
   },
 
-  onRestoreDefaults: function () {
+  onRestoreDefaults() {
     this.props.onTagFilterUpdate(null);
   },
 
-  render: function () {
-
+  render() {
     let categories = this.state.categories;
-
     return (
       <div>
         <ul className="nav nav-pills nav-stacked">
-          <li key="all" onClick={this.onRestoreDefaults} className="nav-item">
-            <Translate component="a" content={this.props.contentPrefix + ".actions.tags.allTags"}/>
+          <li
+            key="all"
+            onClick={this.onRestoreDefaults}
+            className="nav-item">
+            <Translate
+              component="a"
+              content={this.props.contentPrefix + ".actions.tags.allTags"}/>
           </li>
           {
             categories.size > 0 && categories.toJS().map((tagCategory) => {
               let onCategoryLister = this.onTagCategorySelected;
               return (
-                <li key={tagCategory.name} onClick={onCategoryLister} className="nav-item">
+                <li
+                  key={tagCategory.name}
+                  onClick={onCategoryLister}
+                  className="nav-item">
                   <a className="nav-link active" href="#">{tagCategory.name}</a>
                 </li>
               )

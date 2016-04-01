@@ -8,6 +8,7 @@ import TextInput from '../../../widgets/admin/text_input_widget.jsx';
 
 
 const UpdateModal =  React.createClass({
+
   propTypes: {
     contentPrefix: React.PropTypes.string.isRequired,
     form: React.PropTypes.object.isRequired,
@@ -18,20 +19,18 @@ const UpdateModal =  React.createClass({
     acknowledgementElement: React.PropTypes.oneOfType([React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]),
   },
 
-
-  getInitialState: function() {
+  getInitialState() {
     return {
       step: "form",
       record: null,
     }
   },
 
-  show: function() {
+  show() {
     this.refs.modal.show();
   },
 
-  onFormSubmit: function(fieldValues) {
-
+  onFormSubmit(fieldValues) {
     this.recordCall = window.data
       .record(this.props.app, this.props.model, this.props.recordId)
       .on("loading", () => {
@@ -66,25 +65,33 @@ const UpdateModal =  React.createClass({
       .update(fieldValues);
   },
 
-  onSuccess: function(){
+  onSuccess(){
     this.props.onSuccess && this.props.onSuccess();
   },
 
-  onCancel: function() {
+  onCancel() {
     if (this.recordCall) {
       this.recordCall.teardown();
     }
   },
 
-
-  onShow: function() {
+  onShow() {
     this.setState(this.getInitialState());
   },
 
-  render: function() {
+  render() {
     return (
-      <ModalForm ref="modal" acknowledgementElement={ this.props.acknowledgementElement } contentPrefix={ this.props.contentPrefix } onShow={ this.onShow } step={ this.state.step } record={ this.state.record }
-        form={ this.props.form } onFormSubmit={ this.onFormSubmit } onCancel={ this.onCancel } onSuccess={ this.props.onSuccess } />
+      <ModalForm
+        ref="modal"
+        acknowledgementElement={ this.props.acknowledgementElement }
+        contentPrefix={ this.props.contentPrefix }
+        onShow={ this.onShow }
+        step={ this.state.step }
+        record={ this.state.record }
+        form={ this.props.form }
+        onFormSubmit={ this.onFormSubmit }
+        onCancel={ this.onCancel }
+        onSuccess={ this.props.onSuccess } />
     );
   }
 });

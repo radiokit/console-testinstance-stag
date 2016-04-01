@@ -3,62 +3,73 @@ import Translate from 'react-translate-component';
 
 import ModalForEach from '../../../widgets/admin/modal_foreach_widget.jsx';
 
-
 export default React.createClass({
+
   propTypes: {
     selectedRecordIds: React.PropTypes.object.isRequired,
     tagCategories: React.PropTypes.object.isRequired,
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       index: 0
     }
   },
 
-  show: function() {
+  show() {
     this.refs.modal.show();
   },
 
-  onTagAppliedSucess: function(record) {
+  onTagAppliedSucess(record) {
     this.setState({
       index: this.state.index + 1
     });
   },
 
-  onPerform: function(index, recordId) {
+  onPerform(index, recordId) {
     this.onTagAppliedSucess();
   },
 
-
-  render: function() {
+  render() {
     return (
-      <ModalForEach ref="modal" onPerform={this.onPerform} contentPrefix="widgets.vault.file_browser.modals.tag" recordIds={this.props.selectedRecordIds} index={this.state.index}>
+      <ModalForEach
+        ref="modal"
+        onPerform={this.onPerform}
+        contentPrefix="widgets.vault.file_browser.modals.tag"
+        recordIds={this.props.selectedRecordIds}
+        index={this.state.index}>
         <div>
-          <Translate component="p" content="widgets.vault.file_browser.modals.tag.message.confirmation" count={this.props.selectedRecordIds.count()} />
+          <Translate
+            component="p"
+            content="widgets.vault.file_browser.modals.tag.message.confirmation"
+            count={this.props.selectedRecordIds.count()} />
 
           {this.props.tagCategories.map((tag) => {
-              return (
-                <div key={tag.get("id")} className="form-group">
-                    <label>
-                      <input type="checkbox" />
-                      test
-                    </label>
-                  </div>
+            return (
+              <div key={tag.get("id")} className="form-group">
+                  <label>
+                    <input type="checkbox" />
+                    test
+                  </label>
+                </div>
               );
             })}
         </div>
-
         <div>
-          <Translate component="p" content="widgets.vault.file_browser.modals.tag.message.progress" />
+          <Translate
+            component="p"
+            content="widgets.vault.file_browser.modals.tag.message.progress" />
         </div>
-
         <div>
-          <Translate component="p" content="widgets.vault.file_browser.modals.tag.message.acknowledgement" count={this.props.selectedRecordIds.count()} />
+          <Translate
+            component="p"
+            content="widgets.vault.file_browser.modals.tag.message.acknowledgement"
+            count={this.props.selectedRecordIds.count()} />
         </div>
-
         <div>
-          <Translate component="p" content="widgets.vault.file_browser.modals.tag.message.cancelled" />
+          <Translate
+            component="p"
+            content="widgets.vault.file_browser.modals.tag.message.cancelled" />
         </div>
       </ModalForEach>
     );
