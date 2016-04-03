@@ -1,6 +1,10 @@
 import React from 'react';
 import Translate from 'react-translate-component';
 
+// FIXME do not use jquery
+import $ from 'jquery';
+import Bootstrap from 'bootstrap-sass';
+
 export default React.createClass({
   propTypes: {
     contentPrefix: React.PropTypes.string.isRequired,

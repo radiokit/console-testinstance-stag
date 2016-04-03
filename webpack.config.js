@@ -7,6 +7,7 @@ var config = {
   devtool: 'eval',
 
   entry: [
+    'bootstrap-loader',
     'webpack-dev-server/client?http://0.0.0.0:8080', // WebpackDevServer host and port
     'webpack/hot/only-dev-server', // "only" prevents reload on syntax errors
     path.resolve(__dirname, 'app/main.js')
@@ -26,6 +27,9 @@ var config = {
 
   module: {
     loaders: [{
+      test: /bootstrap-sass[\/\\]assets[\/\\]javascripts[\/\\]/,
+      loader: 'imports?jQuery=jquery'
+    }, {
       test: /\.jsx$/,
       exclude: [node_modules_dir],
       loaders: ['react-hot', 'babel']

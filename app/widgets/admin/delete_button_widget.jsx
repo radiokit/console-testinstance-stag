@@ -1,6 +1,8 @@
 import React from 'react';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
+// FIXME remove jquery
+import $ from 'jquery';
 
 export default React.createClass({
   propTypes: {
