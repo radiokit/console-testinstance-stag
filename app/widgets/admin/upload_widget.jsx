@@ -108,7 +108,7 @@ export default React.createClass({
         <tr key={file.get("id")}>
           <td className="text-right">{i+1}.</td>
           <td>{file.get("name")}</td>
-          <td className="text-right">{filesize(file.get("size"))}/></td>
+          <td className="text-right">{filesize(file.get("size"))}</td>
           <td>{badge}</td>
         </tr>);
     });
