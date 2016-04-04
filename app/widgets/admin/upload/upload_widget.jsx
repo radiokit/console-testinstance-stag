@@ -11,6 +11,7 @@ import connect from 'immview-react-connect';
 import classnames from 'classnames';
 //ui
 import Loading from './../../general/loading_widget.jsx';
+import Dropzone from 'react-dropzone';
 //data
 import uploadDomain from '../../../services/upload/uploadDomain';
 //lang
@@ -61,22 +62,15 @@ const UploadWidget = React.createClass({
     }
   },
 
-  componentDidMount: function () {
-    uploadDomain.registerDropZone(
-      this.props.repository.get("id"),
-      ReactDOM.findDOMNode(this.refs.uploadDropzone)
-    );
-  },
-
   renderDropzone: function () {
     return (
-      <div className="card style-primary upload-dropzone" ref="uploadDropzone">
-        <div className="card-body">
-          <form className="upload-dropzone" ref="uploadButton" className="upload-button">
-            <Translate content="uploadWidget.uploadInstructions" component="h3"/>
-          </form>
-        </div>
-      </div>
+      <Dropzone className="card style-primary upload-dropzone" onDrop={files => uploadDomain.upload(this.props.repository.get("id"), files)}>
+          <div className="card-body">
+            <form className="upload-dropzone" ref="uploadButton" className="upload-button">
+              <Translate content="uploadWidget.uploadInstructions" component="h3"/>
+            </form>
+          </div>
+      </Dropzone>
     );
   },
 

@@ -53,6 +53,12 @@ var config = {
       test: /\.(ttf|eot|svg|woff(2)?)([\?].*)?$/,
       loader: 'file-loader'
     }]
+  },
+
+  resolve: {
+    alias: {
+      'React': 'react'
+    }
   }
 };
 

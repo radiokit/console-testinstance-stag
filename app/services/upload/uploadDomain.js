@@ -24,17 +24,16 @@ class UploadDomain extends Domain {
      * @param {number} repositoryID
      * @param {Node} domElement
      */
-    function registerDropZone(repositoryID, domElement) {
+    function upload(repositoryID, files) {
       //create process
       const process = RadioKit.upload(repositoryID, {autoStart: true});
-      
-      //bind repository and domElement to process
-      nodesByProcess = nodesByProcess.set(process, domElement);
+
+      //bind repository to process
       repositoriesByProcess = repositoriesByProcess.set(process, repositoryID);
 
-      //bind process to dom element
-      process.assignBrowse(domElement);
-      process.assignDrop(domElement);
+      setTimeout(() => {
+        files.forEach(file => process.__resumable.addFile(file));
+      });
 
       function update(queue) {
         queuesByProcess.write(
@@ -53,10 +52,9 @@ class UploadDomain extends Domain {
       process.EVENTS.forEach(event => process.on(event, readQueue));
 
       //start queue immediately after file selection
-      process.on('added', () => process.start());
+      // process.on('added', () => process.start());
     }
-    
-    let nodesByProcess = Map();
+
     let repositoriesByProcess = Map();
 
     /**
@@ -103,7 +101,6 @@ class UploadDomain extends Domain {
         const uploading = !!files.find(file => file.get('uploading'), null, false);
         const name = files.find(file => file.get('uploading'), null, emptyMap).get('name', '');
         const repository = repositoriesByProcess.get(process, 0);
-        const node = nodesByProcess.get(process, 0);
 
         return Map({
           name,
@@ -111,7 +108,6 @@ class UploadDomain extends Domain {
           completed,
           uploading,
           repository,
-          node,
           files,
         });
       });
@@ -122,7 +118,7 @@ class UploadDomain extends Domain {
       queuesSummaries,
       /* interface */
       {
-        registerDropZone,
+        upload,
       }
     );
   }
