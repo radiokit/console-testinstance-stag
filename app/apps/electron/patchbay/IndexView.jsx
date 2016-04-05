@@ -16,8 +16,8 @@ Counterpart.registerTranslations("pl", require('./IndexView.locale.pl.js'));
 export default React.createClass({
   buildTabs: function() {
     return {
-      diagram:  { element: IndexDiagramPartial },
-      table:    { element: IndexTablePartial },
+      diagram:  { element: IndexDiagramPartial, props: { contentPrefix: "apps.electron.patchbay.diagram" } },
+      table:    { element: IndexTablePartial, props: { contentPrefix: "apps.electron.patchbay.table" } },
     }
   },
 
