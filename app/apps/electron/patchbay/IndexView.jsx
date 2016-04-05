@@ -9,8 +9,8 @@ import Card from '../../../widgets/admin/card_widget.jsx';
 import IndexDiagramPartial from './IndexDiagramPartial.jsx';
 import IndexTablePartial from './IndexTablePartial.jsx';
 
-Counterpart.registerTranslations("en", require('./locales.en.js'));
-Counterpart.registerTranslations("pl", require('./locales.pl.js'));
+Counterpart.registerTranslations("en", require('./IndexView.locale.en.js'));
+Counterpart.registerTranslations("pl", require('./IndexView.locale.pl.js'));
 
 
 export default React.createClass({
