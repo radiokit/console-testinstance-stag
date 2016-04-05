@@ -24,6 +24,9 @@ var config = {
 
   module: {
     loaders: [{
+      test: /bootstrap-sass[\/\\]assets[\/\\]javascripts[\/\\]/,
+      loader: 'imports?jQuery=jquery'
+    }, {
       test: /\.jsx?$/,
       exclude: [node_modules_dir],
       loader: 'babel'
