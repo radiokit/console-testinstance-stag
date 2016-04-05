@@ -17,7 +17,7 @@ import BroadcastLiveIndex from './apps/broadcast/live/index_view.jsx';
 import ElectronApp from './apps/electron/app.jsx';
 import ElectronDevicesIndex from './apps/electron/devices/index_view.jsx';
 import ElectronDevicesShow from './apps/electron/devices/show_view.jsx';
-import ElectronPatchbayIndex from './apps/electron/patchbay/index_view.jsx';
+import ElectronPatchbayIndex from './apps/electron/patchbay/IndexView.jsx';
 import ElectronTransmissionsIndex from './apps/electron/transmissions/index_view.jsx';
 import InfrastructureApp from './apps/infrastructure/app.jsx';
 import InfrastructureComputingNodesIndex from './apps/infrastructure/computing_nodes/index_view.jsx';
