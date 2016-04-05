@@ -1,7 +1,12 @@
 import React from 'react';
+import Counterpart from 'counterpart';
 
 import Index from '../../../widgets/admin/crud/index_widget.jsx';
-import CreateAcknowledgement from './create_acknowledgement.jsx';
+import IndexCreateAcknowledgement from './IndexCreateAcknowledgement.jsx';
+
+Counterpart.registerTranslations("en", require('./IndexView.locale.en.js'));
+Counterpart.registerTranslations("pl", require('./IndexView.locale.pl.js'));
+
 
 export default React.createClass({
   contextTypes: {
@@ -48,7 +53,7 @@ export default React.createClass({
   render: function() {
     return (
       <Index
-        createAcknowledgementElement={CreateAcknowledgement}
+        createAcknowledgementElement={IndexCreateAcknowledgement}
         contentPrefix="apps.electron.devices"
         app="auth"
         model="Client.Standalone"

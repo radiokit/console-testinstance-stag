@@ -1,8 +1,12 @@
 import React from 'react';
+import Counterpart from 'counterpart';
 
 import Show from '../../../widgets/admin/crud/show_widget.jsx';
 
-import AudioInterfacePartial from './show_audio_interface_partial.jsx';
+import AudioInterfacePartial from './ShowAudioInterfacePartial.jsx';
+
+Counterpart.registerTranslations("en", require('./ShowView.locale.en.js'));
+Counterpart.registerTranslations("pl", require('./ShowView.locale.pl.js'));
 
 
 export default React.createClass({
