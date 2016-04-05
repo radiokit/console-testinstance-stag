@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 
+import TableCellLambda from './table_cell_lambda.jsx';
 import TableCellString from './table_cell_string.jsx';
 import TableCellDb from './table_cell_db.jsx';
 import TableCellUrl from './table_cell_url.jsx';
@@ -45,10 +46,18 @@ export default React.createClass({
       value = this.props.record.get(this.props.attributeName);
     }
 
-    if(value !== null || this.props.attributeConfig.renderer === "peakmeter" || this.props.attributeConfig.renderer === "scope-user-account" || this.props.attributeConfig.renderer === "scope-broadcast-channel") {
+    if(value !== null ||
+      this.props.attributeConfig.renderer === "peakmeter" ||
+      this.props.attributeConfig.renderer === "lambda" ||
+      this.props.attributeConfig.renderer === "scope-user-account" ||
+      this.props.attributeConfig.renderer === "scope-broadcast-channel") {
       let cell;
 
       switch(this.props.attributeConfig.renderer) {
+        case "lambda":
+          cell = (<TableCellLambda {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value}/>);
+          break;
+
         case "counter":
           cell = (<TableCellCounter {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value}/>);
           break;

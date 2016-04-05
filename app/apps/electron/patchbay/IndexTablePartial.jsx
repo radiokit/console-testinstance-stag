@@ -19,7 +19,6 @@ export default React.createClass({
 
   modifyIndexQuery: function(query) {
     return query
-      .select("source_audio_interface", "destination_audio_interface")
       .joins("source_audio_interface")
       .joins("destination_audio_interface")
       // .where("references", "deq", "owner", Data.buildRecordGlobalID("auth", "Client.Standalone", this.props.record.get("id")))
@@ -33,16 +32,28 @@ export default React.createClass({
   },
 
 
-  buildAttributes: function() {
-    return {
-      source_audio_interface: { renderer: "string", valueFunc: (record, attribute) => {
-        return record.get(attribute) != null && record.get(attribute).get("name"); }
-      },
-      destination_audio_interface: { renderer: "string", valueFunc: (record, attribute) => { return
-        record.get(attribute) != null && record.get(attribute).get("name"); }
-      },
+  buildFullAudioInterfaceName: function(linkRuleRecord, attribute, callback) {
+    if(linkRuleRecord.get(attribute)) {
+      let clientRecord = window.data.fromGlobalID(linkRuleRecord.get(attribute).get("references").get("owner"))
+
+      window.data.query(clientRecord.options.appName, clientRecord.options.model)
+        .select("name")
+        .where("id", "eq", clientRecord.options.recordId)
+        .on("fetch", (_event, _query, clientStandaloneRecord) => {
+          callback(`${clientStandaloneRecord.first().get("name")} - ${linkRuleRecord.get(attribute).get("name")}`)
+        })
+        .fetch();
     }
   },
+
+
+  buildAttributes: function() {
+    return {
+      source_audio_interface:      { renderer: "lambda", props: { lambda: this.buildFullAudioInterfaceName } },
+      destination_audio_interface: { renderer: "lambda", props: { lambda: this.buildFullAudioInterfaceName } },
+    }
+  },
+
 
   render: function() {
     return (
