@@ -80,16 +80,16 @@ const CalendarRow = React.createClass({
         <td className="ScheduleDailyWidget-CalendarRow-items">
           {hourMarker}
           {items.filter((item) => {
-            return item.get("start_at").isBetween(hourStart, hourStop);
+            const start = item.get("start_at");
+            return start.isBefore(hourStop) && !hourStart.isAfter(start);
 
           }).map((item) => {
             if(item.get("stop_at").isAfter(item.get("start_at").clone().endOf("hour"))) {
-              debugger;
               return (
                 <div
                     key={item.get("id")}
                     className="ScheduleDailyWidget-CalendarRow-item"
-                    style={{top: (item.get("start_at").minutes() / 59 * 100) + "%", bottom: "0" }}>
+                    style={{top: (item.get("start_at").minutes() / 60 * 100) + "%", bottom: "0" }}>
                   <header>
                     {item.get("id")}
                     / {item.get("start_at").format()}
@@ -101,7 +101,12 @@ const CalendarRow = React.createClass({
 
             } else {
               return (
-                <div key={item.get("id")} className="ScheduleDailyWidget-CalendarRow-item" style={{top: (item.get("start_at").minutes() / 59 * 100) + "%", bottom: (100 - item.get("stop_at").minutes() / 59 * 100) + "%" }}>
+                <div
+                    key={item.get("id")}
+                    className="ScheduleDailyWidget-CalendarRow-item"
+                    style={{
+                      top: (item.get("start_at").minutes() / 60 * 100) + "%",
+                      bottom: (100 - item.get("stop_at").minutes() / 60 * 100) + "%" }}>
                   <header>
                     {item.get("id")}
                     / {item.get("start_at").format()}
@@ -119,7 +124,10 @@ const CalendarRow = React.createClass({
 
           }).map((item) => {
             return (
-              <div key={item.get("id")} className="ScheduleDailyWidget-CalendarRow-item" style={{bottom: "0", top: "-1px" }} />
+              <div
+                  key={item.get("id")}
+                  className="ScheduleDailyWidget-CalendarRow-item"
+                  style={{bottom: "0", top: "-1px" }} />
             );
           })}
 
@@ -130,7 +138,13 @@ const CalendarRow = React.createClass({
 
           }).map((item) => {
             return (
-              <div key={item.get("id")} className="item item-stop" style={{bottom: (100 - item.get("stop_at").minutes() / 59 * 100) + "%", top: "-1px" }} />
+              <div
+                  key={item.get("id")}
+                  className="ScheduleDailyWidget-CalendarRow-item"
+                  style={{
+                    bottom: (100 - item.get("stop_at").minutes() / 60 * 100) + "%",
+                    top: "-1px"
+                  }} />
             );
           })}
 
