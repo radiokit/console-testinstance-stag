@@ -1,0 +1,38 @@
+.TrackCursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  pointer-events: none;
+
+  &__line {
+    position: absolute;
+    top: 0;
+    left: -1px;
+    bottom: 0;
+    width: 2px;
+    box-sizing: border-box;
+    border: 1px solid black;
+  }
+
+  &__top {
+    position: absolute;
+    top: 0;
+    left: -6px;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-top-color: black;
+  }
+
+  &__bottom {
+    position: absolute;
+    bottom: 0;
+    left: -6px;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-bottom-color: black;
+  }
+}
