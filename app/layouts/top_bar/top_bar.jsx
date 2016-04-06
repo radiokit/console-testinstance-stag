@@ -14,7 +14,7 @@ import localeEN from './top_bar_en';
 Counterpart.registerTranslations("en", {topBarPartial: localeEN});
 Counterpart.registerTranslations("pl", {topBarPartial: localePL});
 
-export default React.createClass({
+const TopBar = React.createClass({
   contextTypes: {
     currentUserAccount: React.PropTypes.object,
     currentBroadcastChannel: React.PropTypes.object,
@@ -140,3 +140,5 @@ export default React.createClass({
     );
   }
 });
+
+export default TopBar;

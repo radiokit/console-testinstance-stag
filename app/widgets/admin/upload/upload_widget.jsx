@@ -23,8 +23,6 @@ import localeEN from './upload_widget_en';
 Counterpart.registerTranslations("en", {uploadWidget: localeEN});
 Counterpart.registerTranslations("pl", {uploadWidget: localePL});
 
-const emptyElement = (<div></div>);
-
 function renderQueueRow(file, i) {
   let badge = null;
   if (file.get("uploading")) {
@@ -64,12 +62,13 @@ const UploadWidget = React.createClass({
 
   renderDropzone: function () {
     return (
-      <Dropzone className="card style-primary upload-dropzone" onDrop={files => uploadDomain.upload(this.props.repository.get("id"), files)}>
-          <div className="card-body">
-            <form className="upload-dropzone" ref="uploadButton" className="upload-button">
-              <Translate content="uploadWidget.uploadInstructions" component="h3"/>
-            </form>
-          </div>
+      <Dropzone className="card style-primary upload-dropzone"
+                onDrop={files => uploadDomain.upload(this.props.repository.get("id"), files)}>
+        <div className="card-body">
+          <form className="upload-dropzone" ref="uploadButton" className="upload-button">
+            <Translate content="uploadWidget.uploadInstructions" component="h3"/>
+          </form>
+        </div>
       </Dropzone>
     );
   },
@@ -85,7 +84,7 @@ const UploadWidget = React.createClass({
     const queue = this.getQueue();
 
     if (!queue.count()) {
-      return emptyElement;
+      return null;
     }
 
     const cardBodyCN = classnames({
@@ -111,9 +110,7 @@ const UploadWidget = React.createClass({
               </tr>
               </thead>
               <tbody>
-              {
-                queue.map(renderQueueRow).toJS()
-              }
+              { queue.map(renderQueueRow).toJS() }
               </tbody>
             </table>
           </div>
