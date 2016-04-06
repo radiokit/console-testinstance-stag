@@ -1,5 +1,9 @@
 import React from 'react';
 import Translate from 'react-translate-component';
+import Counterpart from 'counterpart';
+
+Counterpart.registerTranslations("en", require('./IndexCreateAcknowledgement.locale.en.js'));
+Counterpart.registerTranslations("pl", require('./IndexCreateAcknowledgement.locale.pl.js'));
 
 
 export default React.createClass({

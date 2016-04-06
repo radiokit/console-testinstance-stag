@@ -14,6 +14,11 @@ export default {
           return "/apps/electron/transmissions/index";
         },
       },
+      patchbay: {
+        index: function(context) {
+          return "/apps/electron/patchbay/index";
+        },
+      },
     },
 
     broadcast: {

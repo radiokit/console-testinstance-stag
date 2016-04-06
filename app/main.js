@@ -15,9 +15,10 @@ import BroadcastApp from './apps/broadcast/app.jsx';
 import BroadcastPlaylistIndex from './apps/broadcast/playlist/index_view.jsx';
 import BroadcastLiveIndex from './apps/broadcast/live/index_view.jsx';
 import ElectronApp from './apps/electron/app.jsx';
-import ElectronDevicesIndex from './apps/electron/devices/index_view.jsx';
-import ElectronDevicesShow from './apps/electron/devices/show_view.jsx';
-import ElectronTransmissionsIndex from './apps/electron/transmissions/index_view.jsx';
+import ElectronDevicesIndex from './apps/electron/devices/IndexView.jsx';
+import ElectronDevicesShow from './apps/electron/devices/ShowView.jsx';
+import ElectronPatchbayIndex from './apps/electron/patchbay/IndexView.jsx';
+import ElectronTransmissionsIndex from './apps/electron/transmissions/IndexView.jsx';
 import InfrastructureApp from './apps/infrastructure/app.jsx';
 import InfrastructureComputingNodesIndex from './apps/infrastructure/computing_nodes/index_view.jsx';
 import InfrastructureExternalInputsIndex from './apps/infrastructure/external_inputs/index_view.jsx';
@@ -118,6 +119,9 @@ ReactDOM.render((
             </Route>
             <Route path="transmissions">
               <Route path="index" component={ElectronTransmissionsIndex} onEnter={pingGoogleAnalytics}/>
+            </Route>
+            <Route path="patchbay">
+              <Route path="index" component={ElectronPatchbayIndex} onEnter={pingGoogleAnalytics}/>
             </Route>
           </Route>
         </Route>

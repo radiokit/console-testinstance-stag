@@ -1,6 +1,7 @@
 import React from 'react';
 import Immutable from 'immutable';
 import { Data } from 'radiokit-api';
+import Counterpart from 'counterpart';
 
 import GridRow from '../../../widgets/admin/grid_row_widget.jsx';
 import GridCell from '../../../widgets/admin/grid_cell_widget.jsx';
@@ -9,6 +10,10 @@ import Loading from '../../../widgets/general/loading_widget.jsx';
 import Card from '../../../widgets/admin/card_widget.jsx';
 import Alert from '../../../widgets/admin/alert_widget.jsx';
 import VolumeTracker from '../../../widgets/general/volume_tracker_widget.jsx';
+
+
+Counterpart.registerTranslations("en", require('./IndexView.locale.en.js'));
+Counterpart.registerTranslations("pl", require('./IndexView.locale.pl.js'));
 
 
 export default React.createClass({
@@ -64,7 +69,7 @@ export default React.createClass({
 
 
   loadInputs: function() {
-    window.data
+    this.inputsQuery = window.data
       .query("plumber", "Media.Input.Stream.RTP")
       .select("id", "audio_interface")
       .joins("audio_interface")
@@ -77,6 +82,13 @@ export default React.createClass({
         }
       })
       .enableAutoUpdate();
+  },
+
+
+  componentWillUnmount: function() {
+    if(this.inputsQuery) {
+      this.inputsQuery.teardown();
+    }
   },
 
 
