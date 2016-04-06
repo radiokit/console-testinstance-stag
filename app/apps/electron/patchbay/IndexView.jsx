@@ -17,7 +17,7 @@ export default React.createClass({
   buildTabs: function() {
     return {
       table:    { element: IndexTablePartial, props: { contentPrefix: "apps.electron.patchbay.table" } },
-      // diagram:  { element: IndexDiagramPartial, props: { contentPrefix: "apps.electron.patchbay.diagram" } },
+      diagram:  { element: IndexDiagramPartial, props: { contentPrefix: "apps.electron.patchbay.diagram" } },
     }
   },
 
