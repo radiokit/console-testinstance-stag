@@ -73,6 +73,7 @@ export default React.createClass({
       .query("plumber", "Media.Input.Stream.RTP")
       .select("id", "audio_interface")
       .joins("audio_interface")
+      .order("id", "asc") // Better than nothing, FIXME should be inserted_at asc
       .on("fetch", (_event, _query, data) => {
         if(this.isMounted()) {
           this.setState({
