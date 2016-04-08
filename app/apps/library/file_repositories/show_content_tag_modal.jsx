@@ -10,6 +10,7 @@ const ShowContentTagModal = React.createClass({
   propTypes: {
     selectedRecordIds: React.PropTypes.object.isRequired,
     tagCategories: React.PropTypes.object.isRequired,
+    selectedTags: React.PropTypes.object.isRequired
   },
 
   getInitialState() {
@@ -17,12 +18,13 @@ const ShowContentTagModal = React.createClass({
       index: 0,
       selectedTagIds:[],
       deselectedTagIds:[],
+      tagsToAssign:[],
+      tagsToRemove:[],
       filesData: null
     }
   },
 
   selectTagId(tagId) {
-    console.log("selected tag " + tagId);
     let selectedTagIds = this.state.selectedTagIds;
     selectedTagIds.push(tagId);
     this.setState({
@@ -32,7 +34,6 @@ const ShowContentTagModal = React.createClass({
   },
 
   deselectTagId(tagId) {
-    console.log("deselected tag " + tagId);
     let deselectedTagIds = this.state.deselectedTagIds;
     deselectedTagIds.push(tagId);
     this.setState({
@@ -42,7 +43,6 @@ const ShowContentTagModal = React.createClass({
   },
 
   resetTagId(tagId) {
-    console.log("reseted tag " + tagId);
     this.setState({
       selectedTagIds: _.pull(this.state.selectedTagIds, tagId),
       deselectedTagIds: _.pull(this.state.deselectedTagIds, tagId),
@@ -54,20 +54,40 @@ const ShowContentTagModal = React.createClass({
   },
 
   getTagStatus(tagId) {
-    return {
-      selected: true,
-      indeterminate: true,
-    };
-  },
-
-  onTagAppliedSucess(record) {
-    this.setState({
-      index: this.state.index + 1
-    });
+    let occuranceCount = this.props.selectedTags[tagId] || 0;
+    if (occuranceCount === 0) {
+      return {
+        checked: false,
+        indeterminate: false
+      }
+    }
+    else {
+      let tagForAll = occuranceCount === this.props.selectedRecordIds.count();
+      return {
+        checked: tagForAll,
+        indeterminate: !tagForAll,
+      };
+    }
   },
 
   onPerform(index, recordId) {
-    this.onTagAppliedSucess();
+
+    console.log(this.state.selectedTagIds[0]);
+    window.data
+    .record("vault", "Data.Tag.Association")
+    .on("error", () => {
+      //FIXME
+    })
+    .on("loaded", () => {
+      if(this.isMounted()) {
+      this.setState({
+        index: this.state.index + 1
+      });
+    }
+    }).create({
+      tag_item_id: this.state.selectedTagIds[0],
+      record_file_id: recordId
+    });
   },
 
   renderCategoryTags: function(category) {
@@ -79,6 +99,8 @@ const ShowContentTagModal = React.createClass({
                 let onTagSelected = this.selectTagId.bind(null, tag.id);
                 let onTagDeselected = this.deselectTagId.bind(null, tag.id);
                 let onTagRestored = this.resetTagId.bind(null, tag.id);
+                let tagStatus = this.getTagStatus(tag.id);
+                console.log("rendering tag: " + tag.name + " with status " + JSON.stringify(tagStatus));
                 return (
                   <li key={ tag.id }>
                     <div className="card-head card-head-xs">
@@ -87,10 +109,11 @@ const ShowContentTagModal = React.createClass({
                       </header>
                       <div className="tools">
                         <Checkbox
+                          selected={tagStatus.checked}
                           onSelected={onTagSelected}
                           onDeselected={onTagDeselected}
                           onRestore={onTagRestored}
-                          indeterminate={this.getTagStatus(tag.id).indeterminate} />
+                          indeterminate={tagStatus.indeterminate} />
                       </div>
                     </div>
                   </li>
@@ -174,8 +197,8 @@ const Checkbox = React.createClass({
 
   getInitialState() {
     return {
-      checked: false,
-      indeterminate: false,
+      checked: this.props.checked,
+      indeterminate: this.props.indeterminate,
     }
   },
 

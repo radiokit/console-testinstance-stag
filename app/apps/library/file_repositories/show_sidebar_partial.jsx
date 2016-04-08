@@ -23,6 +23,10 @@ export default React.createClass({
     };
   },
 
+  componentDidMount() {
+    // console.log(this.props.record.toJS());
+  },
+
   onTagCategorySelected(tag) {
     this.props.onTagFilterUpdate(tag);
   },

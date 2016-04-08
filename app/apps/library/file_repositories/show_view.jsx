@@ -15,18 +15,14 @@ const ShowView = React.createClass({
     return {
         filter: null,
         categories:[],
+        stage: null,
     }
   },
 
   onTagFilterUpdate(f){
-
     this.setState({
       filter: f
     });
-  },
-
-  componentDidMount : function(){
-    this.queryTagCategories();
   },
 
   buildTabs() {
@@ -42,34 +38,6 @@ const ShowView = React.createClass({
     return {
       test: { element: SidebarPartial, props: { categories: this.state.categories, filter:this.state.filter, onTagFilterUpdate: this.onTagFilterUpdate }},
     }
-  },
-
-  modifyShowQuery(query) {
-
-   /* window.data
-      .query("vault", "Data.Tag.Category")
-      .select("id", "name", "tag_items")
-      .joins("tag_items")
-      .where("record_repository_id", "eq", this.context.params.id)
-      .on("fetch", (_eventName, _record, data) => {
-
-        if (this.isMounted()) {
-          this.setState({
-            categories: data,
-            loaded: true,
-          });
-        }
-      })
-      .on("error", () => {
-
-        if (this.isMounted()) {
-          this.setState({
-            loaded: true,
-            error: true,
-          });
-        }
-      })
-      .fetch();*/
   },
 
   modifyShowQuery(query) {

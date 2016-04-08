@@ -10,7 +10,7 @@ import UploadModal from './show_content_upload_modal.jsx';
 import MetadataModal from './show_content_metadata_modal.jsx';
 import TagModal from './show_content_tag_modal.jsx';
 
-export default React.createClass({
+const ShowContentPartial =  React.createClass({
 
   propTypes: {
     record: React.PropTypes.object.isRequired,
@@ -24,13 +24,39 @@ export default React.createClass({
   getInitialState() {
     return {
       selectedRecordIds: new Immutable.Seq().toIndexedSeq(),
+      selectedTags: {},
     };
   },
 
+  buildSelectedTags(selectedRecordIds) {
+    selectedRecordIds.count() > 0 && window.data
+      .query("vault", "Data.Tag.Association")
+      .select("record_file_id","tag_item_id")
+      .where("record_file_id","in", selectedRecordIds.toJS())
+      .on("error", () => {
+        if(this.isMounted()){
+          this.setState({
+            selectedRecordIds: selectedRecordIds
+          });
+        }
+      })
+      .on("fetch", (_event, _query, data) => {
+        if(this.isMounted()){
+          let selectedTags = {};
+          data.forEach((record) => {
+            selectedTags[record.get("tag_item_id")] = selectedTags[record.get("tag_item_id")] + 1 || 1;
+          });
+          console.log("should render");
+          this.setState({
+            selectedTags:selectedTags,
+            selectedRecordIds: selectedRecordIds
+          });
+        }
+      }).fetch();
+  },
+
   onTableSelect(selectedRecordIds) {
-    this.setState({
-      selectedRecordIds: selectedRecordIds
-    });
+    this.buildSelectedTags(selectedRecordIds);
   },
 
   buildTableAttributes() {
@@ -64,7 +90,8 @@ export default React.createClass({
       .where("record_repository_id", "eq", this.props.record.get("id"));
   },
 
-  render() {;
+  render() {
+    console.log("rendering");
     return (
       <TableBrowser
         onSelect={this.onTableSelect}
@@ -102,7 +129,13 @@ export default React.createClass({
                   labelTextKey={this.props.contentPrefix + ".actions.tags.assignTags"}
                   disabled={this.state.selectedRecordIds.count() === 0}
                   modalElement={TagModal}
-                  modalProps={{ selectedRecordIds: this.state.selectedRecordIds, tagCategories: this.props.record.get("tag_categories") }} />
+                  modalProps={
+                    {
+                      selectedRecordIds: this.state.selectedRecordIds,
+                      tagCategories: this.props.record.get("tag_categories"),
+                      selectedTags: this.state.selectedTags,
+                    }
+                  } />
               </ToolbarGroup>
             );
         }()}
@@ -125,3 +158,5 @@ export default React.createClass({
     );
   }
 });
+
+export default ShowContentPartial;

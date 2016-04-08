@@ -127,7 +127,6 @@ export default React.createClass({
     }
   },
 
-
   onSelectRecord: function(state, recordId, selectedRecordIds) {
     if(this.state.oldSelectedRecordIds && state === false) {
       this.setState({
@@ -136,7 +135,6 @@ export default React.createClass({
         selectedRecordIds: this.state.oldSelectedRecordIds.filterNot((x) => { return x === recordId }),
         oldSelectedRecordIds: undefined
       });
-
     } else {
       this.setState({
         selectedRecordIds: selectedRecordIds,
