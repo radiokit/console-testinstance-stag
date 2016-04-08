@@ -28,6 +28,24 @@ export default React.createClass({
 
   buildForm: function() {
     return {
+      source_audio_interface_id: {
+        type: "query",
+        appName: "plumber",
+        model: "Resource.Architecture.AudioInterface",
+        modifyQueryFunc: (query) => { return query.where("direction", "eq", "capture"); }, // TODO add scope limitation
+        validators: {
+          presence: true,
+        }
+      },
+      destination_audio_interface_id: {
+        type: "query",
+        appName: "plumber",
+        model: "Resource.Architecture.AudioInterface",
+        modifyQueryFunc: (query) => { return query.where("direction", "eq", "playback"); }, // TODO add scope limitation
+        validators: {
+          presence: true,
+        }
+      },
     }
   },
 

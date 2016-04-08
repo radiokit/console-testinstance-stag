@@ -14,6 +14,18 @@ export default {
                 action: {
                   proceed: "Add rule",
                   cancel: "Cancel",
+                  close: "Close",
+                },
+                form: {
+                  source_audio_interface_id: {
+                    label: "Source (audio interface)",
+                  },
+                  destination_audio_interface_id: {
+                    label: "Destination (audio interface)",
+                  },
+                  message: {
+                    acknowledgement: "Rule was successfully created",
+                  },
                 },
               },
               delete: {
