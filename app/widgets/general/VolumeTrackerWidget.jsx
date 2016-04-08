@@ -1,6 +1,6 @@
 import React from 'react';
 
-import VolumeTrackerCanvas from '../canvas/volume_tracker_canvas.js';
+import VolumeTrackerCanvas from '../canvas/VolumeTrackerCanvas.js';
 
 export default React.createClass({
   propTypes: {
@@ -20,7 +20,7 @@ export default React.createClass({
 
 
   componentDidMount: function() {
-    this.volumeTracker = VolumeTrackerCanvas.init(this.refs.canvas);
+    this.volumeTracker = new VolumeTrackerCanvas(this.refs.canvas);
 
     let channelName = this.props.model.replace(/\./g, "/").toLowerCase() + "/" + this.props.record.get("id");
 
@@ -44,7 +44,7 @@ export default React.createClass({
 
   onLevel: function(payload) {
     if(this.isMounted()) {
-      this.volumeTracker.push(new Date(payload.timestamp), 40, payload.params.peak); // read change sample duration
+      this.volumeTracker.push(new Date(payload.timestamp), 40, payload.params.peak); // TODO read change sample duration
     }
   },
 

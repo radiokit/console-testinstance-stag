@@ -9,7 +9,7 @@ import Section from '../../../widgets/admin/section_widget.jsx';
 import Loading from '../../../widgets/general/loading_widget.jsx';
 import Card from '../../../widgets/admin/card_widget.jsx';
 import Alert from '../../../widgets/admin/alert_widget.jsx';
-import VolumeTracker from '../../../widgets/general/volume_tracker_widget.jsx';
+import VolumeTracker from '../../../widgets/general/VolumeTrackerWidget.jsx';
 
 
 Counterpart.registerTranslations("en", require('./IndexView.locale.en.js'));
@@ -71,7 +71,7 @@ export default React.createClass({
   loadInputs: function() {
     this.inputsQuery = window.data
       .query("plumber", "Media.Input.Stream.RTP")
-      .select("id", "audio_interface")
+      .select("id", "audio_interface") // FIXME add where!
       .joins("audio_interface")
       .on("fetch", (_event, _query, data) => {
         if(this.isMounted()) {
@@ -113,15 +113,21 @@ export default React.createClass({
       <Section>
         {() => {
           return this.state.availableInputsRtp.map((input) => {
-            let audioInterfaceOwnerGlobalID = input.get("audio_interface").get("references").get("owner");
-            let audioInterfaceOwner = this.state.availableClients.find((client) => {
-              let clientGlobalID = Data.buildRecordGlobalID("auth", "Client.Standalone", client.get("id"));
-              return clientGlobalID === audioInterfaceOwnerGlobalID;
-            });
+            if(input.has("audio_interface") && input.get("audio_interface") !== null && input.get("audio_interface").has("references") && input.get("audio_interface").get("references") !== null) {
+              let audioInterfaceOwnerGlobalID = input.get("audio_interface").get("references").get("owner");
+              let audioInterfaceOwner = this.state.availableClients.find((client) => {
+                let clientGlobalID = Data.buildRecordGlobalID("auth", "Client.Standalone", client.get("id"));
+                return clientGlobalID === audioInterfaceOwnerGlobalID;
+              });
 
-            let clientName = audioInterfaceOwner.get("name");
-            let audioInterfaceName = input.get("audio_interface").get("name");
-            let name = `${clientName}: ${audioInterfaceName}`;
+              let clientName = audioInterfaceOwner.get("name");
+              let audioInterfaceName = input.get("audio_interface").get("name");
+              let name = `${clientName}: ${audioInterfaceName}`;
+            } else {
+              // It is unlikely that electron client will not be bound to
+              // any audio interface but let's handle this
+              let name = input.get("id");
+            }
 
             return (
               <GridRow key={input.get("id")}>
