@@ -20,13 +20,14 @@ export default {
                   os: "Wybierz instrukcję zgodną z systemem operacyjnym zainstalowanym na urządzeniu:",
                   android: {
                     header: "Android",
-                    instructions: "Znajdź aplikację Joint.FM w sklepie Google Play i zainstaluj ją.",
+                    instructions: "Znajdź aplikację RadioKit Electron w sklepie Google Play i zainstaluj ją.",
                     action_open: "Otwórz Google Play",
                   },
                   windows: {
                     header: "Windows",
                     instructions: "Pobierz aplikację z używając przycisku znajdującego się poniżej i zainstaluj ją.",
-                    action_open: "Pobierz",
+                    action_open_32bit: "32 bit",
+                    action_open_64bit: "64 bit",
                   },
                 }
               },

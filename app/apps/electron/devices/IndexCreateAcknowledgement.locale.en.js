@@ -20,13 +20,14 @@ export default {
                   os: "Choose instruction appropriate to the operating system installed on the device:",
                   android: {
                     header: "Android",
-                    instructions: "Find the app in the Google Play store and install it.",
+                    instructions: "Find the RadioKit Electron app in the Google Play store and install it.",
                     action_open: "Open Google Play",
                   },
                   windows: {
                     header: "Windows",
                     instructions: "Download application using button below and install it.",
-                    action_open: "Download",
+                    action_open_32bit: "32-bit",
+                    action_open_64bit: "64-bit",
                   },
                 }
               },
