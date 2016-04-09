@@ -27,7 +27,7 @@ export default React.createClass({
   loadClients: function() {
     window.data
       .query("auth", "Client.Standalone")
-      .select("id", "name")
+      .select("id", "name", "extra")
       .where("application", "eq", "electron")
       .where("account_id", "eq", this.context.currentUserAccount.get("id"))
       .on("fetch", (_event, _query, data) => {
@@ -68,15 +68,31 @@ export default React.createClass({
   },
 
 
+  buildMergedClients: function(clients, audioInterfaces) {
+    return clients.map((client) => {
+      let audioInterfacesOfClient = audioInterfaces.filter((audioInterface) => {
+        return
+          audioInterface.has("references") &&
+          audioInterface.get("references").has("owner") &&
+          audioInterface.get("references").get("owner") === Data.buildRecordGlobalID("auth", "Client.Standalone", client.get("id"));
+      });
+
+      return client.set("audio_interfaces", audioInterfacesOfClient);
+    });
+  },
+
+
   render: function() {
     if(this.state.loadedClients === null || this.state.loadedAudioInterfaces === null) {
       return (
         <div>Loading</div>
-      ); // FIXME
+      ); // FIXME use LoadingWidget
 
     } else {
+      let mergedClients = this.buildMergedClients(this.state.loadedClients, this.state.loadedAudioInterfaces);
+
       return (
-        <RoutingDiagramCanvas clients={this.state.loadedClients} audioInterfaces={this.state.loadedAudioInterfaces} />
+        <RoutingDiagramCanvas clients={mergedClients} />
       );
     }
   }
