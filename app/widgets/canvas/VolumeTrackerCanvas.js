@@ -1,7 +1,5 @@
-"use strict";
-
-var VolumeTracker = {
-  init: function(canvas, options) {
+class VolumeTracker {
+  constructor(canvas, options) {
     this.__canvas = canvas;
     this.__ctx = canvas.getContext("2d");
     this.__animationFrameId = null;
@@ -32,27 +30,27 @@ var VolumeTracker = {
     this.__render();
 
     return this;
-  },
+  }
 
 
-  start: function() {
+  start() {
     this.__nextAnimationFrame();
 
     return this;
-  },
+  }
 
 
-  stop: function() {
+  stop() {
     if(this.__animationFrameId !== null) {
       window.cancelAnimationFrame(this.__animationFrameId);
       this.__animationFrameId = null;
     }
 
     return this;
-  },
+  }
 
 
-  push: function(sampleStartTimestamp, sampleDuration, peakValues) {
+  push(sampleStartTimestamp, sampleDuration, peakValues) {
     for(var i = 0; i < this.__channelCount; i++) {
       var peakValue = peakValues[i];
       var boundaries = this.__cachedChannelVerticalBoundaries[i];
@@ -94,7 +92,7 @@ var VolumeTracker = {
     }
 
     return this;
-  },
+  }
 
 
   __readOptionPositiveInteger(options, key, defaultValue) {
@@ -105,7 +103,7 @@ var VolumeTracker = {
     }
 
     this.__createOptionGetter(key);
-  },
+  }
 
 
   __readOptionNegativeInteger(options, key, defaultValue) {
@@ -116,7 +114,7 @@ var VolumeTracker = {
     }
 
     this.__createOptionGetter(key);
-  },
+  }
 
 
   __readOptionString(options, key, defaultValue) {
@@ -127,33 +125,33 @@ var VolumeTracker = {
     }
 
     this.__createOptionGetter(key);
-  },
+  }
 
 
-  __createOptionGetter: function(key) {
+  __createOptionGetter(key) {
     this["get" + key[0].toUpperCase() + key.substr(1)] = function() {
       return this["__" + key];
     }
-  },
+  }
 
 
-  __render: function() {
+  __render() {
     this.__renderBackground();
     this.__renderChannels();
     this.__renderTimeAxis();
     this.__renderVolumeAxis();
-  },
+  }
 
 
-  __renderBackground: function() {
+  __renderBackground() {
     this.__ctx.save();
     this.__ctx.fillStyle = this.__backgroundColor;
     this.__ctx.fillRect(0, 0, this.__canvas.width, this.__canvas.height);
     this.__ctx.restore();
-  },
+  }
 
 
-  __renderChannels: function() {
+  __renderChannels() {
     this.__ctx.save();
     this.__ctx.fillStyle = this.__channelBackgroundColor;
 
@@ -163,10 +161,10 @@ var VolumeTracker = {
       this.__ctx.fillRect(0, boundaries[0], this.__cachedChannelAvailableWidth, boundaries[1]);
     }
     this.__ctx.restore();
-  },
+  }
 
 
-  __renderTimeAxis: function() {
+  __renderTimeAxis() {
     this.__ctx.save();
     this.__ctx.fillStyle = this.__timeAxisColor;
     this.__ctx.font = this.__timeAxisFontSize + "px " + this.__timeAxisFontName;
@@ -184,10 +182,10 @@ var VolumeTracker = {
       }
     }
     this.__ctx.restore();
-  },
+  }
 
 
-  __renderVolumeAxis: function() {
+  __renderVolumeAxis() {
     this.__ctx.save();
     this.__ctx.fillStyle = this.__volumeAxisColor;
     this.__ctx.font = this.__volumeAxisFontSize + "px " + this.__volumeAxisFontName;
@@ -202,10 +200,10 @@ var VolumeTracker = {
       this.__ctx.fillText((this.__channelVolumeHigh + " dB").replace("-", "−"), x, this.__cachedChannelVerticalBoundaries[i][0] + ((this.__channelVolumeHigh / this.__channelVolumeLow) * this.__cachedChannelVerticalBoundaries[i][1]));
     }
     this.__ctx.restore();
-  },
+  }
 
 
-  __renderSamples: function() {
+  __renderSamples() {
     this.__ctx.save();
     var now = new Date();
     var newSamples = [];
@@ -231,23 +229,23 @@ var VolumeTracker = {
 
     this.__samples = newSamples;
     this.__ctx.restore();
-  },
+  }
 
 
-  __nextAnimationFrame: function() {
+  __nextAnimationFrame() {
     this.__animationFrameId = window.requestAnimationFrame(this.__onAnimationFrame.bind(this));
-  },
+  }
 
 
-  __onAnimationFrame: function() {
+  __onAnimationFrame() {
     this.__renderChannels();
     this.__renderSamples();
 
     this.__nextAnimationFrame();
-  },
+  }
 
 
-  __cacheComputations: function() {
+  __cacheComputations() {
     this.__computeChannelColorsAsRgb();
     this.__computeChannelAvailableHeight();
     this.__computeVolumeAxisTextWidth();
@@ -257,10 +255,10 @@ var VolumeTracker = {
     for(var i = 0; i < this.__channelCount; i++) {
       this.__cachedChannelVerticalBoundaries.push(this.__computeChannelVerticalBoundary(i));
     }
-  },
+  }
 
 
-  __computeVolumeAxisTextWidth: function() {
+  __computeVolumeAxisTextWidth() {
     this.__ctx.fillStyle = this.__volumeAxisColor;
     this.__ctx.font = this.__volumeAxisFontSize + "px " + this.__volumeAxisFontName;
     this.__ctx.textAlign = "left";
@@ -270,20 +268,20 @@ var VolumeTracker = {
     var highWidth = this.__ctx.measureText((this.__channelVolumeHigh + " dB").replace("-", "−")).width;
 
     this.__cachedVolumeAxisTextWidth = Math.max(lowWidth, mediumWidth, highWidth);
-  },
+  }
 
 
-  __computeChannelAvailableWidth: function() {
+  __computeChannelAvailableWidth() {
     this.__cachedChannelAvailableWidth = this.__canvas.width - this.__cachedVolumeAxisTextWidth - this.__volumeAxisLeftMargin;
-  },
+  }
 
 
-  __computeChannelAvailableHeight: function() {
+  __computeChannelAvailableHeight() {
     this.__cachedChannelAvailableHeight = this.__canvas.height - this.__timeAxisFontSize - this.__timeAxisTopMargin;
-  },
+  }
 
 
-  __computeChannelVerticalBoundary: function(channelNumber) {
+  __computeChannelVerticalBoundary(channelNumber) {
     var totalChannelMarginsHeight = (this.__channelCount - 1) * this.__channelMargin;
     var channelHeight = Math.round((this.__cachedChannelAvailableHeight - totalChannelMarginsHeight) / this.__channelCount);
     var channelTop = channelHeight * channelNumber + (channelNumber > 0 ? this.__channelMargin : 0);
@@ -292,42 +290,42 @@ var VolumeTracker = {
     arr[0] = channelTop;
     arr[1] = channelHeight;
     return arr;
-  },
+  }
 
 
-  __computeChannelColorsAsRgb: function() {
+  __computeChannelColorsAsRgb() {
     this.__cachedChannelForegroundColorLowAsRgb = this.__colorHexToRgb(this.__channelForegroundColorLow);
     this.__cachedChannelForegroundColorMediumAsRgb = this.__colorHexToRgb(this.__channelForegroundColorMedium);
     this.__cachedChannelForegroundColorHighAsRgb = this.__colorHexToRgb(this.__channelForegroundColorHigh);
-  },
+  }
 
 
-  __colorHexToRgb: function(hex) {
+  __colorHexToRgb(hex) {
     var result = /^#?([a-f\d]{1,2})([a-f\d]{1,2})([a-f\d]{1,2})$/i.exec(hex);
     return result ? Uint8ClampedArray.of(
       parseInt(result[1].length === 1 ? result[1] + "" + result[1] : result[1], 16),
       parseInt(result[2].length === 1 ? result[2] + "" + result[2] : result[2], 16),
       parseInt(result[3].length === 1 ? result[3] + "" + result[3] : result[3], 16)
     ) : null;
-  },
+  }
 
 
   __colorRgbToHex(color) {
     return "#" + ((1 << 24) + (color[0] << 16) + (color[1] << 8) + color[2]).toString(16).slice(1);
-  },
+  }
 
 
-  __computeColorBetween: function(distance, begin, end) {
-      var w = distance * 2 - 1;
-      var w1 = (w + 1) / 2.0;
-      var w2 = 1 - w1;
+  __computeColorBetween(distance, begin, end) {
+    var w = distance * 2 - 1;
+    var w1 = (w + 1) / 2.0;
+    var w2 = 1 - w1;
 
-      var rgb = Uint8ClampedArray.of(
-        parseInt(begin[0] * w1 + end[0] * w2),
-        parseInt(begin[1] * w1 + end[1] * w2),
-        parseInt(begin[2] * w1 + end[2] * w2));
+    var rgb = Uint8ClampedArray.of(
+      parseInt(begin[0] * w1 + end[0] * w2),
+      parseInt(begin[1] * w1 + end[1] * w2),
+      parseInt(begin[2] * w1 + end[2] * w2));
 
-      return rgb;
+    return rgb;
   }
 }
 

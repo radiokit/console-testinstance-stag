@@ -14,6 +14,18 @@ export default {
                 action: {
                   proceed: "Dodaj regułę",
                   cancel: "Anuluj",
+                  close: "Zamknij",
+                },
+                form: {
+                  source_audio_interface_id: {
+                    label: "Źródło (interfejs audio)",
+                  },
+                  destination_audio_interface_id: {
+                    label: "Cel (interfejs audio)",
+                  },
+                },
+                message: {
+                  acknowledgement: "Pomyślnie utworzono regułę",
                 },
               },
               delete: {

@@ -9,7 +9,6 @@ import Section from '../../../widgets/admin/section_widget.jsx';
 import Loading from '../../../widgets/general/loading_widget.jsx';
 import Card from '../../../widgets/admin/card_widget.jsx';
 import Alert from '../../../widgets/admin/alert_widget.jsx';
-import VolumeTracker from '../../../widgets/general/volume_tracker_widget.jsx';
 
 import ClientLinkDiagram from './ClientLinkDiagram.jsx';
 

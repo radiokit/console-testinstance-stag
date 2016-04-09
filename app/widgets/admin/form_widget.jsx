@@ -1,7 +1,7 @@
 import React from 'react';
 import Translate from 'react-translate-component';
 import Counterpart from 'counterpart';
-
+import clone from 'clone';
 
 const FormWidget = React.createClass({
   propTypes: {
@@ -20,6 +20,7 @@ const FormWidget = React.createClass({
   getInitialState: function() {
     return {
       errors: {},
+      deferredFieldsData: {},
     }
   },
 
@@ -62,6 +63,40 @@ const FormWidget = React.createClass({
         errors: errors
       });
       return false;
+    }
+  },
+
+
+  componentDidMount: function() {
+    if(this.formHasDeferredFields()) {
+      Object.keys(this.props.form).map((fieldName) => {
+        let fieldConfig = this.props.form[fieldName];
+
+        switch (fieldConfig.type) {
+          case "query":
+            let query = window.data
+              .query(fieldConfig.appName, fieldConfig.model)
+              .select("id", "name")
+              .on("fetch", (_eventName, _query, data) => {
+                if(this.isMounted()) {
+                  let fieldsData = clone(this.state.deferredFieldsData);
+                  fieldsData[fieldName] = data;
+
+                  this.setState({
+                    deferredFieldsData: fieldsData
+                  });
+                }
+              });
+
+            if(typeof(fieldConfig.modifyQueryFunc) === "function") {
+              query = fieldConfig.modifyQueryFunc(query);
+            }
+
+            query.fetch();
+
+            break;
+        }
+      });
     }
   },
 
@@ -113,8 +148,44 @@ const FormWidget = React.createClass({
   },
 
 
+  formHasDeferredFields: function() {
+    let hasDeferredFields = false;
+
+    Object.keys(this.props.form).map((fieldName) => {
+      let fieldConfig = this.props.form[fieldName];
+
+      switch (fieldConfig.type) {
+        case "query":
+          hasDeferredFields = true;
+          break;
+      }
+    });
+
+    return hasDeferredFields;
+  },
+
+
+  formLoadedDeferredFields: function() {
+    let loadedDeferredFields = true;
+
+    Object.keys(this.props.form).map((fieldName) => {
+      let fieldConfig = this.props.form[fieldName];
+
+      switch (fieldConfig.type) {
+        case "query":
+          if(!this.state.deferredFieldsData.hasOwnProperty(fieldName)) {
+            loadedDeferredFields = false;
+          }
+          break;
+      }
+    });
+
+    return loadedDeferredFields;
+  },
+
+
   renderForm: function() {
-    return Object.keys(this.props.form).map((fieldName) => {
+    let fields = Object.keys(this.props.form).map((fieldName) => {
       let fieldConfig = this.props.form[fieldName];
       let input;
       let hint;
@@ -155,6 +226,18 @@ const FormWidget = React.createClass({
             { valuesSorted.map((value) => {
                 return (<Translate key={ value } value={ value } component="option" content={ `${this.props.contentPrefix}.${fieldName}.values.${value}` } />);
               }) }
+          </select>
+        );
+        break;
+
+      case "query":
+        input = (
+          <select className="form-control" id={ fieldName } ref={ fieldName } required={ required }>
+            { this.state.deferredFieldsData[fieldName].map((record) => {
+              return (<option key={ record.get("id") } value={ record.get("id") }>
+                        { record.get("name") }
+                      </option>);
+            })}
           </select>
         );
         break;
@@ -227,16 +310,27 @@ const FormWidget = React.createClass({
         );
       }
     });
+
+    return (
+      <form className="form" role="form" ref="form" onSubmit={ this.onFormSubmit }>
+        {fields}
+      </form>
+    );
   },
 
 
 
   render: function() {
-    return (
-      <form className="form" role="form" ref="form" onSubmit={ this.onFormSubmit }>
-        { this.renderForm() }
-      </form>
-    );
+    if(this.formHasDeferredFields()) {
+      if(this.formLoadedDeferredFields()) {
+        return this.renderForm();
+      } else {
+        return (<div>...</div>); // FIXME
+      }
+
+    } else {
+      return this.renderForm();
+    }
   }
 });
 
