@@ -2,7 +2,7 @@ import React from 'react';
 import Immutable from 'immutable';
 import { Data } from 'radiokit-api';
 
-import RoutingDiagram from './RoutingDiagram.jsx';
+import RoutingDiagramCanvas from './RoutingDiagramCanvas.jsx';
 
 
 export default React.createClass({
@@ -76,7 +76,7 @@ export default React.createClass({
 
     } else {
       return (
-        <RoutingDiagram clients={this.state.loadedClients} audioInterfaces={this.state.loadedAudioInterfaces} />
+        <RoutingDiagramCanvas clients={this.state.loadedClients} audioInterfaces={this.state.loadedAudioInterfaces} />
       );
     }
   }
