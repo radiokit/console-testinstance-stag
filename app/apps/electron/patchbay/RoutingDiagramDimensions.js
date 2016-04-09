@@ -1,15 +1,30 @@
 export default {
   getClientWidth: function() {
-    return 100;
+    return 200;
   },
 
 
   getClientHeight: function(audioInterfacesCount) {
-    return audioInterfacesCount * this.getAudioInterfaceHeight() + 100;
+    let height = audioInterfacesCount * (this.getAudioInterfaceHeight() + this.getAudioInterfaceMargin()) + this.getAudioInterfaceMargin() * 2;
+    if(height < 60) {
+      return 60;
+    } else {
+      return height;
+    }
   },
 
 
   getAudioInterfaceHeight: function() {
-    return 20;
-  }
+    return 16;
+  },
+
+
+  getAudioInterfaceWidth: function() {
+    return 16;
+  },
+
+
+  getAudioInterfaceMargin: function() {
+    return 8;
+  },
 }

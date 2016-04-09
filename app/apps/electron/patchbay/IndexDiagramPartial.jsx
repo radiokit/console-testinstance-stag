@@ -45,13 +45,15 @@ export default React.createClass({
 
   loadAudioInterfaces: function() {
     let clientsGlobalIDs = this.state.loadedClients.map((client) => { return Data.buildRecordGlobalID("auth", "Client.Standalone", client.get("id")); }).toJS();
+    let clientsCondition = ["references", "din", "owner"].concat(clientsGlobalIDs)
 
     let query = window.data
       .query("plumber", "Resource.Architecture.AudioInterface")
-      .select("id", "name", "config_routing_link_rules_as_source", "config_routing_link_rules_as_destination")
+      .select("id", "name", "direction", "config_routing_link_rules_as_source", "config_routing_link_rules_as_destination", "references")
       .joins("config_routing_link_rules_as_source")
       .joins("config_routing_link_rules_as_destination")
-      .where.apply(this, ["references", "din", "owner"].concat(clientsGlobalIDs))
+      .order("name", "asc")
+      // .where.apply(this, clientsCondition)
       .on("fetch", (_event, _query, data) => {
         if(this.isMounted()) {
           this.setState({
@@ -71,10 +73,11 @@ export default React.createClass({
   buildMergedClients: function(clients, audioInterfaces) {
     return clients.map((client) => {
       let audioInterfacesOfClient = audioInterfaces.filter((audioInterface) => {
-        return
-          audioInterface.has("references") &&
-          audioInterface.get("references").has("owner") &&
-          audioInterface.get("references").get("owner") === Data.buildRecordGlobalID("auth", "Client.Standalone", client.get("id"));
+        return (
+          audioInterface.has("references") && audioInterface.get("references") !== null &&
+          audioInterface.get("references").has("owner") && audioInterface.get("references").has("owner") !== null &&
+          audioInterface.get("references").get("owner") === Data.buildRecordGlobalID("auth", "Client.Standalone", client.get("id"))
+        );
       });
 
       return client.set("audio_interfaces", audioInterfacesOfClient);

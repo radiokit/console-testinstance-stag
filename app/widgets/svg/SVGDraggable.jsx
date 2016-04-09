@@ -47,32 +47,29 @@ export default React.createClass({
 
 
   onMouseUp: function(e) {
-    this.setState({
-      dragging: false,
-      dragStartX: null,
-      dragStartY: null,
-      dragStartClientX: null,
-      dragStartClientY: null,
-    }, () => {
-      if(this.props.onDragStop) {
-        this.props.onDragStop(this.state.x, this.state.y);
-      }
-    });
+    this.stopDragging();
   },
 
 
   onMouseOut: function(e) {
-    this.setState({
-      dragging: false,
-      dragStartX: null,
-      dragStartY: null,
-      dragStartClientX: null,
-      dragStartClientY: null,
-    }, () => {
-      if(this.props.onDragStop) {
-        this.props.onDragStop(this.state.x, this.state.y);
-      }
-    });
+    this.stopDragging();
+  },
+
+
+  stopDragging: function() {
+    if(this.state.dragging) {
+      this.setState({
+        dragging: false,
+        dragStartX: null,
+        dragStartY: null,
+        dragStartClientX: null,
+        dragStartClientY: null,
+      }, () => {
+        if(this.props.onDragStop) {
+          this.props.onDragStop(this.state.x, this.state.y);
+        }
+      });
+    }
   },
 
 

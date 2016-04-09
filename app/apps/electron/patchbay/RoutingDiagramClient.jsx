@@ -19,7 +19,7 @@ export default React.createClass({
       x: this.props.client.get("extra").get("electron").get("diagram").get("x"),
       y: this.props.client.get("extra").get("electron").get("diagram").get("y"),
       width: RoutingDiagramDimensions.getClientWidth(),
-      height: RoutingDiagramDimensions.getClientHeight(3),
+      height: RoutingDiagramDimensions.getClientHeight(this.props.client.get("audio_interfaces").count()),
     }
   },
 
@@ -86,8 +86,11 @@ export default React.createClass({
           {this.props.client.get("name")}
         </text>
 
-        {this.props.client.get("audio_interfaces").map((audioInterface) => {
-          return (<RoutingDiagramAudioInterface key={audioInterface.get("id")} />);
+
+        {this.props.client
+          .get("audio_interfaces")
+          .map((audioInterface, i) => {
+          return (<RoutingDiagramAudioInterface key={audioInterface.get("id")} audioInterface={audioInterface} index={i} />);
         })}
 
       </SVGDraggable>
