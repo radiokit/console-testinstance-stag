@@ -1,18 +1,19 @@
-.mdi-chevron-right {
-  transition: all 0.1s linear;
-  font-size: 1.4em;
-}
+.ShowTagsSchemaPartial {
+  .mdi-chevron-right {
+    transition: all 0.1s linear;
+    font-size: 1.4em;
+  }
 
-.card-head .mdi-chevron-right {
-  transform: rotate(90deg);
-}
+  .card-head .mdi-chevron-right {
+    transform: rotate(90deg);
+  }
 
-.card-head .collapsed  .mdi-chevron-right {
-  transform: rotate(0deg);
-}
+  .card-head .collapsed  .mdi-chevron-right {
+    transform: rotate(0deg);
+  }
 
-.card-head-sm{
-  padding-left: 36px;
-  background-color: #f2f2f2;
+  .card-head-sm {
+    padding-left: 36px;
+    background-color: #f2f2f2;
+  }
 }
-

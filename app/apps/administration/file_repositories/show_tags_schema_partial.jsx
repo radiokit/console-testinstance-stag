@@ -121,7 +121,7 @@ const ShowTagsSchemaPartial = React.createClass({
 
   renderCategoryTags(category) {
     return (
-      <div>
+      <div className="ShowTagsSchemaPartial">
         <ul className="list">
           { _.sortBy(category.tag_items,'name').map((tag) => {
             let onDeleteTagListener = this.showDeleteTagModal.bind(undefined, tag);
