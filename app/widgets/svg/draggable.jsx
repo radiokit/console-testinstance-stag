@@ -37,6 +37,8 @@ export default React.createClass({
       dragStartClientX: e.clientX,
       dragStartClientY: e.clientY,
     }, () => {
+      this.refs.container.parentNode.appendChild(this.refs.container);
+
       if(this.props.onDragStart) {
         this.props.onDragStart(this.state.x, this.state.y);
       }
@@ -89,7 +91,7 @@ export default React.createClass({
 
   render: function() {
     return (
-      <g
+      <g ref="container"
         transform={`translate(${this.state.x},${this.state.y})`}
         onMouseDown={this.onMouseDown}
         onMouseUp={this.onMouseUp}
