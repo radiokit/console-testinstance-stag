@@ -1,4 +1,9 @@
 export default {
+  getHeaderHeight: function() {
+    return 8;
+  },
+
+
   getClientWidth: function() {
     return 200;
   },

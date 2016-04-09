@@ -75,14 +75,14 @@ export default React.createClass({
           stroke={this.props.borderColor} />
 
         <text
-          transform={`translate(${this.state.width/2},${20})`}
+          transform={`translate(${this.state.width/2},${-1 * RoutingDiagramDimensions.getHeaderHeight()})`}
           x="0"
           y="0"
           textAnchor="middle"
           fontFamily="Roboto,Helvetica,Arial,sans"
           fontSize="14px"
           stroke="none"
-          fill={this.props.foregroundColor}>
+          fill={this.props.borderColor}>
           {this.props.client.get("name")}
         </text>
 
