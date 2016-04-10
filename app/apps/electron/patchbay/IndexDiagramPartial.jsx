@@ -20,6 +20,7 @@ export default React.createClass({
     return {
       loadedClients: null,
       loadedAudioInterfaces: null,
+      loadedLinkRules: null,
     }
   },
 
@@ -49,15 +50,31 @@ export default React.createClass({
 
     let query = window.data
       .query("plumber", "Resource.Architecture.AudioInterface")
-      .select("id", "name", "direction", "config_routing_link_rules_as_source", "config_routing_link_rules_as_destination", "references")
-      .joins("config_routing_link_rules_as_source")
-      .joins("config_routing_link_rules_as_destination")
+      .select("id", "name", "direction", "references")
       .order("name", "asc")
-      // .where.apply(this, clientsCondition)
+      // .where.apply(this, clientsCondition) // FIXME
       .on("fetch", (_event, _query, data) => {
         if(this.isMounted()) {
           this.setState({
             loadedAudioInterfaces: data
+          }, () => {
+            this.loadLinkRules();
+          });
+        }
+      })
+      .fetch();
+  },
+
+
+  loadLinkRules: function() {
+    let query = window.data
+      .query("plumber", "Config.Routing.LinkRule")
+      .select("id", "source_audio_interface_id", "destination_audio_interface_id")
+      .where("source_audio_interface_id", "in", this.state.loadedAudioInterfaces.map((audioInterface) => { return audioInterface.get("id"); }).toJS())
+      .on("fetch", (_event, _query, data) => {
+        if(this.isMounted()) {
+          this.setState({
+            loadedLinkRules: data
           });
         }
       })
@@ -70,32 +87,19 @@ export default React.createClass({
   },
 
 
-  buildMergedClients: function(clients, audioInterfaces) {
-    return clients.map((client) => {
-      let audioInterfacesOfClient = audioInterfaces.filter((audioInterface) => {
-        return (
-          audioInterface.has("references") && audioInterface.get("references") !== null &&
-          audioInterface.get("references").has("owner") && audioInterface.get("references").has("owner") !== null &&
-          audioInterface.get("references").get("owner") === Data.buildRecordGlobalID("auth", "Client.Standalone", client.get("id"))
-        );
-      });
 
-      return client.set("audio_interfaces", audioInterfacesOfClient);
-    });
-  },
 
 
   render: function() {
-    if(this.state.loadedClients === null || this.state.loadedAudioInterfaces === null) {
+    if(this.state.loadedClients === null || this.state.loadedAudioInterfaces === null || this.state.loadedLinkRules === null) {
       return (
         <div>Loading</div>
       ); // FIXME use LoadingWidget
 
     } else {
-      let mergedClients = this.buildMergedClients(this.state.loadedClients, this.state.loadedAudioInterfaces);
 
       return (
-        <RoutingDiagramCanvas clients={mergedClients} />
+        <RoutingDiagramCanvas clients={this.state.loadedClients} audioInterfaces={this.state.loadedAudioInterfaces} linkRules={this.state.loadedLinkRules} />
       );
     }
   }
