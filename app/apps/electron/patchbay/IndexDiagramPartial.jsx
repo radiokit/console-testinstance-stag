@@ -129,12 +129,24 @@ export default React.createClass({
   },
 
 
-  componentDidMount: function() {
-    this.loadClients();
+  onClientDragStop: function(client, x, y) {
+    window.data.record("auth", "Client.Standalone", client.get("id"))
+      .update({
+        extra: {
+          electron: {
+            diagram: {
+              x: x,
+              y: y
+            }
+          }
+        }
+      });
   },
 
 
-
+  componentDidMount: function() {
+    this.loadClients();
+  },
 
 
   render: function() {
@@ -146,7 +158,11 @@ export default React.createClass({
     } else {
 
       return (
-        <RoutingDiagramCanvas clients={this.state.loadedClients} audioInterfaces={this.state.loadedAudioInterfaces} linkRules={this.state.loadedLinkRules} />
+        <RoutingDiagramCanvas
+          clients={this.state.loadedClients}
+          audioInterfaces={this.state.loadedAudioInterfaces}
+          linkRules={this.state.loadedLinkRules}
+          onClientDragStop={this.onClientDragStop} />
       );
     }
   }
