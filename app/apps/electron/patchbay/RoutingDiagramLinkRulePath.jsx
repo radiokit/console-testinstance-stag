@@ -38,11 +38,11 @@ const RoutingDiagramLinkRulePath = (props) => {
   let startPoint = `${linkRuleSourceX} ${linkRuleSourceY}`;
 
   // Compute bezier curve's anchors coordinates
-  let startPointCurveX = linkRuleSourceX - horizontalCurveOffset;
+  let startPointCurveX = linkRuleSourceX + horizontalCurveOffset;
   let startPointCurveY = linkRuleSourceY;
   let startPointCurve = `${startPointCurveX} ${startPointCurveY}`;
 
-  let stopPointCurveX = linkRuleDestinationX + horizontalCurveOffset;
+  let stopPointCurveX = linkRuleDestinationX - horizontalCurveOffset;
   let stopPointCurveY = linkRuleDestinationY;
   let stopPointCurve = `${stopPointCurveX} ${stopPointCurveY}`;
 
