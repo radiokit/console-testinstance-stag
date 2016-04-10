@@ -161,11 +161,11 @@ export default React.createClass({
 
           {this.getAudioInterfacesOfClient(client)
             .map((audioInterface, index) => {
-              let audioInterfaceX = (audioInterface.get("direction") === "capture" ? 0 : RoutingDiagramDimensions.getClientWidth()) + RoutingDiagramDimensions.getAudioInterfaceWidth() / -2;
+              let audioInterfaceX = (audioInterface.get("direction") === "capture" ? RoutingDiagramDimensions.getClientWidth() : 0) + RoutingDiagramDimensions.getAudioInterfaceWidth() / -2;
               let audioInterfaceY = (index * (RoutingDiagramDimensions.getAudioInterfaceMargin() + RoutingDiagramDimensions.getAudioInterfaceHeight()) + RoutingDiagramDimensions.getAudioInterfaceMargin());
 
               linkCoordinates[audioInterface.get("id")] = {
-                x: clientX + audioInterfaceX + (audioInterface.get("direction") === "playback" ? RoutingDiagramDimensions.getAudioInterfaceWidth() : 0),
+                x: clientX + audioInterfaceX + (audioInterface.get("direction") === "capture" ? RoutingDiagramDimensions.getAudioInterfaceWidth() : 0),
                 y: clientY + audioInterfaceY + RoutingDiagramDimensions.getAudioInterfaceHeight() / 2
               };
 
@@ -184,9 +184,9 @@ export default React.createClass({
                     onClick={this.onAudioInterfaceClick} />
 
                   <text
-                    x={audioInterface.get("direction") === "capture" ? RoutingDiagramDimensions.getAudioInterfaceWidth() * 1.25 : RoutingDiagramDimensions.getAudioInterfaceWidth() * -0.25}
+                    x={audioInterface.get("direction") === "capture" ? RoutingDiagramDimensions.getAudioInterfaceWidth() * -0.25 : RoutingDiagramDimensions.getAudioInterfaceWidth() * 1.25}
                     y="12"
-                    textAnchor={audioInterface.get("direction") === "capture" ? "start" : "end"}
+                    textAnchor={audioInterface.get("direction") === "capture" ? "end" : "start"}
                     fontFamily="Roboto,Helvetica,Arial,sans"
                     fontSize="10px"
                     stroke="none"
