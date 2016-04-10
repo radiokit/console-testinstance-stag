@@ -15,67 +15,14 @@ export default React.createClass({
   },
 
 
-  getInitialState: function() {
-    return {
-      audioInterfacesLinkCoordinates: null,
-    }
-  },
-
-
-  clientHasExtra: function(client) {
-    return (
-      client.has("extra") && client.get("extra") !== null &&
-      client.get("extra").has("electron") && client.get("extra").get("electron") !== null &&
-      client.get("extra").get("electron").has("diagram") && client.get("extra").get("electron").get("diagram") !== null &&
-      client.get("extra").get("electron").get("diagram").has("x") && client.get("extra").get("electron").get("diagram").get("x") !== null &&
-      client.get("extra").get("electron").get("diagram").has("x") && client.get("extra").get("electron").get("diagram").get("y") !== null
-    );
-  },
-
-
-  buildDefaultClientExtra: function() {
-    return Immutable.fromJS({
-      electron: {
-        diagram: {
-           x: 0,
-           y: 0,
-         }
-       }
-     }
-   );
-  },
-
-
-  setDefaultClientExtra: function(client) {
-    if(!client.has("extra") || client.get("extra") === null) {
-      return client.set("extra", this.buildDefaultClientExtra());
-
-    } else {
-      return client.set("extra", client.get("extra").merge(this.buildDefaultClientExtra()));
-    }
-  },
-
-
-  buildClientsWithExtra: function(clients) {
-    // TODO improve algorithm that will append X/Y positions to clients
-    // if it's necessary so it does not assign 0, 0 all the time
-    return clients.map((client) => {
-      if(!this.clientHasExtra(client)) {
-        return this.setDefaultClientExtra(client);
-      } else {
-        return client;
-      }
-    });
-  },
-
-
-
   getAudioInterfacesOfClient: function(client) {
+    let clientGlobalID = Data.buildRecordGlobalID("auth", "Client.Standalone", client.get("id"));
+
     return this.props.audioInterfaces.filter((audioInterface) => {
       return (
         audioInterface.has("references") && audioInterface.get("references") !== null &&
         audioInterface.get("references").has("owner") && audioInterface.get("references").has("owner") !== null &&
-        audioInterface.get("references").get("owner") === Data.buildRecordGlobalID("auth", "Client.Standalone", client.get("id"))
+        audioInterface.get("references").get("owner") === clientGlobalID
       );
     });
   },
@@ -90,19 +37,22 @@ export default React.createClass({
   },
 
 
-  onClientDragStop: function(x, y) {
+  onClientDragMove: function(client, x, y) {
+    this.clientsCoordinates = this.clientsCoordinates.set(client.get("id"), new Immutable.Map({x: x, y: y}));
+    this.forceUpdate();
+
     // FIXME
-    window.data.record("auth", "Client.Standalone", this.props.client.get("id"))
-      .update({
-        extra: {
-          electron: {
-            diagram: {
-              x: x,
-              y: y
-            }
-          }
-        }
-      });
+    // window.data.record("auth", "Client.Standalone", this.props.client.get("id"))
+    //   .update({
+    //     extra: {
+    //       electron: {
+    //         diagram: {
+    //           x: x,
+    //           y: y
+    //         }
+    //       }
+    //     }
+    //   });
   },
 
 
@@ -111,21 +61,34 @@ export default React.createClass({
   },
 
 
-  render: function() {
-    let clientsWithExtra = this.buildClientsWithExtra(this.props.clients);
+  componentWillMount: function() {
+    // We do not use state as it's updates are not not happening immediately
+    // which results in sluggish UI
+    this.clientsCoordinates = new Immutable.Map();
+  },
 
+
+  componentWillUnount: function() {
+    delete this.clientsCoordinates;
+  },
+
+
+  render: function() {
     var linkCoordinates = {};
 
-    let clientsDiagram = clientsWithExtra.map((client) => {
-      let clientX = client.get("extra").get("electron").get("diagram").get("x");
-      let clientY = client.get("extra").get("electron").get("diagram").get("y");
+    // Render all clients along with their audio interfaces
+    let clientsDiagram = this.props.clients.map((client) => {
+      // If client was moved, use its new coordinates, otherwise get one that came with props
+      let clientX = this.clientsCoordinates.has(client.get("id")) ? this.clientsCoordinates.get(client.get("id")).get("x") : client.get("extra").get("electron").get("diagram").get("x");
+      let clientY = this.clientsCoordinates.has(client.get("id")) ? this.clientsCoordinates.get(client.get("id")).get("y") : client.get("extra").get("electron").get("diagram").get("y");
 
+      // Render dragable box + shadow + client's name
       return (
         <SVGDraggable
           key={`client-${client.get("id")}`}
           x={clientX}
           y={clientY}
-          onDragStop={this.onClientDragStop}>
+          onDragMove={this.onClientDragMove.bind(this, client)}>
           <rect
             x="2"
             y="2"
@@ -161,14 +124,20 @@ export default React.createClass({
 
           {this.getAudioInterfacesOfClient(client)
             .map((audioInterface, index) => {
+              // Use audio interface box position as internal relative origin.
+              // Put it on the right edge of client's box if it's "capture"
+              // interface, or on the left otherwise.
               let audioInterfaceX = (audioInterface.get("direction") === "capture" ? RoutingDiagramDimensions.getClientWidth() : 0) + RoutingDiagramDimensions.getAudioInterfaceWidth() / -2;
               let audioInterfaceY = (index * (RoutingDiagramDimensions.getAudioInterfaceMargin() + RoutingDiagramDimensions.getAudioInterfaceHeight()) + RoutingDiagramDimensions.getAudioInterfaceMargin());
 
+              // Store computed, absolute coordinates of the interface for
+              // future usage while linking.
               linkCoordinates[audioInterface.get("id")] = {
                 x: clientX + audioInterfaceX + (audioInterface.get("direction") === "capture" ? RoutingDiagramDimensions.getAudioInterfaceWidth() : 0),
                 y: clientY + audioInterfaceY + RoutingDiagramDimensions.getAudioInterfaceHeight() / 2
               };
 
+              // Render box + interface's name
               return (
                 <g key={`audio-interface-${audioInterface.get("id")}`}
                   transform={`translate(${audioInterfaceX},${audioInterfaceY})`}>
@@ -201,80 +170,100 @@ export default React.createClass({
       );
     });
 
-    clientsDiagram.toJS(); // Do any operation so the lazy map() above is actually triggered
+    // Do any operation on clients so the lazy map() above is actually triggered
+    clientsDiagram.toJS();
 
-    // console.log(linkCoordinates);
-
+    // Render link rules, filter out only these for which we know coordinates
+    // (in case we got from the server more data than needed) and these
+    // which link from audio interface to audio interface (as they may support
+    // other types of linking later on).
     let linkRulesDiagram = this.props.linkRules
       .filter((linkRule) => {
         return (
           linkCoordinates.hasOwnProperty(linkRule.get("source_audio_interface_id")) ||
           linkCoordinates.hasOwnProperty(linkRule.get("destination_audio_interface_id"))
-        );
-      })
-      .filter((linkRule) => {
-        return (
+        ) && (
           linkRule.get("source_audio_interface_id") !== null &&
           linkRule.get("destination_audio_interface_id") !== null
         );
       })
       .map((linkRule) => {
+        // Determine associated audio interfaces
         let sourceAudioInterface = this.props.audioInterfaces.find((audioInterface) => { return audioInterface.get("id") === linkRule.get("source_audio_interface_id"); });
         let destinationAudioInterface = this.props.audioInterfaces.find((audioInterface) => { return audioInterface.get("id") === linkRule.get("destination_audio_interface_id"); });
 
-        // Starting point
-        let startPoint = `M${linkCoordinates[linkRule.get("source_audio_interface_id")].x} ${linkCoordinates[linkRule.get("source_audio_interface_id")].y}`;
+        // Cache some values
+        let linkRuleSourceX = linkCoordinates[linkRule.get("source_audio_interface_id")].x;
+        let linkRuleSourceY = linkCoordinates[linkRule.get("source_audio_interface_id")].y;
+        let linkRuleDestinationX = linkCoordinates[linkRule.get("destination_audio_interface_id")].x;
+        let linkRuleDestinationY = linkCoordinates[linkRule.get("destination_audio_interface_id")].y;
 
-        // Points to make curve
+
+        // Compute coordinates of starting point
+        let startPoint = `${linkRuleSourceX} ${linkRuleSourceY}`;
+
+        // Compute coordinates of points that make curve near starting point
         let startAnchorXOffset;
         if(sourceAudioInterface.get("direction") === "playback") {
-          startAnchorXOffset = RoutingDiagramDimensions.getLinkAnchorDistance();
-        } else {
           startAnchorXOffset = RoutingDiagramDimensions.getLinkAnchorDistance() * -1;
+        } else {
+          startAnchorXOffset = RoutingDiagramDimensions.getLinkAnchorDistance();
         }
-        let startAnchorH = `L${linkCoordinates[linkRule.get("source_audio_interface_id")].x + startAnchorXOffset} ${linkCoordinates[linkRule.get("source_audio_interface_id")].y}`;
+        let startAnchorH = `${linkRuleSourceX + startAnchorXOffset} ${linkRuleSourceY}`;
 
         let startAnchorV;
-        if(linkCoordinates[sourceAudioInterface.get("id")].y > linkCoordinates[destinationAudioInterface.get("id")].y) {
-          startAnchorV = `L${linkCoordinates[linkRule.get("source_audio_interface_id")].x + startAnchorXOffset} ${linkCoordinates[linkRule.get("source_audio_interface_id")].y - RoutingDiagramDimensions.getLinkAnchorDistance()}`;
+        if(linkRuleSourceY > linkRuleDestinationY) {
+          startAnchorV = `${linkRuleSourceX + startAnchorXOffset} ${linkRuleSourceY - RoutingDiagramDimensions.getLinkAnchorDistance()}`;
         } else {
-          startAnchorV = `L${linkCoordinates[linkRule.get("source_audio_interface_id")].x + startAnchorXOffset} ${linkCoordinates[linkRule.get("source_audio_interface_id")].y + RoutingDiagramDimensions.getLinkAnchorDistance()}`;
+          startAnchorV = `${linkRuleSourceX + startAnchorXOffset} ${linkRuleSourceY + RoutingDiagramDimensions.getLinkAnchorDistance()}`;
         }
 
 
-        // Points to make curve
+        // Compute coordinates of points that make curve near stopping point
         let stopAnchorXOffset;
-        if(sourceAudioInterface.get("direction") === "capture") {
-          stopAnchorXOffset = RoutingDiagramDimensions.getLinkAnchorDistance();
-        } else {
+        if(destinationAudioInterface.get("direction") === "playback") {
           stopAnchorXOffset = RoutingDiagramDimensions.getLinkAnchorDistance() * -1;
+        } else {
+          stopAnchorXOffset = RoutingDiagramDimensions.getLinkAnchorDistance();
         }
-        let stopAnchorH = `L${linkCoordinates[linkRule.get("destination_audio_interface_id")].x + stopAnchorXOffset} ${linkCoordinates[linkRule.get("destination_audio_interface_id")].y}`;
+        let stopAnchorH = `${linkRuleDestinationX + stopAnchorXOffset} ${linkRuleDestinationY}`;
 
         let stopAnchorV;
-        if(linkCoordinates[sourceAudioInterface.get("id")].y > linkCoordinates[destinationAudioInterface.get("id")].y) {
-          stopAnchorV = `L${linkCoordinates[linkRule.get("destination_audio_interface_id")].x + stopAnchorXOffset} ${linkCoordinates[linkRule.get("destination_audio_interface_id")].y - RoutingDiagramDimensions.getLinkAnchorDistance()}`;
+        if(linkRuleSourceY < linkRuleDestinationY) {
+          stopAnchorV = `${linkRuleDestinationX + stopAnchorXOffset} ${linkRuleDestinationY - RoutingDiagramDimensions.getLinkAnchorDistance()}`;
         } else {
-          stopAnchorV = `L${linkCoordinates[linkRule.get("destination_audio_interface_id")].x + stopAnchorXOffset} ${linkCoordinates[linkRule.get("destination_audio_interface_id")].y + RoutingDiagramDimensions.getLinkAnchorDistance()}`;
+          stopAnchorV = `${linkRuleDestinationX + stopAnchorXOffset} ${linkRuleDestinationY + RoutingDiagramDimensions.getLinkAnchorDistance()}`;
         }
 
+        // Compute coordinates of stopping point
+        let stopPoint = `${linkRuleDestinationX} ${linkRuleDestinationY}`;
 
-        // Final point
-        let stopPoint = `L${linkCoordinates[linkRule.get("destination_audio_interface_id")].x} ${linkCoordinates[linkRule.get("destination_audio_interface_id")].y}`;
 
+        // Render path
         return (
           <path key={`link-rule-${linkRule.get("id")}`}
-            d={`${startPoint} ${startAnchorH} ${startAnchorV} ${stopAnchorV} ${stopAnchorH} ${stopPoint}`}
+            d={`M ${startPoint}
+                L ${startAnchorH}
+                L ${startAnchorV}
+                L ${stopAnchorV}
+                L ${stopAnchorH}
+                L ${stopPoint}`}
             strokeWidth="2"
             stroke="red"
             fill="none" />
           );
-      })
+      });
 
+
+    // Render whole canvas, clients above link rules
     return (
       <svg version="1.1" height="600" width="100%">
-        {clientsDiagram}
-        {linkRulesDiagram}
+        <g>
+          {linkRulesDiagram}
+        </g>
+        <g>
+          {clientsDiagram}
+        </g>
       </svg>
     );
   }

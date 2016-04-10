@@ -6,6 +6,7 @@ export default React.createClass({
     y: React.PropTypes.number.isRequired,
     onDragStart: React.PropTypes.func,
     onDragStop: React.PropTypes.func,
+    onDragMove: React.PropTypes.func,
   },
 
 
@@ -81,6 +82,10 @@ export default React.createClass({
       this.setState({
         x: this.state.dragStartX + dx,
         y: this.state.dragStartY + dy,
+      }, () => {
+        if(this.props.onDragMove) {
+          this.props.onDragMove(this.state.x, this.state.y);
+        }
       });
     }
   },
