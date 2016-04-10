@@ -32,7 +32,12 @@ const RoutingDiagramLinkRulePath = (props) => {
   let linkRuleDestinationX = linkCoordinates[props.linkRule.get("destination_audio_interface_id")].x;
   let linkRuleDestinationY = linkCoordinates[props.linkRule.get("destination_audio_interface_id")].y;
   let horizontalDistance = linkRuleDestinationX - linkRuleSourceX;
-  let horizontalCurveOffset = horizontalDistance / 2 < 96 ? 96 : horizontalDistance / 2;
+  let horizontalCurveOffset;
+  if(linkRuleDestinationX <= linkRuleSourceX) {
+    horizontalCurveOffset = 192;
+  } else {
+    horizontalCurveOffset = horizontalDistance / 2 < 96 ? 96 : horizontalDistance / 2;
+  }
 
   // Compute coordinates of starting point
   let startPoint = `${linkRuleSourceX} ${linkRuleSourceY}`;
