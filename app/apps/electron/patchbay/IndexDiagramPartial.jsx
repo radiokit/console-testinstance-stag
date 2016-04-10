@@ -26,7 +26,7 @@ export default React.createClass({
 
 
   loadClients: function() {
-    window.data
+    this.clientsQuery = window.data
       .query("auth", "Client.Standalone")
       .select("id", "name", "extra")
       .where("application", "eq", "electron")
@@ -40,7 +40,7 @@ export default React.createClass({
           });
         }
       })
-      .fetch();
+      .enableAutoUpdate();
   },
 
 
@@ -95,7 +95,7 @@ export default React.createClass({
     let clientsGlobalIDs = this.state.loadedClients.map((client) => { return Data.buildRecordGlobalID("auth", "Client.Standalone", client.get("id")); }).toJS();
     let clientsCondition = ["references", "din", "owner"].concat(clientsGlobalIDs)
 
-    let query = window.data
+    this.audioInterfacesQuery = query = window.data
       .query("plumber", "Resource.Architecture.AudioInterface")
       .select("id", "name", "direction", "references")
       .order("name", "asc")
@@ -109,12 +109,12 @@ export default React.createClass({
           });
         }
       })
-      .fetch();
+      .enableAutoUpdate();
   },
 
 
   loadLinkRules: function() {
-    let query = window.data
+    this.linkRulesQuery = query = window.data
       .query("plumber", "Config.Routing.LinkRule")
       .select("id", "source_audio_interface_id", "destination_audio_interface_id")
       .where("source_audio_interface_id", "in", this.state.loadedAudioInterfaces.map((audioInterface) => { return audioInterface.get("id"); }).toJS())
@@ -125,7 +125,7 @@ export default React.createClass({
           });
         }
       })
-      .fetch();
+      .enableAutoUpdate();
   },
 
 
@@ -146,6 +146,24 @@ export default React.createClass({
 
   componentDidMount: function() {
     this.loadClients();
+  },
+
+
+  componentWillUnmount: function() {
+    if(this.linkRulesQuery) {
+      this.linkRulesQuery.teardown();
+      delete this.linkRulesQuery;
+    }
+
+    if(this.audioInterfacesQuery) {
+      this.audioInterfacesQuery.teardown();
+      delete this.audioInterfacesQuery;
+    }
+
+    if(this.clientsQuery) {
+      this.clientsQuery.teardown();
+      delete this.clientsQuery;
+    }
   },
 
 
