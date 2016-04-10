@@ -219,16 +219,55 @@ export default React.createClass({
         );
       })
       .map((linkRule) => {
-        console.log(linkRule.get("source_audio_interface_id") + " -> " + linkRule.get("destination_audio_interface_id"));
+        let sourceAudioInterface = this.props.audioInterfaces.find((audioInterface) => { return audioInterface.get("id") === linkRule.get("source_audio_interface_id"); });
+        let destinationAudioInterface = this.props.audioInterfaces.find((audioInterface) => { return audioInterface.get("id") === linkRule.get("destination_audio_interface_id"); });
 
-        let start = `M${linkCoordinates[linkRule.get("source_audio_interface_id")].x} ${linkCoordinates[linkRule.get("source_audio_interface_id")].y}`;
-        let stop = `L${linkCoordinates[linkRule.get("destination_audio_interface_id")].x} ${linkCoordinates[linkRule.get("destination_audio_interface_id")].y}`;
+        // Starting point
+        let startPoint = `M${linkCoordinates[linkRule.get("source_audio_interface_id")].x} ${linkCoordinates[linkRule.get("source_audio_interface_id")].y}`;
+
+        // Points to make curve
+        let startAnchorXOffset;
+        if(sourceAudioInterface.get("direction") === "playback") {
+          startAnchorXOffset = RoutingDiagramDimensions.getLinkAnchorDistance();
+        } else {
+          startAnchorXOffset = RoutingDiagramDimensions.getLinkAnchorDistance() * -1;
+        }
+        let startAnchorH = `L${linkCoordinates[linkRule.get("source_audio_interface_id")].x + startAnchorXOffset} ${linkCoordinates[linkRule.get("source_audio_interface_id")].y}`;
+
+        let startAnchorV;
+        if(linkCoordinates[sourceAudioInterface.get("id")].y > linkCoordinates[destinationAudioInterface.get("id")].y) {
+          startAnchorV = `L${linkCoordinates[linkRule.get("source_audio_interface_id")].x + startAnchorXOffset} ${linkCoordinates[linkRule.get("source_audio_interface_id")].y - RoutingDiagramDimensions.getLinkAnchorDistance()}`;
+        } else {
+          startAnchorV = `L${linkCoordinates[linkRule.get("source_audio_interface_id")].x + startAnchorXOffset} ${linkCoordinates[linkRule.get("source_audio_interface_id")].y + RoutingDiagramDimensions.getLinkAnchorDistance()}`;
+        }
+
+
+        // Points to make curve
+        let stopAnchorXOffset;
+        if(sourceAudioInterface.get("direction") === "capture") {
+          stopAnchorXOffset = RoutingDiagramDimensions.getLinkAnchorDistance();
+        } else {
+          stopAnchorXOffset = RoutingDiagramDimensions.getLinkAnchorDistance() * -1;
+        }
+        let stopAnchorH = `L${linkCoordinates[linkRule.get("destination_audio_interface_id")].x + stopAnchorXOffset} ${linkCoordinates[linkRule.get("destination_audio_interface_id")].y}`;
+
+        let stopAnchorV;
+        if(linkCoordinates[sourceAudioInterface.get("id")].y > linkCoordinates[destinationAudioInterface.get("id")].y) {
+          stopAnchorV = `L${linkCoordinates[linkRule.get("destination_audio_interface_id")].x + stopAnchorXOffset} ${linkCoordinates[linkRule.get("destination_audio_interface_id")].y - RoutingDiagramDimensions.getLinkAnchorDistance()}`;
+        } else {
+          stopAnchorV = `L${linkCoordinates[linkRule.get("destination_audio_interface_id")].x + stopAnchorXOffset} ${linkCoordinates[linkRule.get("destination_audio_interface_id")].y + RoutingDiagramDimensions.getLinkAnchorDistance()}`;
+        }
+
+
+        // Final point
+        let stopPoint = `L${linkCoordinates[linkRule.get("destination_audio_interface_id")].x} ${linkCoordinates[linkRule.get("destination_audio_interface_id")].y}`;
 
         return (
           <path key={`link-rule-${linkRule.get("id")}`}
-            d={`${start} ${stop}`}
+            d={`${startPoint} ${startAnchorH} ${startAnchorV} ${stopAnchorV} ${stopAnchorH} ${stopPoint}`}
             strokeWidth="2"
-            stroke="red" />
+            stroke="red"
+            fill="none" />
           );
       })
 

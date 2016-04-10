@@ -32,4 +32,9 @@ export default {
   getAudioInterfaceMargin: function() {
     return 8;
   },
+
+
+  getLinkAnchorDistance: function() {
+    return 64;
+  },
 }
