@@ -26,21 +26,23 @@ export default React.createClass({
 
 
   loadClients: function() {
-    this.clientsQuery = window.data
-      .query("auth", "Client.Standalone")
-      .select("id", "name", "extra")
-      .where("application", "eq", "electron")
-      .where("account_id", "eq", this.context.currentUserAccount.get("id"))
-      .on("fetch", (_event, _query, data) => {
-        if(this.isMounted()) {
-          this.setState({
-            loadedClients: this.buildClientsWithExtra(data)
-          }, () => {
-            this.loadAudioInterfaces();
-          });
-        }
-      })
-      .enableAutoUpdate();
+    if(!this.clientsQuery) {
+      this.clientsQuery = window.data
+        .query("auth", "Client.Standalone")
+        .select("id", "name", "extra")
+        .where("application", "eq", "electron")
+        .where("account_id", "eq", this.context.currentUserAccount.get("id"))
+        .on("fetch", (_event, _query, data) => {
+          if(this.isMounted()) {
+            this.setState({
+              loadedClients: this.buildClientsWithExtra(data)
+            }, () => {
+              this.loadAudioInterfaces();
+            });
+          }
+        })
+        .enableAutoUpdate();
+    }
   },
 
 
@@ -92,40 +94,44 @@ export default React.createClass({
 
 
   loadAudioInterfaces: function() {
-    let clientsGlobalIDs = this.state.loadedClients.map((client) => { return Data.buildRecordGlobalID("auth", "Client.Standalone", client.get("id")); }).toJS();
-    let clientsCondition = ["references", "din", "owner"].concat(clientsGlobalIDs)
+    if(!this.audioInterfacesQuery) {
+      let clientsGlobalIDs = this.state.loadedClients.map((client) => { return Data.buildRecordGlobalID("auth", "Client.Standalone", client.get("id")); }).toJS();
+      let clientsCondition = ["references", "din", "owner"].concat(clientsGlobalIDs)
 
-    this.audioInterfacesQuery = window.data
-      .query("plumber", "Resource.Architecture.AudioInterface")
-      .select("id", "name", "direction", "references")
-      .order("name", "asc")
-      // .where.apply(this, clientsCondition) // FIXME
-      .on("fetch", (_event, _query, data) => {
-        if(this.isMounted()) {
-          this.setState({
-            loadedAudioInterfaces: data
-          }, () => {
-            this.loadLinkRules();
-          });
-        }
-      })
-      .enableAutoUpdate();
+      this.audioInterfacesQuery = window.data
+        .query("plumber", "Resource.Architecture.AudioInterface")
+        .select("id", "name", "direction", "references")
+        .order("name", "asc")
+        // .where.apply(this, clientsCondition) // FIXME
+        .on("fetch", (_event, _query, data) => {
+          if(this.isMounted()) {
+            this.setState({
+              loadedAudioInterfaces: data
+            }, () => {
+              this.loadLinkRules();
+            });
+          }
+        })
+        .enableAutoUpdate();
+    }
   },
 
 
   loadLinkRules: function() {
-    this.linkRulesQuery = window.data
-      .query("plumber", "Config.Routing.LinkRule")
-      .select("id", "source_audio_interface_id", "destination_audio_interface_id")
-      .where("source_audio_interface_id", "in", this.state.loadedAudioInterfaces.map((audioInterface) => { return audioInterface.get("id"); }).toJS())
-      .on("fetch", (_event, _query, data) => {
-        if(this.isMounted()) {
-          this.setState({
-            loadedLinkRules: data
-          });
-        }
-      })
-      .enableAutoUpdate();
+    if(!this.linkRulesQuery) {
+      this.linkRulesQuery = window.data
+        .query("plumber", "Config.Routing.LinkRule")
+        .select("id", "source_audio_interface_id", "destination_audio_interface_id")
+        .where("source_audio_interface_id", "in", this.state.loadedAudioInterfaces.map((audioInterface) => { return audioInterface.get("id"); }).toJS())
+        .on("fetch", (_event, _query, data) => {
+          if(this.isMounted()) {
+            this.setState({
+              loadedLinkRules: data
+            });
+          }
+        })
+        .enableAutoUpdate();
+    }
   },
 
 

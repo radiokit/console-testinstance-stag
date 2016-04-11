@@ -56,9 +56,6 @@ export default React.createClass({
 
 
   render: function() {
-
-
-
     let filteredLinkRules = this.props.linkRules
       .filter((linkRule) => {
         return ( // FIXME should be obsolete if backend was returing limited data
