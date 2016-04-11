@@ -72,7 +72,7 @@ export default React.createClass({
       <div className={klass}>
         <div className="modal-content">
           <div className="modal-header">
-            <button type="button" className="close" data-dismiss="modal" aria-hidden="true">X</button>
+            <button type="button" className="close" data-dismiss="modal" aria-hidden="true">×</button>
             <Translate component="h4" content={this.props.contentPrefix + ".header"} className="modal-title" />
           </div>
 
