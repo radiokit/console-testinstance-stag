@@ -4,8 +4,8 @@
   "description": "User interface for controlling various RadioKit systems",
   "scripts": {
     "dev": "node server.js",
-    "stag": "NODE_ENV=stag webpack -p --optimize-minimize --progress --config webpack.stag.config.js",
-    "prod": "NODE_ENV=prod webpack -p --optimize-minimize --progress --config webpack.prod.config.js"
+    "stag": "NODE_ENV=stag webpack --progress --config webpack.stag.config.js",
+    "prod": "NODE_ENV=prod webpack --progress --config webpack.prod.config.js"
   },
   "repository": {
     "type": "git",
