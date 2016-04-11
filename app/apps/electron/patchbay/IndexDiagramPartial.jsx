@@ -95,7 +95,7 @@ export default React.createClass({
     let clientsGlobalIDs = this.state.loadedClients.map((client) => { return Data.buildRecordGlobalID("auth", "Client.Standalone", client.get("id")); }).toJS();
     let clientsCondition = ["references", "din", "owner"].concat(clientsGlobalIDs)
 
-    this.audioInterfacesQuery = query = window.data
+    this.audioInterfacesQuery = window.data
       .query("plumber", "Resource.Architecture.AudioInterface")
       .select("id", "name", "direction", "references")
       .order("name", "asc")
@@ -114,7 +114,7 @@ export default React.createClass({
 
 
   loadLinkRules: function() {
-    this.linkRulesQuery = query = window.data
+    this.linkRulesQuery = window.data
       .query("plumber", "Config.Routing.LinkRule")
       .select("id", "source_audio_interface_id", "destination_audio_interface_id")
       .where("source_audio_interface_id", "in", this.state.loadedAudioInterfaces.map((audioInterface) => { return audioInterface.get("id"); }).toJS())
