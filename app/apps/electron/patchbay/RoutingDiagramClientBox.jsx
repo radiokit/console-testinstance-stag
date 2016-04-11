@@ -32,6 +32,7 @@ const RoutingDiagramClientBox = (props) => {
         stroke="#2b323a" />
 
       <text
+        style={{cursor: "move"}}
         transform={`translate(${RoutingDiagramDimensions.getClientWidth()/2},${-1 * RoutingDiagramDimensions.getHeaderHeight()})`}
         x="0"
         y="0"
