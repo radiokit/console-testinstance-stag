@@ -88,9 +88,23 @@ export default React.createClass({
 
 
   onLinkRuleClick: function(linkRule) {
-    this.setState({
-      selectedLinkRule: linkRule,
-    });
+    if(this.state.selectedLinkRule) {
+      if(this.state.selectedLinkRule.get("id") === linkRule.get("id")) {
+        this.setState({
+          selectedLinkRule: null,
+        });
+
+      } else {
+        this.setState({
+          selectedLinkRule: linkRule,
+        });
+      }
+
+    } else {
+      this.setState({
+        selectedLinkRule: linkRule,
+      });
+    }
   },
 
 
