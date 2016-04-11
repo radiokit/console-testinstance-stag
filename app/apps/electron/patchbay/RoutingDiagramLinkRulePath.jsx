@@ -56,14 +56,28 @@ const RoutingDiagramLinkRulePath = (props) => {
 
   // Render path
   return (
-    <path
-      d={`M ${startPoint}
-          C ${startPointCurve}
-            ${stopPointCurve}
-            ${stopPoint}`}
-      strokeWidth="2"
-      stroke="red"
-      fill="none" />
+    <g>
+      <path
+        style={{cursor: "pointer", opacity: 0.0000001}}
+        d={`M ${startPoint}
+            C ${startPointCurve}
+              ${stopPointCurve}
+              ${stopPoint}`}
+        strokeWidth="10"
+        stroke="#fff"
+        fill="none"
+        onClick={props.onLinkRuleClick} />
+      <path
+        style={{cursor: "pointer"}}
+        d={`M ${startPoint}
+            C ${startPointCurve}
+              ${stopPointCurve}
+              ${stopPoint}`}
+        strokeWidth="2"
+        stroke={props.selectedLinkRule && props.selectedLinkRule.get("id") === props.linkRule.get("id") ? "#f00" : "#2b323a"}
+        fill="none"
+        onClick={props.onLinkRuleClick} />
+      </g>
     );
 }
 

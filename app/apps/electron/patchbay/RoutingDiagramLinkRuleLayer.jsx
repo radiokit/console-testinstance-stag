@@ -12,6 +12,8 @@ const RoutingDiagramLinkRuleLayer = (props) => {
           linkRule={linkRule}
           clients={props.clients}
           clientsCoordinates={props.clientsCoordinates}
+          selectedLinkRule={props.selectedLinkRule}
+          onLinkRuleClick={props.onLinkRuleClick.bind(null, linkRule)}
           audioInterfaces={props.audioInterfaces} />
       );
     });

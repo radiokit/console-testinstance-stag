@@ -21,6 +21,7 @@ const RoutingDiagramClientBox = (props) => {
         fill="#000000" />
 
       <rect
+        style={{cursor: "move"}}
         x="0"
         y="0"
         rx="2"
@@ -56,6 +57,7 @@ const RoutingDiagramClientBox = (props) => {
             <g key={audioInterface.get("id")}
               transform={`translate(${audioInterfaceX},${audioInterfaceY})`}>
               <rect
+                style={{cursor: "pointer"}}
                 x="0"
                 y="0"
                 rx="2"

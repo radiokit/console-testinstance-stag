@@ -1,6 +1,9 @@
 import React from 'react';
 import Immutable from 'immutable';
-import { Data } from 'radiokit-api';
+
+import Toolbar from '../../../widgets/admin/toolbar_widget.jsx';
+import ToolbarButton from '../../../widgets/admin/toolbar_button_widget.jsx';
+import ToolbarGroup from '../../../widgets/admin/toolbar_group_widget.jsx';
 
 
 import RoutingDiagramClientLayer from './RoutingDiagramClientLayer.jsx';
@@ -19,6 +22,7 @@ export default React.createClass({
   getInitialState: function() {
     return {
       selectedAudioInterface: null,
+      selectedLinkRule: null,
     };
   },
 
@@ -73,8 +77,32 @@ export default React.createClass({
               destination_audio_interface_id: destinationAudioInterface.get("id"),
             });
         });
+
+      } else {
+        this.setState({
+          selectedAudioInterface: audioInterface,
+        });
       }
     }
+  },
+
+
+  onLinkRuleClick: function(linkRule) {
+    this.setState({
+      selectedLinkRule: linkRule,
+    });
+  },
+
+
+  onLinkRuleDeleteClick: function(linkRule) {
+    window.data
+      .record("plumber", "Config.Routing.LinkRule", this.state.selectedLinkRule.get("id"))
+      .on("loaded", () => {
+        this.setState({
+          selectedLinkRule: null,
+        });
+      })
+      .destroy();
   },
 
 
@@ -105,21 +133,31 @@ export default React.createClass({
 
     // Render whole canvas, clients above link rules
     return (
-      <svg version="1.1" height="600" width="100%">
-        <RoutingDiagramClientLayer
-          clients={this.props.clients}
-          audioInterfaces={this.props.audioInterfaces}
-          clientsCoordinates={this.clientsCoordinates}
-          onAudioInterfaceClick={this.onAudioInterfaceClick}
-          selectedAudioInterface={this.state.selectedAudioInterface}
-          onClientDragMove={this.onClientDragMove}
-          onClientDragStop={this.onClientDragStop} />
-        <RoutingDiagramLinkRuleLayer
-          clients={this.props.clients}
-          audioInterfaces={this.props.audioInterfaces}
-          linkRules={filteredLinkRules}
-          clientsCoordinates={this.clientsCoordinates} />
-      </svg>
+      <div>
+        <Toolbar>
+          <ToolbarGroup>
+            <ToolbarButton icon="delete" disabled={this.state.selectedLinkRule === null} onClick={this.onLinkRuleDeleteClick} />
+          </ToolbarGroup>
+        </Toolbar>
+
+        <svg version="1.1" height="560" width="100%">
+          <RoutingDiagramClientLayer
+            clients={this.props.clients}
+            audioInterfaces={this.props.audioInterfaces}
+            clientsCoordinates={this.clientsCoordinates}
+            onAudioInterfaceClick={this.onAudioInterfaceClick}
+            selectedAudioInterface={this.state.selectedAudioInterface}
+            onClientDragMove={this.onClientDragMove}
+            onClientDragStop={this.onClientDragStop} />
+          <RoutingDiagramLinkRuleLayer
+            clients={this.props.clients}
+            audioInterfaces={this.props.audioInterfaces}
+            linkRules={filteredLinkRules}
+            selectedLinkRule={this.state.selectedLinkRule}
+            onLinkRuleClick={this.onLinkRuleClick}
+            clientsCoordinates={this.clientsCoordinates} />
+        </svg>
+      </div>
     );
   }
 });
