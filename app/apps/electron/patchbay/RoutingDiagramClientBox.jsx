@@ -62,8 +62,9 @@ const RoutingDiagramClientBox = (props) => {
                 ry="2"
                 width={RoutingDiagramDimensions.getAudioInterfaceWidth()}
                 height={RoutingDiagramDimensions.getAudioInterfaceHeight()}
-                fill="#fff"
-                stroke="#2b323a" />
+                fill={props.selectedAudioInterface && props.selectedAudioInterface.get("id") === audioInterface.get("id") ? "yellow" : "white"}
+                stroke="#2b323a"
+                onClick={props.onAudioInterfaceClick.bind(null, audioInterface)} />
 
               <text
                 x={audioInterface.get("direction") === "capture" ? RoutingDiagramDimensions.getAudioInterfaceWidth() * -0.25 : RoutingDiagramDimensions.getAudioInterfaceWidth() * 1.25}

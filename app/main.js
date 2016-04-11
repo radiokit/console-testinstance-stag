@@ -71,7 +71,7 @@ function getEnv() {
         "agenda": { baseUrl: "https://radiokit-agenda-stag.herokuapp.com" },
         "diffusor": { baseUrl: "https://radiokit-diffusor-stag.herokuapp.com" },
       },
-      verbose: true
+      verbose: false
     };
   }
 }

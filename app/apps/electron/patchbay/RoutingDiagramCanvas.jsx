@@ -16,6 +16,13 @@ export default React.createClass({
   },
 
 
+  getInitialState: function() {
+    return {
+      selectedAudioInterface: null,
+    };
+  },
+
+
   getLinkRulesOfAudioInterface: function(audioInterface) {
     return this.props.linkRules.filter((linkRule) => {
       return (
@@ -38,8 +45,36 @@ export default React.createClass({
   },
 
 
-  onAudioInterfaceClick: function() {
-    // TODO
+  onAudioInterfaceClick: function(audioInterface) {
+    if(this.state.selectedAudioInterface === null) {
+      this.setState({
+        selectedAudioInterface: audioInterface,
+      });
+    } else {
+      if(this.state.selectedAudioInterface.get("direction") !== audioInterface.get("direction")) {
+        let sourceAudioInterface;
+        let destinationAudioInterface;
+
+        if(this.state.selectedAudioInterface.get("direction") === "capture") {
+          sourceAudioInterface = this.state.selectedAudioInterface;
+          destinationAudioInterface = audioInterface;
+        } else {
+          sourceAudioInterface = audioInterface;
+          destinationAudioInterface = this.state.selectedAudioInterface;
+        }
+
+        this.setState({
+          selectedAudioInterface: null,
+        }, () => {
+          window.data
+            .record("plumber", "Config.Routing.LinkRule")
+            .create({
+              source_audio_interface_id: sourceAudioInterface.get("id"),
+              destination_audio_interface_id: destinationAudioInterface.get("id"),
+            });
+        });
+      }
+    }
   },
 
 
@@ -75,6 +110,8 @@ export default React.createClass({
           clients={this.props.clients}
           audioInterfaces={this.props.audioInterfaces}
           clientsCoordinates={this.clientsCoordinates}
+          onAudioInterfaceClick={this.onAudioInterfaceClick}
+          selectedAudioInterface={this.state.selectedAudioInterface}
           onClientDragMove={this.onClientDragMove}
           onClientDragStop={this.onClientDragStop} />
         <RoutingDiagramLinkRuleLayer
