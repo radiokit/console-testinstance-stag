@@ -1,5 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
+var ClosureCompilerPlugin = require('webpack-closure-compiler');
 
 var node_modules_dir = path.resolve(__dirname, 'node_modules');
 
@@ -19,7 +20,15 @@ var config = {
   },
 
   plugins: [
-    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en|pl/)
+    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en|pl/),
+    new ClosureCompilerPlugin({
+      compiler: {
+        language_in: 'ECMASCRIPT6',
+        language_out: 'ECMASCRIPT5',
+        compilation_level: 'ADVANCED'
+      },
+      concurrency: 3,
+    })
   ],
 
   module: {
