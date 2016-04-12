@@ -96,4 +96,4 @@ const CreateModal = React.createClass({
   }
 });
 
-module.exports = CreateModal;
+export default CreateModal;

@@ -175,7 +175,7 @@ export default React.createClass({
         return (<Alert type="error" fullscreen={true} infoTextKey="general.errors.communication.general" />);
       }
 
-      if(this.state.loadedUser === false || this.state.loadedAccounts === false) {
+      if(this.state.loadedUser === false || this.state.loadedAccounts === false || this.state.loadedBroadcastChannels === false) {
         return (<LoadingLayout />);
       }
 

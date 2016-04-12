@@ -272,9 +272,26 @@ const FormWidget = React.createClass({
         );
         break;
 
+      case "object":
+        let objectsSorted = fieldConfig.values.sort((a, b) => {
+          return a.name == b.name ? 0 : (a.name < b.name ? -1 : 1);
+        });
+
+        input = (
+          <select className="form-control" if={ fieldName } ref={ fieldName } required={ required }>
+            { objectsSorted.map((value) => {
+                return (
+                  <option key={value.id} value={value.id}>{value.name}</option>
+                );
+              })
+            }
+          </select>
+        );
+        break;
+
       case "datetime":
         input = (
-          <DateTimePicker ref={fieldName} required={required} value={fieldConfig.value} />
+          <DateTimePicker ref={fieldName} required={required} defaultValue={fieldConfig.value} />
         );
         break;
 

@@ -151,7 +151,18 @@ export default React.createClass({
 
   render: function() {
     return (
-      <ModalProgress ref="modal" size={this.props.size} onConfirm={this.onConfirm} onCancel={this.onCancel} contentPrefix={this.props.contentPrefix} warning={this.props.warning} proceedType={this.props.proceedType} step={this.state.step} progressCurrent={this.props.index} progressMax={this.props.recordIds.count()} onSuccess={this.props.onSuccess}>
+      <ModalProgress
+          ref="modal"
+          size={this.props.size}
+          onConfirm={this.onConfirm}
+          onCancel={this.onCancel}
+          contentPrefix={this.props.contentPrefix}
+          warning={this.props.warning}
+          proceedType={this.props.proceedType}
+          step={this.state.step}
+          progressCurrent={this.props.index}
+          progressMax={this.props.recordIds.count()}
+          onSuccess={this.props.onSuccess}>
         {this.props.children}
       </ModalProgress>
     );

@@ -16,7 +16,6 @@ import ScheduleDaily from '../../../widgets/admin/schedule_daily_widget.jsx';
 import ScheduleDaySelector from '../../../widgets/admin/schedule_day_selector_widget.jsx';
 import ScheduleDayCrudButtons from '../../../widgets/admin/schedule_day_crud_buttons.jsx';
 import ToolbarButtonModal from '../../../widgets/admin/toolbar_button_modal_widget.jsx';
-import CreateModal from '../../../widgets/admin/crud/create_modal.jsx';
 
 export default React.createClass({
   contextTypes: {
@@ -31,6 +30,7 @@ export default React.createClass({
       loadedFiles: false,
       availableFiles: new Immutable.Seq().toIndexedSeq(),
       now: Moment.utc(),
+      activeItem: null
     }
   },
 
@@ -71,6 +71,10 @@ export default React.createClass({
     });
   },
 
+  onChangeActiveItem(item) {
+    this.setState({activeItem: item});
+  },
+
   getItems: function(data) {
     return data.map(entry => {
       return Immutable.Map()
@@ -95,7 +99,8 @@ export default React.createClass({
                   toolbarElement={ScheduleDayCrudButtons}
                   toolbarProps={{
                     availablePlumberFiles: this.state.availableFiles,
-                    afterFormSubmit: this.fetchPlumberFiles
+                    afterFormSubmit: this.fetchPlumberFiles,
+                    activeItem: this.state.activeItem
                   }}
                   sidebarElement={ScheduleDaySelector}
                   sidebarProps={{
@@ -105,7 +110,9 @@ export default React.createClass({
                   contentElement={ScheduleDaily}
                   contentProps={{
                     now: this.state.now,
-                    items: this.state.availableFiles
+                    items: this.state.availableFiles,
+                    activeItem: this.state.activeItem,
+                    onChangeActiveItem: this.onChangeActiveItem
                   }} />
             </GridCell>
           </GridRow>

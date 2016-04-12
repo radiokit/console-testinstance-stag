@@ -80,4 +80,4 @@ const DeleteModalWithSelect = React.createClass({
   }
 });
 
-module.exports = DeleteModalWithSelect;
+export default DeleteModalWithSelect;

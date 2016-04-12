@@ -42,4 +42,4 @@ const DateTimePicker = React.createClass({
   }
 });
 
-module.exports = DateTimePicker;
+export default DateTimePicker;

@@ -43,5 +43,13 @@
       position: absolute;
       min-height: 1px;
     }
+
+    .ScheduleDailyWidget-CalendarRow-item-active {
+      background: #FFF700;
+      left: 12px;
+      right: 12px;
+      position: absolute;
+      min-height: 1px;
+    }
   }
 }

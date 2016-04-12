@@ -20,6 +20,8 @@ const CalendarRow = React.createClass({
     now: PropTypes.object.isRequired,
     expanded: PropTypes.boolean,
     onChangeExpansionState: PropTypes.func.isRequired,
+    activeItem: PropTypes.object,
+    onChangeActiveItem: PropTypes.func.isRequired
   },
   onCollapse(e) {
     this.props.onChangeExpansionState(this.props.hour, false)
@@ -33,8 +35,23 @@ const CalendarRow = React.createClass({
       this.props.hour === nextProp.hour &&
       this.props.items === nextProp.items &&
       this.props.now === nextProp.now &&
-      this.props.expanded === nextProp.expanded
+      this.props.expanded === nextProp.expanded &&
+      this.props.activeItem === nextProp.activeItem
     );
+  },
+  markAsActive(item) {
+    if (this.props.activeItem && item.get("id") === this.props.activeItem.get("id")) {
+      this.props.onChangeActiveItem(null);
+    } else {
+      this.props.onChangeActiveItem(item);
+    }
+  },
+  getClassName(item) {
+    let className = "ScheduleDailyWidget-CalendarRow-item"
+    if (this.props.activeItem && this.props.activeItem.get("id") === item.get("id")) {
+      className += "-active";
+    }
+    return className;
   },
   render() {
 
@@ -88,8 +105,9 @@ const CalendarRow = React.createClass({
               return (
                 <div
                     key={item.get("id")}
-                    className="ScheduleDailyWidget-CalendarRow-item"
-                    style={{top: (item.get("start_at").minutes() / 60 * 100) + "%", bottom: "0" }}>
+                    className={this.getClassName(item)}
+                    style={{top: (item.get("start_at").minutes() / 60 * 100) + "%", bottom: "0" }}
+                    onClick={this.markAsActive.bind(null, item)}>
                   <header>
                     {item.get("id")}
                     / {item.get("start_at").format()}
@@ -103,10 +121,12 @@ const CalendarRow = React.createClass({
               return (
                 <div
                     key={item.get("id")}
-                    className="ScheduleDailyWidget-CalendarRow-item"
+                    className={this.getClassName(item)}
                     style={{
                       top: (item.get("start_at").minutes() / 60 * 100) + "%",
-                      bottom: (100 - item.get("stop_at").minutes() / 60 * 100) + "%" }}>
+                      bottom: (100 - item.get("stop_at").minutes() / 60 * 100) + "%"
+                    }}
+                    onClick={this.markAsActive.bind(null, item)}>
                   <header>
                     {item.get("id")}
                     / {item.get("start_at").format()}
@@ -126,8 +146,9 @@ const CalendarRow = React.createClass({
             return (
               <div
                   key={item.get("id")}
-                  className="ScheduleDailyWidget-CalendarRow-item"
-                  style={{bottom: "0", top: "-1px" }} />
+                  className={this.getClassName(item)}
+                  style={{bottom: "0", top: "-1px" }}
+                  onClick={this.markAsActive.bind(null, item)} />
             );
           })}
 
@@ -140,11 +161,12 @@ const CalendarRow = React.createClass({
             return (
               <div
                   key={item.get("id")}
-                  className="ScheduleDailyWidget-CalendarRow-item"
+                  className={this.getClassName(item)}
                   style={{
                     bottom: (100 - item.get("stop_at").minutes() / 60 * 100) + "%",
                     top: "-1px"
-                  }} />
+                  }}
+                  onClick={this.markAsActive.bind(null, item)} />
             );
           })}
 
@@ -162,6 +184,8 @@ export default React.createClass({
     firstHour: hourType.isRequired,
     items: React.PropTypes.object.isRequired,
     now: React.PropTypes.object.isRequired,
+    activeItem: React.PropTypes.object,
+    onChangeActiveItem: React.PropTypes.func
   },
 
 
@@ -204,7 +228,9 @@ export default React.createClass({
                 now={this.props.now}
                 items={this.props.items}
                 onChangeExpansionState={this.onChangeExpansionState}
-                expanded={this.state.expansionState[hour]}/>
+                expanded={this.state.expansionState[hour]}
+                onChangeActiveItem={this.props.onChangeActiveItem}
+                activeItem={this.props.activeItem} />
             );
           })}
         </tbody>

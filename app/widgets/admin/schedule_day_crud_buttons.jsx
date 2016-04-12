@@ -4,8 +4,9 @@ import Moment from 'moment';
 import { Data } from 'radiokit-api';
 
 import CreateModal from './crud/create_modal.jsx';
-import EditModal from './crud/edit_modal.jsx';
+import UpdateModal from './crud/update_modal.jsx';
 import DeleteModalWithSelect from './crud/delete_modal_with_select.jsx';
+import DeleteModal from './crud/delete_modal.jsx';
 import ToolbarGroup from './toolbar_group_widget.jsx';
 import ToolbarButtonModal from './toolbar_button_modal_widget.jsx';
 
@@ -16,7 +17,8 @@ const ScheduleDayCrudButtons = React.createClass({
 
   propTypes: {
     availablePlumberFiles: React.PropTypes.object.isRequired,
-    afterFormSubmit: React.PropTypes.func
+    afterFormSubmit: React.PropTypes.func,
+    activeItem: React.PropTypes.object
   },
 
   getInitialState: function() {
@@ -57,15 +59,6 @@ const ScheduleDayCrudButtons = React.createClass({
     });
   },
 
-  preparePlumberFiles: function(plumberFiles) {
-    return plumberFiles.map(file => {
-      return {
-        id: file.get("id"),
-        name: file.get("id") + " : " + file.get("start_at").toISOString() + " - " + file.get("stop_at").toISOString()
-      };
-    });
-  },
-
   buildNewForm: function() {
     return {
       location: {
@@ -86,31 +79,25 @@ const ScheduleDayCrudButtons = React.createClass({
     };
   },
 
-  buildEditForm: function() {
+  getDateValue: function(key) {
+    if (this.props.activeItem) {
+      return this.props.activeItem.get(key).toISOString()
+    }
+    return Moment.utc().toISOString()
+  },
+
+  buildUpdateForm: function() {
     return {
-      recordId: {
-        type: "object",
-        values: this.preparePlumberFiles(this.props.availablePlumberFiles)
-      },
       name: {
         type: "string"
       },
       start_at: {
         type: "datetime",
-        value: Moment.utc().toISOString()
+        value: this.getDateValue("start_at")
       },
       stop_at: {
         type: "datetime",
-        value: Moment.utc().clone().add(1, "minute").toISOString()
-      }
-    };
-  },
-
-  buildDeleteForm: function() {
-    return {
-      recordId: {
-        type: "object",
-        values: this.preparePlumberFiles(this.props.availablePlumberFiles)
+        value: this.getDateValue("stop_at")
       }
     };
   },
@@ -133,29 +120,32 @@ const ScheduleDayCrudButtons = React.createClass({
         <ToolbarButtonModal
             icon="folder"
             labelTextKey="apps.broadcast.playlist.update_button"
-            modalElement={EditModal}
+            disabled={this.props.activeItem === null}
+            modalElement={UpdateModal}
             modalProps={{
               contentPrefix: "apps.broadcast.playlist.edit_button",
-              form: this.buildEditForm(),
+              form: this.buildUpdateForm(),
               app: "plumber",
               model: "Media.Input.File.Http",
-              afterFormSubmit: this.props.afterFormSubmit
+              recordId: (this.props.activeItem ? this.props.activeItem.get("id") : null),
+              onSuccess: this.props.afterFormSubmit
             }} />
 
         <ToolbarButtonModal
             icon="delete"
             labelTextKey="apps.broadcast.playlist.delete_button"
-            modalElement={DeleteModalWithSelect}
+            disabled={this.props.activeItem === null}
+            modalElement={DeleteModal}
             modalProps={{
               contentPrefix: "apps.broadcast.playlist.delete_button",
-              form: this.buildDeleteForm(),
               app: "plumber",
               model: "Media.Input.File.Http",
-              afterFormSubmit: this.props.afterFormSubmit
+              selectedRecordIds: Immutable.List.of(null), // this.props.activeItem.get("id")
+              onSuccess: this.props.afterFormSubmit
             }} />
       </ToolbarGroup>
     );
   }
 });
 
-module.exports = ScheduleDayCrudButtons;
+export default ScheduleDayCrudButtons;
