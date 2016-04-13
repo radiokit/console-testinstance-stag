@@ -18,7 +18,8 @@ export default React.createClass({
 
   onClick: function(e) {
     e.preventDefault();
-    this.refs.modal.refs.modal.show();
+    //some modalElement's components may have unimplemented show function and only hold ref to modal
+    (this.refs.modal.show && this.refs.modal.show()) || this.refs.modal.refs.modal.show();
   },
 
 

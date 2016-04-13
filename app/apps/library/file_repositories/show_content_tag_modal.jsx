@@ -10,51 +10,78 @@ const ShowContentTagModal = React.createClass({
   propTypes: {
     selectedRecordIds: React.PropTypes.object.isRequired,
     tagCategories: React.PropTypes.object.isRequired,
-    selectedTags: React.PropTypes.object.isRequired
+    initialAssociations: React.PropTypes.object,
   },
 
   getInitialState() {
     return {
       index: 0,
+      shouldUpdate: true,
       selectedTagIds:[],
       deselectedTagIds:[],
-      tagsToAssign:[],
-      tagsToRemove:[],
-      filesData: null
     }
   },
 
+  calculateTagFrequencies(props) {
+    // console.log(props.initialAssociations);
+    // console.log(props.initialAssociations.toJS());
+    this.tagFrequencies = {};
+    props.initialAssociations.forEach((record) => {
+      this.tagFrequencies[record.get("tag_item_id")] = this.tagFrequencies[record.get("tag_item_id")] + 1 || 1;
+    });
+  },
+
+  componentDidMount() {
+   this.calculateTagFrequencies(this.props);
+  },
+
+  componentWillReceiveProps(nextProps) {
+      this.calculateTagFrequencies(nextProps);
+      this.setState({
+        shouldUpdate: true
+      });
+  },
+
   selectTagId(tagId) {
+    console.log("selected tag " + tagId);
     let selectedTagIds = this.state.selectedTagIds;
     selectedTagIds.push(tagId);
     this.setState({
+      shouldUpdate: false,
       selectedTagIds: selectedTagIds,
       deselectedTagIds: _.pull(this.state.deselectedTagIds, tagId),
     });
   },
 
   deselectTagId(tagId) {
+    console.log("deselected tag " + tagId);
     let deselectedTagIds = this.state.deselectedTagIds;
     deselectedTagIds.push(tagId);
     this.setState({
+      shouldUpdate: false,
       selectedTagIds: _.pull(this.state.selectedTagIds, tagId),
       deselectedTagIds: deselectedTagIds,
     });
   },
 
   resetTagId(tagId) {
+    console.log("reset tag " + tagId);
     this.setState({
+      shouldUpdate: false,
       selectedTagIds: _.pull(this.state.selectedTagIds, tagId),
       deselectedTagIds: _.pull(this.state.deselectedTagIds, tagId),
     });
   },
 
   show() {
+    this.setState({
+      shouldUpdate:true
+    })
     this.refs.modal.show();
   },
 
   getTagStatus(tagId) {
-    let occuranceCount = this.props.selectedTags[tagId] || 0;
+    let occuranceCount = (this.tagFrequencies && this.tagFrequencies[tagId]) || 0;
     if (occuranceCount === 0) {
       return {
         checked: false,
@@ -70,24 +97,73 @@ const ShowContentTagModal = React.createClass({
     }
   },
 
-  onPerform(index, recordId) {
+  createAssociation(association) {
 
-    console.log(this.state.selectedTagIds[0]);
+    console.log("creating association file " + association.recordId + " ->  tag " + association.tagId);
+    // this.recordIdUpdateComplete(association.recordId);
     window.data
-    .record("vault", "Data.Tag.Association")
-    .on("error", () => {
-      //FIXME
-    })
-    .on("loaded", () => {
-      if(this.isMounted()) {
-      this.setState({
-        index: this.state.index + 1
+      .record("vault", "Data.Tag.Association")
+      .on("error", () => {
+        //FIXME
+        console.log("error on file " + association.recordId);
+      })
+      .on("loaded", () => {
+        console.log("loaded file " + association.recordId);
+        if (this.isMounted()) {
+          console.log("is mounted");
+          if (this.state.insertCount === 0) {
+            console.log("inserCount is 0");
+            if (this.state.deleteCompleted) {
+              this.recordIdUpdateComplete(association.recordId);
+            } else {
+              this.setState({
+                insertCompleted: true
+              });
+            }
+          } else {
+            console.log("decrement inserts to " + this.state.insertCount - 1);
+            this.setState({
+              insertCount: this.state.insertCount - 1
+            })
+          }
+        }
+      })
+      .create({
+       tag_item_id: association.tagId,
+       record_file_id: association.recordId
       });
-    }
-    }).create({
-      tag_item_id: this.state.selectedTagIds[0],
-      record_file_id: recordId
+  },
+
+  recordIdUpdateComplete(recordId) {
+    this.setState({
+      index : this.state.index  + 1
     });
+  },
+
+  deleteAssociation(tagId) {
+
+  },
+
+  onPerform(index, recordId) {
+    this.setState({
+      shouldUpdate: true,
+    });
+    console.log("FILE ID: " + recordId);
+    let newAssociations = this.state.selectedTagIds
+      .map((tagId) =>{return {tagId: tagId, recordId: recordId}})
+      .filter((association) => {return !_.some(this.props.initialAssociations.toJS(), association)});
+    console.log("NEWASS.. " + newAssociations);
+    if(newAssociations.length > 0){
+      this.setState({
+        insertCount: newAssociations.length - 1,
+        insertCompleted: false,
+        deleteCompleted: true,
+      });
+      newAssociations.forEach(this.createAssociation);
+    }else{
+      console.log("no new ass..");
+      this.recordIdUpdateComplete(recordId);
+    }
   },
 
   renderCategoryTags: function(category) {
@@ -100,7 +176,7 @@ const ShowContentTagModal = React.createClass({
                 let onTagDeselected = this.deselectTagId.bind(null, tag.id);
                 let onTagRestored = this.resetTagId.bind(null, tag.id);
                 let tagStatus = this.getTagStatus(tag.id);
-                console.log("rendering tag: " + tag.name + " with status " + JSON.stringify(tagStatus));
+                // console.log("rendering tag: " + tag.name + " with status " + JSON.stringify(tagStatus));
                 return (
                   <li key={ tag.id }>
                     <div className="card-head card-head-xs">
@@ -109,7 +185,7 @@ const ShowContentTagModal = React.createClass({
                       </header>
                       <div className="tools">
                         <Checkbox
-                          selected={tagStatus.checked}
+                          checked={tagStatus.checked}
                           onSelected={onTagSelected}
                           onDeselected={onTagDeselected}
                           onRestore={onTagRestored}
@@ -122,6 +198,10 @@ const ShowContentTagModal = React.createClass({
           </ul>
         </div>
       );
+  },
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextState.shouldUpdate;
   },
 
   render() {
@@ -202,16 +282,22 @@ const Checkbox = React.createClass({
     }
   },
 
+  componentWillReceiveProps(nextProps) {
+      this.setState({
+        checked: nextProps.checked,
+        indeterminate: nextProps.indeterminate,
+      });
+  },
+
   onChange(e) {
-    if(this.state.checked){
+    if (this.state.checked) {
       this.props.onDeselected();
       this.setState({
         checked: false,
         indeterminate: false
       });
-    }
-    else{
-      if(this.props.indeterminate && !this.state.indeterminate){
+    } else {
+      if (this.props.indeterminate && !this.state.indeterminate) {
         this.props.onRestore();
         this.setState({
           checked: false,

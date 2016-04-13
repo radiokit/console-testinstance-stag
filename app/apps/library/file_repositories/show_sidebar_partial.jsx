@@ -1,9 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 
-import ToolbarButtonModal from '../../../widgets/admin/toolbar_button_modal_widget.jsx';
 import Translate from 'react-translate-component';
-
 
 export default React.createClass({
 
@@ -21,10 +19,6 @@ export default React.createClass({
     return {
       categories: []
     };
-  },
-
-  componentDidMount() {
-    // console.log(this.props.record.toJS());
   },
 
   onTagCategorySelected(tag) {

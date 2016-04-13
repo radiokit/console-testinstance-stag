@@ -24,7 +24,7 @@ const ShowContentPartial =  React.createClass({
   getInitialState() {
     return {
       selectedRecordIds: new Immutable.Seq().toIndexedSeq(),
-      selectedTags: {},
+      selectedAssociations: new Immutable.List(),
     };
   },
 
@@ -42,13 +42,8 @@ const ShowContentPartial =  React.createClass({
       })
       .on("fetch", (_event, _query, data) => {
         if(this.isMounted()){
-          let selectedTags = {};
-          data.forEach((record) => {
-            selectedTags[record.get("tag_item_id")] = selectedTags[record.get("tag_item_id")] + 1 || 1;
-          });
-          console.log("should render");
           this.setState({
-            selectedTags:selectedTags,
+            selectedAssociations: data,
             selectedRecordIds: selectedRecordIds
           });
         }
@@ -91,7 +86,6 @@ const ShowContentPartial =  React.createClass({
   },
 
   render() {
-    console.log("rendering");
     return (
       <TableBrowser
         onSelect={this.onTableSelect}
@@ -133,7 +127,7 @@ const ShowContentPartial =  React.createClass({
                     {
                       selectedRecordIds: this.state.selectedRecordIds,
                       tagCategories: this.props.record.get("tag_categories"),
-                      selectedTags: this.state.selectedTags,
+                      initialAssociations: this.state.selectedAssociations,
                     }
                   } />
               </ToolbarGroup>
