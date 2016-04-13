@@ -31,7 +31,7 @@ const ShowContentPartial =  React.createClass({
   buildSelectedTags(selectedRecordIds) {
     selectedRecordIds.count() > 0 && window.data
       .query("vault", "Data.Tag.Association")
-      .select("record_file_id","tag_item_id")
+      .select("record_file_id","tag_item_id","id")
       .where("record_file_id","in", selectedRecordIds.toJS())
       .on("error", () => {
         if(this.isMounted()){
@@ -52,6 +52,10 @@ const ShowContentPartial =  React.createClass({
 
   onTableSelect(selectedRecordIds) {
     this.buildSelectedTags(selectedRecordIds);
+  },
+
+  refreshTagData(){
+    this.buildSelectedTags(this.state.selectedRecordIds);
   },
 
   buildTableAttributes() {
@@ -128,6 +132,7 @@ const ShowContentPartial =  React.createClass({
                       selectedRecordIds: this.state.selectedRecordIds,
                       tagCategories: this.props.record.get("tag_categories"),
                       initialAssociations: this.state.selectedAssociations,
+                      onDismiss: this.refreshTagData,
                     }
                   } />
               </ToolbarGroup>

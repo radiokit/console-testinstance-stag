@@ -124,8 +124,8 @@ const ShowTagsSchemaPartial = React.createClass({
       <div className="ShowTagsSchemaPartial">
         <ul className="list">
           { _.sortBy(category.tag_items,'name').map((tag) => {
-            let onDeleteTagListener = this.showDeleteTagModal.bind(undefined, tag);
-            let onEditTagListener = this.showEditTagModal.bind(undefined, tag);
+            let onDeleteTagListener = this.showDeleteTagModal.bind(null, tag);
+            let onEditTagListener = this.showEditTagModal.bind(null, tag);
             return (
               <li key={ tag.id } className="">
                 <DeleteModal
@@ -133,7 +133,7 @@ const ShowTagsSchemaPartial = React.createClass({
                   contentPrefix={ this.props.contentPrefix + ".modals.delete_tag" }
                   app="vault" model="Data.Tag.Item"
                   selectedRecordIds={ Immutable.List.of(tag.id) }
-                  onSuccess={ this.refreshData }/>
+                  onDismiss={ this.refreshData }/>
                 <UpdateModal
                   ref={ "editTagModal-" + tag.name }
                   contentPrefix={ this.props.contentPrefix + ".modals.edit_tag" }
@@ -141,7 +141,7 @@ const ShowTagsSchemaPartial = React.createClass({
                   model="Data.Tag.Item"
                   recordId={ tag.id }
                   form={ this.buildEditTagForm(tag) }
-                  onSuccess={ this.refreshData } />
+                  onDismiss={ this.refreshData } />
                 <div className="card-head card-head-sm">
                   <header>
                     { tag.name }
@@ -192,16 +192,16 @@ const ShowTagsSchemaPartial = React.createClass({
             labelTextKey={ this.props.contentPrefix + ".actions.add_category" }
             modalElement={ CreateModal }
             modalProps={ {  contentPrefix: this.props.contentPrefix + ".modals.create_category",
-                            onSuccess: this.refreshData,
+                            onDismiss: this.refreshData,
                             form: this.buildNewCategoryForm(),
                             app: "vault",
                             model: "Data.Tag.Category" } } />
         </ToolbarGroup>
         { this.state.categories.size > 0 && _.sortBy(this.state.categories.toJS(),'name').map((category) => {
 
-            let onNewTagListener = this.showNewTagModal.bind(undefined, category);
-            let onDeleteCategoryListener = this.showDeleteCategoryModal.bind(undefined, category);
-            let onEditCategoryListener = this.showEditCategoryModal.bind(undefined, category);
+            let onNewTagListener = this.showNewTagModal.bind(null, category);
+            let onDeleteCategoryListener = this.showDeleteCategoryModal.bind(null, category);
+            let onEditCategoryListener = this.showEditCategoryModal.bind(null, category);
             let toggleClassNames = classnames('btn', 'btn-flat', 'btn-icon-toggle', {'disabled' : category.tag_items.length === 0 });
 
             return (
@@ -212,13 +212,13 @@ const ShowTagsSchemaPartial = React.createClass({
                   app="vault"
                   model="Data.Tag.Item"
                   form={ this.buildNewTagForm(category) }
-                  onSuccess={ this.refreshData }/>
+                  onDismiss={ this.refreshData }/>
                 <DeleteModal
                   ref={ "deleteCategoryModal-" + category.name }
                   contentPrefix={ this.props.contentPrefix + ".modals.delete_category" }
                   app="vault" model="Data.Tag.Category"
                   selectedRecordIds={ Immutable.List.of(category.id) }
-                  onSuccess={ this.refreshData }/>
+                  onDismiss={ this.refreshData }/>
                 <UpdateModal
                   ref={ "editCategoryModal-" + category.name }
                   contentPrefix={ this.props.contentPrefix + ".modals.edit_category" }
@@ -226,7 +226,7 @@ const ShowTagsSchemaPartial = React.createClass({
                   model="Data.Tag.Category"
                   recordId={ category.id }
                   form={ this.buildEditCategoryForm(category) }
-                  onSuccess={ this.refreshData } />
+                  onDismiss={ this.refreshData } />
                 <div className="expanded">
                   <div className="card-head" aria-expanded="true">
                     <a className={ toggleClassNames }

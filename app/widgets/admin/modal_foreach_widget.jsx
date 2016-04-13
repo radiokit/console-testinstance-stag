@@ -92,6 +92,7 @@ export default React.createClass({
     proceedType: React.PropTypes.oneOf(['primary', 'success', 'info', 'warning', 'danger']),
     size: React.PropTypes.oneOf(['normal', 'large']),
     onSuccess: React.PropTypes.func,
+    onDismiss: React.PropTypes.func,
   },
 
 
@@ -123,6 +124,9 @@ export default React.createClass({
     })
   },
 
+  onDismiss: function() {
+    this.props.onDismiss && this.props.onDismiss();
+  },
 
   componentWillReceiveProps: function(nextProps) {
     if(nextProps.index > this.props.index) {
@@ -140,7 +144,6 @@ export default React.createClass({
     }
   },
 
-
   componentDidUpdate: function(prevProps, prevState) {
     if(prevState.step === "confirmation" && this.state.step === "progress") {
       let currentRecordId = this.props.recordIds.get(this.props.index);
@@ -148,10 +151,20 @@ export default React.createClass({
     }
   },
 
-
   render: function() {
     return (
-      <ModalProgress ref="modal" size={this.props.size} onConfirm={this.onConfirm} onCancel={this.onCancel} contentPrefix={this.props.contentPrefix} warning={this.props.warning} proceedType={this.props.proceedType} step={this.state.step} progressCurrent={this.props.index} progressMax={this.props.recordIds.count()} onSuccess={this.props.onSuccess}>
+      <ModalProgress ref="modal"
+        size={this.props.size}
+        onConfirm={this.onConfirm}
+        onCancel={this.onCancel}
+        contentPrefix={this.props.contentPrefix}
+        warning={this.props.warning}
+        proceedType={this.props.proceedType}
+        step={this.state.step}
+        progressCurrent={this.props.index}
+        progressMax={this.props.recordIds.count()}
+        onSuccess={this.props.onSuccess}
+        onDismiss={this.onDismiss}>
         {this.props.children}
       </ModalProgress>
     );

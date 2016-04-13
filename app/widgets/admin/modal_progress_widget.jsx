@@ -17,6 +17,7 @@ export default React.createClass({
     step: React.PropTypes.oneOf(['confirmation', 'progress', 'acknowledgement', 'cancelled', 'error']).isRequired,
     size: React.PropTypes.oneOf(['normal', 'large']),
     onSuccess: React.PropTypes.func,
+    onDismiss:React.PropTypes.func,
   },
 
 
@@ -30,11 +31,18 @@ export default React.createClass({
     this.refs.modal.show();
   },
 
-
   onConfirm: function() {
     this.props.onConfirm();
   },
 
+  onSuccess: function() {
+    this.props.onSuccess && this.props.onSuccess();
+    this.onDismiss();
+  },
+
+  onDismiss: function() {
+    this.props.onDismiss && this.props.onDismiss();
+  },
 
   onCancel: function() {
     this.props.onCancel();
@@ -122,21 +130,21 @@ export default React.createClass({
                 case "acknowledgement":
                   return (
                     <div>
-                      <Translate component="button" content={this.props.contentPrefix + ".action.close"} role="button" className={"btn btn-" + this.props.proceedType} data-dismiss="modal" onClick = {this.props.onSuccess || null} />
+                      <Translate component="button" content={this.props.contentPrefix + ".action.close"} role="button" className={"btn btn-" + this.props.proceedType} data-dismiss="modal" onClick = {this.onSuccess} />
                     </div>
                   );
 
                 case "cancelled":
                   return (
                     <div>
-                      <Translate component="button" content={this.props.contentPrefix + ".action.close"} role="button" className={"btn btn-" + this.props.proceedType} data-dismiss="modal" />
+                      <Translate component="button" content={this.props.contentPrefix + ".action.close"} role="button" className={"btn btn-" + this.props.proceedType} data-dismiss="modal" onClick={this.onDismiss}/>
                     </div>
                   );
 
                 case "error":
                   return (
                     <div>
-                      <Translate component="button" content={this.props.contentPrefix + ".action.close"} role="button" className={"btn btn-" + this.props.proceedType} data-dismiss="modal" />
+                      <Translate component="button" content={this.props.contentPrefix + ".action.close"} role="button" className={"btn btn-" + this.props.proceedType} data-dismiss="modal" onClick={this.onDismiss} />
                     </div>
                   );
               }
