@@ -43,8 +43,7 @@ export default React.createClass({
     };
   },
 
-
-  componentDidMount: function() {
+  buildRecordsQuery() {
     this.recordsQueryFull = this.props.recordsQuery
       .clone()
       .offset(this.state.offset) // FIXME update this on component update
@@ -60,16 +59,22 @@ export default React.createClass({
       .on("fetch", this.onRecordsQueryFetch);
     this.recordsQueryIds
       .on("fetch", this.onRecordIdsQueryFetch);
-
-    this.loadRecords();
   },
 
+  componentDidMount: function() {
+    this.buildRecordsQuery();
+    this.loadRecords();
+  },
 
   componentWillUnmount: function() {
     this.recordsQueryFull.teardown();
     this.recordsQueryIds.teardown();
   },
 
+  reloadData() {
+    this.buildRecordsQuery();
+    this.loadRecords();
+  },
 
   componentDidUpdate: function(prevProps, prevState) {
     if(prevState.selectedRecordIds != this.state.selectedRecordIds && this.props.onSelect) {
@@ -190,7 +195,7 @@ export default React.createClass({
 
 
   onRefreshClick: function() {
-    this.loadRecords();
+    this.reloadData();
   },
 
 

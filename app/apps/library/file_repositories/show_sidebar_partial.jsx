@@ -6,27 +6,20 @@ import Translate from 'react-translate-component';
 export default React.createClass({
 
   propTypes: {
-    record: React.PropTypes.object.isRequired,
-    app: React.PropTypes.string.isRequired,
-    model: React.PropTypes.string.isRequired,
     contentPrefix: React.PropTypes.string.isRequired,
-    categories: React.PropTypes.object.isRequired,
-    filter: React.PropTypes.object,
-    onFilterUpdate: React.PropTypes.func.isRequired,
+    onTagFilterUpdate: React.PropTypes.func.isRequired,
   },
 
-  getInitialState() {
-    return {
-      categories: []
-    };
+  selectCategory(category) {
+    this.props.onTagFilterUpdate(category.tag_items);
   },
 
-  onTagCategorySelected(tag) {
-    this.props.onTagFilterUpdate(tag);
+  selectTag(tag) {
+    this.props.onTagFilterUpdate([tag]);
   },
 
   onRestoreDefaults() {
-    this.props.onTagFilterUpdate(null);
+    this.props.onTagFilterUpdate([]);
   },
 
   renderCategoryTags: function(category) {
@@ -34,9 +27,10 @@ export default React.createClass({
         <div>
           <ul className="list">
             {category.tag_items && _.sortBy(category.tag_items,'name').map((tag) => {
+                let onTagSelected = this.selectTag.bind(null, tag);
                 return (
                   <li key={ tag.id }>
-                    <div className="card-head card-head-sm">
+                    <div className="card-head card-head-sm" onClick={onTagSelected}>
                       <header>
                         { tag.name }
                       </header>
@@ -51,11 +45,14 @@ export default React.createClass({
 
   render: function () {
     let categories = this.props.record.toJS().tag_categories;
+
     return (
       <div>
+        <Translate component="div" content={this.props.contentPrefix + ".tags.all_tags"} className="card-head" onClick={this.onRestoreDefaults}/>
         { categories.length > 0 && _.sortBy(categories,'name').map((category) => {
+            let onCategorySelected = this.selectCategory.bind(null, category);
             return (
-              <div id={ category.name }>
+              <div id={ category.name } key={category.name}>
                 <div className="expanded">
                   <div className="card-head" aria-expanded="true">
                     <a className={ "btn btn-flat ink-reaction btn-icon-toggle " + (category.tag_items.length === 0 ? "disabled" : "") }
@@ -63,7 +60,7 @@ export default React.createClass({
                       data-target={ "#" + category.name + "-tagList" }>
                       <i className="mdi mdi-chevron-right" />
                     </a>
-                    <header>
+                    <header onClick={onCategorySelected} >
                       { category.name }
                     </header>
                   </div>

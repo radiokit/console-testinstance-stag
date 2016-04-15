@@ -66,7 +66,6 @@ export default React.createClass({
       this.recordQuery = this.buildShowQuery()
         .on("fetch", (_eventName, _record, data) => {
           if(this.isMounted()) {
-
             this.setState({
               record: data.first(),
               loaded: true,

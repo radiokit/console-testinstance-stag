@@ -248,7 +248,7 @@ const ShowContentTagModal = React.createClass({
             if(category.tag_items.length === 0){
               return null;
             } else return (
-              <div id={ category.name + "-modal"}>
+              <div key={category.name} id={ category.name + "-modal"}>
                 <div className="expanded">
                   <div className="card-head" aria-expanded="true">
                     <a className={ "btn btn-flat ink-reaction btn-icon-toggle " + (category.tag_items.length === 0 ? "disabled" : "") }

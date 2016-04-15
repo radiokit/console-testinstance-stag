@@ -13,32 +13,32 @@ const ShowView = React.createClass({
 
   getInitialState(){
     return {
-        filter: null,
-        categories:[],
+        tagFilter: [],
         stage: null,
     }
   },
 
-  onTagFilterUpdate(f){
+  onTagFilterUpdate(filter){
     this.setState({
-      filter: f
+      tagFilter: filter
     });
   },
 
   buildTabs() {
     return {
-      incoming: { element: ContentPartial, props: { stage: "incoming", filter: this.state.filter }},
-      ready:    { element: ContentPartial, props: { stage: "ready",  filter: this.state.filter }},
-      archive:  { element: ContentPartial, props: { stage: "archive", filter: this.state.filter }},
-      trash:    { element: ContentPartial, props: { stage: "trash", filter: this.state.filter }},
+      incoming: { element: ContentPartial, props: { stage: "incoming", tagFilter: this.state.tagFilter }},
+      ready:    { element: ContentPartial, props: { stage: "ready",  tagFilter: this.state.tagFilter }},
+      archive:  { element: ContentPartial, props: { stage: "archive", tagFilter: this.state.tagFilter }},
+      trash:    { element: ContentPartial, props: { stage: "trash", tagFilter: this.state.tagFilter }},
     }
   },
 
   buildSideBar(){
     return {
-      test: { element: SidebarPartial, props: { categories: this.state.categories, filter:this.state.filter, onTagFilterUpdate: this.onTagFilterUpdate }},
+      test: { element: SidebarPartial, props: { tagFilter:this.state.tagFilter, onTagFilterUpdate: this.onTagFilterUpdate }},
     }
   },
+
 
   modifyShowQuery(query) {
     return query

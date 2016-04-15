@@ -1,5 +1,6 @@
 import React from 'react';
 import Immutable from 'immutable';
+import _ from 'lodash';
 
 import TableBrowser from '../../../widgets/admin/table_browser_widget.jsx';
 import ToolbarGroup from '../../../widgets/admin/toolbar_group_widget.jsx';
@@ -18,13 +19,14 @@ const ShowContentPartial =  React.createClass({
     model: React.PropTypes.string.isRequired,
     contentPrefix: React.PropTypes.string.isRequired,
     stage: React.PropTypes.oneOf(['incoming', 'ready', 'archive', 'trash']).isRequired,
-    filter: React.PropTypes.string.isRequired,
+    tagFilter: React.PropTypes.array.isRequired,
   },
 
   getInitialState() {
     return {
       selectedRecordIds: new Immutable.Seq().toIndexedSeq(),
       selectedAssociations: new Immutable.List(),
+      needsReload: false,
     };
   },
 
@@ -34,23 +36,27 @@ const ShowContentPartial =  React.createClass({
       .select("record_file_id","tag_item_id","id")
       .where("record_file_id","in", selectedRecordIds.toJS())
       .on("error", () => {
-        if(this.isMounted()){
-          this.setState({
-            selectedRecordIds: selectedRecordIds
-          });
-        }
+        // FIXME
       })
       .on("fetch", (_event, _query, data) => {
         if(this.isMounted()){
           this.setState({
             selectedAssociations: data,
-            selectedRecordIds: selectedRecordIds
           });
         }
       }).fetch();
   },
 
+  componentDidUpdate(prevProps, prevState) {
+    if(!_.isEqual(prevProps.tagFilter,this.props.tagFilter)){
+      this.refs.tableBrowser.reloadData();
+    }
+  },
+
   onTableSelect(selectedRecordIds) {
+    this.setState({
+      selectedRecordIds: selectedRecordIds
+    });
     this.buildSelectedTags(selectedRecordIds);
   },
 
@@ -79,24 +85,37 @@ const ShowContentPartial =  React.createClass({
     }, attributes);
   },
 
+  buildTagFilterQuery(query){
+    let tagIdsFilter = this.props.tagFilter.map((tag) => tag.id);
+    if(this.props.tagFilter.length > 0){
+      return  query.where("tag_associations.tag_item_id","in", tagIdsFilter);
+    }
+    else{
+      return query;
+    }
+  },
+
   buildTableRecordsQuery() {
     return window.data
       .query("vault", "Data.Record.File")
       .select("id", "name", "metadata_items", "tag_items")
       .joins("metadata_items")
       .joins("tag_items")
+      .joins("tag_associations")
       .where("stage", "eq", this.props.stage)
       .where("record_repository_id", "eq", this.props.record.get("id"));
   },
 
   render() {
+    console.log("this.state.selectedRecordIds.count " + this.state.selectedRecordIds.count());
     return (
       <TableBrowser
+        ref="tableBrowser"
         onSelect={this.onTableSelect}
         selectable={true}
         attributes={this.buildTableAttributes()}
         contentPrefix="widgets.vault.file_browser.table"
-        recordsQuery={this.buildTableRecordsQuery()}>
+        recordsQuery={this.buildTagFilterQuery(this.buildTableRecordsQuery())}>
         <ToolbarGroup>
           {() => {
             if(this.props.stage === "incoming") {
