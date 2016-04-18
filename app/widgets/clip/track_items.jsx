@@ -36,6 +36,7 @@ const TrackItems = React.createClass({
       }
     } else {
       this.replaceSelected(item);
+      this.props.onClick && this.props.onClick(e);
     }
   },
 
@@ -251,10 +252,8 @@ function crossfadeCollection(items) {
 
         if (last.get('position') + last.get('offsetLength') <= item.get('position')) {
           // not sticking to each other
-          console.log('not overlapping');
           return fadedTrack.push(item);
         }
-        console.log('overlapping');
 
         //sticking, crossfade
         const overlapLength = last.get('position') + last.get('offsetLength') - item.get('position');

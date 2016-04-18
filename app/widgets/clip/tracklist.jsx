@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 import {
   debounce,
@@ -17,18 +18,18 @@ import TrackTimeMarks from './track_time_marks.jsx';
 
 import './tracklist.scss';
 
-function getMouseOffset(e) {
-  let element = e.currentTarget || e.target;
+function getElementOffset(originalElement) {
+  let element = originalElement;
   let elementOffsetLeft = 0;
   let elementOffsetTop = 0;
   while (element) {
-    elementOffsetLeft += element.offsetLeft;
-    elementOffsetTop += element.offsetTop;
+    elementOffsetLeft += element.offsetLeft | 0;
+    elementOffsetTop += element.offsetTop | 0;
     element = element.offsetParent;
   }
   return {
-    x: e.clientX - elementOffsetLeft,
-    y: e.clientY - elementOffsetTop,
+    x: elementOffsetLeft,
+    y: elementOffsetTop,
   };
 }
 
@@ -57,36 +58,42 @@ const TrackList = React.createClass({
     return {
       offsetStart: 0,
       offsetLength: 0,
-
       visibleTracksCount: null,
       trackHeight: 100,
-
       cursorTime: null,
     };
   },
 
   getInitialState() {
-
-    this.mouseMoveTimestamp = 0;
-    this.timeoutCursor = debounce(() => this.handleMouseLeave(), 1000);
-    this.throttledSetState = throttle(s => this.setState(s), 1000 / 60);
-
     return {
       mouseCursorPosition: null,
     };
   },
 
+  componentWillMount() {
+    this.mouseMoveTimestamp = null;
+    this.timeoutCursor = debounce(() => this.handleMouseLeave(), 1000);
+    this.throttledSetState = throttle(s => this.setState(s), 1000 / 60);
+  },
+
   storeMousePosition(mouseCursorPosition) {
-    // setState with a delay but only if mouse button is not being held down
-    (this.mouseDownTime ? (() => null) : this.throttledSetState)({mouseCursorPosition});
+    if (this.props.cursorTime) {
+      // setState with a delay but only if mouse button is not being held down
+      (this.mouseDownTime ? (() => null) : this.throttledSetState)({mouseCursorPosition});
+    }
   },
 
   handleMouseMove (e) {
-    if (this.props.cursorTime) {
-      this.storeMousePosition(getMouseOffset(e).x);
-      this.timeoutCursor();
-      this.mouseMoveTimestamp = Date.now();
-    }
+    this.storeMousePosition(this.getMouseOffset(e).x);
+    this.timeoutCursor();
+    this.mouseMoveTimestamp = Date.now();
+  },
+
+  getMouseOffset(e) {
+    return {
+      x: e.clientX - getElementOffset(ReactDOM.findDOMNode(this)).x,
+      y: e.clientY - getElementOffset(ReactDOM.findDOMNode(this)).y,
+    };
   },
 
   handleMouseLeave() {
@@ -98,8 +105,8 @@ const TrackList = React.createClass({
     // that are raised immediately after moving a mouse
     // as clicks to move cursor
     if (this.mouseMoveTimestamp < Date.now() - 100) {
-      const offsetX = getMouseOffset(e).x;
-      const offsetTime = offsetX * this.props.offsetLength / this.props.width + this.getOffsetStart();
+      const offsetX = this.getMouseOffset(e).x;
+      const offsetTime = offsetX * this.getOffsetLength() / this.props.width + this.getOffsetStart();
       this.props.onSelectTime && this.props.onSelectTime(offsetTime);
     }
   },
@@ -127,10 +134,9 @@ const TrackList = React.createClass({
   },
 
   getOffsetLength() {
-    if (this.props.clip) {
-      return Math.max(this.props.offsetLength, this.props.clip.get('duration'));
-    }
-    return this.props.offsetLength;
+    return (this.props.clip)
+      ? Math.max(this.props.offsetLength, this.props.clip.get('duration'))
+      : this.props.offsetLength;
   },
 
   getTrackList() {
@@ -166,10 +172,8 @@ const TrackList = React.createClass({
   },
 
   getTracksCount() {
-    if (this.props.visibleTracksCount !== null) {
-      return this.props.visibleTracksCount;
-    }
-    return this.getTrackItems().reduce((v, item) => Math.max(item.get('track') - 1, v), 1);
+    return this.props.visibleTracksCount ||
+      this.getTrackItems().reduce((v, item) => Math.max(item.get('track') - 1, v), 1);
   },
 
   render() {
@@ -187,7 +191,8 @@ const TrackList = React.createClass({
            style={contStyle}>
         <TrackTimeMarks offsetStart={offsetStart}
                         offsetLength={offsetLength}
-                        width={this.props.width}/>
+                        width={this.props.width}
+        />
         <TrackLines tracksCount={this.getTracksCount()}
                     trackHeight={this.props.trackHeight}
         />
@@ -200,6 +205,7 @@ const TrackList = React.createClass({
                     fadesOf={this.props.clip?'clip':'item'}
                     onItemChange={this.handleItemChange}
                     onClipChange={this.handleClipChange}
+                    onClick={this.handleClick}
         />
         <TrackListCursors
           playPosition={(

@@ -104,6 +104,16 @@ class ClipEditorApp extends React.Component {
                 />
               )}
 
+              <p>TrackList[clip=clip]</p>
+              {!false && (
+                <TrackList width={1000} offsetStart={0} offsetLength={0}
+                           clip={clip}
+                           cursorTime={this.state.cursor || 1000}
+                           onSelectTime={this.setCursor}
+                           onClipChange={this.setClip}
+                />
+              )}
+
               <p>ScrollableTrackList[playlist=playlist][scrollable][zoomable]</p>
               {!false && (
                 <ScrollableTrackList width={1000} offsetStart={0} offsetLength={150000}

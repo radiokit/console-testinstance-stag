@@ -152,14 +152,18 @@ const TrackItem = React.createClass({
       scale
     );
 
-    const trackItemStyle = {
+    const containerPositionStyle = {
       position: 'absolute', left: 0,
       top: (prettyItem.get('track') - 1) * this.props.height,
       transition: `top 60ms ease`,
       transform: `translateX(${Math.round(Math.max(0, viewLeftOffset) * scale)}px)`,
       width: blockWidth,
       height: blockHeight,
-      outline: this.props.selected ? '3px solid black' : 'none',
+    };
+
+    const trackItemStyle = {
+      ...containerPositionStyle,
+      outline: this.props.selected ? '1px solid black' : '1px solid gray',
     };
 
     const trackItemProps = {
@@ -168,8 +172,6 @@ const TrackItem = React.createClass({
       // style to display while dragging
       holdStyle: {
         ...trackItemStyle,
-        boxShadow: '0px 6px 6px rgba(0,0,0,0.5)',
-        top: trackItemStyle.top - 6,
         zIndex: 2,
       },
       onMouseDown: this.handleMouseDown,
@@ -205,14 +207,24 @@ const TrackItem = React.createClass({
       onChange: this.handleFadeOutChange,
     };
 
+    const fadeContainerProps = {
+      style: {
+        ...containerPositionStyle,
+        zIndex: 2,
+        pointerEvents: 'none',
+      },
+    };
+
     return (
-      <Movable {...trackItemProps}>
-        <ClipBox {...clipBoxProps}/>
-        <div style={{position: 'absolute', top:0, zIndex:2}}>
+      <div>
+        <Movable {...trackItemProps}>
+          <ClipBox {...clipBoxProps}/>
+        </Movable>
+        <div {...fadeContainerProps}>
           {this.props.fadesOf === 'item' && (<TimeMovableRegion {...fadeInProps} />)}
           {this.props.fadesOf === 'item' && (<TimeMovableRegion {...fadeOutProps} />)}
         </div>
-      </Movable>
+      </div>
     );
   }
 });
