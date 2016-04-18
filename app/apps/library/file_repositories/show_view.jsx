@@ -39,7 +39,6 @@ const ShowView = React.createClass({
     }
   },
 
-
   modifyShowQuery(query) {
     return query
       .select("metadata_schemas") // metadata_schemas and tag_categories fields are required by the content partial

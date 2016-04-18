@@ -40,7 +40,6 @@ export default React.createClass({
       <ModalForEach ref="modal" size="large" onPerform={this.onPerform} contentPrefix="widgets.vault.file_browser.modals.metadata" recordIds={this.props.selectedRecordIds} index={this.state.index}>
         <div>
           <Translate component="p" content="widgets.vault.file_browser.modals.metadata.message.confirmation" count={this.props.selectedRecordIds.count()} />
-§
           <form className="form-horizontal" role="form">
             {this.props.metadataSchemas.map((metadataSchema) => {
               return (

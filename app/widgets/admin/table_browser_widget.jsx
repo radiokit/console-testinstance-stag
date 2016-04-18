@@ -222,13 +222,10 @@ export default React.createClass({
 
 
   renderTable: function() {
-    if(this.state.recordsCount !== 0) {
       return (
         <Table linkFunc={this.props.recordsLinkFunc} selectedRecordIds={this.state.selectedRecordIds} onSelectRecord={this.onSelectRecord} onSelectAll={this.onSelectAll} selectable={this.props.selectable} attributes={this.props.attributes} contentPrefix={this.props.contentPrefix} records={this.state.records} />
       );
-    }
   },
-
 
   render: function() {
     if(this.state.loadingError) {

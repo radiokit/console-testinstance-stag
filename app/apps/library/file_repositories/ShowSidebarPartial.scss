@@ -1,6 +1,6 @@
 .ShowSidebarPartial {
 
-  .allTags {
+  .AllTags {
     padding-left: 36px;
     &--selected{
       padding-left: 36px;
@@ -13,7 +13,7 @@
   .card-head-sm {
       padding-left: 36px;
   }
-  .tag {
+  .Tag {
 
     background-color: #f2f2f2;
     &--selected{
@@ -22,7 +22,7 @@
       border-bottom: 1px solid white;
     }
   }
-  .category{
+  .Category{
     &--selected{
       background-color: #1e587b;
       color: white;

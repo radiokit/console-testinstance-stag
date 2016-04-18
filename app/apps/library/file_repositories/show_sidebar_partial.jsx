@@ -1,6 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import classnames from 'classnames';
+import Immutable from 'immutable';
 
 import Translate from 'react-translate-component';
 
@@ -53,10 +54,10 @@ const ShowSidebarPartial = React.createClass({
         <div>
           <ul className="list">
             {category.tag_items && _.sortBy(category.tag_items,'name').map((tag) => {
-                let onTagSelected = this.selectTag.bind(null, tag);
+                const onTagSelected = () => this.selectTag(tag);
                 return (
                   <li key={ tag.id }>
-                    <div className={"card-head card-head-sm tag" + (this.isTagSelected(tag) ? "--selected" : "")} onClick={onTagSelected}>
+                    <div className={"card-head card-head-sm Tag" + (this.isTagSelected(tag) ? "--selected" : "")} onClick={onTagSelected}>
                       <header>
                         { tag.name }
                       </header>
@@ -70,20 +71,20 @@ const ShowSidebarPartial = React.createClass({
   },
 
   render: function () {
-    let categories = this.props.record.toJS().tag_categories;
+    const categories = this.props.record.get("tag_categories", new Immutable.List()).toJS();
     return (
       <div className="ShowSidebarPartial">
-        <div className={"card-head allTags" + (!this.props.tagFilter.length > 0 ? "--selected" : "")}>
+        <div className={"card-head AllTags" + (!this.props.tagFilter.length > 0 ? "--selected" : "")}>
           <header onClick={this.onClearFilter}>
             <Translate content={this.props.contentPrefix + ".tags.all_tags"} />
           </header>
         </div>
         { categories.length > 0 && _.sortBy(categories,'name').map((category) => {
-            let onCategorySelected = this.selectCategory.bind(null, category);
+            const onCategorySelected = () => this.selectCategory(category);
             return (
               <div id={ category.name } key={category.name}>
                 <div className="expanded">
-                  <div className={"card-head category" + (this.isCategorySelected(category) ? "--selected" : "")} aria-expanded="true">
+                  <div className={"card-head Category" + (this.isCategorySelected(category) ? "--selected" : "")} aria-expanded="true">
                     <a className={ "btn btn-flat ink-reaction btn-icon-toggle " + (category.tag_items.length === 0 ? "disabled" : "") }
                       data-toggle="collapse" data-parent={ "#" + category.name }
                       data-target={ "#" + category.name + "-tagList" }>

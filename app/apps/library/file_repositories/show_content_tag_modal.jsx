@@ -4,6 +4,7 @@ import _ from 'lodash';
 import ReactDOM from 'react-dom';
 import Immutable from 'immutable';
 
+import Checkbox from '../../../widgets/general/indeterminate_checkbox_widget.jsx';
 import ModalForEach from '../../../widgets/admin/modal_foreach_widget.jsx';
 
 import './ShowContentTagModal.scss';
@@ -94,7 +95,7 @@ const ShowContentTagModal = React.createClass({
   },
 
   getTagStatus(tagId) {
-    let occuranceCount = (this.tagFrequencies && this.tagFrequencies[tagId]) || 0;
+    const occuranceCount = (this.tagFrequencies && this.tagFrequencies[tagId]) || 0;
     if (occuranceCount === 0) {
       return {
         checked: false,
@@ -102,7 +103,7 @@ const ShowContentTagModal = React.createClass({
       }
     }
     else {
-      let tagForAll = occuranceCount === this.props.selectedRecordIds.count();
+      const tagForAll = occuranceCount === this.props.selectedRecordIds.count();
       return {
         checked: tagForAll,
         indeterminate: !tagForAll,
@@ -176,7 +177,7 @@ const ShowContentTagModal = React.createClass({
     this.setState({
       shouldUpdate: true,
     });
-    let newAssociations = this.state.selectedTagIds
+    const newAssociations = this.state.selectedTagIds
       .map((tagId) => {
         return {
           tag_item_id: tagId,
@@ -186,11 +187,11 @@ const ShowContentTagModal = React.createClass({
       .filter((association) => {
         return !(_.some(this.props.initialAssociations.toJS(), association))
       });
-    let unwantedAssociations = this.props.initialAssociations.toJS()
+    const unwantedAssociations = this.props.initialAssociations.toJS()
       .filter((a) => {return a.record_file_id === recordId})
       .filter((a) => {return _.includes(this.state.deselectedTagIds, a.tag_item_id)});
-    let insertCompleted = newAssociations.length === 0;
-    let deleteCompleted = unwantedAssociations.length === 0;
+    const insertCompleted = newAssociations.length === 0;
+    const deleteCompleted = unwantedAssociations.length === 0;
     if (insertCompleted && deleteCompleted) {
       this.recordIdUpdateComplete(recordId);
     } else {
@@ -211,10 +212,10 @@ const ShowContentTagModal = React.createClass({
           <ul className="list">
             {category.tag_items && _.sortBy(category.tag_items,'name').map((tag) => {
 
-                let onTagSelected = this.selectTagId.bind(null, tag.id);
-                let onTagDeselected = this.deselectTagId.bind(null, tag.id);
-                let onTagRestored = this.resetTagId.bind(null, tag.id);
-                let tagStatus = this.getTagStatus(tag.id);
+                const onTagSelected = () => this.selectTagId(tag.id);
+                const onTagDeselected = () => this.deselectTagId(tag.id);
+                const onTagRestored = () => this.resetTagId(tag.id);
+                const tagStatus = this.getTagStatus(tag.id);
                 return (
                   <li key={ tag.id }>
                     <div className="card-head card-head-xs">
@@ -243,7 +244,7 @@ const ShowContentTagModal = React.createClass({
   },
 
   render() {
-    let categories = this.props.tagCategories.toJS();
+    const categories = this.props.tagCategories.toJS();
     return (
       <ModalForEach
         ref="modal"
@@ -308,72 +309,5 @@ const ShowContentTagModal = React.createClass({
   }
 });
 
-const Checkbox = React.createClass({
-
-  propTypes: {
-    checked: React.PropTypes.bool,
-    indeterminate: React.PropTypes.bool,
-    onSelected: React.PropTypes.func,
-    onDeselected: React.PropTypes.func,
-    onRestore: React.PropTypes.func
-  },
-
-  getInitialState() {
-    return {
-      checked: this.props.checked,
-      indeterminate: this.props.indeterminate,
-    }
-  },
-
-  componentWillReceiveProps(nextProps) {
-      this.setState({
-        checked: nextProps.checked,
-        indeterminate: nextProps.indeterminate,
-      });
-  },
-
-  onChange(e) {
-    if (this.state.checked) {
-      this.props.onDeselected();
-      this.setState({
-        checked: false,
-        indeterminate: false
-      });
-    } else {
-      if (this.props.indeterminate && !this.state.indeterminate) {
-        this.props.onRestore();
-        this.setState({
-          checked: false,
-          indeterminate: true,
-        });
-      } else {
-        this.props.onSelected();
-        this.setState({
-          checked: true,
-          indeterminate: false
-        });
-      }
-    }
-  },
-
-  componentDidMount() {
-    if (this.state.indeterminate) {
-      this.setIndeterminate(true);
-    }
-  },
-
-  componentDidUpdate(previousProps) {
-    this.setIndeterminate(this.state.indeterminate);
-  },
-
-  setIndeterminate(indeterminate) {
-    const node = ReactDOM.findDOMNode(this);
-    node.indeterminate = indeterminate;
-  },
-
-  render() {
-    return <input type="checkbox" checked={this.state.checked} onChange={this.onChange}/>;
-  }
-});
 
 export default ShowContentTagModal;
