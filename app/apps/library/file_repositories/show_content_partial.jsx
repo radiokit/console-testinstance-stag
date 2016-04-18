@@ -107,7 +107,6 @@ const ShowContentPartial =  React.createClass({
   },
 
   render() {
-    console.log("this.state.selectedRecordIds.count " + this.state.selectedRecordIds.count());
     return (
       <TableBrowser
         ref="tableBrowser"

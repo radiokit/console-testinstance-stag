@@ -6,6 +6,7 @@ import Immutable from 'immutable';
 
 import ModalForEach from '../../../widgets/admin/modal_foreach_widget.jsx';
 
+import './ShowContentTagModal.scss';
 const ShowContentTagModal = React.createClass({
 
   propTypes: {
@@ -25,9 +26,17 @@ const ShowContentTagModal = React.createClass({
   },
 
   calculateTagFrequencies(props) {
+    this.categoryFrequencies = new Set();
     this.tagFrequencies = {};
     props.initialAssociations.forEach((record) => {
       this.tagFrequencies[record.get("tag_item_id")] = this.tagFrequencies[record.get("tag_item_id")] + 1 || 1;
+    });
+    Object.keys(this.tagFrequencies).forEach((tagId) => {
+      this.props.tagCategories.toJS().forEach((category) => {
+        if (_.includes(category.tag_items.map((tag) => tag.id), tagId)) {
+          this.categoryFrequencies.add(category.id);
+        }
+      });
     });
   },
 
@@ -136,6 +145,10 @@ const ShowContentTagModal = React.createClass({
     });
   },
 
+  isCategoryExpanded(category) {
+    return this.categoryFrequencies && this.categoryFrequencies.has(category.id);
+  },
+
   deleteAssociation(association) {
     window.data.record("vault", "Data.Tag.Association", association.id)
         // .on("error", this.onDeleteError) // TODO
@@ -239,21 +252,25 @@ const ShowContentTagModal = React.createClass({
         recordIds={this.props.selectedRecordIds}
         onDismiss={this.onDismiss}
         index={this.state.index}>
-        <div>
+        <div className="ShowContentTagModal">
           <Translate
             component="p"
             content="widgets.vault.file_browser.modals.tag.message.confirmation"
             count={this.props.selectedRecordIds.count()} />
           {categories.length > 0 && _.sortBy(categories,'name').map((category) => {
+            let expanded = this.isCategoryExpanded(category);
             if(category.tag_items.length === 0){
               return null;
             } else return (
               <div key={category.name} id={ category.name + "-modal"}>
                 <div className="expanded">
-                  <div className="card-head" aria-expanded="true">
-                    <a className={ "btn btn-flat ink-reaction btn-icon-toggle " + (category.tag_items.length === 0 ? "disabled" : "") }
-                      data-toggle="collapse" data-parent={ "#" + category.name + "-modal" }
-                      data-target={ "#" + category.name + "-tagList-modal" }>
+                  <div
+                    className="card-head"
+                    aria-expanded="true"
+                    data-toggle="collapse"
+                    data-parent={ "#" + category.name + "-modal" }
+                    data-target={ "#" + category.name + "-tagList-modal" }>
+                    <a className={ "btn btn-icon-toggle " + (category.tag_items.length === 0 ? "disabled" : "")} >
                       <i className="mdi mdi-chevron-right" />
                     </a>
                     <header>
@@ -261,8 +278,8 @@ const ShowContentTagModal = React.createClass({
                     </header>
                   </div>
                   <div id={ category.name + "-tagList-modal" }
-                    className="collapse in"
-                    aria-expanded="true">
+                    className={ expanded ? "collapse in" : "collapse"}
+                    aria-expanded={expanded}>
                     { this.renderCategoryTags(category) }
                   </div>
                 </div>
