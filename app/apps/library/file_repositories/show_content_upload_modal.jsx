@@ -2,7 +2,7 @@ import React from 'react';
 import Translate from 'react-translate-component';
 
 import Modal from '../../../widgets/admin/modal_widget.jsx';
-import Upload from '../../../widgets/admin/upload_widget.jsx';
+import Upload from '../../../widgets/admin/upload/upload_widget.jsx';
 
 export default React.createClass({
 
