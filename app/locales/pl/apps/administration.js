@@ -269,6 +269,7 @@ export default {
             headers: {
               metadata_schema: "Winiety",
               tags_schema: "Etykiety",
+            },
             body: {
               metadata_schema: {
                 table: {
