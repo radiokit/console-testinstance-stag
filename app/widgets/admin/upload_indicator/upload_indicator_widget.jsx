@@ -49,7 +49,7 @@ const UploadIndicatorWidget = props => {
 
 export default connect(
   UploadIndicatorWidget,
-  {queues: uploadDomain},
+  {queues: uploadDomain.view},
   data => ({
     queues: data.get('queues').filter(queue => !queue.get('completed')),
   })
