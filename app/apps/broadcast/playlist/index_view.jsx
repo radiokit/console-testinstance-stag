@@ -51,7 +51,7 @@ export default React.createClass({
         }
       }).on("fetch", (_event, _query, data) => {
         if(this.isMounted()) {
-          if(data.count() != 0) {
+          if(data.count() !== 0) {
             this.setState({
               loadedFiles: true,
               availableFiles: this.getItems(data).toList()
@@ -84,6 +84,11 @@ export default React.createClass({
     });
   },
 
+  afterFormSubmit: function() {
+    this.fetchPlumberFiles();
+    this.onChangeActiveItem(null);
+  },
+
   render: function() {
 
     if(this.state.loadingError) {
@@ -99,7 +104,7 @@ export default React.createClass({
                   toolbarElement={ScheduleDayCrudButtons}
                   toolbarProps={{
                     availablePlumberFiles: this.state.availableFiles,
-                    afterFormSubmit: this.fetchPlumberFiles,
+                    afterFormSubmit: this.afterFormSubmit,
                     activeItem: this.state.activeItem
                   }}
                   sidebarElement={ScheduleDaySelector}

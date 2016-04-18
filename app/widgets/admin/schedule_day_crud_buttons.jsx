@@ -5,7 +5,6 @@ import { Data } from 'radiokit-api';
 
 import CreateModal from './crud/create_modal.jsx';
 import UpdateModal from './crud/update_modal.jsx';
-import DeleteModalWithSelect from './crud/delete_modal_with_select.jsx';
 import DeleteModal from './crud/delete_modal.jsx';
 import ToolbarGroup from './toolbar_group_widget.jsx';
 import ToolbarButtonModal from './toolbar_button_modal_widget.jsx';
@@ -102,6 +101,10 @@ const ScheduleDayCrudButtons = React.createClass({
     };
   },
 
+  onDeleteSuccess: function() {
+    this.forceUpdate();
+  },
+
   render: function() {
     return (
       <ToolbarGroup position="right">
@@ -140,7 +143,8 @@ const ScheduleDayCrudButtons = React.createClass({
               contentPrefix: "apps.broadcast.playlist.delete_button",
               app: "plumber",
               model: "Media.Input.File.Http",
-              selectedRecordIds: Immutable.List.of(null), // this.props.activeItem.get("id")
+              selectedRecordIds: (this.props.activeItem ? Immutable.List.of(this.props.activeItem.get("id")) : Immutable.List.of(null)), // this.props.activeItem.get("id")
+              // selectedRecordIds: this.props.availablePlumberFiles.map((entry) => {return entry.get("id")}),
               onSuccess: this.props.afterFormSubmit
             }} />
       </ToolbarGroup>
