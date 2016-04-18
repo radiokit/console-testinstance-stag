@@ -51,7 +51,15 @@ export default React.createClass({
 
   render: function() {
     return (
-        <Modal ref="modal" size={this.props.size} contentPrefix={this.props.contentPrefix} onConfirm={this.onConfirm} onCancel={this.onCancel} warning={this.props.warning} proceedType={this.props.proceedType}>
+        <Modal
+          ref="modal"
+          size={this.props.size}
+          contentPrefix={this.props.contentPrefix}
+          onConfirm={this.onConfirm}
+          onCancel={this.onCancel}
+          onHide={this.onDismiss}
+          warning={this.props.warning}
+          proceedType={this.props.proceedType}>
           <div className="modal-body">
             {() => {
               switch(this.props.step) {
@@ -130,7 +138,7 @@ export default React.createClass({
                 case "acknowledgement":
                   return (
                     <div>
-                      <Translate component="button" content={this.props.contentPrefix + ".action.close"} role="button" className={"btn btn-" + this.props.proceedType} data-dismiss="modal" onClick = {this.onSuccess} />
+                      <Translate component="button" content={this.props.contentPrefix + ".action.close"} role="button" className={"btn btn-" + this.props.proceedType} data-dismiss="modal" onClick ={this.onSuccess} />
                     </div>
                   );
 

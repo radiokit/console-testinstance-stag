@@ -26,22 +26,15 @@ export default React.createClass({
   },
 
 
-  onShow: function() {
-    if(this.props.onShow) {
+  onHide: function() {
+    if(this.props.onHide) {
       this.props.onHide(this);
     }
   },
 
-
-  componentDidMount: function() {
-    $(this.refs.modal).on("hide.bs.modal", this.onHide);
-  },
-
-
   componentWillUnmount: function() {
     $(this.refs.modal).off("hide.bs.modal", this.onHide);
   },
-
 
   onShow: function() {
     if(this.props.onShow) {
@@ -49,16 +42,9 @@ export default React.createClass({
     }
   },
 
-
   componentDidMount: function() {
     $(this.refs.modal).on("show.bs.modal", this.onShow);
   },
-
-
-  componentWillUnmount: function() {
-    $(this.refs.modal).off("show.bs.modal", this.onShow);
-  },
-
 
   render: function() {
     let klass;
@@ -72,7 +58,7 @@ export default React.createClass({
       <div className={klass}>
         <div className="modal-content">
           <div className="modal-header">
-            <button type="button" className="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <button type="button" className="close" data-dismiss="modal" onClick={this.onHide} aria-hidden="true">×</button>
             <Translate component="h4" content={this.props.contentPrefix + ".header"} className="modal-title" />
           </div>
 

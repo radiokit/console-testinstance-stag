@@ -10,7 +10,8 @@ const DeleteModal = React.createClass({
     selectedRecordIds: React.PropTypes.object.isRequired,
     app: React.PropTypes.string.isRequired,
     model: React.PropTypes.string.isRequired,
-    onSuccess: React.PropTypes.func
+    onSuccess: React.PropTypes.func,
+    onDismiss: React.PropTypes.func,
   },
 
   getInitialState() {
@@ -33,6 +34,10 @@ const DeleteModal = React.createClass({
     this.props.onSuccess && this.props.onSuccess();
   },
 
+  onDismiss() {
+    this.props.onDismiss && this.props.onDismiss();
+  },
+
   onPerform(index, recordId) {
     window.data.record(this.props.app, this.props.model, recordId)
       // .on("error", this.onDeleteError) // TODO
@@ -50,7 +55,8 @@ const DeleteModal = React.createClass({
         proceedType="danger"
         recordIds={ this.props.selectedRecordIds }
         index={ this.state.index }
-        onSuccess={ this.onSuccess }>
+        onSuccess={ this.onSuccess }
+        onDismiss={ this.onDismiss }>
         <div>
           <Translate
             component="p"
