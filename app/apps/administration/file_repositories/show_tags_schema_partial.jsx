@@ -198,67 +198,65 @@ const ShowTagsSchemaPartial = React.createClass({
                             model: "Data.Tag.Category" } } />
         </ToolbarGroup>
         { this.state.categories.size > 0 && _.sortBy(this.state.categories.toJS(),'name').map((category) => {
-
-            const onNewTagListener = () => this.showNewTagModal(category);
-            const onDeleteCategoryListener = () => this.showDeleteCategoryModal(category);
-            const onEditCategoryListener = () => this.showEditCategoryModal(category);
-            const toggleClassNames = classnames('btn', 'btn-flat', 'btn-icon-toggle', {'disabled' : category.tag_items.length === 0 });
-
-            return (
-              <div id={ category.name }>
-                <CreateModal
-                  ref={ "newTagModal-" + category.name }
-                  contentPrefix={ this.props.contentPrefix + ".modals.create_tag" }
-                  app="vault"
-                  model="Data.Tag.Item"
-                  form={ this.buildNewTagForm(category) }
-                  onDismiss={ this.refreshData }/>
-                <DeleteModal
-                  ref={ "deleteCategoryModal-" + category.name }
-                  contentPrefix={ this.props.contentPrefix + ".modals.delete_category" }
-                  app="vault" model="Data.Tag.Category"
-                  selectedRecordIds={ Immutable.List.of(category.id) }
-                  onDismiss={ this.refreshData }/>
-                <UpdateModal
-                  ref={ "editCategoryModal-" + category.name }
-                  contentPrefix={ this.props.contentPrefix + ".modals.edit_category" }
-                  app="vault"
-                  model="Data.Tag.Category"
-                  recordId={ category.id }
-                  form={ this.buildEditCategoryForm(category) }
-                  onDismiss={ this.refreshData } />
-                <div className="expanded">
-                  <div className="card-head" aria-expanded="true">
-                    <a className={ toggleClassNames }
-                       data-toggle="collapse" data-parent={ "#" + category.name }
-                       data-target={ "#" + category.name + "-tagList" }>
-                      <i className="mdi mdi-chevron-right" />
+          const onNewTagListener = () => this.showNewTagModal(category);
+          const onDeleteCategoryListener = () => this.showDeleteCategoryModal(category);
+          const onEditCategoryListener = () => this.showEditCategoryModal(category);
+          const toggleClassNames = classnames('btn', 'btn-flat', 'btn-icon-toggle', {'disabled' : category.tag_items.length === 0 });
+          return (
+            <div id={ category.name } key={category.id}>
+              <CreateModal
+                ref={ "newTagModal-" + category.name }
+                contentPrefix={ this.props.contentPrefix + ".modals.create_tag" }
+                app="vault"
+                model="Data.Tag.Item"
+                form={ this.buildNewTagForm(category) }
+                onDismiss={ this.refreshData }/>
+              <DeleteModal
+                ref={ "deleteCategoryModal-" + category.name }
+                contentPrefix={ this.props.contentPrefix + ".modals.delete_category" }
+                app="vault" model="Data.Tag.Category"
+                selectedRecordIds={ Immutable.List.of(category.id) }
+                onDismiss={ this.refreshData }/>
+              <UpdateModal
+                ref={ "editCategoryModal-" + category.name }
+                contentPrefix={ this.props.contentPrefix + ".modals.edit_category" }
+                app="vault"
+                model="Data.Tag.Category"
+                recordId={ category.id }
+                form={ this.buildEditCategoryForm(category) }
+                onDismiss={ this.refreshData } />
+              <div className="expanded">
+                <div className="card-head" aria-expanded="true">
+                  <a className={ toggleClassNames }
+                     data-toggle="collapse" data-parent={ "#" + category.name }
+                     data-target={ "#" + category.name + "-tagList" }>
+                    <i className="mdi mdi-chevron-right" />
+                  </a>
+                  <header>
+                    { category.name }
+                  </header>
+                  <div className="tools">
+                    <a className="btn btn-icon" onClick={ onNewTagListener }>
+                      <i className="mdi mdi-library-plus"></i>
                     </a>
-                    <header>
-                      { category.name }
-                    </header>
-                    <div className="tools">
-                      <a className="btn btn-icon" onClick={ onNewTagListener }>
-                        <i className="mdi mdi-library-plus"></i>
-                      </a>
-                      <a className="btn btn-icon" onClick={ onEditCategoryListener }>
-                        <i className="mdi mdi-border-color"></i>
-                      </a>
-                      <a className="btn btn-icon" onClick={ onDeleteCategoryListener }>
-                        <i className="mdi mdi-delete"></i>
-                      </a>
-                    </div>
-                  </div>
-                  <div id={ category.name + "-tagList" } className="collapse in" aria-expanded="true">
-                    { this.renderCategoryTags(category) }
+                    <a className="btn btn-icon" onClick={ onEditCategoryListener }>
+                      <i className="mdi mdi-border-color"></i>
+                    </a>
+                    <a className="btn btn-icon" onClick={ onDeleteCategoryListener }>
+                      <i className="mdi mdi-delete"></i>
+                    </a>
                   </div>
                 </div>
+                <div id={ category.name + "-tagList" } className="collapse in" aria-expanded="true">
+                  { this.renderCategoryTags(category) }
+                </div>
               </div>
-            )
-          }) }
+            </div>
+          );
+          })}
       </div>
     );
-  }
+  },
 });
 
 export default ShowTagsSchemaPartial;

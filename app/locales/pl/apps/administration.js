@@ -288,18 +288,19 @@ export default {
 
                     modals: {
                       create: {
-                        header: "Add metadata field",
+                        header: "Dodaj pole metadanych",
                         action: {
-                          proceed: "Add metadata field",
+                          proceed: "Dodaj",
                           close: "Close",
                           cancel: "Cancel",
                         },
-                        acknowledgement: {
-                          info: "Metadata field was added succesfully.",
+                        message: {
+                          acknowledgement: "Dodano pole metadanych",
+                          progress: "Dodawanie pól metedanych...",
                         },
                         form: {
                           name: {
-                            label: "Field name",
+                            label: "Nazwa pola",
                             hint: "Choose any name that will describe contents of this field, e.g. \"composer\".",
                           },
                           key: {
@@ -321,6 +322,19 @@ export default {
                               duration: "Duration",
                             }
                           },
+                        },
+                      },
+                      delete: {
+                        header: "Usuń pola metadanych",
+                        action: {
+                          proceed: "Usuń",
+                          close: "Zamknij",
+                          cancel: "Anuluj",
+                        },
+                        message: {
+                          progress: "Usuwanie pól metadanych...",
+                          confirmation: "Czy napewno chcesz usunąć te pola metadanych?",
+                          acknowledgement: "Usunięto pola metadanych.",
                         },
                       },
                     },
