@@ -1,95 +1,93 @@
-import AccountHelper from './account_helper.js';
-
 export default {
   apps: {
     electron: {
-      icon: "blur-radial",
+      icon: 'blur-radial',
       devices: {
-        index: function(context) {
-          return "/apps/electron/devices/index";
+        index() {
+          return '/apps/electron/devices/index';
         },
       },
       transmissions: {
-        index: function(context) {
-          return "/apps/electron/transmissions/index";
+        index() {
+          return '/apps/electron/transmissions/index';
         },
       },
       patchbay: {
-        index: function(context) {
-          return "/apps/electron/patchbay/index";
+        index() {
+          return '/apps/electron/patchbay/index';
         },
       },
     },
 
     broadcast: {
-      icon: "radio-tower",
+      icon: 'radio-tower',
       playlist: {
-        index: function(context) {
-          return "/apps/broadcast/playlist/index";
+        index() {
+          return '/apps/broadcast/playlist/index';
         },
       },
       live: {
-        index: function(context) {
-          return "/apps/broadcast/live/index";
+        index() {
+          return '/apps/broadcast/live/index';
         },
       },
     },
 
     infrastructure: {
-      icon: "server-network",
+      icon: 'server-network',
       computing_nodes: {
-        index: function(context) {
-          return "/apps/infrastructure/computing_nodes/index";
+        index() {
+          return '/apps/infrastructure/computing_nodes/index';
         },
       },
       external_inputs: {
-        index: function(context) {
-          return "/apps/infrastructure/external_inputs/index";
+        index() {
+          return '/apps/infrastructure/external_inputs/index';
         },
       },
       transmissions: {
-        index: function(context) {
-          return "/apps/infrastructure/transmissions/index";
+        index() {
+          return '/apps/infrastructure/transmissions/index';
         },
       },
       patchbay: {
-        index: function(context) {
-          return "/apps/infrastructure/patchbay/index";
+        index() {
+          return '/apps/infrastructure/patchbay/index';
         },
       },
     },
 
     administration: {
-      icon: "settings",
+      icon: 'settings',
       user_accounts: {
-        index: function(context) {
-          return "/apps/administration/user_accounts/index";
+        index() {
+          return '/apps/administration/user_accounts/index';
         },
       },
       broadcast_channels: {
-        index: function(context) {
-          return "/apps/administration/broadcast_channels/index";
+        index() {
+          return '/apps/administration/broadcast_channels/index';
         },
       },
       editors: {
-        index: function(context) {
-          return "/apps/administration/editors/index";
+        index() {
+          return '/apps/administration/editors/index';
         },
       },
       file_repositories: {
-        index: function(context) {
-          return "/apps/administration/file_repositories/index";
+        index() {
+          return '/apps/administration/file_repositories/index';
         },
       },
     },
 
     library: {
-      icon: "library-music",
+      icon: 'library-music',
       file_repositories: {
-        index: function(context) {
-          return "/apps/library/file_repositories/index";
+        index() {
+          return '/apps/library/file_repositories/index';
         },
       },
     },
-  }
-}
+  },
+};

@@ -1,4 +1,7 @@
 import React from 'react';
+import {
+  mapValues,
+} from 'lodash';
 
 export default {
   /**
@@ -18,7 +21,7 @@ export default {
    //
    //     {
    //      metadata_schema: {
-   //        element: MetadataSchemaPartial, props: {key1: "val1"},
+   //        element: MetadataSchemaPartial, props: {key1: 'val1'},
    //      },
    //      tags_schema: {
    //         element: TagsSchemaPartial, props: {},
@@ -36,65 +39,68 @@ export default {
    // Optionally you can modify rendered element by passing function as the
    // fourth argument. It will get three arguments: key, rendered element and props.
    */
-  renderDelegatedComponent: function(element, props, preRenderCallback, postRenderCallback) {
-    if(typeof(element) === "object") {
-      if(!this.containsNestedElements(element)) {
+  renderDelegatedComponent(element, props, preRenderCallback, postRenderCallback) {
+    if (typeof(element) === 'object') {
+      if (!this.containsNestedElements(element)) {
         // element argument is a single, already rendered element
         return element;
-
-      } else {
-        // element argument is an object containing definition of nested elements
-        // to be rendered
-        let nestedElements = Object.keys(element).map((key) => {
-          let value = element[key];
-          if(!value.hasOwnProperty("element")) {
-            throw new Error("Missing 'element' key in one of values of object passed to renderDelegatedComponent, passed object was " + JSON.stringify(element));
-          }
-
-          // Merge props passed to renderDelegatedComponent with props passed
-          // to hash specyfing component structure, and then set the 'key' prop.
-          let nestedProps = {};
-          if(typeof(props) === "object") {
-            for(let attr in props) { nestedProps[attr] = props[attr]; }
-          }
-          if(value.hasOwnProperty("props")) {
-            for(let attr in value.props) { nestedProps[attr] = value.props[attr]; }
-          }
-          nestedProps.key = key;
-
-          // Call preRenderCallback if it's present, expect that modified props
-          // will be returned.
-          if(typeof(preRenderCallback) === "function") {
-            nestedProps = preRenderCallback(key, value.element, nestedProps);
-          }
-
-          // Do the actual rendering
-          let renderedElement = this.renderDelegatedComponent(value.element, nestedProps);
-
-          // Call postRenderCallback if it's present, expect that modified element
-          // will be returned.
-          if(typeof(postRenderCallback) === "function") {
-            return postRenderCallback(key, renderedElement, nestedProps);
-          } else {
-            return renderedElement;
-          }
-        });
-
-        return (
-          <div>
-            {nestedElements}
-          </div>
-        );
       }
+      // element argument is an object containing definition of nested elements
+      // to be rendered
+      let nestedElements = Object.keys(element).map((key) => {
+        const value = element[key];
+        if (!value.hasOwnProperty('element')) {
+          throw new Error([
+            'Missing element key in one of values of object passed to ',
+            'renderDelegatedComponent, passed object was ',
+            JSON.stringify(element),
+          ].join(''));
+        }
 
-    } else {
-      // element argument is a react component class that we have to instantiate
-      return React.createElement(element, props);
+        // Merge props passed to renderDelegatedComponent with props passed
+        // to hash specyfing component structure, and then set the 'key' prop.
+        let nestedProps = {};
+        if (typeof(props) === 'object') {
+          mapValues(props, (v, attr) => {
+            nestedProps[attr] = v;
+          });
+        }
+        if (value.hasOwnProperty('props')) {
+          mapValues(value.props, (v, attr) => {
+            nestedProps[attr] = v;
+          });
+        }
+        nestedProps.key = key;
+
+        // Call preRenderCallback if it's present, expect that modified props
+        // will be returned.
+        if (typeof(preRenderCallback) === 'function') {
+          nestedProps = preRenderCallback(key, value.element, nestedProps);
+        }
+
+        // Do the actual rendering
+        const renderedElement = this.renderDelegatedComponent(value.element, nestedProps);
+
+        // Call postRenderCallback if it's present, expect that modified element
+        // will be returned.
+        if (typeof(postRenderCallback) === 'function') {
+          return postRenderCallback(key, renderedElement, nestedProps);
+        }
+        return renderedElement;
+      });
+
+      return (
+        <div>
+          {nestedElements}
+        </div>
+      );
     }
+
+    // element argument is a react component class that we have to instantiate
+    return React.createElement(element, props);
   },
 
-
-  containsNestedElements: function(element) {
-    return typeof(element) === "object" && element.$$typeof !== Symbol.for("react.element");
-  }
-}
+  containsNestedElements(element) {
+    return typeof(element) === 'object' && element.$$typeof !== Symbol.for('react.element');
+  },
+};
