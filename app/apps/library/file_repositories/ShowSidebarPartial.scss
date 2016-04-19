@@ -1,9 +1,15 @@
 .ShowSidebarPartial {
 
   .AllTags {
-    padding-left: 36px;
+
+    header {
+      margin-left: 20px;
+      font-size: 17px;
+    }
+
     &--selected{
-      padding-left: 36px;
+
+      @extend .AllTags;
       background-color: #1e587b;
       color: white;
       border-bottom: 1px solid white;
@@ -13,17 +19,49 @@
   .card-head-sm {
       padding-left: 36px;
   }
+
   .Tag {
+
+    header{
+      font-size: 14px;
+      padding: 7px;
+    }
 
     background-color: #f2f2f2;
     &--selected{
+      @extend .Tag;
       background-color: #297bac;
       color: white;
       border-bottom: 1px solid white;
     }
   }
   .Category{
+
+    header{
+      font-size: 17px;
+      padding: 7px;
+    }
+
+    .mdi-chevron-right {
+      transition: all 0.1s linear;
+      font-size: 1.4em;
+    }
+
+    .mdi-chevron-right {
+      transform: rotate(90deg);
+    }
+
+    .collapsed  .mdi-chevron-right {
+      transform: rotate(0deg);
+    }
+
+    .card-head-sm {
+      padding-left: 36px;
+      background-color: #f2f2f2;
+    }
+
     &--selected{
+      @extend .Category;
       background-color: #1e587b;
       color: white;
       border-bottom: 1px solid white;

@@ -81,20 +81,26 @@ const ShowSidebarPartial = React.createClass({
         </div>
         { categories.length > 0 && _.sortBy(categories,'name').map((category) => {
             const onCategorySelected = () => this.selectCategory(category);
+            let toggleClasses = classnames('btn btn-flat btn-icon-toggle collapsed', {
+              'disabled': category.tag_items.length === 0,
+            });
+            let headerClasses = classnames('card-head Category', {
+              'Category--selected': this.isCategorySelected(category),
+            });
             return (
-              <div id={ category.name } key={category.name}>
+              <div id={ category.id } key={category.id}>
                 <div className="expanded">
-                  <div className={"card-head Category" + (this.isCategorySelected(category) ? "--selected" : "")} aria-expanded="true">
-                    <a className={ "btn btn-flat ink-reaction btn-icon-toggle " + (category.tag_items.length === 0 ? "disabled" : "") }
-                      data-toggle="collapse" data-parent={ "#" + category.name }
-                      data-target={ "#" + category.name + "-tagList" }>
+                  <div className={headerClasses} aria-expanded="true">
+                    <a className={toggleClasses}
+                      data-toggle="collapse" data-parent={ "#" + category.id }
+                      data-target={ "#" + category.id + "-tagList" }>
                       <i className="mdi mdi-chevron-right" />
                     </a>
                     <header onClick={onCategorySelected} >
                       { category.name }
                     </header>
                   </div>
-                  <div id={ category.name + "-tagList" }
+                  <div id={ category.id + "-tagList" }
                     className="collapse"
                     aria-expanded="false">
                     { this.renderCategoryTags(category) }

@@ -120,7 +120,7 @@ export default React.createClass({
                       <Translate component="button" content={this.props.contentPrefix + ".action.proceed"} role="button" className={"btn btn-" + this.props.proceedType} onClick={this.onConfirm} />
                         {() => {
                           if(this.props.warning && this.props.step === "confirmation") {
-                            return (<Translate content={"widgets.admin.modal.warnings." + this.props.warning} className={"pull-right text-" + this.props.proceedType}  />);
+                            return (<Translate content={"widgets.admin.modal.warnings." + this.props.warning} className={"pull-left text-" + this.props.proceedType}  />);
                           }
                         }()}
                     </div>

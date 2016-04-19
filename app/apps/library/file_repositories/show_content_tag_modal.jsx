@@ -3,6 +3,7 @@ import Translate from 'react-translate-component';
 import _ from 'lodash';
 import ReactDOM from 'react-dom';
 import Immutable from 'immutable';
+import classnames from 'classnames';
 
 import Checkbox from '../../../widgets/general/indeterminate_checkbox_widget.jsx';
 import ModalForEach from '../../../widgets/admin/modal_foreach_widget.jsx';
@@ -260,25 +261,29 @@ const ShowContentTagModal = React.createClass({
             count={this.props.selectedRecordIds.count()} />
           {categories.length > 0 && _.sortBy(categories,'name').map((category) => {
             let expanded = this.isCategoryExpanded(category);
+            let toggleClasses = classnames('btn btn-icon-toggle', {
+              'disabled': category.tag_items.length === 0,
+              'collapsed': !expanded,
+            });
             if(category.tag_items.length === 0){
               return null;
             } else return (
-              <div key={category.name} id={ category.name + "-modal"}>
+              <div key={category.id} id={ category.id + "-modal"}>
                 <div className="expanded">
                   <div
                     className="card-head"
                     aria-expanded="true"
                     data-toggle="collapse"
-                    data-parent={ "#" + category.name + "-modal" }
-                    data-target={ "#" + category.name + "-tagList-modal" }>
-                    <a className={ "btn btn-icon-toggle " + (category.tag_items.length === 0 ? "disabled" : "")} >
+                    data-parent={ "#" + category.id + "-modal" }
+                    data-target={ "#" + category.id + "-tagList-modal" }>
+                    <a className={toggleClasses} >
                       <i className="mdi mdi-chevron-right" />
                     </a>
                     <header>
                       { category.name }
                     </header>
                   </div>
-                  <div id={ category.name + "-tagList-modal" }
+                  <div id={ category.id + "-tagList-modal" }
                     className={ expanded ? "collapse in" : "collapse"}
                     aria-expanded={expanded}>
                     { this.renderCategoryTags(category) }
