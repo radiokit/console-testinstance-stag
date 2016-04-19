@@ -4,23 +4,19 @@ export default {
   SCREEN_MD: 992,
   SCREEN_LG: 1200,
 
-
-  isWindowXs: function() {
+  isWindowXs() {
     return window.innerWidth <= this.SCREEN_XS;
   },
 
-
-  isWindowSm: function() {
+  isWindowSm() {
     return window.innerWidth <= this.SCREEN_SM;
   },
 
-
-  isWindowMd: function() {
+  isWindowMd() {
     return window.innerWidth <= this.SCREEN_MD;
   },
 
-
-  isWindowLg: function() {
+  isWindowLg() {
     return window.innerWidth <= this.SCREEN_LG;
-  }
-}
+  },
+};

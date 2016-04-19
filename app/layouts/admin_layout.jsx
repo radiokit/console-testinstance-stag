@@ -7,21 +7,22 @@ import MenuBar from './menu_bar/menu_bar_partial.jsx';
 import TopBar from './top_bar/top_bar.jsx';
 import Background from './background/background_partial.jsx';
 
+const AdminLayout = props => (
+  <div>
+    <Background />
+    <TopBar />
 
-export default React.createClass({
-  render: function() {
-    return (
-      <div>
-        <Background />
-        <TopBar />
-
-        <div id="base">
-          <div id="content">
-            {this.props.children}
-          </div>
-          <MenuBar />
-        </div>
+    <div id="base">
+      <div id="content">
+        {props.children}
       </div>
-    );
-  }
-});
+      <MenuBar />
+    </div>
+  </div>
+);
+
+AdminLayout.propTypes = {
+  children: React.PropTypes.any,
+};
+
+export default AdminLayout;

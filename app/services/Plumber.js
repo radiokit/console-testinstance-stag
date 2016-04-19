@@ -5,10 +5,10 @@ import { Socket } from 'phoenix-socket';
 const Plumber
   = window.plumberStream // legacy
   = new Socket(
-  ENV.apps.plumber.baseUrl.replace(/^http/, "ws") + "/api/stream/v1.0",
-  {
-    heartbeatIntervalMs: 1000
-  }
+    `${ENV.apps.plumber.baseUrl.replace(/^http/, 'ws')}/api/stream/v1.0`,
+    {
+      heartbeatIntervalMs: 1000,
+    }
 );
 
 Plumber.connect();
