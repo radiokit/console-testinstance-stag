@@ -112,18 +112,17 @@ export default React.createClass({
 
           <div className="modal-footer">
             {() => {
-              if(this.props.warning && this.props.step === "confirmation") {
-                return (<Translate content={"widgets.admin.modal.warnings." + this.props.warning} className={"pull-left text-" + this.props.proceedType}  />);
-              }
-            }()}
-
-            {() => {
               switch(this.props.step) {
                 case "confirmation":
                   return (
                     <div>
                       <Translate component="button" content={this.props.contentPrefix + ".action.cancel"} role="button" className="btn btn-default" data-dismiss="modal" />
                       <Translate component="button" content={this.props.contentPrefix + ".action.proceed"} role="button" className={"btn btn-" + this.props.proceedType} onClick={this.onConfirm} />
+                        {() => {
+                          if(this.props.warning && this.props.step === "confirmation") {
+                            return (<Translate content={"widgets.admin.modal.warnings." + this.props.warning} className={"pull-right text-" + this.props.proceedType}  />);
+                          }
+                        }()}
                     </div>
                   );
 

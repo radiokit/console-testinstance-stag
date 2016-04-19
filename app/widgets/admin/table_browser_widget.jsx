@@ -82,16 +82,13 @@ export default React.createClass({
     }
   },
 
-
   loadRecords: function() {
     this.recordsQueryFull.fetch();
   },
 
-
   loadRecordIds: function() {
     this.recordsQueryIds.fetch();
   },
-
 
   onRecordsQueryFetch: function(_event, _query, data, meta) {
     if(this.isMounted()) {
@@ -102,7 +99,6 @@ export default React.createClass({
       });
     }
   },
-
 
   onRecordIdsQueryFetch: function(_event, _query, data, meta) {
     if(this.isMounted()) {
@@ -117,11 +113,9 @@ export default React.createClass({
     }
   },
 
-
   buildRangeStart: function() {
     return this.state.offset+1;
   },
-
 
   buildRangeStop: function() {
     let rangeStop = this.state.offset + this.props.limit;
@@ -156,7 +150,6 @@ export default React.createClass({
     });
   },
 
-
   onNextPageClick: function() {
     this.setState({
       offset: this.state.offset + this.props.limit
@@ -164,7 +157,6 @@ export default React.createClass({
       this.loadRecords();
     });
   },
-
 
   onPreviousPageClick: function() {
     this.setState({
@@ -174,7 +166,6 @@ export default React.createClass({
     });
   },
 
-
   onOverSelectAllClick: function() {
     this.setState({
       selectedMatching: false,
@@ -183,7 +174,6 @@ export default React.createClass({
       this.loadRecordIds();
     });
   },
-
 
   onOverClearClick: function() {
     this.setState({
@@ -198,7 +188,6 @@ export default React.createClass({
     this.reloadData();
   },
 
-
   renderPagination: function() {
     if(this.state.recordsCount !== 0) {
       return (
@@ -211,7 +200,6 @@ export default React.createClass({
     }
   },
 
-
   renderRefresh: function() {
     return (
       <ToolbarGroup position="right">
@@ -219,7 +207,6 @@ export default React.createClass({
       </ToolbarGroup>
     );
   },
-
 
   renderTable: function() {
       return (

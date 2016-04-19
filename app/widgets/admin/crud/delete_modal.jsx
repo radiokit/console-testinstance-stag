@@ -16,15 +16,18 @@ const DeleteModal = React.createClass({
 
   getInitialState() {
     return {
-      index: 0
+      index: 0,
     }
   },
 
   show() {
+    this.setState({
+      index: 0,
+    });
     this.refs.modal.show();
   },
 
-  onDeleteSuccess(record) {
+  onDeleteSuccess() {
     this.setState({
       index: this.state.index + 1
     });
@@ -56,11 +59,12 @@ const DeleteModal = React.createClass({
         recordIds={ this.props.selectedRecordIds }
         index={ this.state.index }
         onSuccess={ this.onSuccess }
-        onDismiss={ this.onDismiss }>
+        onDismiss={ this.onDismiss }
+      >
         <div>
           <Translate
             component="p"
-            content={ this.props.contentPrefix + ".message.confirmation" }
+            content={ this.props.contentPrefix + '.message.confirmation' }
             count={ this.props.selectedRecordIds.count() } />
         </div>
         <div>

@@ -376,9 +376,8 @@ export default {
                   label: "Konto użytkownika",
                 }
               },
-
-              acknowledgement: {
-                info: "Pomyślnie dodano repozytorium plików",
+              message: {
+                acknowledgement: "Pomyślnie dodano repozytorium plików",
               },
 
               action: {

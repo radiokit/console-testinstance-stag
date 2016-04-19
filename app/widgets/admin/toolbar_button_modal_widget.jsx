@@ -26,7 +26,6 @@ export default React.createClass({
   render: function() {
     let modalPropsMerged = clone(this.props.modalProps);
     modalPropsMerged.ref = "modal";
-
     return (
       <span>
         {React.createElement(this.props.modalElement, modalPropsMerged)}

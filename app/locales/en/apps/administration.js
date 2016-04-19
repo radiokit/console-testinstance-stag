@@ -377,11 +377,9 @@ export default {
                   label: "Client account",
                 }
               },
-
-              acknowledgement: {
-                info: "File repository added succesfully",
+              message: {
+                acknowledgement: "File repository added succesfully",
               },
-
               action: {
                 proceed: "Add file repository",
                 cancel: "Cancel",

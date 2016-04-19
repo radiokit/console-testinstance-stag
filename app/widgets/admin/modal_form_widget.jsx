@@ -23,18 +23,15 @@ export default React.createClass({
     record: React.PropTypes.object,
   },
 
-
   getDefaultProps: function() {
     return {
       proceedType: "primary",
     }
   },
 
-
   show: function() {
     this.refs.modal.show();
   },
-
 
   onShow: function() {
     if(this.props.onShow) {
@@ -44,6 +41,7 @@ export default React.createClass({
 
   onSuccess: function(){
     this.props.onSuccess && this.props.onSuccess();
+    this.onHide();
   },
 
   onHide: function() {
@@ -52,21 +50,17 @@ export default React.createClass({
     }
   },
 
-
   onProceed: function() {
     this.refs.form.submit();
   },
-
 
   onFormSubmit: function(fieldValues) {
     this.props.onFormSubmit(fieldValues);
   },
 
-
   onCancel: function() {
     this.props.onCancel();
   },
-
 
   render: function() {
     return (
@@ -141,14 +135,14 @@ export default React.createClass({
                 case "acknowledgement":
                   return (
                     <div>
-                      <Translate component="button" content={this.props.contentPrefix + ".action.close"} role="button" className={"btn btn-" + this.props.proceedType} data-dismiss="modal"  onClick={this.onSuccess}/>
+                      <Translate component="button" content={this.props.contentPrefix + ".action.close"} role="button" className={"btn btn-" + this.props.proceedType} data-dismiss="modal" onClick={this.onSuccess}/>
                     </div>
                   );
 
                 case "cancelled":
                   return (
                     <div>
-                      <Translate component="button" content={this.props.contentPrefix + ".action.close"} role="button" className={"btn btn-" + this.props.proceedType} data-dismiss="modal" />
+                      <Translate component="button" content={this.props.contentPrefix + ".action.close"} role="button" className={"btn btn-" + this.props.proceedType} data-dismiss="modal" onClick={this.onHide}/>
                     </div>
                   );
 
@@ -156,7 +150,7 @@ export default React.createClass({
                 case "error":
                   return (
                     <div>
-                      <Translate component="button" content={this.props.contentPrefix + ".action.close"} role="button" className={"btn btn-" + this.props.proceedType} data-dismiss="modal" />
+                      <Translate component="button" content={this.props.contentPrefix + ".action.close"} role="button" className={"btn btn-" + this.props.proceedType} data-dismiss="modal"  onClick={this.onHide}/>
                     </div>
                   );
               }
