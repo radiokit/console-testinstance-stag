@@ -27,6 +27,12 @@ const DeleteModal = React.createClass({
     this.setState({
       index: this.state.index + 1
     });
+
+    if(this.props.selectedRecordIds.count() === this.state.index) {
+      this.setState({
+        index: 0
+      });
+    }
   },
 
   onSuccess() {

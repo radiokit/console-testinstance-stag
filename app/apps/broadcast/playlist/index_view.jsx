@@ -59,7 +59,8 @@ export default React.createClass({
           } else {
             this.setState({
               loadedListOfFiles: true,
-            })
+              availableFiles: new Immutable.Seq().toIndexedSeq()
+            });
           }
         }
       }).fetch();

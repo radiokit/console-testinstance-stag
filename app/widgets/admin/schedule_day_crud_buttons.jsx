@@ -79,10 +79,7 @@ const ScheduleDayCrudButtons = React.createClass({
   },
 
   getDateValue: function(key) {
-    if (this.props.activeItem) {
-      return this.props.activeItem.get(key).toISOString()
-    }
-    return Moment.utc().toISOString()
+    return this.props.activeItem ? this.props.activeItem.get(key) : Moment.utc();
   },
 
   buildUpdateForm: function() {
@@ -92,11 +89,11 @@ const ScheduleDayCrudButtons = React.createClass({
       },
       start_at: {
         type: "datetime",
-        value: this.getDateValue("start_at")
+        value: this.getDateValue("start_at").toISOString()
       },
       stop_at: {
         type: "datetime",
-        value: this.getDateValue("stop_at")
+        value: this.getDateValue("stop_at").toISOString()
       }
     };
   },
@@ -125,6 +122,7 @@ const ScheduleDayCrudButtons = React.createClass({
             labelTextKey="apps.broadcast.playlist.update_button"
             disabled={this.props.activeItem === null}
             modalElement={UpdateModal}
+            key={(this.props.activeItem && this.props.activeItem.get("id")) || "no-id" }
             modalProps={{
               contentPrefix: "apps.broadcast.playlist.edit_button",
               form: this.buildUpdateForm(),
