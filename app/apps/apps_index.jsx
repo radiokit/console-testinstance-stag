@@ -1,9 +1,9 @@
 import React from 'react';
 
-import AdminLayout from '../layouts/admin_layout.jsx';
+const AppIndex = props => (<div>{props.children}</div>);
 
-export default React.createClass({
-  render: function() {
-    return (<div>{this.props.children}</div>);    
-  }  
-});
+AppIndex.propTypes = {
+  children: React.PropTypes.any,
+};
+
+export default AppIndex;
