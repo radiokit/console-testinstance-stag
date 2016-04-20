@@ -8,9 +8,6 @@ import GridRow from '../../../widgets/admin/grid_row_widget.jsx';
 import GridCell from '../../../widgets/admin/grid_cell_widget.jsx';
 import Section from '../../../widgets/admin/section_widget.jsx';
 import Card from '../../../widgets/admin/card_widget.jsx';
-import CardBody from '../../../widgets/admin/card_body_widget.jsx';
-import CardHeader from '../../../widgets/admin/card_header_widget.jsx';
-import CardSidebar from '../../../widgets/admin/card_sidebar_widget.jsx';
 import Alert from '../../../widgets/admin/alert_widget.jsx';
 import ScheduleDaily from '../../../widgets/admin/schedule_daily_widget.jsx';
 import ScheduleDaySelector from '../../../widgets/admin/schedule_day_selector_widget.jsx';
@@ -108,23 +105,16 @@ export default React.createClass({
             <GridCell size="large" center={true}>
               <Card
                   contentPrefix="apps.broadcast.playlist"
-                  toolbarElement={ScheduleDayCrudButtons}
-                  toolbarProps={{
-                    availablePlumberFiles: this.state.availableFiles,
-                    afterFormSubmit: this.afterFormSubmit,
-                    activeItem: this.state.activeItem
-                  }}
-                  sidebarElement={ScheduleDaySelector}
-                  sidebarProps={{
-                    now: this.state.now,
-                    onChange: this.onNowChange
-                  }}
                   contentElement={ScheduleDaily}
                   contentProps={{
                     now: this.state.now,
                     items: this.state.availableFiles,
                     activeItem: this.state.activeItem,
-                    onChangeActiveItem: this.onChangeActiveItem
+                    onChangeActiveItem: this.onChangeActiveItem,
+                    onNowChange: this.onNowChange,
+                    availablePlumberFiles: this.state.availableFiles,
+                    afterFormSubmit: this.afterFormSubmit,
+                    activeItem: this.state.activeItem
                   }} />
             </GridCell>
           </GridRow>

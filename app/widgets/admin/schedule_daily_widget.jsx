@@ -4,6 +4,9 @@ import sprintf from 'tiny-sprintf';
 import Moment from 'moment';
 import classnames from 'classnames';
 
+import ScheduleDaySelector from './schedule_day_selector_widget.jsx';
+import ScheduleDayCrudButtons from './schedule_day_crud_buttons.jsx';
+
 import './schedule_daily_widget.scss';
 
 const hourType = PropTypes.oneOf([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]);
@@ -185,7 +188,11 @@ export default React.createClass({
     items: React.PropTypes.object.isRequired,
     now: React.PropTypes.object.isRequired,
     activeItem: React.PropTypes.object,
-    onChangeActiveItem: React.PropTypes.func
+    onChangeActiveItem: React.PropTypes.func,
+    onNowChange: React.PropTypes.func,
+    availablePlumberFiles: React.PropTypes.object,
+    afterFormSubmit: React.PropTypes.func,
+    activeItem: React.PropTypes.object
   },
 
 
@@ -207,6 +214,12 @@ export default React.createClass({
     this.setState({expansionState: {...this.state.expansionState, [hour]: value}});
   },
 
+  onNowChange: function(newNow) {
+    this.setState({
+      now: newNow,
+    });
+  },
+
   render() {
     let hours;
 
@@ -217,24 +230,32 @@ export default React.createClass({
     }
 
     return (
-      <table className="ScheduleDailyWidget table table-banded table-hover ">
-        <tbody>
-          {hours.map((hour)=> {
-            return (
-              <CalendarRow
-                key={hour}
-                hour={hour}
-                firstHour={this.props.firstHour}
-                now={this.props.now}
-                items={this.props.items}
-                onChangeExpansionState={this.onChangeExpansionState}
-                expanded={this.state.expansionState[hour]}
-                onChangeActiveItem={this.props.onChangeActiveItem}
-                activeItem={this.props.activeItem} />
-            );
-          })}
-        </tbody>
-      </table>
+      <div>
+        <ScheduleDayCrudButtons
+            availablePlumberFiles={this.props.availablePlumberFiles}
+            afterFormSubmit={this.props.afterFormSubmit}
+            activeItem={this.props.activeItem} />
+
+        <ScheduleDaySelector now={this.props.now} onChange={this.props.onNowChange} />
+        <table className="ScheduleDailyWidget table table-banded table-hover ">
+          <tbody>
+            {hours.map((hour)=> {
+              return (
+                <CalendarRow
+                  key={hour}
+                  hour={hour}
+                  firstHour={this.props.firstHour}
+                  now={this.props.now}
+                  items={this.props.items}
+                  onChangeExpansionState={this.onChangeExpansionState}
+                  expanded={this.state.expansionState[hour]}
+                  onChangeActiveItem={this.props.onChangeActiveItem}
+                  activeItem={this.props.activeItem} />
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     );
   }
 });
