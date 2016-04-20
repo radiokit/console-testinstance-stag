@@ -11,7 +11,7 @@ import {
 import RadioKitDomain from './../RadioKitDomain';
 
 const scheduleReadyQueries = new View(
-  RadioKitDomain.view,
+  RadioKitDomain,
   RKDData => RKDData.filter((queryStatus, queryParams) => (
     queryParams.get('key') === 'schedule') &&
     (
