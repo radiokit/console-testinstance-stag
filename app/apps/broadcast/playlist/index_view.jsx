@@ -17,6 +17,12 @@ import ScheduleDaySelector from '../../../widgets/admin/schedule_day_selector_wi
 import ScheduleDayCrudButtons from '../../../widgets/admin/schedule_day_crud_buttons.jsx';
 import ToolbarButtonModal from '../../../widgets/admin/toolbar_button_modal_widget.jsx';
 
+import Schedule from '../../../services/ScheduleDomain';
+setTimeout(() => {
+  Schedule.subscribe(d => d && console.log(JSON.stringify(d.toJS(), null, '    ')));
+  Schedule.observe('2014-05-05');
+}, 2000);
+
 export default React.createClass({
   contextTypes: {
     currentBroadcastChannel: React.PropTypes.object.isRequired,

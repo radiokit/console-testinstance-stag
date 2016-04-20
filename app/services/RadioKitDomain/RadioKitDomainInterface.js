@@ -3,19 +3,11 @@ import {
   Map,
 } from 'immutable';
 import RadioKit from './../RadioKit';
-import DataSource from './RadioKitDomainData';
-
-function updateDataSource(queryData, status, data, time) {
-  DataSource.write(queriesData => queriesData.set(queryData, Map({
-    status,
-    data,
-    time,
-  })));
-}
+import {RadioKitDomainData, update} from './RadioKitDomainData';
 
 function checkIfQueryExists(queryParams, {autoSync = false, maxAge = Date.now()}) {
-  const currentQueryStatus = DataSource.read().getIn([queryParams, 'status']) || 'none';
-  const currentQueryTime = DataSource.read().getIn([queryParams, 'time']) || 0;
+  const currentQueryStatus = RadioKitDomainData.read().getIn([queryParams, 'status']) || 'none';
+  const currentQueryTime = RadioKitDomainData.read().getIn([queryParams, 'time']) || 0;
   if (autoSync) {
     // Check if query is currently loading or registered to receive updates
     if (currentQueryStatus === 'live') {
@@ -66,16 +58,28 @@ export function query(queryParams = Map(), options = {}) {
   const {autoSync = false} = options;
 
   // Initialize query in storage
-  updateDataSource(queryParams, autoSync ? 'live' : 'loading', List(), autoSync ? null : Date.now());
+  update(queryParams, autoSync ? 'live' : 'loading', List(), autoSync ? null : Date.now());
 
   // Set up query execution hooks
-  q = q.on('error', () => updateDataSource(queryParams, 'error', List(), Date.now()));
+  const markErroneous = e => {
+    update(queryParams, 'error', List(), Date.now());
+    (e instanceof Error) && console.warn(e.message || e);
+  };
+
+  q = q.on(
+    'error',
+    markErroneous
+  );
 
   q = q.on(
     'fetch',
-    (e, q, data) => updateDataSource(queryParams, autoSync ? 'live' : 'done', data, autoSync ? null : Date.now())
+    (e, q, data) => update(queryParams, autoSync ? 'live' : 'done', data, autoSync ? null : Date.now())
   );
 
   // Execute query
-  autoSync ? q.enableAutoUpdate() : q.fetch();
+  try {
+    autoSync ? q.enableAutoUpdate() : q.fetch();
+  } catch (e) {
+    markErroneous(e);
+  }
 }
