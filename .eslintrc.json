@@ -1,7 +1,9 @@
 {
   "extends": "airbnb",
+  "parser": "babel-eslint",
   "plugins": [
-    "react"
+    "react",
+    "babel"
   ],
   "rules": {
     "react/prefer-es6-class": [
