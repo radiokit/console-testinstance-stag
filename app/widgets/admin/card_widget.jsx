@@ -7,6 +7,7 @@ import CardHeader from './card_header_widget.jsx';
 import CardToolBar from './card_tool_bar_widget.jsx';
 import CardBody from './card_body_widget.jsx';
 
+import DateTime from 'react-datetime';
 
 
 export default React.createClass({
@@ -26,8 +27,7 @@ export default React.createClass({
 
   getDefaultProps: function() {
     return {
-      cardPadding: true,
-      headerVisible: true,
+      cardPadding: true
     }
   },
 
@@ -91,7 +91,7 @@ export default React.createClass({
 
 
   renderContentElement: function() {
-    if(this.props.children && this.props.children.size !== 0) {
+    if(this.props.children && React.Children.count(this.props.children) !== 0) {
       return this.props.children;
 
     } else {
@@ -108,18 +108,20 @@ export default React.createClass({
   render: function() {
     return (
       <div className="card card-underline style-gray-dark2">
-        {() => {
-          if(this.props.headerVisible === true) {
-            return <CardHeader contentPrefix={this.props.contentPrefix} headerText={this.props.headerText} tabs={this.buildTabHeaders()} selectedTab={this.state.selectedTab} onTabClick={this.onTabClick} />
-          }
-        }()}
-        <CardBody cardPadding={this.props.cardPadding && (this.props.sidebarElement || this.props.sidebarElement)}>
+        <CardHeader
+            contentPrefix={this.props.contentPrefix}
+            headerText={this.props.headerText}
+            tabs={this.buildTabHeaders()}
+            selectedTab={this.state.selectedTab}
+            onTabClick={this.onTabClick} />
+
+        <CardBody cardPadding={this.props.cardPadding && this.props.sidebarElement}>
           {() => {
-            if(this.props.sidebarElement || this.props.sidebarElement) {
+            if (this.props.sidebarElement) {
               return (
                 <CardSidebar>
                   {this.renderSidebarElement()}
-                  {this.renderContentElement()}
+                  {this.renderContentPartial()}
                 </CardSidebar>
               )
             } else {

@@ -2,6 +2,8 @@ import React from 'react';
 import Translate from 'react-translate-component';
 import Counterpart from 'counterpart';
 import clone from 'clone';
+import Moment from 'moment';
+import DateTimePicker from './date_time_picker.jsx';
 
 const FormWidget = React.createClass({
   propTypes: {
@@ -130,6 +132,10 @@ const FormWidget = React.createClass({
 
       case "hidden":
         values[fieldName] = fieldConfig.value;
+        break;
+
+      case "datetime":
+        values[fieldName] = this.refs[fieldName].getInput();
         break;
 
       default:
@@ -263,6 +269,29 @@ const FormWidget = React.createClass({
                         </option>);
               }) }
           </select>
+        );
+        break;
+
+      case "object":
+        let objectsSorted = fieldConfig.values.sort((a, b) => {
+          return a.name == b.name ? 0 : (a.name < b.name ? -1 : 1);
+        });
+
+        input = (
+          <select className="form-control" if={ fieldName } ref={ fieldName } required={ required }>
+            { objectsSorted.map((value) => {
+                return (
+                  <option key={value.id} value={value.id}>{value.name}</option>
+                );
+              })
+            }
+          </select>
+        );
+        break;
+
+      case "datetime":
+        input = (
+          <DateTimePicker ref={fieldName} required={required} defaultValue={fieldConfig.value} />
         );
         break;
 

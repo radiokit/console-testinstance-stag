@@ -27,6 +27,7 @@ import InfrastructurePatchbayIndex from './apps/infrastructure/patchbay/index_vi
 import LibraryApp from './apps/library/app.jsx';
 import LibraryFileRepositoriesIndex from './apps/library/file_repositories/index_view.jsx';
 import LibraryFileRepositoriesShow from './apps/library/file_repositories/show_view.jsx';
+import ClipEditorApp from './apps/clip_editor/app.jsx';
 import AdministrationApp from './apps/administration/app.jsx';
 import AdministrationUserAccountsIndex from './apps/administration/user_accounts/index_view.jsx';
 import AdministrationBroadcastChannelsIndex from './apps/administration/broadcast_channels/index_view.jsx';
@@ -100,6 +101,8 @@ ReactDOM.render((
             </Route>
           </Route>
         </Route>
+
+        <Route path="clipeditor" component={ClipEditorApp}></Route>
 
         <Route path="infrastructure" component={BroadcastApp}>
           <Route path="external_inputs/index" component={InfrastructureExternalInputsIndex} onEnter={pingGoogleAnalytics}/>

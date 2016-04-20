@@ -14,6 +14,9 @@ export default {
 
       playlist: {
         header: "Ramówka",
+        add_button: "Dodaj utwór",
+        update_button: "Edytuj utwór",
+        delete_button: "Usuń utwór"
       },
 
 

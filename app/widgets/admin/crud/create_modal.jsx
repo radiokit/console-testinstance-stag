@@ -7,8 +7,7 @@ import Form from '../../../widgets/admin/form_widget.jsx';
 import TextInput from '../../../widgets/admin/text_input_widget.jsx';
 
 
-export default React.createClass({
-
+const CreateModal = React.createClass({
   propTypes: {
     contentPrefix: React.PropTypes.string.isRequired,
     form: React.PropTypes.object.isRequired,
@@ -17,6 +16,7 @@ export default React.createClass({
     onSuccess: React.PropTypes.func,
     onDismiss: React.PropTypes.func,
     acknowledgementElement: React.PropTypes.oneOfType([React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]),
+    afterFormSubmit: React.PropTypes.func
   },
 
   getInitialState() {
@@ -41,11 +41,12 @@ export default React.createClass({
         }
       })
       .on("loaded", (_event, _record, data) => {
-        if (this.isMounted()) {
+        if(this.isMounted()) {
           this.setState({
             step: "acknowledgement",
             record: data
           });
+          this.props.afterFormSubmit();
         }
       })
       .on("warning", () => {
@@ -100,3 +101,5 @@ export default React.createClass({
     );
   }
 });
+
+export default CreateModal;
