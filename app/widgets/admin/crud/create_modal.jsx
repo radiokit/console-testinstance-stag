@@ -15,6 +15,7 @@ export default React.createClass({
     app: React.PropTypes.string.isRequired,
     model: React.PropTypes.string.isRequired,
     onSuccess: React.PropTypes.func,
+    onDismiss: React.PropTypes.func,
     acknowledgementElement: React.PropTypes.oneOfType([React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]),
   },
 
@@ -64,8 +65,12 @@ export default React.createClass({
       .create(fieldValues);
   },
 
-  onSuccess(){
+  onSuccess() {
     this.props.onSuccess && this.props.onSuccess();
+  },
+
+  onDismiss() {
+    this.props.onDismiss && this.props.onDismiss();
   },
 
   onCancel() {
@@ -90,6 +95,7 @@ export default React.createClass({
         form={ this.props.form }
         onFormSubmit={ this.onFormSubmit }
         onCancel={ this.onCancel }
+        onHide={this.onDismiss}
         onSuccess={ this.props.onSuccess } />
     );
   }

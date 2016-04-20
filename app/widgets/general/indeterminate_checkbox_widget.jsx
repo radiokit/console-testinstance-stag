@@ -1,32 +1,72 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-// based on http://stackoverflow.com/questions/32139455/indeterminate-checkbox-in-react-jsx
+const IndeterminateCheckboxWidget = React.createClass({
 
-export default React.createClass({
-  componentDidMount: function() {
-    if (this.props.indeterminate === true) {
-      console.log("DID MOUNT TRUE")
+  propTypes: {
+    checked: React.PropTypes.bool,
+    indeterminate: React.PropTypes.bool,
+    onSelected: React.PropTypes.func,
+    onDeselected: React.PropTypes.func,
+    onRestore: React.PropTypes.func
+  },
+
+  getInitialState() {
+    return {
+      checked: this.props.checked,
+      indeterminate: this.props.indeterminate,
+    }
+  },
+
+  componentWillReceiveProps(nextProps) {
+      this.setState({
+        checked: nextProps.checked,
+        indeterminate: nextProps.indeterminate,
+      });
+  },
+
+  onChange(e) {
+    if (this.state.checked) {
+      this.props.onDeselected();
+      this.setState({
+        checked: false,
+        indeterminate: false
+      });
+    } else {
+      if (this.props.indeterminate && !this.state.indeterminate) {
+        this.props.onRestore();
+        this.setState({
+          checked: false,
+          indeterminate: true,
+        });
+      } else {
+        this.props.onSelected();
+        this.setState({
+          checked: true,
+          indeterminate: false
+        });
+      }
+    }
+  },
+
+  componentDidMount() {
+    if (this.state.indeterminate) {
       this.setIndeterminate(true);
     }
   },
 
-
-  componentDidUpdate: function(previousProps) {
-    if (previousProps.indeterminate !== this.props.indeterminate) {
-      this.setIndeterminate(this.props.indeterminate);
-    }
+  componentDidUpdate(previousProps) {
+    this.setIndeterminate(this.state.indeterminate);
   },
 
-
-  setIndeterminate: function(indeterminate) {
+  setIndeterminate(indeterminate) {
     const node = ReactDOM.findDOMNode(this);
     node.indeterminate = indeterminate;
   },
 
-
-  render: function() {
-    const { indeterminate, type, ...props } = this.props;
-    return <input type="checkbox" {...props} />;
+  render() {
+    return <input type="checkbox" checked={this.state.checked} onChange={this.onChange}/>;
   }
 });
+
+export default IndeterminateCheckboxWidget;

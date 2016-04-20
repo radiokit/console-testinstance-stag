@@ -10,20 +10,24 @@ const DeleteModal = React.createClass({
     selectedRecordIds: React.PropTypes.object.isRequired,
     app: React.PropTypes.string.isRequired,
     model: React.PropTypes.string.isRequired,
-    onSuccess: React.PropTypes.func
+    onSuccess: React.PropTypes.func,
+    onDismiss: React.PropTypes.func,
   },
 
   getInitialState() {
     return {
-      index: 0
+      index: 0,
     }
   },
 
   show() {
+    this.setState({
+      index: 0,
+    });
     this.refs.modal.show();
   },
 
-  onDeleteSuccess(record) {
+  onDeleteSuccess() {
     this.setState({
       index: this.state.index + 1
     });
@@ -31,6 +35,10 @@ const DeleteModal = React.createClass({
 
   onSuccess() {
     this.props.onSuccess && this.props.onSuccess();
+  },
+
+  onDismiss() {
+    this.props.onDismiss && this.props.onDismiss();
   },
 
   onPerform(index, recordId) {
@@ -50,11 +58,13 @@ const DeleteModal = React.createClass({
         proceedType="danger"
         recordIds={ this.props.selectedRecordIds }
         index={ this.state.index }
-        onSuccess={ this.onSuccess }>
+        onSuccess={ this.onSuccess }
+        onDismiss={ this.onDismiss }
+      >
         <div>
           <Translate
             component="p"
-            content={ this.props.contentPrefix + ".message.confirmation" }
+            content={ this.props.contentPrefix + '.message.confirmation' }
             count={ this.props.selectedRecordIds.count() } />
         </div>
         <div>

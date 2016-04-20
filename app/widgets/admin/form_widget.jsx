@@ -12,7 +12,7 @@ const FormWidget = React.createClass({
 
 
   contextTypes: {
-    availableBroadcastChannels: React.PropTypes.object.isRequired,
+    availableBroadcastChannels: React.PropTypes.object,
     availableUserAccounts: React.PropTypes.object.isRequired,
   },
 
@@ -257,7 +257,7 @@ const FormWidget = React.createClass({
       case "scope-broadcast-channel":
         input = (
           <select className="form-control" id={ fieldName } ref={ fieldName } required={ required }>
-            { this.context.availableBroadcastChannels.map((broadcastChannel) => {
+            { this.context.availableBroadcastChannels && this.context.availableBroadcastChannels.map((broadcastChannel) => {
                 return (<option key={ broadcastChannel.get("id") } value={ broadcastChannel.get("id") }>
                           { broadcastChannel.get("name") }
                         </option>);

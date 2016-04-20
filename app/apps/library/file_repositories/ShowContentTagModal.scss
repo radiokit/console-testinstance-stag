@@ -1,0 +1,24 @@
+.ShowContentTagModal {
+
+  .mdi-chevron-right {
+    transition: all 0.1s linear;
+    font-size: 1.4em;
+  }
+
+  .mdi-chevron-right {
+    transform: rotate(90deg);
+  }
+
+  .collapsed .mdi-chevron-right {
+    transform: rotate(0deg);
+  }
+
+  .card-head-xs {
+    padding-left: 36px;
+    background-color: #f2f2f2;
+  }
+  .btn.btn-icon-toggle {
+    float: none
+  }
+}
+

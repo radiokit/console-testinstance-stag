@@ -17,6 +17,7 @@ export default React.createClass({
     step: React.PropTypes.oneOf(['confirmation', 'progress', 'acknowledgement', 'cancelled', 'error']).isRequired,
     size: React.PropTypes.oneOf(['normal', 'large']),
     onSuccess: React.PropTypes.func,
+    onDismiss:React.PropTypes.func,
   },
 
 
@@ -30,11 +31,18 @@ export default React.createClass({
     this.refs.modal.show();
   },
 
-
   onConfirm: function() {
     this.props.onConfirm();
   },
 
+  onSuccess: function() {
+    this.props.onSuccess && this.props.onSuccess();
+    this.onDismiss();
+  },
+
+  onDismiss: function() {
+    this.props.onDismiss && this.props.onDismiss();
+  },
 
   onCancel: function() {
     this.props.onCancel();
@@ -43,7 +51,15 @@ export default React.createClass({
 
   render: function() {
     return (
-        <Modal ref="modal" size={this.props.size} contentPrefix={this.props.contentPrefix} onConfirm={this.onConfirm} onCancel={this.onCancel} warning={this.props.warning} proceedType={this.props.proceedType}>
+        <Modal
+          ref="modal"
+          size={this.props.size}
+          contentPrefix={this.props.contentPrefix}
+          onConfirm={this.onConfirm}
+          onCancel={this.onCancel}
+          onHide={this.onDismiss}
+          warning={this.props.warning}
+          proceedType={this.props.proceedType}>
           <div className="modal-body">
             {() => {
               switch(this.props.step) {
@@ -96,18 +112,17 @@ export default React.createClass({
 
           <div className="modal-footer">
             {() => {
-              if(this.props.warning && this.props.step === "confirmation") {
-                return (<Translate content={"widgets.admin.modal.warnings." + this.props.warning} className={"pull-left text-" + this.props.proceedType}  />);
-              }
-            }()}
-
-            {() => {
               switch(this.props.step) {
                 case "confirmation":
                   return (
                     <div>
                       <Translate component="button" content={this.props.contentPrefix + ".action.cancel"} role="button" className="btn btn-default" data-dismiss="modal" />
                       <Translate component="button" content={this.props.contentPrefix + ".action.proceed"} role="button" className={"btn btn-" + this.props.proceedType} onClick={this.onConfirm} />
+                        {() => {
+                          if(this.props.warning && this.props.step === "confirmation") {
+                            return (<Translate content={"widgets.admin.modal.warnings." + this.props.warning} className={"pull-left text-" + this.props.proceedType}  />);
+                          }
+                        }()}
                     </div>
                   );
 
@@ -122,21 +137,21 @@ export default React.createClass({
                 case "acknowledgement":
                   return (
                     <div>
-                      <Translate component="button" content={this.props.contentPrefix + ".action.close"} role="button" className={"btn btn-" + this.props.proceedType} data-dismiss="modal" onClick = {this.props.onSuccess || null} />
+                      <Translate component="button" content={this.props.contentPrefix + ".action.close"} role="button" className={"btn btn-" + this.props.proceedType} data-dismiss="modal" onClick ={this.onSuccess} />
                     </div>
                   );
 
                 case "cancelled":
                   return (
                     <div>
-                      <Translate component="button" content={this.props.contentPrefix + ".action.close"} role="button" className={"btn btn-" + this.props.proceedType} data-dismiss="modal" />
+                      <Translate component="button" content={this.props.contentPrefix + ".action.close"} role="button" className={"btn btn-" + this.props.proceedType} data-dismiss="modal" onClick={this.onDismiss}/>
                     </div>
                   );
 
                 case "error":
                   return (
                     <div>
-                      <Translate component="button" content={this.props.contentPrefix + ".action.close"} role="button" className={"btn btn-" + this.props.proceedType} data-dismiss="modal" />
+                      <Translate component="button" content={this.props.contentPrefix + ".action.close"} role="button" className={"btn btn-" + this.props.proceedType} data-dismiss="modal" onClick={this.onDismiss} />
                     </div>
                   );
               }

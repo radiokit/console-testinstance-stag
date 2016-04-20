@@ -18,14 +18,14 @@ export default React.createClass({
 
   onClick: function(e) {
     e.preventDefault();
-    this.refs.modal.refs.modal.show();
+    //some modalElement's components may have unimplemented show function and only hold ref to modal
+    (this.refs.modal.show && this.refs.modal.show()) || this.refs.modal.refs.modal.show();
   },
 
 
   render: function() {
     let modalPropsMerged = clone(this.props.modalProps);
     modalPropsMerged.ref = "modal";
-
     return (
       <span>
         {React.createElement(this.props.modalElement, modalPropsMerged)}

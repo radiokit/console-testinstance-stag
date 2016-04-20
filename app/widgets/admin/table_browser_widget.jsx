@@ -43,8 +43,7 @@ export default React.createClass({
     };
   },
 
-
-  componentDidMount: function() {
+  buildRecordsQuery() {
     this.recordsQueryFull = this.props.recordsQuery
       .clone()
       .offset(this.state.offset) // FIXME update this on component update
@@ -60,16 +59,22 @@ export default React.createClass({
       .on("fetch", this.onRecordsQueryFetch);
     this.recordsQueryIds
       .on("fetch", this.onRecordIdsQueryFetch);
-
-    this.loadRecords();
   },
 
+  componentDidMount: function() {
+    this.buildRecordsQuery();
+    this.loadRecords();
+  },
 
   componentWillUnmount: function() {
     this.recordsQueryFull.teardown();
     this.recordsQueryIds.teardown();
   },
 
+  reloadData() {
+    this.buildRecordsQuery();
+    this.loadRecords();
+  },
 
   componentDidUpdate: function(prevProps, prevState) {
     if(prevState.selectedRecordIds != this.state.selectedRecordIds && this.props.onSelect) {
@@ -77,16 +82,13 @@ export default React.createClass({
     }
   },
 
-
   loadRecords: function() {
     this.recordsQueryFull.fetch();
   },
 
-
   loadRecordIds: function() {
     this.recordsQueryIds.fetch();
   },
-
 
   onRecordsQueryFetch: function(_event, _query, data, meta) {
     if(this.isMounted()) {
@@ -97,7 +99,6 @@ export default React.createClass({
       });
     }
   },
-
 
   onRecordIdsQueryFetch: function(_event, _query, data, meta) {
     if(this.isMounted()) {
@@ -112,11 +113,9 @@ export default React.createClass({
     }
   },
 
-
   buildRangeStart: function() {
     return this.state.offset+1;
   },
-
 
   buildRangeStop: function() {
     let rangeStop = this.state.offset + this.props.limit;
@@ -127,7 +126,6 @@ export default React.createClass({
     }
   },
 
-
   onSelectRecord: function(state, recordId, selectedRecordIds) {
     if(this.state.oldSelectedRecordIds && state === false) {
       this.setState({
@@ -136,7 +134,6 @@ export default React.createClass({
         selectedRecordIds: this.state.oldSelectedRecordIds.filterNot((x) => { return x === recordId }),
         oldSelectedRecordIds: undefined
       });
-
     } else {
       this.setState({
         selectedRecordIds: selectedRecordIds,
@@ -153,7 +150,6 @@ export default React.createClass({
     });
   },
 
-
   onNextPageClick: function() {
     this.setState({
       offset: this.state.offset + this.props.limit
@@ -161,7 +157,6 @@ export default React.createClass({
       this.loadRecords();
     });
   },
-
 
   onPreviousPageClick: function() {
     this.setState({
@@ -171,7 +166,6 @@ export default React.createClass({
     });
   },
 
-
   onOverSelectAllClick: function() {
     this.setState({
       selectedMatching: false,
@@ -180,7 +174,6 @@ export default React.createClass({
       this.loadRecordIds();
     });
   },
-
 
   onOverClearClick: function() {
     this.setState({
@@ -192,9 +185,8 @@ export default React.createClass({
 
 
   onRefreshClick: function() {
-    this.loadRecords();
+    this.reloadData();
   },
-
 
   renderPagination: function() {
     if(this.state.recordsCount !== 0) {
@@ -208,7 +200,6 @@ export default React.createClass({
     }
   },
 
-
   renderRefresh: function() {
     return (
       <ToolbarGroup position="right">
@@ -217,15 +208,11 @@ export default React.createClass({
     );
   },
 
-
   renderTable: function() {
-    if(this.state.recordsCount !== 0) {
       return (
         <Table linkFunc={this.props.recordsLinkFunc} selectedRecordIds={this.state.selectedRecordIds} onSelectRecord={this.onSelectRecord} onSelectAll={this.onSelectAll} selectable={this.props.selectable} attributes={this.props.attributes} contentPrefix={this.props.contentPrefix} records={this.state.records} />
       );
-    }
   },
-
 
   render: function() {
     if(this.state.loadingError) {

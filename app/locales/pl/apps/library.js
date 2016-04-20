@@ -36,6 +36,9 @@ export default {
               trash: "Pliki przeznaczone do skasowania, są automatycznie czyszczone po 30 dniach",
             },
           },
+          tags: {
+            all_tags:"Wszystkie"
+          }
         },
 
         index: {

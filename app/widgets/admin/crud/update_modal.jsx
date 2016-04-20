@@ -16,6 +16,7 @@ const UpdateModal =  React.createClass({
     model: React.PropTypes.string.isRequired,
     recordId: React.PropTypes.string.isRequired,
     onSuccess: React.PropTypes.func,
+    onDismiss: React.PropTypes.func,
     acknowledgementElement: React.PropTypes.oneOfType([React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]),
   },
 
@@ -75,6 +76,10 @@ const UpdateModal =  React.createClass({
     }
   },
 
+  onDismiss() {
+    this.props.onDismiss && this.props.onDismiss();
+  },
+
   onShow() {
     this.setState(this.getInitialState());
   },
@@ -91,6 +96,7 @@ const UpdateModal =  React.createClass({
         form={ this.props.form }
         onFormSubmit={ this.onFormSubmit }
         onCancel={ this.onCancel }
+        onHide={ this.onDismiss }
         onSuccess={ this.props.onSuccess } />
     );
   }

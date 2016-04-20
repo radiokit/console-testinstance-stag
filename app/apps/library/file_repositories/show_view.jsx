@@ -5,33 +5,37 @@ import Show from '../../../widgets/admin/crud/show_widget.jsx';
 import SidebarPartial from './show_sidebar_partial.jsx';
 import ContentPartial from './show_content_partial.jsx';
 
-export default React.createClass({
+const ShowView = React.createClass({
+
+   contextTypes: {
+    params: React.PropTypes.object.isRequired,
+  },
 
   getInitialState(){
     return {
-        filter: null,
-        tags:[],
+        tagFilter: [],
+        stage: null,
     }
   },
 
-  onTagFilterUpdate(f){
-
+  onTagFilterUpdate(filter){
     this.setState({
-      filter: f
+      tagFilter: filter
     });
   },
 
   buildTabs() {
     return {
-      incoming: { element: ContentPartial, props: { stage: "incoming", filter: this.state.filter }},
-      ready:    { element: ContentPartial, props: { stage: "ready",  filter: this.state.filter }},
-      archive:  { element: ContentPartial, props: { stage: "archive", filter: this.state.filter }},
-      trash:    { element: ContentPartial, props: { stage: "trash", filter: this.state.filter }},
+      incoming: { element: ContentPartial, props: { stage: "incoming", tagFilter: this.state.tagFilter }},
+      ready:    { element: ContentPartial, props: { stage: "ready",  tagFilter: this.state.tagFilter }},
+      archive:  { element: ContentPartial, props: { stage: "archive", tagFilter: this.state.tagFilter }},
+      trash:    { element: ContentPartial, props: { stage: "trash", tagFilter: this.state.tagFilter }},
     }
   },
+
   buildSideBar(){
     return {
-      test: { element: SidebarPartial, props: { tags: this.state.tags, selectedTag:this.state.filter, onTagFilterUpdate: this.onTagFilterUpdate }},
+      test: { element: SidebarPartial, props: { tagFilter:this.state.tagFilter, onTagFilterUpdate: this.onTagFilterUpdate }},
     }
   },
 
@@ -41,6 +45,8 @@ export default React.createClass({
       .joins("metadata_schemas")
       .select("tag_categories")
       .joins("tag_categories")
+      .select("tag_items")
+      .joins("tag_items")
   },
 
   render() {
@@ -56,3 +62,5 @@ export default React.createClass({
     );
   }
 });
+
+export default ShowView;

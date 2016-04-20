@@ -297,8 +297,9 @@ export default {
                           close: "Close",
                           cancel: "Cancel",
                         },
-                        acknowledgement: {
-                          info: "Metadata field was added succesfully.",
+                        message: {
+                          progress: "Adding metadata...",
+                          acknowledgement: "Metadata field was added succesfully.",
                         },
                         form: {
                           name: {
@@ -324,6 +325,19 @@ export default {
                               duration: "Duration",
                             }
                           },
+                        },
+                      },
+                      delete: {
+                        header: "Remove metadata field",
+                        action: {
+                          proceed: "Remove metadata field",
+                          close: "Close",
+                          cancel: "Cancel",
+                        },
+                        message: {
+                          progress: "Deleting metedata fields... ",
+                          confirmation: "Do you really want to remove this metadata field?",
+                          acknowledgement: "Metadata field was succesfully removed.",
                         },
                       },
                     },
@@ -377,11 +391,9 @@ export default {
                   label: "Client account",
                 }
               },
-
-              acknowledgement: {
-                info: "File repository added succesfully",
+              message: {
+                acknowledgement: "File repository added succesfully",
               },
-
               action: {
                 proceed: "Add file repository",
                 cancel: "Cancel",
