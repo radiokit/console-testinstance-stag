@@ -27,7 +27,8 @@ export default React.createClass({
 
   getDefaultProps: function() {
     return {
-      cardPadding: true
+      cardPadding: true,
+      headerVisible: true,
     }
   },
 
