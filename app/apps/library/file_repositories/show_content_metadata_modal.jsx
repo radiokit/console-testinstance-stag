@@ -45,17 +45,17 @@ export default React.createClass({
               return (
                 <div key={metadataSchema.get("id")} className="form-group">
                   <label className="col-sm-3 control-label">
-                    {metadataSchema.get("key")}
+                    {metadataSchema.get("name")}
                   </label>
-                  <div className="col-sm-6">
+                  <div className="col-sm-8">
                     <input type="text" className="form-control" />
                   </div>
-                  <div className="col-sm-3">
+                 {/* <div className="col-sm-3">
                     <label>
                       <input type="checkbox" />
                       <Translate component="p" content="widgets.vault.file_browser.modals.metadata.immutable" />
                     </label>
-                  </div>
+                  </div>*/}
                 </div>
               );
             })}
