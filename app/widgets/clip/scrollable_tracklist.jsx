@@ -2,17 +2,19 @@ import React from 'react';
 
 import Movable from '../general/movable.jsx';
 import TrackList from './tracklist.jsx';
+import makeUniqStyle from './uniqStyle';
+const uniqStyle = makeUniqStyle();
 
 const ScrollableTracklist = React.createClass({
 
   propTypes: {
-      offsetStart: React.PropTypes.number,
-      offsetLength: React.PropTypes.number,
+    offsetStart: React.PropTypes.number,
+    offsetLength: React.PropTypes.number,
 
-      width: React.PropTypes.number.isRequired,
+    width: React.PropTypes.number.isRequired,
 
-      scrollable: React.PropTypes.bool,
-      zoomable: React.PropTypes.bool,
+    scrollable: React.PropTypes.bool,
+    zoomable: React.PropTypes.bool,
   },
 
   getInitialState() {
@@ -75,17 +77,17 @@ const ScrollableTracklist = React.createClass({
     }
   },
 
-  handleScroll({x}) {
+  handleScroll({ x }) {
     this.scrollHorizontally(-1 * x);
     this.mouseDownTime = 0;
   },
 
   handleScrollStart() {
-    this.setState({scrolling: true});
+    this.setState({ scrolling: true });
   },
 
   handleScrollFinish() {
-    this.setState({scrolling: false});
+    this.setState({ scrolling: false });
   },
 
   getOffsetStart(state) {
@@ -108,10 +110,11 @@ const ScrollableTracklist = React.createClass({
         onHold={this.handleScrollStart}
         onDrop={this.handleScrollFinish}
         onWheel={this.handleWheel}
-        style={{width: this.props.width}}>
+        style={uniqStyle({ width: this.props.width })}
+      >
         <TrackList {...trackListProps} />
       </Movable>
     );
-  }
+  },
 });
 export default ScrollableTracklist;

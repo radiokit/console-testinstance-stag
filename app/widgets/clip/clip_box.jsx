@@ -67,14 +67,13 @@ const ClipBox = React.createClass({
   },
 
   render() {
-
-    const style = {
+    const style = ({
       position: 'relative',
       display: 'block',
       width: this.props.width,
       height: calcHeight(this.props.height),
       overflow: 'hidden',
-    };
+    });
 
     const childProps = {
       clip: this.props.clip,

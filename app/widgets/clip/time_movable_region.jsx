@@ -23,7 +23,7 @@ const TimeMovableRegion = props => {
     const oldPosition = {
       regionStart,
       regionLength,
-    }
+    };
     const newPosition = {
       regionStart: Math.round(regionStart + startX * scale),
       regionLength: Math.round(regionLength + endX * scale),

@@ -1,6 +1,8 @@
 import React from 'react';
 
 import Movable from '../general/movable.jsx';
+import makeUniqStyle from './uniqStyle';
+const uniqStyle = makeUniqStyle();
 
 const PixelMovableBlock = React.createClass({
   propTypes: {
@@ -24,20 +26,20 @@ const PixelMovableBlock = React.createClass({
     };
   },
 
-  handleMove({x}) {
+  handleMove({ x }) {
     this.props.onMove && this.props.onMove(x);
   },
 
   handleHold() {
-    this.setState({mouseHold: true})
+    this.setState({ mouseHold: true });
   },
 
   handleDrop() {
-    this.setState({mouseHold: false});
+    this.setState({ mouseHold: false });
   },
 
   render() {
-    const containerStyle = {
+    const containerStyle = uniqStyle({
       position: 'absolute', top: 0, left: 0,
       transform: `translateX(${this.props.offset}px)`,
       backgroundColor: this.props.color,
@@ -45,15 +47,15 @@ const PixelMovableBlock = React.createClass({
       height: this.props.height,
       width: this.props.width,
       zIndex: this.state.mouseHold ? 2 : 1,
-    }
+    });
     return (
       <Movable style={containerStyle}
-               onMove={e => this.handleMove(e)}
-               onHold={this.handleHold}
-               onDrop={this.handleDrop}
+        onMove={this.handleMove}
+        onHold={this.handleHold}
+        onDrop={this.handleDrop}
       />
-    )
-  }
+    );
+  },
 });
 
 export default PixelMovableBlock;

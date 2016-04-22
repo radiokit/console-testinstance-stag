@@ -11,7 +11,7 @@ const TimeMovableMarker = props => {
     height,
     width,
     offsetLength,
-    offsetStart
+    offsetStart,
   } = props;
 
   const scale = offsetLength / width;

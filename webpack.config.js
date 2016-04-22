@@ -16,7 +16,10 @@ var config = {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     // This will force moment to load only specified languages.
-    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /pl|en/)
+    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /pl|en/),
+    new webpack.DefinePlugin({
+      process: {env: { NODE_ENV: "'production'"}}
+    })
   ],
 
   output: {
@@ -57,7 +60,7 @@ var config = {
 
   resolve: {
     alias: {
-      'React': 'react'
+      'React': 'react',
     }
   }
 };

@@ -2,6 +2,8 @@ import React from 'react';
 import classNames from 'classnames';
 
 import Movable from '../general/movable.jsx';
+import makeUniqStyle from './uniqStyle';
+const uniqStyle = makeUniqStyle();
 
 import './pixel_movable_fade_region.scss';
 
@@ -25,68 +27,95 @@ const PixelMovableFadeRegion = React.createClass({
     this.props.onMove && this.props.onMove(startX, endX);
   },
 
+  makeMarker1Active() {
+    this.setState({ marker1Active: true });
+  },
+
+  makeMarker1Inactive() {
+    this.setState({ marker1Active: false });
+  },
+
+  handleMarker1Move({ x }) {
+    this.handleMove(x, -1 * x);
+  },
+
+  makeMarker2Active() {
+    this.setState({ marker2Active: true });
+  },
+
+  makeMarker2Inactive() {
+    this.setState({ marker2Active: false });
+  },
+
+  handleMarker2Move({ x }) {
+    this.handleMove(0, x);
+  },
+
+  handleBlockMove({ x }) {
+    this.handleMove(x, 0);
+  },
+
   render() {
     const isFadeIn = this.props.regionKey === 'fadeIn';
     const markerWidth = 15;
 
     const rootProps = {
       className: 'PixelMovableFadeRegion',
-      style: {
-        transform: `translateX(${this.props.offset}px)`,
+      style: ({
+        transform: `translateX(${Math.round(this.props.offset)}px)`,
         height: this.props.height,
         width: this.props.width,
         pointerEvents: 'auto',
-      }
-    }
+      }),
+    };
     const marker1Props = {
       className: classNames({
-        'PixelMovableFadeRegion__marker': true,
+        PixelMovableFadeRegion__marker: true,
         'PixelMovableFadeRegion__marker--active': !!this.state.marker1Active,
       }),
-      style: {
+      style: uniqStyle({
         top: isFadeIn ? '' : 0,
         bottom: isFadeIn ? 0 : '',
-        left: 0 - (!isFadeIn | 0) * markerWidth,
-      },
-      onHold: () => this.setState({marker1Active: true}),
-      onDrop: () => this.setState({marker1Active: false}),
-      onMove: ({x}) => this.handleMove(x, -1 * x),
+        left: Math.round(0 - (!isFadeIn | 0) * markerWidth),
+      }),
+      onHold: this.makeMarker1Active,
+      onDrop: this.makeMarker1Inactive,
+      onMove: this.handleMarker1Move,
     };
     const marker2Props = {
       className: classNames({
-        'PixelMovableFadeRegion__marker': true,
+        PixelMovableFadeRegion__marker: true,
         'PixelMovableFadeRegion__marker--active': !!this.state.marker2Active,
       }),
-      style: {
+      style: uniqStyle({
         top: !isFadeIn ? '' : 0,
         bottom: !isFadeIn ? 0 : '',
-        left: this.props.width - (!isFadeIn | 0) * markerWidth,
-      },
-      onHold: () => this.setState({marker2Active: true}),
-      onDrop: () => this.setState({marker2Active: false}),
-      onMove: ({x}) => this.handleMove(0, x),
-    }
+        left: Math.round(this.props.width - (!isFadeIn | 0) * markerWidth),
+      }),
+      onHold: this.makeMarker2Active,
+      onDrop: this.makeMarker2Inactive,
+      onMove: this.handleMarker2Move,
+    };
     const blockProps = {
       className: 'PixelMovableFadeRegion__block',
-      style: {
-        right: -1 * markerWidth * (isFadeIn | 0),
-        left: -1 * markerWidth * (!isFadeIn | 0),
-      },
-      onMove: ({x}) => this.handleMove(x, 0),
+      style: uniqStyle({
+        right: Math.round(-1 * markerWidth * (isFadeIn | 0)),
+        left: Math.round(-1 * markerWidth * (!isFadeIn | 0)),
+      }),
+      onMove: this.handleBlockMove,
     };
 
-    const lineReachX = this.props.width;
-    const lineReachY = this.props.height - markerWidth;
+    const lineReachX = Math.round(this.props.width);
+    const lineReachY = Math.round(this.props.height - markerWidth);
     const skewX = 90 - Math.atan(lineReachY / lineReachX) * 180 / Math.PI * (isFadeIn ? -1 : 1);
-    const translateX = lineReachX / 2;
+    const translateX = Math.round(lineReachX / 2);
     const lineProps = {
       className: 'PixelMovableFadeRegion__line',
-      style: {
+      style: ({
         height: lineReachY,
         transform: `skewX(${skewX}deg) translateX(${translateX}px)`,
         borderLeftWidth: 1 + lineReachX / lineReachY,
-      },
-      onMove: ({x}) => this.handleMove(x, 0),
+      }),
     };
 
     return (
@@ -97,6 +126,7 @@ const PixelMovableFadeRegion = React.createClass({
         <Movable {...marker2Props} />
       </div>
     );
-  }
+  },
 });
+
 export default PixelMovableFadeRegion;
