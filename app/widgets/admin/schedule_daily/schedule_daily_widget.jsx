@@ -14,14 +14,14 @@ const hourType = PropTypes.oneOf(range(0, 24));
 
 const ScheduleDaily = React.createClass({
   propTypes: {
-    firstHour: hourType.isRequired,
-    items: React.PropTypes.object.isRequired,
-    now: React.PropTypes.object.isRequired,
-    activeItem: React.PropTypes.object,
-    onChangeActiveItem: React.PropTypes.func,
-    onNowChange: React.PropTypes.func,
-    availablePlumberFiles: React.PropTypes.object,
-    afterFormSubmit: React.PropTypes.func,
+    // firstHour: hourType.isRequired,
+    // items: React.PropTypes.object.isRequired,
+    // now: React.PropTypes.object.isRequired,
+    // activeItem: React.PropTypes.object,
+    // onChangeActiveItem: React.PropTypes.func,
+    // onNowChange: React.PropTypes.func,
+    // availablePlumberFiles: React.PropTypes.object,
+    // afterFormSubmit: React.PropTypes.func,
   },
 
   getDefaultProps() {
