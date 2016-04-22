@@ -1,5 +1,4 @@
 import React from 'react';
-import Immutable from 'immutable';
 import Translate from 'react-translate-component';
 import { Link } from 'react-router';
 
@@ -11,7 +10,7 @@ import List from './widgets/admin/list_widget.jsx';
 import Card from './widgets/admin/card_widget.jsx';
 import RoutingHelper from './helpers/routing_helper.js';
 
-require("./dashboard.scss");
+import './dashboard.scss';
 
 
 export default React.createClass({
@@ -20,76 +19,87 @@ export default React.createClass({
   },
 
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       selectedApp: null,
-    }
+    };
   },
 
 
-  onAppClick: function(appName) {
+  onAppClick(appName) {
     this.setState({
-      selectedApp: appName
+      selectedApp: appName,
     });
   },
 
 
   // FIXME don't use inline styles
-  render: function() {
-    if(this.state.selectedApp == null) {
+  render() {
+    const { selectedApp } = this.state;
+    if (!selectedApp) {
       return (
         <Section className="dashboard">
           <GridRow>
-            {() => {
-              return this.context.currentUser.get("apps_available").map((appName) => {
-                return (
+            {this.context.currentUser.get('apps_available').map((appName) => (
+              RoutingHelper.apps[appName] && (
                   <div key={appName} className="col-md-3">
                     <Card cardPadding={false} headerVisible={false}>
-                      <a className="btn btn-block btn-default text-center small-padding" onClick={this.onAppClick.bind(this, appName)}>
+                      <a
+                        className="btn btn-block btn-default text-center small-padding"
+                        onClick={() => this.onAppClick(appName)}
+                      >
                         <i className={`text-xxxxl mdi mdi-${RoutingHelper.apps[appName].icon}`} />
-                        <Translate component="h2" content={`apps.${appName}.navigation.title`}/>
-                        <Translate component="small" content={`apps.${appName}.navigation.subtitle`}/>
+                        <Translate
+                          component="h2"
+                          content={`apps.${appName}.navigation.title`}
+                        />
+                        <Translate
+                          component="small"
+                          content={`apps.${appName}.navigation.subtitle`}
+                        />
                       </a>
                     </Card>
                   </div>
-                );
-              });
-            }()}
+                )
+            ))}
           </GridRow>
         </Section>
-      )
-
-    } else {
-      return (
+      );
+    }
+    return (
         <Section className="dashboard">
           <GridRow>
-            <GridCell size="small" center={true}>
+            <GridCell size="small" center>
               <div className="text-center small-padding">
-                <i className={`text-xxxxl mdi mdi-${RoutingHelper.apps[this.state.selectedApp].icon}`} />
-                <Translate component="h2" content={`apps.${this.state.selectedApp}.navigation.title`}/>
+                <i className={`text-xxxxl mdi mdi-${RoutingHelper.apps[selectedApp].icon}`} />
+                <Translate component="h2" content={`apps.${selectedApp}.navigation.title`} />
               </div>
 
               <List>
                 <Card cardPadding={false} headerVisible={false}>
-                  {() => {
-                    return Immutable.fromJS(Object.keys(RoutingHelper.apps[this.state.selectedApp]))
-                      .filterNot((subAppName) => { return subAppName === "icon"; })
-                      .map((subAppName) => {
-                        return (
+                  {Object.keys(RoutingHelper.apps[selectedApp] || {})
+                      .filter((subAppName) => subAppName !== 'icon')
+                      .map((subAppName) => (
                           <li key={subAppName} className="tile">
-                            <Link className="tile-content" to={RoutingHelper.apps[this.state.selectedApp][subAppName].index(this)}>
-                              <Translate component="div" className="tile-text" content={`apps.${this.state.selectedApp}.navigation.${subAppName}.title`}/>
+                            <Link
+                              className="tile-content"
+                              to={RoutingHelper.apps[selectedApp][subAppName].index(this)}
+                            >
+                              <Translate
+                                component="div"
+                                className="tile-text"
+                                content={`apps.${selectedApp}.navigation.${subAppName}.title`}
+                              />
                             </Link>
                           </li>
-                        );
-                    });
-                  }()}
+                        )
+                      )
+                  }
                 </Card>
               </List>
             </GridCell>
           </GridRow>
         </Section>
       );
-    }
-  }
+  },
 });
