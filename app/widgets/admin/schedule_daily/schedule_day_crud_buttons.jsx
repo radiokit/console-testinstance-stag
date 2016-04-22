@@ -3,11 +3,11 @@ import Immutable from 'immutable';
 import Moment from 'moment';
 import { Data } from 'radiokit-api';
 
-import CreateModal from './crud/create_modal.jsx';
-import UpdateModal from './crud/update_modal.jsx';
-import DeleteModal from './crud/delete_modal.jsx';
-import ToolbarGroup from './toolbar_group_widget.jsx';
-import ToolbarButtonModal from './toolbar_button_modal_widget.jsx';
+import CreateModal from './../crud/create_modal.jsx';
+import UpdateModal from './../crud/update_modal.jsx';
+import DeleteModal from './../crud/delete_modal.jsx';
+import ToolbarGroup from './../toolbar_group_widget.jsx';
+import ToolbarButtonModal from './../toolbar_button_modal_widget.jsx';
 
 const ScheduleDayCrudButtons = React.createClass({
   contextTypes: {
