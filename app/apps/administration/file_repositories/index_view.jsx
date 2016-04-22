@@ -6,34 +6,34 @@ const IndexView = React.createClass({
 
   modifyIndexQuery(query) {
     return query
-      .order("name", "asc")
+      .order('name', 'asc');
   },
 
   buildAttributes() {
     return {
-      name: { renderer: "string" },
-      files_size_total: { renderer: "filesize" },
-      files_count: { renderer: "integer" },
-      user_account: { renderer: "scope-user-account" },
-    }
+      name: { renderer: 'string' },
+      files_size_total: { renderer: 'filesize' },
+      files_count: { renderer: 'integer' },
+      user_account: { renderer: 'scope-user-account' },
+    };
   },
 
   buildForm() {
     return {
       name: {
-        type: "string",
+        type: 'string',
         hint: true,
         validators: {
           presence: true,
-        }
+        },
       },
       user_account: {
-        type: "scope-user-account",
+        type: 'scope-user-account',
         validators: {
           presence: true,
-        }
+        },
       },
-    }
+    };
   },
 
   render() {
@@ -44,9 +44,21 @@ const IndexView = React.createClass({
         model="Data.Record.Repository"
         attributes={ this.buildAttributes() }
         form={ this.buildForm() }
-        indexQueryFunc={ this.modifyIndexQuery } />
+        updateForm = {
+        {
+          name: {
+            type: 'string',
+            hint: true,
+            validators: {
+              presence: true,
+            },
+          },
+        }}
+        updateEnabled = {true}
+        indexQueryFunc={ this.modifyIndexQuery }
+      />
     );
-  }
+  },
 });
 
 export default IndexView;

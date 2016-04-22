@@ -279,6 +279,8 @@ export default {
                   index: {
                     actions: {
                       create: "Add metadata field",
+                      delete: "Remove selected metadata fields",
+                      update: "Edit single metadata field",
                     },
 
                     table: {
@@ -300,6 +302,43 @@ export default {
                         message: {
                           progress: "Adding metadata...",
                           acknowledgement: "Metadata field was added succesfully.",
+                        },
+                        form: {
+                          name: {
+                            label: "Field name",
+                            hint: "Choose any name that will describe contents of this field, e.g. \"composer\".",
+                          },
+                          key: {
+                            label: "Key",
+                            hint: "Unique key describing role of this field for the system.",
+                          },
+                          kind: {
+                            label: "Value type",
+                            values: {
+                              string: "Text (one line)",
+                              db: "Decibels",
+                              integer: "Number (integer)",
+                              text: "Text (multiline)",
+                              float: "Number (with decimal part)",
+                              date: "Date",
+                              time: "Time",
+                              datetime: "Date & Time",
+                              url: "URL",
+                              duration: "Duration",
+                            }
+                          },
+                        },
+                      },
+                      update: {
+                        header: "Modify metadata field",
+                        action: {
+                          proceed: "Modify metadata field",
+                          close: "Close",
+                          cancel: "Cancel",
+                        },
+                        message: {
+                          progress: "Updating metadata field...",
+                          acknowledgement: "Metadata field was updated succesfully.",
                         },
                         form: {
                           name: {
@@ -353,6 +392,7 @@ export default {
           actions: {
             create: "Add file repository",
             delete: "Delete selected file repositories",
+            update: "Edit single repository",
           },
 
           table: {
@@ -396,6 +436,26 @@ export default {
               },
               action: {
                 proceed: "Add file repository",
+                cancel: "Cancel",
+                close: "Close",
+              }
+            },
+            update: {
+              header: "Edit file repository",
+              form: {
+                name: {
+                  label: "Name of the file repository",
+                  hint: "Choose any name that will help you to distinguish this file repository from others.",
+                },
+                user_account: {
+                  label: "Client account",
+                }
+              },
+              message: {
+                acknowledgement: "File repository edited succesfully",
+              },
+              action: {
+                proceed: "Edit file repository",
                 cancel: "Cancel",
                 close: "Close",
               }

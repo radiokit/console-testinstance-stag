@@ -4,17 +4,15 @@ import Translate from 'react-translate-component';
 
 import ModalForm from '../../../widgets/admin/modal_form_widget.jsx';
 import Form from '../../../widgets/admin/form_widget.jsx';
-import TextInput from '../../../widgets/admin/text_input_widget.jsx';
 
-
-const UpdateModal =  React.createClass({
+const UpdateModal = React.createClass({
 
   propTypes: {
     contentPrefix: React.PropTypes.string.isRequired,
     form: React.PropTypes.object.isRequired,
     app: React.PropTypes.string.isRequired,
     model: React.PropTypes.string.isRequired,
-    recordId: React.PropTypes.string.isRequired,
+    recordId: React.PropTypes.string,
     onSuccess: React.PropTypes.func,
     onDismiss: React.PropTypes.func,
     acknowledgementElement: React.PropTypes.oneOfType([React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]),
@@ -66,7 +64,7 @@ const UpdateModal =  React.createClass({
       .update(fieldValues);
   },
 
-  onSuccess(){
+  onSuccess() {
     this.props.onSuccess && this.props.onSuccess();
   },
 
@@ -97,9 +95,10 @@ const UpdateModal =  React.createClass({
         onFormSubmit={ this.onFormSubmit }
         onCancel={ this.onCancel }
         onHide={ this.onDismiss }
-        onSuccess={ this.props.onSuccess } />
+        onSuccess={ this.props.onSuccess }
+      />
     );
-  }
+  },
 });
 
 export default UpdateModal;

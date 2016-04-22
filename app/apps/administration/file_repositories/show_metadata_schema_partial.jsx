@@ -53,13 +53,22 @@ const ShowMetadataSchema = React.createClass({
       kind:     { renderer: "string" },
     }
   },
-
   render() {
     return (
       <IndexTableBrowser
         contentPrefix = { this.props.contentPrefix + ".table" }
         app = "vault"
         model = "Data.Metadata.Schema"
+        updateEnabled = { true }
+        updateForm = {{
+          name: {
+            type: "string",
+            hint: true,
+            validators: {
+              presence: true,
+            }
+          }
+        }}
         form = { this.buildForm() }
         attributes = { this.buildAttributes() }
         indexQueryFunc = { this.modifyIndexQuery }/>

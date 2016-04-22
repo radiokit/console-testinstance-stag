@@ -9,6 +9,7 @@ import ToolBarButtonModal from '../../../widgets/admin/toolbar_button_modal_widg
 
 import CreateModal from './create_modal.jsx';
 import DeleteModal from './delete_modal.jsx';
+import UpdateModal from './update_modal.jsx';
 
 export default React.createClass({
   propTypes: {
@@ -17,6 +18,7 @@ export default React.createClass({
     app: React.PropTypes.string.isRequired,
     model: React.PropTypes.string.isRequired,
     form: React.PropTypes.object.isRequired,
+    updateForm: React.PropTypes.object,
     attributes: React.PropTypes.object.isRequired,
     readEnabled: React.PropTypes.bool.isRequired,
     createEnabled: React.PropTypes.bool.isRequired,
@@ -47,6 +49,7 @@ export default React.createClass({
   getInitialState: function() {
     return {
       selectedRecordIds: new Immutable.Seq().toIndexedSeq(),
+      selectedRecords: new Immutable.Seq().toIndexedSeq(),
     }
   },
 
@@ -66,9 +69,10 @@ export default React.createClass({
    * Callback called when user selected/deselected some records in the table.
    * Just stores list of selected IDs in the state.
    */
-  onTableSelect: function(selectedRecordIds) {
+  onTableSelect(selectedRecordIds, selectedRecords) {
     this.setState({
-      selectedRecordIds: selectedRecordIds
+      selectedRecordIds: selectedRecordIds,
+      selectedRecords: selectedRecords,
     });
   },
 
@@ -126,6 +130,20 @@ export default React.createClass({
     return query;
   },
 
+  fillUpdateForm() {
+    //Update modal requires only one record
+    if(this.state.selectedRecords.count() === 1){
+      const record = this.state.selectedRecords.first();
+      let form = JSON.parse(JSON.stringify(this.props.updateForm))
+      Object.keys(this.props.updateForm).forEach((key) => {
+        form[key].value = record.get(key);
+      });
+      return form;
+    }
+    else {
+      return this.props.updateForm;
+    }
+  },
 
   render: function() {
     return (
@@ -136,6 +154,7 @@ export default React.createClass({
         attributes={this.props.attributes}
         contentPrefix={`${this.props.contentPrefix}.index.table`}
         recordsQuery={this.buildIndexQuery()}
+        requestFullRecords
         recordsLinkFunc={this.props.readEnabled === true ? this.onRecordClick : undefined}
       >
         <ToolBarGroup>
@@ -158,6 +177,27 @@ export default React.createClass({
                 } />;
             }
           }()}
+          {() => {
+            if(this.props.updateEnabled && this.props.updateEnabled === true && this.props.updateForm) {
+              return <ToolBarButtonModal
+                icon="border-color"
+                hintTooltipKey={`${this.props.contentPrefix}.index.actions.update`}
+                modalElement={UpdateModal}
+                modalProps={
+                  {
+                    acknowledgementElement: this.props.createAcknowledgementElement,
+                    contentPrefix: this.props.contentPrefix + ".index.modals.update",
+                    recordId: this.state.selectedRecordIds.first(),
+                    form: this.fillUpdateForm(),
+                    app: this.props.app,
+                    model: this.props.model,
+                    onDismiss: this.onRefresh,
+                  }
+                }
+                disabled={this.state.selectedRecordIds.count() !== 1} />;
+            }
+          }()}
+
           {() => {
             if(this.props.deleteEnabled === true) {
               return <ToolBarButtonModal
