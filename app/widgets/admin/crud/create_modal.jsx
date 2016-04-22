@@ -1,10 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import Translate from 'react-translate-component';
-
 import ModalForm from '../../../widgets/admin/modal_form_widget.jsx';
-import Form from '../../../widgets/admin/form_widget.jsx';
-import TextInput from '../../../widgets/admin/text_input_widget.jsx';
 
 
 const CreateModal = React.createClass({
@@ -15,15 +10,16 @@ const CreateModal = React.createClass({
     model: React.PropTypes.string.isRequired,
     onSuccess: React.PropTypes.func,
     onDismiss: React.PropTypes.func,
-    acknowledgementElement: React.PropTypes.oneOfType([React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]),
-    afterFormSubmit: React.PropTypes.func
+    acknowledgementElement: React.PropTypes.oneOfType(
+      [React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]),
+    afterFormSubmit: React.PropTypes.func,
   },
 
   getInitialState() {
     return {
-      step: "form",
+      step: 'form',
       record: null,
-    }
+    };
   },
 
   show() {
@@ -97,9 +93,10 @@ const CreateModal = React.createClass({
         onFormSubmit={ this.onFormSubmit }
         onCancel={ this.onCancel }
         onHide={this.onDismiss}
-        onSuccess={ this.props.onSuccess } />
+        onSuccess={ this.props.onSuccess }
+      />
     );
-  }
+  },
 });
 
 export default CreateModal;

@@ -5,6 +5,7 @@ import clone from 'clone';
 import Moment from 'moment';
 import DateTimePicker from './date_time_picker.jsx';
 
+import './form_widget.scss';
 const FormWidget = React.createClass({
   propTypes: {
     form: React.PropTypes.object.isRequired,
@@ -316,7 +317,7 @@ const FormWidget = React.createClass({
       }
 
       if (hint) {
-        hint = (<p className="help-block">
+        hint = (<p className="help-block FormWidget__hint">
                   { hint }
                 </p>);
       }
@@ -341,7 +342,7 @@ const FormWidget = React.createClass({
     });
 
     return (
-      <form className="form" role="form" ref="form" onSubmit={ this.onFormSubmit }>
+      <form className="form FormWidget" role="form" ref="form" onSubmit={ this.onFormSubmit }>
         {fields}
       </form>
     );
