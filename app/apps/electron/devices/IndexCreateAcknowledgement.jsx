@@ -40,10 +40,10 @@ export default React.createClass({
               <Translate component="h2" content={`${this.props.contentPrefix}.acknowledgement.instructions.windows.header`} />
               <Translate component="p" content={`${this.props.contentPrefix}.acknowledgement.instructions.windows.instructions`} />
               <div className="btn-group btn-group-justified small-padding" role="group">
-                <a className="btn btn-default-bright" href="https://packages.radiokit.org/packages/windows/radiokit-electron/stable/RadioKit%20Electron%201.0.1%2032bit%20Setup.exe">
+                <a className="btn btn-default-bright" href="https://packages.radiokit.org/packages/windows/radiokit-electron/stable/latest-32bit">
                   <Translate component="span" content={`${this.props.contentPrefix}.acknowledgement.instructions.windows.action_open_32bit`} />
                 </a>
-                <a className="btn btn-default-bright" href="https://packages.radiokit.org/packages/windows/radiokit-electron/stable/RadioKit%20Electron%201.0.1%2064bit%20Setup.exe">
+                <a className="btn btn-default-bright" href="https://packages.radiokit.org/packages/windows/radiokit-electron/stable/latest-64bit">
                   <Translate component="span" content={`${this.props.contentPrefix}.acknowledgement.instructions.windows.action_open_64bit`} />
                 </a>
               </div>
