@@ -32,8 +32,8 @@ import AdministrationApp from './apps/administration/app.jsx';
 import AdministrationUserAccountsIndex from './apps/administration/user_accounts/index_view.jsx';
 import AdministrationBroadcastChannelsIndex from './apps/administration/broadcast_channels/index_view.jsx';
 import AdministrationUsersIndex from './apps/administration/editors/index_view.jsx';
-import AdministrationFileRepositoriesIndex from './apps/administration/file_repositories/index_view.jsx';
-import AdministrationFileRepositoriesShow from './apps/administration/file_repositories/show_view.jsx';
+import AdministrationFileRepositoriesIndex from './apps/administration/file_repositories/IndexView.jsx';
+import AdministrationFileRepositoriesShow from './apps/administration/file_repositories/ShowView.jsx';
 
 Counterpart.registerTranslations("en", require('./locales/en/general.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/broadcast.js'));

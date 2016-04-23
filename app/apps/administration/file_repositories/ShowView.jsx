@@ -1,8 +1,14 @@
 import React from 'react';
+import Counterpart from 'counterpart';
 
 import Show from '../../../widgets/admin/crud/show_widget.jsx';
-import MetadataSchemaPartial from './show_metadata_schema_partial.jsx';
-import TagsSchemaPartial from './show_tags_schema_partial.jsx';
+import MetadataSchemaPartial from './ShowMetadataSchemaPartial.jsx';
+import ExportsSchemaPartial from './ShowExportsSchemaPartial.jsx';
+import TagsSchemaPartial from './ShowTagsSchemaPartial.jsx';
+
+Counterpart.registerTranslations("en", require('./ShowView.locale.en.js'));
+Counterpart.registerTranslations("pl", require('./ShowView.locale.pl.js'));
+
 
 const ShowView = React.createClass({
 
@@ -17,7 +23,13 @@ const ShowView = React.createClass({
       tags_schema: {
         element: TagsSchemaPartial,
         props: {
-          contentPrefix: "apps.administration.file_repositories.tags_schema"
+          contentPrefix: "apps.administration.file_repositories.show.tabs.body.tags_schema"
+        },
+      },
+      exports_schema: {
+        element: ExportsSchemaPartial,
+        props: {
+          contentPrefix: "apps.administration.file_repositories.show.tabs.body.exports_schema"
         },
       },
     }

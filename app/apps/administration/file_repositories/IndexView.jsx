@@ -1,6 +1,10 @@
 import React from 'react';
+import Counterpart from 'counterpart';
 
 import Index from '../../../widgets/admin/crud/index_widget.jsx';
+
+Counterpart.registerTranslations("en", require('./IndexView.locale.en.js'));
+Counterpart.registerTranslations("pl", require('./IndexView.locale.pl.js'));
 
 const IndexView = React.createClass({
 

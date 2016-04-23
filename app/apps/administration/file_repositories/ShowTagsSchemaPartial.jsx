@@ -2,6 +2,7 @@ import React from 'react';
 import Immutable from 'immutable';
 import _ from 'lodash';
 import classnames from 'classnames';
+import Counterpart from 'counterpart';
 
 import ToolbarGroup from '../../../widgets/admin/toolbar_group_widget.jsx';
 import ToolbarButton from '../../../widgets/admin/toolbar_button_widget.jsx';
@@ -11,6 +12,10 @@ import Loading from '../../../widgets/general/loading_widget.jsx';
 import CreateModal from '../../../widgets/admin/crud/create_modal.jsx';
 import DeleteModal from '../../../widgets/admin/crud/delete_modal.jsx';
 import UpdateModal from '../../../widgets/admin/crud/update_modal.jsx';
+
+Counterpart.registerTranslations("en", require('./ShowTagsSchemaPartial.locale.en.js'));
+Counterpart.registerTranslations("pl", require('./ShowTagsSchemaPartial.locale.pl.js'));
+
 
 import './ShowTagsSchemaPartial.scss';
 const ShowTagsSchemaPartial = React.createClass({

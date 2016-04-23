@@ -1,6 +1,10 @@
 import React from 'react';
+import Counterpart from 'counterpart';
 
 import IndexTableBrowser from '../../../widgets/admin/crud/index_table_browser_widget.jsx';
+
+Counterpart.registerTranslations("en", require('./ShowMetadataSchemaPartial.locale.en.js'));
+Counterpart.registerTranslations("pl", require('./ShowMetadataSchemaPartial.locale.pl.js'));
 
 const ShowMetadataSchema = React.createClass({
 
