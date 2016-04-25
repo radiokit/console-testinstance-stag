@@ -12,7 +12,7 @@ const ScheduleDetails = React.createClass({
 
   getDefaultProps() {
     return {
-      offsetStart: moment().unix(),
+      offsetStart: Date.now(),
       onOffsetStartChange: () => null,
       activeItem: null,
       onActiveItemChange: () => null,
