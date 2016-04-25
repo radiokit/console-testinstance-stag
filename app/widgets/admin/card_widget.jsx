@@ -22,6 +22,7 @@ export default React.createClass({
     headerText: React.PropTypes.string,
     contentElement: ObjectFuncElementValidator,
     contentElementSelected: React.PropTypes.string,
+    onContentElementSelect: React.PropTypes.func,
     sidebarElement: ObjectFuncElementValidator,
     toolbarElement: ObjectFuncElementValidator,
     contentProps: React.PropTypes.object,
@@ -45,14 +46,25 @@ export default React.createClass({
     return {};
   },
 
+  getSelectedTab() {
+    return this.props.onContentElementSelect
+      ? this.props.contentElementSelected
+      : this.state.selectedTab
+    ;
+  },
+
   onTabClick(tab) {
-    this.setState({
-      selectedTab: tab,
-    });
+    if (this.props.onContentElementSelect) {
+      this.props.onContentElementSelect(tab);
+    } else {
+      this.setState({
+        selectedTab: tab,
+      });
+    }
   },
 
   onPostRenderNestedContentElement(key, element) {
-    if (key !== this.state.selectedTab) {
+    if (key !== this.getSelectedTab()) {
       return (<div key={key} style={{ display: 'none' }}>{element}</div>);
     }
     return element;
@@ -117,7 +129,7 @@ export default React.createClass({
                 contentPrefix={this.props.contentPrefix}
                 headerText={this.props.headerText}
                 tabs={this.buildTabHeaders()}
-                selectedTab={this.state.selectedTab}
+                selectedTab={this.getSelectedTab()}
                 onTabClick={this.onTabClick}
               />
             )

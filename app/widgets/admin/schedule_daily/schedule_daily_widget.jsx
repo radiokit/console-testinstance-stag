@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import Immutable from 'immutable';
-import Moment from 'moment';
+import moment from 'moment';
 import {
   range,
 } from 'lodash';
@@ -14,21 +14,19 @@ const hourType = PropTypes.oneOf(range(0, 24));
 
 const ScheduleDaily = React.createClass({
   propTypes: {
-    // firstHour: hourType.isRequired,
-    // items: React.PropTypes.object.isRequired,
-    // now: React.PropTypes.object.isRequired,
-    // activeItem: React.PropTypes.object,
-    // onChangeActiveItem: React.PropTypes.func,
-    // onNowChange: React.PropTypes.func,
-    // availablePlumberFiles: React.PropTypes.object,
-    // afterFormSubmit: React.PropTypes.func,
+    currentBroadcastChannel: React.PropTypes.object,
+    offsetStart: React.PropTypes.number,
+    onOffsetStartChange: React.PropTypes.func,
+    activeItem: React.PropTypes.object,
+    onActiveItemChange: React.PropTypes.func,
   },
 
   getDefaultProps() {
     return {
-      firstHour: 5,
-      items: new Immutable.Seq().toIndexedSeq(),
-      loadedFiles: false,
+      offsetStart: moment().unix(),
+      onOffsetStartChange: () => null,
+      activeItem: null,
+      onActiveItemChange: () => null,
     };
   },
 
@@ -52,8 +50,8 @@ const ScheduleDaily = React.createClass({
     return data.map(entry => (
       Immutable.Map()
         .set('id', entry.get('id'))
-        .set('start_at', Moment.utc(entry.get('start_at')))
-        .set('stop_at', Moment.utc(entry.get('stop_at')))
+        .set('start_at', moment.utc(entry.get('start_at')))
+        .set('stop_at', moment.utc(entry.get('stop_at')))
     ));
   },
 

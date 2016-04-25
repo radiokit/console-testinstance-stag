@@ -1,5 +1,6 @@
 export default {
   BroadcastPlaylist: {
+    header: 'Ramówka',
     tabs: {
       headers: {
         weekly: 'Tydzień',

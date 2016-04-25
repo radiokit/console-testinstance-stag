@@ -1,5 +1,6 @@
 export default {
   BroadcastPlaylist: {
+    headder: 'Broadcast',
     tabs: {
       headers: {
         weekly: 'Weekly',

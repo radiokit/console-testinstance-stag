@@ -30,11 +30,11 @@ Counterpart.registerTranslations('pl', localePL);
 const PlayListIndex = React.createClass({
   propTypes: {
     routeParams: React.PropTypes.object,
+    history: React.PropTypes.object,
   },
 
   contextTypes: {
     currentBroadcastChannel: React.PropTypes.object.isRequired,
-    // availableUserAccounts: React.PropTypes.object.isRequired,
   },
 
   getInitialState() {
@@ -43,26 +43,55 @@ const PlayListIndex = React.createClass({
     };
   },
 
-  onChangeActiveItem(item) {
-    // TODO
-    return item;
+  getOffset() {
+    return this.props.routeParams.date
+      ? parseInt(this.props.routeParams.date, 10)
+      : Date.now()
+    ;
+  },
+
+  getZoom() {
+    return this.props.routeParams.zoom
+      ? this.props.routeParams.zoom
+      : 'daily'
+    ;
+  },
+
+  onChangeActiveItem(activeItem) {
+    this.setState({ activeItem });
+  },
+
+  onOffsetStartChange(offset) {
+    this.changeView({ offset });
+  },
+
+  onZoomChange(zoom) {
+    this.changeView({ zoom });
+  },
+
+  changeView({ offset, zoom }) {
+    this.props.history.push(`/apps/broadcast/playlist/${
+      offset || this.getOffset()
+    }/${
+      zoom || this.getZoom()
+    }`);
   },
 
   render() {
-    const {
-      date = Date.now(),
-      zoom = 'daily',
-    } = this.props.routeParams || {};
+    const date = this.getOffset();
+    const zoom = this.getZoom();
 
     if (this.state.loadingError) {
       return (<Alert type="error" fullscreen infoTextKey="general.errors.communication.general" />);
     }
 
-    const contentProps = {
+    const childProps = {
       currentBroadcastChannel: this.context.currentBroadcastChannel,
-      offsetStart: moment(date).unix(),
+      offsetStart: parseInt(date, 10),
+      onOffsetStartChange: this.onOffsetStartChange,
+      onZoomChange: this.onZoomChange,
       activeItem: this.state.activeItem,
-      onChangeActiveItem: this.onChangeActiveItem,
+      onActiveItemChange: this.onActiveItemChange,
     };
 
     return (
@@ -79,7 +108,10 @@ const PlayListIndex = React.createClass({
                   details: { element: ScheduleDetails },
                 }}
                 contentElementSelected={zoom}
-                contentProps={contentProps}
+                onContentElementSelect={this.onZoomChange}
+                contentProps={childProps}
+                sidebarProps={childProps}
+                toolbarProps={childProps}
               />
             </GridCell>
           </GridRow>
