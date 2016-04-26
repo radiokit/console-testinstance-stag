@@ -4,6 +4,10 @@ import {
   Map,
 } from 'immutable';
 import moment from 'moment';
+import {
+  debounce,
+  noop,
+} from 'lodash';
 import connect from 'immview-react-connect';
 import ScheduleDomain from '../../../services/ScheduleDomain';
 import DetectWidth from '../../general/detect_width.jsx';
@@ -27,6 +31,8 @@ function transformItemToClip(item, track) {
   });
 }
 
+const maxOffsetLengthInHours = 24;
+
 const ScheduleDetails = React.createClass({
   propTypes: {
     currentBroadcastChannel: React.PropTypes.object,
@@ -48,6 +54,11 @@ const ScheduleDetails = React.createClass({
     };
   },
 
+  handleChangeOffset: debounce(function ({ offsetStart, offsetLength }) {
+    const { onOffsetStartChange = noop } = this.props;
+    onOffsetStartChange(Math.round(offsetStart + offsetLength / 2));
+  }, 10 * 1000),
+
   render() {
     const items = this.props.items.map(transformItemToClip);
     const viewportOffsetLength = 1000 * 30;
@@ -64,8 +75,10 @@ const ScheduleDetails = React.createClass({
             visibleTracksCount={tracksCount}
             offsetStart={viewportOffsetStart}
             offsetLength={viewportOffsetLength}
+            maxOffsetLength={maxOffsetLengthInHours * 60 * 60 * 1000}
             playlist={Map({ items })}
             timeMarks="date"
+            onChangeOffset={this.handleChangeOffset}
           />
         )}</DetectWidth>
         <pre>
@@ -87,8 +100,8 @@ export default connect(
   ScheduleDomain,
   (data, props) => {
     const range = Map({
-      from: moment(props.offsetStart).subtract(12, 'hours').toISOString(),
-      to: moment(props.offsetStart).add(12, 'hours').toISOString(),
+      from: moment(props.offsetStart).subtract(maxOffsetLengthInHours / 2, 'hours').toISOString(),
+      to: moment(props.offsetStart).add(maxOffsetLengthInHours / 2, 'hours').toISOString(),
     });
     if (!data.getIn(['ranges', range])) {
       ScheduleDomain.fetch(range.get('from'), range.get('to'));

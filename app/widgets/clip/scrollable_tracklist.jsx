@@ -31,8 +31,10 @@ const ScrollableTracklist = React.createClass({
 
   getInitialState() {
     return {
-      offsetLeft: 0,
-      offsetWidth: 0,
+      offsetStart: this.props.offsetStart,
+      offsetLength: this.props.offsetLength,
+      offsetStartMod: 0,
+      offsetLengthMod: 0,
     };
   },
 
@@ -44,14 +46,14 @@ const ScrollableTracklist = React.createClass({
     const timeScale = this.getOffsetLength() / props.width;
 
     if (left) {
-      normalizedState.offsetLeft += left * timeScale;
+      normalizedState.offsetStartMod += left * timeScale;
     }
 
     if (width) {
-      normalizedState.offsetWidth += width * timeScale;
+      normalizedState.offsetLengthMod += width * timeScale;
       if (this.getOffsetStart(normalizedState) < 0) {
-        normalizedState.offsetWidth = normalizedState.offsetWidth + normalizedState.offsetLeft;
-        normalizedState.offsetLeft = -1 * props.offsetStart;
+        normalizedState.offsetLengthMod = normalizedState.offsetLengthMod + normalizedState.offsetStartMod;
+        normalizedState.offsetStartMod = -1 * props.offsetStart;
       }
     }
 
@@ -60,20 +62,21 @@ const ScrollableTracklist = React.createClass({
       this.getOffsetLength(normalizedState) >= props.minOffsetLength &&
       this.getOffsetLength(normalizedState) <= props.maxOffsetLength
     ) {
-      this.setState(normalizedState);
-      props.onChangeOffset && props.onChangeOffset({
-        offsetStart: this.getOffsetStart(),
-        offsetLength: this.getOffsetLength(),
+      this.setState(normalizedState, () => {
+        props.onChangeOffset && props.onChangeOffset({
+          offsetStart: this.getOffsetStart(),
+          offsetLength: this.getOffsetLength(),
+        });
       });
     }
   },
 
   getOffsetStart(state) {
-    return this.props.offsetStart + (state || this.state).offsetLeft;
+    return this.state.offsetStart + (state || this.state).offsetStartMod;
   },
 
   getOffsetLength(state) {
-    return this.props.offsetLength + (state || this.state).offsetWidth;
+    return this.state.offsetLength + (state || this.state).offsetLengthMod;
   },
 
   handleWheel(e) {
