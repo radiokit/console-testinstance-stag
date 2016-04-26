@@ -25,4 +25,4 @@ export function update(queryData, status, data, time) {
       })
     )
   );
-};
+}

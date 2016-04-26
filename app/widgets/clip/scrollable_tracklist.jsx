@@ -15,6 +15,18 @@ const ScrollableTracklist = React.createClass({
 
     scrollable: React.PropTypes.bool,
     zoomable: React.PropTypes.bool,
+    minOffsetLength: React.PropTypes.number,
+    maxOffsetLength: React.PropTypes.number,
+    onChangeOffset: React.PropTypes.func,
+  },
+
+  getDefaultProps() {
+    return {
+      scrollable: false,
+      zoomable: false,
+      minOffsetLength: 1000,
+      maxOffsetLength: 24 * 60 * 60 * 1000,
+    };
   },
 
   getInitialState() {
@@ -24,44 +36,44 @@ const ScrollableTracklist = React.createClass({
     };
   },
 
-  setNewBonus(modification) {
+  setNewBonus({ left, width }) {
+    const props = this.props;
     const normalizedState = {
       ...this.state,
     };
-    if (modification.offsetLeft) {
-      normalizedState.offsetLeft += modification.offsetLeft / this.props.width * this.getOffsetLength();
-    }
-    if (modification.offsetWidth) {
-      normalizedState.offsetWidth += modification.offsetWidth / this.props.width * this.getOffsetLength();
+    const timeScale = this.getOffsetLength() / props.width;
 
+    if (left) {
+      normalizedState.offsetLeft += left * timeScale;
+    }
+
+    if (width) {
+      normalizedState.offsetWidth += width * timeScale;
       if (this.getOffsetStart(normalizedState) < 0) {
         normalizedState.offsetWidth = normalizedState.offsetWidth + normalizedState.offsetLeft;
-        normalizedState.offsetLeft = -1 * this.props.offsetStart;
+        normalizedState.offsetLeft = -1 * props.offsetStart;
       }
     }
-    if (this.getOffsetStart(normalizedState) >= 0 && this.getOffsetLength(normalizedState) > 1000) {
+
+    if (
+      this.getOffsetStart(normalizedState) >= 0 &&
+      this.getOffsetLength(normalizedState) >= props.minOffsetLength &&
+      this.getOffsetLength(normalizedState) <= props.maxOffsetLength
+    ) {
       this.setState(normalizedState);
+      props.onChangeOffset && props.onChangeOffset({
+        offsetStart: this.getOffsetStart(),
+        offsetLength: this.getOffsetLength(),
+      });
     }
   },
 
-  zoom(diff) {
-    if (!this.props.zoomable) {
-      return;
-    }
-    const cappedDiff = Math.min(100, Math.abs(diff)) * Math.sign(diff);
-    this.setNewBonus({
-      offsetLeft: cappedDiff,
-      offsetWidth: cappedDiff * -2,
-    });
+  getOffsetStart(state) {
+    return this.props.offsetStart + (state || this.state).offsetLeft;
   },
 
-  scrollHorizontally(x) {
-    if (!this.props.scrollable) {
-      return;
-    }
-    this.setNewBonus({
-      offsetLeft: x,
-    });
+  getOffsetLength(state) {
+    return this.props.offsetLength + (state || this.state).offsetWidth;
   },
 
   handleWheel(e) {
@@ -69,7 +81,7 @@ const ScrollableTracklist = React.createClass({
     const vMovement = e.deltaY;
     if ((hMovement > 0 || hMovement < 0) && Math.abs(hMovement) > Math.abs(vMovement)) {
       if (e.shiftKey && this.props.zoomable) {
-        this.zoom(hMovement);
+        this.zoom(-1 * hMovement);
       } else {
         this.scrollHorizontally(hMovement);
       }
@@ -90,12 +102,24 @@ const ScrollableTracklist = React.createClass({
     this.setState({ scrolling: false });
   },
 
-  getOffsetStart(state) {
-    return this.props.offsetStart + (state || this.state).offsetLeft;
+  scrollHorizontally(x) {
+    if (!this.props.scrollable) {
+      return;
+    }
+    this.setNewBonus({
+      left: x,
+    });
   },
 
-  getOffsetLength(state) {
-    return this.props.offsetLength + (state || this.state).offsetWidth;
+  zoom(diff) {
+    if (!this.props.zoomable) {
+      return;
+    }
+    const cappedDiff = Math.min(100, Math.abs(diff)) * Math.sign(diff);
+    this.setNewBonus({
+      left: cappedDiff,
+      width: cappedDiff * -2,
+    });
   },
 
   render() {

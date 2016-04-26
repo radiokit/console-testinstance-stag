@@ -1,5 +1,4 @@
 import React from 'react';
-import moment from 'moment';
 
 import GridRow from '../../../widgets/admin/grid_row_widget.jsx';
 import GridCell from '../../../widgets/admin/grid_cell_widget.jsx';
@@ -12,13 +11,9 @@ import ScheduleWeekly from '../../../widgets/admin/schedule_weekly/schedule_week
 import ScheduleDetails from '../../../widgets/admin/schedule_details/schedule_details.jsx';
 import PlaylistSidebar from './playlist_sidebar.jsx';
 import PlaylistToolbar from './playlist_toolbar.jsx';
+import ScheduleDomain from '../../../services/ScheduleDomain';
 
-// import Schedule from '../../../services/ScheduleDomain';
-// setTimeout(() => {
-//   Schedule.subscribe(d => d && console.log(JSON.stringify(d.toJS(), null, '    ')));
-//   Schedule.observe('2014-05-05');
-// }, 2000);
-
+// import Translate from 'react-translate-component';
 import Counterpart from 'counterpart';
 import localePL from './index_view_pl';
 import localeEN from './index_view_en';
@@ -43,16 +38,11 @@ const PlayListIndex = React.createClass({
     };
   },
 
-  onActiveItemChange(activeItem) {
-    this.setState({ activeItem });
-  },
-
-  onOffsetStartChange(offset) {
-    this.changeView({ offset });
-  },
-
-  onZoomChange(zoom) {
-    this.changeView({ zoom });
+  getOffset() {
+    return this.props.routeParams.date
+      ? parseInt(this.props.routeParams.date, 10)
+      : Date.now()
+    ;
   },
 
   getZoom() {
@@ -62,11 +52,8 @@ const PlayListIndex = React.createClass({
     ;
   },
 
-  getOffset() {
-    return this.props.routeParams.date
-      ? parseInt(this.props.routeParams.date, 10)
-      : Date.now()
-    ;
+  handleChangeActiveItem(activeItem) {
+    this.setState({ activeItem });
   },
 
   changeView({ offset, zoom }) {
@@ -75,6 +62,18 @@ const PlayListIndex = React.createClass({
     }/${
       zoom || this.getZoom()
     }`);
+  },
+
+  handleOffsetStartChange(offset) {
+    this.changeView({ offset });
+  },
+
+  handleZoomChange(zoom) {
+    this.changeView({ zoom });
+  },
+
+  handleCRUD() {
+    ScheduleDomain.clear();
   },
 
   render() {
@@ -88,11 +87,15 @@ const PlayListIndex = React.createClass({
     const childProps = {
       data: this.context.data,
       currentBroadcastChannel: this.context.currentBroadcastChannel,
+
       offsetStart: parseInt(date, 10),
-      onOffsetStartChange: this.onOffsetStartChange,
-      onZoomChange: this.onZoomChange,
       activeItem: this.state.activeItem,
-      onActiveItemChange: this.onActiveItemChange,
+
+      onOffsetStartChange: this.handleOffsetStartChange,
+      onZoomChange: this.handleZoomChange,
+      onActiveItemChange: this.handleChangeActiveItem,
+
+      onCRUD: this.handleCRUD,
     };
 
     return (
@@ -109,7 +112,7 @@ const PlayListIndex = React.createClass({
                   details: { element: ScheduleDetails },
                 }}
                 contentElementSelected={zoom}
-                onContentElementSelect={this.onZoomChange}
+                onContentElementSelect={this.handleZoomChange}
                 contentProps={childProps}
                 sidebarProps={childProps}
                 toolbarProps={childProps}

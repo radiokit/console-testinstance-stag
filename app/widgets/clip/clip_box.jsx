@@ -1,4 +1,7 @@
 import React from 'react';
+import {
+  List,
+} from 'immutable';
 
 import ImmutableComponent from '../../helpers/immutable_component';
 import ClipBackground from './clip_background.jsx';
@@ -124,7 +127,7 @@ const ClipMarkers = ({
 }) => {
   return (
     <div>{
-      clip.get('markers').toArray().map((marker, i) => {
+      clip.get('markers', List()).toArray().map((marker, i) => {
         const rootProps = {
           offsetStart,
           offsetLength,
@@ -160,7 +163,7 @@ const ClipRegions = ({
 }) => {
   return (
     <div>{
-      clip.get('regions').toArray().map((region, i)=> {
+      clip.get('regions', List()).toArray().map((region, i)=> {
         const clipMovableProps = {
           component: PixelMovableRegion,
           offsetStart,

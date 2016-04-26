@@ -116,7 +116,7 @@ const TrackItems = React.createClass({
       >
         { items.toArray().map((item, key) => {
           if (
-            item.get('position') < offsetStart + offsetLength &&
+            item.get('position') < offsetStart + offsetLength ||
             item.get('position') + item.get('offsetLength') > offsetStart
           ) {
             return (

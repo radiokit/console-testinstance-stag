@@ -2,6 +2,7 @@ import React from 'react';
 
 import {
   Map,
+  List,
 } from 'immutable';
 
 import './clip_background.scss';
@@ -19,10 +20,10 @@ const ClipBackground = props => {
 
   const imageWidth = Math.ceil(width / clipScale);
 
-  const anyImage = clip.get('images').first();
-  const sufficientImage = clip.get('images').find(image => image.get('width', 0) > width);
+  const anyImage = clip.get('images', List()).first();
+  const sufficientImage = clip.get('images', List()).find(image => image.get('width', 0) > width);
 
-  const imageUrl = (sufficientImage || anyImage || Map()).get('url');
+  const imageUrl = (sufficientImage || anyImage || Map()).get('url', '');
 
   const rootProps = {
     style: ({

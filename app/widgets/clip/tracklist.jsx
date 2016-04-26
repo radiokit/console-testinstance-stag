@@ -54,6 +54,8 @@ const TrackList = React.createClass({
     onPlaylistChange: React.PropTypes.func,
     onItemChange: React.PropTypes.func,
     onClipChange: React.PropTypes.func,
+    
+    timeMarks: React.PropTypes.oneOf([null, 'relative', 'date']),
   },
 
   getDefaultProps() {
@@ -63,6 +65,7 @@ const TrackList = React.createClass({
       visibleTracksCount: null,
       trackHeight: 100,
       cursorTime: null,
+      timeMarks: 'relative',
     };
   },
 
@@ -131,8 +134,13 @@ const TrackList = React.createClass({
   },
 
   getTracksCount() {
-    return this.props.visibleTracksCount ||
-      this.getTrackItems().reduce((v, item) => Math.max(item.get('track') - 1, v), 1);
+    return Math.max(
+      1,
+      (
+        this.props.visibleTracksCount ||
+        this.getTrackItems().reduce((v, item) => Math.max(item.get('track') - 1, v), 1)
+      )
+    );
   },
 
   handleClipChange(newClip, oldClip) {
@@ -200,11 +208,14 @@ const TrackList = React.createClass({
         onClick={this.handleClick}
         style={contStyle}
       >
-        <TrackTimeMarks
-          offsetStart={offsetStart}
-          offsetLength={offsetLength}
-          width={this.props.width}
-        />
+        {this.props.timeMarks && (
+          <TrackTimeMarks
+            type={this.props.timeMarks}
+            offsetStart={offsetStart}
+            offsetLength={offsetLength}
+            width={this.props.width}
+          />
+        )}
         <TrackLines
           tracksCount={this.getTracksCount()}
           trackHeight={this.props.trackHeight}

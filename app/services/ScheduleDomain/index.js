@@ -10,4 +10,6 @@ const ScheduleDomain = new Domain(
   ScheduleDomainInterface
 );
 
+window.schedule = ScheduleDomain;
+
 export default ScheduleDomain;
