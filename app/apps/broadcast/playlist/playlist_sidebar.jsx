@@ -8,7 +8,7 @@ const PlaylistSidebar = React.createClass({
     offsetStart: React.PropTypes.number.isRequired,
     onOffsetStartChange: React.PropTypes.func,
     onZoomChange: React.PropTypes.func,
-    activeItem: React.PropTypes.object.isRequired,
+    activeItem: React.PropTypes.object,
     onActiveItemChange: React.PropTypes.func,
   },
 
