@@ -19,7 +19,6 @@ import PlaylistToolbar from './playlist_toolbar.jsx';
 //   Schedule.observe('2014-05-05');
 // }, 2000);
 
-import Translate from 'react-translate-component';
 import Counterpart from 'counterpart';
 import localePL from './index_view_pl';
 import localeEN from './index_view_en';
@@ -34,6 +33,7 @@ const PlayListIndex = React.createClass({
   },
 
   contextTypes: {
+    data: React.PropTypes.object.isRequired,
     currentBroadcastChannel: React.PropTypes.object.isRequired,
   },
 
@@ -43,21 +43,7 @@ const PlayListIndex = React.createClass({
     };
   },
 
-  getOffset() {
-    return this.props.routeParams.date
-      ? parseInt(this.props.routeParams.date, 10)
-      : Date.now()
-    ;
-  },
-
-  getZoom() {
-    return this.props.routeParams.zoom
-      ? this.props.routeParams.zoom
-      : 'daily'
-    ;
-  },
-
-  onChangeActiveItem(activeItem) {
+  onActiveItemChange(activeItem) {
     this.setState({ activeItem });
   },
 
@@ -67,6 +53,20 @@ const PlayListIndex = React.createClass({
 
   onZoomChange(zoom) {
     this.changeView({ zoom });
+  },
+
+  getZoom() {
+    return this.props.routeParams.zoom
+      ? this.props.routeParams.zoom
+      : 'daily'
+    ;
+  },
+
+  getOffset() {
+    return this.props.routeParams.date
+      ? parseInt(this.props.routeParams.date, 10)
+      : Date.now()
+    ;
   },
 
   changeView({ offset, zoom }) {
@@ -86,6 +86,7 @@ const PlayListIndex = React.createClass({
     }
 
     const childProps = {
+      data: this.context.data,
       currentBroadcastChannel: this.context.currentBroadcastChannel,
       offsetStart: parseInt(date, 10),
       onOffsetStartChange: this.onOffsetStartChange,

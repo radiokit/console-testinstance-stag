@@ -16,7 +16,7 @@ const CalendarRow = React.createClass({
     expanded: PropTypes.boolean,
     onChangeExpansionState: PropTypes.func.isRequired,
     activeItem: PropTypes.object,
-    onChangeActiveItem: PropTypes.func.isRequired,
+    onActiveItemChange: PropTypes.func.isRequired,
   },
 
   shouldComponentUpdate(nextProp) {
@@ -48,9 +48,9 @@ const CalendarRow = React.createClass({
 
   markAsActive(item) {
     if (this.props.activeItem && item.get('id') === this.props.activeItem.get('id')) {
-      this.props.onChangeActiveItem(null);
+      this.props.onActiveItemChange(null);
     } else {
-      this.props.onChangeActiveItem(item);
+      this.props.onActiveItemChange(item);
     }
   },
 

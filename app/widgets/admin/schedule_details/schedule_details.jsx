@@ -18,7 +18,7 @@ const ScheduleDetails = React.createClass({
       onActiveItemChange: () => null,
     };
   },
-  
+
   render() {
     return (
       <div>

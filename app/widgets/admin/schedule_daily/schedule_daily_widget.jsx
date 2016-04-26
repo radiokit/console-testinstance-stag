@@ -4,8 +4,6 @@ import moment from 'moment';
 import {
   range,
 } from 'lodash';
-import ScheduleDaySelector from './schedule_day_selector_widget.jsx';
-import ScheduleDayCrudButtons from './schedule_day_crud_buttons.jsx';
 import CalendarRow from './schedule_daily_calendar_row.jsx';
 
 import './schedule_daily_widget.scss';
@@ -14,6 +12,7 @@ const hourType = PropTypes.oneOf(range(0, 24));
 
 const ScheduleDaily = React.createClass({
   propTypes: {
+    firstHour: React.PropTypes.number, // FIXME: ??
     currentBroadcastChannel: React.PropTypes.object,
     offsetStart: React.PropTypes.number,
     onOffsetStartChange: React.PropTypes.func,
@@ -21,8 +20,13 @@ const ScheduleDaily = React.createClass({
     onActiveItemChange: React.PropTypes.func,
   },
 
+  contextTypes: {
+    data: React.PropTypes.object,
+  },
+
   getDefaultProps() {
     return {
+      firstHour: 5,
       offsetStart: Date.now(),
       onOffsetStartChange: () => null,
       activeItem: null,
@@ -33,17 +37,20 @@ const ScheduleDaily = React.createClass({
   getInitialState() {
     return {
       expansionState: {},
+      availableFiles: new Immutable.Seq().toIndexedSeq(),
     };
   },
-  
+
   componentDidMount() {
-    return;
     this.fetchPlumberFiles();
   },
 
-  afterFormSubmit() {
-    this.fetchPlumberFiles();
-    this.onChangeActiveItem(null);
+  onChangeExpansionState(hour, value) {
+    this.setState({ expansionState: { ...this.state.expansionState, [hour]: value } });
+  },
+
+  onNowChange(newNow) {
+    this.setState({ now: newNow });
   },
 
   getItems(data) {
@@ -55,6 +62,11 @@ const ScheduleDaily = React.createClass({
     ));
   },
 
+  afterFormSubmit() {
+    this.fetchPlumberFiles();
+    this.onChangeActiveItem(null);
+  },
+
   fetchPlumberFiles() {
     this.context.data
       .query('plumber', 'Media.Input.File.Http')
@@ -64,31 +76,21 @@ const ScheduleDaily = React.createClass({
           loadingError: true,
         });
       }).on('fetch', (_event, _query, data) => {
-      if (data.count() !== 0) {
-        this.setState({
-          loadedFiles: true,
-          availableFiles: this.getItems(data).toList(),
-        });
-      } else {
-        this.setState({
-          loadedListOfFiles: true,
-          availableFiles: new Immutable.Seq().toIndexedSeq(),
-        });
-      }
-    }).fetch();
-  },
-
-  onChangeExpansionState(hour, value) {
-    this.setState({ expansionState: { ...this.state.expansionState, [hour]: value } });
-  },
-
-  onNowChange(newNow) {
-    this.setState({ now: newNow });
+        if (data.count() !== 0) {
+          this.setState({
+            loadedFiles: true,
+            availableFiles: this.getItems(data).toList(),
+          });
+        } else {
+          this.setState({
+            loadedListOfFiles: true,
+            availableFiles: new Immutable.Seq().toIndexedSeq(),
+          });
+        }
+      }).fetch();
   },
 
   render() {
-    return null;
-
     const hours = (this.props.firstHour > 0)
     ? new Immutable
       .Range(this.props.firstHour, 24)
@@ -96,31 +98,23 @@ const ScheduleDaily = React.createClass({
     : new Immutable.Range(0, 24);
 
     return (
-      <div>
-        <ScheduleDayCrudButtons
-          availablePlumberFiles={this.props.availablePlumberFiles}
-          afterFormSubmit={this.props.afterFormSubmit}
-          activeItem={this.props.activeItem}
-        />
-        <ScheduleDaySelector now={this.props.now} onChange={this.props.onNowChange} />
-        <table className="ScheduleDailyWidget table table-banded table-hover ">
-          <tbody>
-            {hours.map((hour) => (
-                <CalendarRow
-                  key={hour}
-                  hour={hour}
-                  firstHour={this.props.firstHour}
-                  now={this.props.now}
-                  items={this.props.items}
-                  onChangeExpansionState={this.onChangeExpansionState}
-                  expanded={this.state.expansionState[hour]}
-                  onChangeActiveItem={this.props.onChangeActiveItem}
-                  activeItem={this.props.activeItem}
-                />
-              ))}
-          </tbody>
-        </table>
-      </div>
+      <table className="ScheduleDailyWidget table table-banded table-hover ">
+        <tbody>
+          {hours.map((hour) => (
+              <CalendarRow
+                key={hour}
+                hour={hour}
+                firstHour={this.props.firstHour}
+                now={moment.utc(this.props.offsetStart)}
+                items={this.state.availableFiles}
+                onChangeExpansionState={this.onChangeExpansionState}
+                expanded={this.state.expansionState[hour]}
+                onActiveItemChange={this.props.onActiveItemChange}
+                activeItem={this.props.activeItem}
+              />
+            ))}
+        </tbody>
+      </table>
     );
   },
 });
