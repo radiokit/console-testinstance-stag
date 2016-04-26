@@ -1,6 +1,5 @@
 import React from 'react';
 import moment from 'moment';
-import clone from 'clone';
 
 const PlaylistSidebar = React.createClass({
   propTypes: {
@@ -21,116 +20,50 @@ const PlaylistSidebar = React.createClass({
     };
   },
 
-  onDayPreviousClick(e) {
-    e.preventDefault();
-    this.props.onOffsetStartChange(
-      parseInt(
-        moment
-        .utc(this.props.offsetStart)
-        .clone()
-        .subtract(1, 'day')
-        .format('x'),
-        10
-      )
-    );
+  triggerOffsetChange(op, quantity, unit) {
+    const { onOffsetStartChange } = this.props;
+    const offset = moment(this.props.offsetStart)[op](quantity, unit).valueOf();
+    onOffsetStartChange && onOffsetStartChange(offset);
   },
 
-  onDayNextClick(e) {
+  handleDayPreviousClick(e) {
     e.preventDefault();
-    this.props.onOffsetStartChange(
-      parseInt(
-        moment
-        .utc(this.props.offsetStart)
-        .clone()
-        .add(1, 'day')
-        .format('x'),
-        10
-      )
-    );
+    this.triggerOffsetChange('subtract', 1, 'day');
   },
 
-  onWeekPreviousClick(e) {
+  handleDayNextClick(e) {
     e.preventDefault();
-    this.props.onOffsetStartChange(
-      parseInt(
-        moment
-        .utc(this.props.offsetStart)
-        .clone()
-        .subtract(1, 'week')
-        .format('x'),
-        10
-      )
-    );
+    this.triggerOffsetChange('add', 1, 'day');
   },
 
-  onWeekNextClick(e) {
+  handleWeekPreviousClick(e) {
     e.preventDefault();
-    this.props.onOffsetStartChange(
-      parseInt(
-        moment
-        .utc(this.props.offsetStart)
-        .clone()
-        .add(1, 'week')
-        .format('x'),
-        10
-      )
-    );
+    this.triggerOffsetChange('subtract', 1, 'week');
   },
 
-  onMonthPreviousClick(e) {
+  handleWeekNextClick(e) {
     e.preventDefault();
-    this.props.onOffsetStartChange(
-      parseInt(
-        moment
-        .utc(this.props.offsetStart)
-        .clone()
-        .subtract(1, 'month')
-        .format('x'),
-        10
-      )
-    );
+    this.triggerOffsetChange('add', 1, 'week');
   },
 
-  onMonthNextClick(e) {
+  handleMonthPreviousClick(e) {
     e.preventDefault();
-    this.props.onOffsetStartChange(
-      parseInt(
-        moment
-        .utc(this.props.offsetStart)
-        .clone()
-        .add(1, 'month')
-        .format('x'),
-        10
-      )
-    );
+    this.triggerOffsetChange('subtract', 1, 'month');
   },
 
-  onYearPreviousClick(e) {
+  handleMonthNextClick(e) {
     e.preventDefault();
-    this.props.onOffsetStartChange(
-      parseInt(
-        moment
-        .utc(this.props.offsetStart)
-        .clone()
-        .subtract(1, 'year')
-        .format('x'),
-        10
-      )
-    );
+    this.triggerOffsetChange('add', 1, 'month');
   },
 
-  onYearNextClick(e) {
+  handleYearPreviousClick(e) {
     e.preventDefault();
-    this.props.onOffsetStartChange(
-      parseInt(
-        moment
-        .utc(this.props.offsetStart)
-        .clone()
-        .add(1, 'year')
-        .format('x'),
-        10
-      )
-    );
+    this.triggerOffsetChange('subtract', 1, 'year');
+  },
+
+  handleYearNextClick(e) {
+    e.preventDefault();
+    this.triggerOffsetChange('add', 1, 'year');
   },
 
   // TODO add translation in week
@@ -141,7 +74,7 @@ const PlaylistSidebar = React.createClass({
           <button
             type="button"
             className="btn btn-default-light"
-            onClick={this.onDayPreviousClick}
+            onClick={this.handleDayPreviousClick}
           >
             <i className="mdi mdi-chevron-left" />
           </button>
@@ -153,7 +86,7 @@ const PlaylistSidebar = React.createClass({
           <button
             type="button"
             className="btn btn-default-light"
-            onClick={this.onDayNextClick}
+            onClick={this.handleDayNextClick}
           >
            <i className="mdi mdi-chevron-right" />
           </button>
@@ -163,7 +96,7 @@ const PlaylistSidebar = React.createClass({
           <button
             type="button"
             className="btn btn-default-light"
-            onClick={this.onWeekPreviousClick}
+            onClick={this.handleWeekPreviousClick}
           >
             <i className="mdi mdi-chevron-left" />
           </button>
@@ -175,7 +108,7 @@ const PlaylistSidebar = React.createClass({
           <button
             type="button"
             className="btn btn-default-light"
-            onClick={this.onWeekNextClick}
+            onClick={this.handleWeekNextClick}
           >
             <i className="mdi mdi-chevron-right" />
           </button>
@@ -185,7 +118,7 @@ const PlaylistSidebar = React.createClass({
           <button
             type="button"
             className="btn btn-default-light"
-            onClick={this.onMonthPreviousClick}
+            onClick={this.handleMonthPreviousClick}
           >
             <i className="mdi mdi-chevron-left" />
           </button>
@@ -197,7 +130,7 @@ const PlaylistSidebar = React.createClass({
           <button
             type="button"
             className="btn btn-default-light"
-            onClick={this.onMonthNextClick}
+            onClick={this.handleMonthNextClick}
           >
             <i className="mdi mdi-chevron-right" />
           </button>
@@ -207,7 +140,7 @@ const PlaylistSidebar = React.createClass({
           <button
             type="button"
             className="btn btn-default-light"
-            onClick={this.onYearPreviousClick}
+            onClick={this.handleYearPreviousClick}
           >
             <i className="mdi mdi-chevron-left" />
           </button>
@@ -219,7 +152,7 @@ const PlaylistSidebar = React.createClass({
           <button
             type="button"
             className="btn btn-default-light"
-            onClick={this.onYearNextClick}
+            onClick={this.handleYearNextClick}
           >
             <i className="mdi mdi-chevron-right" />
           </button>
