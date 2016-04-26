@@ -1,8 +1,6 @@
 import React from 'react';
 import Translate from 'react-translate-component';
 import _ from 'lodash';
-import ReactDOM from 'react-dom';
-import Immutable from 'immutable';
 import classnames from 'classnames';
 
 import Checkbox from '../../../widgets/general/indeterminate_checkbox_widget.jsx';
@@ -22,16 +20,16 @@ const ShowContentTagModal = React.createClass({
     return {
       index: 0,
       shouldUpdate: true,
-      selectedTagIds:[],
-      deselectedTagIds:[],
-    }
+      selectedTagIds: [],
+      deselectedTagIds: [],
+    };
   },
 
   calculateTagFrequencies(props) {
     this.categoryFrequencies = new Set();
     this.tagFrequencies = {};
     props.initialAssociations.forEach((record) => {
-      this.tagFrequencies[record.get("tag_item_id")] = this.tagFrequencies[record.get("tag_item_id")] + 1 || 1;
+      this.tagFrequencies[record.get('tag_item_id')] = this.tagFrequencies[record.get('tag_item_id')] + 1 || 1;
     });
     Object.keys(this.tagFrequencies).forEach((tagId) => {
       this.props.tagCategories.toJS().forEach((category) => {
@@ -43,33 +41,33 @@ const ShowContentTagModal = React.createClass({
   },
 
   componentDidMount() {
-   this.calculateTagFrequencies(this.props);
+    this.calculateTagFrequencies(this.props);
   },
 
   componentWillReceiveProps(nextProps) {
-      this.calculateTagFrequencies(nextProps);
-      this.setState({
-        shouldUpdate: true
-      });
+    this.calculateTagFrequencies(nextProps);
+    this.setState({
+      shouldUpdate: true,
+    });
   },
 
   selectTagId(tagId) {
-    let selectedTagIds = this.state.selectedTagIds;
+    const selectedTagIds = this.state.selectedTagIds;
     selectedTagIds.push(tagId);
     this.setState({
       shouldUpdate: false,
-      selectedTagIds: selectedTagIds,
+      selectedTagIds,
       deselectedTagIds: _.pull(this.state.deselectedTagIds, tagId),
     });
   },
 
   deselectTagId(tagId) {
-    let deselectedTagIds = this.state.deselectedTagIds;
+    const deselectedTagIds = this.state.deselectedTagIds;
     deselectedTagIds.push(tagId);
     this.setState({
       shouldUpdate: false,
       selectedTagIds: _.pull(this.state.selectedTagIds, tagId),
-      deselectedTagIds: deselectedTagIds,
+      deselectedTagIds,
     });
   },
 
@@ -83,11 +81,11 @@ const ShowContentTagModal = React.createClass({
 
   show() {
     this.setState({
-      shouldUpdate:true,
-      index:0,
-      selectedTagIds:[],
-      deselectedTagIds:[],
-    })
+      shouldUpdate: true,
+      index: 0,
+      selectedTagIds: [],
+      deselectedTagIds: [],
+    });
     this.refs.modal.show();
   },
 
@@ -100,8 +98,8 @@ const ShowContentTagModal = React.createClass({
     if (occuranceCount === 0) {
       return {
         checked: false,
-        indeterminate: false
-      }
+        indeterminate: false,
+      };
     }
     else {
       const tagForAll = occuranceCount === this.props.selectedRecordIds.count();
@@ -114,25 +112,20 @@ const ShowContentTagModal = React.createClass({
 
   createAssociation(association) {
     window.data
-      .record("vault", "Data.Tag.Association")
-      .on("error", () => {
-        //FIXME
-      })
-      .on("loaded", () => {
-        if (this.isMounted()) {
-          if (this.state.insertCount === 0) {
-            if (this.state.deleteCompleted) {
-              this.recordIdUpdateComplete(association.record_file_id);
-            } else {
-              this.setState({
-                insertCompleted: true
-              });
-            }
+      .record('vault', 'Data.Tag.Association')
+      .on('loaded', () => {
+        if (this.state.insertCount === 0) {
+          if (this.state.deleteCompleted) {
+            this.recordIdUpdateComplete(association.record_file_id);
           } else {
             this.setState({
-              insertCount: this.state.insertCount - 1
-            })
+              insertCompleted: true,
+            });
           }
+        } else {
+          this.setState({
+            insertCount: this.state.insertCount - 1,
+          });
         }
       })
       .create({
@@ -143,7 +136,7 @@ const ShowContentTagModal = React.createClass({
 
   recordIdUpdateComplete(recordId) {
     this.setState({
-      index : this.state.index  + 1
+      index: this.state.index + 1,
     });
   },
 
@@ -152,25 +145,22 @@ const ShowContentTagModal = React.createClass({
   },
 
   deleteAssociation(association) {
-    window.data.record("vault", "Data.Tag.Association", association.id)
-        // .on("error", this.onDeleteError) // TODO
-      .on("loaded", () => {
-          if (this.isMounted()) {
-            if (this.state.deleteCount === 0) {
-              if (this.state.insertCompleted) {
-                this.recordIdUpdateComplete(association.record_file_id);
-              } else {
-                this.setState({
-                  deleteCompleted: true
-                });
-              }
-            } else {
-              this.setState({
-                deleteCount: this.state.deleteCount - 1
-              })
-            }
+    window.data.record('vault', 'Data.Tag.Association', association.id)
+      .on('loaded', () => {
+        if (this.state.deleteCount === 0) {
+          if (this.state.insertCompleted) {
+            this.recordIdUpdateComplete(association.record_file_id);
+          } else {
+            this.setState({
+              deleteCompleted: true,
+            });
           }
-        })
+        } else {
+          this.setState({
+            deleteCount: this.state.deleteCount - 1,
+          });
+        }
+      })
       .destroy();
   },
 
@@ -182,15 +172,15 @@ const ShowContentTagModal = React.createClass({
       .map((tagId) => {
         return {
           tag_item_id: tagId,
-          record_file_id: recordId
-        }
+          record_file_id: recordId,
+        };
       })
       .filter((association) => {
-        return !(_.some(this.props.initialAssociations.toJS(), association))
+        return !(_.some(this.props.initialAssociations.toJS(), association));
       });
     const unwantedAssociations = this.props.initialAssociations.toJS()
-      .filter((a) => {return a.record_file_id === recordId})
-      .filter((a) => {return _.includes(this.state.deselectedTagIds, a.tag_item_id)});
+      .filter((a) => { return a.record_file_id === recordId; })
+      .filter((a) => { return _.includes(this.state.deselectedTagIds, a.tag_item_id); });
     const insertCompleted = newAssociations.length === 0;
     const deleteCompleted = unwantedAssociations.length === 0;
     if (insertCompleted && deleteCompleted) {
@@ -199,42 +189,43 @@ const ShowContentTagModal = React.createClass({
       this.setState({
         insertCount: newAssociations.length - 1,
         deleteCount: unwantedAssociations.length - 1,
-        insertCompleted: insertCompleted,
-        deleteCompleted: deleteCompleted,
+        insertCompleted,
+        deleteCompleted,
       });
       newAssociations.forEach(this.createAssociation);
       unwantedAssociations.forEach(this.deleteAssociation);
     }
   },
 
-  renderCategoryTags: function(category) {
-      return (
+  renderCategoryTags(category) {
+    return (
         <div>
           <ul className="list">
-            {category.tag_items && _.sortBy(category.tag_items,'name').map((tag) => {
-
-                const onTagSelected = () => this.selectTagId(tag.id);
-                const onTagDeselected = () => this.deselectTagId(tag.id);
-                const onTagRestored = () => this.resetTagId(tag.id);
-                const tagStatus = this.getTagStatus(tag.id);
-                return (
-                  <li key={ tag.id }>
-                    <div className="card-head card-head-xs">
-                      <header>
-                        { tag.name }
-                      </header>
-                      <div className="tools">
-                        <Checkbox
-                          checked={tagStatus.checked}
-                          onSelected={onTagSelected}
-                          onDeselected={onTagDeselected}
-                          onRestore={onTagRestored}
-                          indeterminate={tagStatus.indeterminate} />
-                      </div>
+            {category.tag_items && _.sortBy(category.tag_items, 'name').map((tag) => {
+              const onTagSelected = () => this.selectTagId(tag.id);
+              const onTagDeselected = () => this.deselectTagId(tag.id);
+              const onTagRestored = () => this.resetTagId(tag.id);
+              const tagStatus = this.getTagStatus(tag.id);
+              return (
+                <li key={tag.id}>
+                  <div className="card-head card-head-xs" onClick={() => this.refs['checkBox-' + tag.id].onChange(null)}>
+                    <header>
+                      {tag.name}
+                    </header>
+                    <div className="tools">
+                      <Checkbox
+                        ref={'checkBox-' + tag.id}
+                        checked={tagStatus.checked}
+                        onSelected={onTagSelected}
+                        onDeselected={onTagDeselected}
+                        onRestore={onTagRestored}
+                        indeterminate={tagStatus.indeterminate}
+                      />
                     </div>
-                  </li>
-                );
-              }) }
+                  </div>
+                </li>
+              );
+            })}
           </ul>
         </div>
       );
@@ -253,65 +244,72 @@ const ShowContentTagModal = React.createClass({
         contentPrefix="widgets.vault.file_browser.modals.tag"
         recordIds={this.props.selectedRecordIds}
         onDismiss={this.onDismiss}
-        index={this.state.index}>
+        index={this.state.index}
+      >
         <div className="ShowContentTagModal">
           <Translate
             component="p"
             content="widgets.vault.file_browser.modals.tag.message.confirmation"
-            count={this.props.selectedRecordIds.count()} />
-          {categories.length > 0 && _.sortBy(categories,'name').map((category) => {
+            count={this.props.selectedRecordIds.count()}
+          />
+          {categories.length > 0 && _.sortBy(categories, 'name').map((category) => {
             let expanded = this.isCategoryExpanded(category);
             let toggleClasses = classnames('btn btn-icon-toggle', {
               'disabled': category.tag_items.length === 0,
               'collapsed': !expanded,
             });
-            if(category.tag_items.length === 0){
+            if (category.tag_items.length === 0) {
               return null;
             } else return (
-              <div key={category.id} id={ category.id + "-modal"}>
+              <div key={category.id} id={ category.id + '-modal'}>
                 <div className="expanded">
                   <div
                     className="card-head"
                     aria-expanded="true"
                     data-toggle="collapse"
-                    data-parent={ "#" + category.id + "-modal" }
-                    data-target={ "#" + category.id + "-tagList-modal" }>
+                    data-parent={'#' + category.id + '-modal'}
+                    data-target={'#' + category.id + '-tagList-modal'}
+                  >
                     <a className={toggleClasses} >
                       <i className="mdi mdi-chevron-right" />
                     </a>
                     <header>
-                      { category.name }
+                      {category.name}
                     </header>
                   </div>
-                  <div id={ category.id + "-tagList-modal" }
-                    className={ expanded ? "collapse in" : "collapse"}
-                    aria-expanded={expanded}>
-                    { this.renderCategoryTags(category) }
+                  <div id={category.id + '-tagList-modal'}
+                    className={expanded ? 'collapse in' : 'collapse'}
+                    aria-expanded={expanded}
+                  >
+                    {this.renderCategoryTags(category)}
                   </div>
                 </div>
               </div>
-            )
-          }) }
+            );
+          })}
         </div>
         <div>
           <Translate
             component="p"
-            content="widgets.vault.file_browser.modals.tag.message.progress" />
+            content="widgets.vault.file_browser.modals.tag.message.progress"
+          />
         </div>
         <div>
           <Translate
             component="p"
             content="widgets.vault.file_browser.modals.tag.message.acknowledgement"
-            count={this.props.selectedRecordIds.count()} />
+            count={this.props.selectedRecordIds.count()}
+          />
         </div>
         <div>
           <Translate
             component="p"
-            content="widgets.vault.file_browser.modals.tag.message.cancelled" />
+            content="widgets.vault.file_browser.modals.tag.message.cancelled"
+          />
         </div>
       </ModalForEach>
     );
-  }
+  },
 });
 
 
