@@ -235,7 +235,8 @@ export default {
                 proceed: "Create",
                 cancel: "Cancel",
                 close: "Close",
-              }
+              },
+              empty_warning: "Category is used to aggregate tags. Add at least one tag",
             },
 
             create_tag: {

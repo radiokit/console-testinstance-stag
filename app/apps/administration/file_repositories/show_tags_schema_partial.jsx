@@ -2,6 +2,7 @@ import React from 'react';
 import Immutable from 'immutable';
 import _ from 'lodash';
 import classnames from 'classnames';
+import Translate from 'react-translate-component';
 
 import ToolbarGroup from '../../../widgets/admin/toolbar_group_widget.jsx';
 import ToolbarButton from '../../../widgets/admin/toolbar_button_widget.jsx';
@@ -202,6 +203,8 @@ const ShowTagsSchemaPartial = React.createClass({
           const onDeleteCategoryListener = () => this.showDeleteCategoryModal(category);
           const onEditCategoryListener = () => this.showEditCategoryModal(category);
           const toggleClassNames = classnames('btn', 'btn-flat', 'btn-icon-toggle', {'disabled' : category.tag_items.length === 0 });
+          const newTagIconClassNames = classnames('btn', 'btn-icon', {'EmptyCategory' : category.tag_items.length === 0 });
+
           return (
             <div id={ category.name } key={category.id}>
               <CreateModal
@@ -235,8 +238,14 @@ const ShowTagsSchemaPartial = React.createClass({
                   <header>
                     { category.name }
                   </header>
+
                   <div className="tools">
-                    <a className="btn btn-icon" onClick={ onNewTagListener }>
+                    {() => {
+                      if(category.tag_items.length === 0){
+                        return <Translate content={this.props.contentPrefix + ".modals.create_category.empty_warning"} component="small" className="EmptyCategory" />
+                      }
+                    }()}
+                    <a className={newTagIconClassNames} onClick={ onNewTagListener }>
                       <i className="mdi mdi-library-plus"></i>
                     </a>
                     <a className="btn btn-icon" onClick={ onEditCategoryListener }>

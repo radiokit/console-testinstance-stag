@@ -234,7 +234,9 @@ export default {
                 proceed: "Dodaj",
                 cancel: "Anuluj",
                 close: "Zamknij",
-              }
+              },
+              empty_warning: "Kategoria służy jako zbiór etykiet. Dodaj przynajmniej jedną etykietę",
+
             },
 
             create_tag: {
