@@ -7,8 +7,7 @@ import Form from '../../../widgets/admin/form_widget.jsx';
 import TextInput from '../../../widgets/admin/text_input_widget.jsx';
 
 
-const UpdateModal =  React.createClass({
-
+const UpdateModal = React.createClass({
   propTypes: {
     contentPrefix: React.PropTypes.string.isRequired,
     form: React.PropTypes.object.isRequired,
@@ -17,56 +16,48 @@ const UpdateModal =  React.createClass({
     recordId: React.PropTypes.string.isRequired,
     onSuccess: React.PropTypes.func,
     onDismiss: React.PropTypes.func,
-    acknowledgementElement: React.PropTypes.oneOfType([React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]),
+    acknowledgementElement: React.PropTypes.oneOfType(
+      [React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]
+    ),
+    afterFormAccept: React.PropTypes.func,
   },
 
   getInitialState() {
     return {
-      step: "form",
+      step: 'form',
       record: null,
-    }
-  },
-
-  show() {
-    this.refs.modal.show();
+    };
   },
 
   onFormSubmit(fieldValues) {
     this.recordCall = window.data
       .record(this.props.app, this.props.model, this.props.recordId)
-      .on("loading", () => {
-        if (this.isMounted()) {
-          this.setState({
-            step: "progress"
-          });
-        }
+      .on('loading', () => {
+        this.setState({
+          step: 'progress',
+        });
       })
-      .on("loaded", (_event, _record, data) => {
-        if (this.isMounted()) {
-          this.setState({
-            step: "acknowledgement",
-            record: data
-          });
-        }
+      .on('loaded', (_event, _record, data) => {
+        this.setState({
+          step: 'acknowledgement',
+          record: data,
+        });
+        this.props.afterFormAccept();
       })
-      .on("warning", () => {
-        if (this.isMounted()) {
-          this.setState({
-            step: "error"
-          });
-        }
+      .on('warning', () => {
+        this.setState({
+          step: 'error',
+        });
       })
-      .on("error", () => {
-        if (this.isMounted()) {
-          this.setState({
-            step: "error"
-          });
-        }
+      .on('error', () => {
+        this.setState({
+          step: 'error',
+        });
       })
       .update(fieldValues);
   },
 
-  onSuccess(){
+  onSuccess() {
     this.props.onSuccess && this.props.onSuccess();
   },
 
@@ -84,6 +75,10 @@ const UpdateModal =  React.createClass({
     this.setState(this.getInitialState());
   },
 
+  show() {
+    this.refs.modal.show();
+  },
+
   render() {
     return (
       <ModalForm
@@ -97,9 +92,10 @@ const UpdateModal =  React.createClass({
         onFormSubmit={ this.onFormSubmit }
         onCancel={ this.onCancel }
         onHide={ this.onDismiss }
-        onSuccess={ this.props.onSuccess } />
+        onSuccess={ this.props.onSuccess }
+      />
     );
-  }
+  },
 });
 
 export default UpdateModal;

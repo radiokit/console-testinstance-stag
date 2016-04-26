@@ -44,6 +44,10 @@ const ScheduleDayCrudButtons = React.createClass({
       }).fetch();
   },
 
+  onDeleteSuccess() {
+    this.forceUpdate();
+  },
+
   getFilesData() {
     return this.state.availableVaultFiles.toList().map(file => {
       return {
@@ -51,6 +55,10 @@ const ScheduleDayCrudButtons = React.createClass({
         name: file.get('name'),
       };
     });
+  },
+
+  getDateValue(key) {
+    return this.props.activeItem ? this.props.activeItem.get(key) : Moment.utc();
   },
 
   buildNewForm() {
@@ -73,10 +81,6 @@ const ScheduleDayCrudButtons = React.createClass({
     };
   },
 
-  getDateValue(key) {
-    return this.props.activeItem ? this.props.activeItem.get(key) : Moment.utc();
-  },
-
   buildUpdateForm() {
     return {
       name: {
@@ -91,10 +95,6 @@ const ScheduleDayCrudButtons = React.createClass({
         value: this.getDateValue('stop_at').toISOString(),
       },
     };
-  },
-
-  onDeleteSuccess() {
-    this.forceUpdate();
   },
 
   render() {
