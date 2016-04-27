@@ -26,8 +26,6 @@ const ShowContentPartial =  React.createClass({
     return {
       selectedRecordIds: new Immutable.Seq().toIndexedSeq(),
       selectedAssociations: new Immutable.List(),
-      needsReload: false,
-      previousFilter: [],
     };
   },
 
@@ -48,8 +46,10 @@ const ShowContentPartial =  React.createClass({
       }).fetch();
   },
 
+
   componentDidUpdate(prevProps, prevState) {
-    if(!_.isEqual(this.tagFilter,this.props.tagFilter)){
+
+    if(!_.isEqual(prevProps.tagFilter,this.props.tagFilter)){
       this.refs.tableBrowser.reloadData();
     }
   },
@@ -90,8 +90,7 @@ const ShowContentPartial =  React.createClass({
     let tagIdsFilter = this.props.tagFilter.map((tag) => tag.id);
     if(this.props.tagFilter.length > 0){
       return  query.where("tag_associations.tag_item_id","in", tagIdsFilter);
-    }
-    else{
+    } else{
       return query;
     }
   },
