@@ -1,23 +1,21 @@
 import React from 'react';
 
-const TimeMovableRegion = props => {
-  const {
-    height,
-    width,
-    offsetLength,
-    offsetStart,
-    regionStart,
-    regionLength,
-    regionKey,
-    color,
-    onChange,
-    component,
-  } = props;
-
+const TimeMovableRegion = ({
+  height,
+  width,
+  offsetLength,
+  offsetStart,
+  regionStart,
+  regionLength,
+  regionKey,
+  color,
+  onChange,
+  component,
+}) => {
   const scale = offsetLength / width;
 
-  const regionOffset = regionStart / scale - offsetStart / scale;
-  const regionWidth = regionLength / scale;
+  const regionOffset = Math.round(regionStart / scale - offsetStart / scale);
+  const regionWidth = Math.round(regionLength / scale);
 
   const onMove = (startX, endX) => {
     const oldPosition = {

@@ -26,8 +26,12 @@ const readyQueries = scheduleQueries.map(
 
 const fileDataMaxAge = 60 * 1000; // 1min
 readyQueries
-  .map(queries => queries.map(status => status.get('data', List())).flatten(true))
-  .map(items => items.map(item => List(item.get('location').split('/')).last()).flatten(true).toSet())
+  .map(queries => queries.map(
+    status => status.get('data', List())
+  ).flatten(true))
+  .map(items => items.map(
+    item => List(item.get('location').split('/')).last()).flatten(true).toSet()
+  )
   .subscribe(fileIds => fileIds.forEach(fileID => {
     VaultDomain.loadFile(fileID, { maxAge: fileDataMaxAge });
   }));

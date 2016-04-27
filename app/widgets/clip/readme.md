@@ -2,9 +2,7 @@ Playlist struct
 
 ```
 Map{
-    items: List[
-        ...TrackItems
-    ]
+    items: List<TrackItems>
 }
 ```
 
@@ -28,12 +26,33 @@ Clip struct
 
 ```
 Map{
-    id,
-    duration,
-    images,
-    markers,
-    regions,
-    fadeIn,
-    fadeOut,
+    id: string,
+    duration: number,
+    images: List<string>,
+    markers: List<Marker>,
+    regions: List<Region>,
+    fadeIn: Region,
+    fadeOut: Region,
+}
+```
+
+Region struct
+
+```
+Map{
+    id: string,
+    key: string,
+    position: number,
+    duration: number,
+}
+```
+
+Marker struct 
+
+```
+Map{
+    id: string,
+    key: string,
+    position: number,
 }
 ```

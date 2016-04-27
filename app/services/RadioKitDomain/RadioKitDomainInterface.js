@@ -2,19 +2,12 @@ import {
   List,
   Map,
 } from 'immutable';
-import RadioKit from './../RadioKit';
-import { RadioKitDomainData, update } from './RadioKitDomainData';
-
-const QUERY_STATUS = {
-  live: 'live',
-  loading: 'loading',
-  done: 'done',
-  error: 'error',
-};
+import RadioKit from '../RadioKit';
+import { RadioKitQueries, update, QUERY_STATUS } from './RadioKitQueries';
 
 function checkIfQueryExists(queryParams, { autoSync = false, maxAge = Date.now() }) {
-  const currentQueryStatus = RadioKitDomainData.read().getIn([queryParams, 'status']);
-  const currentQueryTime = RadioKitDomainData.read().getIn([queryParams, 'time']) || 0;
+  const currentQueryStatus = RadioKitQueries.read().getIn([queryParams, 'status']);
+  const currentQueryTime = RadioKitQueries.read().getIn([queryParams, 'time']) || 0;
   if (autoSync) {
     // Check if query is currently loading or registered to receive updates
     if (currentQueryStatus === 'live') {
@@ -62,7 +55,7 @@ function buildQuery(queryParams) {
  *  maxAge: number
  * }} options
  */
-export function query(queryParams = Map(), options = {}) {
+function query(queryParams = Map(), options = {}) {
   if (checkIfQueryExists(queryParams, options)) {
     return;
   }
@@ -73,35 +66,35 @@ export function query(queryParams = Map(), options = {}) {
 
     // Initialize query in storage
   if (autoSync) {
-    update(queryParams, QUERY_STATUS.live, List(), null);
+    update(queryParams, QUERY_STATUS.live, List(), Date.now());
   } else {
     update(queryParams, QUERY_STATUS.loading, List(), Date.now());
   }
 
     // Set up query execution hooks
-  const markErroneous = () => {
-    update(queryParams, 'error', List(), Date.now());
+  const markAsErroneous = () => {
+    update(queryParams, QUERY_STATUS.error, List(), Date.now());
   };
 
-  q = q.on('error', markErroneous);
-
-  q = q.on('fetch', (__, _, data) => update(
-    queryParams,
-    autoSync ? QUERY_STATUS.live : QUERY_STATUS.done,
-    data,
-    autoSync ? null : Date.now()
-  ));
+  q = q
+    .on('error', markAsErroneous)
+    .on('fetch', (__, _, data) => update(
+      queryParams,
+      autoSync ? QUERY_STATUS.live : QUERY_STATUS.done,
+      data,
+      autoSync ? null : Date.now()
+    ));
 
   // Execute query
   try {
     autoSync ? q.enableAutoUpdate() : q.fetch();
   } catch (e) {
-    markErroneous(e);
+    markAsErroneous(e);
   }
 }
 
-export function clear(app, model = null) {
-  RadioKitDomainData.write(
+function clear(app, model = null) {
+  RadioKitQueries.write(
     RKDData => RKDData
       .filter(
         (status, params) => !(
@@ -114,3 +107,65 @@ export function clear(app, model = null) {
       )
   );
 }
+
+function mutate(action, params, patch) {
+  const queryParams = params
+    .set('action', action);
+  const { app, model, id } = params.toObject();
+  RadioKit
+    .record(app, model, id)
+    .on(
+      'loading',
+      () => update(queryParams, QUERY_STATUS.loading, patch, Date.now())
+    )
+    .on(
+      'loaded',
+      (_event, _record, data) => update(queryParams, QUERY_STATUS.done, data, Date.now())
+    )
+    .on(
+      'warning',
+      () => update(queryParams, QUERY_STATUS.error, List(), Date.now())
+    )
+    .on(
+      'error',
+      () => update(queryParams, QUERY_STATUS.error, List(), Date.now())
+    )
+    [action](patch);
+}
+
+function save(params, patch) {
+  const action = params.get('id') ? 'update' : 'create';
+  mutate(action, params, patch);
+}
+
+function remove(params) {
+  const stub = List([Map({ id: params.get('id') })]);
+  const queryParams = params.set('action', 'destroy');
+  const { app, model, id } = params.toObject();
+  RadioKit
+    .record(app, model, id)
+    .on(
+      'loading',
+      () => update(queryParams, QUERY_STATUS.loading, stub, Date.now())
+    )
+    .on(
+      'loaded',
+      () => update(queryParams, QUERY_STATUS.done, stub, Date.now())
+    )
+    .on(
+      'warning',
+      () => update(queryParams, QUERY_STATUS.error, List(), Date.now())
+    )
+    .on(
+      'error',
+      () => update(queryParams, QUERY_STATUS.error, List(), Date.now())
+    )
+    .destroy();
+}
+
+export default {
+  query,
+  clear,
+  save,
+  remove,
+};

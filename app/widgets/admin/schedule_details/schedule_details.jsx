@@ -2,6 +2,7 @@ import React from 'react';
 import {
   OrderedMap,
   Map,
+  List,
 } from 'immutable';
 import moment from 'moment';
 import {
@@ -18,16 +19,26 @@ import {
 const tracksCount = 3;
 
 function transformItemToClip(item, track) {
+  const offsetLength = (
+    moment(item.get('stop_at')).valueOf() -
+    moment(item.get('start_at')).valueOf()
+  );
   return Map({
     id: item.get('id'),
     position: moment(item.get('start_at')).valueOf(),
     offsetStart: 0,
-    offsetLength: moment(item.get('stop_at')).valueOf() - moment(item.get('start_at')).valueOf(),
-    maxOffsetLength: Number.MAX_SAFE_INTEGER,
+    offsetLength,
+    maxOffsetLength: item.getIn(['file', 'duration'], offsetLength),
     fadeIn: 0,
     fadeOut: 0,
     track: (track + 1) % tracksCount,
-    clip: Map({}),
+    clip: Map({
+      id: item.getIn(['file', 'id']),
+      duration: item.getIn(['file', 'duration'], offsetLength),
+      images: List(),
+      markers: List(),
+      regions: List(),
+    }),
   });
 }
 
@@ -57,7 +68,7 @@ const ScheduleDetails = React.createClass({
   handleChangeOffset: debounce(function ({ offsetStart, offsetLength }) {
     const { onOffsetStartChange = noop } = this.props;
     onOffsetStartChange(Math.round(offsetStart + offsetLength / 2));
-  }, 10 * 1000),
+  }, 1000),
 
   render() {
     const items = this.props.items.map(transformItemToClip);

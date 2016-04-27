@@ -212,8 +212,10 @@ const TrackItem = React.createClass({
     const fadeInProps = {
       component: PixelMovableFadeRegion,
       width: blockWidth, height: blockHeight,
-      offsetStart: clipBoxProps.offsetStart, offsetLength: clipBoxProps.offsetLength,
-      regionStart: prettyItem.get('offsetStart'), regionLength: prettyItem.get('fadeIn'),
+      offsetStart: clipBoxProps.offsetStart,
+      offsetLength: clipBoxProps.offsetLength,
+      regionStart: prettyItem.get('offsetStart'),
+      regionLength: prettyItem.get('fadeIn'),
       regionKey: 'fadeIn',
       onChange: this.handleFadeInChange,
     };

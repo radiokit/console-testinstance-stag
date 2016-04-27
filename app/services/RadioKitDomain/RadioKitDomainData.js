@@ -1,28 +1,30 @@
 import {
-  Data,
+  View,
 } from 'immview';
-import {
-  OrderedMap,
-  Map,
-} from 'immutable';
+import RadioKitQueries from './RadioKitQueries';
+import RadioKitEntities from './RadioKitEntities';
 
-/**
- * OrderedMap<queryParams,Map{status,data,time}>
- */
-export const RadioKitDomainData = new Data(OrderedMap());
-export default RadioKitDomainData;
+// RadioKitQueries.subscribe(d => d && console.log('queries', d.toJS()));
+// RadioKitEntities.subscribe(d => d && console.log('entities', d.toJS()));
 
-export function update(queryData, status, data, time) {
-  RadioKitDomainData.write(
-    queries => queries.set(
-      /** key */
-      queryData,
-      /** value */
-      Map({
-        status,
-        data,
-        time,
-      })
+export default new View(
+  {
+    queries: RadioKitQueries,
+    entities: RadioKitEntities,
+  },
+  data => data
+    .get('queries')
+    .map(
+      (status, params) => status.set(
+        'data',
+        status.get('data')
+          .map(entity => data.getIn([
+            'entities',
+            params.get('app'),
+            params.get('model'),
+            entity.get('id'),
+          ], null))
+          .filter(entity => !!entity)
+      )
     )
-  );
-}
+);
