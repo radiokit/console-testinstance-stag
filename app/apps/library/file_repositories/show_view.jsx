@@ -7,36 +7,36 @@ import ContentPartial from './show_content_partial.jsx';
 
 const ShowView = React.createClass({
 
-   contextTypes: {
+  contextTypes: {
     params: React.PropTypes.object.isRequired,
   },
 
-  getInitialState(){
+  getInitialState() {
     return {
-        tagFilter: [],
-        stage: null,
-    }
+      tagFilter: [],
+      stage: null,
+    };
   },
 
-  onTagFilterUpdate(filter){
+  onTagFilterUpdate(filter) {
     this.setState({
-      tagFilter: filter
+      tagFilter: filter,
     });
   },
 
   buildTabs() {
     return {
       incoming: { element: ContentPartial, props: { stage: "incoming", tagFilter: this.state.tagFilter }},
-      ready:    { element: ContentPartial, props: { stage: "ready",  tagFilter: this.state.tagFilter }},
+      ready:    { element: ContentPartial, props: { stage: "ready", tagFilter: this.state.tagFilter }},
       archive:  { element: ContentPartial, props: { stage: "archive", tagFilter: this.state.tagFilter }},
       trash:    { element: ContentPartial, props: { stage: "trash", tagFilter: this.state.tagFilter }},
-    }
+    };
   },
 
-  buildSideBar(){
+  buildSideBar() {
     return {
-      test: { element: SidebarPartial, props: { tagFilter:this.state.tagFilter, onTagFilterUpdate: this.onTagFilterUpdate }},
-    }
+      test: { element: SidebarPartial, props: { tagFilter: this.state.tagFilter, onTagFilterUpdate: this.onTagFilterUpdate }},
+    };
   },
 
   modifyShowQuery(query) {
@@ -46,7 +46,7 @@ const ShowView = React.createClass({
       .select("tag_categories")
       .joins("tag_categories")
       .select("tag_items")
-      .joins("tag_items")
+      .joins("tag_items");
   },
 
   render() {
@@ -58,9 +58,10 @@ const ShowView = React.createClass({
         showQueryFunc={this.modifyShowQuery}
         sidebarElement={this.buildSideBar()}
         contentElement={this.buildTabs()}
-        deleteEnabled={false} />
+        deleteEnabled={false}
+      />
     );
-  }
+  },
 });
 
 export default ShowView;

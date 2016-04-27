@@ -27,6 +27,7 @@ const ShowContentPartial =  React.createClass({
       selectedRecordIds: new Immutable.Seq().toIndexedSeq(),
       selectedAssociations: new Immutable.List(),
       needsReload: false,
+      previousFilter: [],
     };
   },
 
@@ -48,7 +49,7 @@ const ShowContentPartial =  React.createClass({
   },
 
   componentDidUpdate(prevProps, prevState) {
-    if(!_.isEqual(prevProps.tagFilter,this.props.tagFilter)){
+    if(!_.isEqual(this.tagFilter,this.props.tagFilter)){
       this.refs.tableBrowser.reloadData();
     }
   },
