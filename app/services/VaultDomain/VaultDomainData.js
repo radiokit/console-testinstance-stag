@@ -6,30 +6,35 @@ import RadioKitDomain from '../RadioKitDomain';
 
 import domainConfig from './VaultDomainConfig';
 
-const vaultQueries = RadioKitDomain.map(
-  RKDData => RKDData.filter((queryStatus, queryParams) => (
+const vaultDomainOwnQueries = RadioKitDomain.map(
+  RKDData => RKDData.filter((result, queryParams) => (
     queryParams.get('key') === domainConfig.key
   ))
 );
 
-const readyQueries = vaultQueries.map(
-  queries => queries.filter((queryStatus) => (
-    queryStatus.get('status') === 'live' ||
-    queryStatus.get('status') === 'done'
+const readyQueries = vaultDomainOwnQueries.map(
+  queries => queries.filter(result => (
+    result.get('status') === 'live' ||
+    result.get('status') === 'done'
   ))
 );
 
-const filesView = readyQueries.map(
+const filesQueries = readyQueries.map(
   queries => queries
     .filter(
       (queryStatus, queryParams) => queryParams.get('model') === domainConfig.models.file
     )
-    .map(queryStatus => queryStatus.get('data'))
+);
+
+const filesById = filesQueries.map(
+  queries => queries
+    .map(queryStatus => queryStatus.get('data').toList())
+    .toList()
     .flatten(true)
     .groupBy(file => file.get('id'))
     .map(fileVersions => fileVersions.last())
 );
 
 export default new View({
-  files: filesView,
+  files: filesById,
 });

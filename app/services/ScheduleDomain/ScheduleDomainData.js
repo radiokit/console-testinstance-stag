@@ -17,9 +17,9 @@ const scheduleQueries = RadioKitDomain.map(
 
 const readyQueries = scheduleQueries.map(
   RKDData => RKDData.filter(
-    (queryStatus) => (
-      queryStatus.get('status') === 'live' ||
-      queryStatus.get('status') === 'done'
+    result => (
+      result.get('status') === 'live' ||
+      result.get('status') === 'done'
     )
   )
 );

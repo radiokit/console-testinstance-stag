@@ -38,7 +38,9 @@ export default new View(
               (result, params) => result
                 .get('data', List())
                 .map(item => Map({ item, action: params.get('action') }))
+                .toList()
             )
+            .toList()
             .flatten(true)
             .groupBy(itemWithAction => itemWithAction.getIn(['item', 'id']))
             .map(

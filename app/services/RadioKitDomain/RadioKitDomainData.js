@@ -4,9 +4,6 @@ import {
 import RadioKitQueries from './RadioKitQueries';
 import RadioKitEntities from './RadioKitEntities';
 
-// RadioKitQueries.subscribe(d => d && console.log('queries', d.toJS()));
-// RadioKitEntities.subscribe(d => d && console.log('entities', d.toJS()));
-
 export default new View(
   {
     queries: RadioKitQueries,

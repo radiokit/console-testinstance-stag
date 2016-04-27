@@ -110,20 +110,32 @@ export default connect(
   ScheduleDetails,
   ScheduleDomain,
   (data, props) => {
-    const range = Map({
-      from: moment(props.offsetStart).subtract(maxOffsetLengthInHours / 2, 'hours').toISOString(),
-      to: moment(props.offsetStart).add(maxOffsetLengthInHours / 2, 'hours').toISOString(),
-    });
-    if (!data.getIn(['ranges', range])) {
-      ScheduleDomain.fetch(range.get('from'), range.get('to'));
+    // force data fetching for currently viewed range
+    const fromISO = moment(props.offsetStart)
+      .subtract(maxOffsetLengthInHours / 2, 'hours')
+      .toISOString();
+    const toISO = moment(props.offsetStart)
+      .add(maxOffsetLengthInHours / 2, 'hours')
+      .toISOString();
+
+    if (!data.getIn(['ranges', Map({ from: fromISO, to: toISO })])) {
+      ScheduleDomain.fetch(fromISO, toISO);
     }
+
+    // ...but push wider subset in case of whole day scrolling
+    const fromTS = moment(props.offsetStart)
+      .subtract(maxOffsetLengthInHours * 2, 'hours')
+      .valueOf();
+    const toTS = moment(props.offsetStart)
+      .add(maxOffsetLengthInHours * 2, 'hours')
+      .valueOf();
     const items = data
       .get('all', OrderedMap())
       .toList()
       .filter(
         item => (
-          item.get('stop_at') > range.get('from') ||
-          item.get('start_at') < range.get('to')
+          new Date(item.get('stop_at')) > fromTS &&
+          new Date(item.get('start_at')) < toTS
         )
       );
     return {
