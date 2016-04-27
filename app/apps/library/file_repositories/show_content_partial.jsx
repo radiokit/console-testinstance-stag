@@ -46,9 +46,7 @@ const ShowContentPartial =  React.createClass({
       }).fetch();
   },
 
-
   componentDidUpdate(prevProps, prevState) {
-
     if(!_.isEqual(prevProps.tagFilter,this.props.tagFilter)){
       this.refs.tableBrowser.reloadData();
     }

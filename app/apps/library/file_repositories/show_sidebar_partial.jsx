@@ -22,7 +22,7 @@ const ShowSidebarPartial = React.createClass({
   },
 
   selectCategory(category) {
-    let newFilter = this.props.tagFilter;
+    let newFilter = [...this.props.tagFilter];
     let selectedCategoriesIds = this.state.selectedCategoriesIds;
     if (this.isCategorySelected(category)) {
       newFilter = _.differenceBy(newFilter, category.tag_items, 'id');
@@ -36,7 +36,7 @@ const ShowSidebarPartial = React.createClass({
   },
 
   selectTag(tag) {
-    let newFilter = this.props.tagFilter;
+    let newFilter = [...this.props.tagFilter];
     if (this.isTagSelected(tag)) {
       newFilter = _.differenceBy(newFilter, [tag], 'id');
     } else {
