@@ -15,32 +15,9 @@ import DetectWidth from '../../general/detect_width.jsx';
 import {
   ScrollableTrackList,
 } from '../../clip';
+import { scheduleItemToTrackItem, trackItemToScheduleItem } from './schedule_details_tranform';
 
 const tracksCount = 3;
-
-function transformItemToClip(item, track) {
-  const offsetLength = (
-    moment(item.get('stop_at')).valueOf() -
-    moment(item.get('start_at')).valueOf()
-  );
-  return Map({
-    id: item.get('id'),
-    position: moment(item.get('start_at')).valueOf(),
-    offsetStart: 0,
-    offsetLength,
-    maxOffsetLength: item.getIn(['file', 'duration'], offsetLength),
-    fadeIn: 0,
-    fadeOut: 0,
-    track: (track + 1) % tracksCount,
-    clip: Map({
-      id: item.getIn(['file', 'id']),
-      duration: item.getIn(['file', 'duration'], offsetLength),
-      images: List(),
-      markers: List(),
-      regions: List(),
-    }),
-  });
-}
 
 const maxOffsetLengthInHours = 24;
 
@@ -70,8 +47,23 @@ const ScheduleDetails = React.createClass({
     onOffsetStartChange(Math.round(offsetStart + offsetLength / 2));
   }, 1000),
 
+  handleItemChange(item) {
+    const newScheduleItem = (
+      item &&
+      this.props.items &&
+      trackItemToScheduleItem(
+        item,
+        this.props.items.find(
+          scheduleItem => scheduleItem.get('id') === item.get('id')
+        )
+      )
+    );
+    // console.log(newScheduleItem && newScheduleItem.toJS());
+    ScheduleDomain.save(newScheduleItem.get('id'), newScheduleItem);
+  },
+
   render() {
-    const items = this.props.items.map(transformItemToClip);
+    const items = this.props.items.map((v, k) => scheduleItemToTrackItem(v, (k + 1) % tracksCount));
     const viewportOffsetLength = 1000 * 30;
     const viewportOffsetStart = this.props.offsetStart - viewportOffsetLength / 2;
     return (
@@ -88,6 +80,7 @@ const ScheduleDetails = React.createClass({
             offsetLength={viewportOffsetLength}
             maxOffsetLength={maxOffsetLengthInHours * 60 * 60 * 1000}
             playlist={Map({ items })}
+            onItemChange={this.handleItemChange}
             timeMarks="date"
             onChangeOffset={this.handleChangeOffset}
           />

@@ -3,7 +3,9 @@ import {
   Map,
 } from 'immutable';
 import RadioKit from '../RadioKit';
-import { RadioKitQueries, update, QUERY_STATUS } from './RadioKitQueries';
+import { RadioKitQueries, update } from './RadioKitQueries';
+import { save, remove } from './RadioKitMutator';
+import * as QUERY_STATUS from './RadioKitQueryStatuses';
 
 function checkIfQueryExists(queryParams, { autoSync = false, maxAge = Date.now() }) {
   const currentQueryStatus = RadioKitQueries.read().getIn([queryParams, 'status']);
@@ -106,61 +108,6 @@ function clear(app, model = null) {
         )
       )
   );
-}
-
-function mutate(action, params, patch) {
-  const queryParams = params
-    .set('action', action);
-  const { app, model, id } = params.toObject();
-  RadioKit
-    .record(app, model, id)
-    .on(
-      'loading',
-      () => update(queryParams, QUERY_STATUS.loading, patch, Date.now())
-    )
-    .on(
-      'loaded',
-      (_event, _record, data) => update(queryParams, QUERY_STATUS.done, data, Date.now())
-    )
-    .on(
-      'warning',
-      () => update(queryParams, QUERY_STATUS.error, List(), Date.now())
-    )
-    .on(
-      'error',
-      () => update(queryParams, QUERY_STATUS.error, List(), Date.now())
-    )
-    [action](patch);
-}
-
-function save(params, patch) {
-  const action = params.get('id') ? 'update' : 'create';
-  mutate(action, params, patch);
-}
-
-function remove(params) {
-  const stub = List([Map({ id: params.get('id') })]);
-  const queryParams = params.set('action', 'destroy');
-  const { app, model, id } = params.toObject();
-  RadioKit
-    .record(app, model, id)
-    .on(
-      'loading',
-      () => update(queryParams, QUERY_STATUS.loading, stub, Date.now())
-    )
-    .on(
-      'loaded',
-      () => update(queryParams, QUERY_STATUS.done, stub, Date.now())
-    )
-    .on(
-      'warning',
-      () => update(queryParams, QUERY_STATUS.error, List(), Date.now())
-    )
-    .on(
-      'error',
-      () => update(queryParams, QUERY_STATUS.error, List(), Date.now())
-    )
-    .destroy();
 }
 
 export {

@@ -5,7 +5,8 @@ import {
   Map,
   List,
 } from 'immutable';
-import { RadioKitQueries, QUERY_STATUS } from './RadioKitQueries';
+import { RadioKitQueries } from './RadioKitQueries';
+import * as QUERY_STATUS from './RadioKitQueryStatuses';
 
 /**
  * Map<
@@ -24,6 +25,7 @@ export default new View(
   RadioKitQueries,
   queries => queries
     .filter(result => (
+      result.get('status') === QUERY_STATUS.live ||
       result.get('status') === QUERY_STATUS.done ||
       result.get('status') === QUERY_STATUS.loading
     ))

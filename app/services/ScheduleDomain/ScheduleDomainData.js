@@ -44,7 +44,9 @@ const queriesWithFiles = new View(
         const fileID = List(item.get('location').split('/')).last();
         const file = data.getIn(['vault', 'files', fileID]);
         if (file) {
-          return item.set('file', file);
+          return item
+            .delete('location')
+            .set('file', file);
         }
         return null;
       })

@@ -26,10 +26,3 @@ export function update(queryParams, status, data, time) {
     )
   );
 }
-
-export const QUERY_STATUS = {
-  live: 'live',
-  loading: 'loading',
-  done: 'done',
-  error: 'error',
-};

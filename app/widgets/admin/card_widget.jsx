@@ -65,7 +65,7 @@ export default React.createClass({
 
   onPostRenderNestedContentElement(key, element) {
     if (key !== this.getSelectedTab()) {
-      return (<div key={key} style={{ display: 'none' }}>{element}</div>);
+      return (<div key={key} style={{ display: 'none' }}></div>);
     }
     return element;
   },

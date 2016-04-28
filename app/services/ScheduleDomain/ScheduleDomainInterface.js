@@ -5,14 +5,18 @@ import {
 
 import moment from 'moment';
 
+const key = 'schedule';
+const app = 'plumber';
+const model = 'Media.Input.File.Http';
+
 import RadioKitDomain from './../RadioKitDomain';
 
 function performQuery(from, to, options) {
   RadioKitDomain.query(
     Map({
-      key: 'schedule',
-      app: 'plumber',
-      model: 'Media.Input.File.Http',
+      key,
+      app,
+      model,
       select: List(['id', 'name', 'start_at', 'stop_at', 'location']),
       conditions: List([
         from ? Map({
@@ -47,6 +51,20 @@ export function observe(from, to) {
   performQuery(from, to, { autoSync: true });
 }
 
+export function save(id, patch) {
+  RadioKitDomain.save(
+    Map({
+      key: `${key}update`,
+      app,
+      model,
+      id,
+    }),
+    patch
+      .delete('file')
+      .set('location', `record://vault/Data.Record.File/${patch.getIn(['file', 'id'])}`)
+  );
+}
+
 export function clear() {
-  RadioKitDomain.clear('plumber', 'Media.Input.File.Http');
+  RadioKitDomain.clear(app, model);
 }
