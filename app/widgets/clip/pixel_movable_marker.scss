@@ -1,0 +1,23 @@
+.PixelMovableMarker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+
+  &--held {
+    z-index: 2;
+  }
+
+  &__line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+  }
+
+  &__handler {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}

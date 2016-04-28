@@ -36,6 +36,7 @@ function validateOffsetLength(props, propName, componentName) {
   }
 }
 
+import './clip_box.scss';
 const ClipBox = React.createClass({
 
   ...ImmutableComponent,
@@ -70,12 +71,10 @@ const ClipBox = React.createClass({
   },
 
   render() {
+    const { clip } = this.props;
     const style = ({
-      position: 'relative',
-      display: 'block',
       width: this.props.width,
       height: calcHeight(this.props.height),
-      overflow: 'hidden',
     });
 
     const childProps = {
@@ -94,8 +93,8 @@ const ClipBox = React.createClass({
                         height={style.height}
                         offsetStart={this.props.offsetStart}
                         offsetLength={this.props.offsetLength}/>
-        {this.props.visibleRegions && (<ClipRegions {...childProps} />)}
-        {this.props.visibleMarkers && (<ClipMarkers {...childProps} />)}
+        {this.props.visibleRegions && getClipRegions(clip).size && (<ClipRegions {...childProps} />)}
+        {this.props.visibleMarkers && getClipMarkers(clip).size && (<ClipMarkers {...childProps} />)}
         {this.props.visibleFades && (<ClipBoxFades {...childProps} />)}
       </div>
     )
@@ -117,6 +116,14 @@ const markerColors = {
   'mix-next': 'red',
 };
 
+function getClipMarkers(clip) {
+  return clip.get('markers', List());
+}
+
+function getClipRegions(clip) {
+  return clip.get('markers', List());
+}
+
 const ClipMarkers = ({
   clip,
   updateClip,
@@ -127,7 +134,7 @@ const ClipMarkers = ({
 }) => {
   return (
     <div>{
-      clip.get('markers', List()).toArray().map((marker, i) => {
+      getClipMarkers(clip).toArray().map((marker, i) => {
         const rootProps = {
           offsetStart,
           offsetLength,
@@ -163,7 +170,7 @@ const ClipRegions = ({
 }) => {
   return (
     <div>{
-      clip.get('regions', List()).toArray().map((region, i)=> {
+      getClipRegions(clip).toArray().map((region, i)=> {
         const clipMovableProps = {
           component: PixelMovableRegion,
           offsetStart,

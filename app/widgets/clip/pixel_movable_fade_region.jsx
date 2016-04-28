@@ -65,7 +65,6 @@ const PixelMovableFadeRegion = React.createClass({
         transform: `translateX(${Math.round(this.props.offset)}px)`,
         height: this.props.height,
         width: this.props.width,
-        pointerEvents: 'auto',
       }),
     };
     const marker1Props = {

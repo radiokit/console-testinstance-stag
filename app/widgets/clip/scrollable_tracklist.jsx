@@ -2,8 +2,6 @@ import React from 'react';
 
 import Movable from '../general/movable.jsx';
 import TrackList from './tracklist.jsx';
-import makeUniqStyle from './uniqStyle';
-const uniqStyle = makeUniqStyle();
 
 const ScrollableTracklist = React.createClass({
 
@@ -137,7 +135,7 @@ const ScrollableTracklist = React.createClass({
         onHold={this.handleScrollStart}
         onDrop={this.handleScrollFinish}
         onWheel={this.handleWheel}
-        style={uniqStyle({ width: this.props.width })}
+        style={{ width: this.props.width }}
       >
         <TrackList {...trackListProps} />
       </Movable>

@@ -7,26 +7,31 @@ window.addEventListener('mouseup', e => {
 });
 
 let lastNotProcessedMoveEvent = null;
+
 window.addEventListener('mousemove', e => {
   if (activeMovable) {
     lastNotProcessedMoveEvent = e;
   }
 });
-const mouseCheckTick = () => {
+
+function dispatchDeferred(func) {
+  if (window.requestAnimationFrame) {
+    window.setTimeout(() => window.requestAnimationFrame(func), 4);
+  } else {
+    window.setTimeout(func, 1000 / 60);
+  }
+}
+
+function mouseCheckTick() {
   if (activeMovable && lastNotProcessedMoveEvent) {
     activeMovable.handleMouseMove(lastNotProcessedMoveEvent);
     lastNotProcessedMoveEvent = null;
   }
-};
-const animationFrame = () => {
-  mouseCheckTick();
-  if (window.requestAnimationFrame) {
-    (window.setImmediate || window.setTimeout)(() => window.requestAnimationFrame(animationFrame));
-  } else {
-    window.setTimeout(animationFrame, 1000 / 60);
-  }
-};
-animationFrame();
+  /* eslint no-use-before-define: 0 */
+  dispatchDeferred(mouseCheckTick);
+}
+
+mouseCheckTick();
 
 function preventDefault(e) {
   e.preventDefault();

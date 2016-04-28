@@ -1,5 +1,5 @@
 import React from 'react';
-
+import ImmutableComponent from '../../helpers/immutable_component';
 import ClipBox from './clip_box.jsx';
 import Movable from '../general/movable.jsx';
 import TimeMovableRegion from './time_movable_region.jsx';
@@ -18,7 +18,10 @@ function destructRegionDiff(newRegion, oldRegion) {
   };
 }
 
+import './track_item.scss';
 const TrackItem = React.createClass({
+
+  ...ImmutableComponent,
 
   propTypes: {
     offsetStart: React.PropTypes.number.isRequired,
@@ -149,32 +152,34 @@ const TrackItem = React.createClass({
 
   render() {
     const { offsetStart, offsetLength, width, height } = this.props;
-    const prettyItem = this.getItem();
+    const item = this.getItem();
     const scale = width / offsetLength;
 
-    const viewLeftOffset = prettyItem.get('position') - offsetStart;
+    const viewLeftOffset = item.get('position') - offsetStart;
     const viewLeftClipping = Math.max(0, -1 * viewLeftOffset);
     const viewRightClipping = Math.max(0,
-      prettyItem.get('position') +
-      prettyItem.get('offsetLength') -
+      item.get('position') +
+      item.get('offsetLength') -
       (offsetStart + offsetLength)
     );
 
     const blockHeight = height - 1;
     const blockWidth = Math.round(
       Math.max(0,
-        prettyItem.get('offsetLength') - viewLeftClipping - viewRightClipping) *
+        item.get('offsetLength') - viewLeftClipping - viewRightClipping) *
       scale
     );
 
-    const containerPositionStyle = {
-      position: 'absolute', left: 0,
-      top: (prettyItem.get('track') - 1) * this.props.height,
+    const containerPositionStyle = uniqStyle({
       // transition: `top 60ms ease`,
       transform: `translateX(${Math.round(Math.max(0, viewLeftOffset) * scale)}px)`,
       width: blockWidth,
       height: blockHeight,
-    };
+    });
+    
+    const rootStyle = uniqStyle({
+      top: (item.get('track') - 1) * this.props.height,
+    });
 
     const movablePropsStyle = uniqStyle({
       ...containerPositionStyle,
@@ -182,6 +187,7 @@ const TrackItem = React.createClass({
     });
 
     const movableProps = {
+      className: 'TrackItem__element',
       // normal style
       style: movablePropsStyle,
       // style to display while dragging
@@ -196,15 +202,15 @@ const TrackItem = React.createClass({
     };
 
     const clipBoxProps = {
-      offsetStart: Math.max(0, prettyItem.get('offsetStart') + viewLeftClipping),
+      offsetStart: Math.max(0, item.get('offsetStart') + viewLeftClipping),
       offsetLength: Math.max(0,
-        prettyItem.get('offsetLength') -
+        item.get('offsetLength') -
         viewLeftClipping -
         viewRightClipping
       ),
       width: blockWidth,
       height: blockHeight,
-      clip: prettyItem.get('clip'),
+      clip: item.get('clip'),
       visibleFades: this.props.fadesOf === 'clip',
       onChange: this.triggerClipChange,
     };
@@ -214,8 +220,8 @@ const TrackItem = React.createClass({
       width: blockWidth, height: blockHeight,
       offsetStart: clipBoxProps.offsetStart,
       offsetLength: clipBoxProps.offsetLength,
-      regionStart: prettyItem.get('offsetStart'),
-      regionLength: prettyItem.get('fadeIn'),
+      regionStart: item.get('offsetStart'),
+      regionLength: item.get('fadeIn'),
       regionKey: 'fadeIn',
       onChange: this.handleFadeInChange,
     };
@@ -223,27 +229,26 @@ const TrackItem = React.createClass({
     const fadeOutProps = {
       ...fadeInProps,
       regionStart: (
-        prettyItem.get('offsetStart') +
-        prettyItem.get('offsetLength') -
-        prettyItem.get('fadeOut')
+        item.get('offsetStart') +
+        item.get('offsetLength') -
+        item.get('fadeOut')
       ),
-      regionLength: prettyItem.get('fadeOut'),
+      regionLength: item.get('fadeOut'),
       regionKey: 'fadeOut',
       onChange: this.handleFadeOutChange,
     };
 
-    const fadeContainerStyle = ({
-      ...containerPositionStyle,
-      zIndex: 2,
-      pointerEvents: 'none',
-    });
+    const fadeContProps = {
+      className: 'TrackItem__fadeContainer',
+      style: containerPositionStyle,
+    };
 
     return (
-      <div>
+      <div className="TrackItem" style={rootStyle}>
         <Movable {...movableProps}>
           <ClipBox {...clipBoxProps} />
         </Movable>
-        <div style={fadeContainerStyle}>
+        <div {...fadeContProps}>
           {this.props.fadesOf === 'item' && (<TimeMovableRegion {...fadeInProps} />)}
           {this.props.fadesOf === 'item' && (<TimeMovableRegion {...fadeOutProps} />)}
         </div>

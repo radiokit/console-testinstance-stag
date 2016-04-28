@@ -85,6 +85,7 @@ const ScheduleDetails = React.createClass({
             onChangeOffset={this.handleChangeOffset}
           />
         )}</DetectWidth>
+        {/*
         <pre>
           {JSON.stringify(this.props.items.toJS(), null, '  ')}
         </pre>
@@ -94,6 +95,7 @@ const ScheduleDetails = React.createClass({
         <pre>
           {this.props.offsetStart}
         </pre>
+        */}
       </div>
     );
   },

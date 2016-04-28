@@ -18,7 +18,8 @@ var config = {
     // This will force moment to load only specified languages.
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /pl|en/),
     // new webpack.DefinePlugin({
-    //   process: {env: { NODE_ENV: "'production'"}}
+    //   process: {env: { NODE_ENV: "'production'"}},
+    //   '__DEV__': JSON.stringify(false),
     // })
   ],
 

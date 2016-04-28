@@ -2,8 +2,8 @@ import React from 'react';
 
 import PixelMovableMarker from './pixel_movable_marker.jsx';
 import PixelMovableBlock from './pixel_movable_block.jsx';
-import makeUniqStyle from './uniqStyle';
-const uniqStyle = makeUniqStyle();
+
+import './pixel_movable_fade_region.scss';
 
 const PixelMovableRegion = React.createClass({
   propTypes: {
@@ -34,12 +34,14 @@ const PixelMovableRegion = React.createClass({
   render() {
     const { color, height, width, offset } = this.props;
 
-    const rootStyle = ({
-      position: 'absolute', top: 0, left: 0,
-      transform: `translateX(${offset}px)`,
-      height,
-      width,
-    });
+    const rootProps = {
+      className: 'PixelMovableRegion',
+      style: {
+        transform: `translateX(${offset}px)`,
+        height,
+        width,
+      },
+    };
 
     const marker1Props = {
       color,
@@ -63,7 +65,7 @@ const PixelMovableRegion = React.createClass({
     };
 
     return (
-      <div style={rootStyle}>
+      <div {...rootProps}>
         <PixelMovableBlock {...blockProps} />
         <PixelMovableMarker {...marker1Props} />
         <PixelMovableMarker {...marker2Props} />
