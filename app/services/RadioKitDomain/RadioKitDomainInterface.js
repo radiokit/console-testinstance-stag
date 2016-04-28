@@ -163,7 +163,7 @@ function remove(params) {
     .destroy();
 }
 
-export default {
+export {
   query,
   clear,
   save,
