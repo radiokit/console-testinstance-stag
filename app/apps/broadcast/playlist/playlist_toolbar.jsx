@@ -54,6 +54,14 @@ const PlaylistToolbar = React.createClass({
     });
   },
 
+  onDelete() {
+    setTimeout(() => {
+      const { onCRUD, onActiveItemChange } = this.props;
+      onCRUD && onCRUD();
+      onActiveItemChange && onActiveItemChange(null);
+    }, 500);
+  },
+
   getDateValue(key) {
     return this.props.activeItem ? this.props.activeItem.get(key) : Moment.utc();
   },
@@ -138,7 +146,7 @@ const PlaylistToolbar = React.createClass({
             selectedRecordIds: (this.props.activeItem
               ? Immutable.List.of(this.props.activeItem.get('id'))
               : Immutable.List.of(null)),
-            afterFormAccept: this.props.onCRUD,
+            afterFormAccept: this.onDelete,
           }}
         />
       </ToolbarGroup>

@@ -1,5 +1,6 @@
 import React from 'react';
 import Translate from 'react-translate-component';
+import RadioKit from '../../../services/RadioKit.js';
 
 import ModalForEach from '../../../widgets/admin/modal_foreach_widget.jsx';
 
@@ -12,31 +13,27 @@ const DeleteModal = React.createClass({
     model: React.PropTypes.string.isRequired,
     onSuccess: React.PropTypes.func,
     onDismiss: React.PropTypes.func,
+    afterFormAccept: React.PropTypes.func,
   },
 
   getInitialState() {
     return {
       index: 0,
-    }
-  },
-
-  show() {
-    this.setState({
-      index: 0,
-    });
-    this.refs.modal.show();
+    };
   },
 
   onDeleteSuccess() {
     this.setState({
-      index: this.state.index + 1
+      index: this.state.index + 1,
     });
 
-    if(this.props.selectedRecordIds.count() === this.state.index) {
+    if (this.props.selectedRecordIds.count() === this.state.index) {
       this.setState({
-        index: 0
+        index: 0,
       });
     }
+
+    this.props.afterFormAccept && this.props.afterFormAccept();
   },
 
   onSuccess() {
@@ -48,10 +45,17 @@ const DeleteModal = React.createClass({
   },
 
   onPerform(index, recordId) {
-    window.data.record(this.props.app, this.props.model, recordId)
+    RadioKit.record(this.props.app, this.props.model, recordId)
       // .on("error", this.onDeleteError) // TODO
-      .on("loaded", this.onDeleteSuccess)
+      .on('loaded', this.onDeleteSuccess)
       .destroy();
+  },
+
+  show() {
+    this.setState({
+      index: 0,
+    });
+    this.refs.modal.show();
   },
 
   render() {
@@ -70,23 +74,26 @@ const DeleteModal = React.createClass({
         <div>
           <Translate
             component="p"
-            content={ this.props.contentPrefix + '.message.confirmation' }
-            count={ this.props.selectedRecordIds.count() } />
+            content={ `${this.props.contentPrefix}.message.confirmation` }
+            count={ this.props.selectedRecordIds.count() }
+          />
         </div>
         <div>
           <Translate
             component="p"
-            content={ this.props.contentPrefix + ".message.progress" } />
+            content={ `${this.props.contentPrefix}.message.progress` }
+          />
         </div>
         <div>
           <Translate
             component="p"
-            content={ this.props.contentPrefix + ".message.acknowledgement" }
-            count={ this.props.selectedRecordIds.count() } />
+            content={ `${this.props.contentPrefix}.message.acknowledgement` }
+            count={ this.props.selectedRecordIds.count() }
+          />
         </div>
       </ModalForEach>
     );
-  }
+  },
 });
 
 export default DeleteModal;

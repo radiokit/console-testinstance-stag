@@ -28,6 +28,8 @@ export default React.createClass({
       // .on('error', this.onDeleteError) // TODO
       .on('loaded', this.onDeleteSuccess)
       .destroy();
+
+    this.props.afterFormAccept();
   },
 
   show() {

@@ -19,17 +19,6 @@ const CalendarRow = React.createClass({
     onActiveItemChange: PropTypes.func.isRequired,
   },
 
-  shouldComponentUpdate(nextProp) {
-    return !(
-      this.props.firstHour === nextProp.firstHour &&
-      this.props.hour === nextProp.hour &&
-      this.props.items === nextProp.items &&
-      this.props.now === nextProp.now &&
-      this.props.expanded === nextProp.expanded &&
-      this.props.activeItem === nextProp.activeItem
-    );
-  },
-
   onCollapse() {
     this.props.onChangeExpansionState(this.props.hour, false);
   },
@@ -99,7 +88,6 @@ const CalendarRow = React.createClass({
         <td className="ScheduleDailyWidget-CalendarRow-hour">
           {sprintf('%02s:00', hour)}
         </td>
-
         <td className="ScheduleDailyWidget-CalendarRow-items">
           {hourMarker}
           {items.filter((item) => {
@@ -148,8 +136,8 @@ const CalendarRow = React.createClass({
 
           {this.props.items
             .filter((item) => (
-            item.get('start_at').isBefore(hourStart) &&
-            item.get('stop_at').isAfter(hourStop)
+              item.get('start_at').isBefore(hourStart) &&
+              item.get('stop_at').isSameOrAfter(hourStop)
             ))
             .map((item) => (
               <div

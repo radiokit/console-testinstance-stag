@@ -5,10 +5,10 @@ import {
   range,
 } from 'lodash';
 import CalendarRow from './schedule_daily_calendar_row.jsx';
+import connect from 'immview-react-connect';
+import ScheduleDomain from '../../../services/ScheduleDomain';
 
 import './schedule_daily_widget.scss';
-
-const hourType = PropTypes.oneOf(range(0, 24));
 
 const ScheduleDaily = React.createClass({
   propTypes: {
@@ -18,6 +18,8 @@ const ScheduleDaily = React.createClass({
     onOffsetStartChange: React.PropTypes.func,
     activeItem: React.PropTypes.object,
     onActiveItemChange: React.PropTypes.func,
+    // connector
+    items: React.PropTypes.object,
   },
 
   contextTypes: {
@@ -37,12 +39,7 @@ const ScheduleDaily = React.createClass({
   getInitialState() {
     return {
       expansionState: {},
-      availableFiles: new Immutable.Seq().toIndexedSeq(),
     };
-  },
-
-  componentDidMount() {
-    this.fetchPlumberFiles();
   },
 
   onChangeExpansionState(hour, value) {
@@ -53,41 +50,13 @@ const ScheduleDaily = React.createClass({
     this.setState({ now: newNow });
   },
 
-  getItems(data) {
-    return data.map(entry => (
+  getItems() {
+    return this.props.items.map(entry => (
       Immutable.Map()
         .set('id', entry.get('id'))
         .set('start_at', moment.utc(entry.get('start_at')))
         .set('stop_at', moment.utc(entry.get('stop_at')))
     ));
-  },
-
-  afterFormSubmit() {
-    this.fetchPlumberFiles();
-    this.onChangeActiveItem(null);
-  },
-
-  fetchPlumberFiles() {
-    this.context.data
-      .query('plumber', 'Media.Input.File.Http')
-      .select('id', 'start_at', 'stop_at')
-      .on('error', () => {
-        this.setState({
-          loadingError: true,
-        });
-      }).on('fetch', (_event, _query, data) => {
-        if (data.count() !== 0) {
-          this.setState({
-            loadedFiles: true,
-            availableFiles: this.getItems(data).toList(),
-          });
-        } else {
-          this.setState({
-            loadedListOfFiles: true,
-            availableFiles: new Immutable.Seq().toIndexedSeq(),
-          });
-        }
-      }).fetch();
   },
 
   render() {
@@ -105,8 +74,8 @@ const ScheduleDaily = React.createClass({
                 key={hour}
                 hour={hour}
                 firstHour={this.props.firstHour}
+                items={this.getItems()}
                 now={moment.utc(this.props.offsetStart)}
-                items={this.state.availableFiles}
                 onChangeExpansionState={this.onChangeExpansionState}
                 expanded={this.state.expansionState[hour]}
                 onActiveItemChange={this.props.onActiveItemChange}
@@ -119,4 +88,28 @@ const ScheduleDaily = React.createClass({
   },
 });
 
-export default ScheduleDaily;
+export default connect(
+  ScheduleDaily,
+  ScheduleDomain,
+  (data, props) => {
+    const ranger = Immutable.Map({
+      from: moment.utc(props.offsetStart).startOf('day').add(5, 'hours').toISOString(),
+      to: moment.utc(props.offsetStart).endOf('day').add(5, 'hours').toISOString(),
+    });
+    if (!data.getIn(['ranges', ranger])) {
+      ScheduleDomain.fetch(ranger.get('from'), ranger.get('to'));
+    }
+    const items = data
+      .get('all', Immutable.OrderedMap())
+      .toList()
+      .filter(
+        item => (
+          item.get('stop_at') > ranger.get('from') &&
+          item.get('start_at') < ranger.get('to')
+        )
+      );
+    return {
+      items,
+    };
+  }
+);

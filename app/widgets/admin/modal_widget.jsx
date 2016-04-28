@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Translate from 'react-translate-component';
 
 // FIXME do not use jquery
@@ -13,18 +14,15 @@ export default React.createClass({
     onHide: React.PropTypes.func,
   },
 
-
   getDefaultProps: function() {
     return {
       size: "normal",
     }
   },
 
-
   show: function() {
-    $(this.refs.modal).modal("show");
+    $(this.getNode()).modal("show");
   },
-
 
   onHide: function() {
     if(this.props.onHide) {
@@ -33,7 +31,7 @@ export default React.createClass({
   },
 
   componentWillUnmount: function() {
-    $(this.refs.modal).off("hide.bs.modal", this.onHide);
+    $(this.getNode()).off("hide.bs.modal", this.onHide);
   },
 
   onShow: function() {
@@ -43,7 +41,11 @@ export default React.createClass({
   },
 
   componentDidMount: function() {
-    $(this.refs.modal).on("show.bs.modal", this.onShow);
+    $(this.getNode()).on("show.bs.modal", this.onShow);
+  },
+
+  getNode() {
+    return ReactDOM.findDOMNode(this.refs.modal);
   },
 
   render: function() {
