@@ -5,7 +5,7 @@ import { Router, Route, IndexRoute } from 'react-router';
 import Counterpart from 'counterpart';
 
 import './services/RadioKit'; // for legacy window binding
-import './services/plumber'; // for legacy window binding
+import './services/Plumber'; // for legacy window binding
 
 import Root from './root.jsx';
 import Dashboard from './dashboard.jsx';
