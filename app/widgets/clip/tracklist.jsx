@@ -53,6 +53,7 @@ const TrackList = React.createClass({
 
     onPlaylistChange: React.PropTypes.func,
     onItemChange: React.PropTypes.func,
+    onItemSelect: React.PropTypes.func,
     onClipChange: React.PropTypes.func,
     
     timeMarks: React.PropTypes.oneOf([null, 'relative', 'date']),
@@ -134,13 +135,10 @@ const TrackList = React.createClass({
   },
 
   getTracksCount() {
-    return Math.max(
-      1,
-      (
-        this.props.visibleTracksCount ||
-        this.getTrackItems().reduce((v, item) => Math.max(item.get('track') - 1, v), 1)
-      )
-    );
+    return Math.max(1, (
+      this.props.visibleTracksCount ||
+      this.getTrackItems().reduce((v, item) => Math.max(item.get('track') - 1, v), 1)
+    ));
   },
 
   handleClipChange(newClip, oldClip) {
@@ -185,6 +183,11 @@ const TrackList = React.createClass({
     this.storeMousePosition(this.getMouseOffset(e).x);
     this.timeoutCursor();
     this.mouseMoveTimestamp = Date.now();
+  },
+
+  handleItemSelect(item) {
+    const { onItemSelect = () => null } = this.props;
+    onItemSelect(item);
   },
 
   storeMousePosition(mouseCursorPosition) {
@@ -233,6 +236,7 @@ const TrackList = React.createClass({
           fadesOf={this.props.clip ? 'clip' : 'item'}
           onItemChange={this.handleItemChange}
           onClipChange={this.handleClipChange}
+          onItemSelect={this.handleItemSelect}
           onClick={this.handleClick}
         />
         <TrackListCursors

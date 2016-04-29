@@ -11,15 +11,17 @@ function checkIfQueryExists(queryParams, { autoSync = false, maxAge = Date.now()
   const currentQueryStatus = RadioKitQueries.read().getIn([queryParams, 'status']);
   const currentQueryTime = RadioKitQueries.read().getIn([queryParams, 'time']) || 0;
   if (autoSync) {
-    // Check if query is currently loading or registered to receive updates
     if (currentQueryStatus === 'live') {
       return true;
     }
   } else {
     // Check if query execution time is acceptable
     if (
-      (currentQueryStatus === QUERY_STATUS.loading) ||
-      (currentQueryStatus === QUERY_STATUS.done && currentQueryTime > Date.now() - maxAge)
+      currentQueryStatus === QUERY_STATUS.loading ||
+      (
+        currentQueryStatus === QUERY_STATUS.done &&
+        currentQueryTime > Date.now() - maxAge
+      )
     ) {
       return true;
     }
@@ -112,7 +114,7 @@ function clear(app, model = null) {
 
 export {
   query,
-  clear,
   save,
   remove,
+  clear,
 };

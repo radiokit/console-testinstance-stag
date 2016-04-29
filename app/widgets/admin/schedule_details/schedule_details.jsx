@@ -2,7 +2,6 @@ import React from 'react';
 import {
   OrderedMap,
   Map,
-  List,
 } from 'immutable';
 import moment from 'moment';
 import {
@@ -17,11 +16,8 @@ import {
 } from '../../clip';
 import { scheduleItemToTrackItem, trackItemToScheduleItem } from './schedule_details_tranform';
 
-import Perf from 'react-addons-perf';
-window.Perf = Perf;
-
 const tracksCount = 3;
-
+const defaultViewportOffsetLength = 60000;
 const maxOffsetLengthInHours = 24;
 
 const ScheduleDetails = React.createClass({
@@ -45,10 +41,23 @@ const ScheduleDetails = React.createClass({
     };
   },
 
-  handleChangeOffset: debounce(function ({ offsetStart, offsetLength }) {
+  getInitialState() {
+    return {
+      offsetStart: this.props.offsetStart - defaultViewportOffsetLength / 2,
+      offsetLength: defaultViewportOffsetLength,
+    };
+  },
+
+  triggerOffsetStartChange: debounce(function (newValue) {
     const { onOffsetStartChange = noop } = this.props;
-    onOffsetStartChange(Math.round(offsetStart + offsetLength / 2));
+    onOffsetStartChange(newValue);
   }, 1000),
+
+  handleChangeOffset({ offsetStart, offsetLength }) {
+    this.setState({ offsetStart, offsetLength });
+    const offsetCenter = Math.round(offsetStart + offsetLength / 2);
+    this.triggerOffsetStartChange(offsetCenter);
+  },
 
   handleItemChange(item) {
     const newScheduleItem = (
@@ -56,19 +65,28 @@ const ScheduleDetails = React.createClass({
       this.props.items &&
       trackItemToScheduleItem(
         item,
-        this.props.items.find(
-          scheduleItem => scheduleItem.get('id') === item.get('id')
-        )
+        this.findScheduleItem(item)
       )
     );
-    // console.log(newScheduleItem && newScheduleItem.toJS());
-    ScheduleDomain.save(newScheduleItem.get('id'), newScheduleItem);
+    if (newScheduleItem) {
+      ScheduleDomain.save(newScheduleItem.get('id'), newScheduleItem);
+    }
+  },
+
+  handleItemSelect(trackItem) {
+    const { onActiveItemChange = () => null } = this.props;
+    const scheduleItem = this.findScheduleItem(trackItem);
+    onActiveItemChange(scheduleItem);
+  },
+
+  findScheduleItem(trackItem) {
+    return this.props.items.find(
+      scheduleItem => scheduleItem.get('id') === trackItem.get('id')
+    );
   },
 
   render() {
     const items = this.props.items.map((v, k) => scheduleItemToTrackItem(v, (k + 1) % tracksCount));
-    const viewportOffsetLength = 1000 * 30;
-    const viewportOffsetStart = this.props.offsetStart - viewportOffsetLength / 2;
     return (
       <div>
         <h1>Schedule Details</h1>
@@ -79,13 +97,14 @@ const ScheduleDetails = React.createClass({
             zoomable
             width={width}
             visibleTracksCount={tracksCount}
-            offsetStart={viewportOffsetStart}
-            offsetLength={viewportOffsetLength}
+            offsetStart={this.state.offsetStart}
+            offsetLength={this.state.offsetLength}
             maxOffsetLength={maxOffsetLengthInHours * 60 * 60 * 1000}
             playlist={Map({ items })}
             onItemChange={this.handleItemChange}
             timeMarks="date"
             onChangeOffset={this.handleChangeOffset}
+            onItemSelect={this.handleItemSelect}
           />
         )}</DetectWidth>
         {/*

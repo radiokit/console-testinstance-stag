@@ -34,9 +34,14 @@ const TrackItems = React.createClass({
   },
 
   setSelected(selected, cb) {
+    const { onItemSelect } = this.props;
     this.setState({ selected }, () => {
-      if (selected && selected.size === 1) {
-        this.props.onItemSelect && this.props.onItemSelect(selected.first());
+      if (selected && selected.count() === 1 && onItemSelect) {
+        const itemID = selected.first();
+        const item = this.props.items.find(
+          trackItem => trackItem.get('id') === itemID
+        );
+        onItemSelect(item);
       }
       cb && cb(selected);
     });
