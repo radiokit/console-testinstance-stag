@@ -63,7 +63,7 @@ const ShowExportsSchema = React.createClass({
       <IndexTableBrowser
         contentPrefix = { this.props.contentPrefix + ".table" }
         app = "vault"
-        model = "Data.Exports.Schema"
+        model = "Data.Export.Schema"
         form = { this.buildForm() }
         attributes = { this.buildAttributes() }
         indexQueryFunc = { this.modifyIndexQuery }/>

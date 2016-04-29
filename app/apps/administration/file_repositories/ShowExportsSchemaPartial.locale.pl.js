@@ -5,18 +5,18 @@ export default {
         show: {
           tabs: {
             body: {
-              export_schema: {
+              exports_schema: {
                 table: {
                   index: {
                     actions: {
-                      create: "Add export field",
+                      create: "Dodaj eksport",
                     },
 
                     table: {
                       header: {
-                        name: "Field name",
-                        key: "Key",
-                        kind: "Value type",
+                        name: "Nazwa",
+                        key: "Klucz",
+                        kind: "Rodzaj",
                       }
                     },
 
@@ -34,12 +34,12 @@ export default {
                         },
                         form: {
                           name: {
-                            label: "Nazwa pola",
-                            hint: "Choose any name that will describe contents of this field, e.g. \"composer\".",
+                            label: "Nazwa",
+                            hint: "Nazwa eksportu zrozumiała dla użytkownika.",
                           },
                           key: {
                             label: "Klucz",
-                            hint: "Unique key describing role of this field for the system.",
+                            hint: "Unikalny klucz identyfikujący ten eksport w systemie.",
                           },
                           kind: {
                             label: "Rodzaj",

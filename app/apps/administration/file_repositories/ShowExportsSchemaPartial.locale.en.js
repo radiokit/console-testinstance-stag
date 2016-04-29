@@ -5,7 +5,7 @@ export default {
         show: {
           tabs: {
             body: {
-              export_schema: {
+              exports_schema: {
                 table: {
                   index: {
                     actions: {
@@ -14,9 +14,9 @@ export default {
 
                     table: {
                       header: {
-                        name: "Field name",
+                        name: "Name",
                         key: "Key",
-                        kind: "Value type",
+                        kind: "Kind",
                       }
                     },
 
@@ -39,7 +39,7 @@ export default {
                           },
                           key: {
                             label: "Key",
-                            hint: "Unique key describing role of this for the system.",
+                            hint: "Unique key describing role of this export for the system.",
                           },
                           kind: {
                             label: "Value type",
