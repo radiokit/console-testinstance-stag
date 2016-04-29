@@ -2,6 +2,7 @@ import React from 'react';
 import Counterpart from 'counterpart';
 
 import IndexTableBrowser from '../../../widgets/admin/crud/index_table_browser_widget.jsx';
+import ShowExportsSchemaCreateAcknowledgement from './ShowExportsSchemaCreateAcknowledgement.jsx';
 
 Counterpart.registerTranslations("en", require('./ShowExportsSchemaPartial.locale.en.js'));
 Counterpart.registerTranslations("pl", require('./ShowExportsSchemaPartial.locale.pl.js'));
@@ -52,15 +53,19 @@ const ShowExportsSchema = React.createClass({
 
   buildAttributes() {
     return {
-      name:     { renderer: "string" },
-      key:      { renderer: "string" },
-      kind:     { renderer: "string" },
+      name:                  { renderer: "string" },
+      key:                   { renderer: "string" },
+      kind:                  { renderer: "string" },
+      connector_state:       { renderer: "string" },
+      connector_credentials: { renderer: "string" },
     }
   },
+
 
   render() {
     return (
       <IndexTableBrowser
+        createAcknowledgementElement={ShowExportsSchemaCreateAcknowledgement}
         contentPrefix = { this.props.contentPrefix + ".table" }
         app = "vault"
         model = "Data.Export.Schema"

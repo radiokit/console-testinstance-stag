@@ -17,6 +17,8 @@ export default {
                         name: "Name",
                         key: "Key",
                         kind: "Kind",
+                        connector_state: "State",
+                        connector_credentials: "Username",
                       }
                     },
 

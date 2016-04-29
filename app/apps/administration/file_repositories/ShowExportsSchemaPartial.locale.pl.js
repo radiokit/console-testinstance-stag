@@ -17,6 +17,8 @@ export default {
                         name: "Nazwa",
                         key: "Klucz",
                         kind: "Rodzaj",
+                        connector_state: "Stan",
+                        connector_credentials: "Użytkownik",
                       }
                     },
 
@@ -49,6 +51,7 @@ export default {
                           },
                         },
                       },
+
                       delete: {
                         header: "Usuń eksporty",
                         action: {
