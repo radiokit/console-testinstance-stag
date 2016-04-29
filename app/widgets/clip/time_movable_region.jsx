@@ -1,30 +1,31 @@
 import React from 'react';
-import ImmutableComponent from '../../helpers/immutable_component';
+import compareProps from '../../helpers/props_comparison';
+
+const propTypes = {
+  onChange: React.PropTypes.func,
+
+  /* clip viewing start time and length */
+  offsetStart: React.PropTypes.number.isRequired,
+  offsetLength: React.PropTypes.number.isRequired,
+
+  /* region start time and length */
+  regionKey: React.PropTypes.string,
+  regionStart: React.PropTypes.number.isRequired,
+  regionLength: React.PropTypes.number.isRequired,
+
+  /* containers width & height */
+  color: React.PropTypes.string,
+  width: React.PropTypes.number.isRequired,
+  height: React.PropTypes.number.isRequired,
+
+  component: React.PropTypes.any,
+};
 
 const TimeMovableRegion = React.createClass({
-  
-  ...ImmutableComponent,
-  
-  propTypes: {
-    onChange: React.PropTypes.func,
+  propTypes,
 
-    /* clip viewing start time and length */
-    offsetStart: React.PropTypes.number.isRequired,
-    offsetLength: React.PropTypes.number.isRequired,
+  shouldComponentUpdate: compareProps(Object.keys(propTypes)),
 
-    /* region start time and length */
-    regionKey: React.PropTypes.string,
-    regionStart: React.PropTypes.number.isRequired,
-    regionLength: React.PropTypes.number.isRequired,
-
-    /* containers width & height */
-    color: React.PropTypes.string,
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired,
-
-    component: React.PropTypes.any,
-  },
-  
   render() {
     const {
       height,

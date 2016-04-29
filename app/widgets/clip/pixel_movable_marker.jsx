@@ -1,18 +1,23 @@
 import React from 'react';
 
 import Movable from '../general/movable.jsx';
+import compareProps from '../../helpers/props_comparison';
 import makeUniqStyle from './uniqStyle';
 const uniqStyle = makeUniqStyle();
 
 import './pixel_movable_marker.scss';
 
+const propTypes = {
+  color: React.PropTypes.string.isRequired,
+  height: React.PropTypes.number.isRequired,
+  offset: React.PropTypes.number.isRequired,
+  onMove: React.PropTypes.func,
+};
+
 const PixelMovableMarker = React.createClass({
-  propTypes: {
-    color: React.PropTypes.string.isRequired,
-    height: React.PropTypes.number.isRequired,
-    offset: React.PropTypes.number.isRequired,
-    onMove: React.PropTypes.func,
-  },
+  propTypes,
+
+  shouldComponentUpdate: compareProps(Object.keys(propTypes)),
 
   handleMove({ x }) {
     this.props.onMove && this.props.onMove(x);

@@ -15,7 +15,7 @@ const TimeMovableMarker = props => {
   } = props;
 
   const scale = offsetLength / width;
-  const offset = (position - offsetStart) / scale;
+  const offset = Math.round((position - offsetStart) / scale);
   const onMove = x => {
     const newPosition = Math.round(position + x * scale);
     onChange && onChange(newPosition);

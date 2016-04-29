@@ -19,7 +19,7 @@ var config = {
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /pl|en/),
     // new webpack.DefinePlugin({
     //   process: {env: { NODE_ENV: "'production'"}},
-    //   '__DEV__': JSON.stringify(false),
+    //   '__DEV__': JSON.stringify(false)
     // })
   ],
 

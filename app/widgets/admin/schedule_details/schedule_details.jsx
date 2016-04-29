@@ -17,6 +17,9 @@ import {
 } from '../../clip';
 import { scheduleItemToTrackItem, trackItemToScheduleItem } from './schedule_details_tranform';
 
+import Perf from 'react-addons-perf';
+window.Perf = Perf;
+
 const tracksCount = 3;
 
 const maxOffsetLengthInHours = 24;

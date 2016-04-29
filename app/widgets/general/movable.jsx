@@ -27,7 +27,6 @@ function mouseCheckTick() {
     activeMovable.handleMouseMove(lastNotProcessedMoveEvent);
     lastNotProcessedMoveEvent = null;
   }
-  /* eslint no-use-before-define: 0 */
   dispatchDeferred(mouseCheckTick);
 }
 
@@ -40,21 +39,27 @@ function preventDefault(e) {
 
 const Movable = React.createClass({
   propTypes: {
-    style: React.PropTypes.object,
+    children: React.PropTypes.any,
     onHold: React.PropTypes.func,
     onDrop: React.PropTypes.func,
     onMove: React.PropTypes.func,
+    onClick: React.PropTypes.func,
+    onMouseDown: React.PropTypes.func,
+    className: React.PropTypes.string,
     holdClassName: React.PropTypes.string,
+    style: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.object,
+    ]),
     holdStyle: React.PropTypes.oneOfType([
       React.PropTypes.string,
       React.PropTypes.object,
     ]),
   },
 
-  getInitialState() {
+  componentWillMount() {
     this.firstPosition = null;
     this.lastPosition = null;
-    return {};
   },
 
   componentWillUnmount() {
@@ -107,7 +112,7 @@ const Movable = React.createClass({
 
       // redraw component with new style if there is one
       if (this.props.holdClassName || this.props.holdStyle) {
-        this.setState({isHeld: true});
+        this.setState({ isHeld: true });
       }
 
       // mark time when mouse button has been pressed
@@ -125,7 +130,7 @@ const Movable = React.createClass({
       this.storeMouse(null);
     }
     if (this.props.holdClassName || this.props.holdStyle) {
-      this.setState({isHeld: false});
+      this.setState({ isHeld: false });
     }
     if (this.props.onDrop) {
       this.props.onDrop(e);
@@ -160,9 +165,13 @@ const Movable = React.createClass({
       onMove: null,
       onDrop: null,
       onHold: null,
-      style: this.state.isHeld ? this.props.holdStyle : this.props.style,
+      style: (this.state && this.state.isHeld)
+        ? (this.props.holdStyle || this.props.style)
+        : this.props.style,
       holdStyle: null,
-      className: this.state.isHeld ? this.props.holdClassName : this.props.className,
+      className: (this.state && this.state.isHeld)
+        ? (this.props.holdClassName || this.props.className)
+        : this.props.className,
       holdClassName: null,
       onMouseDown: this.handleMouseDown,
     };
