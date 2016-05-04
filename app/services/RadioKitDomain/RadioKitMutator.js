@@ -29,16 +29,16 @@ function perform(mutation) {
   const queryParams = mutationToParams(mutation).set('job', currentJobId);
   currentJobId++;
 
-  const ts = Date.now();
+  const requestTime = Date.now();
 
   return new Promise((resolve, reject) => {
     const onSuccess = (data) => {
-      update(queryParams, STATUS.done, result || List([data]), ts);
+      update(queryParams, STATUS.done, result || List([data]), requestTime);
       resolve();
     };
 
     const onError = () => {
-      update(queryParams, STATUS.error, List(), ts);
+      update(queryParams, STATUS.error, List(), requestTime);
       resolve();
     };
 

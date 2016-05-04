@@ -21,15 +21,24 @@ import * as STATUS from './RadioKitQueryStatuses';
  * >
  */
 
+function getQueriesByStatus(queries, status) {
+  return queries
+    .filter(result => (
+      result.get('status') === status
+    ));
+}
+
+function sortQueriesByTime(queries) {
+  return queries
+    .sortBy(query => query.get('time'));
+}
+
 export default new View(
   RadioKitQueries,
-  queries => queries
-    .filter(result => (
-      result.get('status') === STATUS.live ||
-      result.get('status') === STATUS.done ||
-      result.get('status') === STATUS.loading
-    ))
-    .sortBy(query => query.get('time'))
+  queries => Map()
+    .concat(sortQueriesByTime(getQueriesByStatus(queries, STATUS.done)))
+    .concat(sortQueriesByTime(getQueriesByStatus(queries, STATUS.live)))
+    .concat(sortQueriesByTime(getQueriesByStatus(queries, STATUS.loading)))
     .groupBy((result, params) => params.get('app'))
     .map(
       queriesOfApp => queriesOfApp

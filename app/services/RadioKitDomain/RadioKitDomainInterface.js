@@ -68,16 +68,18 @@ function query(queryParams = Map(), options = {}) {
 
   const { autoSync = false } = options;
 
+  const requestTime = Date.now();
+
     // Initialize query in storage
   if (autoSync) {
-    update(queryParams, STATUS.live, List(), Date.now());
+    update(queryParams, STATUS.live, List(), requestTime);
   } else {
-    update(queryParams, STATUS.loading, List(), Date.now());
+    update(queryParams, STATUS.loading, List(), requestTime);
   }
 
     // Set up query execution hooks
   const markAsErroneous = () => {
-    update(queryParams, STATUS.error, List(), Date.now());
+    update(queryParams, STATUS.error, List(), requestTime);
   };
 
   q = q
@@ -86,7 +88,7 @@ function query(queryParams = Map(), options = {}) {
       queryParams,
       autoSync ? STATUS.live : STATUS.done,
       data,
-      autoSync ? null : Date.now()
+      autoSync ? null : requestTime
     ));
 
   // Execute query

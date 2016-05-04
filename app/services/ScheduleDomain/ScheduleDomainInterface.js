@@ -9,6 +9,7 @@ const app = 'plumber';
 const model = 'Media.Input.File.Http';
 
 import RadioKitDomain from './../RadioKitDomain';
+import RecordURI from '../RecordURI';
 
 function performQuery(from, to, options) {
   RadioKitDomain.query(
@@ -64,7 +65,7 @@ export function save(id, patch) {
     }),
     patch
       .delete('file')
-      .set('location', `record://vault/Data.Record.File/${patch.getIn(['file', 'id'])}`)
+      .set('location', RecordURI.to('vault', 'Data.Record.File', patch.getIn(['file', 'id'])))
   );
 }
 
