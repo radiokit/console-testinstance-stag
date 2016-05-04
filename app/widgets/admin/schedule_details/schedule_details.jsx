@@ -30,6 +30,7 @@ const ScheduleDetails = React.createClass({
 
     // from connector
     items: React.PropTypes.object,
+    loading: React.PropTypes.bool,
   },
 
   getDefaultProps() {
@@ -76,7 +77,7 @@ const ScheduleDetails = React.createClass({
   handleItemSelect(trackItem) {
     const { onActiveItemChange = () => null } = this.props;
     const scheduleItem = this.findScheduleItem(trackItem);
-    onActiveItemChange(scheduleItem);
+    //onActiveItemChange(scheduleItem);
   },
 
   findScheduleItem(trackItem) {
@@ -89,7 +90,10 @@ const ScheduleDetails = React.createClass({
     const items = this.props.items.map((v, k) => scheduleItemToTrackItem(v, (k + 1) % tracksCount));
     return (
       <div>
-        <h1>Schedule Details</h1>
+        <h1>
+          Schedule Details
+          <span children={this.props.loading ? ' ...' : ''} />
+        </h1>
         <DetectWidth>{width => (
           <ScrollableTrackList
             cursorTime={this.props.offsetStart}
@@ -136,7 +140,7 @@ export default connect(
       .toISOString();
 
     if (!data.getIn(['ranges', Map({ from: fromISO, to: toISO })])) {
-      ScheduleDomain.fetch(fromISO, toISO);
+      setTimeout(() => ScheduleDomain.fetch(fromISO, toISO), 0);
     }
 
     // ...but push wider subset in case of whole day scrolling
@@ -157,6 +161,7 @@ export default connect(
       );
     return {
       items,
+      loading: data.get('loading', false),
     };
   }
 );

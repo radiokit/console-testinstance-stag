@@ -6,7 +6,7 @@ import {
   List,
 } from 'immutable';
 import { RadioKitQueries } from './RadioKitQueries';
-import * as QUERY_STATUS from './RadioKitQueryStatuses';
+import * as STATUS from './RadioKitQueryStatuses';
 
 /**
  * Map<
@@ -25,9 +25,9 @@ export default new View(
   RadioKitQueries,
   queries => queries
     .filter(result => (
-      result.get('status') === QUERY_STATUS.live ||
-      result.get('status') === QUERY_STATUS.done ||
-      result.get('status') === QUERY_STATUS.loading
+      result.get('status') === STATUS.live ||
+      result.get('status') === STATUS.done ||
+      result.get('status') === STATUS.loading
     ))
     .sortBy(query => query.get('time'))
     .groupBy((result, params) => params.get('app'))

@@ -5,7 +5,7 @@ import {
 import RadioKit from '../RadioKit';
 import { RadioKitQueries, update } from './RadioKitQueries';
 import { save, remove } from './RadioKitMutator';
-import * as QUERY_STATUS from './RadioKitQueryStatuses';
+import * as STATUS from './RadioKitQueryStatuses';
 
 function checkIfQueryExists(queryParams, { autoSync = false, maxAge = Date.now() }) {
   const currentQueryStatus = RadioKitQueries.read().getIn([queryParams, 'status']);
@@ -17,9 +17,9 @@ function checkIfQueryExists(queryParams, { autoSync = false, maxAge = Date.now()
   } else {
     // Check if query execution time is acceptable
     if (
-      currentQueryStatus === QUERY_STATUS.loading ||
+      currentQueryStatus === STATUS.loading ||
       (
-        currentQueryStatus === QUERY_STATUS.done &&
+        currentQueryStatus === STATUS.done &&
         currentQueryTime > Date.now() - maxAge
       )
     ) {
@@ -70,21 +70,21 @@ function query(queryParams = Map(), options = {}) {
 
     // Initialize query in storage
   if (autoSync) {
-    update(queryParams, QUERY_STATUS.live, List(), Date.now());
+    update(queryParams, STATUS.live, List(), Date.now());
   } else {
-    update(queryParams, QUERY_STATUS.loading, List(), Date.now());
+    update(queryParams, STATUS.loading, List(), Date.now());
   }
 
     // Set up query execution hooks
   const markAsErroneous = () => {
-    update(queryParams, QUERY_STATUS.error, List(), Date.now());
+    update(queryParams, STATUS.error, List(), Date.now());
   };
 
   q = q
     .on('error', markAsErroneous)
     .on('fetch', (__, _, data) => update(
       queryParams,
-      autoSync ? QUERY_STATUS.live : QUERY_STATUS.done,
+      autoSync ? STATUS.live : STATUS.done,
       data,
       autoSync ? null : Date.now()
     ));

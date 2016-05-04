@@ -1,6 +1,9 @@
 import {
   View,
 } from 'immview';
+import {
+  Map,
+} from 'immutable';
 
 import RadioKitDomain from '../RadioKitDomain';
 
@@ -13,10 +16,20 @@ const vaultDomainOwnQueries = RadioKitDomain.map(
 );
 
 const readyQueries = vaultDomainOwnQueries.map(
-  queries => queries.filter(result => (
-    result.get('status') === 'live' ||
-    result.get('status') === 'done'
-  ))
+  queries => queries.filter(
+    result => (
+      result.get('status') === RadioKitDomain.STATUS.live ||
+      result.get('status') === RadioKitDomain.STATUS.done
+    )
+  )
+);
+
+const loading = vaultDomainOwnQueries.map(
+  queries => Map({
+    value: queries.filter(
+        result => result.get('status') === RadioKitDomain.STATUS.loading
+      ).count() > 0,
+  })
 );
 
 const filesQueries = readyQueries.map(
@@ -37,4 +50,8 @@ const filesById = filesQueries.map(
 
 export default new View({
   files: filesById,
-});
+  loading,
+}, data => Map({
+  files: data.get('files'),
+  loading: data.getIn(['loading', 'value']),
+}));

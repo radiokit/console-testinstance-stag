@@ -8,52 +8,8 @@ import {
   List,
 } from 'immutable';
 
-import RadioKitDomain from '../RadioKitDomain';
-import VaultDomain from '../VaultDomain';
-
-const scheduleQueries = RadioKitDomain.map(
-  RKDData => RKDData.filter((queryStatus, queryParams) => queryParams.get('key') === 'schedule')
-);
-
-const readyQueries = scheduleQueries.map(
-  RKDData => RKDData.filter(
-    result => (
-      result.get('status') === 'live' ||
-      result.get('status') === 'done'
-    )
-  )
-);
-
-const fileDataMaxAge = 60 * 1000; // 1min
-readyQueries
-  .map(queries => queries.map(
-    status => status.get('data', List())
-  ).flatten(true))
-  .map(items => items.map(
-    item => List(item.get('location').split('/')).last()).flatten(true).toSet()
-  )
-  .subscribe(fileIds => fileIds.forEach(fileID => {
-    VaultDomain.loadFile(fileID, { maxAge: fileDataMaxAge });
-  }));
-
-const queriesWithFiles = new View(
-  { queries: readyQueries, vault: VaultDomain },
-  data => data.get('queries', List()).map(
-    query => query.set('data', query.get('data', List())
-      .map(item => {
-        const fileID = List(item.get('location').split('/')).last();
-        const file = data.getIn(['vault', 'files', fileID]);
-        if (file) {
-          return item
-            .delete('location')
-            .set('file', file);
-        }
-        return null;
-      })
-      .filter(item => !!item)
-    )
-  )
-);
+import loading from './ScheduleLoading';
+import ScheduleReadyQueriesWithFiles from './ScheduleReadyQueriesWithFiles';
 
 function getRangeFromParams(queryParams) {
   const conditions = queryParams.get('conditions', List());
@@ -73,19 +29,24 @@ function getRangeFromParams(queryParams) {
 }
 
 export default new View(
-  queriesWithFiles,
-  RKDData => {
+  {
+    queries: ScheduleReadyQueriesWithFiles,
+    loading,
+  },
+  data => {
     let rangesMap = OrderedMap();
     let idsMap = OrderedMap();
-    RKDData.forEach((queryStatus, queryParams) => {
+    data.get('queries').forEach((queryStatus, queryParams) => {
       const range = getRangeFromParams(queryParams);
-      const data = queryStatus.get('data', List());
-      rangesMap = rangesMap.set(Map(range), data);
-      data.forEach(item => {
+      const queryData = queryStatus.get('data', List());
+      rangesMap = rangesMap.set(Map(range), queryData);
+      queryData.forEach(item => {
         idsMap = idsMap.set(item.get('id'), item);
       });
     });
+
     return Map({
+      loading: data.getIn(['loading', 'value'], false),
       ranges: rangesMap,
       all: idsMap,
     });

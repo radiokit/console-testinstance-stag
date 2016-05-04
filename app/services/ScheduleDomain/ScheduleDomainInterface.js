@@ -5,7 +5,6 @@ import {
 
 import moment from 'moment';
 
-const key = 'schedule';
 const app = 'plumber';
 const model = 'Media.Input.File.Http';
 
@@ -14,7 +13,7 @@ import RadioKitDomain from './../RadioKitDomain';
 function performQuery(from, to, options) {
   RadioKitDomain.query(
     Map({
-      key,
+      key: 'schedule',
       app,
       model,
       select: List(['id', 'name', 'start_at', 'stop_at', 'location']),
@@ -24,7 +23,11 @@ function performQuery(from, to, options) {
           comparison: 'gte',
           value: moment(from).toISOString(),
         }) : null,
-        to ? Map({ field: 'stop_at', comparison: 'lte', value: moment(to).toISOString() }) : null,
+        to ? Map({
+          field: 'stop_at',
+          comparison: 'lte',
+          value: moment(to).toISOString(),
+        }) : null,
       ]).filter(i => !!i),
     }),
     options
@@ -54,7 +57,7 @@ export function observe(from, to) {
 export function save(id, patch) {
   RadioKitDomain.save(
     Map({
-      key: `${key}update`,
+      key: 'schedule:update',
       app,
       model,
       id,

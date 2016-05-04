@@ -5,7 +5,7 @@ import {
 } from 'immutable';
 import RadioKit from '../RadioKit';
 import { update } from './RadioKitQueries';
-import * as QUERY_STATUS from './RadioKitQueryStatuses';
+import * as STATUS from './RadioKitQueryStatuses';
 import { debounce } from 'lodash';
 
 let mutationQueue = OrderedMap();
@@ -33,12 +33,12 @@ function perform(mutation) {
 
   return new Promise((resolve, reject) => {
     const onSuccess = (data) => {
-      update(queryParams, QUERY_STATUS.done, result || List([data]), ts);
+      update(queryParams, STATUS.done, result || List([data]), ts);
       resolve();
     };
 
     const onError = () => {
-      update(queryParams, QUERY_STATUS.error, List(), ts);
+      update(queryParams, STATUS.error, List(), ts);
       resolve();
     };
 
@@ -87,8 +87,8 @@ function pushMutationToQueue(mutation) {
 function dispatchMutation(mutation) {
   const { patch } = mutation.toObject();
   update(
-    mutationToParams(mutation).set('job', currentJobId + 1),
-    QUERY_STATUS.loading,
+    mutationToParams(mutation).set('job', currentJobId),
+    STATUS.loading,
     List([patch]),
     Date.now()
   );
@@ -107,6 +107,6 @@ export function remove(params) {
   const mutation = params
     .set('patch', stub)
     .set('action', 'destroy')
-    .set('result', List());
+    .set('result', stub);
   dispatchMutation(mutation);
 }
