@@ -10,7 +10,6 @@ import { debounce } from 'lodash';
 
 let mutationQueue = OrderedMap();
 let isQueueRunning = false;
-let currentJobId = 0;
 
 function mutationToParams(mutation) {
   const { app, model, id, action } = mutation.toObject();
@@ -26,9 +25,8 @@ function perform(mutation) {
     patch,
     result,
   } = mutation.toObject();
-  const queryParams = mutationToParams(mutation).set('job', currentJobId);
-  currentJobId++;
 
+  const queryParams = mutationToParams(mutation);
   const requestTime = Date.now();
 
   return new Promise((resolve) => {
@@ -87,7 +85,7 @@ function pushMutationToQueue(mutation) {
 function dispatchMutation(mutation) {
   const { patch } = mutation.toObject();
   update(
-    mutationToParams(mutation).set('job', currentJobId),
+    mutationToParams(mutation),
     STATUS.loading,
     List([patch]),
     Date.now()
