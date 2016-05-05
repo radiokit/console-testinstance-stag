@@ -23,7 +23,7 @@ export default {
       icon: 'radio-tower',
       playlist: {
         index() {
-          return '/apps/broadcast/playlist/index';
+          return '/apps/broadcast/playlist';
         },
       },
       live: {

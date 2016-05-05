@@ -21,6 +21,10 @@ var config = {
 
   plugins: [
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en|pl/),
+    new webpack.DefinePlugin({
+      process: {env: { NODE_ENV: "'production'"}},
+      '__DEV__': JSON.stringify(false)
+    }),
     new ClosureCompilerPlugin({
       compiler: {
         language_in: 'ECMASCRIPT6',

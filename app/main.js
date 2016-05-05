@@ -71,7 +71,8 @@ ReactDOM.render((
       <Route path="apps" component={AppsIndex} onEnter={pingGoogleAnalytics}>
         <Route path="broadcast" component={BroadcastApp}>
           <Route component={ScopeLayout} scope="broadcastChannel">
-            <Route path="playlist/index" component={BroadcastPlaylistIndex} onEnter={pingGoogleAnalytics}/>
+            <Route path="playlist/index" component={BroadcastPlaylistIndex} onEnter={pingGoogleAnalytics} />
+            <Route path="playlist(/:date/:zoom)" component={BroadcastPlaylistIndex} onEnter={pingGoogleAnalytics} />
           </Route>
           <Route component={ScopeLayout} scope="broadcastChannel">
             <Route path="live/index" component={BroadcastLiveIndex} onEnter={pingGoogleAnalytics}/>

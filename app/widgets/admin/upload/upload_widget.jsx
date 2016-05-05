@@ -155,5 +155,5 @@ const emptyList = List();
 
 export default connect(
   UploadWidget,
-  {queues: uploadDomain.view},
+  { queues: uploadDomain },
 );

@@ -1,6 +1,9 @@
 import React from 'react';
 
-import {Map} from 'immutable';
+import {
+  Map,
+  List,
+} from 'immutable';
 
 import './clip_background.scss';
 
@@ -17,10 +20,10 @@ const ClipBackground = props => {
 
   const imageWidth = Math.ceil(width / clipScale);
 
-  const anyImage = clip.get('images').first();
-  const sufficientImage = clip.get('images').find(image => image.get('width', 0) > width);
+  const anyImage = clip.get('images', List()).first();
+  const sufficientImage = clip.get('images', List()).find(image => image.get('width', 0) > width);
 
-  const imageUrl = (sufficientImage || anyImage || Map()).get('url');
+  const imageUrl = (sufficientImage || anyImage || Map()).get('url', '');
 
   const rootProps = {
     style: {
@@ -30,7 +33,7 @@ const ClipBackground = props => {
 
       backgroundImage: `url(${imageUrl})`,
       backgroundSize: `${imageWidth + 1}px ${height}px`,
-      backgroundPosition: Math.floor(imageWidth * (offsetStart / clipLength) * -1 - 1) + 'px 0',
+      backgroundPosition: `${Math.floor(imageWidth * (offsetStart / clipLength) * -1 - 1)}px 0`,
     },
     className: 'ClipBackground',
   };
@@ -46,12 +49,12 @@ const ClipBackground = props => {
   const vignetteStyle2 = {
     ...vignetteStyle1,
     background: 'linear-gradient(to right, rgba(0,0,0,0.15) 0%,rgba(0,0,0,0) 20%,rgba(0,0,0,0) 79%,rgba(0,0,0,0.15) 100%)',
-  }
+  };
 
   return (
     <div {...rootProps}>
-      <div style={vignetteStyle1}/>
-      <div style={vignetteStyle2}/>
+      <div style={vignetteStyle1} />
+      <div style={vignetteStyle2} />
     </div>
   );
 };

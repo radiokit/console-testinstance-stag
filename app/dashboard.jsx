@@ -18,20 +18,17 @@ export default React.createClass({
     currentUser: React.PropTypes.object.isRequired,
   },
 
-
   getInitialState() {
     return {
       selectedApp: null,
     };
   },
 
-
   onAppClick(appName) {
     this.setState({
       selectedApp: appName,
     });
   },
-
 
   // FIXME don't use inline styles
   render() {

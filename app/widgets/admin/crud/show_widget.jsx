@@ -19,6 +19,7 @@ export default React.createClass({
     showQueryFunc: React.PropTypes.func,
     contentElement: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.func, React.PropTypes.element]).isRequired,
     sidebarElement: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.func, React.PropTypes.element]),
+    toolbarElement: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.func, React.PropTypes.element])
   },
 
 
@@ -102,7 +103,21 @@ export default React.createClass({
           <Section>
             <GridRow>
               <GridCell size="large" center={true}>
-                <Card contentPrefix={`${this.props.contentPrefix}.show`} headerText={this.state.record.get("name")} sidebarElement={this.props.sidebarElement} sidebarProps={{ contentPrefix: this.props.contentPrefix + ".show", app: this.props.app, model: this.props.model, record: this.state.record }} contentElement={this.props.contentElement} contentProps={{ contentPrefix: this.props.contentPrefix + ".show", app: this.props.app, model: this.props.model, record: this.state.record }} />
+                <Card
+                    contentPrefix={`${this.props.contentPrefix}.show`}
+                    headerText={this.state.record.get("name")}
+                    sidebarElement={this.props.sidebarElement}
+                    sidebarProps={{
+                      contentPrefix: this.props.contentPrefix + ".show",
+                      app: this.props.app,
+                      model: this.props.model,
+                      record: this.state.record }}
+                    contentElement={this.props.contentElement}
+                    contentProps={{
+                      contentPrefix: this.props.contentPrefix + ".show",
+                      app: this.props.app,
+                      model: this.props.model,
+                      record: this.state.record }} />
               </GridCell>
             </GridRow>
           </Section>

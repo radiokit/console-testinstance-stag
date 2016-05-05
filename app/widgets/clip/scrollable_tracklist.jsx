@@ -6,60 +6,69 @@ import TrackList from './tracklist.jsx';
 const ScrollableTracklist = React.createClass({
 
   propTypes: {
-      offsetStart: React.PropTypes.number,
-      offsetLength: React.PropTypes.number,
+    offsetStart: React.PropTypes.number,
+    offsetLength: React.PropTypes.number,
 
-      width: React.PropTypes.number.isRequired,
+    width: React.PropTypes.number.isRequired,
 
-      scrollable: React.PropTypes.bool,
-      zoomable: React.PropTypes.bool,
+    scrollable: React.PropTypes.bool,
+    zoomable: React.PropTypes.bool,
+    minOffsetLength: React.PropTypes.number,
+    maxOffsetLength: React.PropTypes.number,
+    onChangeOffset: React.PropTypes.func,
   },
 
-  getInitialState() {
+  getDefaultProps() {
     return {
-      offsetLeft: 0,
-      offsetWidth: 0,
+      scrollable: false,
+      zoomable: false,
+      minOffsetLength: 1000,
+      maxOffsetLength: 24 * 60 * 60 * 1000,
     };
   },
+  
+  changeOffset(offsetStartModification = 0, offsetLengthModification = 0) {
+    const {
+      offsetStart,
+      offsetLength,
+      minOffsetLength,
+      maxOffsetLength,
+      onChangeOffset,
+    } = this.props;
+    let normalizedOffsetStartModification = offsetStartModification;
+    let normalizedOffsetLengthModification = offsetLengthModification;
 
-  setNewBonus(modification) {
-    const normalizedState = {
-      ...this.state,
-    };
-    if (modification.offsetLeft) {
-      normalizedState.offsetLeft += modification.offsetLeft / this.props.width * this.getOffsetLength();
+    if (offsetStart + normalizedOffsetStartModification < 0) {
+      normalizedOffsetLengthModification = (
+        normalizedOffsetLengthModification +
+        normalizedOffsetStartModification
+      );
+      normalizedOffsetStartModification = -1 * offsetStart;
     }
-    if (modification.offsetWidth) {
-      normalizedState.offsetWidth += modification.offsetWidth / this.props.width * this.getOffsetLength();
 
-      if (this.getOffsetStart(normalizedState) < 0) {
-        normalizedState.offsetWidth = normalizedState.offsetWidth + normalizedState.offsetLeft;
-        normalizedState.offsetLeft = -1 * this.props.offsetStart;
-      }
+    const offsetStartCandidate = offsetStart + normalizedOffsetStartModification;
+    const offsetLengthCandidate = offsetLength + normalizedOffsetLengthModification;
+
+    if (
+      offsetStartCandidate >= 0 &&
+      offsetLengthCandidate >= minOffsetLength &&
+      offsetLengthCandidate <= maxOffsetLength
+    ) {
+      onChangeOffset && onChangeOffset({
+        offsetStart: offsetStartCandidate,
+        offsetLength: offsetLengthCandidate,
+      });
     }
-    if (this.getOffsetStart(normalizedState) >= 0 && this.getOffsetLength(normalizedState) > 1000) {
-      this.setState(normalizedState);
-    }
+
   },
 
-  zoom(diff) {
-    if (!this.props.zoomable) {
-      return;
-    }
-    const cappedDiff = Math.min(100, Math.abs(diff)) * Math.sign(diff);
-    this.setNewBonus({
-      offsetLeft: cappedDiff,
-      offsetWidth: cappedDiff * -2,
-    });
-  },
-
-  scrollHorizontally(x) {
-    if (!this.props.scrollable) {
-      return;
-    }
-    this.setNewBonus({
-      offsetLeft: x,
-    });
+  changePixelOffset(leftModification, widthModification) {
+    const {
+      offsetLength,
+      width,
+    } = this.props;
+    const timeScale = offsetLength / width;
+    this.changeOffset(leftModification * timeScale, widthModification * timeScale);
   },
 
   handleWheel(e) {
@@ -67,7 +76,7 @@ const ScrollableTracklist = React.createClass({
     const vMovement = e.deltaY;
     if ((hMovement > 0 || hMovement < 0) && Math.abs(hMovement) > Math.abs(vMovement)) {
       if (e.shiftKey && this.props.zoomable) {
-        this.zoom(hMovement);
+        this.zoom(-1 * hMovement);
       } else {
         this.scrollHorizontally(hMovement);
       }
@@ -75,43 +84,39 @@ const ScrollableTracklist = React.createClass({
     }
   },
 
-  handleScroll({x}) {
+  handleScroll({ x }) {
     this.scrollHorizontally(-1 * x);
     this.mouseDownTime = 0;
   },
 
-  handleScrollStart() {
-    this.setState({scrolling: true});
+  scrollHorizontally(x) {
+    if (!this.props.scrollable) {
+      return;
+    }
+    this.changePixelOffset(x, 0);
   },
 
-  handleScrollFinish() {
-    this.setState({scrolling: false});
-  },
-
-  getOffsetStart(state) {
-    return this.props.offsetStart + (state || this.state).offsetLeft;
-  },
-
-  getOffsetLength(state) {
-    return this.props.offsetLength + (state || this.state).offsetWidth;
+  zoom(diff) {
+    if (!this.props.zoomable) {
+      return;
+    }
+    const cappedDiff = Math.min(100, Math.abs(diff)) * Math.sign(diff);
+    this.changePixelOffset(cappedDiff, cappedDiff * -2);
   },
 
   render() {
     const trackListProps = {
       ...this.props,
-      offsetStart: this.getOffsetStart(),
-      offsetLength: this.getOffsetLength(),
     };
     return (
       <Movable
         onMove={this.handleScroll}
-        onHold={this.handleScrollStart}
-        onDrop={this.handleScrollFinish}
         onWheel={this.handleWheel}
-        style={{width: this.props.width}}>
+        style={{ width: this.props.width }}
+      >
         <TrackList {...trackListProps} />
       </Movable>
     );
-  }
+  },
 });
 export default ScrollableTracklist;

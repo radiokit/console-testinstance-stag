@@ -1,5 +1,5 @@
 import React from 'react';
-import Datetime from 'react-datetime'
+import Datetime from 'react-datetime';
 import Moment from 'moment';
 
 import './date_time_picker.scss';
@@ -7,20 +7,20 @@ import './date_time_picker.scss';
 const DateTimePicker = React.createClass({
   propTypes: {
     required: React.PropTypes.bool,
-    defaultValue: React.PropTypes.string
+    defaultValue: React.PropTypes.string,
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
-      defaultValue: Moment.utc()
+      defaultValue: Moment.utc(),
     };
   },
 
-  getInput: function() {
+  getInput() {
     return Moment(this.refs.datetime.refs.input.value).toISOString();
   },
 
-  render: function() {
+  render() {
     let value;
     if (this.props.defaultValue) {
       value = Moment.utc(this.props.defaultValue);
@@ -34,12 +34,13 @@ const DateTimePicker = React.createClass({
         dateFormat="Y-MM-DD"
         timeFormat="HH:mm:ss.SSS[Z]"
         inputProps={{
-          ref: "input",
-          className: "form-control",
-          required: this.props.required
-        }} />
+          ref: 'input',
+          className: 'form-control',
+          required: this.props.required,
+        }}
+      />
     );
-  }
+  },
 });
 
 export default DateTimePicker;
