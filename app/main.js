@@ -31,6 +31,7 @@ import ClipEditorApp from './apps/clip_editor/app.jsx';
 import AdministrationApp from './apps/administration/app.jsx';
 import AdministrationUserAccountsIndex from './apps/administration/user_accounts/index_view.jsx';
 import AdministrationBroadcastChannelsIndex from './apps/administration/broadcast_channels/IndexView.jsx';
+import AdministrationBroadcastChannelsShow from './apps/administration/broadcast_channels/ShowView.jsx';
 import AdministrationUsersIndex from './apps/administration/editors/index_view.jsx';
 import AdministrationFileRepositoriesIndex from './apps/administration/file_repositories/IndexView.jsx';
 import AdministrationFileRepositoriesShow from './apps/administration/file_repositories/ShowView.jsx';
@@ -113,7 +114,10 @@ ReactDOM.render((
         </Route>
 
         <Route path="administration" component={AdministrationApp}>
-          <Route path="broadcast_channels/index" component={AdministrationBroadcastChannelsIndex} onEnter={pingGoogleAnalytics}/>
+          <Route path="broadcast_channels">
+            <Route path="index" component={AdministrationBroadcastChannelsIndex} onEnter={pingGoogleAnalytics}/>
+            <Route path="show/:id" component={AdministrationBroadcastChannelsShow} onEnter={pingGoogleAnalytics}/>
+          </Route>
           <Route path="user_accounts/index" component={AdministrationUserAccountsIndex} onEnter={pingGoogleAnalytics}/>
           <Route path="editors/index" component={AdministrationUsersIndex} onEnter={pingGoogleAnalytics}/>
           <Route path="file_repositories">
