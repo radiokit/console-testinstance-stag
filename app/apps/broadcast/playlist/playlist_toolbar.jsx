@@ -93,11 +93,11 @@ const PlaylistToolbar = React.createClass({
       },
       start_at: {
         type: 'datetime',
-        value: this.getDateValue('start_at').toISOString(),
+        value: Moment(this.getDateValue('start_at')).toISOString(),
       },
       stop_at: {
         type: 'datetime',
-        value: this.getDateValue('stop_at').toISOString(),
+        value: Moment(this.getDateValue('stop_at')).toISOString(),
       },
     };
   },

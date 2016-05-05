@@ -16,7 +16,7 @@ import {
 } from '../../clip';
 import { scheduleItemToTrackItem, trackItemToScheduleItem } from './schedule_details_tranform';
 
-const tracksCount = 3;
+const tracksCount = 5;
 const defaultViewportOffsetLength = 60000;
 const maxOffsetLengthInHours = 24;
 
@@ -76,8 +76,10 @@ const ScheduleDetails = React.createClass({
 
   handleItemSelect(trackItem) {
     const { onActiveItemChange = () => null } = this.props;
-    const scheduleItem = this.findScheduleItem(trackItem);
-    //onActiveItemChange(scheduleItem);
+    const scheduleItem = trackItem
+      ? this.findScheduleItem(trackItem)
+      : null;
+    onActiveItemChange(scheduleItem);
   },
 
   findScheduleItem(trackItem) {
@@ -87,7 +89,7 @@ const ScheduleDetails = React.createClass({
   },
 
   render() {
-    const items = this.props.items.map((v, k) => scheduleItemToTrackItem(v, (k + 1) % tracksCount));
+    const items = this.props.items.map((v, k) => scheduleItemToTrackItem(v, k % tracksCount + 1));
     return (
       <div>
         <h1>

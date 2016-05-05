@@ -30,7 +30,7 @@ function formatDate(n) {
   return `${
     d.getUTCFullYear()
     }-${
-    padLeft(d.getUTCMonth(), 2, '0')
+    padLeft(d.getUTCMonth() + 1, 2, '0')
     }-${
     padLeft(d.getUTCDate(), 2, '0')
     } ${
