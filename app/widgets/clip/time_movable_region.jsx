@@ -1,54 +1,7 @@
 import React from 'react';
+import compareProps from '../../helpers/props_comparison';
 
-const TimeMovableRegion = props => {
-  const {
-    height,
-    width,
-    offsetLength,
-    offsetStart,
-    regionStart,
-    regionLength,
-    regionKey,
-    color,
-    onChange,
-    component,
-  } = props;
-
-  const scale = offsetLength / width;
-
-  const regionOffset = regionStart / scale - offsetStart / scale;
-  const regionWidth = regionLength / scale;
-
-  const onMove = (startX, endX) => {
-    const oldPosition = {
-      regionStart,
-      regionLength,
-    }
-    const newPosition = {
-      regionStart: Math.round(regionStart + startX * scale),
-      regionLength: Math.round(regionLength + endX * scale),
-    };
-    onChange && onChange(newPosition, oldPosition);
-  };
-
-  if (regionOffset + regionWidth >= 0 && regionOffset <= width) {
-    const MovableRegion = component;
-    return (
-      <MovableRegion
-        regionKey={regionKey}
-        color={color}
-        height={height}
-        offset={regionOffset}
-        width={regionWidth}
-        onMove={onMove}
-      />
-    );
-  }
-
-  return <noscript />;
-};
-
-TimeMovableRegion.propTypes = {
+const propTypes = {
   onChange: React.PropTypes.func,
 
   /* clip viewing start time and length */
@@ -67,5 +20,59 @@ TimeMovableRegion.propTypes = {
 
   component: React.PropTypes.any,
 };
+
+const TimeMovableRegion = React.createClass({
+  propTypes,
+
+  shouldComponentUpdate: compareProps(Object.keys(propTypes)),
+
+  render() {
+    const {
+      height,
+      width,
+      offsetLength,
+      offsetStart,
+      regionStart,
+      regionLength,
+      regionKey,
+      color,
+      onChange,
+      component,
+    } = this.props;
+
+    const scale = offsetLength / width;
+
+    const regionOffset = Math.round(regionStart / scale - offsetStart / scale);
+    const regionWidth = Math.round(regionLength / scale);
+
+    const onMove = (startX, endX) => {
+      const oldPosition = {
+        regionStart,
+        regionLength,
+      };
+      const newPosition = {
+        regionStart: Math.round(regionStart + startX * scale),
+        regionLength: Math.round(regionLength + endX * scale),
+      };
+      onChange && onChange(newPosition, oldPosition);
+    };
+
+    if (regionOffset + regionWidth >= 0 && regionOffset <= width) {
+      const MovableRegion = component;
+      return (
+        <MovableRegion
+          regionKey={regionKey}
+          color={color}
+          height={height}
+          offset={regionOffset}
+          width={regionWidth}
+          onMove={onMove}
+        />
+      );
+    }
+
+    return null;
+  },
+});
 
 export default TimeMovableRegion;

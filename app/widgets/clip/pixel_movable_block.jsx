@@ -1,6 +1,10 @@
 import React from 'react';
 
 import Movable from '../general/movable.jsx';
+import makeUniqStyle from './uniqStyle';
+const uniqStyle = makeUniqStyle();
+
+import './pixel_movable_block.scss';
 
 const PixelMovableBlock = React.createClass({
   propTypes: {
@@ -12,48 +16,35 @@ const PixelMovableBlock = React.createClass({
     onMove: React.PropTypes.func,
   },
 
-  getDefaultProps() {
-    return {
-      opacity: 0.2,
-    };
-  },
-
-  getInitialState() {
-    return {
-      mouseHold: false,
-    };
-  },
-
-  handleMove({x}) {
+  handleMove({ x }) {
     this.props.onMove && this.props.onMove(x);
   },
 
-  handleHold() {
-    this.setState({mouseHold: true})
-  },
-
-  handleDrop() {
-    this.setState({mouseHold: false});
-  },
-
   render() {
-    const containerStyle = {
-      position: 'absolute', top: 0, left: 0,
+    const {
+      color,
+      opacity = 0.2,
+      height,
+      width,
+    } = this.props;
+
+    const containerStyle = uniqStyle({
       transform: `translateX(${this.props.offset}px)`,
-      backgroundColor: this.props.color,
-      opacity: this.props.opacity,
-      height: this.props.height,
-      width: this.props.width,
-      zIndex: this.state.mouseHold ? 2 : 1,
-    }
+      backgroundColor: color,
+      opacity,
+      height,
+      width,
+    });
+
     return (
-      <Movable style={containerStyle}
-               onMove={e => this.handleMove(e)}
-               onHold={this.handleHold}
-               onDrop={this.handleDrop}
+      <Movable
+        className="PixelMovableBlock"
+        holdClassName="PixelMovableBlock PixelMovableBlock--held"
+        style={containerStyle}
+        onMove={this.handleMove}
       />
-    )
-  }
+    );
+  },
 });
 
 export default PixelMovableBlock;

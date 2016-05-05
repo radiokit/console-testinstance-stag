@@ -4,7 +4,7 @@ import {
 
 export default {
   shouldComponentUpdate(nextProps, nextState) {
-    if (!is(nextState, this.state)) {
+    if (nextState !== this.state) {
       return true;
     }
     let should = false;
@@ -13,5 +13,5 @@ export default {
       should = should || !is(this.props[key], nextProps[key]);
     });
     return should;
-  }
+  },
 };

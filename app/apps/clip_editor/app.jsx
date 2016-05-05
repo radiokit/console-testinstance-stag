@@ -211,17 +211,17 @@ const mockClip = fromJS({
   ],
   metadata_schemas: [
     {
-      id: "rfv",
+      id: "intro-offset",
       key: "intro",
       kind: "offset",
     },
     {
-      id: "tgb",
+      id: "outro-offset",
       key: "outro",
       kind: "offset",
     },
     {
-      id: "yhn",
+      id: "mix-next-offset",
       key: "mix-next",
       kind: "offset",
     },
@@ -246,7 +246,7 @@ const mockClip = fromJS({
       kind: "offset",
     },
     {
-      id: "yhsn",
+      id: "loop-region",
       key: "loop",
       kind: "region",
     },
@@ -254,22 +254,22 @@ const mockClip = fromJS({
   metadata_items: [ // jest ale działa nieco inaczej i sie inaczej nazywa w joinach
     {
       id: "F05CFA94-FB09-11E5-968A-16DFE97DB0C6",
-      schema_id: "rfv",
+      schema_id: "intro-offset",
       value_offset: 12345, // milisekundy, wartość jest w polu value_(kind),
     },
     {
       id: "F05CFA94-FB09-11E5-968A-16DFE97DB0C7",
-      schema_id: "tgb",
+      schema_id: "outro-offset",
       value_offset: 55567, // milisekundy, wartość jest w polu value_(kind),
     },
     {
       id: "F05CFA94-FB09-11E5-968A-16DFE97DB0C8",
-      schema_id: "yhn",
+      schema_id: "mix-next-offset",
       value_offset: 40000, // milisekundy, wartość jest w polu value_(kind),
     },
     {
       id: "F05CFA94-FB09-11E5-968A-16DFE97DB0C9",
-      schema_id: "yhsn",
+      schema_id: "loop-region",
       value_offset: 20000,
       value_duration: 10000,
     },

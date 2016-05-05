@@ -18,7 +18,6 @@ const emptyMap = OrderedMap();
 class UploadDomain extends Domain {
 
   constructor() {
-
     /** --------------- */
     /** Domain storages */
     /** --------------- */
@@ -33,7 +32,7 @@ class UploadDomain extends Domain {
      * FileUpload is an interface
      * with which information about file upload
      * are given from RadioKit
-     * 
+     *
      * FileUpload: Map {
      *    completed: boolean,
      *    id: string,
@@ -71,16 +70,16 @@ class UploadDomain extends Domain {
       queuesByProcessData => queuesByProcessData.map(
         (/** List<FileUpload> */ files,
          /** UploadProcess */ process) => Map({
-          name: files.find(file => file.get('uploading'), null, emptyMap).get('name', ''),
-          progress: Math.round(
+           name: files.find(file => file.get('uploading'), null, emptyMap).get('name', ''),
+           progress: Math.round(
             files.reduce((progress, file) => progress + file.get('progress', 0), 0)
             / files.count()
           ),
-          completed: !files.count(file => !file.get('completed')),
-          uploading: !!files.find(file => file.get('uploading'), null, false),
-          repository: repositoriesByProcess.get(process, 0),
-          files
-        })
+           completed: !files.count(file => !file.get('completed')),
+           uploading: !!files.find(file => file.get('uploading'), null, false),
+           repository: repositoriesByProcess.get(process, 0),
+           files,
+         })
       )
     );
 
@@ -94,10 +93,10 @@ class UploadDomain extends Domain {
      * @param {File[]} list of files to upload to repository
      */
     function upload(repositoryID, files) {
-      //create process
-      const uploadProcess = RadioKit.upload(repositoryID, {autoStart: true});
+      // create process
+      const uploadProcess = RadioKit.upload(repositoryID, { autoStart: true });
 
-      //bind repository to process
+      // bind repository to process
       repositoriesByProcess = repositoriesByProcess.set(uploadProcess, repositoryID);
 
       function update(queue) {
@@ -106,13 +105,15 @@ class UploadDomain extends Domain {
         );
       }
 
-      //prepare queue
+      // prepare queue
       update(emptyQueue);
 
-      //update queue on every event
-      uploadProcess.EVENTS.forEach(event => uploadProcess.on(event, () => update(uploadProcess.getQueue())));
+      // update queue on every event
+      uploadProcess.EVENTS.forEach(
+        event => uploadProcess.on(event, () => update(uploadProcess.getQueue()))
+      );
 
-      //append files to newly created queue
+      // append files to newly created queue
       files.forEach(file => uploadProcess.__resumable.addFile(file));
     }
 

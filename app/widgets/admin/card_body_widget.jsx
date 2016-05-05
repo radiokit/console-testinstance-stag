@@ -1,34 +1,29 @@
 import React from 'react';
 
-import CardSidebar from './card_sidebar_widget.jsx';
-
-
 export default React.createClass({
   propTypes: {
     cardPadding: React.PropTypes.bool.isRequired,
     contentPrefix: React.PropTypes.string,
   },
 
-
-  getDefaultProps: function() {
+  getDefaultProps() {
     return {
       cardPadding: true,
-    }
+    };
   },
 
-
-  render: function() {
-    let klass;
-    if(this.props.cardPadding === true) {
-      klass = "card-body style-default-bright";
+  render() {
+    let className;
+    if (this.props.cardPadding === true) {
+      className = 'card-body style-default-bright';
     } else {
-      klass = "card-body style-default-bright no-padding";
+      className = 'card-body style-default-bright no-padding';
     }
 
     return (
-      <div className={klass}>
+      <div className={className}>
         {this.props.children}
       </div>
     );
-  }
+  },
 });

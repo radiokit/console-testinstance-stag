@@ -5,19 +5,31 @@ import {
 
 import moment from 'moment';
 
+const app = 'plumber';
+const model = 'Media.Input.File.Http';
+
 import RadioKitDomain from './../RadioKitDomain';
+import RecordURI from '../RecordURI';
 
 function performQuery(from, to, options) {
   RadioKitDomain.query(
     Map({
       key: 'schedule',
-      app: 'plumber',
-      model: 'Media.Input.File.Http',
-      select: List(['id', 'name', 'start_at', 'stop_at']),
+      app,
+      model,
+      select: List(['id', 'name', 'start_at', 'stop_at', 'location']),
       conditions: List([
-        from ? Map({field: 'start_at', comparison: 'gte', value: moment(from).toISOString()}) : null,
-        to ? Map({field: 'stop_at', comparison: 'lte', value: moment(to).toISOString()}) : null,
-      ]).filter(i => !!i)
+        from ? Map({
+          field: 'start_at',
+          comparison: 'gte',
+          value: moment(from).toISOString(),
+        }) : null,
+        to ? Map({
+          field: 'stop_at',
+          comparison: 'lte',
+          value: moment(to).toISOString(),
+        }) : null,
+      ]).filter(i => !!i),
     }),
     options
   );
@@ -29,8 +41,8 @@ function performQuery(from, to, options) {
  * @param {string|number} from
  * @param {string|number} to
  */
-export function fetch(from, to) {
-  performQuery(from, to, {maxAge: 1000 * 60});
+export function fetch(from, to, maxAge = 1000) {
+  performQuery(from, to, { maxAge });
 }
 
 /**
@@ -40,5 +52,23 @@ export function fetch(from, to) {
  * @param {string|number} to
  */
 export function observe(from, to) {
-  performQuery(from, to, {autoSync: true});
+  performQuery(from, to, { autoSync: true });
+}
+
+export function save(id, patch) {
+  RadioKitDomain.save(
+    Map({
+      key: 'schedule:update',
+      app,
+      model,
+      id,
+    }),
+    patch
+      .delete('file')
+      .set('location', RecordURI.to('vault', 'Data.Record.File', patch.getIn(['file', 'id'])))
+  );
+}
+
+export function clear() {
+  RadioKitDomain.clear(app, model);
 }

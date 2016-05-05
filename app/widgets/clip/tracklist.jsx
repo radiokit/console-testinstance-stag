@@ -15,6 +15,8 @@ import {
 import TrackItems from './track_items.jsx';
 import TrackCursor from './track_cursor.jsx';
 import TrackTimeMarks from './track_time_marks.jsx';
+import makeUniqStyle from './uniqStyle';
+const uniqStyle = makeUniqStyle();
 
 import './tracklist.scss';
 
@@ -51,7 +53,10 @@ const TrackList = React.createClass({
 
     onPlaylistChange: React.PropTypes.func,
     onItemChange: React.PropTypes.func,
+    onItemSelect: React.PropTypes.func,
     onClipChange: React.PropTypes.func,
+    
+    timeMarks: React.PropTypes.oneOf([null, 'relative', 'date']),
   },
 
   getDefaultProps() {
@@ -61,6 +66,7 @@ const TrackList = React.createClass({
       visibleTracksCount: null,
       trackHeight: 100,
       cursorTime: null,
+      timeMarks: 'relative',
     };
   },
 
@@ -73,20 +79,10 @@ const TrackList = React.createClass({
   componentWillMount() {
     this.mouseMoveTimestamp = null;
     this.timeoutCursor = debounce(() => this.handleMouseLeave(), 1000);
-    this.throttledSetState = throttle(s => this.setState(s), 1000 / 60);
-  },
-
-  storeMousePosition(mouseCursorPosition) {
-    if (this.props.cursorTime) {
-      // setState with a delay but only if mouse button is not being held down
-      (this.mouseDownTime ? (() => null) : this.throttledSetState)({mouseCursorPosition});
-    }
-  },
-
-  handleMouseMove (e) {
-    this.storeMousePosition(this.getMouseOffset(e).x);
-    this.timeoutCursor();
-    this.mouseMoveTimestamp = Date.now();
+    this.throttledSetState = throttle(
+      s => (window.requestAnimationFrame || window.setTimeout)(() => this.setState(s)),
+      1000 / 30
+    );
   },
 
   getMouseOffset(e) {
@@ -96,41 +92,8 @@ const TrackList = React.createClass({
     };
   },
 
-  handleMouseLeave() {
-    this.storeMousePosition(null);
-  },
-
-  handleClick(e) {
-    // condition for not treating clicks
-    // that are raised immediately after moving a mouse
-    // as clicks to move cursor
-    if (this.mouseMoveTimestamp < Date.now() - 100) {
-      const offsetX = this.getMouseOffset(e).x;
-      const offsetTime = offsetX * this.getOffsetLength() / this.props.width + this.getOffsetStart();
-      this.props.onSelectTime && this.props.onSelectTime(offsetTime);
-    }
-  },
-
-  handleItemChange(newItem, oldItem) {
-    const {playlist, onItemChange, onPlaylistChange}= this.props;
-    if (onItemChange && playlist) {
-      onItemChange(newItem, oldItem);
-    }
-    if (onPlaylistChange && playlist) {
-      const newTrackItems = playlist.get('items').map(
-        item => (item.get('id') === newItem.get('id')) ? newItem : item
-      );
-      const newPlaylist = playlist.set('items', newTrackItems);
-      onPlaylistChange(newPlaylist, playlist);
-    }
-  },
-
-  handleClipChange(newClip, oldClip) {
-    this.props.onClipChange && this.props.onClipChange(newClip, oldClip);
-  },
-
   getOffsetStart() {
-    return ( this.props.clip ? 0 : this.props.offsetStart );
+    return (this.props.clip ? 0 : this.props.offsetStart);
   },
 
   getOffsetLength() {
@@ -140,9 +103,9 @@ const TrackList = React.createClass({
   },
 
   getTrackList() {
-    const {playlist, clip} = this.props;
+    const { playlist, clip } = this.props;
 
-    //playlist input
+    // playlist input
     return playlist ||
 
       // clip input
@@ -157,13 +120,13 @@ const TrackList = React.createClass({
             fadeIn: 0,
             fadeOut: 0,
             clip,
-          })
-        ])
+          }),
+        ]),
       })) ||
 
-      //no input
+      // no input
       Map({
-        items: List()
+        items: List(),
       });
   },
 
@@ -172,40 +135,109 @@ const TrackList = React.createClass({
   },
 
   getTracksCount() {
-    return this.props.visibleTracksCount ||
-      this.getTrackItems().reduce((v, item) => Math.max(item.get('track') - 1, v), 1);
+    return Math.max(1, (
+      this.props.visibleTracksCount ||
+      this.getTrackItems().reduce((v, item) => Math.max(item.get('track') - 1, v), 1)
+    ));
+  },
+
+  handleClipChange(newClip, oldClip) {
+    this.props.onClipChange && this.props.onClipChange(newClip, oldClip);
+  },
+
+  handleItemChange(newItem, oldItem) {
+    const { playlist, onItemChange, onPlaylistChange } = this.props;
+    if (onItemChange && playlist) {
+      onItemChange(newItem, oldItem);
+    }
+    if (onPlaylistChange && playlist) {
+      const newTrackItems = playlist.get('items').map(
+        item => ((item.get('id') === newItem.get('id')) ? newItem : item)
+      );
+      const newPlaylist = playlist.set('items', newTrackItems);
+      onPlaylistChange(newPlaylist, playlist);
+    }
+  },
+
+  handleClick(e) {
+    // condition for not treating clicks
+    // that are raised immediately after moving a mouse
+    // as clicks to move cursor
+    if (this.mouseMoveTimestamp < Date.now() - 100) {
+      const offsetX = this.getMouseOffset(e).x;
+      const offsetTime = (
+        offsetX *
+        this.getOffsetLength() /
+        this.props.width +
+        this.getOffsetStart()
+      );
+      this.props.onSelectTime && this.props.onSelectTime(offsetTime);
+    }
+  },
+
+  handleMouseLeave() {
+    this.storeMousePosition(null);
+  },
+
+  handleMouseMove(e) {
+    this.storeMousePosition(this.getMouseOffset(e).x);
+    this.timeoutCursor();
+    this.mouseMoveTimestamp = Date.now();
+  },
+
+  handleItemSelect(item) {
+    const { onItemSelect = () => null } = this.props;
+    onItemSelect(item);
+  },
+
+  storeMousePosition(mouseCursorPosition) {
+    if (this.props.cursorTime) {
+      // setState with a delay but only if mouse button is not being held down
+      (this.mouseDownTime ? () => null : this.throttledSetState)({ mouseCursorPosition });
+    }
   },
 
   render() {
     const offsetStart = this.getOffsetStart();
     const offsetLength = this.getOffsetLength();
-    const contStyle = {
+    const contStyle = ({
       position: 'relative',
       width: this.props.width,
-    };
+    });
     return (
       <div className="TrackList"
-           onMouseMove={this.handleMouseMove}
-           onMouseLeave={this.handleMouseLeave}
-           onClick={this.handleClick}
-           style={contStyle}>
-        <TrackTimeMarks offsetStart={offsetStart}
-                        offsetLength={offsetLength}
-                        width={this.props.width}
+        onMouseMove={this.handleMouseMove}
+        onMouseLeave={this.handleMouseLeave}
+        onClick={this.handleClick}
+        style={contStyle}
+      >
+        {this.props.timeMarks && (
+          <TrackTimeMarks
+            type={this.props.timeMarks}
+            offsetStart={offsetStart}
+            offsetLength={offsetLength}
+            width={this.props.width}
+          />
+        )}
+        <TrackLines
+          tracksCount={this.getTracksCount()}
+          trackHeight={this.props.trackHeight}
         />
-        <TrackLines tracksCount={this.getTracksCount()}
-                    trackHeight={this.props.trackHeight}
-        />
-        <TrackItems style={{...contStyle, height: this.props.trackHeight * (this.getTracksCount())}}
-                    items={this.getTrackItems()}
-                    offsetStart={offsetStart}
-                    offsetLength={offsetLength}
-                    width={this.props.width}
-                    height={this.props.trackHeight}
-                    fadesOf={this.props.clip?'clip':'item'}
-                    onItemChange={this.handleItemChange}
-                    onClipChange={this.handleClipChange}
-                    onClick={this.handleClick}
+        <TrackItems
+          style={uniqStyle({
+            ...contStyle,
+            height: this.props.trackHeight * (this.getTracksCount()),
+          })}
+          items={this.getTrackItems()}
+          offsetStart={offsetStart}
+          offsetLength={offsetLength}
+          width={this.props.width}
+          height={this.props.trackHeight}
+          fadesOf={this.props.clip ? 'clip' : 'item'}
+          onItemChange={this.handleItemChange}
+          onClipChange={this.handleClipChange}
+          onItemSelect={this.handleItemSelect}
+          onClick={this.handleClick}
         />
         <TrackListCursors
           playPosition={(
@@ -217,24 +249,38 @@ const TrackList = React.createClass({
         />
       </div>
     );
-  }
+  },
 });
 
 export default TrackList;
 
-const TrackListCursors = ({playPosition, mousePosition}) => (
+const TrackListCursors = ({ playPosition, mousePosition }) => (
   <div>
-    {(typeof playPosition === 'number') && (<TrackCursor left={playPosition}/>)}
-    {(typeof mousePosition === 'number') && (<TrackCursor left={mousePosition} style={{opacity: 0.25}}/>)}
+    {(typeof playPosition === 'number') && (<TrackCursor left={playPosition} />)}
+    {
+      (typeof mousePosition === 'number') &&
+      (<TrackCursor left={mousePosition} style={{ opacity: 0.25 }} />)
+    }
   </div>
 );
 
-const TrackLines = ({tracksCount, trackHeight}) => {
-  return (
-    <div style={{position:'relative'}}>
+TrackListCursors.propTypes = {
+  playPosition: React.PropTypes.number,
+  mousePosition: React.PropTypes.number,
+};
+
+const TrackLines = ({ tracksCount, trackHeight }) => (
+    <div className="TrackList__tracks">
       {range(0, tracksCount).map(num => (
-        <div className="TrackList__track" key={num} style={{transform:`translateY(${num * trackHeight}px)`}}/>
+        <div className="TrackList__tracks__line"
+          key={num}
+          style={{ transform: `translateY(${num * trackHeight}px)` }}
+        />
       )) }
     </div>
-  )
+  );
+
+TrackLines.propTypes = {
+  tracksCount: React.PropTypes.number,
+  trackHeight: React.PropTypes.number,
 };
