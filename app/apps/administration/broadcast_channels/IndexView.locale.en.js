@@ -1,0 +1,76 @@
+export default {
+  apps: {
+    administration: {
+      broadcast_channels: {
+        index: {
+          header: "Channels",
+          actions: {
+            create: "Add channel",
+            delete: "Delete selected channels",
+          },
+
+          table: {
+            loading: "Fetching list of channels",
+            header: {
+              name: "Name",
+              slug: "Address",
+              user_account: "Account",
+            },
+          },
+
+          modals: {
+            delete: {
+              header: "Delete channel",
+              message: {
+                confirmation: "Are you sure that you want to delete %(count)s selected channel(s)?",
+                acknowledgement: "Deleted %(count)s channel(s).",
+                progress: "Deleting in progress…",
+              },
+              action: {
+                proceed: "Delete",
+                cancel: "Cancel",
+                close: "Close",
+              }
+            },
+
+            create: {
+              header: "Add channel",
+              form: {
+                name: {
+                  label: "Name",
+                  hint: "Choose any name that will help you to distinguish this channel from others.",
+                },
+                slug: {
+                  label: "Unique address",
+                  hint: "It is going to be part of stream URLs.",
+                },
+                description: {
+                  label: "Description",
+                },
+                genre: {
+                  label: "Genre/Format",
+                },
+                homepage_url: {
+                  label: "Home page URL",
+                },
+                user_account: {
+                  label: "Account",
+                }
+              },
+
+              message: {
+                acknowledgement: "Channel added succesfully",
+              },
+
+              action: {
+                proceed: "Add channel",
+                cancel: "Cancel",
+                close: "Close",
+              }
+            }
+          }
+        },
+      },
+    }
+  }
+}

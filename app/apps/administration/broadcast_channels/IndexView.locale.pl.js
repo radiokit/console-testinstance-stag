@@ -1,0 +1,76 @@
+export default {
+  apps: {
+    administration: {
+      broadcast_channels: {
+        index: {
+          header: "Kanały",
+          actions: {
+            create: "Dodaj kanał",
+            delete: "Usuń zaznaczone kanały",
+          },
+
+          table: {
+            loading: "Pobieranie listy kanałów",
+            header: {
+              name: "Nazwa",
+              slug: "Adres",
+              user_account: "Konto",
+            },
+          },
+
+          modals: {
+            delete: {
+              header: "Usuwanie kanału",
+              message: {
+                confirmation: "Czy na pewno chcesz usunąć zaznaczone kanały (%(count)s szt.)?",
+                acknowledgement: "Usunięto %(count)s kanałów.",
+                progress: "Trwa usuwanie kanałów…",
+              },
+              action: {
+                proceed: "Usuń",
+                cancel: "Anuluj",
+                close: "Zamknij",
+              }
+            },
+
+            create: {
+              header: "Dodawanie kanału",
+              form: {
+                name: {
+                  label: "Nazwa",
+                  hint: "Wybierz jakąkolwiek nazwę, która pozwoli Ci odróżnić ten kanał od innych.",
+                },
+                slug: {
+                  label: "Unikalny adres",
+                  hint: "Ta wartość będzie używana do skonstruowania adresów strumieni.",
+                },
+                description: {
+                  label: "Opis",
+                },
+                genre: {
+                  label: "Gatunek/format treści",
+                },
+                homepage_url: {
+                  label: "Adres strony internetowej",
+                },
+                user_account: {
+                  label: "Konto",
+                },
+              },
+
+              message: {
+                acknowledgement: "Pomyślnie dodano kanał",
+              },
+
+              action: {
+                proceed: "Dodaj kanał",
+                cancel: "Anuluj",
+                close: "Zamknij",
+              }
+            }
+          }
+        },
+      },
+    }
+  }
+}
