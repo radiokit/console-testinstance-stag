@@ -2,6 +2,7 @@ import {
   View,
 } from 'immview';
 import {
+  OrderedMap,
   Map,
   List,
 } from 'immutable';
@@ -35,7 +36,7 @@ function sortQueriesByTime(queries) {
 
 export default new View(
   RadioKitQueries,
-  queries => Map()
+  queries => OrderedMap()
     .concat(sortQueriesByTime(getQueriesByStatus(queries, STATUS.done)))
     .concat(sortQueriesByTime(getQueriesByStatus(queries, STATUS.live)))
     .concat(sortQueriesByTime(getQueriesByStatus(queries, STATUS.loading)))

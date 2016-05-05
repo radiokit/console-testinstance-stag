@@ -31,7 +31,7 @@ function perform(mutation) {
 
   const requestTime = Date.now();
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const onSuccess = (data) => {
       update(queryParams, STATUS.done, result || List([data]), requestTime);
       resolve();
