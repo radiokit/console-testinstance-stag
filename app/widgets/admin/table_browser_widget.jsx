@@ -79,7 +79,7 @@ export default React.createClass({
 
   componentDidUpdate: function(prevProps, prevState) {
     if(prevState.selectedRecordIds != this.state.selectedRecordIds && this.props.onSelect) {
-      if(this.props.requestFullRecords && this.state.records){
+      if(this.props.requestFullRecords && this.props.requestFullRecords === true && this.state.records){
          const selectedRecords = this.state.records.filter((record) => this.state.selectedRecordIds.includes(record.get('id')));
          this.props.onSelect(this.state.selectedRecordIds, selectedRecords);
       }

@@ -93,6 +93,7 @@ export default React.createClass({
     size: React.PropTypes.oneOf(['normal', 'large']),
     onSuccess: React.PropTypes.func,
     onDismiss: React.PropTypes.func,
+    onConfirm: React.PropTypes.func,
   },
 
 
@@ -112,6 +113,9 @@ export default React.createClass({
 
 
   onConfirm: function() {
+    if (this.props.onConfirm) {
+      this.props.onConfirm();
+    }
     this.setState({
       step: "progress",
     });

@@ -1,0 +1,14 @@
+.MetadataFormWidget {
+
+  .input-group{
+    float: none;
+  }
+  .form-control[disabled]{
+    cursor: not-allowed !important;
+  }
+  .MetadataFormWidget__checkbox{
+    display: table-cell;
+    width: 1%;
+    text-align: center;
+  }
+}

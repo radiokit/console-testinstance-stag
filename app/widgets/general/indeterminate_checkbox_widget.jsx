@@ -8,29 +8,29 @@ const IndeterminateCheckboxWidget = React.createClass({
     indeterminate: React.PropTypes.bool,
     onSelected: React.PropTypes.func,
     onDeselected: React.PropTypes.func,
-    onRestore: React.PropTypes.func
+    onRestore: React.PropTypes.func,
   },
 
   getInitialState() {
     return {
       checked: this.props.checked,
       indeterminate: this.props.indeterminate,
-    }
+    };
   },
 
   componentWillReceiveProps(nextProps) {
-      this.setState({
-        checked: nextProps.checked,
-        indeterminate: nextProps.indeterminate,
-      });
+    this.setState({
+      checked: nextProps.checked,
+      indeterminate: nextProps.indeterminate,
+    });
   },
 
-  onChange(e) {
+  onChange() {
     if (this.state.checked) {
       this.props.onDeselected();
       this.setState({
         checked: false,
-        indeterminate: false
+        indeterminate: false,
       });
     } else {
       if (this.props.indeterminate && !this.state.indeterminate) {
@@ -43,7 +43,7 @@ const IndeterminateCheckboxWidget = React.createClass({
         this.props.onSelected();
         this.setState({
           checked: true,
-          indeterminate: false
+          indeterminate: false,
         });
       }
     }
@@ -65,8 +65,8 @@ const IndeterminateCheckboxWidget = React.createClass({
   },
 
   render() {
-    return <input type="checkbox" checked={this.state.checked} onChange={this.onChange}/>;
-  }
+    return <input type="checkbox" checked={this.state.checked} onChange={this.onChange} />;
+  },
 });
 
 export default IndeterminateCheckboxWidget;

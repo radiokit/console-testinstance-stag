@@ -25,6 +25,7 @@ const ShowContentPartial =  React.createClass({
   getInitialState() {
     return {
       selectedRecordIds: new Immutable.Seq().toIndexedSeq(),
+      selectedRecords: new Immutable.Seq().toIndexedSeq(),
       selectedAssociations: new Immutable.List(),
     };
   },
@@ -48,19 +49,24 @@ const ShowContentPartial =  React.createClass({
 
   componentDidUpdate(prevProps, prevState) {
     if(!_.isEqual(prevProps.tagFilter,this.props.tagFilter)){
-      this.refs.tableBrowser.reloadData();
+      this.reloadTable();
     }
   },
 
-  onTableSelect(selectedRecordIds) {
+  onTableSelect(selectedRecordIds, selectedRecords) {
     this.setState({
-      selectedRecordIds: selectedRecordIds
+      selectedRecordIds,
+      selectedRecords,
     });
     this.buildSelectedTags(selectedRecordIds);
   },
 
-  refreshTagData(){
+  refreshData(){
     this.buildSelectedTags(this.state.selectedRecordIds);
+  },
+
+  reloadTable(){
+      this.refs.tableBrowser.reloadData();
   },
 
   buildTableAttributes() {
@@ -112,6 +118,7 @@ const ShowContentPartial =  React.createClass({
         selectable={true}
         attributes={this.buildTableAttributes()}
         contentPrefix="widgets.vault.file_browser.table"
+        requestFullRecords = {true}
         recordsQuery={this.buildTagFilterQuery(this.buildTableRecordsQuery())}>
         <ToolbarGroup>
           {() => {
@@ -148,7 +155,7 @@ const ShowContentPartial =  React.createClass({
                       selectedRecordIds: this.state.selectedRecordIds,
                       tagCategories: this.props.record.get("tag_categories"),
                       initialAssociations: this.state.selectedAssociations,
-                      onDismiss: this.refreshTagData,
+                      onDismiss: this.refreshData,
                     }
                   } />
               </ToolbarGroup>
@@ -164,7 +171,16 @@ const ShowContentPartial =  React.createClass({
                   labelTextKey="widgets.vault.file_browser.modals.metadata.header"
                   disabled={this.state.selectedRecordIds.count() === 0}
                   modalElement={MetadataModal}
-                  modalProps={{ selectedRecordIds: this.state.selectedRecordIds, metadataSchemas: this.props.record.get("metadata_schemas") }} />
+                  modalProps={
+                    {
+                      contentPrefix: "widgets.vault.file_browser.modals.metadata",
+                      selectedRecordIds: this.state.selectedRecordIds,
+                      selectedRecords: this.state.selectedRecords,
+                      metadataSchemas: this.props.record.get("metadata_schemas"),
+                      onDismiss: this.reloadTable,
+                    }
+                  }
+              />
               </ToolbarGroup>
             );
           }

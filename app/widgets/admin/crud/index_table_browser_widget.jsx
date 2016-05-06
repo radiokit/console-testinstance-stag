@@ -154,7 +154,7 @@ export default React.createClass({
         attributes={this.props.attributes}
         contentPrefix={`${this.props.contentPrefix}.index.table`}
         recordsQuery={this.buildIndexQuery()}
-        requestFullRecords
+        requestFullRecords = {this.props.updateEnabled}
         recordsLinkFunc={this.props.readEnabled === true ? this.onRecordClick : undefined}
       >
         <ToolBarGroup>
