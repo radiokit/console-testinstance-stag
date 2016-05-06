@@ -13,7 +13,7 @@ const UpdateModal = React.createClass({
     form: React.PropTypes.object.isRequired,
     app: React.PropTypes.string.isRequired,
     model: React.PropTypes.string.isRequired,
-    recordId: React.PropTypes.string.isRequired,
+    recordId: React.PropTypes.string,
     onSuccess: React.PropTypes.func,
     onDismiss: React.PropTypes.func,
     acknowledgementElement: React.PropTypes.oneOfType(

@@ -1,9 +1,14 @@
 .ScheduleDailyWidget {
+  $ellipsed-line-height: 37px;
+  $calendar-row-items-height: 40px;
   .ScheduleDailyWidget-CalendarRow {
     transition: all 0.5s;
     height: auto;
+
     &.ScheduleDailyWidget-CalendarRow--expanded {
-      height: 400px;
+      td {
+        vertical-align: top;
+      }
     }
 
     &.ScheduleDailyWidget-CalendarRow--past {
@@ -35,21 +40,45 @@
 
   .ScheduleDailyWidget-CalendarRow-items {
     position: relative;
+    height: $calendar-row-items-height;
 
     .ScheduleDailyWidget-CalendarRow-item {
       background: orange;
       left: 12px;
       right: 12px;
-      position: absolute;
       min-height: 1px;
+      padding: 4px;
     }
 
     .ScheduleDailyWidget-CalendarRow-item-active {
-      background: #FFF700;
+      background: #006C95;
       left: 12px;
       right: 12px;
-      position: absolute;
       min-height: 1px;
+      padding: 4px;
+    }
+
+    .ScheduleDailyWidget-CalendarRow-item-ellipsed {
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      line-height: $ellipsed-line-height;
+      padding-left: 5px;
+      padding-right: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .ScheduleDailyWidget-CalendarRow-item-expanded {
+      min-height: 50px;
+      ul {
+        list-style-type: none;
+        margin-bottom: 0;
+        padding-left: 0;
+      }
     }
   }
 }

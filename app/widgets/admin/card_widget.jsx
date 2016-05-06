@@ -46,13 +46,6 @@ export default React.createClass({
     return {};
   },
 
-  getSelectedTab() {
-    return this.props.onContentElementSelect
-      ? this.props.contentElementSelected
-      : this.state.selectedTab
-    ;
-  },
-
   onTabClick(tab) {
     if (this.props.onContentElementSelect) {
       this.props.onContentElementSelect(tab);
@@ -68,6 +61,13 @@ export default React.createClass({
       return (<div key={key} style={{ display: 'none' }}></div>);
     }
     return element;
+  },
+
+  getSelectedTab() {
+    return this.props.onContentElementSelect
+      ? this.props.contentElementSelected
+      : this.state.selectedTab
+    ;
   },
 
   hasTabs() {

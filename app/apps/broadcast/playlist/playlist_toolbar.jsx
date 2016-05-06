@@ -16,7 +16,7 @@ const PlaylistToolbar = React.createClass({
     offsetStart: React.PropTypes.number.isRequired,
     onOffsetStartChange: React.PropTypes.func,
     onZoomChange: React.PropTypes.func,
-    activeItem: React.PropTypes.object.isRequired,
+    activeItem: React.PropTypes.object,
     onActiveItemChange: React.PropTypes.func,
     onCRUD: React.PropTypes.func,
   },
@@ -45,21 +45,21 @@ const PlaylistToolbar = React.createClass({
       }).fetch();
   },
 
-  getFilesData() {
-    return this.state.availableVaultFiles.toList().map(file => {
-      return {
-        id: Data.buildRecordGlobalID('vault', 'Data.Record.File', file.get('id')),
-        name: file.get('name'),
-      };
-    });
-  },
-
   onDelete() {
     setTimeout(() => {
       const { onCRUD, onActiveItemChange } = this.props;
       onCRUD && onCRUD();
       onActiveItemChange && onActiveItemChange(null);
     }, 500);
+  },
+
+  getFilesData() {
+    return this.state.availableVaultFiles.toList().map(file => (
+      {
+        id: Data.buildRecordGlobalID('vault', 'Data.Record.File', file.get('id')),
+        name: file.get('name'),
+      }
+    ));
   },
 
   getDateValue(key) {
