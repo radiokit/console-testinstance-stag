@@ -14,10 +14,23 @@ export default {
                   index: {
                     actions: {
                       create: "Dodaj strumień",
-                      delete: "Usuń strumienie",
+                      delete: "Usuń zaznaczone strumienie",
                     },
 
                     modals: {
+                      delete: {
+                        header: "Usuwanie strumienia",
+                        action: {
+                          proceed: "Usuń",
+                          cancel: "Anuluj",
+                          close: "Zamknij",
+                        },
+                        message: {
+                          confirmation: "Czy na pewno chcesz usunąć zaznaczone strumienie (%(count)s szt.)?",
+                          acknowledgement: "Usunięto %(count)s strumieni.",
+                          progress: "Trwa usuwanie strumieni…",
+                        },
+                      },
                       create: {
                         header: "Dodawanie strumienia",
                         action: {
