@@ -24,4 +24,7 @@ export default new View(
           .filter(entity => !!entity)
       )
     )
+    .sortBy(
+      (status) => status.get('time', Number.MAX_VALUE)
+    )
 );
