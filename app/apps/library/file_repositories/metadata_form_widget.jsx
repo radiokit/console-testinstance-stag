@@ -20,7 +20,7 @@ const MetadataFormWidget = React.createClass({
   },
 
   componentWillReceiveProps() {
-    this.setState({ enabledFields: [] });
+    this.replaceState({ enabledFields: [] });
   },
 
   submit() {
@@ -53,6 +53,9 @@ const MetadataFormWidget = React.createClass({
       const onFieldDisabled = () => {
         this.setState({ enabledFields: _.pull(this.state.enabledFields, fieldId) });
       };
+      const inputListener = (e) => {
+        this.setState({ [fieldId]: e.target.value });
+      };
       const disabled = !this.state.enabledFields.includes(fieldId);
       const inputValue = fieldConfig.hasMultiValues ? '' : fieldConfig.value;
       const inputPlaceholder = fieldConfig.hasMultiValues ? Counterpart.translate(`${this.props.contentPrefix}.multiple_val`) : '';
@@ -66,15 +69,16 @@ const MetadataFormWidget = React.createClass({
               >
                 {fieldConfig.name}
               </label>
-              <Input
+              <input
                 type= {fieldConfig.type}
                 id={ fieldId }
                 ref={ fieldId }
                 required={ fieldConfig.required }
                 disabled = { disabled }
-                value={ inputValue }
+                value={ this.state[fieldId] || inputValue }
                 placeholder = {inputPlaceholder}
                 className="form-control"
+                onChange = {inputListener}
               />
             </div>
             <div className="MetadataFormWidget__checkbox">
