@@ -45,6 +45,7 @@ export default React.createClass({
       formFilled,
       formSubmitted: true,
     });
+    this.refs.modal.startBatchOperation();
   },
 
   buildForm(selectedRecords) {
@@ -186,7 +187,7 @@ export default React.createClass({
   render() {
     return (
       <ModalForEach
-        ref="modal"s
+        ref="modal"
         size="large"
         onPerform={this.onPerform}
         onConfirm={this.onConfirm}
@@ -194,6 +195,7 @@ export default React.createClass({
         contentPrefix="widgets.vault.file_browser.modals.metadata"
         recordIds={this.props.selectedRecordIds}
         index={this.state.index}
+        waitForConfirmationAcknowledgement
       >
         <div>
           <Translate
