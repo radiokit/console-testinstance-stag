@@ -35,7 +35,9 @@ const CreateModal = React.createClass({
           step: 'acknowledgement',
           record: data,
         });
-        this.props.afterFormAccept();
+        if(this.props.afterFormAccept) {
+          this.props.afterFormAccept();
+        }
       })
       .on('warning', () => {
         this.setState({
