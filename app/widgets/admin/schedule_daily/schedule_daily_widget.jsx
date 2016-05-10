@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import Immutable from 'immutable';
 import moment from 'moment';
 import CalendarRow from './schedule_daily_calendar_row.jsx';
@@ -97,7 +97,8 @@ export default connect(
   ScheduleDomain,
   (data, props) => {
     const range = Immutable.Map({
-      from: moment.utc(props.offsetStart).startOf('day').add(5, 'hours').subtract(1, 'day').toISOString(),
+      from: moment.utc(props.offsetStart).startOf('day').add(5, 'hours')
+        .subtract(1, 'day').toISOString(),
       to: moment.utc(props.offsetStart).endOf('day').add(5, 'hours').add(1, 'day').toISOString(),
     });
     if (!data.getIn(['ranges', range])) {

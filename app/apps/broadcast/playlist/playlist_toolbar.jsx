@@ -1,13 +1,16 @@
 import React from 'react';
 import Immutable from 'immutable';
 import Moment from 'moment';
-import { Data } from 'radiokit-api';
+import Counterpart from 'counterpart';
 
 import CreateModal from '../../../widgets/admin/crud/create_modal.jsx';
 import UpdateModal from '../../../widgets/admin/crud/update_modal.jsx';
 import DeleteModal from '../../../widgets/admin/crud/delete_modal.jsx';
 import ToolbarGroup from '../../../widgets/admin/toolbar_group_widget.jsx';
 import ToolbarButtonModal from '../../../widgets/admin/toolbar_button_modal_widget.jsx';
+
+Counterpart.registerTranslations('en', require('./playlist_toolbar_en.js'));
+Counterpart.registerTranslations('pl', require('./playlist_toolbar_pl.js'));
 
 const PlaylistToolbar = React.createClass({
   propTypes: {
@@ -56,7 +59,7 @@ const PlaylistToolbar = React.createClass({
   getFilesData() {
     return this.state.availableVaultFiles.toList().map(file => (
       {
-        id: Data.buildRecordGlobalID('vault', 'Data.Record.File', file.get('id')),
+        id: file.get('id'),
         name: file.get('name'),
       }
     ));
@@ -68,7 +71,7 @@ const PlaylistToolbar = React.createClass({
 
   buildNewForm() {
     return {
-      location: {
+      file: {
         type: 'object',
         values: this.getFilesData(),
       },
@@ -110,10 +113,10 @@ const PlaylistToolbar = React.createClass({
           labelTextKey="apps.broadcast.playlist.add_button"
           modalElement={CreateModal}
           modalProps={{
-            contentPrefix: 'apps.broadcast.playlist.add_button',
+            contentPrefix: 'apps.broadcast.playlist.add',
             form: this.buildNewForm(),
             app: 'plumber',
-            model: 'Media.Input.File.Http',
+            model: 'Media.Input.File.RadioKit.Vault',
             afterFormAccept: this.props.onCRUD,
           }}
         />
@@ -125,10 +128,10 @@ const PlaylistToolbar = React.createClass({
           modalElement={UpdateModal}
           key={(this.props.activeItem && this.props.activeItem.get('id')) || 'no-id' }
           modalProps={{
-            contentPrefix: 'apps.broadcast.playlist.edit_button',
+            contentPrefix: 'apps.broadcast.playlist.update',
             form: this.buildUpdateForm(),
             app: 'plumber',
-            model: 'Media.Input.File.Http',
+            model: 'Media.Input.File.RadioKit.Vault',
             recordId: (this.props.activeItem ? this.props.activeItem.get('id') : null),
             afterFormAccept: this.props.onCRUD,
           }}
@@ -140,9 +143,9 @@ const PlaylistToolbar = React.createClass({
           disabled={this.props.activeItem === null}
           modalElement={DeleteModal}
           modalProps={{
-            contentPrefix: 'apps.broadcast.playlist.delete_button',
+            contentPrefix: 'apps.broadcast.playlist.delete',
             app: 'plumber',
-            model: 'Media.Input.File.Http',
+            model: 'Media.Input.File.RadioKit.Vault',
             selectedRecordIds: (this.props.activeItem
               ? Immutable.List.of(this.props.activeItem.get('id'))
               : Immutable.List.of(null)),
