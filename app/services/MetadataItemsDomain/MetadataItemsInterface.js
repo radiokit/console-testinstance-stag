@@ -27,7 +27,7 @@ export function loadMetadataItemOfFile(fileId, options) {
       ],
     }),
     {
-      maxAge: 1000,
+      maxAge: 60000,
       ...options,
     }
   );

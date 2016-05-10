@@ -1,14 +1,19 @@
 import RadioKitDomain from '../RadioKitDomain';
 
-const ScheduleUpdateQueriesStream = RadioKitDomain.map(
-  RKDData => RKDData.filter(
-    (queryStatus, queryParams) => (
-      queryParams.get('app') === 'plumber' &&
-      queryParams.get('model') === 'Media.Input.File.Http' &&
-      queryParams.get('action') &&
-      queryStatus.get('status') === RadioKitDomain.STATUS.loading
+import {
+  updateKey,
+} from './ScheduleConfig';
+
+import {
+  pickLoadingQueries,
+} from '../RadioKitQueriesUtils';
+
+const ScheduleUpdateQueriesStream = RadioKitDomain
+  .map(pickLoadingQueries)
+  .map(
+    queries => queries.filter(
+      (queryStatus, queryParams) => queryParams.get('key') === updateKey
     )
-  )
-);
+  );
 
 export default ScheduleUpdateQueriesStream;

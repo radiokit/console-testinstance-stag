@@ -4,7 +4,6 @@ import {
 import {
   List,
 } from 'immutable';
-import RecordURI from '../RecordURI';
 import FilesDomain from '../FilesDomain';
 import ScheduleReadyQueriesStream from './ScheduleReadyQueriesStream';
 
@@ -17,7 +16,7 @@ ScheduleReadyQueriesStream
   )
   .map(
     items => items
-      .map(item => RecordURI.from(item.get('location')).id)
+      .map(item => item.get('file'))
       .flatten(true)
       .toSet()
   )
@@ -25,17 +24,15 @@ ScheduleReadyQueriesStream
     FilesDomain.loadFile(fileID, { maxAge: fileDataMaxAge });
   }));
 
-const queriesWithFiles = new View(
+const ScheduleReadyQueriesWithFiles = new View(
   { queries: ScheduleReadyQueriesStream, vault: FilesDomain },
   data => data.get('queries', List()).map(
     query => query.set('data', query.get('data', List())
       .map(item => {
-        const fileID = RecordURI.from(item.get('location')).id;
+        const fileID = item.get('file');
         const file = data.getIn(['vault', 'files', fileID]);
         if (file) {
-          return item
-            .delete('location')
-            .set('file', file);
+          return item.set('file', file);
         }
         return null;
       })
@@ -44,4 +41,4 @@ const queriesWithFiles = new View(
   )
 );
 
-export default queriesWithFiles;
+export default ScheduleReadyQueriesWithFiles;

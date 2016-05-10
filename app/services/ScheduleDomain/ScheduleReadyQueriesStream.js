@@ -1,13 +1,8 @@
-import RadioKitDomain from '../RadioKitDomain';
+import {
+  pickReadyQueries,
+} from '../RadioKitQueriesUtils';
 import ScheduleQueriesStream from './ScheduleQueriesStream';
 
-const ScheduleReadyQueriesStream = ScheduleQueriesStream.map(
-  queries => queries.filter(
-    result => (
-      result.get('status') === RadioKitDomain.STATUS.live ||
-      result.get('status') === RadioKitDomain.STATUS.done
-    )
-  )
-);
+const ScheduleReadyQueriesStream = ScheduleQueriesStream.map(pickReadyQueries);
 
 export default ScheduleReadyQueriesStream;

@@ -30,7 +30,7 @@ const UniqueMetadataSchemasStream = MetadataItemsStream.map(
 
 UniqueMetadataSchemasStream.subscribe(
   metadataSchemaIds => metadataSchemaIds.forEach(
-    metadataSchemaId => MetadataSchemasDomain.loadMetadataSchema(metadataSchemaId)
+    metadataSchemaId => MetadataSchemasDomain.loadMetadataSchema(metadataSchemaId, { noLoadingState: true })
   )
 );
 

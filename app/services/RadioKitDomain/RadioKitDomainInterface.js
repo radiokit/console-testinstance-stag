@@ -7,6 +7,10 @@ import { RadioKitQueries, update } from './RadioKitQueries';
 import { save, remove } from './RadioKitMutator';
 import * as STATUS from './RadioKitQueryStatuses';
 
+function getPreviousQuery(queryParams) {
+  return RadioKitQueries.read().getIn([queryParams]);
+}
+
 function checkIfQueryExists(queryParams, { autoSync = false, maxAge = Date.now() }) {
   const currentQueryStatus = RadioKitQueries.read().getIn([queryParams, 'status']);
   const currentQueryTime = RadioKitQueries.read().getIn([queryParams, 'time']) || 0;
@@ -62,7 +66,8 @@ function buildQuery(queryParams) {
  * }} queryParams
  * @param {{
  *  autoSync: bool,
- *  maxAge: number
+ *  maxAge: number,
+ *  noLoadingState: bool
  * }} options
  */
 function query(queryParams = Map(), options = {}) {
@@ -72,15 +77,21 @@ function query(queryParams = Map(), options = {}) {
 
   let q = buildQuery(queryParams);
 
-  const { autoSync = false } = options;
+  const {
+    autoSync = false,
+    noLoadingState = false,
+  } = options;
 
   const requestTime = Date.now();
 
-    // Initialize query in storage
-  if (autoSync) {
-    update(queryParams, STATUS.live, List(), requestTime);
-  } else {
-    update(queryParams, STATUS.loading, List(), requestTime);
+  // Initialize query in storage
+  const existingQuery = getPreviousQuery(queryParams);
+  if (!existingQuery || !noLoadingState) {
+    if (autoSync) {
+      update(queryParams, STATUS.live, List(), requestTime);
+    } else {
+      update(queryParams, STATUS.loading, List(), requestTime);
+    }
   }
 
     // Set up query execution hooks

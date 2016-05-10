@@ -18,13 +18,12 @@ const FilesEntitiesStream = FilesReadyQueriesStream
 const FilesIdsStream = FilesEntitiesStream.map(
   files => files
     .map(file => file.get('id'))
-    .sort()
     .toSet()
 );
 
 FilesIdsStream.subscribe(
   fileIds => fileIds.forEach(
-    fileId => MetadataItemsDomain.loadMetadataItemOfFile(fileId)
+    fileId => MetadataItemsDomain.loadMetadataItemOfFile(fileId, { noLoadingState: true })
   )
 );
 
