@@ -4,6 +4,7 @@ import Immutable from 'immutable';
 import Toolbar from '../../../widgets/admin/toolbar_widget.jsx';
 import ToolbarButton from '../../../widgets/admin/toolbar_button_widget.jsx';
 import ToolbarGroup from '../../../widgets/admin/toolbar_group_widget.jsx';
+import DevicesToolbar from './DevicesToolbar.jsx';
 
 
 import RoutingDiagramClientLayer from './RoutingDiagramClientLayer.jsx';
@@ -149,9 +150,9 @@ export default React.createClass({
     return (
       <div>
         <Toolbar>
-          <ToolbarGroup>
-            <ToolbarButton icon="delete" disabled={this.state.selectedLinkRule === null} onClick={this.onLinkRuleDeleteClick} />
-          </ToolbarGroup>
+          <DevicesToolbar 
+            selectedLinkRule={this.state.selectedLinkRule}
+            onLinkRuleDeleteClick={this.onLinkRuleDeleteClick} />
         </Toolbar>
 
         <svg version="1.1" height="560" width="100%">
