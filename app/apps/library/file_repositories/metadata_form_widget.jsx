@@ -56,7 +56,10 @@ const MetadataFormWidget = React.createClass({
         that.setState({ enabledFields });
       };
       const onFieldDisabled = () => {
-        that.setState({ enabledFields: that.state.enabledFields.filter((field) => field.id !== fieldSummary.id) });
+        that.setState({
+          enabledFields: that.state.enabledFields.filter((field) => field.id !== fieldSummary.id),
+          [fieldId]: undefined,
+        });
       };
       const inputListener = (e) => {
         that.setState({ [fieldId]: e.target.value });

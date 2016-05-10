@@ -158,6 +158,9 @@ export default React.createClass({
     const updatedSchemasIds = _.intersection(usedSchemasIds, filledMetadataSchemasIds);
     const unusedSchemasIds = _.difference(allSchemasIds, usedSchemasIds);
     const newSchemasIds = _.intersection(unusedSchemasIds, filledMetadataSchemasIds);
+    if (_.isEmpty(updatedSchemasIds) && _.isEmpty(newSchemasIds)) {
+      this.finishUpdatingRecord();
+    }
     this.setState({
       updatingSchemas: updatedSchemasIds.length,
       creatingSchemas: newSchemasIds.length,
