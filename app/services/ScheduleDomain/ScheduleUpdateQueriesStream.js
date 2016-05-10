@@ -1,6 +1,6 @@
 import RadioKitDomain from '../RadioKitDomain';
 
-const ScheduleUpdateQueries = RadioKitDomain.map(
+const ScheduleUpdateQueriesStream = RadioKitDomain.map(
   RKDData => RKDData.filter(
     (queryStatus, queryParams) => (
       queryParams.get('app') === 'plumber' &&
@@ -11,4 +11,4 @@ const ScheduleUpdateQueries = RadioKitDomain.map(
   )
 );
 
-export default ScheduleUpdateQueries;
+export default ScheduleUpdateQueriesStream;

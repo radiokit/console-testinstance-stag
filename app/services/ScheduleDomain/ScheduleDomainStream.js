@@ -8,7 +8,7 @@ import {
   List,
 } from 'immutable';
 
-import loading from './ScheduleLoading';
+import ScheduleLoadingStream from './ScheduleLoadingStream';
 import ScheduleReadyQueriesWithFiles from './ScheduleReadyQueriesWithFiles';
 
 function getRangeFromParams(queryParams) {
@@ -31,7 +31,7 @@ function getRangeFromParams(queryParams) {
 export default new View(
   {
     queries: ScheduleReadyQueriesWithFiles,
-    loading,
+    loading: ScheduleLoadingStream,
   },
   data => {
     let rangesMap = OrderedMap();

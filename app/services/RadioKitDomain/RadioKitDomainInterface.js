@@ -30,7 +30,7 @@ function checkIfQueryExists(queryParams, { autoSync = false, maxAge = Date.now()
 }
 
 function buildQuery(queryParams) {
-  const { app, model, select, conditions, joins } = queryParams.toObject();
+  const { app, model, select, conditions, joins, limit, offset } = queryParams.toObject();
   let q = RadioKit.query(app, model);
   select && select.forEach(field => {
     q = q.select(field);
@@ -42,6 +42,12 @@ function buildQuery(queryParams) {
   joins && joins.forEach(join => {
     q = q.joins(join);
   });
+  if (typeof limit === 'number') {
+    q = q.limit(limit);
+  }
+  if (typeof offset === 'number') {
+    q = q.offset(offset);
+  }
   return q;
 }
 
@@ -78,8 +84,10 @@ function query(queryParams = Map(), options = {}) {
   }
 
     // Set up query execution hooks
-  const markAsErroneous = () => {
+  const markAsErroneous = e => {
     update(queryParams, STATUS.error, List(), requestTime);
+    /* eslint no-console: 0 */
+    console.error(e.stack);
   };
 
   q = q

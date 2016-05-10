@@ -5,11 +5,11 @@ import {
   List,
 } from 'immutable';
 import RecordURI from '../RecordURI';
-import VaultDomain from '../VaultDomain';
-import readyQueries from './ScheduleReadyQueries';
+import FilesDomain from '../FilesDomain';
+import ScheduleReadyQueriesStream from './ScheduleReadyQueriesStream';
 
 const fileDataMaxAge = 60 * 1000; // 1min
-readyQueries
+ScheduleReadyQueriesStream
   .map(
     queries => queries
       .map(status => status.get('data', List()))
@@ -22,11 +22,11 @@ readyQueries
       .toSet()
   )
   .subscribe(fileIds => fileIds.forEach(fileID => {
-    VaultDomain.loadFile(fileID, { maxAge: fileDataMaxAge });
+    FilesDomain.loadFile(fileID, { maxAge: fileDataMaxAge });
   }));
 
 const queriesWithFiles = new View(
-  { queries: readyQueries, vault: VaultDomain },
+  { queries: ScheduleReadyQueriesStream, vault: FilesDomain },
   data => data.get('queries', List()).map(
     query => query.set('data', query.get('data', List())
       .map(item => {

@@ -5,12 +5,11 @@ import RadioKitDomain from '../RadioKitDomain';
 import {
   app,
   key,
-} from './VaultConfig';
-import {
   model,
   readFields,
+  createFields,
   updateFields,
-} from './VaultMetadataItemsConfig';
+} from './MetadataItemsConfig';
 
 export function loadMetadataItemOfFile(fileId, options) {
   RadioKitDomain.query(
@@ -37,6 +36,6 @@ export function loadMetadataItemOfFile(fileId, options) {
 export function saveMetadataItem(entity, id) {
   RadioKitDomain.save(
     fromJS({ app, key, model, id }),
-    entity.filter((_, k) => updateFields.indexOf(k) >= 0)
+    entity.filter((_, k) => (id ? updateFields : createFields).indexOf(k) >= 0)
   );
 }

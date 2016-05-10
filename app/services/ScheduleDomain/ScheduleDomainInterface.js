@@ -45,16 +45,6 @@ export function fetch(from, to, maxAge = 1000) {
   performQuery(from, to, { maxAge });
 }
 
-/**
- * Get items from selected range and keeps them updated.
- * Range can be anything that moment can transform.
- * @param {string|number} from
- * @param {string|number} to
- */
-export function observe(from, to) {
-  performQuery(from, to, { autoSync: true });
-}
-
 export function save(id, patch) {
   RadioKitDomain.save(
     Map({
