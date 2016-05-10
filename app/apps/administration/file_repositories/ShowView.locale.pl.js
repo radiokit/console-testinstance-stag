@@ -7,6 +7,7 @@ export default {
             headers: {
               metadata_schema: "Winiety",
               tags_schema: "Etykiety",
+              imports_schema: "Importy",
               exports_schema: "Eksporty",
             },
           },

@@ -3,6 +3,7 @@ import Counterpart from 'counterpart';
 
 import Show from '../../../widgets/admin/crud/show_widget.jsx';
 import MetadataSchemaPartial from './ShowMetadataSchemaPartial.jsx';
+import ImportsSchemaPartial from './ShowImportsSchemaPartial.jsx';
 import ExportsSchemaPartial from './ShowExportsSchemaPartial.jsx';
 import TagsSchemaPartial from './ShowTagsSchemaPartial.jsx';
 
@@ -24,6 +25,12 @@ const ShowView = React.createClass({
         element: TagsSchemaPartial,
         props: {
           contentPrefix: "apps.administration.file_repositories.show.tabs.body.tags_schema"
+        },
+      },
+      imports_schema: {
+        element: ImportsSchemaPartial,
+        props: {
+          contentPrefix: "apps.administration.file_repositories.show.tabs.body.imports_schema"
         },
       },
       exports_schema: {
