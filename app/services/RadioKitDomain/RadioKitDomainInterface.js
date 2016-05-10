@@ -7,6 +7,10 @@ import { RadioKitQueries, update } from './RadioKitQueries';
 import { save, remove } from './RadioKitMutator';
 import * as STATUS from './RadioKitQueryStatuses';
 
+function getPreviousQuery(queryParams) {
+  return RadioKitQueries.read().getIn([queryParams]);
+}
+
 function checkIfQueryExists(queryParams, { autoSync = false, maxAge = Date.now() }) {
   const currentQueryStatus = RadioKitQueries.read().getIn([queryParams, 'status']);
   const currentQueryTime = RadioKitQueries.read().getIn([queryParams, 'time']) || 0;
@@ -30,7 +34,7 @@ function checkIfQueryExists(queryParams, { autoSync = false, maxAge = Date.now()
 }
 
 function buildQuery(queryParams) {
-  const { app, model, select, conditions, joins } = queryParams.toObject();
+  const { app, model, select, conditions, joins, limit, offset } = queryParams.toObject();
   let q = RadioKit.query(app, model);
   select && select.forEach(field => {
     q = q.select(field);
@@ -42,6 +46,12 @@ function buildQuery(queryParams) {
   joins && joins.forEach(join => {
     q = q.joins(join);
   });
+  if (typeof limit === 'number') {
+    q = q.limit(limit);
+  }
+  if (typeof offset === 'number') {
+    q = q.offset(offset);
+  }
   return q;
 }
 
@@ -56,7 +66,8 @@ function buildQuery(queryParams) {
  * }} queryParams
  * @param {{
  *  autoSync: bool,
- *  maxAge: number
+ *  maxAge: number,
+ *  noLoadingState: bool
  * }} options
  */
 function query(queryParams = Map(), options = {}) {
@@ -66,20 +77,28 @@ function query(queryParams = Map(), options = {}) {
 
   let q = buildQuery(queryParams);
 
-  const { autoSync = false } = options;
+  const {
+    autoSync = false,
+    noLoadingState = false,
+  } = options;
 
   const requestTime = Date.now();
 
-    // Initialize query in storage
-  if (autoSync) {
-    update(queryParams, STATUS.live, List(), requestTime);
-  } else {
-    update(queryParams, STATUS.loading, List(), requestTime);
+  // Initialize query in storage
+  const existingQuery = getPreviousQuery(queryParams);
+  if (!existingQuery || !noLoadingState) {
+    if (autoSync) {
+      update(queryParams, STATUS.live, List(), requestTime);
+    } else {
+      update(queryParams, STATUS.loading, List(), requestTime);
+    }
   }
 
     // Set up query execution hooks
-  const markAsErroneous = () => {
+  const markAsErroneous = e => {
     update(queryParams, STATUS.error, List(), requestTime);
+    /* eslint no-console: 0 */
+    console.error(e.stack);
   };
 
   q = q

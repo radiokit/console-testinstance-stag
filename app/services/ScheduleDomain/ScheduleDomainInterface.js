@@ -1,35 +1,39 @@
 import {
-  Map,
-  List,
+  fromJS,
 } from 'immutable';
 
 import moment from 'moment';
 
-const app = 'plumber';
-const model = 'Media.Input.File.Http';
+import {
+  app,
+  model,
+  key,
+  updateKey,
+  readFields,
+  updateFields,
+} from './ScheduleConfig';
 
 import RadioKitDomain from './../RadioKitDomain';
-import RecordURI from '../RecordURI';
 
 function performQuery(from, to, options) {
   RadioKitDomain.query(
-    Map({
-      key: 'schedule',
+    fromJS({
+      [key]: true,
       app,
       model,
-      select: List(['id', 'name', 'start_at', 'stop_at', 'location']),
-      conditions: List([
-        from ? Map({
+      select: readFields,
+      conditions: [
+        from ? {
           field: 'start_at',
           comparison: 'gte',
           value: moment(from).toISOString(),
-        }) : null,
-        to ? Map({
+        } : null,
+        to ? {
           field: 'stop_at',
           comparison: 'lte',
           value: moment(to).toISOString(),
-        }) : null,
-      ]).filter(i => !!i),
+        } : null,
+      ].filter(i => !!i),
     }),
     options
   );
@@ -45,27 +49,21 @@ export function fetch(from, to, maxAge = 1000) {
   performQuery(from, to, { maxAge });
 }
 
-/**
- * Get items from selected range and keeps them updated.
- * Range can be anything that moment can transform.
- * @param {string|number} from
- * @param {string|number} to
- */
-export function observe(from, to) {
-  performQuery(from, to, { autoSync: true });
-}
-
 export function save(id, patch) {
+  if (!id) {
+    throw new Error('ScheduleDomain:save no id');
+  }
+
   RadioKitDomain.save(
-    Map({
-      key: 'schedule:update',
+    fromJS({
+      [updateKey]: true,
       app,
       model,
       id,
     }),
     patch
-      .delete('file')
-      .set('location', RecordURI.to('vault', 'Data.Record.File', patch.getIn(['file', 'id'])))
+      .set('file', patch.getIn(['file', 'id']))
+      .filter((_, field) => updateFields.indexOf(field) >= 0)
   );
 }
 

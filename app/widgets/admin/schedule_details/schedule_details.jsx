@@ -14,11 +14,15 @@ import DetectWidth from '../../general/detect_width.jsx';
 import {
   ScrollableTrackList,
 } from '../../clip';
-import { scheduleItemToTrackItem, trackItemToScheduleItem } from './schedule_details_tranform';
+import {
+  scheduleItemToTrackItem,
+  trackItemToScheduleItem,
+  assignTrackNumbersToItems,
+} from './schedule_details_tranform';
 
 const tracksCount = 5;
 const defaultViewportOffsetLength = 60000;
-const maxOffsetLengthInHours = 24;
+const maxOffsetLengthInHours = 1;
 
 const ScheduleDetails = React.createClass({
   propTypes: {
@@ -89,7 +93,10 @@ const ScheduleDetails = React.createClass({
   },
 
   render() {
-    const items = this.props.items.map((v, k) => scheduleItemToTrackItem(v, k % tracksCount + 1));
+    const items = assignTrackNumbersToItems(
+      this.props.items.map(scheduleItemToTrackItem),
+      tracksCount
+    );
     return (
       <div>
         <h1>
@@ -160,7 +167,9 @@ export default connect(
           new Date(item.get('stop_at')) > fromTS &&
           new Date(item.get('start_at')) < toTS
         )
-      );
+      )
+      .sortBy(item => item.get('start_at'))
+      ;
     return {
       items,
       loading: data.get('loading', false),
