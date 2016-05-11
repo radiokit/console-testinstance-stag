@@ -77,7 +77,7 @@ export default React.createClass({
 
 
   initializeGoogleAnalytics: function(currentUser) {
-    if(typeof(ga) !== "undefined") {
+    if(ga && ENV.external.googleAnalyticsID) {
       let currentUserEmail = currentUser.get("email");
 
       // Exclude our own traffic
