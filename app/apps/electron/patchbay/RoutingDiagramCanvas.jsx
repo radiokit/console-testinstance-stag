@@ -143,7 +143,7 @@ export default React.createClass({
     };
 
     window.data
-      .record("plumber", "Config.Routing.{resourceName}", resourceId)
+      .record("plumber", "Config.Routing." + resourceName, resourceId)
       .on("loaded", () => {
         this.setState({
           selectedLinkRule: null,
