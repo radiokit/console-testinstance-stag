@@ -18,7 +18,7 @@ const ShowContentPartial =  React.createClass({
     app: React.PropTypes.string.isRequired,
     model: React.PropTypes.string.isRequired,
     contentPrefix: React.PropTypes.string.isRequired,
-    stage: React.PropTypes.oneOf(['incoming', 'ready', 'archive', 'trash']).isRequired,
+    stage: React.PropTypes.oneOf(['incoming', 'current', 'archive', 'trash']).isRequired,
     tagFilter: React.PropTypes.array.isRequired,
   },
 
@@ -61,12 +61,57 @@ const ShowContentPartial =  React.createClass({
     this.buildSelectedTags(selectedRecordIds);
   },
 
-  refreshData(){
+  refreshTagData(){
     this.buildSelectedTags(this.state.selectedRecordIds);
   },
 
   reloadTable(){
       this.refs.tableBrowser.reloadData();
+  },
+
+  onDeleteClick(){
+    if(this.props.stage === 'trash'){
+      this.setState(
+        {
+          fileDeletionIndex: this.state.selectedRecordIds.count() - 1,
+        });
+      this.state.selectedRecordIds.forEach((recordId) => {
+        window.data
+        .record('vault', 'Data.Record.File', recordId)
+        .on('loaded', () => {
+          if (this.state.fileDeletionIndex === 0){
+            this.reloadTable();
+          } else {
+            this.setState({
+              fileDeletionIndex: this.state.fileDeletionIndex - 1,
+            });
+          }
+        })
+        .destroy();
+      });
+    } else {
+      this.moveFiles('trash');
+    }
+  },
+
+  moveFiles(stage){
+    this.setState({
+      stageMovingIndex: this.state.selectedRecordIds.count() - 1,
+    });
+    this.state.selectedRecordIds.forEach((recordId) => {
+      window.data
+      .record('vault', 'Data.Record.File', recordId)
+      .on('loaded', () => {
+        if (this.state.stageMovingIndex === 0){
+          this.reloadTable();
+        } else {
+          this.setState({
+            stageMovingIndex: this.state.stageMovingIndex - 1,
+          });
+        }
+      })
+      .update({ stage });
+    });
   },
 
   buildTableAttributes() {
@@ -99,10 +144,21 @@ const ShowContentPartial =  React.createClass({
     }
   },
 
+  renderMoveToButton(stage){
+    return (
+      <ToolbarButton
+        icon="folder-move"
+        labelTextKey={this.props.contentPrefix + ".actions.move_to." + stage}
+        disabled={this.state.selectedRecordIds.count() === 0}
+        onClick = {() => this.moveFiles(stage)}
+      />
+    );
+  },
+
   buildTableRecordsQuery() {
     return window.data
       .query("vault", "Data.Record.File")
-      .select("id", "name", "metadata_items", "tag_items")
+      .select("id", "name", "metadata_items", "tag_items","stage")
       .joins("metadata_items")
       .joins("tag_items")
       .joins("tag_associations")
@@ -138,6 +194,7 @@ const ShowContentPartial =  React.createClass({
             onClick={this.onDownloadClick}/>
           <ToolbarButton
             icon="delete"
+            labelTextKey={this.props.contentPrefix + ".actions." + (this.props.stage === 'trash' ? "delete" : "move_to.trash")}
             disabled={this.state.selectedRecordIds.count() === 0}
             onClick={this.onDeleteClick}/>
         </ToolbarGroup>
@@ -155,7 +212,7 @@ const ShowContentPartial =  React.createClass({
                       selectedRecordIds: this.state.selectedRecordIds,
                       tagCategories: this.props.record.get("tag_categories"),
                       initialAssociations: this.state.selectedAssociations,
-                      onDismiss: this.refreshData,
+                      onDismiss: this.refreshTagData,
                     }
                   } />
               </ToolbarGroup>
@@ -185,6 +242,32 @@ const ShowContentPartial =  React.createClass({
             );
           }
         }()}
+
+        {() => {
+          return (
+            <ToolbarGroup>
+             {() => {
+              switch(this.props.stage){
+                case 'incoming':
+                  return this.renderMoveToButton('current');
+                case 'current':
+                  return (
+                    <div>
+                      {this.renderMoveToButton('incoming')}
+                      {this.renderMoveToButton('archive')}
+                    </div>
+                  )
+                case 'archive':
+                  return this.renderMoveToButton('current');
+                case 'trash':
+                  return this.renderMoveToButton('current');
+                default: return null;
+              }
+              }()}
+             </ToolbarGroup>
+          )
+        }()}
+
       </TableBrowser>
     );
   }

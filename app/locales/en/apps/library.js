@@ -18,19 +18,26 @@ export default {
               allTags: "All",
               assignTags: "Assign tags",
               manageTags: "Manage tags",
-            }
+            },
+            delete: "Delete permamantly",
+            move_to:{
+              incoming: "Move to incoming",
+              current: "Move to ready",
+              archive: "Move to archive",
+              trash: "Move to trash",
+            },
           },
 
           tabs: {
             headers: {
               incoming: "Incoming",
-              ready: "Ready",
+              current: "Ready",
               archive: "Archive",
               trash: "Trash",
             },
             hints: {
               incoming: "Files that were uploaded but are not marked as ready for publication yet",
-              ready: "Files that are ready for publication",
+              current: "Files that are ready for publication",
               archive: "Files that are not longer necessary or publicly available but we want to keep them for the future",
               trash: "Files that are supposed to be deleted, purged automatically after 30 days",
             },

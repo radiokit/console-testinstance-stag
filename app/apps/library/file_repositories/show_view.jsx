@@ -27,7 +27,7 @@ const ShowView = React.createClass({
   buildTabs() {
     return {
       incoming: { element: ContentPartial, props: { stage: "incoming", tagFilter: this.state.tagFilter }},
-      ready:    { element: ContentPartial, props: { stage: "ready", tagFilter: this.state.tagFilter }},
+      current:    { element: ContentPartial, props: { stage: "current", tagFilter: this.state.tagFilter }},
       archive:  { element: ContentPartial, props: { stage: "archive", tagFilter: this.state.tagFilter }},
       trash:    { element: ContentPartial, props: { stage: "trash", tagFilter: this.state.tagFilter }},
     };
