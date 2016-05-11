@@ -9,7 +9,7 @@ import {
 } from 'immutable';
 
 import ScheduleLoadingStream from './ScheduleLoadingStream';
-import ScheduleReadyQueriesWithFiles from './ScheduleReadyQueriesWithFiles';
+import ScheduleReadyQueriesStream from './ScheduleReadyQueriesStream';
 
 function getRangeFromParams(queryParams) {
   const conditions = queryParams.get('conditions', List());
@@ -30,7 +30,7 @@ function getRangeFromParams(queryParams) {
 
 export default new View(
   {
-    queries: ScheduleReadyQueriesWithFiles,
+    queries: ScheduleReadyQueriesStream,
     loading: ScheduleLoadingStream,
   },
   data => {
@@ -38,7 +38,9 @@ export default new View(
     let idsMap = OrderedMap();
     data.get('queries').forEach((queryStatus, queryParams) => {
       const range = getRangeFromParams(queryParams);
-      const queryData = queryStatus.get('data', List());
+      const queryData = queryStatus
+        .get('data', List())
+        .sortBy(item => new Date(item.get('start_at', 0).valueOf()));
       rangesMap = rangesMap.set(Map(range), queryData);
       queryData.forEach(item => {
         idsMap = idsMap.set(item.get('id'), item);

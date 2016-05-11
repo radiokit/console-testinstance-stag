@@ -14,11 +14,7 @@ import {
   updateFields,
 } from './FilesConfig';
 
-function runFilesQuery(queryAppendix = {}, options) {
-  const requestOptions = {
-    maxAge: 1000,
-    ...options,
-  };
+function runFilesQuery(queryAppendix = {}, requestOptions) {
 
   RadioKitDomain.query(
     fromJS({
@@ -32,7 +28,11 @@ function runFilesQuery(queryAppendix = {}, options) {
   );
 }
 
-export function loadFile(id, options = {}) {
+export function loadFile(id, requestOptions) {
+  if (!id) {
+    throw new Error(`${key}.loadFile Provide id`);
+  }
+
   runFilesQuery(
     {
       conditions: [
@@ -43,7 +43,7 @@ export function loadFile(id, options = {}) {
         },
       ],
     },
-    options
+    requestOptions
   );
 }
 

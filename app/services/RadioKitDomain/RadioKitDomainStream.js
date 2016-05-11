@@ -19,7 +19,7 @@ export default new View(
             'entities',
             params.get('app'),
             params.get('model'),
-            entity.get('id'),
+            params.get('id') || entity.get('id'),
           ], null))
           .filter(entity => !!entity)
       )
