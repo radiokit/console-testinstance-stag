@@ -2,7 +2,7 @@ import React from 'react';
 import TimeMovableRegion from './time_movable_region.jsx';
 import PixelMovableFadeRegion from './pixel_movable_fade_region.jsx';
 import compareProps from '../../helpers/props_comparison';
-import makeAreDifferent from './compare_immutable_structures';
+import createImmutableComparator from './create_immutable_comparator';
 
 function isRegionFitting(clip, regionStart, regionLength) {
   return (regionStart >= 0 &&
@@ -22,7 +22,7 @@ const propTypes = {
 
 const compareClipBoxFadesProps = compareProps(Object.keys(propTypes).filter(v => v !== 'clip'));
 
-const areClipsSignificantlyDifferent = makeAreDifferent([
+const areClipsSignificantlyDifferent = createImmutableComparator([
   ['fadeIn', 'position'],
   ['fadeIn', 'duration'],
   ['fadeOut', 'position'],

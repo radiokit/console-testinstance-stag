@@ -4,7 +4,7 @@ import {
 } from 'immutable';
 import TimeMovableMarker from './time_movable_marker.jsx';
 import compareProps from '../../helpers/props_comparison';
-import makeAreDifferent from './compare_immutable_structures';
+import createImmutableComparator from './create_immutable_comparator';
 
 const markerColors = {
   intro: 'green',
@@ -27,7 +27,7 @@ const propTypes = {
 
 const compareClipBoxFadesProps = compareProps(Object.keys(propTypes).filter(v => v !== 'clip'));
 
-const areClipsSignificantlyDifferent = makeAreDifferent([
+const areClipsSignificantlyDifferent = createImmutableComparator([
   ['markers'],
 ]);
 
