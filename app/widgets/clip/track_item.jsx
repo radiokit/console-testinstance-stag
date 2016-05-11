@@ -20,9 +20,6 @@ function destructRegionDiff(newRegion, oldRegion) {
 
 import './track_item.scss';
 const TrackItem = React.createClass({
-
-  ...ImmutableComponent,
-
   propTypes: {
     offsetStart: React.PropTypes.number.isRequired,
     offsetLength: React.PropTypes.number.isRequired,
@@ -48,6 +45,8 @@ const TrackItem = React.createClass({
       selected: false,
     };
   },
+
+  shouldComponentUpdate: ImmutableComponent.shouldComponentUpdate,
 
   // movable events
   onHold() {
@@ -215,28 +214,32 @@ const TrackItem = React.createClass({
       onChange: this.triggerClipChange,
     };
 
-    const fadeInProps = {
-      component: PixelMovableFadeRegion,
-      width: blockWidth, height: blockHeight,
-      offsetStart: clipBoxProps.offsetStart,
-      offsetLength: clipBoxProps.offsetLength,
-      regionStart: item.get('offsetStart'),
-      regionLength: item.get('fadeIn'),
-      regionKey: 'fadeIn',
-      onChange: this.handleFadeInChange,
-    };
+    const fadeInProps = typeof item.get('fadeIn') === 'number'
+      ? {
+        component: PixelMovableFadeRegion,
+        width: blockWidth, height: blockHeight,
+        offsetStart: clipBoxProps.offsetStart,
+        offsetLength: clipBoxProps.offsetLength,
+        regionStart: item.get('offsetStart'),
+        regionLength: item.get('fadeIn'),
+        regionKey: 'fadeIn',
+        onChange: this.handleFadeInChange,
+      }
+      : null;
 
-    const fadeOutProps = {
-      ...fadeInProps,
-      regionStart: (
-        item.get('offsetStart') +
-        item.get('offsetLength') -
-        item.get('fadeOut')
-      ),
-      regionLength: item.get('fadeOut'),
-      regionKey: 'fadeOut',
-      onChange: this.handleFadeOutChange,
-    };
+    const fadeOutProps = typeof item.get('fadeIn') === 'number'
+      ? {
+        ...fadeInProps,
+        regionStart: (
+          item.get('offsetStart') +
+          item.get('offsetLength') -
+          item.get('fadeOut')
+        ),
+        regionLength: item.get('fadeOut'),
+        regionKey: 'fadeOut',
+        onChange: this.handleFadeOutChange,
+      }
+      : null;
 
     const fadeContProps = {
       className: 'TrackItem__fadeContainer',
@@ -249,8 +252,16 @@ const TrackItem = React.createClass({
           <ClipBox {...clipBoxProps} />
         </Movable>
         <div {...fadeContProps}>
-          {this.props.fadesOf === 'item' && (<TimeMovableRegion {...fadeInProps} />)}
-          {this.props.fadesOf === 'item' && (<TimeMovableRegion {...fadeOutProps} />)}
+          {
+            this.props.fadesOf === 'item' &&
+            fadeInProps &&
+            (<TimeMovableRegion {...fadeInProps} />)
+          }
+          {
+            this.props.fadesOf === 'item' &&
+            fadeOutProps &&
+            (<TimeMovableRegion {...fadeOutProps} />)
+          }
         </div>
       </div>
     );

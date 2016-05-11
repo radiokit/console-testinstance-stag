@@ -15,11 +15,11 @@ function getRangeFromParams(queryParams) {
   const conditions = queryParams.get('conditions', List());
 
   const fromCondition =
-    conditions.find(condition => condition.get('field') === 'start_at') ||
+    conditions.find(condition => condition.get('field') === 'stop_at') ||
     Map();
 
   const toCondition =
-    conditions.find(condition => condition.get('field') === 'stop_at') ||
+    conditions.find(condition => condition.get('field') === 'start_at') ||
     Map();
 
   const from = fromCondition.get('value', 0);

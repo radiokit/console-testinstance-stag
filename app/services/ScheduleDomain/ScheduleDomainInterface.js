@@ -25,13 +25,13 @@ function performQuery(from, to, options) {
       conditions: [
         from ? {
           field: 'start_at',
-          comparison: 'gte',
-          value: moment(from).toISOString(),
+          comparison: 'lte',
+          value: moment(to).toISOString(),
         } : null,
         to ? {
           field: 'stop_at',
-          comparison: 'lte',
-          value: moment(to).toISOString(),
+          comparison: 'gte',
+          value: moment(from).toISOString(),
         } : null,
       ].filter(i => !!i),
     }),
