@@ -45,8 +45,8 @@ function performQuery(from, to, options) {
  * @param {string|number} from
  * @param {string|number} to
  */
-export function fetch(from, to, maxAge = 1000) {
-  performQuery(from, to, { maxAge });
+export function fetch(from, to, requestOptions) {
+  performQuery(from, to, requestOptions);
 }
 
 export function save(id, patch) {
@@ -62,7 +62,6 @@ export function save(id, patch) {
       id,
     }),
     patch
-      .set('file', patch.getIn(['file', 'id']))
       .filter((_, field) => updateFields.indexOf(field) >= 0)
   );
 }

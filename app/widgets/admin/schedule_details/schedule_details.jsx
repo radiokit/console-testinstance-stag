@@ -9,7 +9,7 @@ import {
   noop,
 } from 'lodash';
 import connect from 'immview-react-connect';
-import ScheduleDomain from '../../../services/ScheduleDomain';
+import ScheduleExpandedDomain from '../../../services/ScheduleExpandedDomain';
 import DetectWidth from '../../general/detect_width.jsx';
 import {
   ScrollableTrackList,
@@ -65,16 +65,14 @@ const ScheduleDetails = React.createClass({
   },
 
   handleItemChange(item) {
+    const originalScheduleItem = this.findScheduleItem(item);
     const newScheduleItem = (
       item &&
-      this.props.items &&
-      trackItemToScheduleItem(
-        item,
-        this.findScheduleItem(item)
-      )
+      originalScheduleItem &&
+      trackItemToScheduleItem(item, originalScheduleItem)
     );
     if (newScheduleItem) {
-      ScheduleDomain.save(newScheduleItem.get('id'), newScheduleItem);
+      ScheduleExpandedDomain.save(newScheduleItem.get('id'), newScheduleItem);
     }
   },
 
@@ -87,9 +85,10 @@ const ScheduleDetails = React.createClass({
   },
 
   findScheduleItem(trackItem) {
-    return this.props.items.find(
-      scheduleItem => scheduleItem.get('id') === trackItem.get('id')
-    );
+    return ScheduleExpandedDomain.read().getIn([
+      'all',
+      trackItem.get('id'),
+    ]);
   },
 
   render() {
@@ -138,7 +137,7 @@ const ScheduleDetails = React.createClass({
 
 export default connect(
   ScheduleDetails,
-  ScheduleDomain,
+  ScheduleExpandedDomain,
   (data, props) => {
     // force data fetching for currently viewed range
     const fromISO = moment(props.offsetStart)
@@ -148,9 +147,7 @@ export default connect(
       .add(maxOffsetLengthInHours / 2, 'hours')
       .toISOString();
 
-    if (!data.getIn(['ranges', Map({ from: fromISO, to: toISO })])) {
-      setTimeout(() => ScheduleDomain.fetch(fromISO, toISO), 0);
-    }
+    ScheduleExpandedDomain.fetch(fromISO, toISO, { maxAge: 60000 });
 
     // ...but push wider subset in case of whole day scrolling
     const fromTS = moment(props.offsetStart)

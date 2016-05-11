@@ -12,7 +12,7 @@ const ScheduleUpdateQueriesStream = RadioKitDomain
   .map(pickLoadingQueries)
   .map(
     queries => queries.filter(
-      (queryStatus, queryParams) => queryParams.get('key') === updateKey
+      (_, queryParams) => queryParams.get(updateKey)
     )
   );
 

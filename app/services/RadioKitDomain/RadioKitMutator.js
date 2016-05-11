@@ -87,7 +87,7 @@ function dispatchMutation(mutation) {
   update(
     mutationToParams(mutation),
     STATUS.loading,
-    List([patch]),
+    List([patch.set('id', mutation.get('id'))]),
     Date.now()
   );
   pushMutationToQueue(mutation);
