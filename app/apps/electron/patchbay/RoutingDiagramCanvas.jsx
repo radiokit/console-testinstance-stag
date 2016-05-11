@@ -23,7 +23,8 @@ export default React.createClass({
   getInitialState: function() {
     return {
       selectedAudioInterface: null,
-      selectedLinkRule: null,
+      selectedClient: null,
+      selectedLinkRule: null
     };
   },
 
@@ -103,18 +104,50 @@ export default React.createClass({
 
     } else {
       this.setState({
-        selectedLinkRule: linkRule,
+        selectedClient: null,
+        selectedLinkRule: linkRule
       });
     }
   },
 
 
-  onLinkRuleDeleteClick: function(linkRule) {
+  onClientBoxClick: function(client) {
+    if(this.state.selectedClient) {
+      if(this.state.selectedClient.get("id") === client.get("id")) {
+        this.setState({
+          selectedClient: null,
+        });
+
+      } else {
+        this.setState({
+          selectedClient: client,
+        });
+      }
+
+    } else {
+      this.setState({
+        selectedLinkRule: null,
+        selectedClient: client
+      });
+    }
+  },
+
+
+  onDeleteClick: function(linkRule) {
+    if(this.state.selectedLinkRule) {
+      var resourceName = "LinkRule"
+      var resourceId   = this.state.selectedLinkRule.get("id")
+    } else {
+      var resourceName = "Client"
+      var resourceId   = this.state.selectedClient.get("id")
+    };
+
     window.data
-      .record("plumber", "Config.Routing.LinkRule", this.state.selectedLinkRule.get("id"))
+      .record("plumber", "Config.Routing.{resourceName}", resourceId)
       .on("loaded", () => {
         this.setState({
           selectedLinkRule: null,
+          selectedClient: null
         });
       })
       .destroy();
@@ -152,7 +185,8 @@ export default React.createClass({
         <Toolbar>
           <DevicesToolbar 
             selectedLinkRule={this.state.selectedLinkRule}
-            onLinkRuleDeleteClick={this.onLinkRuleDeleteClick} />
+            onDeleteClick={this.onDeleteClick}
+            selectedClient={this.state.selectedClient} />
         </Toolbar>
 
         <svg version="1.1" height="560" width="100%">
@@ -163,7 +197,9 @@ export default React.createClass({
             onAudioInterfaceClick={this.onAudioInterfaceClick}
             selectedAudioInterface={this.state.selectedAudioInterface}
             onClientDragMove={this.onClientDragMove}
-            onClientDragStop={this.onClientDragStop} />
+            onClientDragStop={this.onClientDragStop}
+            onClientBoxClick={this.onClientBoxClick}
+            selectedClient={this.state.selectedClient} />
           <RoutingDiagramLinkRuleLayer
             clients={this.props.clients}
             audioInterfaces={this.props.audioInterfaces}

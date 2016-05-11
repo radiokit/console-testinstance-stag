@@ -20,7 +20,9 @@ const RoutingDiagramClientLayer = (props) => {
         audioInterfaces={props.audioInterfaces}
         clientsCoordinates={props.clientsCoordinates}
         onDragMove={props.onClientDragMove.bind(null, client)}
-        onDragStop={props.onClientDragStop.bind(null, client)} />
+        onDragStop={props.onClientDragStop.bind(null, client)}
+        onClientBoxClick={props.onClientBoxClick.bind(null, client)}
+        selectedClient={props.selectedClient} />
     );
   });
 

@@ -9,7 +9,8 @@ import IndexCreateAcknowledgement from './IndexCreateAcknowledgement.jsx';
 const DevicesToolbar = React.createClass({
   propTypes: {
     selectedLinkRule: React.PropTypes.object,
-    onLinkRuleDeleteClick: React.PropTypes.func,
+    selectedClient: React.PropTypes.object,
+    onDeleteClick: React.PropTypes.func,
   },
 
   contextTypes: {
@@ -51,7 +52,7 @@ const DevicesToolbar = React.createClass({
             acknowledgementElement: IndexCreateAcknowledgement
           }}
         />
-        <ToolbarButton icon="delete" disabled={this.props.selectedLinkRule === null} onClick={this.props.onLinkRuleDeleteClick} />
+        <ToolbarButton icon="delete" disabled={this.props.selectedLinkRule === null && this.props.selectedClient === null} onClick={this.props.onDeleteClick} />
       </ToolbarGroup>
     );
   },

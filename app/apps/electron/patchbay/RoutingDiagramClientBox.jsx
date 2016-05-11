@@ -9,7 +9,7 @@ const RoutingDiagramClientBox = (props) => {
   let audioInterfacesOfClientCount = audioInterfacesOfClient.count();
 
   return (
-    <g>
+    <g onClick={props.onClientBoxClick}>
       <rect
         x="2"
         y="2"
@@ -28,7 +28,7 @@ const RoutingDiagramClientBox = (props) => {
         ry="2"
         width={RoutingDiagramDimensions.getClientWidth()-2}
         height={RoutingDiagramDimensions.getClientHeight(audioInterfacesOfClientCount)-2}
-        fill="#006c90"
+        fill={props.selectedClient && props.selectedClient.get("id") === props.client.get("id") ? "#f00" : "#006c90" }
         stroke="#2b323a" />
 
       <text
