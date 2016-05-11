@@ -21,7 +21,14 @@ const DetectWidth = React.createClass({
       React.PropTypes.func,
       React.PropTypes.node,
     ]),
+    interval: React.PropTypes.number,
     onWidth: React.PropTypes.func,
+  },
+  
+  getDefaultProps() {
+    return {
+      interval: 500,
+    };
   },
 
   getInitialState() {
@@ -35,7 +42,7 @@ const DetectWidth = React.createClass({
   componentDidMount() {
     this.interval = window.setInterval(() => {
       this.setWidth(this.refs.root.offsetWidth || ReactDOM.findDOMNode(this.refs.root).offsetWidth);
-    }, 150);
+    }, this.props.interval);
   },
 
   componentWillUnmount() {

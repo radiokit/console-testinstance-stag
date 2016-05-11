@@ -25,6 +25,9 @@ import {
 const defaultViewportOffsetLength = 60000;
 const maxOffsetLengthInHours = 1;
 
+import Perf from 'react-addons-perf';
+window.Perf = Perf;
+
 const ScheduleDetails = React.createClass({
   propTypes: {
     currentBroadcastChannel: React.PropTypes.object,
@@ -153,31 +156,17 @@ export default connect(
   (data, props) => {
     // force data fetching for currently viewed range
     const fromISO = moment(props.offsetStart)
-      .subtract(maxOffsetLengthInHours / 2, 'hours')
+      .subtract(maxOffsetLengthInHours, 'hours')
       .toISOString();
     const toISO = moment(props.offsetStart)
-      .add(maxOffsetLengthInHours / 2, 'hours')
+      .add(maxOffsetLengthInHours, 'hours')
       .toISOString();
 
     ScheduleExpandedDomain.fetch(fromISO, toISO, { maxAge: 60000 });
 
-    // ...but push wider subset in case of whole day scrolling
-    const fromTS = moment(props.offsetStart)
-      .subtract(maxOffsetLengthInHours * 4, 'hours')
-      .valueOf();
-    const toTS = moment(props.offsetStart)
-      .add(maxOffsetLengthInHours * 4, 'hours')
-      .valueOf();
     const items = data
       .get('all', OrderedMap())
       .toList()
-      .filter(
-        item => (
-          new Date(item.get('stop_at')) > fromTS &&
-          new Date(item.get('start_at')) < toTS
-        )
-      )
-      .sortBy(item => item.get('start_at'))
       ;
     return {
       items,

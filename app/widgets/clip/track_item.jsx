@@ -155,23 +155,13 @@ const TrackItem = React.createClass({
     const scale = width / offsetLength;
 
     const viewLeftOffset = item.get('position') - offsetStart;
-    const viewLeftClipping = Math.max(0, -1 * viewLeftOffset);
-    const viewRightClipping = Math.max(0,
-      item.get('position') +
-      item.get('offsetLength') -
-      (offsetStart + offsetLength)
-    );
 
     const blockHeight = height - 1;
-    const blockWidth = Math.round(
-      Math.max(0,
-        item.get('offsetLength') - viewLeftClipping - viewRightClipping) *
-      scale
-    );
+    const blockWidth = Math.round(item.get('offsetLength') * scale);
 
     const containerPositionStyle = uniqStyle({
       // transition: `top 60ms ease`,
-      transform: `translateX(${Math.round(Math.max(0, viewLeftOffset) * scale)}px)`,
+      transform: `translateX(${Math.round(viewLeftOffset * scale)}px)`,
       width: blockWidth,
       height: blockHeight,
     });
@@ -201,12 +191,8 @@ const TrackItem = React.createClass({
     };
 
     const clipBoxProps = {
-      offsetStart: Math.max(0, item.get('offsetStart') + viewLeftClipping),
-      offsetLength: Math.max(0,
-        item.get('offsetLength') -
-        viewLeftClipping -
-        viewRightClipping
-      ),
+      offsetStart: item.get('offsetStart'),
+      offsetLength: item.get('offsetLength'),
       width: blockWidth,
       height: blockHeight,
       clip: item.get('clip'),
@@ -217,7 +203,8 @@ const TrackItem = React.createClass({
     const fadeInProps = typeof item.get('fadeIn') === 'number'
       ? {
         component: PixelMovableFadeRegion,
-        width: blockWidth, height: blockHeight,
+        width: blockWidth,
+        height: blockHeight,
         offsetStart: clipBoxProps.offsetStart,
         offsetLength: clipBoxProps.offsetLength,
         regionStart: item.get('offsetStart'),
