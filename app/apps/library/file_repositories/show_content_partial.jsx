@@ -94,7 +94,14 @@ const ShowContentPartial =  React.createClass({
     }
   },
 
-  moveFiles(stage){
+  moveFiles(newStage){
+    let patch = { stage: newStage };
+    if(this.props.stage === 'trash'){
+      patch.destroy_at = null;
+    }
+    if(newStage === 'trash'){
+      patch.destroy_in = 1000 * 60 * 60 * 24 * 30 ;
+    }
     this.setState({
       stageMovingIndex: this.state.selectedRecordIds.count() - 1,
     });
@@ -110,7 +117,7 @@ const ShowContentPartial =  React.createClass({
           });
         }
       })
-      .update({ stage });
+      .update(patch);
     });
   },
 
