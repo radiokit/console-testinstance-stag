@@ -4,6 +4,7 @@ export default {
       patchbay: {
         index: {
           add_button: "Dodaj urządzenie",
+          update_button: "Edytuj urządzenie",
           modals: {
             create: {
               header: "Dodawanie urządzenia",

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import CreateModal from '../../../widgets/admin/crud/create_modal.jsx';
+import UpdateModal from '../../../widgets/admin/crud/update_modal.jsx';
 import ToolbarGroup from '../../../widgets/admin/toolbar_group_widget.jsx';
 import ToolbarButton from '../../../widgets/admin/toolbar_button_widget.jsx';
 import ToolbarButtonModal from '../../../widgets/admin/toolbar_button_modal_widget.jsx';
@@ -37,6 +38,15 @@ const DevicesToolbar = React.createClass({
     }
   },
 
+  buildUpdateForm(client) {
+    return {
+      name: {
+        type: 'string',
+        value: client ? client.get("name") : ""
+      },
+    };
+  },
+
   render() {
     return (
       <ToolbarGroup>
@@ -50,6 +60,20 @@ const DevicesToolbar = React.createClass({
             app: 'auth',
             model: 'Client.Standalone',
             acknowledgementElement: IndexCreateAcknowledgement
+          }}
+        />
+        <ToolbarButtonModal
+          icon="folder"
+          labelTextKey="apps.electron.patchbay.index.update_button"
+          disabled={this.props.selectedClient === null}
+          modalElement={UpdateModal}
+          key={(this.props.selectedClient && this.props.selectedClient.get('id')) || 'no-id' }
+          modalProps={{
+            contentPrefix: 'apps.electron.patchbay.index.modals.update',
+            form: this.buildUpdateForm(this.props.selectedClient),
+            app: 'plumber',
+            model: 'Client.Standalone',
+            recordId: (this.props.selectedClient ? this.props.selectedClient.get('id') : null),
           }}
         />
         <ToolbarButton icon="delete" disabled={this.props.selectedLinkRule === null && this.props.selectedClient === null} onClick={this.props.onDeleteClick} />
