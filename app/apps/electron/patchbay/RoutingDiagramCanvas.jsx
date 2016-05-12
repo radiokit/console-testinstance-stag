@@ -133,27 +133,6 @@ export default React.createClass({
   },
 
 
-  onDeleteClick: function(linkRule) {
-    if(this.state.selectedLinkRule) {
-      var resourceName = "LinkRule"
-      var resourceId   = this.state.selectedLinkRule.get("id")
-    } else {
-      var resourceName = "Client"
-      var resourceId   = this.state.selectedClient.get("id")
-    };
-
-    window.data
-      .record("plumber", "Config.Routing." + resourceName, resourceId)
-      .on("loaded", () => {
-        this.setState({
-          selectedLinkRule: null,
-          selectedClient: null
-        });
-      })
-      .destroy();
-  },
-
-
   componentWillMount: function() {
     // We do not use state as it's updates are not not happening immediately
     // which results in sluggish UI
@@ -185,7 +164,6 @@ export default React.createClass({
         <Toolbar>
           <DevicesToolbar 
             selectedLinkRule={this.state.selectedLinkRule}
-            onDeleteClick={this.onDeleteClick}
             selectedClient={this.state.selectedClient} />
         </Toolbar>
 
