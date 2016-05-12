@@ -88,9 +88,10 @@ const TrackList = React.createClass({
   },
 
   getMouseOffset(e) {
+    const node = ReactDOM.findDOMNode(this);
     return {
-      x: e.clientX - getElementOffset(ReactDOM.findDOMNode(this)).x,
-      y: e.clientY - getElementOffset(ReactDOM.findDOMNode(this)).y,
+      x: e.clientX - getElementOffset(node).x,
+      y: e.clientY - getElementOffset(node).y,
     };
   },
 
