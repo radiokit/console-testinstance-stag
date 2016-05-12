@@ -145,6 +145,25 @@ export default React.createClass({
   },
 
 
+  getSelectedRecord: function() {
+    var selectedRecord = {"record": null, "model": "no-model", "id": "no-id"};
+
+    if(this.state.selectedLinkRule || this.state.selectedClient) {
+      if(this.state.selectedLinkRule){
+        selectedRecord["record"] = this.state.selectedLinkRule
+        selectedRecord["id"]     = this.state.selectedLinkRule.get('id')
+        selectedRecord["model"]  = "Config.Routing.LinkRule"
+      } else {
+        selectedRecord["record"] = this.state.selectedClient
+        selectedRecord["id"]     = this.state.selectedClient.get('id'),
+        selectedRecord["model"]  = "Client.Standalone"
+      };
+    };
+
+    return(selectedRecord);
+  },
+
+
   render: function() {
     let filteredLinkRules = this.props.linkRules
       .filter((linkRule) => {
@@ -163,8 +182,8 @@ export default React.createClass({
       <div>
         <Toolbar>
           <DevicesToolbar 
-            selectedLinkRule={this.state.selectedLinkRule}
-            selectedClient={this.state.selectedClient} />
+            selectedRecord={this.getSelectedRecord()}
+          />
         </Toolbar>
 
         <svg version="1.1" height="560" width="100%">

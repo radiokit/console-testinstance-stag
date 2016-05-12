@@ -11,8 +11,7 @@ import IndexCreateAcknowledgement from './IndexCreateAcknowledgement.jsx';
 
 const DevicesToolbar = React.createClass({
   propTypes: {
-    selectedLinkRule: React.PropTypes.object,
-    selectedClient: React.PropTypes.object,
+    selectedRecord: React.PropTypes.object
   },
 
   contextTypes: {
@@ -43,7 +42,7 @@ const DevicesToolbar = React.createClass({
     return {
       name: {
         type: 'string',
-        value: client ? client.get("name") : ""
+        value: client["record"] ? client["record"].get("name") : ""
       },
     };
   },
@@ -74,12 +73,12 @@ const DevicesToolbar = React.createClass({
         <ToolbarButtonModal
           icon="folder"
           labelTextKey="apps.electron.patchbay.index.update_button"
-          disabled={this.props.selectedClient === null}
+          disabled={this.props.selectedRecord["model"] != "Client.Standalone"}
           modalElement={UpdateModal}
-          key={(this.props.selectedClient && this.props.selectedClient.get('id')) || 'no-id' }
+          key={(this.props.selectedRecord && this.props.selectedRecord["id"] || 'no-id') }
           modalProps={{
             contentPrefix: 'apps.electron.patchbay.index.modals.update',
-            form: this.buildUpdateForm(this.props.selectedClient),
+            form: this.buildUpdateForm(this.props.selectedRecord),
             app: 'plumber',
             model: 'Client.Standalone',
             recordId: (this.props.selectedClient ? this.props.selectedClient.get('id') :'no-id'),
@@ -87,16 +86,14 @@ const DevicesToolbar = React.createClass({
         />
         <ToolbarButtonModal
           icon="delete"
-          disabled={this.props.selectedLinkRule === null && this.props.selectedClient === null}
+          disabled={this.props.selectedRecord["record"] === null}
           modalElement={DeleteModal}
           modalProps={{
             contentPrefix: 'apps.broadcast.playlist.delete_button',
             app: 'plumber',
-            model: this.props.selectedClient
-              ? "Client.Standalone"
-              : "Config.Routing.LinkRule",
-            selectedRecordIds: this.props.selectedClient
-              ? Immutable.List.of(this.props.selectedClient ? this.props.selectedClient.get('id') : this.props.selectedLinkRule.get('id'))
+            model: this.props.selectedRecord['model'],
+            selectedRecordIds: this.props.selectedRecord
+              ? Immutable.List.of(this.props.selectedRecord['id'])
               : Immutable.List.of(null),
             afterFormAccept: this.onDelete,
           }}
