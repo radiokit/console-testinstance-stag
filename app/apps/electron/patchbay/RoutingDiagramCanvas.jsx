@@ -24,7 +24,7 @@ export default React.createClass({
     return {
       selectedAudioInterface: null,
       selectedClient: null,
-      selectedLinkRule: null
+      selectedLinkRule: null,
     };
   },
 

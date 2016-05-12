@@ -9,7 +9,7 @@ const RoutingDiagramClientBox = (props) => {
   let audioInterfacesOfClientCount = audioInterfacesOfClient.count();
 
   return (
-    <g onClick={props.onClientBoxClick}>
+    <g>
       <rect
         x="2"
         y="2"
