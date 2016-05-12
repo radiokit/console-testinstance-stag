@@ -6,6 +6,7 @@ import TableBrowser from '../../../widgets/admin/table_browser_widget.jsx';
 import ToolbarGroup from '../../../widgets/admin/toolbar_group_widget.jsx';
 import ToolbarButton from '../../../widgets/admin/toolbar_button_widget.jsx';
 import ToolbarButtonModal from '../../../widgets/admin/toolbar_button_modal_widget.jsx';
+import RadioKit from '../../../services/RadioKit';
 
 import UploadModal from './show_content_upload_modal.jsx';
 import MetadataModal from './show_content_metadata_modal.jsx';
@@ -31,7 +32,7 @@ const ShowContentPartial =  React.createClass({
   },
 
   buildSelectedTags(selectedRecordIds) {
-    selectedRecordIds.count() > 0 && window.data
+    selectedRecordIds.count() > 0 && RadioKit
       .query("vault", "Data.Tag.Association")
       .select("record_file_id","tag_item_id","id")
       .where("record_file_id","in", selectedRecordIds.toJS())
@@ -76,7 +77,7 @@ const ShowContentPartial =  React.createClass({
           fileDeletionIndex: this.state.selectedRecordIds.count() - 1,
         });
       this.state.selectedRecordIds.forEach((recordId) => {
-        window.data
+        RadioKit
         .record('vault', 'Data.Record.File', recordId)
         .on('loaded', () => {
           if (this.state.fileDeletionIndex === 0){
@@ -106,7 +107,7 @@ const ShowContentPartial =  React.createClass({
       stageMovingIndex: this.state.selectedRecordIds.count() - 1,
     });
     this.state.selectedRecordIds.forEach((recordId) => {
-      window.data
+      RadioKit
       .record('vault', 'Data.Record.File', recordId)
       .on('loaded', () => {
         if (this.state.stageMovingIndex === 0){
@@ -163,7 +164,7 @@ const ShowContentPartial =  React.createClass({
   },
 
   buildTableRecordsQuery() {
-    return window.data
+    return RadioKit
       .query("vault", "Data.Record.File")
       .select("id", "name", "metadata_items", "tag_items","stage")
       .joins("metadata_items")

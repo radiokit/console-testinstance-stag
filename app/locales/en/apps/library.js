@@ -19,7 +19,7 @@ export default {
               assignTags: "Assign tags",
               manageTags: "Manage tags",
             },
-            delete: "Delete permamantly",
+            delete: "Delete permanently",
             move_to:{
               incoming: "Move to incoming",
               current: "Move to ready",

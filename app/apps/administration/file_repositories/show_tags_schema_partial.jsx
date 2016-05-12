@@ -242,7 +242,13 @@ const ShowTagsSchemaPartial = React.createClass({
                   <div className="tools">
                     {() => {
                       if(category.tag_items.length === 0){
-                        return <Translate content={this.props.contentPrefix + ".modals.create_category.empty_warning"} component="small" className="EmptyCategory" />
+                        return (
+                          <Translate
+                            content={this.props.contentPrefix + ".modals.create_category.empty_warning"}
+                            component="small"
+                            className="EmptyCategory"
+                          />
+                        );
                       }
                     }()}
                     <a className={newTagIconClassNames} onClick={ onNewTagListener }>

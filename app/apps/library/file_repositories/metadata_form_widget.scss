@@ -1,10 +1,10 @@
 .MetadataFormWidget {
 
-  .input-group{
+  &__inputGroup{
     float: none;
-  }
-  .form-control[disabled]{
-    cursor: not-allowed !important;
+    .form-control[disabled]{
+      cursor: not-allowed !important;
+    }
   }
   .MetadataFormWidget__checkbox{
     display: table-cell;

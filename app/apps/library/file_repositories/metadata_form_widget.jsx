@@ -1,5 +1,5 @@
 import React from 'react';
-import _ from 'lodash';
+import { some } from 'lodash';
 import Counterpart from 'counterpart';
 import Translate from 'react-translate-component';
 import Checkbox from '../../../widgets/general/indeterminate_checkbox_widget.jsx';
@@ -64,7 +64,7 @@ const MetadataFormWidget = React.createClass({
       const inputListener = (e) => {
         that.setState({ [fieldId]: e.target.value });
       };
-      const disabled = !_.some(this.state.enabledFields, fieldSummary);
+      const disabled = !some(this.state.enabledFields, fieldSummary);
       let inputValue = fieldConfig.hasMultiValues ? '' : fieldConfig.value;
       const inputPlaceholder = fieldConfig.hasMultiValues ? Counterpart.translate(`${this.props.contentPrefix}.multiple_val`) : '';
       let inputType = fieldConfig.type;
@@ -101,7 +101,7 @@ const MetadataFormWidget = React.createClass({
       }
       return (
         <div key={ fieldId } className="form-group">
-          <div className="input-group">
+          <div className="MetadataFormWidget__inputGroup">
             <div className="input-group-content">
               <label
                 htmlFor={ fieldId }
