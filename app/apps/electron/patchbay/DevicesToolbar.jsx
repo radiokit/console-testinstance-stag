@@ -55,6 +55,16 @@ const DevicesToolbar = React.createClass({
     }, 500);
   },
 
+  getTranslationPrefix: function(modalType) {
+    if(this.props.selectedRecord["model"] == "Client.Standalone"){
+      var prefix = "client";
+    } else {
+      var prefix = "link"
+    };
+
+    return("apps.electron.patchbay.modals." + modalType + "." + prefix);
+  },
+
   render() {
     return (
       <ToolbarGroup>
@@ -89,7 +99,7 @@ const DevicesToolbar = React.createClass({
           disabled={this.props.selectedRecord["record"] === null}
           modalElement={DeleteModal}
           modalProps={{
-            contentPrefix: 'apps.broadcast.playlist.delete_button',
+            contentPrefix: this.getTranslationPrefix("delete"),
             app: 'plumber',
             model: this.props.selectedRecord['model'],
             selectedRecordIds: this.props.selectedRecord
