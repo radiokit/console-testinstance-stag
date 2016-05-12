@@ -72,12 +72,12 @@ const DevicesToolbar = React.createClass({
         />
         <ToolbarButtonModal
           icon="folder"
-          labelTextKey="apps.electron.patchbay.index.update_button"
+          labelTextKey="apps.electron.patchbay.update_button"
           disabled={this.props.selectedRecord["model"] != "Client.Standalone"}
           modalElement={UpdateModal}
           key={(this.props.selectedRecord && this.props.selectedRecord["id"] || 'no-id') }
           modalProps={{
-            contentPrefix: 'apps.electron.patchbay.index.modals.update',
+            contentPrefix: 'apps.electron.patchbay.modals.update',
             form: this.buildUpdateForm(this.props.selectedRecord),
             app: 'plumber',
             model: 'Client.Standalone',
