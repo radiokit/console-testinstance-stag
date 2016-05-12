@@ -26,11 +26,6 @@ const FormWidget = React.createClass({
     }
   },
 
-  // FIXME
-  shouldComponentUpdate: function () {
-    return false;
-  },
-
 
   submit: function() {
     if (this.validate()) {

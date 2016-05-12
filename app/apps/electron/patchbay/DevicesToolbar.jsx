@@ -18,6 +18,20 @@ const DevicesToolbar = React.createClass({
     currentUserAccount: React.PropTypes.object.isRequired,
   },
 
+
+  shouldComponentUpdate: function(nextProps) {
+    if(this.props.selectedRecord["model"] === "Client.Standalone"){
+      if((this.props.selectedRecord["id"] != nextProps.selectedRecord["id"]) || (this.props.selectedRecord["record"].get("name") != nextProps.selectedRecord["record"].get("name"))) {
+        return true;
+      } else {
+        return false;
+      };
+    } else {
+      return true;
+    };
+  },
+
+
   buildNewForm: function() {
     return {
       name: {
