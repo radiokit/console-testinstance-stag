@@ -56,10 +56,6 @@ export default React.createClass({
       this.setState({
         selectedAudioInterface: audioInterface,
       });
-    } else if(this.state.selectedAudioInterface === audioInterface) {
-      this.setState({
-        selectedAudioInterface: null,
-      });
     } else {
       if(this.state.selectedAudioInterface.get("direction") !== audioInterface.get("direction")) {
         let sourceAudioInterface;
