@@ -133,14 +133,6 @@ export default React.createClass({
   },
 
 
-  clearSelections: function() {
-    this.setState({
-      selectedLinkRule: null,
-      selectedClient: null
-    });
-  },
-
-
   componentWillMount: function() {
     // We do not use state as it's updates are not not happening immediately
     // which results in sluggish UI
