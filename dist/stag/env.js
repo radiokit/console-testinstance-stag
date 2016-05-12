@@ -11,7 +11,6 @@ window.ENV = {
     "diffusor": { baseUrl: "https://diffusor.radiokitapp-stag.org" },
   },
   external: {
-    googleAnalyticsID: "UA-68358393-1"
   },
   verbose: true
 };

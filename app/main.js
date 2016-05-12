@@ -5,7 +5,7 @@ import { Router, Route, IndexRoute } from 'react-router';
 import Counterpart from 'counterpart';
 
 import './services/RadioKit'; // for legacy window binding
-import './services/plumber'; // for legacy window binding
+import './services/Plumber'; // for legacy window binding
 
 import Root from './root.jsx';
 import Dashboard from './dashboard.jsx';
@@ -30,10 +30,11 @@ import LibraryFileRepositoriesShow from './apps/library/file_repositories/show_v
 import ClipEditorApp from './apps/clip_editor/app.jsx';
 import AdministrationApp from './apps/administration/app.jsx';
 import AdministrationUserAccountsIndex from './apps/administration/user_accounts/index_view.jsx';
-import AdministrationBroadcastChannelsIndex from './apps/administration/broadcast_channels/index_view.jsx';
+import AdministrationBroadcastChannelsIndex from './apps/administration/broadcast_channels/IndexView.jsx';
+import AdministrationBroadcastChannelsShow from './apps/administration/broadcast_channels/ShowView.jsx';
 import AdministrationUsersIndex from './apps/administration/editors/index_view.jsx';
-import AdministrationFileRepositoriesIndex from './apps/administration/file_repositories/index_view.jsx';
-import AdministrationFileRepositoriesShow from './apps/administration/file_repositories/show_view.jsx';
+import AdministrationFileRepositoriesIndex from './apps/administration/file_repositories/IndexView.jsx';
+import AdministrationFileRepositoriesShow from './apps/administration/file_repositories/ShowView.jsx';
 
 Counterpart.registerTranslations("en", require('./locales/en/general.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/broadcast.js'));
@@ -71,7 +72,8 @@ ReactDOM.render((
       <Route path="apps" component={AppsIndex} onEnter={pingGoogleAnalytics}>
         <Route path="broadcast" component={BroadcastApp}>
           <Route component={ScopeLayout} scope="broadcastChannel">
-            <Route path="playlist/index" component={BroadcastPlaylistIndex} onEnter={pingGoogleAnalytics}/>
+            <Route path="playlist/index" component={BroadcastPlaylistIndex} onEnter={pingGoogleAnalytics} />
+            <Route path="playlist(/:date/:zoom)" component={BroadcastPlaylistIndex} onEnter={pingGoogleAnalytics} />
           </Route>
           <Route component={ScopeLayout} scope="broadcastChannel">
             <Route path="live/index" component={BroadcastLiveIndex} onEnter={pingGoogleAnalytics}/>
@@ -112,7 +114,10 @@ ReactDOM.render((
         </Route>
 
         <Route path="administration" component={AdministrationApp}>
-          <Route path="broadcast_channels/index" component={AdministrationBroadcastChannelsIndex} onEnter={pingGoogleAnalytics}/>
+          <Route path="broadcast_channels">
+            <Route path="index" component={AdministrationBroadcastChannelsIndex} onEnter={pingGoogleAnalytics}/>
+            <Route path="show/:id" component={AdministrationBroadcastChannelsShow} onEnter={pingGoogleAnalytics}/>
+          </Route>
           <Route path="user_accounts/index" component={AdministrationUserAccountsIndex} onEnter={pingGoogleAnalytics}/>
           <Route path="editors/index" component={AdministrationUsersIndex} onEnter={pingGoogleAnalytics}/>
           <Route path="file_repositories">

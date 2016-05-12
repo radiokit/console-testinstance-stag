@@ -1,23 +1,39 @@
 import {
-  Map,
-  List,
+  fromJS,
 } from 'immutable';
 
 import moment from 'moment';
+
+import {
+  app,
+  model,
+  key,
+  updateKey,
+  readFields,
+  updateFields,
+} from './ScheduleConfig';
 
 import RadioKitDomain from './../RadioKitDomain';
 
 function performQuery(from, to, options) {
   RadioKitDomain.query(
-    Map({
-      key: 'schedule',
-      app: 'plumber',
-      model: 'Media.Input.File.Http',
-      select: List(['id', 'name', 'start_at', 'stop_at']),
-      conditions: List([
-        from ? Map({field: 'start_at', comparison: 'gte', value: moment(from).toISOString()}) : null,
-        to ? Map({field: 'stop_at', comparison: 'lte', value: moment(to).toISOString()}) : null,
-      ]).filter(i => !!i)
+    fromJS({
+      [key]: true,
+      app,
+      model,
+      select: readFields,
+      conditions: [
+        from ? {
+          field: 'start_at',
+          comparison: 'gte',
+          value: moment(from).toISOString(),
+        } : null,
+        to ? {
+          field: 'stop_at',
+          comparison: 'lte',
+          value: moment(to).toISOString(),
+        } : null,
+      ].filter(i => !!i),
     }),
     options
   );
@@ -29,16 +45,27 @@ function performQuery(from, to, options) {
  * @param {string|number} from
  * @param {string|number} to
  */
-export function fetch(from, to) {
-  performQuery(from, to, {maxAge: 1000 * 60});
+export function fetch(from, to, requestOptions) {
+  performQuery(from, to, requestOptions);
 }
 
-/**
- * Get items from selected range and keeps them updated.
- * Range can be anything that moment can transform.
- * @param {string|number} from
- * @param {string|number} to
- */
-export function observe(from, to) {
-  performQuery(from, to, {autoSync: true});
+export function save(id, patch) {
+  if (!id) {
+    throw new Error('ScheduleDomain:save no id');
+  }
+
+  RadioKitDomain.save(
+    fromJS({
+      [updateKey]: true,
+      app,
+      model,
+      id,
+    }),
+    patch
+      .filter((_, field) => updateFields.indexOf(field) >= 0)
+  );
+}
+
+export function clear() {
+  RadioKitDomain.clear(app, model);
 }

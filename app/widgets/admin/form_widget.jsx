@@ -103,49 +103,52 @@ const FormWidget = React.createClass({
     }
   },
 
-
-  buildFieldValues() {
-    let values = {};
-
+  buildFieldValues: function() {
+    let params = {};
     Object.keys(this.props.form).map((fieldName) => {
       let fieldConfig = this.props.form[fieldName];
 
-      switch (fieldConfig.type) {
-      case "scope-user-account":
-        if (values.hasOwnProperty("references")) {
-          values.references["user_account_id"] = this.refs[fieldName].value;
-        } else {
-          values.references = {
-            user_account_id: this.refs[fieldName].value
-          };
+      if(fieldConfig.fieldValueFunc) {
+        params = fieldConfig.fieldValueFunc(params, this.refs[fieldName].value);
+
+      } else {
+        switch (fieldConfig.type) {
+        case "scope-user-account":
+          if (params.hasOwnProperty("references")) {
+            params.references["user_account_id"] = this.refs[fieldName].value;
+          } else {
+            params.references = {
+              user_account_id: this.refs[fieldName].value
+            };
+          }
+          break;
+
+        case "scope-broadcast-channel":
+          if (params.hasOwnProperty("references")) {
+            params.references["broadcast_channel_id"] = this.refs[fieldName].value;
+          } else {
+            params.references = {
+              broadcast_channel_id: this.refs[fieldName].value
+            };
+          }
+          break;
+
+        case "hidden":
+          params[fieldName] = fieldConfig.value;
+          break;
+
+        case "datetime":
+          params[fieldName] = this.refs[fieldName].getInput();
+          break;
+
+        default:
+          params[fieldName] = this.refs[fieldName].value
+          break;
         }
-        break;
-
-      case "scope-broadcast-channel":
-        if (values.hasOwnProperty("references")) {
-          values.references["broadcast_channel_id"] = this.refs[fieldName].value;
-        } else {
-          values.references = {
-            broadcast_channel_id: this.refs[fieldName].value
-          };
-        }
-        break;
-
-      case "hidden":
-        values[fieldName] = fieldConfig.value;
-        break;
-
-      case "datetime":
-        values[fieldName] = this.refs[fieldName].getInput();
-        break;
-
-      default:
-        values[fieldName] = this.refs[fieldName].value
-        break;
       }
     });
 
-    return values;
+    return params;
   },
 
 

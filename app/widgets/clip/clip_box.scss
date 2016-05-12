@@ -1,0 +1,10 @@
+.ClipBox {
+  position: relative;
+  display: block;
+  overflow: hidden;
+
+  &__regions {
+    position: absolute;
+    top: 0;
+  }
+}

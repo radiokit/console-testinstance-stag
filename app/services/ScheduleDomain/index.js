@@ -2,11 +2,11 @@ import {
   Domain,
 } from 'immview';
 
-import ScheduleDomainData from './ScheduleDomainData';
+import ScheduleDomainStream from './ScheduleDomainStream';
 import * as ScheduleDomainInterface from './ScheduleDomainInterface';
 
 const ScheduleDomain = new Domain(
-  ScheduleDomainData,
+  ScheduleDomainStream,
   ScheduleDomainInterface
 );
 

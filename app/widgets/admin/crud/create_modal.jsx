@@ -1,7 +1,6 @@
 import React from 'react';
 import ModalForm from '../../../widgets/admin/modal_form_widget.jsx';
 
-
 const CreateModal = React.createClass({
   propTypes: {
     contentPrefix: React.PropTypes.string.isRequired,
@@ -10,9 +9,9 @@ const CreateModal = React.createClass({
     model: React.PropTypes.string.isRequired,
     onSuccess: React.PropTypes.func,
     onDismiss: React.PropTypes.func,
-    acknowledgementElement: React.PropTypes.oneOfType(
-      [React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]),
+    acknowledgementElement: React.PropTypes.oneOfType([React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]),
     afterFormSubmit: React.PropTypes.func,
+    afterFormAccept: React.PropTypes.func,
   },
 
   getInitialState() {
@@ -29,35 +28,29 @@ const CreateModal = React.createClass({
   onFormSubmit(fieldValues) {
     this.recordCall = window.data
       .record(this.props.app, this.props.model)
-      .on("loading", () => {
-        if (this.isMounted()) {
-          this.setState({
-            step: "progress"
-          });
+      .on('loading', () => {
+        this.setState({
+          step: 'progress',
+        });
+      })
+      .on('loaded', (_event, _record, data) => {
+        this.setState({
+          step: 'acknowledgement',
+          record: data,
+        });
+        if(this.props.afterFormAccept) {
+          this.props.afterFormAccept();
         }
       })
-      .on("loaded", (_event, _record, data) => {
-        if(this.isMounted()) {
-          this.setState({
-            step: "acknowledgement",
-            record: data
-          });
-          this.props.afterFormSubmit();
-        }
+      .on('warning', () => {
+        this.setState({
+          step: 'error',
+        });
       })
-      .on("warning", () => {
-        if (this.isMounted()) {
-          this.setState({
-            step: "error"
-          });
-        }
-      })
-      .on("error", () => {
-        if (this.isMounted()) {
-          this.setState({
-            step: "error"
-          });
-        }
+      .on('error', () => {
+        this.setState({
+          step: 'error',
+        });
       })
       .create(fieldValues);
   },
@@ -78,6 +71,10 @@ const CreateModal = React.createClass({
 
   onShow() {
     this.setState(this.getInitialState());
+  },
+
+  show() {
+    this.refs.modal.show();
   },
 
   render() {

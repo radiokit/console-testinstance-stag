@@ -24,10 +24,13 @@
           "Map",
           "List",
           "OrderedMap",
+          "OrderedSet",
           "Set",
-          "Seq"
+          "Seq",
+          "Moment"
         ]
       }
-    ]
+    ],
+    "no-use-before-define": ["error", { "functions": false, "classes": true }]
   }
 }
