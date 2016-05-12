@@ -1,8 +1,7 @@
 import React from 'react';
-import { some } from 'lodash';
+import MetadataInputField from './metadata_input_field.jsx';
 import Counterpart from 'counterpart';
-import Translate from 'react-translate-component';
-import Checkbox from '../../../widgets/general/indeterminate_checkbox_widget.jsx';
+import { some } from 'lodash';
 
 import './metadata_form_widget.scss';
 const MetadataFormWidget = React.createClass({
@@ -14,11 +13,18 @@ const MetadataFormWidget = React.createClass({
   },
 
   getInitialState() {
-    return { enabledFields: [] };
+    return {
+      enabledFields: [],
+      customInputVals: {},
+    };
   },
 
   componentWillReceiveProps() {
-    this.replaceState({ enabledFields: [] });
+    // component needs to clear field values when file selection changes
+    this.setState({
+      enabledFields: [],
+      customInputVals: {},
+    });
   },
 
   submit() {
@@ -33,8 +39,7 @@ const MetadataFormWidget = React.createClass({
   buildFieldValues() {
     const values = {};
     this.state.enabledFields.forEach((fieldSummary) => {
-      values[fieldSummary.id] = this.refs[fieldSummary.id].value;
-
+      values[fieldSummary.id] = this.state.customInputVals[fieldSummary.id];
       if (fieldSummary.type === 'datetime') {
         values[fieldSummary.id] = new Date(values[fieldSummary.id]).toISOString();
       }
@@ -45,94 +50,48 @@ const MetadataFormWidget = React.createClass({
   render() {
     const fields = Object.keys(this.props.form).map((fieldId) => {
       const fieldConfig = this.props.form[fieldId];
-      const that = this;
       const fieldSummary = {
         id: fieldId,
         type: fieldConfig.type,
       };
+      const disabled = !some(this.state.enabledFields, fieldSummary);
       const onFieldEnabled = () => {
         const enabledFields = this.state.enabledFields;
         enabledFields.push(fieldSummary);
-        that.setState({ enabledFields });
+        this.setState({ enabledFields });
       };
       const onFieldDisabled = () => {
-        that.setState({
-          enabledFields: that.state.enabledFields.filter((field) => field.id !== fieldSummary.id),
-          [fieldId]: undefined,
+        const newInputVals = this.state.customInputVals;
+        newInputVals[fieldId] = undefined;
+        this.setState({
+          enabledFields: this.state.enabledFields.filter((field) => field.id !== fieldSummary.id),
+          customInputVals: newInputVals,
         });
       };
-      const inputListener = (e) => {
-        that.setState({ [fieldId]: e.target.value });
+      const onFieldChanged = (e) => {
+        const newInputVals = this.state.customInputVals;
+        newInputVals[fieldId] = e.target.value;
+        this.setState({ customInputVals: newInputVals });
       };
-      const disabled = !some(this.state.enabledFields, fieldSummary);
       let inputValue = fieldConfig.hasMultiValues ? '' : fieldConfig.value;
-      const inputPlaceholder = fieldConfig.hasMultiValues ? Counterpart.translate(`${this.props.contentPrefix}.multiple_val`) : '';
-      let inputType = fieldConfig.type;
-      let step = null;
-      let min = null;
-      let max = null;
-      if (this.state[fieldId] !== undefined) {
-        inputValue = this.state[fieldId];
+      if (this.state.customInputVals[fieldId] !== undefined) {
+        inputValue = this.state.customInputVals[fieldId];
       }
-      switch (inputType) {
-        case 'string':
-          inputType = 'text';
-          break;
-        case 'db':
-        case 'integer':
-          inputType = 'number';
-          break;
-        case 'float':
-          inputType = 'number';
-          step = 'any';
-          break;
-        case 'duration':
-          inputType = 'number';
-          min = 0;
-          break;
-        case 'datetime':
-          inputType = 'datetime-local';
-          inputValue = inputValue && inputValue.slice(-1) === 'Z' ? inputValue.slice(0, -1) : inputValue;
-          break;
-        case 'time':
-          step = 1;
-          break;
-        default:
-      }
+      const inputPlaceholder = fieldConfig.hasMultiValues ?
+        Counterpart.translate(`${this.props.contentPrefix}.multiple_val`) : '';
       return (
-        <div key={ fieldId } className="form-group">
-          <div className="MetadataFormWidget__inputGroup">
-            <div className="input-group-content">
-              <label
-                htmlFor={ fieldId }
-              >
-                {fieldConfig.name}
-              </label>
-              <input
-                type= {inputType}
-                id={ fieldId }
-                ref={ fieldId }
-                required={ fieldConfig.required }
-                disabled = { disabled }
-                value={ inputValue }
-                placeholder = {inputPlaceholder}
-                className="form-control"
-                onChange = {inputListener}
-                step = {step}
-                min = {min}
-                max = {max}
-              />
-            </div>
-            <div className="MetadataFormWidget__checkbox">
-              <Translate component="p" content= {this.props.contentPrefix + ".retain"} />
-              <Checkbox
-                checked={disabled}
-                onSelected ={onFieldDisabled}
-                onDeselected ={onFieldEnabled}
-              />
-            </div>
-          </div>
-        </div>
+        <MetadataInputField
+          key = {fieldId}
+          contentPrefix = {this.props.contentPrefix}
+          fieldId={fieldId}
+          fieldConfig={fieldConfig}
+          placeholder = {inputPlaceholder}
+          value = {inputValue}
+          disabled = {disabled}
+          onFieldEnabled ={onFieldEnabled}
+          onFieldDisabled ={onFieldDisabled}
+          onFieldChanged ={onFieldChanged}
+        />
       );
     });
 
@@ -144,7 +103,7 @@ const MetadataFormWidget = React.createClass({
         ref="form"
       >
         {fields}
-      <button type="submit" ref="submitter" className="hidden"/>
+      <button type="submit" ref="submitter" className="hidden" />
       </form>
     );
   },
