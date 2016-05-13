@@ -41,17 +41,17 @@ export default React.createClass({
     }, () => {
       this.refs.container.parentNode.appendChild(this.refs.container);
 
-      if(this.props.onDragStart) {
+      if (this.props.onDragStart) {
         this.props.onDragStart(this.state.x, this.state.y);
       }
 
-      if(this.props.onElementClick) {
+      if (this.props.onElementClick) {
         setTimeout(() => {
-          if(!this.state.dragging) {
+          if (!this.state.dragging) {
             this.props.onElementClick();
           }
         }, 100);
-      } 
+      }
     });
   },
 
