@@ -1,6 +1,4 @@
 import React from 'react';
-import Immutable from 'immutable';
-import Moment from 'moment';
 import Counterpart from 'counterpart';
 
 import GridRow from '../../../widgets/admin/grid_row_widget.jsx';
@@ -11,27 +9,32 @@ import Card from '../../../widgets/admin/card_widget.jsx';
 
 import IndexDiagramPartial from './IndexDiagramPartial.jsx';
 
-Counterpart.registerTranslations("en", require('./IndexView.locale.en.js'));
-Counterpart.registerTranslations("pl", require('./IndexView.locale.pl.js'));
+Counterpart.registerTranslations('en', require('./IndexView.locale.en.js'));
+Counterpart.registerTranslations('pl', require('./IndexView.locale.pl.js'));
 
 
 export default React.createClass({
-  buildTabs: function() {
+  buildTabs() {
     return {
-      diagram:  { element: IndexDiagramPartial, props: { contentPrefix: "apps.electron.patchbay.diagram" } },
-    }
+      diagram: {
+        element: IndexDiagramPartial,
+        props: { contentPrefix: 'apps.electron.patchbay.diagram' },
+      },
+    };
   },
 
-  render: function() {
+  render() {
     return (
       <Section>
         <GridRow>
           <GridCell size="large" center={true}>
-            <Card contentPrefix="apps.electron.patchbay"
-                  contentElement={this.buildTabs()} />
+            <Card
+              contentPrefix="apps.electron.patchbay"
+              contentElement={this.buildTabs()}
+            />
           </GridCell>
         </GridRow>
       </Section>
     );
-  }
+  },
 });
