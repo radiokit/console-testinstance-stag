@@ -102,7 +102,7 @@ export default React.createClass({
         .query("plumber", "Resource.Architecture.AudioInterface")
         .select("id", "name", "direction", "references")
         .order("name", "asc")
-        // .where.apply(this, clientsCondition) // FIXME
+        .where.apply(this, clientsCondition)
         .on("fetch", (_event, _query, data) => {
           if(this.isMounted()) {
             this.setState({
