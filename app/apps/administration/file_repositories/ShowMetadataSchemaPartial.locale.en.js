@@ -54,6 +54,9 @@ export default {
                               datetime: "Date & Time",
                               url: "URL",
                               duration: "Duration",
+                              waveform: "Waveform",
+                              image: "Image",
+                              file: "File",
                             }
                           },
                         },
