@@ -120,7 +120,7 @@ const DevicesToolbar = React.createClass({
             form: this.buildUpdateForm(this.props.selectedRecord),
             app: 'plumber',
             model: 'Client.Standalone',
-            recordId: (this.props.selectedRecord ?
+            recordId: (this.props.selectedRecord.record ?
                        this.props.selectedRecord.record.get('id') :
                        'no-id'),
           }}
