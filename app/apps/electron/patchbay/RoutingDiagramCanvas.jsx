@@ -157,7 +157,7 @@ export default React.createClass({
   },
 
 
-  componentWillUnount() {
+  componentWillUnmount() {
     delete this.clientsCoordinates;
   },
 
