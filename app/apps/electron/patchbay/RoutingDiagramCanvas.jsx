@@ -145,7 +145,7 @@ export default React.createClass({
       });
     }
 
-    if (this.state.selectedLinkRule) {
+    if (this.state.selectedClient) {
       return ({
         record: this.state.selectedClient,
         id: this.state.selectedClient.get('id'),
