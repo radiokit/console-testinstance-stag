@@ -21,23 +21,16 @@ const DevicesToolbar = React.createClass({
 
 
   shouldComponentUpdate(nextProps) {
-    let selectedRecordId;
-    let newSelectedRecordId;
-    let selectedRecordName;
-    let newSelectedRecordName;
+    const selectedRecordId = this.props.selectedRecord.id;
+    const newSelectedRecordId = nextProps.selectedRecord.id;
+    const selectedRecordName = this.props.selectedRecord.record ?
+      this.props.selectedRecord.record.get('name') : '';
+    const newSelectedRecordName = nextProps.selectedRecord.record ?
+      nextProps.selectedRecord.record.get('name') : '';
 
-    if (this.props.selectedRecord.model === 'Client.Standalone') {
-      selectedRecordId = this.props.selectedRecord.id;
-      newSelectedRecordId = nextProps.selectedRecord.id;
-      selectedRecordName = this.props.selectedRecord.record.get('name');
-      newSelectedRecordName = nextProps.selectedRecord.record ? nextProps.selectedRecord.record.get('name') : '';
-
-      if ((selectedRecordId !== newSelectedRecordId) ||
-          (selectedRecordName !== newSelectedRecordName)) {
-        return true;
-      }
-
-      return false;
+    if ((selectedRecordId !== newSelectedRecordId) ||
+        (selectedRecordName !== newSelectedRecordName)) {
+      return true;
     }
 
     return false;
