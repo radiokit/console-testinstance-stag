@@ -26,7 +26,7 @@ const DevicesToolbar = React.createClass({
     let selectedRecordName;
     let newSelectedRecordName;
 
-    if (this.props.selectedRecord.model === 'Client.Standalone') {
+    if (nextProps.selectedRecord.record && this.props.selectedRecord.model === 'Client.Standalone') {
       selectedRecordId = this.props.selectedRecord.id;
       newSelectedRecordId = nextProps.selectedRecord.id;
       selectedRecordName = this.props.selectedRecord.record.get('name');
