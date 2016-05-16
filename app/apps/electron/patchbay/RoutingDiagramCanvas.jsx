@@ -1,5 +1,7 @@
 import React from 'react';
-import * as Immutable from 'immutable';
+import {
+  Map,
+} from 'immutable';
 
 import Toolbar from '../../../widgets/admin/toolbar_widget.jsx';
 import DevicesToolbar from './DevicesToolbar.jsx';
@@ -29,7 +31,7 @@ export default React.createClass({
 
   onClientDragMove(client, x, y) {
     this.clientsCoordinates =
-      this.clientsCoordinates.set(client.get('id'), Immutable.Map({ x, y }));
+      this.clientsCoordinates.set(client.get('id'), Map({ x, y }));
     this.forceUpdate();
   },
 
@@ -130,7 +132,7 @@ export default React.createClass({
   componentWillMount() {
     // We do not use state as it's updates are not not happening immediately
     // which results in sluggish UI
-    this.clientsCoordinates = Immutable.Map();
+    this.clientsCoordinates = Map();
   },
 
 
