@@ -40,7 +40,7 @@ const DevicesToolbar = React.createClass({
       return false;
     }
 
-    return true;
+    return false;
   },
 
   onDelete() {
