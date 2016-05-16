@@ -45,6 +45,21 @@ export default {
           },
           tags: {
             all_tags:"Wszystkie"
+          },
+          modals: {
+            delete: {
+              header: "Trwale usuń wybrane pliki",
+              message: {
+                confirmation: "Czy na pewno chcesz trwale usunąć zaznaczone pliki (%(count)s szt.)?",
+                acknowledgement: "Usunięto %(count)s plików.",
+                progress: "Trwa usuwanie plików…",
+              },
+              action: {
+                proceed: "Usuń",
+                cancel: "Anuluj",
+                close: "Zamknij",
+              },
+            },
           }
         },
 

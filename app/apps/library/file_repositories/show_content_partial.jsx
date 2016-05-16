@@ -2,6 +2,7 @@ import React from 'react';
 import Immutable from 'immutable';
 import _ from 'lodash';
 
+import DeleteModal from '../../../widgets/admin/crud/delete_modal.jsx';
 import TableBrowser from '../../../widgets/admin/table_browser_widget.jsx';
 import ToolbarGroup from '../../../widgets/admin/toolbar_group_widget.jsx';
 import ToolbarButton from '../../../widgets/admin/toolbar_button_widget.jsx';
@@ -72,24 +73,7 @@ const ShowContentPartial =  React.createClass({
 
   onDeleteClick(){
     if(this.props.stage === 'trash'){
-      this.setState(
-        {
-          fileDeletionIndex: this.state.selectedRecordIds.count() - 1,
-        });
-      this.state.selectedRecordIds.forEach((recordId) => {
-        RadioKit
-        .record('vault', 'Data.Record.File', recordId)
-        .on('loaded', () => {
-          if (this.state.fileDeletionIndex === 0){
-            this.reloadTable();
-          } else {
-            this.setState({
-              fileDeletionIndex: this.state.fileDeletionIndex - 1,
-            });
-          }
-        })
-        .destroy();
-      });
+      this.refs.deleteModal.show();
     } else {
       this.moveFiles('trash');
     }
@@ -199,12 +183,23 @@ const ShowContentPartial =  React.createClass({
           <ToolbarButton
             icon="download"
             disabled={this.state.selectedRecordIds.count() === 0}
-            onClick={this.onDownloadClick}/>
+            onClick={this.onDownloadClick}
+          />
           <ToolbarButton
             icon="delete"
             labelTextKey={this.props.contentPrefix + ".actions." + (this.props.stage === 'trash' ? "delete" : "move_to.trash")}
             disabled={this.state.selectedRecordIds.count() === 0}
-            onClick={this.onDeleteClick}/>
+            onClick={this.onDeleteClick}
+          />
+          <DeleteModal
+            ref="deleteModal"
+            contentPrefix = {this.props.contentPrefix + ".modals.delete"}
+            selectedRecordIds = {this.state.selectedRecordIds}
+            app = "vault"
+            model = "Data.Record.File"
+            onSuccess = { this.reloadTable }
+          />
+
         </ToolbarGroup>
 
         {() => {
