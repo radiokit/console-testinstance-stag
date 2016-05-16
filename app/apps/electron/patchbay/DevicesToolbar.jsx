@@ -1,5 +1,7 @@
 import React from 'react';
-import Immutable from 'immutable';
+import {
+  List,
+} from 'immutable';
 
 import CreateModal from '../../../widgets/admin/crud/create_modal.jsx';
 import UpdateModal from '../../../widgets/admin/crud/update_modal.jsx';
@@ -122,8 +124,8 @@ const DevicesToolbar = React.createClass({
             app: 'plumber',
             model: this.props.selectedRecord.model,
             selectedRecordIds: this.props.selectedRecord
-              ? Immutable.List.of(this.props.selectedRecord.id)
-              : Immutable.List.of(null),
+              ? List.of(this.props.selectedRecord.id)
+              : List.of(null),
             afterFormAccept: this.onDelete,
           }}
         />
