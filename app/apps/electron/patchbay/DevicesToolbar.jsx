@@ -28,12 +28,10 @@ const DevicesToolbar = React.createClass({
     const newSelectedRecordName = nextProps.selectedRecord.record ?
       nextProps.selectedRecord.record.get('name') : '';
 
-    if ((selectedRecordId !== newSelectedRecordId) ||
-        (selectedRecordName !== newSelectedRecordName)) {
-      return true;
-    }
-
-    return false;
+    return (
+      (selectedRecordId !== newSelectedRecordId) ||
+      (selectedRecordName !== newSelectedRecordName)
+    );
   },
 
   onDelete() {
@@ -45,13 +43,10 @@ const DevicesToolbar = React.createClass({
   },
 
   getTranslationPrefix(modalType) {
-    let prefix;
-
-    if (this.props.selectedRecord.model === 'Client.Standalone') {
-      prefix = 'client';
-    } else {
-      prefix = 'link';
-    }
+    const prefix = ({
+      'Client.Standalone': 'client',
+      'Config.Routing.LinkRule': 'link'
+    })[this.props.selectedRecord.model]
 
     return 'apps.electron.patchbay.modals.${modalType}.${prefix}';
   },

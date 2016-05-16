@@ -1,5 +1,5 @@
 import React from 'react';
-import Immutable from 'immutable';
+import * as Immutable from 'immutable';
 
 import Toolbar from '../../../widgets/admin/toolbar_widget.jsx';
 import DevicesToolbar from './DevicesToolbar.jsx';
@@ -29,7 +29,7 @@ export default React.createClass({
 
   onClientDragMove(client, x, y) {
     this.clientsCoordinates =
-      this.clientsCoordinates.set(client.get('id'), new Immutable.Map({ x, y }));
+      this.clientsCoordinates.set(client.get('id'), Immutable.Map({ x, y }));
     this.forceUpdate();
   },
 
@@ -130,26 +130,28 @@ export default React.createClass({
   componentWillMount() {
     // We do not use state as it's updates are not not happening immediately
     // which results in sluggish UI
-    this.clientsCoordinates = new Immutable.Map();
+    this.clientsCoordinates = Immutable.Map();
   },
 
 
   getSelectedRecord() {
-    const selectedRecord = { record: null, model: 'no-model', id: 'no-id' };
-
     if (this.state.selectedLinkRule || this.state.selectedClient) {
       if (this.state.selectedLinkRule) {
-        selectedRecord.record = this.state.selectedLinkRule;
-        selectedRecord.id = this.state.selectedLinkRule.get('id');
-        selectedRecord.model = 'Config.Routing.LinkRule';
-      } else {
-        selectedRecord.record = this.state.selectedClient;
-        selectedRecord.id = this.state.selectedClient.get('id');
-        selectedRecord.model = 'Client.Standalone';
+        return ({
+          record: this.state.selectedLinkRule,
+          id: this.state.selectedLinkRule.get('id'),
+          model: 'Config.Routing.LinkRule',
+        });
       }
+
+      return ({
+        record: this.state.selectedClient,
+        id: this.state.selectedClient.get('id'),
+        model: 'Client.Standalone',
+      });
     }
 
-    return selectedRecord;
+    return { record: null, model: 'no-model', id: 'no-id' };
   },
 
 
