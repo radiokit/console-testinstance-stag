@@ -137,15 +137,15 @@ export default React.createClass({
 
 
   getSelectedRecord() {
-    if (this.state.selectedLinkRule || this.state.selectedClient) {
-      if (this.state.selectedLinkRule) {
-        return ({
-          record: this.state.selectedLinkRule,
-          id: this.state.selectedLinkRule.get('id'),
-          model: 'Config.Routing.LinkRule',
-        });
-      }
+    if (this.state.selectedLinkRule) {
+      return ({
+        record: this.state.selectedLinkRule,
+        id: this.state.selectedLinkRule.get('id'),
+        model: 'Config.Routing.LinkRule',
+      });
+    }
 
+    if (this.state.selectedLinkRule) {
       return ({
         record: this.state.selectedClient,
         id: this.state.selectedClient.get('id'),
