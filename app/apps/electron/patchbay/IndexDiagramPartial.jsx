@@ -73,8 +73,8 @@ export default React.createClass({
     return Immutable.fromJS({
       electron: {
         diagram: {
-          x: 0,
-          y: 0,
+          x: 480,
+          y: 280,
         },
       },
     }
