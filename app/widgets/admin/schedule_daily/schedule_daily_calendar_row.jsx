@@ -52,14 +52,6 @@ const CalendarRow = React.createClass({
     now: PropTypes.object.isRequired,
     activeItem: PropTypes.object,
     onActiveItemChange: PropTypes.func.isRequired,
-    expandable: PropTypes.bool.isRequired,
-    viewType: PropTypes.oneOf(['Weekly', 'Daily']).isRequired,
-  },
-
-  getDefaultProps() {
-    return {
-      expandable: false,
-    };
   },
 
   getInitialState() {
@@ -77,11 +69,9 @@ const CalendarRow = React.createClass({
   },
 
   toggleExpansion() {
-    if (this.props.expandable) {
-      this.setState({
-        expanded: !this.state.expanded,
-      });
-    }
+    this.setState({
+      expanded: !this.state.expanded,
+    });
   },
 
   markAsActive(item) {
