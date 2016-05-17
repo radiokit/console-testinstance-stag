@@ -10,6 +10,9 @@
         vertical-align: top;
       }
     }
+    &.ScheduleDailyWidget-CalendarRow--expanded-cell {
+      vertical-align: top;
+    }
 
     &.ScheduleDailyWidget-CalendarRow--past {
       color: #999;
@@ -74,11 +77,12 @@
 
     .ScheduleDailyWidget-CalendarRow-item-expanded {
       min-height: 50px;
-      ul {
-        list-style-type: none;
-        margin-bottom: 0;
-        padding-left: 0;
-      }
+    }
+
+    .ScheduleDailyWidget-CalendarRow-item-expanded-list {
+      list-style-type: none;
+      margin-bottom: 0;
+      padding-left: 0;
     }
   }
 }

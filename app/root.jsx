@@ -3,6 +3,7 @@ import Counterpart from 'counterpart';
 import LoadingLayout from './layouts/loading_layout.jsx';
 import AdminLayout from './layouts/admin_layout.jsx';
 import Alert from './widgets/admin/alert_widget.jsx';
+import Moment from 'moment';
 
 require("../node_modules/mdi/css/materialdesignicons.css");
 require("../node_modules/roboto-fontface/css/roboto-fontface-regular.scss");
@@ -129,6 +130,7 @@ export default React.createClass({
             availableUserAccounts: data.first().get("accounts")
           }, () => {
             Counterpart.setLocale(this.state.currentUser.get("locale"));
+            Moment.locale(this.state.currentUser.get('locale'));
             this.loadBroadcastChannels();
           });
         }

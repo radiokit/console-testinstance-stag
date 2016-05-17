@@ -33,10 +33,6 @@ const ScheduleDaily = React.createClass({
     };
   },
 
-  onNowChange(newNow) {
-    this.setState({ now: newNow });
-  },
-
   getItems(hour) {
     const { items, offsetStart, firstHour } = this.props;
     let hourStart = moment.utc(offsetStart).hour(hour).startOf('hour');

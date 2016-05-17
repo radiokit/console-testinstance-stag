@@ -9,7 +9,7 @@ const hourType = PropTypes.oneOf(range(0, 24));
 
 const ExpandedRow = (props) => (
   <div className="ScheduleDailyWidget-CalendarRow-item-expanded">
-    <ul>
+    <ul className="ScheduleDailyWidget-CalendarRow-item-expanded-list">
       {props.items.sortBy(item => item.toJS().start_at).map(item => (
         <li key={item.get('id')}>
           <div
@@ -52,6 +52,14 @@ const CalendarRow = React.createClass({
     now: PropTypes.object.isRequired,
     activeItem: PropTypes.object,
     onActiveItemChange: PropTypes.func.isRequired,
+    expandable: PropTypes.bool.isRequired,
+    viewType: PropTypes.oneOf(['Weekly', 'Daily']).isRequired,
+  },
+
+  getDefaultProps() {
+    return {
+      expandable: false,
+    };
   },
 
   getInitialState() {
@@ -69,9 +77,11 @@ const CalendarRow = React.createClass({
   },
 
   toggleExpansion() {
-    this.setState({
-      expanded: !this.state.expanded,
-    });
+    if (this.props.expandable) {
+      this.setState({
+        expanded: !this.state.expanded,
+      });
+    }
   },
 
   markAsActive(item) {
@@ -132,7 +142,11 @@ const CalendarRow = React.createClass({
           { 'ScheduleDailyWidget-CalendarRow--expanded': this.state.expanded }
         )}
       >
-        <td className="ScheduleDailyWidget-CalendarRow-expandToggle">
+        <td className={classNames(
+            'ScheduleDailyWidget-CalendarRow-expandToggle',
+            { 'ScheduleDailyWidget-CalendarRow--expanded-cell': this.state.expanded }
+          )}
+        >
           <button
             className="btn btn-icon-toggle"
             onClick={this.toggleExpansion}
@@ -145,10 +159,18 @@ const CalendarRow = React.createClass({
           </button>
         </td>
 
-        <td className="ScheduleDailyWidget-CalendarRow-hour">
+        <td className={classNames(
+            'ScheduleDailyWidget-CalendarRow-hour',
+            { 'ScheduleDailyWidget-CalendarRow--expanded-cell': this.state.expanded }
+          )}
+        >
           {sprintf('%02s:00', hour)}
         </td>
-        <td className="ScheduleDailyWidget-CalendarRow-items">
+        <td className={classNames(
+            'ScheduleDailyWidget-CalendarRow-items',
+            { 'ScheduleDailyWidget-CalendarRow--expanded-cell': this.state.expanded }
+          )}
+        >
           {hourMarker}
           {rowContent}
         </td>

@@ -9,8 +9,11 @@ import DeleteModal from '../../../widgets/admin/crud/delete_modal.jsx';
 import ToolbarGroup from '../../../widgets/admin/toolbar_group_widget.jsx';
 import ToolbarButtonModal from '../../../widgets/admin/toolbar_button_modal_widget.jsx';
 
-Counterpart.registerTranslations('en', require('./playlist_toolbar_en.js'));
-Counterpart.registerTranslations('pl', require('./playlist_toolbar_pl.js'));
+import translationPL from './playlist_toolbar_pl.js';
+import translationEN from './playlist_toolbar_en.js';
+
+Counterpart.registerTranslations('pl', { playlist_toolbar: translationPL });
+Counterpart.registerTranslations('en', { playlist_toolbar: translationEN });
 
 const PlaylistToolbar = React.createClass({
   propTypes: {
@@ -110,10 +113,10 @@ const PlaylistToolbar = React.createClass({
       <ToolbarGroup position="right">
         <ToolbarButtonModal
           icon="plus"
-          labelTextKey="apps.broadcast.playlist.add_button"
+          labelTextKey="playlist_toolbar.add_button"
           modalElement={CreateModal}
           modalProps={{
-            contentPrefix: 'apps.broadcast.playlist.add',
+            contentPrefix: 'playlist_toolbar.add',
             form: this.buildNewForm(),
             app: 'plumber',
             model: 'Media.Input.File.RadioKit.Vault',
@@ -123,12 +126,12 @@ const PlaylistToolbar = React.createClass({
 
         <ToolbarButtonModal
           icon="folder"
-          labelTextKey="apps.broadcast.playlist.update_button"
+          labelTextKey="playlist_toolbar.update_button"
           disabled={this.props.activeItem === null}
           modalElement={UpdateModal}
           key={(this.props.activeItem && this.props.activeItem.get('id')) || 'no-id' }
           modalProps={{
-            contentPrefix: 'apps.broadcast.playlist.update',
+            contentPrefix: 'playlist_toolbar.update',
             form: this.buildUpdateForm(),
             app: 'plumber',
             model: 'Media.Input.File.RadioKit.Vault',
@@ -139,11 +142,11 @@ const PlaylistToolbar = React.createClass({
 
         <ToolbarButtonModal
           icon="delete"
-          labelTextKey="apps.broadcast.playlist.delete_button"
+          labelTextKey="playlist_toolbar.delete_button"
           disabled={this.props.activeItem === null}
           modalElement={DeleteModal}
           modalProps={{
-            contentPrefix: 'apps.broadcast.playlist.delete',
+            contentPrefix: 'playlist_toolbar.delete',
             app: 'plumber',
             model: 'Media.Input.File.RadioKit.Vault',
             selectedRecordIds: (this.props.activeItem

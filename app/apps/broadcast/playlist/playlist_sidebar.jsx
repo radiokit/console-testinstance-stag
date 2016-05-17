@@ -1,9 +1,5 @@
 import React from 'react';
 import moment from 'moment';
-import Counterpart from 'counterpart';
-
-Counterpart.registerTranslations('en', require('./playlist_toolbar_en.js'));
-Counterpart.registerTranslations('pl', require('./playlist_toolbar_pl.js'));
 
 const PlaylistSidebar = React.createClass({
   propTypes: {
