@@ -1,6 +1,6 @@
 import React from 'react';
-import Immutable from 'immutable';
-import _ from 'lodash';
+import { Seq, List } from 'immutable';
+import { isEqual } from 'lodash';
 
 import DeleteModal from '../../../widgets/admin/crud/delete_modal.jsx';
 import TableBrowser from '../../../widgets/admin/table_browser_widget.jsx';
@@ -26,9 +26,9 @@ const ShowContentPartial =  React.createClass({
 
   getInitialState() {
     return {
-      selectedRecordIds: new Immutable.Seq().toIndexedSeq(),
-      selectedRecords: new Immutable.Seq().toIndexedSeq(),
-      selectedAssociations: new Immutable.List(),
+      selectedRecordIds: Seq().toIndexedSeq(),
+      selectedRecords: Seq().toIndexedSeq(),
+      selectedAssociations: List(),
     };
   },
 
@@ -50,7 +50,7 @@ const ShowContentPartial =  React.createClass({
   },
 
   componentDidUpdate(prevProps, prevState) {
-    if(!_.isEqual(prevProps.tagFilter,this.props.tagFilter)){
+    if(!isEqual(prevProps.tagFilter,this.props.tagFilter)){
       this.reloadTable();
     }
   },

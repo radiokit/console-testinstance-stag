@@ -1,6 +1,7 @@
 import React from 'react';
 import Translate from 'react-translate-component';
-import _ from 'lodash';
+import RadioKit from '../../../services/RadioKit';
+import { includes, pull, some, sortBy } from 'lodash';
 import classnames from 'classnames';
 
 import Checkbox from '../../../widgets/general/indeterminate_checkbox_widget.jsx';
@@ -33,7 +34,7 @@ const ShowContentTagModal = React.createClass({
     });
     Object.keys(this.tagFrequencies).forEach((tagId) => {
       this.props.tagCategories.toJS().forEach((category) => {
-        if (_.includes(category.tag_items.map((tag) => tag.id), tagId)) {
+        if (includes(category.tag_items.map((tag) => tag.id), tagId)) {
           this.categoryFrequencies.add(category.id);
         }
       });
@@ -57,7 +58,7 @@ const ShowContentTagModal = React.createClass({
     this.setState({
       shouldUpdate: false,
       selectedTagIds,
-      deselectedTagIds: _.pull(this.state.deselectedTagIds, tagId),
+      deselectedTagIds: pull(this.state.deselectedTagIds, tagId),
     });
   },
 
@@ -66,7 +67,7 @@ const ShowContentTagModal = React.createClass({
     deselectedTagIds.push(tagId);
     this.setState({
       shouldUpdate: false,
-      selectedTagIds: _.pull(this.state.selectedTagIds, tagId),
+      selectedTagIds: pull(this.state.selectedTagIds, tagId),
       deselectedTagIds,
     });
   },
@@ -74,8 +75,8 @@ const ShowContentTagModal = React.createClass({
   resetTagId(tagId) {
     this.setState({
       shouldUpdate: false,
-      selectedTagIds: _.pull(this.state.selectedTagIds, tagId),
-      deselectedTagIds: _.pull(this.state.deselectedTagIds, tagId),
+      selectedTagIds: pull(this.state.selectedTagIds, tagId),
+      deselectedTagIds: pull(this.state.deselectedTagIds, tagId),
     });
   },
 
@@ -111,7 +112,7 @@ const ShowContentTagModal = React.createClass({
   },
 
   createAssociation(association) {
-    window.data
+    RadioKit
       .record("vault", "Data.Tag.Association")
       .on("loaded", () => {
         if (this.isMounted()) {
@@ -136,7 +137,7 @@ const ShowContentTagModal = React.createClass({
       });
   },
 
-  recordIdUpdateComplete(recordId) {
+  recordIdUpdateComplete() {
     this.setState({
       index: this.state.index + 1,
     });
@@ -147,25 +148,22 @@ const ShowContentTagModal = React.createClass({
   },
 
   deleteAssociation(association) {
-    window.data.record("vault", "Data.Tag.Association", association.id)
-        // .on("error", this.onDeleteError) // TODO
-      .on("loaded", () => {
-        if (this.isMounted()) {
-          if (this.state.deleteCount === 0) {
-            if (this.state.insertCompleted) {
-              this.recordIdUpdateComplete(association.record_file_id);
-            } else {
-              this.setState({
-                deleteCompleted: true,
-              });
-            }
+    RadioKit.record('vault', 'Data.Tag.Association', association.id)
+      .on('loaded', () => {
+        if (this.state.deleteCount === 0) {
+          if (this.state.insertCompleted) {
+            this.recordIdUpdateComplete(association.record_file_id);
           } else {
             this.setState({
-              deleteCount: this.state.deleteCount - 1,
+              deleteCompleted: true,
             });
           }
+        } else {
+          this.setState({
+            deleteCount: this.state.deleteCount - 1,
+          });
         }
-        })
+      })
       .destroy();
   },
 
@@ -181,11 +179,11 @@ const ShowContentTagModal = React.createClass({
         };
       })
       .filter((association) => {
-        return !(_.some(this.props.initialAssociations.toJS(), association));
+        return !(some(this.props.initialAssociations.toJS(), association));
       });
     const unwantedAssociations = this.props.initialAssociations.toJS()
       .filter((a) => a.record_file_id === recordId)
-      .filter((a) => _.includes(this.state.deselectedTagIds, a.tag_item_id));
+      .filter((a) => includes(this.state.deselectedTagIds, a.tag_item_id));
     const insertCompleted = newAssociations.length === 0;
     const deleteCompleted = unwantedAssociations.length === 0;
     if (insertCompleted && deleteCompleted) {
@@ -206,7 +204,7 @@ const ShowContentTagModal = React.createClass({
     return (
       <div>
         <ul className="list">
-          { category.tag_items && _.sortBy(category.tag_items,'name').map((tag) => {
+          { category.tag_items && sortBy(category.tag_items,'name').map((tag) => {
             const onTagSelected = () => this.selectTagId(tag.id);
             const onTagDeselected = () => this.deselectTagId(tag.id);
             const onTagRestored = () => this.resetTagId(tag.id);
@@ -253,7 +251,7 @@ const ShowContentTagModal = React.createClass({
             component="p"
             content="widgets.vault.file_browser.modals.tag.message.confirmation"
             count={this.props.selectedRecordIds.count()} />
-          {categories.length > 0 && _.sortBy(categories,'name').map((category) => {
+          {categories.length > 0 && sortBy(categories,'name').map((category) => {
             let expanded = this.isCategoryExpanded(category);
             let toggleClasses = classnames('btn btn-icon-toggle', {
               'disabled': category.tag_items.length === 0,

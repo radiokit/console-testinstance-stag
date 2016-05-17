@@ -1,6 +1,7 @@
 import React from 'react';
 import Translate from 'react-translate-component';
-import _ from 'lodash';
+import { head, intersection, isEmpty, difference } from 'lodash';
+import RadioKit from '../../../services/RadioKit';
 import ModalForEach from '../../../widgets/admin/modal_foreach_widget.jsx';
 import MetadataFormWidget from './metadata_form_widget.jsx';
 
@@ -60,7 +61,7 @@ export default React.createClass({
       }).toJS();
       const flattenedValues = multiValues.filter((val, pos) => multiValues.indexOf(val) === pos);
       const hasMultiValues = flattenedValues.length > 1;
-      const value = hasMultiValues ? null : _.head(flattenedValues);
+      const value = hasMultiValues ? null : head(flattenedValues);
       const row = {
         type: metadataSchema.get('kind'),
         name: metadataSchema.get('name'),
@@ -94,7 +95,7 @@ export default React.createClass({
 
   updateMetadataItem(metadataItem, values, emptyValue) {
     if (emptyValue) {
-      window.data
+      RadioKit
       .record('vault', 'Data.Metadata.Item', metadataItem.id)
       .on('loaded', () => {
         this.decrementMetadataUpdate();
@@ -102,7 +103,7 @@ export default React.createClass({
       .destroy();
     }
     else {
-      window.data
+      RadioKit
       .record('vault', 'Data.Metadata.Item', metadataItem.id)
       .on('loaded', () => {
         this.decrementMetadataUpdate();
@@ -112,7 +113,7 @@ export default React.createClass({
   },
 
   createMetadataItem(fields) {
-    window.data
+    RadioKit
     .record('vault', 'Data.Metadata.Item')
     .on('loaded', () => {
       if (this.state.creatingSchemas === 1) {
@@ -155,10 +156,10 @@ export default React.createClass({
     });
     const allSchemasIds = this.props.metadataSchemas.map((schema) => schema.get('id')).toJS();
     const usedSchemasIds = uniqueMetadataItems.map((metadataItem) => metadataItem.metadata_schema_id);
-    const updatedSchemasIds = _.intersection(usedSchemasIds, filledMetadataSchemasIds);
-    const unusedSchemasIds = _.difference(allSchemasIds, usedSchemasIds);
-    const newSchemasIds = _.intersection(unusedSchemasIds, filledMetadataSchemasIds);
-    if (_.isEmpty(updatedSchemasIds) && _.isEmpty(newSchemasIds)) {
+    const updatedSchemasIds = intersection(usedSchemasIds, filledMetadataSchemasIds);
+    const unusedSchemasIds = difference(allSchemasIds, usedSchemasIds);
+    const newSchemasIds = intersection(unusedSchemasIds, filledMetadataSchemasIds);
+    if (isEmpty(updatedSchemasIds) && isEmpty(newSchemasIds)) {
       this.finishUpdatingRecord();
     }
     this.setState({

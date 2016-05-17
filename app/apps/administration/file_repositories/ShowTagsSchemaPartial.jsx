@@ -1,6 +1,6 @@
 import React from 'react';
-import Immutable from 'immutable';
-import _ from 'lodash';
+import { List } from 'immutable';
+import { sortBy } from 'lodash';
 import classnames from 'classnames';
 import Translate from 'react-translate-component';
 import Counterpart from 'counterpart';
@@ -129,7 +129,7 @@ const ShowTagsSchemaPartial = React.createClass({
     return (
       <div className="ShowTagsSchemaPartial">
         <ul className="list">
-          { _.sortBy(category.tag_items,'name').map((tag) => {
+          { sortBy(category.tag_items,'name').map((tag) => {
             const onDeleteTagListener = () => this.showDeleteTagModal(tag);
             const onEditTagListener = () => this.showEditTagModal(tag);
             return (
@@ -138,7 +138,7 @@ const ShowTagsSchemaPartial = React.createClass({
                   ref={ "deleteTagModal-" + tag.name }
                   contentPrefix={ this.props.contentPrefix + ".modals.delete_tag" }
                   app="vault" model="Data.Tag.Item"
-                  selectedRecordIds={ Immutable.List.of(tag.id) }
+                  selectedRecordIds={ List.of(tag.id) }
                   onDismiss={ this.refreshData }/>
                 <UpdateModal
                   ref={ "editTagModal-" + tag.name }
@@ -148,7 +148,7 @@ const ShowTagsSchemaPartial = React.createClass({
                   recordId={ tag.id }
                   form={ this.buildEditTagForm(tag) }
                   onDismiss={ this.refreshData } />
-                <div className="card-head card-head-sm">
+                <div className="ShowTagsSchemaPartial__tagName card-head card-head-sm">
                   <header>
                     { tag.name }
                   </header>
@@ -203,12 +203,12 @@ const ShowTagsSchemaPartial = React.createClass({
                             app: "vault",
                             model: "Data.Tag.Category" } } />
         </ToolbarGroup>
-        { this.state.categories.size > 0 && _.sortBy(this.state.categories.toJS(),'name').map((category) => {
+        { this.state.categories.size > 0 && sortBy(this.state.categories.toJS(),'name').map((category) => {
           const onNewTagListener = () => this.showNewTagModal(category);
           const onDeleteCategoryListener = () => this.showDeleteCategoryModal(category);
           const onEditCategoryListener = () => this.showEditCategoryModal(category);
           const toggleClassNames = classnames('btn', 'btn-flat', 'btn-icon-toggle', {'disabled' : category.tag_items.length === 0 });
-          const newTagIconClassNames = classnames('btn', 'btn-icon', {'EmptyCategory' : category.tag_items.length === 0 });
+          const newTagIconClassNames = classnames('btn', 'btn-icon', {'ShowTagsSchemaPartial__emptyCategory' : category.tag_items.length === 0 });
 
           return (
             <div id={ category.name } key={category.id}>
@@ -223,7 +223,7 @@ const ShowTagsSchemaPartial = React.createClass({
                 ref={ "deleteCategoryModal-" + category.name }
                 contentPrefix={ this.props.contentPrefix + ".modals.delete_category" }
                 app="vault" model="Data.Tag.Category"
-                selectedRecordIds={ Immutable.List.of(category.id) }
+                selectedRecordIds={ List.of(category.id) }
                 onDismiss={ this.refreshData }/>
               <UpdateModal
                 ref={ "editCategoryModal-" + category.name }
@@ -251,7 +251,7 @@ const ShowTagsSchemaPartial = React.createClass({
                           <Translate
                             content={this.props.contentPrefix + ".modals.create_category.empty_warning"}
                             component="small"
-                            className="EmptyCategory"
+                            className="ShowTagsSchemaPartial__emptyCategory"
                           />
                         );
                       }

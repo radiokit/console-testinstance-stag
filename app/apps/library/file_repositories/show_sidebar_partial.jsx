@@ -1,7 +1,7 @@
 import React from 'react';
-import _ from 'lodash';
+import { differenceBy, pull, uniqBy, sortBy, concat, includes, some } from 'lodash';
 import classnames from 'classnames';
-import Immutable from 'immutable';
+import { List } from 'immutable';
 
 import Translate from 'react-translate-component';
 
@@ -25,10 +25,10 @@ const ShowSidebarPartial = React.createClass({
     let newFilter = [...this.props.tagFilter];
     let selectedCategoriesIds = this.state.selectedCategoriesIds;
     if (this.isCategorySelected(category)) {
-      newFilter = _.differenceBy(newFilter, category.tag_items, 'id');
-      selectedCategoriesIds = _.pull(selectedCategoriesIds, category.id);
+      newFilter = differenceBy(newFilter, category.tag_items, 'id');
+      selectedCategoriesIds = pull(selectedCategoriesIds, category.id);
     } else {
-      newFilter = _.uniqBy(_.concat(newFilter, category.tag_items), 'id');
+      newFilter = uniqBy(concat(newFilter, category.tag_items), 'id');
       selectedCategoriesIds.push(category.id);
     }
     this.props.onTagFilterUpdate(newFilter);
@@ -38,11 +38,11 @@ const ShowSidebarPartial = React.createClass({
   selectTag(tag) {
     let newFilter = [...this.props.tagFilter];
     if (this.isTagSelected(tag)) {
-      newFilter = _.differenceBy(newFilter, [tag], 'id');
+      newFilter = differenceBy(newFilter, [tag], 'id');
     } else {
       newFilter.push(tag);
     }
-    const category = this.props.record.get('tag_categories', new Immutable.List())
+    const category = this.props.record.get('tag_categories', List())
       .filter((cat) => cat.get('id') === tag.tag_category_id).first().toJS();
     const usedTags = newFilter.filter((tagItem) => tagItem.tag_category_id === category.id);
     let selectedCategoriesIds = this.state.selectedCategoriesIds;
@@ -50,7 +50,7 @@ const ShowSidebarPartial = React.createClass({
       selectedCategoriesIds.push(category.id);
     }
     else {
-      selectedCategoriesIds = _.pull(selectedCategoriesIds, category.id);
+      selectedCategoriesIds = pull(selectedCategoriesIds, category.id);
     }
     this.props.onTagFilterUpdate(newFilter);
     this.setState({ selectedCategoriesIds });
@@ -64,18 +64,18 @@ const ShowSidebarPartial = React.createClass({
   },
 
   isCategorySelected(category) {
-    return _.includes(this.state.selectedCategoriesIds, category.id);
+    return includes(this.state.selectedCategoriesIds, category.id);
   },
 
   isTagSelected(tag) {
-    return _.some(this.props.tagFilter, tag);
+    return some(this.props.tagFilter, tag);
   },
 
   renderCategoryTags(category) {
     return (
       <div>
         <ul className="list">
-          { category.tag_items && _.sortBy(category.tag_items,'name').map((tag) => {
+          { category.tag_items && sortBy(category.tag_items,'name').map((tag) => {
             const onTagSelected = () => this.selectTag(tag);
             return (
               <li key={ tag.id }>
@@ -93,7 +93,7 @@ const ShowSidebarPartial = React.createClass({
   },
 
   render() {
-    const categories = this.props.record.get("tag_categories", new Immutable.List()).toJS();
+    const categories = this.props.record.get("tag_categories", List()).toJS();
     return (
       <div className="ShowSidebarPartial">
         <div className={"card-head AllTags" + (!this.props.tagFilter.length > 0 ? "--selected" : "")}>
@@ -101,12 +101,12 @@ const ShowSidebarPartial = React.createClass({
             <Translate content={this.props.contentPrefix + ".tags.all_tags"} />
           </header>
         </div>
-        { categories.length > 0 && _.sortBy(categories,'name').map((category) => {
+        { categories.length > 0 && sortBy(categories,'name').map((category) => {
           const onCategorySelected = () => this.selectCategory(category);
-          let toggleClasses = classnames('btn btn-flat btn-icon-toggle collapsed', {
+          const toggleClasses = classnames('btn btn-flat btn-icon-toggle collapsed', {
             'disabled': category.tag_items.length === 0,
           });
-          let headerClasses = classnames('card-head Category', {
+          const headerClasses = classnames('card-head Category', {
             'Category--selected': this.isCategorySelected(category),
           });
           if (category.tag_items.length === 0) {

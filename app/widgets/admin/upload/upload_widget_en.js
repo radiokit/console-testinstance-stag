@@ -1,5 +1,4 @@
 export default {
-  //TODO
   uploadInstructions: 'Upload files',
   tableFileName: 'File name',
   tableFileSize: 'Size',

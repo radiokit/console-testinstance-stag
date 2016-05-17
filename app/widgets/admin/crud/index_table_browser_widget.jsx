@@ -178,7 +178,7 @@ export default React.createClass({
             }
           }()}
           {() => {
-            if(this.props.updateEnabled && this.props.updateEnabled === true && this.props.updateForm) {
+            if(this.props.updateEnabled && this.props.updateEnabled && this.props.updateForm) {
               return <ToolBarButtonModal
                 icon="border-color"
                 hintTooltipKey={`${this.props.contentPrefix}.index.actions.update`}
