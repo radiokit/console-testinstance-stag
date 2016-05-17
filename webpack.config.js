@@ -36,11 +36,14 @@ var config = {
     }, {
       test: /\.jsx$/,
       exclude: [node_modules_dir],
-      loaders: ['react-hot', 'babel']
+      loaders: ['react-hot']
     }, {
-      test: /\.js$/,
+      test: /\.jsx?$/,
       exclude: [node_modules_dir],
-      loader: 'babel'
+      loader: 'babel',
+      query: {
+        sourceMaps: 'inline'
+      }
     }, {
       include: /\.json$/,
       loader: 'json'

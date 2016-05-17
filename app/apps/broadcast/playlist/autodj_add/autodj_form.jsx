@@ -19,7 +19,7 @@ const AUTODJ_OPTIONS = [
   'query',
 ];
 
-const AutoDJAddForm = React.createClass({
+const AutoDJForm = React.createClass({
   propTypes: {
     defaultTimeOffset: React.PropTypes.number.isRequired,
     defaultTimePeriod: React.PropTypes.number,
@@ -59,12 +59,12 @@ const AutoDJAddForm = React.createClass({
     return (
       <form
         onSubmit={this.handleSubmit}
-        className="AutoDJAddForm"
+        className="AutoDJForm"
       >
         <fieldset>
           <div>
             <label htmlFor="autodjform_type">
-              <Translate content="AutoDJAddForm.typeLabel" />
+              <Translate content="AutoDJForm.typeLabel" />
             </label>
             <select
               name="autodjform_type"
@@ -78,7 +78,7 @@ const AutoDJAddForm = React.createClass({
           </div>
           <div>
             <label htmlFor="">
-              <Translate content="AutoDJAddForm.repositoryLabel" />
+              <Translate content="AutoDJForm.repositoryLabel" />
             </label>
             <VaultRepositoryPicker />
           </div>
@@ -88,4 +88,4 @@ const AutoDJAddForm = React.createClass({
   },
 });
 
-export default AutoDJAddForm;
+export default AutoDJForm;

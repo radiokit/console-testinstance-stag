@@ -1,6 +1,6 @@
 import React from 'react';
 
-import AutoDJAddForm from './autodj_add_form.jsx';
+import AutoDJForm from './autodj_form.jsx';
 import Modal from '../../../../widgets/admin/modal_widget.jsx';
 
 // import Translate from 'react-translate-component';
@@ -11,9 +11,9 @@ import localeEN from './autodj_modal_en';
 Counterpart.registerTranslations('en', localeEN);
 Counterpart.registerTranslations('pl', localePL);
 
-const AutoDJAddModal = React.createClass({
+const AutoDJModal = React.createClass({
   propTypes: {
-    ...AutoDJAddForm.propTypes,
+    ...AutoDJForm.propTypes,
   },
 
   getDefaultProps() {
@@ -43,11 +43,11 @@ const AutoDJAddModal = React.createClass({
     };
 
     return (
-      <Modal contentPrefix="AutoDJAddModal.modal" ref="modal">
-        <AutoDJAddForm {...formProps} />
+      <Modal contentPrefix="AutoDJModal.modal" ref="modal">
+        <AutoDJForm {...formProps} />
       </Modal>
     );
   },
 });
 
-export default AutoDJAddModal;
+export default AutoDJModal;

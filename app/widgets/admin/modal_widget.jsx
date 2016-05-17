@@ -4,64 +4,80 @@ import Translate from 'react-translate-component';
 
 // FIXME do not use jquery
 import $ from 'jquery';
-import Bootstrap from 'bootstrap-sass';
+import 'bootstrap-sass';
 
 export default React.createClass({
   propTypes: {
     contentPrefix: React.PropTypes.string.isRequired,
     size: React.PropTypes.oneOf(['normal', 'large']),
+    children: React.PropTypes.any,
     onShow: React.PropTypes.func,
     onHide: React.PropTypes.func,
   },
 
-  getDefaultProps: function() {
+  getDefaultProps() {
     return {
-      size: "normal",
-    }
+      size: 'normal',
+    };
   },
 
-  show: function() {
-    $(this.getNode()).modal("show");
+  componentDidMount() {
+    $(this.getNode()).on('show.bs.modal', this.handleShow);
   },
 
-  onHide: function() {
-    if(this.props.onHide) {
-      this.props.onHide(this);
-    }
-  },
-
-  componentWillUnmount: function() {
-    $(this.getNode()).off("hide.bs.modal", this.onHide);
-  },
-
-  onShow: function() {
-    if(this.props.onShow) {
-      this.props.onShow(this);
-    }
-  },
-
-  componentDidMount: function() {
-    $(this.getNode()).on("show.bs.modal", this.onShow);
+  componentWillUnmount() {
+    $(this.getNode()).off('hide.bs.modal', this.handleHide);
   },
 
   getNode() {
     return ReactDOM.findDOMNode(this.refs.modal);
   },
 
-  render: function() {
-    let klass;
-    if(this.props.size === "large") {
-      klass = "modal-dialog modal-lg";
+  show() {
+    $(this.getNode()).modal('show');
+  },
+
+  hide() {
+    $(this.getNode()).modal('hide');
+  },
+
+  handleHide() {
+    if (this.props.onHide) {
+      this.props.onHide(this);
+    }
+  },
+
+  handleShow() {
+    if (this.props.onShow) {
+      this.props.onShow(this);
+    }
+  },
+
+  render() {
+    let containerClassName;
+    if (this.props.size === 'large') {
+      containerClassName = 'modal-dialog modal-lg';
     } else {
-      klass = "modal-dialog";
+      containerClassName = 'modal-dialog';
     }
 
     return (<div ref="modal" className="modal fade in" role="dialog">
-      <div className={klass}>
+      <div className={containerClassName}>
         <div className="modal-content">
           <div className="modal-header">
-            <button type="button" className="close" data-dismiss="modal" onClick={this.onHide} aria-hidden="true">×</button>
-            <Translate component="h4" content={this.props.contentPrefix + ".header"} className="modal-title" />
+            <button
+              type="button"
+              className="close"
+              data-dismiss="modal"
+              onClick={this.handleHide}
+              aria-hidden="true"
+              children="×"
+            />
+            <Translate
+              component="h4"
+              content={`${this.props.contentPrefix}.header`}
+              className="modal-title"
+            />
           </div>
 
           {this.props.children}
@@ -69,5 +85,5 @@ export default React.createClass({
         </div>
       </div>
     </div>);
-  }
+  },
 });

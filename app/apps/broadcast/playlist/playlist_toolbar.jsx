@@ -9,6 +9,7 @@ import ScheduleItemModal from '../../../widgets/admin/schedule/schedule_item_mod
 import DeleteModal from '../../../widgets/admin/crud/delete_modal.jsx';
 import ToolbarGroup from '../../../widgets/admin/toolbar_group_widget.jsx';
 import ToolbarButtonModal from '../../../widgets/admin/toolbar_button_modal_widget.jsx';
+import AutoDJAddModal from './autodj_add';
 
 import translationPL from './playlist_toolbar_pl.js';
 import translationEN from './playlist_toolbar_en.js';
@@ -138,6 +139,16 @@ const PlaylistToolbar = React.createClass({
             form: this.buildNewForm(),
             app: 'plumber',
             model: 'Media.Input.File.RadioKit.Vault',
+            afterFormAccept: this.props.onCRUD,
+          }}
+        />
+
+        <ToolbarButtonModal
+          icon="plus"
+          labelTextKey="apps.broadcast.playlist.add_dj_button"
+          modalElement={AutoDJAddModal}
+          modalProps={{
+            defaultTimeOffset: this.props.offsetStart,
             afterFormAccept: this.props.onCRUD,
           }}
         />

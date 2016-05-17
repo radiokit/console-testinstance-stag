@@ -1,5 +1,5 @@
 export default {
-  AutoDJAddModal: {
+  AutoDJModal: {
     modal: {
       header: 'AutoDJ',
     },

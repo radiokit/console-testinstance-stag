@@ -1,5 +1,5 @@
 export default {
-  AutoDJAddForm: {
+  AutoDJForm: {
     typeLabel: 'Type',
     repositoryLabel: 'Repository',
   },
