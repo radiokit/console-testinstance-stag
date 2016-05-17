@@ -2,11 +2,6 @@ export default {
   apps: {
     electron: {
       icon: 'blur-radial',
-      devices: {
-        index() {
-          return '/apps/electron/devices/index';
-        },
-      },
       transmissions: {
         index() {
           return '/apps/electron/transmissions/index';
