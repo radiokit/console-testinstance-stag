@@ -102,6 +102,7 @@ export default React.createClass({
         .order('name', 'asc')
         .where.apply(this, clientsCondition)
         .on('fetch', (_event, _query, data) => {
+
           if(this.isMounted()) {
             this.setState({
               loadedAudioInterfaces: data
