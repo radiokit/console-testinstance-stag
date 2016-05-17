@@ -1,6 +1,7 @@
 import {
   List,
   Map,
+  fromJS,
 } from 'immutable';
 import RadioKit from '../RadioKit';
 import { RadioKitQueries, update } from './RadioKitQueries';
@@ -118,6 +119,25 @@ function query(queryParams = Map(), options = {}) {
   }
 }
 
+function load(app, model, id, fields, queryAppendix = {}, requestOptions = {}) {
+  query(
+    fromJS({
+      app,
+      model,
+      select: fields,
+      conditions: [
+        {
+          field: 'id',
+          comparison: 'eq',
+          value: id,
+        },
+      ],
+      ...queryAppendix,
+    }),
+    requestOptions
+  );
+}
+
 function clear(app, model = null) {
   RadioKitQueries.write(
     RKDData => RKDData
@@ -135,6 +155,7 @@ function clear(app, model = null) {
 
 export {
   query,
+  load,
   save,
   remove,
   clear,
