@@ -6,6 +6,20 @@ import ScheduleDomain from '../../../services/ScheduleDomain';
 import { range } from 'lodash';
 import sprintf from 'tiny-sprintf';
 
+import './schedule_weekly_widget.scss';
+
+const ShortenedRow = (props) => (
+  <div className="ScheduleWeeklyWidget-Table-item-ellipsed">
+    {props.items.sortBy(item => item.toJS().start_at).map(item => (
+      `${item.get('name') || item.get('id')} [${item.get('start_at').format('HH:mm:ss.SSS')}], `
+    ))}
+  </div>
+);
+
+ShortenedRow.propTypes = {
+  items: React.PropTypes.object.isRequired,
+};
+
 const ScheduleWeekly = React.createClass({
   propTypes: {
     firstHour: React.PropTypes.number,
@@ -35,6 +49,24 @@ const ScheduleWeekly = React.createClass({
     ));
   },
 
+  getItems(day, hour) {
+    const { items } = this.props;
+    const start = moment.utc(day).hour(hour);
+    const stop = start.clone().add(1, 'hour');
+
+    return items.filter(item => (
+      moment.utc(item.get('start_at')).isBefore(stop) &&
+      moment.utc(item.get('stop_at')).isAfter(start)
+    )).map(item => (
+      Immutable.Map()
+        .set('id', item.get('id'))
+        .set('name', item.get('name'))
+        .set('start_at', moment.utc(item.get('start_at')))
+        .set('stop_at', moment.utc(item.get('stop_at')))
+        // .set('file', item.get('file'))
+    )).toList();
+  },
+
   render() {
     const { firstHour, offsetStart } = this.props;
     const hours = (firstHour > 0)
@@ -49,10 +81,25 @@ const ScheduleWeekly = React.createClass({
       <table className="ScheduleWeeklyWidget table table-banded table-hover">
         <tbody>
           <tr>
+            <th>{'Godzina'}</th>
             {days.map(day => (
               <th>{day.format('L')}</th>
             ))}
           </tr>
+            {hours.map(hour => (
+              <tr>
+                <td>{sprintf('%02s:00', hour)}</td>
+                {days.map(day => (
+                  <td>
+                    <ShortenedRow
+                      className="ScheduleDailyWidget-CalendarRow-item-ellipsed"
+                      key={day + hour}
+                      items={this.getItems(day, hour)}
+                    />
+                  </td>
+                ))}
+              </tr>
+            ))}
         </tbody>
       </table>
     );
