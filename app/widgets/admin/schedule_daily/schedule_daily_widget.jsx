@@ -1,9 +1,6 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import Immutable from 'immutable';
 import moment from 'moment';
-import {
-  range,
-} from 'lodash';
 import CalendarRow from './schedule_daily_calendar_row.jsx';
 import connect from 'immview-react-connect';
 import ScheduleDomain from '../../../services/ScheduleDomain';
@@ -36,34 +33,39 @@ const ScheduleDaily = React.createClass({
     };
   },
 
-  getInitialState() {
-    return {
-      expansionState: {},
-    };
-  },
+  getItems(hour) {
+    const { items, offsetStart, firstHour } = this.props;
+    let hourStart = moment.utc(offsetStart).hour(hour).startOf('hour');
+    if (hour < firstHour) {
+      hourStart = hourStart.add(1, 'day');
+    }
+    const hourStop = hourStart.clone().add(1, 'hour');
 
-  onChangeExpansionState(hour, value) {
-    this.setState({ expansionState: { ...this.state.expansionState, [hour]: value } });
-  },
-
-  onNowChange(newNow) {
-    this.setState({ now: newNow });
-  },
-
-  getItems() {
-    return this.props.items.map(entry => (
+    return items.filter(item => (
+      moment.utc(item.get('start_at')).isBefore(hourStop) &&
+      moment.utc(item.get('stop_at')).isAfter(hourStart)
+    )).map(item => (
       Immutable.Map()
-        .set('id', entry.get('id'))
-        .set('start_at', moment.utc(entry.get('start_at')))
-        .set('stop_at', moment.utc(entry.get('stop_at')))
-    ));
+        .set('id', item.get('id'))
+        .set('name', item.get('name'))
+        .set('start_at', moment.utc(item.get('start_at')))
+        .set('stop_at', moment.utc(item.get('stop_at')))
+        .set('file', item.get('file'))
+    )).toList();
   },
 
   render() {
-    const hours = (this.props.firstHour > 0)
+    const {
+      firstHour,
+      offsetStart,
+      onActiveItemChange,
+      activeItem,
+    } = this.props;
+
+    const hours = (firstHour > 0)
     ? new Immutable
-      .Range(this.props.firstHour, 24)
-      .concat(new Immutable.Range(0, this.props.firstHour))
+      .Range(firstHour, 24)
+      .concat(new Immutable.Range(0, firstHour))
     : new Immutable.Range(0, 24);
 
     return (
@@ -73,13 +75,11 @@ const ScheduleDaily = React.createClass({
               <CalendarRow
                 key={hour}
                 hour={hour}
-                firstHour={this.props.firstHour}
-                items={this.getItems()}
-                now={moment.utc(this.props.offsetStart)}
-                onChangeExpansionState={this.onChangeExpansionState}
-                expanded={this.state.expansionState[hour]}
-                onActiveItemChange={this.props.onActiveItemChange}
-                activeItem={this.props.activeItem}
+                firstHour={firstHour}
+                items={this.getItems(hour)}
+                now={moment.utc(offsetStart)}
+                onActiveItemChange={onActiveItemChange}
+                activeItem={activeItem}
               />
             ))}
         </tbody>
@@ -92,20 +92,21 @@ export default connect(
   ScheduleDaily,
   ScheduleDomain,
   (data, props) => {
-    const ranger = Immutable.Map({
-      from: moment.utc(props.offsetStart).startOf('day').add(5, 'hours').toISOString(),
-      to: moment.utc(props.offsetStart).endOf('day').add(5, 'hours').toISOString(),
+    const range = Immutable.Map({
+      from: moment.utc(props.offsetStart).startOf('day').add(5, 'hours')
+        .subtract(1, 'day').toISOString(),
+      to: moment.utc(props.offsetStart).endOf('day').add(5, 'hours').add(1, 'day').toISOString(),
     });
-    if (!data.getIn(['ranges', ranger])) {
-      ScheduleDomain.fetch(ranger.get('from'), ranger.get('to'));
+    if (!data.getIn(['ranges', range])) {
+      ScheduleDomain.fetch(range.get('from'), range.get('to'));
     }
     const items = data
       .get('all', Immutable.OrderedMap())
       .toList()
       .filter(
         item => (
-          item.get('stop_at') > ranger.get('from') &&
-          item.get('start_at') < ranger.get('to')
+          item.get('stop_at') > range.get('from') &&
+          item.get('start_at') < range.get('to')
         )
       );
     return {
