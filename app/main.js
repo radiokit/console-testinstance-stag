@@ -15,8 +15,6 @@ import BroadcastApp from './apps/broadcast/app.jsx';
 import BroadcastPlaylistIndex from './apps/broadcast/playlist/index_view.jsx';
 import BroadcastLiveIndex from './apps/broadcast/live/index_view.jsx';
 import ElectronApp from './apps/electron/app.jsx';
-import ElectronDevicesIndex from './apps/electron/devices/IndexView.jsx';
-import ElectronDevicesShow from './apps/electron/devices/ShowView.jsx';
 import ElectronPatchbayIndex from './apps/electron/patchbay/IndexView.jsx';
 import ElectronTransmissionsIndex from './apps/electron/transmissions/IndexView.jsx';
 import InfrastructureApp from './apps/infrastructure/app.jsx';
@@ -90,10 +88,6 @@ ReactDOM.render((
 
         <Route path="electron" component={ElectronApp}>
           <Route component={ScopeLayout} scope="userAccount">
-            <Route path="devices">
-              <Route path="index" component={ElectronDevicesIndex} onEnter={pingGoogleAnalytics}/>
-              <Route path="show/:id" component={ElectronDevicesShow} onEnter={pingGoogleAnalytics}/>
-            </Route>
             <Route path="transmissions">
               <Route path="index" component={ElectronTransmissionsIndex} onEnter={pingGoogleAnalytics}/>
             </Route>
