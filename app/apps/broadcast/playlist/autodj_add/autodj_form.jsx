@@ -11,6 +11,7 @@ import localeEN from './autodj_form_en';
 Counterpart.registerTranslations('en', localeEN);
 Counterpart.registerTranslations('pl', localePL);
 
+import AutoDJShuffleForm from './autodj_shuffle_form.jsx';
 import VaultRepositoryPicker from './vault_repository_picker.jsx';
 
 const AUTODJ_OPTIONS = [
@@ -51,11 +52,31 @@ const AutoDJForm = React.createClass({
     });
   },
 
-  handleRepositoryChange(id) {
-    return id;
+  handleRepositoryChange(repository) {
+    const { model } = this.state;
+    this.setState({
+      model: model.set('repository', repository),
+    });
+  },
+
+  handleDetailsChange(details) {
+    const { model } = this.state;
+    this.setState({
+      model: model.set('details', details),
+    });
   },
 
   render() {
+    const typeDetailsForm = ({
+      [AUTODJ_OPTIONS[0]]: (
+        <AutoDJShuffleForm
+          tags={this.state.model.getIn(['repository', 'tag_items'])}
+          value={this.state.model.get('details')}
+          onChange={this.handleDetailsChange}
+        />
+      ),
+    })[this.state.model.get('type')];
+
     return (
       <form
         onSubmit={this.handleSubmit}
@@ -82,6 +103,9 @@ const AutoDJForm = React.createClass({
             </label>
             <VaultRepositoryPicker />
           </div>
+        </fieldset>
+        <fieldset>
+          {typeDetailsForm}
         </fieldset>
       </form>
     );

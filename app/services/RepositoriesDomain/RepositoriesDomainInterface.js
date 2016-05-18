@@ -7,21 +7,44 @@ import {
   model,
   key,
   readFields,
+  readJoins,
 } from './RepositoriesConfig';
 
-export function loadRepository(id, requestOptions) {
-  RadioKitDomain.load(app, model, id, readFields, { [key]: true }, requestOptions);
-}
-
-export function searchFiles(query, requestOptions) {
+function performQuery(queryAppendix, requestOptions) {
   RadioKitDomain.query(
     fromJS({
       [key]: true,
       app,
       model,
       select: readFields,
-      // TODO query
+      joins: readJoins,
+      ...queryAppendix,
     }),
     requestOptions
   );
+}
+
+export function loadRepository(id, requestOptions) {
+  performQuery(
+    {
+      conditions: [
+        {
+          field: 'id',
+          comparison: 'eq',
+          value: id,
+        },
+      ],
+    },
+    requestOptions
+  );
+}
+
+export function searchRepositories(query, requestOptions) {
+  performQuery(
+    {
+      // TODO query
+    },
+    requestOptions
+  );
+
 }

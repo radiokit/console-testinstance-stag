@@ -5,13 +5,13 @@ import { debounce } from 'lodash';
 import RepositoriesDomain from '../../../../services/RepositoriesDomain';
 
 const searchFiles = debounce(
-  query => RepositoriesDomain.searchFiles(query, { maxAge: 60000 }),
+  query => RepositoriesDomain.searchRepositories(query, { maxAge: 60000 }),
   1000
 );
 
 const VaultRepositoryPicker = React.createClass({
   propTypes: {
-    selectedRepositoryId: React.PropTypes.string,
+    value: React.PropTypes.string,
     onChange: React.PropTypes.func,
     // connector
     repositories: React.PropTypes.object.isRequired,
