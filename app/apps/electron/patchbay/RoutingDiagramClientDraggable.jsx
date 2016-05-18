@@ -10,13 +10,15 @@ const RoutingDiagramClientDraggable = (props) => {
       x={props.x}
       y={props.y}
       onDragMove={props.onDragMove}
-      onDragStop={props.onDragStop}>
+      onDragStop={props.onDragStop}
+      onElementClick={props.onClientBoxClick}>
 
       <RoutingDiagramClientBox
         client={props.client}
         selectedAudioInterface={props.selectedAudioInterface}
         onAudioInterfaceClick={props.onAudioInterfaceClick}
-        audioInterfaces={props.audioInterfaces} />
+        audioInterfaces={props.audioInterfaces} 
+        selectedClient={props.selectedClient} />
 
     </SVGDraggable>
   );

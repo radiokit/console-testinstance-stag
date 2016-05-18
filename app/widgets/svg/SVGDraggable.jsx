@@ -7,6 +7,7 @@ export default React.createClass({
     onDragStart: React.PropTypes.func,
     onDragStop: React.PropTypes.func,
     onDragMove: React.PropTypes.func,
+    onElementClick: React.PropTypes.func,
   },
 
 
@@ -40,8 +41,16 @@ export default React.createClass({
     }, () => {
       this.refs.container.parentNode.appendChild(this.refs.container);
 
-      if(this.props.onDragStart) {
+      if (this.props.onDragStart) {
         this.props.onDragStart(this.state.x, this.state.y);
+      }
+
+      if (this.props.onElementClick) {
+        setTimeout(() => {
+          if (!this.state.dragging) {
+            this.props.onElementClick();
+          }
+        }, 100);
       }
     });
   },

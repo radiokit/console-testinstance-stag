@@ -1,8 +1,9 @@
 export default {
   apps: {
     electron: {
-      devices: {
+      patchbay: {
         index: {
+          add_button: "Dodaj urządzenie",
           modals: {
             create: {
               header: "Dodawanie urządzenia",
