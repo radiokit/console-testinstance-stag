@@ -3,8 +3,6 @@ import Immutable from 'immutable';
 import Moment from 'moment';
 import Counterpart from 'counterpart';
 
-import CreateModal from '../../../widgets/admin/crud/create_modal.jsx';
-import UpdateModal from '../../../widgets/admin/crud/update_modal.jsx';
 import ScheduleItemModal from '../../../widgets/admin/schedule/schedule_item_modal.jsx';
 import DeleteModal from '../../../widgets/admin/crud/delete_modal.jsx';
 import ToolbarGroup from '../../../widgets/admin/toolbar_group_widget.jsx';
@@ -135,6 +133,7 @@ const PlaylistToolbar = React.createClass({
           labelTextKey="playlist_toolbar.add_button"
           modalElement={ScheduleItemModal}
           modalProps={{
+            data: this.state.availableVaultFiles,
             contentPrefix: 'playlist_toolbar.add',
             form: this.buildNewForm(),
             app: 'plumber',
@@ -166,7 +165,7 @@ const PlaylistToolbar = React.createClass({
             form: this.buildUpdateForm(),
             app: 'plumber',
             model: 'Media.Input.File.RadioKit.Vault',
-            recordId: (this.props.activeItem ? this.props.activeItem.get('id') : null),
+            record: this.props.activeItem,
             afterFormAccept: this.props.onCRUD,
           }}
         />

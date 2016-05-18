@@ -2,6 +2,7 @@ import React from 'react';
 import ProgressModal from '../../../widgets/admin/modal_progress_widget.jsx';
 import FileAutosuggestInput from '../../../widgets/admin/schedule/file_autosuggest_input.jsx';
 
+import './schedule_item_modal.scss';
 const ScheduleItemModal = React.createClass({
   propTypes: {
     data: React.PropTypes.object.isRequired,
@@ -11,6 +12,7 @@ const ScheduleItemModal = React.createClass({
     model: React.PropTypes.string.isRequired,
     onSuccess: React.PropTypes.func,
     onDismiss: React.PropTypes.func,
+    record: React.PropTypes.object,
     acknowledgementElement: React.PropTypes.oneOfType(
       [React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]
     ),
@@ -44,21 +46,47 @@ const ScheduleItemModal = React.createClass({
     this.setState({ file });
   },
 
+  onSuccess() {
+    this.props.onSuccess && this.props.onSuccess();
+  },
+
+  show() {
+    this.refs.modal.show();
+    this.setState(this.getInitialState());
+  },
+
   renderFileInput() {
-    return (
-      <div className="form-group">
-        <label htmlFor="fileNameInput"> File name </label>
-        <FileAutosuggestInput
-          data={this.props.data}
-          placeholder="Search file name"
-          searchKey="name"
-          limit={15}
-          className="input-group-content"
-          id="fileNameInput"
-          onFileSelected= {this.handleSelectedFile}
-        />
-      </div>
-    );
+    if (!this.props.record) {
+      return (
+        <div className="form-group">
+          <label htmlFor="fileNameInput"> File name </label>
+          <FileAutosuggestInput
+            data={this.props.data}
+            placeholder="Search file name"
+            searchKey="name"
+            limit={15}
+            className="input-group-content"
+            id="fileNameInput"
+            onFileSelected= {this.handleSelectedFile}
+          />
+        </div>
+      );
+    }
+    else {
+      return (
+        <div className="form-group">
+          <label htmlFor="fileNameInput"> File name </label>
+          <input
+            id="fileNameInput"
+            value={this.props.record.get('name')}
+            readOnly
+            disabled
+            type="text"
+            className="form-control ScheduleItemModal__input--readOnly"
+          />
+        </div>
+      );
+    }
   },
 
   renderDateInputs() {
@@ -89,7 +117,7 @@ const ScheduleItemModal = React.createClass({
         onCancel={this.handleCancel}
         onConfirm={this.handleConfirm}
       >
-        <div className="modal-body form">
+        <div className="ScheduleItemModal modal-body">
          {this.renderFileInput()}
          {this.renderDateInputs()}
         </div>
@@ -104,10 +132,6 @@ const ScheduleItemModal = React.createClass({
     );
   },
 
-  onSuccess() {
-    this.props.onSuccess && this.props.onSuccess();
-  },
-
   onDismiss() {
     this.props.onDismiss && this.props.onDismiss();
   },
@@ -116,11 +140,6 @@ const ScheduleItemModal = React.createClass({
     if (this.recordCall) {
       this.recordCall.teardown();
     }
-  },
-
-  show() {
-    this.refs.modal.show();
-    this.setState(this.getInitialState());
   },
 });
 
