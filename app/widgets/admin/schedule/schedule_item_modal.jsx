@@ -1,5 +1,5 @@
 import React from 'react';
-import Modal from '../../../widgets/admin/modal_widget.jsx';
+import ProgressModal from '../../../widgets/admin/modal_progress_widget.jsx';
 import FileAutosuggestInput from '../../../widgets/admin/schedule/file_autosuggest_input.jsx';
 
 const ScheduleItemModal = React.createClass({
@@ -19,10 +19,25 @@ const ScheduleItemModal = React.createClass({
 
   getInitialState() {
     return {
+      proceedType: 'primary',
+      step: 'confirmation',
       file: null,
       startDate: '',
       stopDate: '',
     };
+  },
+
+  handleCancel() {
+    this.changeStep('cancelled');
+  },
+
+  handleConfirm() {
+    // TODO do stuff
+    this.changeStep('progress');
+  },
+
+  changeStep(step) {
+    this.setState({ step });
   },
 
   handleSelectedFile(file) {
@@ -63,21 +78,32 @@ const ScheduleItemModal = React.createClass({
 
   render() {
     return (
-      <Modal
+      <ProgressModal
         ref="modal"
         size="normal"
+        step={this.state.step}
+        proceedType={this.state.proceedType}
         contentPrefix={this.props.contentPrefix}
         onShow={this.onShow}
         onHide={this.onHide}
+        onCancel={this.handleCancel}
+        onConfirm={this.handleConfirm}
       >
         <div className="modal-body form">
          {this.renderFileInput()}
          {this.renderDateInputs()}
         </div>
+        <div>
+          progress
+        </div>
+        <div>
+          acknowledgementElement
+        </div>
 
-      </Modal>
+      </ProgressModal>
     );
   },
+
   onSuccess() {
     this.props.onSuccess && this.props.onSuccess();
   },
@@ -92,12 +118,9 @@ const ScheduleItemModal = React.createClass({
     }
   },
 
-  onShow() {
-    this.setState(this.getInitialState());
-  },
-
   show() {
     this.refs.modal.show();
+    this.setState(this.getInitialState());
   },
 });
 

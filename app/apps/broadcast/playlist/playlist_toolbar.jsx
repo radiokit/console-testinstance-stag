@@ -133,7 +133,7 @@ const PlaylistToolbar = React.createClass({
         <ToolbarButtonModal
           icon="plus"
           labelTextKey="playlist_toolbar.add_button"
-          modalElement={CreateModal}
+          modalElement={ScheduleItemModal}
           modalProps={{
             contentPrefix: 'playlist_toolbar.add',
             form: this.buildNewForm(),
@@ -155,12 +155,13 @@ const PlaylistToolbar = React.createClass({
         />
 
         <ToolbarButtonModal
-          icon="folder"
+          icon="border-color"
           labelTextKey="playlist_toolbar.update_button"
           disabled={this.props.activeItem === null}
-          modalElement={UpdateModal}
-          key={(this.props.activeItem && this.props.activeItem.get('id')) || 'toolbar_update_button_no-id' }
+          modalElement={ScheduleItemModal}
+          key={(this.props.activeItem && this.props.activeItem.get('id')) || 'no-id' }
           modalProps={{
+            data: this.state.availableVaultFiles,
             contentPrefix: 'playlist_toolbar.update',
             form: this.buildUpdateForm(),
             app: 'plumber',
