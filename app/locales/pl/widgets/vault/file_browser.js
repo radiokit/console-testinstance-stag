@@ -138,7 +138,10 @@ export default {
 
           metadata: {
             header: "Metadane",
-            immutable: "Nie zmieniaj",
+            form: {
+              retain: "Nie zmieniaj",
+              multiple_val: "Wiele wartości",
+            },
             message: {
               confirmation: "Wybierz metadane, które zostaną przypisane do zaznaczonych plików (%(count)s szt.):",
               acknowledgement: "Przypisano metadane do %(count)s plik(ów).",

@@ -1,4 +1,5 @@
 .ShowTagsSchemaPartial {
+
   .mdi-chevron-right {
     transition: all 0.1s linear;
     font-size: 1.4em;
@@ -12,8 +13,11 @@
     transform: rotate(0deg);
   }
 
-  .card-head-sm {
+  &__tagName {
     padding-left: 36px;
     background-color: #f2f2f2;
+  }
+  &__emptyCategory {
+    color: red;
   }
 }

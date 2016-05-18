@@ -18,6 +18,7 @@ export default React.createClass({
     limit: React.PropTypes.number.isRequired,
     recordsQuery: React.PropTypes.object.isRequired,
     recordsLinkFunc: React.PropTypes.func,
+    requestFullRecords: React.PropTypes.bool,
   },
 
 
@@ -78,7 +79,13 @@ export default React.createClass({
 
   componentDidUpdate: function(prevProps, prevState) {
     if(prevState.selectedRecordIds != this.state.selectedRecordIds && this.props.onSelect) {
-      this.props.onSelect(this.state.selectedRecordIds);
+      if(this.props.requestFullRecords && this.props.requestFullRecords === true && this.state.records){
+         const selectedRecords = this.state.records.filter((record) => this.state.selectedRecordIds.includes(record.get('id')));
+         this.props.onSelect(this.state.selectedRecordIds, selectedRecords);
+      }
+      else{
+        this.props.onSelect(this.state.selectedRecordIds);
+      }
     }
   },
 

@@ -138,7 +138,10 @@ export default {
 
           metadata: {
             header: "Metadata",
-            immutable: "Do not change",
+            form: {
+              retain: "Do not change",
+              multiple_val: "Multiple values",
+            },
             message: {
               confirmation: "Edit metadata that should be applied to %(count)s selected file(s):",
               acknowledgement: "Applied metadata to %(count)s file(s).",

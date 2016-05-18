@@ -4,7 +4,7 @@ import Translate from 'react-translate-component';
 import ProgressBar from '../../widgets/admin/progress_bar_widget.jsx';
 import Modal from '../../widgets/admin/modal_widget.jsx';
 
-
+import './modal_progress_widget.scss';
 export default React.createClass({
   propTypes: {
     contentPrefix: React.PropTypes.string.isRequired,
@@ -60,7 +60,7 @@ export default React.createClass({
           onHide={this.onDismiss}
           warning={this.props.warning}
           proceedType={this.props.proceedType}>
-          <div className="modal-body">
+          <div className="ModalProgressWidget modal-body">
             {() => {
               switch(this.props.step) {
                 case "confirmation":
@@ -116,11 +116,28 @@ export default React.createClass({
                 case "confirmation":
                   return (
                     <div>
-                      <Translate component="button" content={this.props.contentPrefix + ".action.cancel"} role="button" className="btn btn-default" data-dismiss="modal" />
-                      <Translate component="button" content={this.props.contentPrefix + ".action.proceed"} role="button" className={"btn btn-" + this.props.proceedType} onClick={this.onConfirm} />
+                      <Translate
+                        component="button"
+                        content={this.props.contentPrefix + ".action.cancel"}
+                        role="button"
+                        className="btn btn-default"
+                        data-dismiss="modal"
+                      />
+                      <Translate
+                        component="button"
+                        content={this.props.contentPrefix + ".action.proceed"}
+                        role="button"
+                        className={"btn btn-" + this.props.proceedType}
+                        onClick={this.onConfirm}
+                      />
                         {() => {
                           if(this.props.warning && this.props.step === "confirmation") {
-                            return (<Translate content={"widgets.admin.modal.warnings." + this.props.warning} className={"pull-left text-" + this.props.proceedType}  />);
+                            return (
+                              <Translate
+                                content={"widgets.admin.modal.warnings." + this.props.warning}
+                                className={"ModalProgressWidget__Warning pull-left text-center text-" + this.props.proceedType}
+                              />
+                            );
                           }
                         }()}
                     </div>

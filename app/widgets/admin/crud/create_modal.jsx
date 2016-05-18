@@ -9,9 +9,8 @@ const CreateModal = React.createClass({
     model: React.PropTypes.string.isRequired,
     onSuccess: React.PropTypes.func,
     onDismiss: React.PropTypes.func,
-    acknowledgementElement: React.PropTypes.oneOfType(
-      [React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]
-    ),
+    acknowledgementElement: React.PropTypes.oneOfType([React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]),
+    afterFormSubmit: React.PropTypes.func,
     afterFormAccept: React.PropTypes.func,
   },
 
@@ -20,6 +19,10 @@ const CreateModal = React.createClass({
       step: 'form',
       record: null,
     };
+  },
+
+  show() {
+    this.refs.modal.show();
   },
 
   onFormSubmit(fieldValues) {

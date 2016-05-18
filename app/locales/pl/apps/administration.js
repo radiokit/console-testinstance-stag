@@ -174,7 +174,9 @@ export default {
                 proceed: "Dodaj",
                 cancel: "Anuluj",
                 close: "Zamknij",
-              }
+              },
+              empty_warning: "Kategoria służy jako zbiór etykiet. Dodaj przynajmniej jedną etykietę",
+
             },
 
             create_tag: {
@@ -215,7 +217,9 @@ export default {
                 table: {
                   index: {
                     actions: {
-                      create: "Add metadata field",
+                      create: "Dodaj pole metadanych",
+                      delete: "Usuń wybrane pola metadanych",
+                      update: "Edytuj jedno pole metadanych",
                     },
 
                     table: {
@@ -237,6 +241,43 @@ export default {
                         message: {
                           acknowledgement: "Dodano pole metadanych",
                           progress: "Dodawanie pól metedanych...",
+                        },
+                        form: {
+                          name: {
+                            label: "Nazwa pola",
+                            hint: "Choose any name that will describe contents of this field, e.g. \"composer\".",
+                          },
+                          key: {
+                            label: "Key",
+                            hint: "Unique key describing role of this field for the system.",
+                          },
+                          kind: {
+                            label: "Value type",
+                            values: {
+                              string: "Text (one line)",
+                              db: "Decibels",
+                              integer: "Number (integer)",
+                              text: "Text (multiline)",
+                              float: "Number (with decimal part)",
+                              date: "Date",
+                              time: "Time",
+                              datetime: "Date & Time",
+                              url: "URL",
+                              duration: "Duration",
+                            }
+                          },
+                        },
+                      },
+                      update: {
+                        header: "Edytuj pole metadanych",
+                        action: {
+                          proceed: "Edytuj",
+                          close: "Close",
+                          cancel: "Cancel",
+                        },
+                        message: {
+                          acknowledgement: "Edytowano pole metadanych",
+                          progress: "Edytowanie pól metedanych...",
                         },
                         form: {
                           name: {
@@ -292,6 +333,7 @@ export default {
           actions: {
             create: "Dodaj repozytorium plików",
             delete: "Usuń zaznaczone repozytoria plików",
+            update: "Edytuj jedno repozytorium",
           },
 
           table: {
@@ -336,6 +378,27 @@ export default {
 
               action: {
                 proceed: "Dodaj repozytorium plików",
+                cancel: "Anuluj",
+                close: "Zamknij",
+              }
+            },
+            update: {
+              header: "Edytowanie repozytorium plików",
+              form: {
+                name: {
+                  label: "Nazwa repozytorium",
+                  hint: "Wybierz jakąkolwiek nazwę, która pozwoli Ci odróżnić to repozytorium plików od innych.",
+                },
+                user_account: {
+                  label: "Konto użytkownika",
+                }
+              },
+              message: {
+                acknowledgement: "Pomyślnie edytowano repozytorium plików",
+              },
+
+              action: {
+                proceed: "Edytuj repozytorium plików",
                 cancel: "Anuluj",
                 close: "Zamknij",
               }

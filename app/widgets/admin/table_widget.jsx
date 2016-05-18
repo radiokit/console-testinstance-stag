@@ -4,7 +4,7 @@ import Immutable from 'immutable';
 import TableBody from './table_body_widget.jsx';
 import TableHeader from './table_header_widget.jsx';
 
-
+import './table_widget.scss';
 export default React.createClass({
   propTypes: {
     attributes: React.PropTypes.object.isRequired,
@@ -98,9 +98,13 @@ export default React.createClass({
 
 
   render: function() {
-    return (<table className="table table-hover">
-      <TableHeader attributes={this.props.attributes} records={this.props.records} contentPrefix={this.props.contentPrefix} selectable={this.props.selectable} headerSelected={this.state.selectedRecordIds.count() >= this.props.records.count()} onSelectAll={this.onSelectAll} />
-      <TableBody linkFunc={this.props.linkFunc} attributes={this.props.attributes} records={this.props.records} selectable={this.props.selectable} selectedRecordIds={this.state.selectedRecordIds} onSelectRecord={this.onSelectRecord} />
-    </table>);
-  }
+    return (
+      <div className="TableWidget">
+        <table className="table table-hover">
+        <TableHeader attributes={this.props.attributes} records={this.props.records} contentPrefix={this.props.contentPrefix} selectable={this.props.selectable} headerSelected={this.state.selectedRecordIds.count() >= this.props.records.count()} onSelectAll={this.onSelectAll} />
+        <TableBody linkFunc={this.props.linkFunc} attributes={this.props.attributes} records={this.props.records} selectable={this.props.selectable} selectedRecordIds={this.state.selectedRecordIds} onSelectRecord={this.onSelectRecord} />
+        </table>
+      </div>
+    );
+  },
 });

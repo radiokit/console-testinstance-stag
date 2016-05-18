@@ -1,6 +1,5 @@
 export default {
-  //TODO
-  uploadInstructions: 'uploadWidget-uploadInstructions',
+  uploadInstructions: 'Upload files',
   tableFileName: 'File name',
   tableFileSize: 'Size',
   tableStatus: 'Progress',

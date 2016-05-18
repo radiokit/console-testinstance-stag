@@ -2,9 +2,10 @@ import React from 'react';
 import Translate from 'react-translate-component';
 import Counterpart from 'counterpart';
 import clone from 'clone';
-import Moment from 'moment';
 import DateTimePicker from './date_time_picker.jsx';
+import Input from './form_input.jsx';
 
+import './form_widget.scss';
 const FormWidget = React.createClass({
   propTypes: {
     form: React.PropTypes.object.isRequired,
@@ -19,27 +20,27 @@ const FormWidget = React.createClass({
   },
 
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       errors: {},
       deferredFieldsData: {},
-    }
+    };
   },
 
 
-  submit: function() {
+  submit() {
     if (this.validate()) {
       this.props.onSubmit(this.buildFieldValues());
     }
   },
 
 
-  isFieldRequired: function(fieldConfig) {
+  isFieldRequired(fieldConfig) {
     return fieldConfig.hasOwnProperty("validators") && fieldConfig.validators.hasOwnProperty("presence") && fieldConfig.validators.presence === true;
   },
 
 
-  validate: function() {
+  validate() {
     let errors = {};
 
     Object.keys(this.props.form).map((fieldName) => {
@@ -69,7 +70,7 @@ const FormWidget = React.createClass({
   },
 
 
-  componentDidMount: function() {
+  componentDidMount() {
     if(this.formHasDeferredFields()) {
       Object.keys(this.props.form).map((fieldName) => {
         let fieldConfig = this.props.form[fieldName];
@@ -102,10 +103,8 @@ const FormWidget = React.createClass({
     }
   },
 
-
   buildFieldValues: function() {
     let params = {};
-
     Object.keys(this.props.form).map((fieldName) => {
       let fieldConfig = this.props.form[fieldName];
 
@@ -153,13 +152,13 @@ const FormWidget = React.createClass({
   },
 
 
-  onFormSubmit: function(e) {
+  onFormSubmit(e) {
     e.preventDefault();
     this.submit();
   },
 
 
-  formHasDeferredFields: function() {
+  formHasDeferredFields() {
     let hasDeferredFields = false;
 
     Object.keys(this.props.form).map((fieldName) => {
@@ -176,7 +175,7 @@ const FormWidget = React.createClass({
   },
 
 
-  formLoadedDeferredFields: function() {
+  formLoadedDeferredFields() {
     let loadedDeferredFields = true;
 
     Object.keys(this.props.form).map((fieldName) => {
@@ -195,7 +194,7 @@ const FormWidget = React.createClass({
   },
 
 
-  renderForm: function() {
+  renderForm() {
     let fields = Object.keys(this.props.form).map((fieldName) => {
       let fieldConfig = this.props.form[fieldName];
       let input;
@@ -321,7 +320,7 @@ const FormWidget = React.createClass({
       }
 
       if (hint) {
-        hint = (<p className="help-block">
+        hint = (<p className="help-block FormWidget__hint">
                   { hint }
                 </p>);
       }
@@ -346,17 +345,15 @@ const FormWidget = React.createClass({
     });
 
     return (
-      <form className="form" role="form" ref="form" onSubmit={ this.onFormSubmit }>
+      <form className="form FormWidget" role="form" ref="form" onSubmit={ this.onFormSubmit }>
         {fields}
       </form>
     );
   },
 
-
-
-  render: function() {
-    if(this.formHasDeferredFields()) {
-      if(this.formLoadedDeferredFields()) {
+  render() {
+    if (this.formHasDeferredFields()) {
+      if (this.formLoadedDeferredFields()) {
         return this.renderForm();
       } else {
         return (<div>...</div>); // FIXME
@@ -365,42 +362,7 @@ const FormWidget = React.createClass({
     } else {
       return this.renderForm();
     }
-  }
-});
-
-const Input = React.createClass({
-
-  propTypes: {
-    className: React.PropTypes.string.isRequired,
-    type: React.PropTypes.string.isRequired,
-    id: React.PropTypes.string.isRequired,
-    required: React.PropTypes.bool.isRequired,
-    value: React.PropTypes.string,
   },
-  value: "",
-  getInitialState: function() {
-    return {
-      value: this.props.value
-    }
-  },
-
-  componentWillReceiveProps: function() {
-    this.value = this.props.value;
-    this.setState({
-      value: this.props.value
-    });
-  },
-
-  onFieldChange: function(e) {
-    this.value = e.target.value;
-    this.setState({
-      value: e.target.value
-    });
-  },
-  render: function() {
-    return <input className={ this.props.className } type={ this.props.type } id={ this.props.id } ref={ this.props.id } required={ this.props.required } value={ this.state.value }
-             onChange={ this.onFieldChange } />;
-  }
 });
 
 export default FormWidget;

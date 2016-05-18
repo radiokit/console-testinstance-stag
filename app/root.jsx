@@ -78,7 +78,18 @@ export default React.createClass({
 
 
   initializeGoogleAnalytics: function(currentUser) {
-    if(typeof(ga) !== "undefined") {
+    if(window.ga && ENV.external.googleAnalyticsID) {
+      let currentUserEmail = currentUser.get("email");
+
+      // Exclude our own traffic
+      // See https://developers.google.com/analytics/devguides/collection/analyticsjs/user-opt-out#opt-out_of_tracking_for_your_site
+      if(currentUserEmail.indexOf("@radiokit.org") !== -1 ||
+         currentUserEmail.indexOf("@xcomp.pl") !== -1 ||
+         currentUserEmail.indexOf("@swmansion.com") !== -1) {
+
+        window[`ga-disable-${ENV.external.googleAnalyticsID}`] = true;
+      }
+
       ga('create', ENV.external.googleAnalyticsID, { 'userId' : "User#" + currentUser.get("id") });
     }
   },

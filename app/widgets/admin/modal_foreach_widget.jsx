@@ -93,6 +93,8 @@ export default React.createClass({
     size: React.PropTypes.oneOf(['normal', 'large']),
     onSuccess: React.PropTypes.func,
     onDismiss: React.PropTypes.func,
+    onConfirm: React.PropTypes.func,
+    waitForConfirmationAcknowledgement: React.PropTypes.bool,
   },
 
 
@@ -110,11 +112,19 @@ export default React.createClass({
     });
   },
 
-
-  onConfirm: function() {
+  startBatchOperation() {
     this.setState({
       step: "progress",
     });
+  },
+
+  onConfirm: function() {
+    if (this.props.onConfirm) {
+      this.props.onConfirm();
+    }
+    if(!this.props.waitForConfirmationAcknowledgement) {
+      this.startBatchOperation();
+    }
   },
 
 
