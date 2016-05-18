@@ -5,6 +5,7 @@ import Counterpart from 'counterpart';
 
 import CreateModal from '../../../widgets/admin/crud/create_modal.jsx';
 import UpdateModal from '../../../widgets/admin/crud/update_modal.jsx';
+import ScheduleItemModal from '../../../widgets/admin/schedule/schedule_item_modal.jsx';
 import DeleteModal from '../../../widgets/admin/crud/delete_modal.jsx';
 import ToolbarGroup from '../../../widgets/admin/toolbar_group_widget.jsx';
 import ToolbarButtonModal from '../../../widgets/admin/toolbar_button_modal_widget.jsx';
@@ -111,6 +112,23 @@ const PlaylistToolbar = React.createClass({
   render() {
     return (
       <ToolbarGroup position="right">
+
+        <ToolbarButtonModal
+          icon="folder"
+          labelTextKey="apps.broadcast.playlist.add_button"
+          modalElement={ScheduleItemModal}
+          key={(this.props.activeItem && this.props.activeItem.get('id')) || 'no-id' }
+          modalProps={{
+            data: this.state.availableVaultFiles,
+            contentPrefix: 'apps.broadcast.playlist.edit_button',
+            form: this.buildUpdateForm(),
+            app: 'plumber',
+            model: 'Media.Input.File.Http',
+            recordId: (this.props.activeItem ? this.props.activeItem.get('id') : null),
+            afterFormAccept: this.props.onCRUD,
+          }}
+        />
+
         <ToolbarButtonModal
           icon="plus"
           labelTextKey="playlist_toolbar.add_button"
