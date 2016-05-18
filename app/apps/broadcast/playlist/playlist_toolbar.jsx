@@ -116,7 +116,7 @@ const PlaylistToolbar = React.createClass({
 
         <ToolbarButtonModal
           icon="folder"
-          labelTextKey="apps.broadcast.playlist.add_button"
+          labelTextKey="playlist_toolbar.add_button"
           modalElement={ScheduleItemModal}
           key={(this.props.activeItem && this.props.activeItem.get('id')) || 'toolbar_add_button_no-id' }
           modalProps={{

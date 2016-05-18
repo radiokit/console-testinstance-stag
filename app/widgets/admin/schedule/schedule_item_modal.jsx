@@ -19,41 +19,65 @@ const ScheduleItemModal = React.createClass({
 
   getInitialState() {
     return {
-      step: 'form',
-      record: null,
+      file: null,
+      startDate: '',
+      stopDate: '',
     };
   },
 
-  onFormSubmit(fieldValues) {
-    this.recordCall = window.data
-      .record(this.props.app, this.props.model)
-      .on('loading', () => {
-        this.setState({
-          step: 'progress',
-        });
-      })
-      .on('loaded', (_event, _record, data) => {
-        this.setState({
-          step: 'acknowledgement',
-          record: data,
-        });
-        if (this.props.afterFormAccept) {
-          this.props.afterFormAccept();
-        }
-      })
-      .on('warning', () => {
-        this.setState({
-          step: 'error',
-        });
-      })
-      .on('error', () => {
-        this.setState({
-          step: 'error',
-        });
-      })
-      .create(fieldValues);
+  handleSelectedFile(file) {
+    this.setState({ file });
   },
 
+  renderFileInput() {
+    return (
+      <div className="form-group">
+        <label htmlFor="fileNameInput"> File name </label>
+        <FileAutosuggestInput
+          data={this.props.data}
+          placeholder="Search file name"
+          searchKey="name"
+          limit={15}
+          className="input-group-content"
+          id="fileNameInput"
+          onFileSelected= {this.handleSelectedFile}
+        />
+      </div>
+    );
+  },
+
+  renderDateInputs() {
+    return (
+      <div>
+        <div className="form-group">
+          <label htmlFor="startDate"> Start at </label>
+          <input id="startDate" type="datetime-local" className="form-control" />
+        </div>
+         <div className="form-group">
+          <label htmlFor="stopDate"> Stop at </label>
+          <input id="stopDate" type="datetime-local" className="form-control" />
+        </div>
+      </div>
+    );
+  },
+
+  render() {
+    return (
+      <Modal
+        ref="modal"
+        size="normal"
+        contentPrefix={this.props.contentPrefix}
+        onShow={this.onShow}
+        onHide={this.onHide}
+      >
+        <div className="modal-body form">
+         {this.renderFileInput()}
+         {this.renderDateInputs()}
+        </div>
+
+      </Modal>
+    );
+  },
   onSuccess() {
     this.props.onSuccess && this.props.onSuccess();
   },
@@ -74,25 +98,6 @@ const ScheduleItemModal = React.createClass({
 
   show() {
     this.refs.modal.show();
-  },
-
-  render() {
-    return (
-      <Modal
-        ref="modal"
-        size="normal"
-        contentPrefix={this.props.contentPrefix}
-        onShow={this.onShow}
-        onHide={this.onHide}
-      >
-        <FileAutosuggestInput
-          data = {this.props.data}
-          placeholder = "Search files"
-          searchKey = "name"
-          limit = {15}
-        />
-      </Modal>
-    );
   },
 });
 

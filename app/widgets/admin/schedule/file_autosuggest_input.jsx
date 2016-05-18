@@ -8,6 +8,7 @@ const FileAutosuggestInput = React.createClass({
     limit: React.PropTypes.number,
     placeholder: React.PropTypes.string,
     colorMatchingPhrase: React.PropTypes.bool,
+    onFileSelected: React.PropTypes.func.isRequired,
   },
 
   getInitialState() {

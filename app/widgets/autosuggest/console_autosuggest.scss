@@ -36,6 +36,8 @@
   border-radius: 2px;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.33);
   background-clip: padding-box;
+  position: absolute;
+  z-index: 100;
 }
 .react-autosuggest__suggestion{
   margin: 0 0 4px;
