@@ -18,6 +18,7 @@ export default React.createClass({
     size: React.PropTypes.oneOf(['normal', 'large']),
     onSuccess: React.PropTypes.func,
     onDismiss:React.PropTypes.func,
+    proceedLabel: React.PropTypes.string,
   },
 
 
@@ -123,23 +124,38 @@ export default React.createClass({
                         className="btn btn-default"
                         data-dismiss="modal"
                       />
-                      <Translate
-                        component="button"
-                        content={this.props.contentPrefix + ".action.proceed"}
-                        role="button"
-                        className={"btn btn-" + this.props.proceedType}
-                        onClick={this.onConfirm}
-                      />
-                        {() => {
-                          if(this.props.warning && this.props.step === "confirmation") {
-                            return (
-                              <Translate
-                                content={"widgets.admin.modal.warnings." + this.props.warning}
-                                className={"ModalProgressWidget__Warning pull-left text-center text-" + this.props.proceedType}
-                              />
-                            );
-                          }
-                        }()}
+                      {()=>{
+                        if(this.props.proceedLabel){
+                          return (
+                            <button
+                              className={"btn btn-" + this.props.proceedType}
+                              onClick={this.onConfirm}
+                            >
+                              {this.props.proceedLabel}
+                            </button>
+                          );
+                        }else {
+                          return (
+                            <Translate
+                              component="button"
+                              content={this.props.contentPrefix + ".action.proceed"}
+                              role="button"
+                              className={"btn btn-" + this.props.proceedType}
+                              onClick={this.onConfirm}
+                            />
+                          );
+                        }
+                      }()}
+                      {() => {
+                        if(this.props.warning && this.props.step === "confirmation") {
+                          return (
+                            <Translate
+                              content={"widgets.admin.modal.warnings." + this.props.warning}
+                              className={"ModalProgressWidget__Warning pull-left text-center text-" + this.props.proceedType}
+                            />
+                          );
+                        }
+                      }()}
                     </div>
                   );
 

@@ -1,6 +1,8 @@
 import React from 'react';
 import ProgressModal from '../../../widgets/admin/modal_progress_widget.jsx';
 import FileAutosuggestInput from '../../../widgets/admin/schedule/file_autosuggest_input.jsx';
+import moment from 'moment';
+import classnames from 'classnames';
 
 import './schedule_item_modal.scss';
 const ScheduleItemModal = React.createClass({
@@ -23,9 +25,10 @@ const ScheduleItemModal = React.createClass({
     return {
       proceedType: 'primary',
       step: 'confirmation',
-      file: null,
-      startDate: '',
+      file: this.props.record,
+      startDate: this.props.record ? this.props.record.get('start_at') : moment(),
       stopDate: '',
+      expanded: false,
     };
   },
 
@@ -44,6 +47,10 @@ const ScheduleItemModal = React.createClass({
 
   handleSelectedFile(file) {
     this.setState({ file });
+  },
+
+  handleStartDateChange(startDate){
+    this.setState({ startDate });
   },
 
   onSuccess() {
@@ -79,7 +86,7 @@ const ScheduleItemModal = React.createClass({
           <input
             id="fileNameInput"
             value={this.props.record.get('name')}
-            readOnly
+            readOnly="true"
             disabled
             type="text"
             className="form-control ScheduleItemModal__input--readOnly"
@@ -89,22 +96,71 @@ const ScheduleItemModal = React.createClass({
     }
   },
 
+  toggleExpansion(){
+    this.setState({expanded: !this.state.expanded});
+  },
+
   renderDateInputs() {
-    return (
-      <div>
-        <div className="form-group">
-          <label htmlFor="startDate"> Start at </label>
-          <input id="startDate" type="datetime-local" className="form-control" />
+    if (this.state.file) {
+      return (
+        <div>
+          <div className="form-group">
+            <label htmlFor="startDate"> Start at </label>
+            <input
+              id="startDate"
+              type="datetime-local"
+              className="form-control"
+              onChange={(e) => this.handleStartDateChange(e.target.value)}
+              value={moment(this.state.startDate).format('YYYY-MM-DDTHH:mm:ss')}
+            />
+            </div>
         </div>
-         <div className="form-group">
-          <label htmlFor="stopDate"> Stop at </label>
-          <input id="stopDate" type="datetime-local" className="form-control" />
+      );
+    }
+    return null;
+  },
+
+  renderOptionalFields(){
+
+    const toggleClasses = classnames('btn btn-icon-toggle', {
+      collapsed: !this.state.expanded,
+    });
+    const hiddedClasses = classnames('collapse', {
+      in: this.state.expanded,
+    });
+    return (
+      <div className="expanded">
+        <div
+          data-parent="toggle"
+          data-target="optionalFields"
+        >
+          <a className={toggleClasses} onClick={this.toggleExpansion}>
+            <i className="mdi mdi-chevron-right ScheduleItemModal__toggle" />
+          </a>
+          <span>
+            Typ i opis
+          </span>
+        </div>
+        <div id="optionalFields"
+          className={hiddedClasses}
+          aria-expanded={this.state.expanded}
+        >
+          {this.renderDescrptionFields()}
         </div>
       </div>
     );
   },
 
+  renderDescrptionFields(){
+    return (
+      <div>
+        I am hidden!
+      </div>
+    );
+  },
+
   render() {
+    // todo translate stuff
     return (
       <ProgressModal
         ref="modal"
@@ -116,10 +172,12 @@ const ScheduleItemModal = React.createClass({
         onHide={this.onHide}
         onCancel={this.handleCancel}
         onConfirm={this.handleConfirm}
+        proceedLabel="Dodaj do ramówki"
       >
         <div className="ScheduleItemModal modal-body">
          {this.renderFileInput()}
          {this.renderDateInputs()}
+         {this.renderOptionalFields()}
         </div>
         <div>
           progress

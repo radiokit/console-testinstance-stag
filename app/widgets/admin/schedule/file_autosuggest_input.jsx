@@ -28,6 +28,12 @@ const FileAutosuggestInput = React.createClass({
     ).take(this.props.limit || this.props.data.count()).toJS();
   },
 
+  onChange(event, { newValue }) {
+    this.setState({
+      value: newValue,
+    });
+  },
+
   getSuggestionValue(suggestion) {
     return suggestion[this.props.searchKey];
   },
@@ -38,10 +44,8 @@ const FileAutosuggestInput = React.createClass({
     );
   },
 
-  onChange(event, { newValue }) {
-    this.setState({
-      value: newValue,
-    });
+  onSuggestionSelected(event, { suggestion }) {
+    this.props.onFileSelected(suggestion);
   },
 
   onSuggestionsUpdateRequested({ value }) {
@@ -62,6 +66,7 @@ const FileAutosuggestInput = React.createClass({
         <ConsoleAutosuggest
           suggestions={suggestions}
           onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
+          onSuggestionSelected={this.onSuggestionSelected}
           getSuggestionValue={this.getSuggestionValue}
           renderSuggestion={this.renderSuggestion}
           inputProps={inputProps}
