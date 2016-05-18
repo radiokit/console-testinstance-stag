@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from '../../../widgets/admin/modal_widget.jsx';
-import AutosuggestInput from '../../autosuggest/console_autosuggest.jsx';
+import FileAutosuggestInput from '../../../widgets/admin/schedule/file_autosuggest_input.jsx';
 
 const ScheduleItemModal = React.createClass({
   propTypes: {
@@ -37,7 +37,7 @@ const ScheduleItemModal = React.createClass({
           step: 'acknowledgement',
           record: data,
         });
-        if(this.props.afterFormAccept) {
+        if (this.props.afterFormAccept) {
           this.props.afterFormAccept();
         }
       })
@@ -85,11 +85,11 @@ const ScheduleItemModal = React.createClass({
         onShow={this.onShow}
         onHide={this.onHide}
       >
-      {/*  <AutosuggestInput
+        <FileAutosuggestInput
           data = {this.props.data}
           placeholder = "Search files"
           searchKey = "name"
-        />*/}
+          limit = {15}
         />
       </Modal>
     );
