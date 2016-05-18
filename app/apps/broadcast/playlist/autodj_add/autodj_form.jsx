@@ -1,7 +1,11 @@
 import React from 'react';
 import {
   Map,
+  List,
 } from 'immutable';
+
+import AutoDJShuffleForm from './autodj_shuffle_form.jsx';
+import VaultRepositoryPicker from './vault_repository_picker.jsx';
 
 import Translate from 'react-translate-component';
 import Counterpart from 'counterpart';
@@ -10,9 +14,6 @@ import localeEN from './autodj_form_en';
 
 Counterpart.registerTranslations('en', localeEN);
 Counterpart.registerTranslations('pl', localePL);
-
-import AutoDJShuffleForm from './autodj_shuffle_form.jsx';
-import VaultRepositoryPicker from './vault_repository_picker.jsx';
 
 const AUTODJ_OPTIONS = [
   'shuffle',
@@ -69,11 +70,14 @@ const AutoDJForm = React.createClass({
   render() {
     const typeDetailsForm = ({
       [AUTODJ_OPTIONS[0]]: (
-        <AutoDJShuffleForm
-          tags={this.state.model.getIn(['repository', 'tag_items'])}
-          value={this.state.model.get('details')}
-          onChange={this.handleDetailsChange}
-        />
+        this.state.model.getIn(['repository']) &&
+        (
+          <AutoDJShuffleForm
+            tags={this.state.model.getIn(['repository', 'tag_items'], List()).toArray()}
+            value={this.state.model.get('details')}
+            onChange={this.handleDetailsChange}
+          />
+        )
       ),
     })[this.state.model.get('type')];
 
@@ -101,7 +105,14 @@ const AutoDJForm = React.createClass({
             <label htmlFor="">
               <Translate content="AutoDJForm.repositoryLabel" />
             </label>
-            <VaultRepositoryPicker />
+            <VaultRepositoryPicker
+              value={this.state.repository}
+              onChange={this.handleRepositoryChange}
+            />
+            <pre>{
+              this.state.model.get('repository') &&
+              JSON.stringify(this.state.model.get('repository').toJS(), null, '  ')
+            }</pre>
           </div>
         </fieldset>
         <fieldset>

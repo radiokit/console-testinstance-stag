@@ -98,7 +98,6 @@ const AutoDJShuffleForm = React.createClass({
     } else {
       onChange(updatedEntries);
     }
-
   },
 
   render() {

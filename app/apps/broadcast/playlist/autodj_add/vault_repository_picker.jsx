@@ -1,13 +1,27 @@
 import React from 'react';
 import connect from 'immview-react-connect';
 import { debounce } from 'lodash';
-
+import ConsoleAutosuggest from '../../../../widgets/admin/console_autosuggest.jsx';
 import RepositoriesDomain from '../../../../services/RepositoriesDomain';
+
+import queryFits from '../../../../helpers/query_fits';
 
 const searchFiles = debounce(
   query => RepositoriesDomain.searchRepositories(query, { maxAge: 60000 }),
   1000
 );
+
+const getRepositoryName = repository => repository.get('name', '');
+
+const repositoryQualifies =
+  query =>
+    repository => queryFits(getRepositoryName(repository), query);
+
+const filterRepositories =
+  query =>
+    collection =>
+      collection.filter(repositoryQualifies(query));
+
 
 const VaultRepositoryPicker = React.createClass({
   propTypes: {
@@ -21,21 +35,53 @@ const VaultRepositoryPicker = React.createClass({
     return {};
   },
 
-  handleInputChange(e) {
-    const { value } = e.target;
+  componentWillMount() {
+    searchFiles('');
+  },
+
+  handleInputChange({ value }) {
     this.setState({ query: value });
     console.log('searching for', value);
     searchFiles(value);
   },
 
-  render() {
+  handleValueChange(_, { suggestion }) {
+    const { onChange = () => null } = this.props;
+    onChange(suggestion);
+  },
+
+  renderRepository(repository) {
     return (
-      <div className="VaultRepositoryPicker">
-        <input onChange={this.handleInputChange} value={this.state.query} />
-        <pre>{
-          JSON.stringify(this.props.repositories.toJS(), null, '  ')
-        }</pre>
-      </div>
+      <div>{getRepositoryName(repository)}</div>
+    );
+  },
+
+  render() {
+    const { value } = this.props;
+    const valueName = value ? getRepositoryName(value) : '';
+    const { query } = this.state;
+    const qualifier = query ? filterRepositories(query) : v => v;
+    const repositories = qualifier(this.props.repositories)
+      .toList()
+      .sortBy(getRepositoryName)
+      .take(100)
+      ;
+    const inputProps = {
+      value: query === undefined ? valueName : query,
+      onChange: this.handleInputChange,
+      type: 'search',
+      placeholder: 'Pick a repository',
+    };
+    return (
+      <ConsoleAutosuggest
+        id="vaultpicker"
+        suggestions={repositories.toArray()}
+        renderSuggestion={this.renderRepository}
+        onSuggestionsUpdateRequested={this.handleInputChange}
+        getSuggestionValue={getRepositoryName}
+        inputProps={inputProps}
+        onSuggestionSelected={this.handleValueChange}
+      />
     );
   },
 });
