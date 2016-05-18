@@ -54,9 +54,9 @@
     "gravatar-api": "^1.2.5",
     "history": "^1.11.1",
     "immutable": "^3.7.5",
-    "jointjs": "^0.9.7",
     "immview": "1.4.2",
     "immview-react-connect": "1.1.1",
+    "jointjs": "^0.9.7",
     "lodash": "^4.7.0",
     "mdi": "^1.5.54",
     "moment": "^2.10.6",
@@ -64,6 +64,8 @@
     "phoenix-socket": "^1.0.4",
     "radiokit-api": "^0.1.17",
     "react": "^0.14.2",
+    "react-autosuggest": "^3.7.3",
+    "react-datetime": "^2.1.0",
     "react-dom": "^0.14.2",
     "react-dropzone": "^3.3.3",
     "react-interpolate-component": "^0.8.0",
@@ -71,8 +73,7 @@
     "react-translate-component": "^0.10.0",
     "roboto-fontface": "^0.4.5",
     "spin.js": "^2.3.2",
-    "tiny-sprintf": "^0.3.0",
-    "react-datetime": "^2.1.0"
+    "tiny-sprintf": "^0.3.0"
   },
   "engines": {
     "node": "0.12.x",
