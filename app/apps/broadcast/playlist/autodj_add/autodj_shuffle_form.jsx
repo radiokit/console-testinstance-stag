@@ -5,13 +5,13 @@ import {
 } from 'immutable';
 import AutoDJShuffleInput from './autodj_shuffle_input.jsx';
 
-function getUnique(entries, objectPath) {
+function getUnique(entries, idPath) {
   const emptyResult = entries.clear();
 
   return entries.reduce(
     (result, nextEntryToInclude) => {
       const exists = !!result.find(
-        includedEntry => is(includedEntry.getIn(objectPath), nextEntryToInclude.getIn(objectPath))
+        includedEntry => is(includedEntry.getIn(idPath), nextEntryToInclude.getIn(idPath))
       );
       if (!exists) {
         return result.push(nextEntryToInclude);
@@ -37,6 +37,31 @@ function clearEmptyEntries(value) {
   return value.filter(entry => !!entry);
 }
 
+function sumValues(entries, valuePath) {
+  return entries.reduce((result, entry) => result + entry.getIn(valuePath), 0);
+}
+
+function balanceLevels(entries, valuePath, targetSum, precision = 2) {
+  const sum = sumValues(entries, valuePath);
+  return entries.map(
+    (entry, i) => {
+      const oldValue = entry.get(valuePath, 0);
+      const newValue = oldValue + (targetSum - sum) / entries.count();
+      const precisionFactor = Math.pow(10, precision);
+      const redefine = (i + 1) % precisionFactor === 0
+        ? v => Math.ceil(v)
+        : v => Math.floor(v);
+      const newRoundValue = redefine(
+          newValue * precisionFactor
+        ) / precisionFactor;
+      return entry.set(
+        valuePath,
+        newRoundValue
+      );
+    }
+  );
+}
+
 const AutoDJShuffleForm = React.createClass({
   propTypes: {
     tags: React.PropTypes.array,
@@ -45,18 +70,35 @@ const AutoDJShuffleForm = React.createClass({
   },
 
   handleChange(newEntry, oldEntry) {
+    const entryIdPath = ['tag', 'id'];
+    const entryRatioPath = ['ratio'];
     const {
       value = List(),
       onChange = () => null,
     } = this.props;
 
-    const newValue = getUnique(
+    const updatedEntries = getUnique(
       clearEmptyEntries(
         substituteEntry(value, oldEntry, newEntry)
       ),
-      ['tag', 'id']
+      entryIdPath
     );
-    onChange(newValue);
+
+    if (newEntry) {
+      const restOfEntries = updatedEntries.filter(
+        v => !is(v, newEntry)
+      );
+      const balancedRest = balanceLevels(
+        restOfEntries,
+        entryRatioPath,
+        1 - newEntry.getIn(entryRatioPath, 0)
+      );
+      const balancedEntries = balancedRest.push(newEntry);
+      onChange(balancedEntries);
+    } else {
+      onChange(updatedEntries);
+    }
+
   },
 
   render() {
