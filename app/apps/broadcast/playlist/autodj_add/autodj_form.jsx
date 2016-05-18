@@ -40,10 +40,14 @@ const AutoDJForm = React.createClass({
     };
   },
 
-  handleSubmit() {
+  triggerFormAccept() {
     const { model } = this.state;
     const { afterFormAccept } = this.props;
     afterFormAccept && afterFormAccept(model.toJS());
+  },
+
+  handleSubmit(e) {
+    e.preventDefault();
   },
 
   handleTypeChange(e) {
@@ -106,7 +110,7 @@ const AutoDJForm = React.createClass({
               <Translate content="AutoDJForm.repositoryLabel" />
             </label>
             <VaultRepositoryPicker
-              value={this.state.repository}
+              value={this.state.model.get('repository')}
               onChange={this.handleRepositoryChange}
             />
             <pre>{

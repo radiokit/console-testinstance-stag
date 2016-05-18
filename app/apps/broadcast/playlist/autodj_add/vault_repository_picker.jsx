@@ -32,22 +32,23 @@ const VaultRepositoryPicker = React.createClass({
   },
 
   getInitialState() {
-    return {};
+    return { query: null };
   },
 
   componentWillMount() {
     searchFiles('');
   },
 
-  handleInputChange({ value }) {
-    this.setState({ query: value });
-    console.log('searching for', value);
-    searchFiles(value);
+  handleInputChange(event, { newValue, method }) {
+    this.setState({ query: newValue });
+    console.log('searching for', newValue);
+    searchFiles(newValue);
   },
 
   handleValueChange(_, { suggestion }) {
     const { onChange = () => null } = this.props;
     onChange(suggestion);
+    this.setState({ query: null });
   },
 
   renderRepository(repository) {
@@ -66,8 +67,9 @@ const VaultRepositoryPicker = React.createClass({
       .sortBy(getRepositoryName)
       .take(100)
       ;
+    const inputValue = query === null ? valueName : query;
     const inputProps = {
-      value: query === undefined ? valueName : query,
+      value: inputValue,
       onChange: this.handleInputChange,
       type: 'search',
       placeholder: 'Pick a repository',
@@ -77,8 +79,8 @@ const VaultRepositoryPicker = React.createClass({
         id="vaultpicker"
         suggestions={repositories.toArray()}
         renderSuggestion={this.renderRepository}
-        onSuggestionsUpdateRequested={this.handleInputChange}
-        getSuggestionValue={getRepositoryName}
+        onSuggestionsUpdateRequested={() => null}
+        getSuggestionValue={() => inputValue}
         inputProps={inputProps}
         onSuggestionSelected={this.handleValueChange}
       />
