@@ -26,6 +26,7 @@ export default {
       close: 'Zamknij',
     },
     message: {
+      progress: 'Dodawanie pliku...',
       acknowledgement: 'Plik został pomyślnie dodany.',
     },
     info: {
@@ -48,6 +49,13 @@ export default {
         label: 'Nazwa',
       },
     },
+    info: {
+      type_and_desc: 'Typ i opis',
+    },
+    message: {
+      progress: 'Edytowanie pliku...',
+      acknowledgement: 'Plik został pomyślnie edytowany.',
+    },
     action: {
       cancel: 'Anuluj',
       proceed: 'Kontynuuj',
@@ -62,7 +70,7 @@ export default {
     },
     action: {
       cancel: 'Anuluj',
-      proceed: 'Kontynuuj',
+      proceed: 'Usuń',
       close: 'Zamknij',
     },
   },

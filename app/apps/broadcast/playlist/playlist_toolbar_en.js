@@ -31,6 +31,10 @@ export default {
     info: {
       type_and_desc: 'Type and description',
     },
+    message: {
+      progress: 'Adding new track...',
+      acknowledgement: 'Track was successfully added',
+    },
   },
   update: {
     header: 'Edit track',
@@ -50,6 +54,13 @@ export default {
       proceed: 'Proceed',
       close: 'Close',
     },
+    info: {
+      type_and_desc: 'Type and description',
+    },
+    message: {
+      progress: 'Editing track...',
+      acknowledgement: 'Track was successfully edited',
+    },
   },
   delete: {
     header: 'Deleting track',
@@ -59,7 +70,7 @@ export default {
     },
     action: {
       cancel: 'Cancel',
-      proceed: 'Proceed',
+      proceed: 'Delete',
       close: 'Close',
     },
   },
