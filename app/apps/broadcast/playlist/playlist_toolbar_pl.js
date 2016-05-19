@@ -8,6 +8,7 @@ export default {
     form: {
       file: {
         label: 'Nazwa pliku',
+        hint: 'Szukaj pliku',
       },
       name: {
         label: 'Nazwa utworu',
@@ -21,24 +22,30 @@ export default {
     },
     action: {
       cancel: 'Anuluj',
-      proceed: 'Kontynuuj',
+      proceed: 'Dodaj do ramówki',
       close: 'Zamknij',
     },
     message: {
       acknowledgement: 'Plik został pomyślnie dodany.',
     },
+    info: {
+      type_and_desc: 'Typ i opis',
+    },
   },
   update: {
     header: 'Edycja utworu',
     form: {
-      name: {
-        label: 'Nazwa utworu',
+      file: {
+        label: 'Nazwa pliku',
       },
       start_at: {
         label: 'Czas rozpoczęcia',
       },
       stop_at: {
         label: 'Czas zakończenia',
+      },
+      name: {
+        label: 'Nazwa',
       },
     },
     action: {

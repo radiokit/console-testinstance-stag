@@ -2,6 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import classnames from 'classnames';
 import Translate from 'react-translate-component';
+import Counterpart from 'counterpart';
 
 import ProgressModal from '../../../widgets/admin/modal_progress_widget.jsx';
 import FileAutosuggestInput from '../../../widgets/admin/schedule/file_autosuggest_input.jsx';
@@ -84,7 +85,6 @@ const ScheduleItemModal = React.createClass({
   },
 
   isUpdating() {
-    console.log("debugger");
     return this.props.record;
   },
 
@@ -117,10 +117,14 @@ const ScheduleItemModal = React.createClass({
     if (!this.isUpdating()) {
       return (
         <div className="form-group">
-          <label htmlFor="fileNameInput"> File name </label>
+          <Translate
+            component="label"
+            content={ `${this.props.contentPrefix}.form.file.label` }
+            htmlFor="fileNameInput"
+          />
           <FileAutosuggestInput
             data={this.props.data}
-            placeholder="Search file name"
+            placeholder= {Counterpart.translate(`${this.props.contentPrefix}.form.file.hint`)}
             searchKey="name"
             limit={15}
             className="input-group-content"
@@ -130,10 +134,13 @@ const ScheduleItemModal = React.createClass({
         </div>
       );
     }
-    console.log(this.state.file);
     return (
       <div className="form-group">
-        <label htmlFor="fileNameInput"> File name </label>
+        <Translate
+          component="label"
+          content={ `${this.props.contentPrefix}.form.file.label` }
+          htmlFor="fileNameInput"
+        />
         <input
           id="fileNameInput"
           value={this.props.record.get('name')}
@@ -155,7 +162,11 @@ const ScheduleItemModal = React.createClass({
       return (
         <div>
           <div className="form-group">
-            <label htmlFor="startDate"> Start at </label>
+            <Translate
+              component="label"
+              content={ `${this.props.contentPrefix}.form.start_at.label` }
+              htmlFor="startDate"
+            />
             <input
               id="startDate"
               type="datetime-local"
@@ -181,16 +192,18 @@ const ScheduleItemModal = React.createClass({
     return (
       <div className="expanded">
         <div
-          className="ScheduleItemModal__optionalInputDivider divider"
+          className="ScheduleItemModal__optionalInputDivider"
           data-parent="toggle"
           data-target="optionalFields"
         >
           <a className={toggleClasses} onClick={this.toggleExpansion}>
             <i className="mdi mdi-chevron-right ScheduleItemModal__toggle" />
           </a>
-          <span>
-            Typ i opis
-          </span>
+          <Translate
+            component="span"
+            content={ `${this.props.contentPrefix}.info.type_and_desc` }
+            htmlFor="startDate"
+          />
         </div>
         <div id="optionalFields"
           className={hiddedClasses}
@@ -204,21 +217,24 @@ const ScheduleItemModal = React.createClass({
 
   renderDescrptionFields() {
     return (
-       <div className="form-group">
-            <label htmlFor="startDate"> Name </label>
-            <input
-              id="nameInput"
-              type="text"
-              className="form-control"
-              onChange={(e) => this.handleNameChange(e.target.value)}
-              value={this.state.name}
-            />
-          </div>
+      <div className="form-group">
+        <Translate
+          component="label"
+          content={ `${this.props.contentPrefix}.form.name.label` }
+          htmlFor="nameInput"
+        />
+        <input
+          id="nameInput"
+          type="text"
+          className="form-control"
+          onChange={(e) => this.handleNameChange(e.target.value)}
+          value={this.state.name}
+        />
+      </div>
     );
   },
 
   render() {
-    // todo translate stuff
     return (
       <ProgressModal
         ref="modal"
@@ -231,7 +247,6 @@ const ScheduleItemModal = React.createClass({
         onCancel={this.handleCancel}
         onConfirm={this.handleConfirm}
         onSuccess={this.handleSuccess}
-        proceedLabel="Dodaj do ramówki"
       >
         <div className="ScheduleItemModal modal-body">
           {this.renderFileInput()}

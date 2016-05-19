@@ -16,6 +16,10 @@
     width: inherit;
   }
 
+  &__optionalInputDivider {
+    margin: 15px 0;
+  }
+
   .collapsed &__toggle {
     transform: rotate(0deg);
   }
