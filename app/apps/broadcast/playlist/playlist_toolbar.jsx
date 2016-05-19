@@ -138,7 +138,7 @@ const PlaylistToolbar = React.createClass({
             form: this.buildNewForm(),
             app: 'plumber',
             model: 'Media.Input.File.RadioKit.Vault',
-            afterFormAccept: this.props.onCRUD,
+            onSuccess: this.props.onCRUD,
           }}
         />
 
@@ -166,7 +166,7 @@ const PlaylistToolbar = React.createClass({
             app: 'plumber',
             model: 'Media.Input.File.RadioKit.Vault',
             record: this.props.activeItem,
-            afterFormAccept: this.props.onCRUD,
+            onSuccess: this.props.onCRUD,
           }}
         />
 

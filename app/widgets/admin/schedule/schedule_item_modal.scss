@@ -1,5 +1,5 @@
-.ScheduleItemModal{
-  &__input--readOnly{
+.ScheduleItemModal {
+  &__input--readOnly {
     cursor: not-allowed !important;
   }
 
@@ -10,6 +10,10 @@
 
   &__toggle {
     transform: rotate(90deg);
+  }
+
+  &__toggleButton {
+    width: inherit;
   }
 
   .collapsed &__toggle {
