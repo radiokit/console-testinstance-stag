@@ -17,7 +17,7 @@ const filterItems =
 const SimpleConsoleAutosuggest = React.createClass({
   propTypes: {
     placeholder: React.PropTypes.string,
-    value: React.PropTypes.string,
+    value: React.PropTypes.object,
     onChange: React.PropTypes.func,
     onInputChange: React.PropTypes.func,
     items: React.PropTypes.object.isRequired,

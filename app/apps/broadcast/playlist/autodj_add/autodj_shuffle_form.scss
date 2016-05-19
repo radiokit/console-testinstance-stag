@@ -3,13 +3,11 @@
     float: left;
     width: 20%;
   }
-  &__fields {
+  &__content {
     float: right;
     width: 80%;
   }
-  &:after {
-    content: '';
+  &__dates {
     clear: both;
-    display: block;
   }
 }

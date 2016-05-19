@@ -5,6 +5,7 @@ import {
 } from 'immutable';
 
 import AutoDJShuffleForm from './autodj_shuffle_form.jsx';
+import AutoDJRotationForm from './autodj_rotation_form.jsx';
 import VaultRepositoryPicker from './vault_repository_picker.jsx';
 
 import Translate from 'react-translate-component';
@@ -53,7 +54,9 @@ const AutoDJForm = React.createClass({
   handleTypeChange(e) {
     const { model } = this.state;
     this.setState({
-      model: model.set('type', e.target.value),
+      model: model
+        .set('type', e.target.value)
+        .set('details', null),
     });
   },
 
@@ -72,18 +75,31 @@ const AutoDJForm = React.createClass({
   },
 
   render() {
+    const { model } = this.state;
     const typeDetailsForm = ({
       [AUTODJ_OPTIONS[0]]: (
-        this.state.model.getIn(['repository']) &&
+        model.getIn(['repository']) &&
         (
           <AutoDJShuffleForm
-            tags={this.state.model.getIn(['repository', 'tag_items'], List())}
-            value={this.state.model.get('details')}
+            tags={model.getIn(['repository', 'tag_items'], List())}
+            value={model.get('details')}
             onChange={this.handleDetailsChange}
           />
         )
       ),
-    })[this.state.model.get('type')];
+      [AUTODJ_OPTIONS[1]]: (
+        model.getIn(['repository']) &&
+        (
+          <AutoDJRotationForm
+            tags={model.getIn(['repository', 'tag_items'], List())}
+            value={model.get('details')}
+            onChange={this.handleDetailsChange}
+          />
+        )
+      ),
+    })[model.get('type')];
+
+    // console.log('model', JSON.stringify(model.toJS(), null, '  '));
 
     return (
       <form
@@ -98,7 +114,7 @@ const AutoDJForm = React.createClass({
             <select
               name="autodjform_type"
               onChange={this.handleTypeChange}
-              value={this.state.model.get('type')}
+              value={model.get('type')}
             >
               {AUTODJ_OPTIONS.map(option => (
                 <option key={option} value={option}>{option}</option>
@@ -106,11 +122,11 @@ const AutoDJForm = React.createClass({
             </select>
           </div>
           <div>
-            <label htmlFor="">
+            <label>
               <Translate content="AutoDJForm.repositoryLabel" />
             </label>
             <VaultRepositoryPicker
-              value={this.state.model.get('repository')}
+              value={model.get('repository')}
               onChange={this.handleRepositoryChange}
             />
           </div>
