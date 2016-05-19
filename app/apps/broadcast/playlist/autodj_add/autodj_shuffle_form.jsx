@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Map,
   List,
   is,
 } from 'immutable';
@@ -37,81 +38,139 @@ function clearEmptyEntries(value) {
   return value.filter(entry => !!entry);
 }
 
-function sumValues(entries, valuePath) {
-  return entries.reduce((result, entry) => result + entry.getIn(valuePath), 0);
+function sumValues(values) {
+  return values.reduce((result, value) => result + value, 0);
 }
 
-function balanceLevels(entries, valuePath, targetSum, precision = 2) {
-  const sum = sumValues(entries, valuePath);
-  return entries.map(
-    (entry, i) => {
-      const oldValue = entry.get(valuePath, 0);
-      const newValue = oldValue + (targetSum - sum) / entries.count();
+function balanceLevels(levels, targetSum, precision = 2) {
+  const sum = sumValues(levels);
+
+  if (sum === 0) {
+    return levels;
+  }
+
+  const factor = targetSum / sum;
+  let cutout = 0;
+  return levels.map(
+    (level, i) => {
+      const oldValue = level;
+      const newValue = oldValue * factor;
       const precisionFactor = Math.pow(10, precision);
-      const redefine = (i + 1) % precisionFactor === 0
-        ? v => Math.ceil(v)
-        : v => Math.floor(v);
-      const newRoundValue = redefine(
+      const newRoundValue = Math.floor(
           newValue * precisionFactor
         ) / precisionFactor;
-      return entry.set(
-        valuePath,
-        newRoundValue
+      cutout += newValue - newRoundValue;
+      const cutoutOverflow = (cutout > 1 / precisionFactor) ? 1 / precisionFactor : 0;
+      cutout -= cutoutOverflow;
+      return (
+        newRoundValue +
+        cutoutOverflow +
+        (
+          (
+            i === levels.count() - 1 &&
+            cutout > 0
+          )
+            ? 1 / precisionFactor
+            : 0
+        )
       );
     }
   );
 }
 
+import './autodj_shuffle_form.scss';
+
+const EMPTY_SHUFFLE = List([Map({ ratio: 1 })]);
+const ENTRY_ID_PATH = ['tag', 'id'];
+const ENTRY_RATIO_PATH = ['ratio'];
+
 const AutoDJShuffleForm = React.createClass({
   propTypes: {
-    tags: React.PropTypes.array,
+    tags: React.PropTypes.object,
     value: React.PropTypes.object,
     onChange: React.PropTypes.func,
   },
 
+  getEntries() {
+    const { value: propValue } = this.props;
+    if (propValue === undefined || propValue.count() === 0) {
+      return EMPTY_SHUFFLE;
+    }
+    return propValue;
+  },
+
   handleChange(newEntry, oldEntry) {
-    const entryIdPath = ['tag', 'id'];
-    const entryRatioPath = ['ratio'];
     const {
-      value = List(),
       onChange = () => null,
     } = this.props;
+    const entries = this.getEntries();
 
     const updatedEntries = getUnique(
       clearEmptyEntries(
-        substituteEntry(value, oldEntry, newEntry)
+        substituteEntry(entries, oldEntry, newEntry)
       ),
-      entryIdPath
+      ENTRY_ID_PATH
     );
 
-    if (newEntry) {
+    if (updatedEntries.count() === 1) {
+      onChange(updatedEntries.setIn([0].concat(ENTRY_RATIO_PATH), 1));
+    } else if (newEntry) {
       const restOfEntries = updatedEntries.filter(
         v => !is(v, newEntry)
       );
-      const balancedRest = balanceLevels(
-        restOfEntries,
-        entryRatioPath,
-        1 - newEntry.getIn(entryRatioPath, 0)
+      const balancedRestRatios = balanceLevels(
+        restOfEntries
+          .groupBy(entry => entry.getIn(ENTRY_ID_PATH))
+          .map(groupedEntries => groupedEntries.last().getIn(ENTRY_RATIO_PATH)),
+        1 - newEntry.getIn(ENTRY_RATIO_PATH, 0)
       );
-      const balancedEntries = balancedRest.push(newEntry);
-      onChange(balancedEntries);
+      const balancedAllRatios = balancedRestRatios.set(
+        newEntry.getIn(ENTRY_ID_PATH),
+        newEntry.getIn(ENTRY_RATIO_PATH)
+      );
+      onChange(
+        updatedEntries
+          .map(
+            entry => entry.setIn(
+              ENTRY_RATIO_PATH,
+              balancedAllRatios.get(entry.getIn(ENTRY_ID_PATH))
+            )
+          )
+      );
     } else {
       onChange(updatedEntries);
     }
   },
 
+  addNewValue() {
+    const {
+      onChange = () => null,
+    } = this.props;
+    onChange(
+      getUnique(
+        this.getEntries().push(Map({ tag: null, ratio: 0 })),
+        ENTRY_ID_PATH
+      )
+    );
+  },
+
   render() {
-    const { value = List() } = this.props;
+    const value = this.getEntries();
     return (
-      <div>
-        {value.toArray().map((entry, i) => (
-          <AutoDJShuffleInput
-            key={i}
-            tags={this.props.tags}
-            value={entry}
-            onChange={this.handleChange}
-          />
-        ))}
+      <div className="AutoDJShuffleForm">
+        <div className="AutoDJShuffleForm__controls">
+          <button onClick={this.addNewValue}>+</button>
+        </div>
+        <div className="AutoDJShuffleForm__fields">
+          {value.toArray().map((entry, i) => (
+            <AutoDJShuffleInput
+              key={i}
+              tags={this.props.tags}
+              value={entry}
+              onChange={this.handleChange}
+            />
+          ))}
+        </div>
       </div>
     );
   },

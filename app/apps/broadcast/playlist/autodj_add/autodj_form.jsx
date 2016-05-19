@@ -36,7 +36,7 @@ const AutoDJForm = React.createClass({
 
   getInitialState() {
     return {
-      model: Map(),
+      model: Map({ type: AUTODJ_OPTIONS[0], repository: null }),
     };
   },
 
@@ -77,7 +77,7 @@ const AutoDJForm = React.createClass({
         this.state.model.getIn(['repository']) &&
         (
           <AutoDJShuffleForm
-            tags={this.state.model.getIn(['repository', 'tag_items'], List()).toArray()}
+            tags={this.state.model.getIn(['repository', 'tag_items'], List())}
             value={this.state.model.get('details')}
             onChange={this.handleDetailsChange}
           />
@@ -98,7 +98,7 @@ const AutoDJForm = React.createClass({
             <select
               name="autodjform_type"
               onChange={this.handleTypeChange}
-              value={this.state.model.get('type', AUTODJ_OPTIONS[0])}
+              value={this.state.model.get('type')}
             >
               {AUTODJ_OPTIONS.map(option => (
                 <option key={option} value={option}>{option}</option>
@@ -113,10 +113,6 @@ const AutoDJForm = React.createClass({
               value={this.state.model.get('repository')}
               onChange={this.handleRepositoryChange}
             />
-            <pre>{
-              this.state.model.get('repository') &&
-              JSON.stringify(this.state.model.get('repository').toJS(), null, '  ')
-            }</pre>
           </div>
         </fieldset>
         <fieldset>
