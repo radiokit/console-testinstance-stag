@@ -16,6 +16,7 @@ export default React.createClass({
     progressMax: React.PropTypes.number,
     step: React.PropTypes.oneOf(['confirmation', 'progress', 'acknowledgement', 'cancelled', 'error']).isRequired,
     size: React.PropTypes.oneOf(['normal', 'large']),
+    disableProceed: React.PropTypes.bool,
     onSuccess: React.PropTypes.func,
     onDismiss:React.PropTypes.func,
   },
@@ -128,6 +129,7 @@ export default React.createClass({
                         content={this.props.contentPrefix + ".action.proceed"}
                         role="button"
                         className={"btn btn-" + this.props.proceedType}
+                        disabled={this.props.disableProceed}
                         onClick={this.onConfirm}
                       />
                       {() => {

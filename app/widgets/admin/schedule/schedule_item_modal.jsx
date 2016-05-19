@@ -247,6 +247,7 @@ const ScheduleItemModal = React.createClass({
         onCancel={this.handleCancel}
         onConfirm={this.handleConfirm}
         onSuccess={this.handleSuccess}
+        disableProceed={!this.state.file}
       >
         <div className="ScheduleItemModal modal-body">
           {this.renderFileInput()}
