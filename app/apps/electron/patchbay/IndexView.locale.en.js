@@ -25,7 +25,12 @@ export default {
               proceed: "Update device",
               cancel: "Cancel",
               close: "Close",
-            }
+            },
+
+            message: {
+              acknowledgement: "Update successful.",
+            },
+            
           },
 
           delete: {
