@@ -27,10 +27,9 @@ import LibraryFileRepositoriesIndex from './apps/library/file_repositories/Index
 import LibraryFileRepositoriesShow from './apps/library/file_repositories/show_view.jsx';
 import ClipEditorApp from './apps/clip_editor/app.jsx';
 import AdministrationApp from './apps/administration/app.jsx';
-import AdministrationUserAccountsIndex from './apps/administration/user_accounts/index_view.jsx';
 import AdministrationBroadcastChannelsIndex from './apps/administration/broadcast_channels/IndexView.jsx';
 import AdministrationBroadcastChannelsShow from './apps/administration/broadcast_channels/ShowView.jsx';
-import AdministrationUsersIndex from './apps/administration/editors/index_view.jsx';
+import AdministrationUsersIndex from './apps/administration/users/IndexView.jsx';
 import AdministrationFileRepositoriesIndex from './apps/administration/file_repositories/IndexView.jsx';
 import AdministrationFileRepositoriesShow from './apps/administration/file_repositories/ShowView.jsx';
 
@@ -112,8 +111,7 @@ ReactDOM.render((
             <Route path="index" component={AdministrationBroadcastChannelsIndex} onEnter={pingGoogleAnalytics}/>
             <Route path="show/:id" component={AdministrationBroadcastChannelsShow} onEnter={pingGoogleAnalytics}/>
           </Route>
-          <Route path="user_accounts/index" component={AdministrationUserAccountsIndex} onEnter={pingGoogleAnalytics}/>
-          <Route path="editors/index" component={AdministrationUsersIndex} onEnter={pingGoogleAnalytics}/>
+          <Route path="users/index" component={AdministrationUsersIndex} onEnter={pingGoogleAnalytics}/>
           <Route path="file_repositories">
             <Route path="index" component={AdministrationFileRepositoriesIndex} onEnter={pingGoogleAnalytics}/>
             <Route path="show/:id" component={AdministrationFileRepositoriesShow} onEnter={pingGoogleAnalytics}/>

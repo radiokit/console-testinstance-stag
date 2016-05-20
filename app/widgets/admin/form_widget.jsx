@@ -137,6 +137,15 @@ const FormWidget = React.createClass({
           params[fieldName] = fieldConfig.value;
           break;
 
+        case "set":
+          let values = [];
+          let options = this.refs[fieldName].selectedOptions;
+          for(let i = 0; i < options.length; i++) {
+            values.push(options[i].value);
+          }
+          params[fieldName] = values;
+          break;
+
         case "datetime":
           params[fieldName] = this.refs[fieldName].getInput();
           break;
@@ -211,6 +220,10 @@ const FormWidget = React.createClass({
         input = (<input className="form-control" type="number" id={ fieldName } ref={ fieldName } required={ required } />);
         break;
 
+      case "password":
+        input = (<input className="form-control" type="password" id={ fieldName } ref={ fieldName } required={ required } />);
+        break;
+
       case "tel":
         input = (<input className="form-control" type="tel" id={ fieldName } ref={ fieldName } required={ required } />);
         break;
@@ -219,21 +232,55 @@ const FormWidget = React.createClass({
         input = (<input className="form-control" type="email" id={ fieldName } ref={ fieldName } required={ required } />);
         break;
 
+      case "set":
+        if(Array.isArray(fieldConfig.values)) {
+          let setValuesSorted;
+          if (!fieldConfig.hasOwnProperty("sorted") || fieldConfig.sorted === false) {
+            setValuesSorted = fieldConfig.values.sort((a, b) => {
+              let translatedA = Counterpart.translate(`${this.props.contentPrefix}.${fieldName}.values.${a}`);
+              let translatedB = Counterpart.translate(`${this.props.contentPrefix}.${fieldName}.values.${b}`);
+              return translatedA == translatedB ? 0 : (translatedA < translatedB ? -1 : 1);
+            });
+          } else {
+            setValuesSorted = fieldConfig.values;
+          }
+
+          input = (
+            <select className="form-control" id={ fieldName } ref={ fieldName } required={ required } multiple>
+              { setValuesSorted.map((value) => {
+                  return (<Translate key={ value } value={ value } component="option" content={ `${this.props.contentPrefix}.${fieldName}.values.${value}` } />);
+                }) }
+            </select>
+          );
+
+        } else {
+          input = (
+            <select className="form-control" id={ fieldName } ref={ fieldName } required={ required } multiple>
+              { Object.keys(fieldConfig.values).map((key) => {
+                  let value = fieldConfig.values[key];
+                  return (<option key={ key } value={ key }>{value}</option>);
+                }) }
+            </select>
+          );
+        }
+
+        break;
+
       case "enum":
-        let valuesSorted;
+        let enumValuesSorted;
         if (!fieldConfig.hasOwnProperty("sorted") || fieldConfig.sorted === false) {
-          valuesSorted = fieldConfig.values.sort((a, b) => {
+          enumValuesSorted = fieldConfig.values.sort((a, b) => {
             let translatedA = Counterpart.translate(`${this.props.contentPrefix}.${fieldName}.values.${a}`);
             let translatedB = Counterpart.translate(`${this.props.contentPrefix}.${fieldName}.values.${b}`);
             return translatedA == translatedB ? 0 : (translatedA < translatedB ? -1 : 1);
           });
         } else {
-          valuesSorted = fieldConfig.values;
+          enumValuesSorted = fieldConfig.values;
         }
 
         input = (
           <select className="form-control" id={ fieldName } ref={ fieldName } required={ required }>
-            { valuesSorted.map((value) => {
+            { enumValuesSorted.map((value) => {
                 return (<Translate key={ value } value={ value } component="option" content={ `${this.props.contentPrefix}.${fieldName}.values.${value}` } />);
               }) }
           </select>
