@@ -9,29 +9,34 @@ const FileAutosuggestInput = React.createClass({
     placeholder: React.PropTypes.string,
     colorMatchingPhrase: React.PropTypes.bool,
     onFileSelected: React.PropTypes.func.isRequired,
+    value: React.PropTypes.string.isRequired,
+    selectedFile: React.PropTypes.object,
+    onValueChanged: React.PropTypes.func.isRequired,
   },
 
   getInitialState() {
     return {
-      value: '',
-      suggestions: this.getSuggestions(''),
+      suggestions: [],
     };
   },
 
-  getSuggestions(value) {
-    if (value === '') {
+  getSuggestions() {
+    const lowercaseValue = this.props.value.toLowerCase();
+    if (lowercaseValue === '') {
       return [];
     }
-    const lowercaseValue = value.toLowerCase();
     return this.props.data.filter((item) =>
       item.get(this.props.searchKey).toLowerCase().includes(lowercaseValue)
     ).take(this.props.limit || this.props.data.count()).toJS();
   },
 
   onChange(event, { newValue }) {
-    this.setState({
-      value: newValue,
-    });
+    this.props.onValueChanged(newValue);
+  },
+
+  onBlur() {
+    const newValue = this.props.selectedFile ? this.props.selectedFile.name : '';
+    this.props.onValueChanged(newValue);
   },
 
   getSuggestionValue(suggestion) {
@@ -55,21 +60,22 @@ const FileAutosuggestInput = React.createClass({
   },
 
   render() {
-    const { value, suggestions } = this.state;
     const inputProps = {
       placeholder: this.props.placeholder || '',
-      value,
+      value: this.props.value,
       onChange: this.onChange,
+      onBlur: this.onBlur,
     };
     return (
       <span className="twitter-typeahead">
         <ConsoleAutosuggest
-          suggestions={suggestions}
+          suggestions={this.state.suggestions}
           onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
           onSuggestionSelected={this.onSuggestionSelected}
           getSuggestionValue={this.getSuggestionValue}
           renderSuggestion={this.renderSuggestion}
           inputProps={inputProps}
+          focusInputOnSuggestionClick={false}
         />
       </span>
     );

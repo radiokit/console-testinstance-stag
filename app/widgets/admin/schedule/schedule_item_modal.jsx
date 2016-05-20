@@ -36,6 +36,7 @@ const ScheduleItemModal = React.createClass({
       stopDate: this.getInitialStopDate(),
       name: null,
       expanded: false,
+      fileNameInput: '',
     };
   },
 
@@ -114,8 +115,10 @@ const ScheduleItemModal = React.createClass({
   },
 
   handleSelectedFile(file) {
-    const stopDate = this.calculateStopDate(this.state.startDate, file);
-    this.setState({ file, stopDate });
+    if (file) {
+      const stopDate = this.calculateStopDate(this.state.startDate, file);
+      this.setState({ file, stopDate });
+    } else this.setState({ file: null });
   },
 
   handleStartDateChange(startDate) {
@@ -125,6 +128,13 @@ const ScheduleItemModal = React.createClass({
 
   handleNameChange(name) {
     this.setState({ name });
+  },
+
+  onFileInputChanged(fileNameInput) {
+    if (fileNameInput === '') {
+      this.setState({ file: null });
+    }
+    this.setState({ fileNameInput });
   },
 
   handleSuccess() {
@@ -152,7 +162,10 @@ const ScheduleItemModal = React.createClass({
             limit={15}
             className="input-group-content"
             id="fileNameInput"
-            onFileSelected= {this.handleSelectedFile}
+            value={this.state.fileNameInput}
+            onFileSelected={this.handleSelectedFile}
+            onValueChanged={this.onFileInputChanged}
+            selectedFile={this.state.file}
           />
         </div>
       );
