@@ -1,8 +1,8 @@
 import React from 'react';
 import { debounce } from 'lodash';
-import ConsoleAutosuggest from '../../../../widgets/admin/console_autosuggest.jsx';
+import ConsoleAutosuggest from './console_autosuggest.jsx';
 
-import queryFits from '../../../../helpers/query_fits';
+import queryFits from '../../helpers/query_fits';
 
 const itemQualifies =
   (query, getItemName) =>

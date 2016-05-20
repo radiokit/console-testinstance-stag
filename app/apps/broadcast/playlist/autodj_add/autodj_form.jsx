@@ -99,7 +99,6 @@ const AutoDJForm = React.createClass({
       ),
     })[model.get('type')];
 
-    // console.log('model', JSON.stringify(model.toJS(), null, '  '));
 
     return (
       <form

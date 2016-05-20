@@ -5,7 +5,7 @@ import {
   is,
 } from 'immutable';
 import AutoDJShuffleInput from './autodj_shuffle_input.jsx';
-import AutoDJDatesRange from './autodj_dates_range.jsx';
+import DatesRange from '../../../../widgets/time/dates_range.jsx';
 
 function getUnique(entries, idPath) {
   const emptyResult = entries.clear();
@@ -196,7 +196,7 @@ const AutoDJShuffleForm = React.createClass({
           ))}
         </div>
         <div className="AutoDJShuffleForm__dates">
-          <AutoDJDatesRange
+          <DatesRange
             value={this.getRange()}
             onChange={this.handleRangeChange}
           />

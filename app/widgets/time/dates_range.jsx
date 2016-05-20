@@ -5,8 +5,8 @@ import {
 
 import Translate from 'react-translate-component';
 import Counterpart from 'counterpart';
-import localePL from './autodj_dates_range_pl';
-import localeEN from './autodj_dates_range_en';
+import localePL from './dates_range_pl';
+import localeEN from './dates_range_en';
 
 Counterpart.registerTranslations('en', localeEN);
 Counterpart.registerTranslations('pl', localePL);
@@ -14,7 +14,7 @@ Counterpart.registerTranslations('pl', localePL);
 const START = 'start';
 const END = 'end';
 
-const AutoDJDatesRange = React.createClass({
+const DatesRange = React.createClass({
   propTypes: {
     value: React.PropTypes.object,
     onChange: React.PropTypes.func,
@@ -74,7 +74,7 @@ const AutoDJDatesRange = React.createClass({
       <fieldset>
         <div>
           <Translate
-            content="AutoDJDatesRange.from"
+            content="DatesRange.from"
             component="label"
           />
           <input
@@ -87,7 +87,7 @@ const AutoDJDatesRange = React.createClass({
         </div>
         <div>
           <Translate
-            content="AutoDJDatesRange.to"
+            content="DatesRange.to"
             component="label"
           />
           <input
@@ -103,4 +103,4 @@ const AutoDJDatesRange = React.createClass({
   },
 });
 
-export default AutoDJDatesRange;
+export default DatesRange;

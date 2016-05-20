@@ -1,5 +1,5 @@
 export default {
-  AutoDJDatesRange: {
+  DatesRange: {
     from: 'From:',
     to: 'To:',
   },

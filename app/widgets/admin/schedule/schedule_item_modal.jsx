@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from '../../../widgets/admin/modal_widget.jsx';
-import AutosuggestInput from '../../../widgets/admin/console_autosuggest.jsx';
+import AutosuggestInput from '../../autosuggest/console_autosuggest.jsx';
 
 const ScheduleItemModal = React.createClass({
   propTypes: {
