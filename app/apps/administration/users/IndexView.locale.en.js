@@ -44,7 +44,7 @@ export default {
                 password: {
                   label: "Password",
                 },
-                accounts: {
+                account_ids: {
                   label: "Accounts",
                   hint: "Select accounts to which this user belongs. Hold Ctrl while clicking to select/deselect multiple accounts.",
                 },
