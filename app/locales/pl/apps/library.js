@@ -62,14 +62,6 @@ export default {
             },
           }
         },
-
-        index: {
-          header: "Library sections",
-
-          table: {
-            loading: "Fetching list of library sections",
-          },
-        },
       },
     }
   }
