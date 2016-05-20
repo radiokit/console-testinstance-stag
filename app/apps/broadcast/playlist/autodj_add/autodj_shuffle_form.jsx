@@ -43,7 +43,7 @@ function sumValues(values) {
   return values.reduce((result, value) => result + value, 0);
 }
 
-function balanceLevels(levels, targetSum, precision = 2) {
+function balanceLevels(levels, targetSum, precision = 3) {
   const sum = sumValues(levels);
 
   if (sum === 0) {
@@ -82,17 +82,26 @@ const EMPTY_FORM = Map({ tags: EMPTY_SHUFFLE, range: EMPTY_RANGE });
 const ENTRY_ID_PATH = ['tag', 'id'];
 const ENTRY_RATIO_PATH = ['ratio'];
 
-function balanceEntriesAgainst(entriesToBalance, staticEntry) {
+function balanceEntriesAgainst(entriesToBalance, targetSum, staticEntry) {
   const restOfEntries = entriesToBalance.filter(
     v => !is(v, staticEntry)
   );
+  const restTargetSum = targetSum - staticEntry.getIn(ENTRY_RATIO_PATH, 0);
   const balancedRestRatios = balanceLevels(
     restOfEntries
       .groupBy(entry => entry.getIn(ENTRY_ID_PATH))
       .map(groupedEntries => groupedEntries.last().getIn(ENTRY_RATIO_PATH)),
-    1 - staticEntry.getIn(ENTRY_RATIO_PATH, 0)
+    restTargetSum
   );
-  const balancedAllRatios = balancedRestRatios.set(
+  const restBalancedSum = sumValues(balancedRestRatios);
+  const restTargetSumDiff = restTargetSum - restBalancedSum;
+  const liftedRestRatios = balanceLevels(
+    balancedRestRatios.map(
+      ratio => Math.max(0, ratio + restTargetSumDiff / balancedRestRatios.count())
+    ),
+    restTargetSum
+  );
+  const balancedAllRatios = liftedRestRatios.set(
     staticEntry.getIn(ENTRY_ID_PATH),
     staticEntry.getIn(ENTRY_RATIO_PATH)
   );
@@ -117,8 +126,7 @@ const AutoDJShuffleForm = React.createClass({
   },
 
   getValue() {
-    const { value = EMPTY_FORM } = this.props;
-    return value;
+    return this.props.value || EMPTY_FORM;
   },
 
   getEntries() {
@@ -159,7 +167,7 @@ const AutoDJShuffleForm = React.createClass({
     if (updatedEntries.count() === 1) {
       this.handleEntriesChange(updatedEntries.setIn([0].concat(ENTRY_RATIO_PATH), 1));
     } else if (newEntry) {
-      this.handleEntriesChange(balanceEntriesAgainst(updatedEntries, newEntry));
+      this.handleEntriesChange(balanceEntriesAgainst(updatedEntries, 1, newEntry));
     } else {
       this.handleEntriesChange(updatedEntries);
     }
