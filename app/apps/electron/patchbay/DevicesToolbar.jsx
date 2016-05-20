@@ -50,7 +50,7 @@ const DevicesToolbar = React.createClass({
       'Config.Routing.LinkRule': 'link'
     })[this.props.selectedRecord.model]
 
-    return 'apps.electron.patchbay.modals.${modalType}.${prefix}';
+    return `apps.electron.patchbay.modals.${modalType}.${prefix}`;
   },
 
 
