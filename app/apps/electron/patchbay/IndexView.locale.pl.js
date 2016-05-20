@@ -25,7 +25,12 @@ export default {
               proceed: "Edytuj urządzenie",
               cancel: "Anuluj",
               close: "Zamknij",
-            }
+            },
+
+            message: {
+              acknowledgement: "Zapisano zmiany.",
+            },
+
           },
 
           delete: {

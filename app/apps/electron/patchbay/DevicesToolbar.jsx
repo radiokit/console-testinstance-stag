@@ -108,7 +108,7 @@ const DevicesToolbar = React.createClass({
           modalProps={{
             contentPrefix: 'apps.electron.patchbay.modals.update',
             form: this.buildUpdateForm(this.props.selectedRecord),
-            app: 'plumber',
+            app: 'auth',
             model: 'Client.Standalone',
             recordId: (this.props.selectedRecord.record ?
                        this.props.selectedRecord.record.get('id') :
