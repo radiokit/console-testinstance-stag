@@ -1,24 +1,41 @@
 import React from 'react';
 import moment from 'moment';
-import Immutable from 'immutable';
+import { Range, Map, OrderedMap, List } from 'immutable';
 import connect from 'immview-react-connect';
 import ScheduleDomain from '../../../services/ScheduleDomain';
 import { range } from 'lodash';
 import sprintf from 'tiny-sprintf';
+import ShortenedRow from '../schedule_daily/schedule_daily_shortened_row.jsx';
 
 import './schedule_weekly_widget.scss';
 
-const ShortenedRow = (props) => (
-  <div className="ScheduleWeeklyWidget-Table-item-ellipsed">
-    {props.items.sortBy(item => item.toJS().start_at).map(item => (
-      `${item.get('name') || item.get('id')} [${item.get('start_at').format('HH:mm:ss.SSS')}], `
-    ))}
-  </div>
-);
+function groupByDateAndHour(items, days) {
+  const hours = Range(0, 24);
+  const groupedItems = days.map(
+    day => (
+      hours.map(
+        hour => (
+          items.filter(
+            item => (
+              hour < 5 ?
+              (moment.utc(item.get('start_at')).isBefore(day.clone().hour(hour + 1)
+                .startOf('hour').add(1, 'day')) &&
+              moment.utc(item.get('stop_at')).isAfter(day.clone().hour(hour)
+                .startOf('hour').add(1, 'day')))
+              :
+              (moment.utc(item.get('start_at')).isBefore(day.clone().hour(hour + 1)
+                .startOf('hour')) &&
+              moment.utc(item.get('stop_at')).isAfter(day.clone().hour(hour)
+                .startOf('hour')))
+            )
+          )
+        )
+      )
+    )
+  );
 
-ShortenedRow.propTypes = {
-  items: React.PropTypes.object.isRequired,
-};
+  return groupedItems;
+}
 
 const ScheduleWeekly = React.createClass({
   propTypes: {
@@ -49,33 +66,15 @@ const ScheduleWeekly = React.createClass({
     ));
   },
 
-  getItems(day, hour) {
-    const { items } = this.props;
-    const start = moment.utc(day).hour(hour);
-    const stop = start.clone().add(1, 'hour');
-
-    return items.filter(item => (
-      moment.utc(item.get('start_at')).isBefore(stop) &&
-      moment.utc(item.get('stop_at')).isAfter(start)
-    )).map(item => (
-      Immutable.Map()
-        .set('id', item.get('id'))
-        .set('name', item.get('name'))
-        .set('start_at', moment.utc(item.get('start_at')))
-        .set('stop_at', moment.utc(item.get('stop_at')))
-        // .set('file', item.get('file'))
-    )).toList();
-  },
-
   render() {
-    const { firstHour, offsetStart } = this.props;
+    const { firstHour, offsetStart, items } = this.props;
     const hours = (firstHour > 0)
-    ? new Immutable
-      .Range(firstHour, 24)
-      .concat(new Immutable.Range(0, firstHour))
-    : new Immutable.Range(0, 24);
+    ? Range(firstHour, 24)
+      .concat(Range(0, firstHour))
+    : Range(0, 24);
 
     const days = this.getDays(moment.utc(offsetStart).startOf('week'));
+    const groupedItems = groupByDateAndHour(items, days);
 
     return (
       <table className="ScheduleWeeklyWidget table table-banded table-hover">
@@ -90,11 +89,11 @@ const ScheduleWeekly = React.createClass({
               <tr>
                 <td>{sprintf('%02s:00', hour)}</td>
                 {days.map(day => (
-                  <td>
+                  <td className="ScheduleWeeklyWidget-Table-items">
                     <ShortenedRow
-                      className="ScheduleDailyWidget-CalendarRow-item-ellipsed"
+                      className="ScheduleWeeklyWidget-CalendarRow-item-ellipsed"
                       key={day + hour}
-                      items={this.getItems(day, hour)}
+                      items={groupedItems[day.weekday()].get(hour, List())}
                     />
                   </td>
                 ))}
@@ -110,7 +109,7 @@ export default connect(
   ScheduleWeekly,
   ScheduleDomain,
   (data, props) => {
-    const timeRange = Immutable.Map({
+    const timeRange = Map({
       from: moment.utc(props.offsetStart).startOf('week').add(5, 'hours')
         .subtract(1, 'day').toISOString(),
       to: moment.utc(props.offsetStart).endOf('week').add(5, 'hours')
@@ -120,7 +119,7 @@ export default connect(
       ScheduleDomain.fetch(timeRange.get('from'), timeRange.get('to'));
     }
     const items = data
-      .get('all', Immutable.OrderedMap())
+      .get('all', OrderedMap())
       .toList()
       .filter(
         item => (

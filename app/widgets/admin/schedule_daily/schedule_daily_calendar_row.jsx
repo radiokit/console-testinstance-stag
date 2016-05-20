@@ -5,44 +5,10 @@ import {
   range,
 } from 'lodash';
 
+import ShortenedRow from './schedule_daily_shortened_row.jsx';
+import ExpandedRow from './schedule_daily_expanded_row.jsx';
+
 const hourType = PropTypes.oneOf(range(0, 24));
-
-const ExpandedRow = (props) => (
-  <div className="ScheduleDailyWidget-CalendarRow-item-expanded">
-    <ul className="ScheduleDailyWidget-CalendarRow-item-expanded-list">
-      {props.items.sortBy(item => item.toJS().start_at).map(item => (
-        <li key={item.get('id')}>
-          <div
-            key={item.get('id')}
-            className={props.getClassName(item)}
-            onClick={() => props.markAsActive(item)}
-          >
-            {item.get('name') || item.get('id')} -
-            - {item.get('start_at').format('HH:mm:ss.SSSS')}
-          </div>
-        </li>
-      ))}
-    </ul>
-  </div>
-);
-
-ExpandedRow.propTypes = {
-  items: React.PropTypes.object.isRequired,
-  getClassName: React.PropTypes.func.isRequired,
-  markAsActive: React.PropTypes.func.isRequired,
-};
-
-const ShortenedRow = (props) => (
-  <div className="ScheduleDailyWidget-CalendarRow-item-ellipsed">
-    {props.items.sortBy(item => item.toJS().start_at).map(item => (
-      `${item.get('name') || item.get('id')} [${item.get('start_at').format('HH:mm:ss.SSS')}], `
-    ))}
-  </div>
-);
-
-ShortenedRow.propTypes = {
-  items: React.PropTypes.object.isRequired,
-};
 
 const CalendarRow = React.createClass({
   propTypes: {
@@ -121,7 +87,10 @@ const CalendarRow = React.createClass({
       );
     } else {
       rowContent = (
-        <ShortenedRow items = {items} />
+        <ShortenedRow
+          items={items}
+          className="ScheduleDailyWidget-CalendarRow-item-ellipsed"
+        />
       );
     }
 

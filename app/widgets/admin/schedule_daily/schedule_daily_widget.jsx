@@ -1,11 +1,35 @@
 import React from 'react';
-import Immutable from 'immutable';
+import { Range, Map, OrderedMap, List } from 'immutable';
 import moment from 'moment';
 import CalendarRow from './schedule_daily_calendar_row.jsx';
 import connect from 'immview-react-connect';
 import ScheduleDomain from '../../../services/ScheduleDomain';
 
 import './schedule_daily_widget.scss';
+
+function groupByHour(items, offsetStart) {
+  const now = moment.utc(offsetStart);
+  const hours = Range(0, 24);
+  const itemsByHour = hours.map(
+    hour => (
+      items.filter(
+        item => (
+          hour < 5 ?
+          (moment.utc(item.get('start_at')).isBefore(now.clone().hour(hour + 1)
+            .startOf('hour').add(1, 'day')) &&
+          moment.utc(item.get('stop_at')).isAfter(now.clone().hour(hour)
+            .startOf('hour').add(1, 'day')))
+          :
+          (moment.utc(item.get('start_at')).isBefore(now.clone().hour(hour + 1)
+            .startOf('hour')) &&
+          moment.utc(item.get('stop_at')).isAfter(now.clone().hour(hour)
+            .startOf('hour')))
+        )
+      )
+    )
+  );
+  return itemsByHour;
+}
 
 const ScheduleDaily = React.createClass({
   propTypes: {
@@ -33,40 +57,21 @@ const ScheduleDaily = React.createClass({
     };
   },
 
-  getItems(hour) {
-    const { items, offsetStart, firstHour } = this.props;
-    let hourStart = moment.utc(offsetStart).hour(hour).startOf('hour');
-    if (hour < firstHour) {
-      hourStart = hourStart.add(1, 'day');
-    }
-    const hourStop = hourStart.clone().add(1, 'hour');
-
-    return items.filter(item => (
-      moment.utc(item.get('start_at')).isBefore(hourStop) &&
-      moment.utc(item.get('stop_at')).isAfter(hourStart)
-    )).map(item => (
-      Immutable.Map()
-        .set('id', item.get('id'))
-        .set('name', item.get('name'))
-        .set('start_at', moment.utc(item.get('start_at')))
-        .set('stop_at', moment.utc(item.get('stop_at')))
-        .set('file', item.get('file'))
-    )).toList();
-  },
-
   render() {
     const {
       firstHour,
       offsetStart,
       onActiveItemChange,
       activeItem,
+      items,
     } = this.props;
 
     const hours = (firstHour > 0)
-    ? new Immutable
-      .Range(firstHour, 24)
-      .concat(new Immutable.Range(0, firstHour))
-    : new Immutable.Range(0, 24);
+    ? Range(firstHour, 24)
+      .concat(Range(0, firstHour))
+    : Range(0, 24);
+
+    const itemsByHour = groupByHour(items, offsetStart).toOrderedMap();
 
     return (
       <table className="ScheduleDailyWidget table table-banded table-hover ">
@@ -76,7 +81,7 @@ const ScheduleDaily = React.createClass({
                 key={hour}
                 hour={hour}
                 firstHour={firstHour}
-                items={this.getItems(hour)}
+                items={itemsByHour.get(hour, List())}
                 now={moment.utc(offsetStart)}
                 onActiveItemChange={onActiveItemChange}
                 activeItem={activeItem}
@@ -92,7 +97,7 @@ export default connect(
   ScheduleDaily,
   ScheduleDomain,
   (data, props) => {
-    const range = Immutable.Map({
+    const range = Map({
       from: moment.utc(props.offsetStart).startOf('day').add(5, 'hours')
         .subtract(1, 'day').toISOString(),
       to: moment.utc(props.offsetStart).endOf('day').add(5, 'hours').add(1, 'day').toISOString(),
@@ -101,7 +106,7 @@ export default connect(
       ScheduleDomain.fetch(range.get('from'), range.get('to'));
     }
     const items = data
-      .get('all', Immutable.OrderedMap())
+      .get('all', OrderedMap())
       .toList()
       .filter(
         item => (

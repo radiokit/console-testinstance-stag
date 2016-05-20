@@ -80,7 +80,7 @@ const PlaylistSidebar = React.createClass({
           </button>
 
           <div className="btn btn-default-light">
-            {moment.utc(this.props.offsetStart).clone().startOf('day').format('Mo (ddd)')}
+            {moment.utc(this.props.offsetStart).clone().startOf('day').format('D (ddd)')}
           </div>
 
           <button

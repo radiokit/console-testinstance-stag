@@ -1,16 +1,21 @@
 .ScheduleWeeklyWidget {
-  .ScheduleWeeklyWidget-Table-item-ellipsed {
-    height: 30px;
-    width: 130px;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    line-height: 37px;
-    padding-left: 5px;
-    padding-right: 5px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  .ScheduleWeeklyWidget-Table-items {
+    position: relative;
+    height: 37px;
+
+    .ScheduleWeeklyWidget-Table-item-ellipsed {
+      height: 30px;
+      width: 150px;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      line-height: 35px;
+      padding-left: 5px;
+      padding-right: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 }

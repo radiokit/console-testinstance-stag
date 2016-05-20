@@ -27,6 +27,7 @@
           "OrderedSet",
           "Set",
           "Seq",
+          "Range",
           "Moment"
         ]
       }

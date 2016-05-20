@@ -6,10 +6,8 @@
     height: auto;
 
     &.ScheduleDailyWidget-CalendarRow--expanded {
-      td {
-        vertical-align: top;
-      }
     }
+
     &.ScheduleDailyWidget-CalendarRow--expanded-cell {
       vertical-align: top;
     }
@@ -34,10 +32,12 @@
   }
 
   .ScheduleDailyWidget-CalendarRow-expandToggle {
+    vertical-align: top;
     width: 1ex;
   }
 
   .ScheduleDailyWidget-CalendarRow-hour {
+    vertical-align: top;
     width: 3ex;
   }
 
