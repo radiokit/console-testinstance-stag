@@ -1,4 +1,4 @@
-export default function makeAreDifferent(paths) {
+export default function createImmutableComparator(paths) {
   return function areDifferent(firstImm, secondImm) {
     return (
       !firstImm ||

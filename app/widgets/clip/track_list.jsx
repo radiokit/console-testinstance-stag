@@ -15,10 +15,12 @@ import {
 import TrackItems from './track_items.jsx';
 import TrackCursor from './track_cursor.jsx';
 import TrackTimeMarks from './track_time_marks.jsx';
+import TrackLines from './track_lines';
+
 import makeUniqStyle from './uniqStyle';
 const uniqStyle = makeUniqStyle();
 
-import './tracklist.scss';
+import './track_list.scss';
 
 function getElementOffset(originalElement) {
   let element = originalElement;
@@ -86,9 +88,10 @@ const TrackList = React.createClass({
   },
 
   getMouseOffset(e) {
+    const node = ReactDOM.findDOMNode(this);
     return {
-      x: e.clientX - getElementOffset(ReactDOM.findDOMNode(this)).x,
-      y: e.clientY - getElementOffset(ReactDOM.findDOMNode(this)).y,
+      x: e.clientX - getElementOffset(node).x,
+      y: e.clientY - getElementOffset(node).y,
     };
   },
 
@@ -204,6 +207,12 @@ const TrackList = React.createClass({
       position: 'relative',
       width: this.props.width,
     });
+    const playCursorPosition = (
+      (this.props.cursorTime === null)
+        ? null
+        : ((this.props.cursorTime - offsetStart) * this.props.width / offsetLength)
+    );
+    const mouseCursorPosition = this.state.mouseCursorPosition;
     return (
       <div className="TrackList"
         onMouseMove={this.handleMouseMove}
@@ -239,48 +248,11 @@ const TrackList = React.createClass({
           onItemSelect={this.handleItemSelect}
           onClick={this.handleClick}
         />
-        <TrackListCursors
-          playPosition={(
-            (this.props.cursorTime === null)
-              ? null
-              : ((this.props.cursorTime - offsetStart) * this.props.width / offsetLength)
-          )}
-          mousePosition={this.state.mouseCursorPosition}
-        />
+        <TrackCursor left={playCursorPosition} />
+        <TrackCursor left={mouseCursorPosition} opacity={1/4} />
       </div>
     );
   },
 });
 
 export default TrackList;
-
-const TrackListCursors = ({ playPosition, mousePosition }) => (
-  <div>
-    {(typeof playPosition === 'number') && (<TrackCursor left={playPosition} />)}
-    {
-      (typeof mousePosition === 'number') &&
-      (<TrackCursor left={mousePosition} style={{ opacity: 0.25 }} />)
-    }
-  </div>
-);
-
-TrackListCursors.propTypes = {
-  playPosition: React.PropTypes.number,
-  mousePosition: React.PropTypes.number,
-};
-
-const TrackLines = ({ tracksCount, trackHeight }) => (
-    <div className="TrackList__tracks">
-      {range(0, tracksCount).map(num => (
-        <div className="TrackList__tracks__line"
-          key={num}
-          style={{ transform: `translateY(${num * trackHeight}px)` }}
-        />
-      )) }
-    </div>
-  );
-
-TrackLines.propTypes = {
-  tracksCount: React.PropTypes.number,
-  trackHeight: React.PropTypes.number,
-};

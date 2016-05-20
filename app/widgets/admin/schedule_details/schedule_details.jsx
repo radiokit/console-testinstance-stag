@@ -17,12 +17,16 @@ import {
 import {
   scheduleItemToTrackItem,
   trackItemToScheduleItem,
-  assignTrackNumbersToItems,
+  assignTrackNumbersToTrackItems,
+  sortTrackItems,
+  selectTrackItemsOfRange,
 } from './schedule_details_tranform';
 
-const tracksCount = 5;
 const defaultViewportOffsetLength = 60000;
 const maxOffsetLengthInHours = 1;
+
+import Perf from 'react-addons-perf';
+window.Perf = Perf;
 
 const ScheduleDetails = React.createClass({
   propTypes: {
@@ -92,9 +96,20 @@ const ScheduleDetails = React.createClass({
   },
 
   render() {
-    const items = assignTrackNumbersToItems(
-      this.props.items.map(scheduleItemToTrackItem),
-      tracksCount
+    const trackItems = sortTrackItems(this.props.items.map(scheduleItemToTrackItem));
+    const positionedTrackItems = assignTrackNumbersToTrackItems(trackItems)
+    const pickedTrackItems = selectTrackItemsOfRange(
+      positionedTrackItems,
+      this.state.offsetStart,
+      this.state.offsetStart + this.state.offsetLength
+    );
+    const lowestTrackItem = pickedTrackItems
+      .maxBy(trackItem => trackItem.get('track', 0));
+    const highestTrackNum = Math.max(
+      6,
+      lowestTrackItem
+        ? lowestTrackItem.get('track')
+        : 0
     );
     return (
       <div>
@@ -108,11 +123,11 @@ const ScheduleDetails = React.createClass({
             scrollable
             zoomable
             width={width}
-            visibleTracksCount={tracksCount}
+            visibleTracksCount={highestTrackNum}
             offsetStart={this.state.offsetStart}
             offsetLength={this.state.offsetLength}
             maxOffsetLength={maxOffsetLengthInHours * 60 * 60 * 1000}
-            playlist={Map({ items })}
+            playlist={Map({ items: pickedTrackItems })}
             onItemChange={this.handleItemChange}
             timeMarks="date"
             onChangeOffset={this.handleChangeOffset}
@@ -141,31 +156,17 @@ export default connect(
   (data, props) => {
     // force data fetching for currently viewed range
     const fromISO = moment(props.offsetStart)
-      .subtract(maxOffsetLengthInHours / 2, 'hours')
+      .subtract(maxOffsetLengthInHours, 'hours')
       .toISOString();
     const toISO = moment(props.offsetStart)
-      .add(maxOffsetLengthInHours / 2, 'hours')
+      .add(maxOffsetLengthInHours, 'hours')
       .toISOString();
 
     ScheduleExpandedDomain.fetch(fromISO, toISO, { maxAge: 60000 });
 
-    // ...but push wider subset in case of whole day scrolling
-    const fromTS = moment(props.offsetStart)
-      .subtract(maxOffsetLengthInHours * 2, 'hours')
-      .valueOf();
-    const toTS = moment(props.offsetStart)
-      .add(maxOffsetLengthInHours * 2, 'hours')
-      .valueOf();
     const items = data
       .get('all', OrderedMap())
       .toList()
-      .filter(
-        item => (
-          new Date(item.get('stop_at')) > fromTS &&
-          new Date(item.get('start_at')) < toTS
-        )
-      )
-      .sortBy(item => item.get('start_at'))
       ;
     return {
       items,

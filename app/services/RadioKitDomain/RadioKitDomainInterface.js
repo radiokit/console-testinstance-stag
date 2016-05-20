@@ -1,6 +1,7 @@
 import {
   List,
   Map,
+  fromJS,
 } from 'immutable';
 import RadioKit from '../RadioKit';
 import { RadioKitQueries, update } from './RadioKitQueries';

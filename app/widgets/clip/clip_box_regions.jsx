@@ -5,7 +5,7 @@ import {
 import TimeMovableRegion from './time_movable_region.jsx';
 import PixelMovableRegion from './pixel_movable_region.jsx';
 import compareProps from '../../helpers/props_comparison';
-import makeAreDifferent from './compare_immutable_structures';
+import createImmutableComparator from './create_immutable_comparator';
 
 function getClipRegions(clip) {
   return clip.get('regions', List());
@@ -33,7 +33,7 @@ const propTypes = {
 
 const compareClipBoxFadesProps = compareProps(Object.keys(propTypes).filter(v => v !== 'clip'));
 
-const areClipsSignificantlyDifferent = makeAreDifferent([
+const areClipsSignificantlyDifferent = createImmutableComparator([
   ['regions'],
 ]);
 

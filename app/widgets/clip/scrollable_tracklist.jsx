@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Movable from '../general/movable.jsx';
-import TrackList from './tracklist.jsx';
+import TrackList from './track_list.jsx';
 
 const ScrollableTracklist = React.createClass({
 

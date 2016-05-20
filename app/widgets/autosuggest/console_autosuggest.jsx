@@ -1,4 +1,5 @@
 import React from 'react';
+// github.com/moroshko/react-autosuggest
 import Autosuggest from 'react-autosuggest';
 
 import './console_autosuggest.scss';

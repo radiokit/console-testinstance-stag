@@ -15,7 +15,6 @@ import {
 } from './FilesConfig';
 
 function runFilesQuery(queryAppendix = {}, requestOptions) {
-
   RadioKitDomain.query(
     fromJS({
       [key]: true,

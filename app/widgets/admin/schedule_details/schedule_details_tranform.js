@@ -1,8 +1,11 @@
 import {
   Map,
   List,
+  OrderedSet,
 } from 'immutable';
 import moment from 'moment';
+
+const LOWEST_TRACK_NUM = 1;
 
 export function scheduleItemToTrackItem(scheduleItem) {
   const offsetLength = (
@@ -15,11 +18,11 @@ export function scheduleItemToTrackItem(scheduleItem) {
     offsetStart: 0,
     offsetLength,
     maxOffsetLength: scheduleItem.getIn(['file', 'duration'], offsetLength),
-    fadeIn: 0,
-    fadeOut: 0,
-    track: 1,
+    fadeIn: null,
+    fadeOut: null,
+    track: LOWEST_TRACK_NUM,
     clip: Map({
-      id: scheduleItem.getIn(['file', 'id']),
+      id: scheduleItem.getIn(['file', 'id'], 'noid'),
       duration: scheduleItem.getIn(['file', 'duration'], offsetLength),
       images: List(),
       markers: List(),
@@ -35,8 +38,46 @@ export function trackItemToScheduleItem(trackItem, originalScheduleItem) {
   }));
 }
 
-export function assignTrackNumbersToItems(trackItemCollection, tracksCount) {
-  return trackItemCollection.map(
-    (trackItem, i) => trackItem.set('track', i % tracksCount + 1)
-  );
+function unixTS(sourceDate) {
+  return new Date(sourceDate).valueOf();
+}
+
+function findLowestUnoccupiedTrackNumInRange(trackItemCollection, from, to) {
+  const occupiedTrackNums = selectTrackItemsOfRange(trackItemCollection, from, to)
+    .map(trackItem => trackItem.get('track'))
+    .toOrderedSet();
+  for (let i = LOWEST_TRACK_NUM; ; i++) {
+    if (!occupiedTrackNums.includes(i)) {
+      return i;
+    }
+  }
+}
+
+export function sortTrackItems(trackItemCollection) {
+  return trackItemCollection
+    .sortBy(
+      trackItem => unixTS(trackItem.get('start_at'))
+    );
+}
+
+export function assignTrackNumbersToTrackItems(trackItemCollection) {
+  const positionedTrackItemCollection = trackItemCollection
+    .reduce(
+      (result, trackItem) => result.push(
+        trackItem.set('track', findLowestUnoccupiedTrackNumInRange(
+          result,
+          trackItem.get('position'),
+          trackItem.get('position') + trackItem.get('offsetLength')
+        ))
+      ),
+      List()
+    );
+  return positionedTrackItemCollection;
+}
+
+export function selectTrackItemsOfRange(trackItemCollection, from, to) {
+  return trackItemCollection.filter(trackItem => (
+      trackItem.get('position') < to &&
+      trackItem.get('position') + trackItem.get('offsetLength') > from
+    ));
 }

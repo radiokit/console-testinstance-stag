@@ -13,9 +13,8 @@ The app assumes that you have an instance of radiokit-auth running, refer to its
 ### Console
 
 * Clone repo
-* In case of Linux, type 'sudo apt-get install build-essential'
-* Type `npm install`
-* Start local webserver & bundler and whatever else is needed: `npm run dev`
+* In case of Linux, type `sudo apt-get install build-essential`
+* Install all dependencies, start local webserver & bundler and whatever else is needed: `npm start`
 * Open the site at http://localhost:8080
 * Enjoy
 

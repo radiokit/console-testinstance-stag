@@ -5,6 +5,8 @@
   "scripts": {
     "predev": "npm i",
     "dev": "node server.js",
+    "prestart": "echo 'INSTALL'; npm i",
+    "start": "echo 'RUN'; node server.js",
     "stag": "NODE_ENV=stag webpack --progress --config webpack.stag.config.js",
     "prod": "NODE_ENV=prod webpack --progress --config webpack.prod.config.js"
   },

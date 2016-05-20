@@ -20,9 +20,6 @@ function destructRegionDiff(newRegion, oldRegion) {
 
 import './track_item.scss';
 const TrackItem = React.createClass({
-
-  ...ImmutableComponent,
-
   propTypes: {
     offsetStart: React.PropTypes.number.isRequired,
     offsetLength: React.PropTypes.number.isRequired,
@@ -48,6 +45,8 @@ const TrackItem = React.createClass({
       selected: false,
     };
   },
+
+  shouldComponentUpdate: ImmutableComponent.shouldComponentUpdate,
 
   // movable events
   onHold() {
@@ -156,23 +155,13 @@ const TrackItem = React.createClass({
     const scale = width / offsetLength;
 
     const viewLeftOffset = item.get('position') - offsetStart;
-    const viewLeftClipping = Math.max(0, -1 * viewLeftOffset);
-    const viewRightClipping = Math.max(0,
-      item.get('position') +
-      item.get('offsetLength') -
-      (offsetStart + offsetLength)
-    );
 
     const blockHeight = height - 1;
-    const blockWidth = Math.round(
-      Math.max(0,
-        item.get('offsetLength') - viewLeftClipping - viewRightClipping) *
-      scale
-    );
+    const blockWidth = Math.round(item.get('offsetLength') * scale);
 
     const containerPositionStyle = uniqStyle({
       // transition: `top 60ms ease`,
-      transform: `translateX(${Math.round(Math.max(0, viewLeftOffset) * scale)}px)`,
+      transform: `translateX(${Math.round(viewLeftOffset * scale)}px)`,
       width: blockWidth,
       height: blockHeight,
     });
@@ -202,12 +191,8 @@ const TrackItem = React.createClass({
     };
 
     const clipBoxProps = {
-      offsetStart: Math.max(0, item.get('offsetStart') + viewLeftClipping),
-      offsetLength: Math.max(0,
-        item.get('offsetLength') -
-        viewLeftClipping -
-        viewRightClipping
-      ),
+      offsetStart: item.get('offsetStart'),
+      offsetLength: item.get('offsetLength'),
       width: blockWidth,
       height: blockHeight,
       clip: item.get('clip'),
@@ -215,28 +200,33 @@ const TrackItem = React.createClass({
       onChange: this.triggerClipChange,
     };
 
-    const fadeInProps = {
-      component: PixelMovableFadeRegion,
-      width: blockWidth, height: blockHeight,
-      offsetStart: clipBoxProps.offsetStart,
-      offsetLength: clipBoxProps.offsetLength,
-      regionStart: item.get('offsetStart'),
-      regionLength: item.get('fadeIn'),
-      regionKey: 'fadeIn',
-      onChange: this.handleFadeInChange,
-    };
+    const fadeInProps = typeof item.get('fadeIn') === 'number'
+      ? {
+        component: PixelMovableFadeRegion,
+        width: blockWidth,
+        height: blockHeight,
+        offsetStart: clipBoxProps.offsetStart,
+        offsetLength: clipBoxProps.offsetLength,
+        regionStart: item.get('offsetStart'),
+        regionLength: item.get('fadeIn'),
+        regionKey: 'fadeIn',
+        onChange: this.handleFadeInChange,
+      }
+      : null;
 
-    const fadeOutProps = {
-      ...fadeInProps,
-      regionStart: (
-        item.get('offsetStart') +
-        item.get('offsetLength') -
-        item.get('fadeOut')
-      ),
-      regionLength: item.get('fadeOut'),
-      regionKey: 'fadeOut',
-      onChange: this.handleFadeOutChange,
-    };
+    const fadeOutProps = typeof item.get('fadeIn') === 'number'
+      ? {
+        ...fadeInProps,
+        regionStart: (
+          item.get('offsetStart') +
+          item.get('offsetLength') -
+          item.get('fadeOut')
+        ),
+        regionLength: item.get('fadeOut'),
+        regionKey: 'fadeOut',
+        onChange: this.handleFadeOutChange,
+      }
+      : null;
 
     const fadeContProps = {
       className: 'TrackItem__fadeContainer',
@@ -249,8 +239,16 @@ const TrackItem = React.createClass({
           <ClipBox {...clipBoxProps} />
         </Movable>
         <div {...fadeContProps}>
-          {this.props.fadesOf === 'item' && (<TimeMovableRegion {...fadeInProps} />)}
-          {this.props.fadesOf === 'item' && (<TimeMovableRegion {...fadeOutProps} />)}
+          {
+            this.props.fadesOf === 'item' &&
+            fadeInProps &&
+            (<TimeMovableRegion {...fadeInProps} />)
+          }
+          {
+            this.props.fadesOf === 'item' &&
+            fadeOutProps &&
+            (<TimeMovableRegion {...fadeOutProps} />)
+          }
         </div>
       </div>
     );
