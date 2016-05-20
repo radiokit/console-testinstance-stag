@@ -23,7 +23,7 @@ import InfrastructureExternalInputsIndex from './apps/infrastructure/external_in
 import InfrastructureTransmissionsIndex from './apps/infrastructure/transmissions/index_view.jsx';
 import InfrastructurePatchbayIndex from './apps/infrastructure/patchbay/index_view.jsx';
 import LibraryApp from './apps/library/app.jsx';
-import LibraryFileRepositoriesIndex from './apps/library/file_repositories/index_view.jsx';
+import LibraryFileRepositoriesIndex from './apps/library/file_repositories/IndexView.jsx';
 import LibraryFileRepositoriesShow from './apps/library/file_repositories/show_view.jsx';
 import ClipEditorApp from './apps/clip_editor/app.jsx';
 import AdministrationApp from './apps/administration/app.jsx';
