@@ -56,7 +56,7 @@ export default {
                     administration: "Administration",
                     broadcast: "Broadcast",
                     freezer: "Freezer",
-                    infrastructure: "Infrastruktura",
+                    infrastructure: "Infrastructure",
                   },
                   hint: "Select applications enabled for this user. Hold Ctrl while clicking to select/deselect multiple applications.",
                 },
