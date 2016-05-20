@@ -37,13 +37,6 @@ export default React.createClass({
         },
       },
 
-      password: {
-        type: 'password',
-        validators: {
-          presence: true,
-        },
-      },
-
       locale: {
         type: 'enum',
         values: ['en', 'pl'],

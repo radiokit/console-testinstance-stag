@@ -38,9 +38,6 @@ export default {
                   label: "e-mail",
                   hint: "Podaj e-mail użytkownika.",
                 },
-                password: {
-                  label: "Hasło",
-                },
                 account_ids: {
                   label: "Konta",
                   hint: "Wybierz konta do których należy ten użytkownik. Przytrzymaj Ctrl podczas klikania by zaznaczyć/odznaczyć wiele kont.",
