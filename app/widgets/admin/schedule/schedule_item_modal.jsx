@@ -3,6 +3,7 @@ import moment from 'moment';
 import classnames from 'classnames';
 import Translate from 'react-translate-component';
 import Counterpart from 'counterpart';
+import { Seq } from 'immutable';
 
 import ProgressModal from '../../../widgets/admin/modal_progress_widget.jsx';
 import FileAutosuggestInput from '../../../widgets/admin/schedule/file_autosuggest_input.jsx';
@@ -32,7 +33,7 @@ const ScheduleItemModal = React.createClass({
       step: 'confirmation',
       file: this.isUpdating() ? this.props.record.toJS() : null,
       startDate: this.getInitialStartDate(),
-      stopDate: null,
+      stopDate: this.getInitialStopDate(),
       name: null,
       expanded: false,
     };
@@ -42,6 +43,12 @@ const ScheduleItemModal = React.createClass({
     return this.props.record
       ? this.props.record.get('start_at')
       : moment().add(1, 'hour').startOf('hour');
+  },
+
+  getInitialStopDate() {
+    return this.props.record
+      ? this.props.record.get('stop_at')
+      : null;
   },
 
   createScheduleItem() {
@@ -65,7 +72,10 @@ const ScheduleItemModal = React.createClass({
   buildScheduleItem() {
     const scheduleItem = {};
     scheduleItem.name = this.state.name;
-    scheduleItem.start_at = moment(this.state.startDate).toISOString();
+    scheduleItem.start_at = moment(this.state.startDate).subtract(15, 'seconds').toISOString();
+    scheduleItem.cue_in_at = moment(this.state.startDate).toISOString();
+    scheduleItem.cue_out_at = moment(this.state.stoptDate).toISOString();
+    scheduleItem.stop_at = moment(this.state.stoptDate).add(15, 'seconds').toISOString();
     if (!this.isUpdating()) {
       scheduleItem.file = this.state.file.id;
     }
@@ -88,16 +98,29 @@ const ScheduleItemModal = React.createClass({
     return this.props.record;
   },
 
+  calculateStopDate(startDate, file) {
+    const duration = (
+      file.stop_at
+      ? file.stop_at.diff(file.start_at)
+      : Seq(file.metadata_items)
+          .find((metadataItem) => metadataItem.value_duration !== null)
+          .value_duration
+    );
+    return moment(startDate).add(duration, 'ms');
+  },
+
   changeStep(step) {
     this.setState({ step });
   },
 
   handleSelectedFile(file) {
-    this.setState({ file });
+    const stopDate = this.calculateStopDate(this.state.startDate, file);
+    this.setState({ file, stopDate });
   },
 
   handleStartDateChange(startDate) {
-    this.setState({ startDate });
+    const stopDate = this.calculateStopDate(startDate, this.state.file);
+    this.setState({ startDate, stopDate });
   },
 
   handleNameChange(name) {
@@ -174,6 +197,22 @@ const ScheduleItemModal = React.createClass({
               step={1}
               onChange={(e) => this.handleStartDateChange(e.target.value)}
               value={moment(this.state.startDate).format('YYYY-MM-DDTHH:mm:ss')}
+            />
+          </div>
+          <div className="form-group">
+            <Translate
+              component="label"
+              content={ `${this.props.contentPrefix}.form.stop_at.label` }
+              htmlFor="stoptDate"
+            />
+            <input
+              id="stopDate"
+              type="datetime-local"
+              className="form-control"
+              step={1}
+              readOnly
+              disabled
+              value={moment(this.state.stopDate).format('YYYY-MM-DDTHH:mm:ss')}
             />
           </div>
         </div>

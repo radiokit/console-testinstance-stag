@@ -1,5 +1,5 @@
 import React from 'react';
-import Immutable from 'immutable';
+import { Seq, List } from 'immutable';
 import Moment from 'moment';
 import Counterpart from 'counterpart';
 
@@ -30,14 +30,17 @@ const PlaylistToolbar = React.createClass({
   getInitialState() {
     return {
       loadedFiles: false,
-      availableVaultFiles: new Immutable.Seq().toIndexedSeq(),
+      availableVaultFiles: Seq().toIndexedSeq(),
     };
   },
 
   componentDidMount() {
     this.props.data
       .query('vault', 'Data.Record.File')
-      .select('id', 'name')
+      .select('id', 'name', 'metadata_schemas', 'metadata_items', 'stage')
+      .joins('metadata_items')
+      .joins('metadata_schemas')
+      .where('stage', 'eq', 'current')
       .on('error', () => {
         this.setState({
           loadingError: true,
@@ -45,10 +48,18 @@ const PlaylistToolbar = React.createClass({
       }).on('fetch', (_event, _query, data) => {
         if (data.count() !== 0) {
           this.setState({
-            availableVaultFiles: data.toIndexedSeq(),
+            availableVaultFiles: this.filterAvailableFiles(data),
           });
         }
-      }).fetch();
+      })
+      .fetch();
+  },
+
+  filterAvailableFiles(data) {
+    return data
+      .filter((record) => !record.get('metadata_schemas')
+        .filter((schema) => schema.get('key') === 'duration')
+        .isEmpty());
   },
 
   onDelete() {
@@ -180,8 +191,8 @@ const PlaylistToolbar = React.createClass({
             app: 'plumber',
             model: 'Media.Input.File.RadioKit.Vault',
             selectedRecordIds: (this.props.activeItem
-              ? Immutable.List.of(this.props.activeItem.get('id'))
-              : Immutable.List.of(null)),
+              ? List.of(this.props.activeItem.get('id'))
+              : List.of(null)),
             afterFormAccept: this.onDelete,
           }}
         />
