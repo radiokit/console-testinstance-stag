@@ -75,14 +75,14 @@ const ShowContentPartial =  React.createClass({
   onDownloadClick(){
     this.state.selectedRecordIds.count() > 0 && RadioKit
       .query("vault", "Data.Record.File")
-      .select("private_temporary_url")
+      .select("private_download_url")
       .where("id","in", this.state.selectedRecordIds.toJS())
       .on("error", () => {
         // FIXME
       })
       .on("fetch", (_event, _query, data) => {
         if(this.isMounted()){
-          multiDownload(data.map((record) => { return record.get("private_temporary_url"); }).toJS());
+          multiDownload(data.map((record) => { return record.get("private_download_url"); }).toJS());
         }
       }).fetch();
   },
