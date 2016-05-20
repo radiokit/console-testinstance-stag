@@ -44,7 +44,7 @@ export default {
               action: {
                 proceed: "Usuń",
                 cancel: "Anuluj",
-                cancel: "Zamknij",
+                close: "Zamknij",
               }
             },
 
