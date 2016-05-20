@@ -121,7 +121,7 @@ const DevicesToolbar = React.createClass({
           modalElement={DeleteModal}
           modalProps={{
             contentPrefix: this.getTranslationPrefix('delete'),
-            app: 'plumber',
+            app: 'auth',
             model: this.props.selectedRecord.model,
             selectedRecordIds: this.props.selectedRecord
               ? List.of(this.props.selectedRecord.id)
