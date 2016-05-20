@@ -14,7 +14,12 @@ export default React.createClass({
   },
 
   modifyIndexQuery(query) {
+    let availableUserAccountIds = this.context.availableUserAccounts.map((account) => { return account.get("id"); }).toJS();
+    let accountsCondition = ['accounts.id', 'in'].concat(availableUserAccountIds)
+
     return query
+      .joins("accounts")
+      .where.apply(this, accountsCondition)
       .order("email", "asc")
   },
 
@@ -27,7 +32,6 @@ export default React.createClass({
 
 
   buildForm() {
-    window.x = this.context.availableUserAccounts.toJS();
     return {
       email: {
         type: 'email',
