@@ -3,15 +3,19 @@ function getEnv() {
     return window.ENV;
   }
   return {
-    auth: { clientId: '123', baseUrl: 'https://radiokit-auth-stag.herokuapp.com' },
-    apps: {
-      plumber: { baseUrl: 'https://radiokit-plumber-stag.herokuapp.com' },
-      auth: { baseUrl: 'https://radiokit-auth-stag.herokuapp.com' },
-      vault: { baseUrl: 'https://radiokit-vault-stag.herokuapp.com' },
-      agenda: { baseUrl: 'https://radiokit-agenda-stag.herokuapp.com' },
-      diffusor: { baseUrl: 'https://radiokit-diffusor-stag.herokuapp.com' },
+    auth: {
+      clientId: "123",
+      baseUrl: "https://auth.radiokitapp-stag.org"
     },
-    verbose: false,
+    apps: {
+      "auth"     : { baseUrl: "https://auth.radiokitapp-stag.org" },
+      "agenda"   : { baseUrl: "https://agenda.radiokitapp-stag.org" },
+      "plumber"  : { baseUrl: "https://plumber.radiokitapp-stag.org" },
+      "vault"    : { baseUrl: "https://vault.radiokitapp-stag.org" },
+    },
+    external: {
+    },
+    verbose: true
   };
 }
 
