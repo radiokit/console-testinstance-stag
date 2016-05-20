@@ -52,8 +52,8 @@ export default {
               },
               action: {
                 proceed: "Delete",
-                  cancel: "Cancel",
-                  close: "Close",
+                cancel: "Cancel",
+                close: "Close",
               }
             }
           }
