@@ -21,10 +21,28 @@ const FilesIdsStream = FilesEntitiesStream.map(
     .toSet()
 );
 
+const requestQueueExecution = queue => {
+  (window.requestIdleCallback || window.setTimeout)(
+    () => {
+      if (queue.count() === 0) {
+        return;
+      }
+      const head = queue.first();
+      const tail = queue.rest();
+      head();
+      requestQueueExecution(tail);
+    }
+  );
+};
+
 FilesIdsStream.subscribe(
-  fileIds => fileIds.forEach(
-    fileId => MetadataItemsDomain.loadMetadataItemOfFile(fileId, { noLoadingState: true })
-  )
+  fileIds => {
+    requestQueueExecution(
+      fileIds.map(
+        fileId => () => MetadataItemsDomain.loadMetadataItemOfFile(fileId, { noLoadingState: true })
+      )
+    );
+  }
 );
 
 const FilesExpandedEntitiesStream = new View(

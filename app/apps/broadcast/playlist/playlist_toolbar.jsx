@@ -1,13 +1,15 @@
 import React from 'react';
-import { Seq, List } from 'immutable';
-import Moment from 'moment';
+import { List } from 'immutable';
 import Counterpart from 'counterpart';
+import connect from 'immview-react-connect';
 
 import ScheduleItemModal from '../../../widgets/admin/schedule/schedule_item_modal.jsx';
 import DeleteModal from '../../../widgets/admin/crud/delete_modal.jsx';
 import ToolbarGroup from '../../../widgets/admin/toolbar_group_widget.jsx';
 import ToolbarButtonModal from '../../../widgets/admin/toolbar_button_modal_widget.jsx';
 import AutoDJAddModal from './autodj_add';
+import FilesDomain from '../../../services/FilesDomain';
+
 
 import translationPL from './playlist_toolbar_pl.js';
 import translationEN from './playlist_toolbar_en.js';
@@ -25,41 +27,15 @@ const PlaylistToolbar = React.createClass({
     activeItem: React.PropTypes.object,
     onActiveItemChange: React.PropTypes.func,
     onCRUD: React.PropTypes.func,
-  },
-
-  getInitialState() {
-    return {
-      loadedFiles: false,
-      availableVaultFiles: Seq().toIndexedSeq(),
-    };
-  },
-
-  componentDidMount() {
-    this.props.data
-      .query('vault', 'Data.Record.File')
-      .select('id', 'name', 'metadata_schemas', 'metadata_items', 'stage')
-      .joins('metadata_items')
-      .joins('metadata_schemas')
-      .where('stage', 'eq', 'current')
-      .on('error', () => {
-        this.setState({
-          loadingError: true,
-        });
-      }).on('fetch', (_event, _query, data) => {
-        if (data.count() !== 0) {
-          this.setState({
-            availableVaultFiles: this.filterAvailableFiles(data),
-          });
-        }
-      })
-      .fetch();
+    availableVaultFiles: React.PropTypes.object,
   },
 
   filterAvailableFiles(data) {
-    return data
-      .filter((record) => !record.get('metadata_schemas')
-        .filter((schema) => schema.get('key') === 'duration')
-        .isEmpty());
+    return data;
+  },
+
+  componentDidMount(){
+    FilesDomain.loadFiles();
   },
 
   onDelete() {
@@ -70,57 +46,7 @@ const PlaylistToolbar = React.createClass({
     }, 500);
   },
 
-  getFilesData() {
-    return this.state.availableVaultFiles.toList().map(file => (
-      {
-        id: file.get('id'),
-        name: file.get('name'),
-      }
-    ));
-  },
-
-  getDateValue(key) {
-    return this.props.activeItem ? this.props.activeItem.get(key) : Moment.utc();
-  },
-
-  buildNewForm() {
-    return {
-      file: {
-        type: 'object',
-        values: this.getFilesData(),
-      },
-      name: {
-        type: 'string',
-      },
-      start_at: {
-        type: 'datetime',
-        value: Moment.utc().toISOString(),
-      },
-      stop_at: {
-        type: 'datetime',
-        value: Moment.utc().clone().add(1, 'minute').toISOString(),
-      },
-    };
-  },
-
-  buildUpdateForm() {
-    return {
-      name: {
-        type: 'string',
-      },
-      start_at: {
-        type: 'datetime',
-        value: Moment(this.getDateValue('start_at')).toISOString(),
-      },
-      stop_at: {
-        type: 'datetime',
-        value: Moment(this.getDateValue('stop_at')).toISOString(),
-      },
-    };
-  },
-
   render() {
-    console.log("activeItem: " + this.props.activeItem);
     return (
       <ToolbarGroup position="right">
 
@@ -145,9 +71,11 @@ const PlaylistToolbar = React.createClass({
           labelTextKey="playlist_toolbar.add_button"
           modalElement={ScheduleItemModal}
           modalProps={{
-            data: this.state.availableVaultFiles,
+            defaultTimeOffset: this.props.offsetStart,
+            files: this.props.availableVaultFiles,
             contentPrefix: 'playlist_toolbar.add',
             onSuccess: this.props.onCRUD,
+            searchDomain: FilesDomain,
           }}
         />
 
@@ -168,12 +96,12 @@ const PlaylistToolbar = React.createClass({
           disabled={this.props.activeItem === null}
           modalElement={ScheduleItemModal}
           modalProps={{
-            data: this.state.availableVaultFiles,
+            files: this.props.availableVaultFiles,
             contentPrefix: 'playlist_toolbar.update',
-            app: 'plumber',
-            model: 'Media.Input.File.RadioKit.Vault',
+            defaultTimeOffset: this.props.offsetStart,
             record: this.props.activeItem,
             onSuccess: this.props.onCRUD,
+            searchDomain: FilesDomain,
           }}
         />
 
@@ -196,5 +124,15 @@ const PlaylistToolbar = React.createClass({
     );
   },
 });
-
-export default PlaylistToolbar;
+export default connect(PlaylistToolbar,
+  FilesDomain.map(
+    (data) => data
+      .get('files')
+      .filter((record) => record.get('stage') === 'current')
+  ),
+  (data) => {
+    return {
+      availableVaultFiles: data,
+    };
+  }
+);

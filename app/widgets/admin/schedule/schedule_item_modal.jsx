@@ -1,18 +1,19 @@
 import React from 'react';
 import moment from 'moment';
-import { Set } from 'immutable';
 import classnames from 'classnames';
 import Translate from 'react-translate-component';
 import Counterpart from 'counterpart';
 import ProgressModal from '../../../widgets/admin/modal_progress_widget.jsx';
 import SimpleAutosuggest from '../../../widgets/autosuggest/simple_console_autosuggest.jsx';
 import RadioKit from '../../../services/RadioKit';
+import FilesDomain from '../../../services/FilesDomain';
 
 
 import './schedule_item_modal.scss';
 const ScheduleItemModal = React.createClass({
   propTypes: {
-    data: React.PropTypes.object.isRequired,
+    files: React.PropTypes.object.isRequired,
+    defaultTimeOffset: React.PropTypes.number.isRequired,
     contentPrefix: React.PropTypes.string.isRequired,
     onSuccess: React.PropTypes.func,
     onDismiss: React.PropTypes.func,
@@ -40,7 +41,7 @@ const ScheduleItemModal = React.createClass({
   getInitialStartDate() {
     return this.props.record
       ? this.props.record.get('start_at')
-      : moment().add(1, 'hour').startOf('hour');
+      : moment(this.props.defaultTimeOffset).add(1, 'hour').startOf('hour');
   },
 
   getInitialStopDate() {
@@ -50,11 +51,11 @@ const ScheduleItemModal = React.createClass({
   },
 
   getInitialDuration() {
-    console.log('getInitialDuration')
     return this.props.record
       ? this.calculateDuration(this.props.record)
       : null;
   },
+
 
   createScheduleItem() {
     this.recordCall = RadioKit
@@ -104,8 +105,6 @@ const ScheduleItemModal = React.createClass({
   },
 
   calculateDuration(file) {
-    console.log('file:: ');
-    console.log(file);
     const duration = (
       file.get('stop_at')
       ? file.get('stop_at').diff(file.get('start_at'))
@@ -122,10 +121,14 @@ const ScheduleItemModal = React.createClass({
 
   handleSelectedFile(file) {
     if (file) {
+      // console.log("FILE: ");
+      // console.log(file.toJS());
       const duration = this.calculateDuration(file);
       const stopDate = moment(this.state.startDate).add(duration, 'ms');
       this.setState({ file, duration, stopDate });
-    } else this.setState({ file: null });
+    } else {
+      this.setState({ file: null });
+    }
   },
 
   handleStartDateChange(startDate) {
@@ -165,7 +168,7 @@ const ScheduleItemModal = React.createClass({
           />
           <span className="twitter-typeahead">
             <SimpleAutosuggest
-              items={this.props.data}
+              items={this.props.files}
               placeholder= {Counterpart.translate(`${this.props.contentPrefix}.form.file.hint`)}
               value={this.state.file}
               onChange={this.handleSelectedFile}
@@ -350,5 +353,6 @@ const ScheduleItemModal = React.createClass({
     }
   },
 });
+
 
 export default ScheduleItemModal;
