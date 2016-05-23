@@ -31,7 +31,6 @@ const AutoDJFormSender = React.createClass({
       errors: validateForm(form),
       form: null,
     }, () => {
-      console.log('errors', this.state.errors);
       this.state.errors.length === 0 && this.sendForm(form);
     });
   },
@@ -41,6 +40,7 @@ const AutoDJFormSender = React.createClass({
       errors = [],
       form = null,
     } = this.state;
+
     const props = {
       ...this.props,
       afterFormAccept: this.handleFormAccept,
@@ -49,7 +49,7 @@ const AutoDJFormSender = React.createClass({
     return (
       <div className="AutoDJFormSender">
         <pre className="AutoDJFormSender__errors">
-          {errors.map(error => <div>{error}</div>)}
+          {errors.map(error => <div>{counterpart(error)}</div>)}
         </pre>
         <pre className="AutoDJFormSender__result">
           {JSON.stringify(form, null, '  ')}

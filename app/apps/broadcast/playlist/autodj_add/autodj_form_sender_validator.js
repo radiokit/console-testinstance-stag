@@ -6,7 +6,6 @@ import {
   range,
   reduce,
 } from 'lodash';
-import counterpart from 'counterpart';
 
 function validateWeekdays(weekdays = Map()) {
   return [
@@ -14,20 +13,20 @@ function validateWeekdays(weekdays = Map()) {
       range(0, 7),
       (anyDaySelected, day) => anyDaySelected || weekdays.get(`day${day}`, false),
       false
-    ) && counterpart('AutoDJFormSender.noDateSelected'),
+    ) && ('AutoDJFormSender.noDateSelected'),
   ];
 }
 
 function validateHourRange(hours = Map()) {
   return [
-    !hours.get('start') && counterpart('AutoDJFormSender.noStartDate'),
-    !hours.get('end') && counterpart('AutoDJFormSender.noEndDate'),
+    !hours.get('start') && ('AutoDJFormSender.noStartDate'),
+    !hours.get('end') && ('AutoDJFormSender.noEndDate'),
   ];
 }
 
 function validateRotationDetails(details = Map()) {
   return [
-    details.get('tags', List()).count() === 0 && counterpart('AutoDJFormSender.noTagsError'),
+    details.get('tags', List()).count() === 0 && ('AutoDJFormSender.noTagsError'),
     ...validateWeekdays(details.get('weekdays')),
     ...validateHourRange(details.get('hours')),
   ];
@@ -35,14 +34,14 @@ function validateRotationDetails(details = Map()) {
 
 function validateShuffleInput(input = Map()) {
   return [
-    (typeof input.get('tag') !== 'object') && counterpart('AutoDJFormSender.tagMissingError'),
-    (typeof input.get('ratio') !== 'number') && counterpart('AutoDJFormSender.ratioMissingError'),
+    (typeof input.get('tag') !== 'object') && ('AutoDJFormSender.tagMissingError'),
+    (typeof input.get('ratio') !== 'number') && ('AutoDJFormSender.ratioMissingError'),
   ];
 }
 
 function validateShuffleDetails(details = Map()) {
   return [
-    details.get('tags', List()).count() === 0 && counterpart('AutoDJFormSender.noTagsError'),
+    details.get('tags', List()).count() === 0 && ('AutoDJFormSender.noTagsError'),
     ...validateWeekdays(details.get('weekdays')),
     ...validateHourRange(details.get('hours')),
     ...details
@@ -58,9 +57,9 @@ function validateNothing() {
 
 export default function validateForm(form = Map()) {
   return [
-    !form.get('type') && counterpart('AutoDJFormSender.noTypeError'),
-    !form.get('repository') && counterpart('AutoDJFormSender.noRepositoryError'),
-    !form.get('details') && counterpart('AutoDJFormSender.noDetailsError'),
+    !form.get('type') && ('AutoDJFormSender.noTypeError'),
+    !form.get('repository') && ('AutoDJFormSender.noRepositoryError'),
+    !form.get('details') && ('AutoDJFormSender.noDetailsError'),
     ...({
       shuffle: validateShuffleDetails,
       rotation: validateRotationDetails,
