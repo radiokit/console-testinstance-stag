@@ -120,6 +120,7 @@ const PlaylistToolbar = React.createClass({
   },
 
   render() {
+    console.log("activeItem: " + this.props.activeItem);
     return (
       <ToolbarGroup position="right">
 
@@ -146,9 +147,6 @@ const PlaylistToolbar = React.createClass({
           modalProps={{
             data: this.state.availableVaultFiles,
             contentPrefix: 'playlist_toolbar.add',
-            form: this.buildNewForm(),
-            app: 'plumber',
-            model: 'Media.Input.File.RadioKit.Vault',
             onSuccess: this.props.onCRUD,
           }}
         />
@@ -169,11 +167,9 @@ const PlaylistToolbar = React.createClass({
           labelTextKey="playlist_toolbar.update_button"
           disabled={this.props.activeItem === null}
           modalElement={ScheduleItemModal}
-          key={(this.props.activeItem && this.props.activeItem.get('id')) || 'no-id' }
           modalProps={{
             data: this.state.availableVaultFiles,
             contentPrefix: 'playlist_toolbar.update',
-            form: this.buildUpdateForm(),
             app: 'plumber',
             model: 'Media.Input.File.RadioKit.Vault',
             record: this.props.activeItem,

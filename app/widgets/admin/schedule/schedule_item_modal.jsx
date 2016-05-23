@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import { Set } from 'immutable';
 import classnames from 'classnames';
 import Translate from 'react-translate-component';
 import Counterpart from 'counterpart';
@@ -13,9 +14,6 @@ const ScheduleItemModal = React.createClass({
   propTypes: {
     data: React.PropTypes.object.isRequired,
     contentPrefix: React.PropTypes.string.isRequired,
-    form: React.PropTypes.object.isRequired,
-    app: React.PropTypes.string.isRequired,
-    model: React.PropTypes.string.isRequired,
     onSuccess: React.PropTypes.func,
     onDismiss: React.PropTypes.func,
     record: React.PropTypes.object,
@@ -29,10 +27,11 @@ const ScheduleItemModal = React.createClass({
     return {
       proceedType: 'primary',
       step: 'confirmation',
-      file: this.isUpdating() ? this.props.record.toJS() : null,
+      file: this.isUpdating() ? this.props.record : null,
       startDate: this.getInitialStartDate(),
       stopDate: this.getInitialStopDate(),
       name: null,
+      duration: this.getInitialDuration(),
       expanded: false,
       fileNameInput: '',
     };
@@ -47,6 +46,13 @@ const ScheduleItemModal = React.createClass({
   getInitialStopDate() {
     return this.props.record
       ? this.props.record.get('stop_at')
+      : null;
+  },
+
+  getInitialDuration() {
+    console.log('getInitialDuration')
+    return this.props.record
+      ? this.calculateDuration(this.props.record)
       : null;
   },
 
@@ -97,15 +103,17 @@ const ScheduleItemModal = React.createClass({
     return this.props.record;
   },
 
-  calculateStopDate(startDate, file) {
+  calculateDuration(file) {
+    console.log('file:: ');
+    console.log(file);
     const duration = (
       file.get('stop_at')
       ? file.get('stop_at').diff(file.get('start_at'))
-      : file.get('metadata_schemas')
+      : file.get('metadata_items')
           .find((metadataItem) => metadataItem.get('value_duration') !== null)
           .get('value_duration')
     );
-    return moment(startDate).add(duration, 'ms');
+    return duration;
   },
 
   changeStep(step) {
@@ -114,13 +122,14 @@ const ScheduleItemModal = React.createClass({
 
   handleSelectedFile(file) {
     if (file) {
-      const stopDate = this.calculateStopDate(this.state.startDate, file);
-      this.setState({ file, stopDate });
+      const duration = this.calculateDuration(file);
+      const stopDate = moment(this.state.startDate).add(duration, 'ms');
+      this.setState({ file, duration, stopDate });
     } else this.setState({ file: null });
   },
 
   handleStartDateChange(startDate) {
-    const stopDate = this.calculateStopDate(startDate, this.state.file);
+    const stopDate = moment(startDate).add(this.state.duration, 'ms');
     this.setState({ startDate, stopDate });
   },
 
