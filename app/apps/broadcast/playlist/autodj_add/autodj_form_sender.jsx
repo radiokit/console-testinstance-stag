@@ -24,6 +24,7 @@ const AutoDJFormSender = React.createClass({
     this.setState({
       form,
     });
+    // TODO
   },
 
   handleFormAccept(form) {
