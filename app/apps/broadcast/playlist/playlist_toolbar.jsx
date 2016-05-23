@@ -118,7 +118,7 @@ const PlaylistToolbar = React.createClass({
           icon="folder"
           labelTextKey="apps.broadcast.playlist.add_button"
           modalElement={ScheduleItemModal}
-          key={(this.props.activeItem && this.props.activeItem.get('id')) || 'no-id' }
+          key={(this.props.activeItem && this.props.activeItem.get('id')) || 'toolbar_add_button_no-id' }
           modalProps={{
             data: this.state.availableVaultFiles,
             contentPrefix: 'apps.broadcast.playlist.edit_button',
@@ -158,7 +158,7 @@ const PlaylistToolbar = React.createClass({
           labelTextKey="playlist_toolbar.update_button"
           disabled={this.props.activeItem === null}
           modalElement={UpdateModal}
-          key={(this.props.activeItem && this.props.activeItem.get('id')) || 'no-id' }
+          key={(this.props.activeItem && this.props.activeItem.get('id')) || 'toolbar_update_button_no-id' }
           modalProps={{
             contentPrefix: 'playlist_toolbar.update',
             form: this.buildUpdateForm(),

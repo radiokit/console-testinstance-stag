@@ -19,7 +19,7 @@ Counterpart.registerTranslations('pl', localePL);
 const AUTODJ_OPTIONS = [
   'shuffle',
   'rotation',
-  'query',
+  // TODO 'query',
 ];
 
 const AutoDJForm = React.createClass({
@@ -43,8 +43,8 @@ const AutoDJForm = React.createClass({
 
   triggerFormAccept() {
     const { model } = this.state;
-    const { afterFormAccept } = this.props;
-    afterFormAccept && afterFormAccept(model.toJS());
+    const { afterFormAccept = () => null } = this.props;
+    afterFormAccept(model);
   },
 
   handleSubmit(e) {
@@ -99,7 +99,6 @@ const AutoDJForm = React.createClass({
       ),
     })[model.get('type')];
 
-
     return (
       <form
         onSubmit={this.handleSubmit}
@@ -112,8 +111,8 @@ const AutoDJForm = React.createClass({
             </label>
             <select
               name="autodjform_type"
-              onChange={this.handleTypeChange}
               value={model.get('type')}
+              onChange={this.handleTypeChange}
             >
               {AUTODJ_OPTIONS.map(option => (
                 <option key={option} value={option}>{option}</option>
@@ -132,6 +131,13 @@ const AutoDJForm = React.createClass({
         </fieldset>
         <fieldset>
           {typeDetailsForm}
+        </fieldset>
+        <fieldset>
+          <Translate
+            component="button"
+            content="AutoDJForm.acceptButton"
+            onClick={this.triggerFormAccept}
+          />
         </fieldset>
       </form>
     );

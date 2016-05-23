@@ -4,7 +4,7 @@ import {
   List,
 } from 'immutable';
 import TagPicker from './tag_picker.jsx';
-import DatesRange from '../../../../widgets/time/dates_range.jsx';
+import WeekDatesPicker from '../../../../widgets/time/week_dates_picker.jsx';
 
 const EMPTY_TAG_LIST = List();
 const EMPTY_RANGE = Map();
@@ -27,8 +27,8 @@ const AutoDJRotationForm = React.createClass({
     return this.getValue().get('tags', EMPTY_TAG_LIST);
   },
 
-  getRange() {
-    return this.getValue().get('range', EMPTY_RANGE);
+  getOccurrences() {
+    return this.getValue().get('weekdays', EMPTY_RANGE);
   },
 
   setValue(newValue) {
@@ -39,9 +39,9 @@ const AutoDJRotationForm = React.createClass({
     this.setValue(this.getValue().set('tags', newTags));
   },
 
-  setRange(newRange) {
+  setOccurences(newRange) {
     this.setValue(
-      this.getValue().set('range', newRange)
+      this.getValue().set('weekdays', newRange)
     );
   },
 
@@ -66,32 +66,27 @@ const AutoDJRotationForm = React.createClass({
     return (
       <div className="AutoDJRotationForm">
         <div className="AutoDJRotationForm__tags">
-          <div className="AutoDJRotationForm__tags__controls">
-            <button onClick={this.addNewEntry}>+</button>
-          </div>
-          <div className="AutoDJRotationForm__tags__content">
-            {this.getTags().toArray().map((tag, i) => (
-              <div key={i}>
-                <TagPicker
-                  value={tag}
-                  tags={this.props.tags}
-                  onChange={newTag => this.handleTagChange(newTag, i)}
-                />
-                <div className="AutoDJRotationForm__tags__separator">v</div>
-              </div>
-            ))}
-            <div>
+          {this.getTags().toArray().map((tag, i) => (
+            <div key={i}>
               <TagPicker
+                value={tag}
                 tags={this.props.tags}
-                onChange={this.handleTagCreation}
+                onChange={newTag => this.handleTagChange(newTag, i)}
               />
+              <div className="AutoDJRotationForm__tags__separator">v</div>
             </div>
+          ))}
+          <div>
+            <TagPicker
+              tags={this.props.tags}
+              onChange={this.handleTagCreation}
+            />
           </div>
         </div>
         <div className="AutoDJRotationForm__dates">
-          <DatesRange
-            value={this.getRange()}
-            onChange={this.setRange}
+          <WeekDatesPicker
+            value={this.getOccurrences()}
+            onChange={this.setOccurences}
           />
         </div>
       </div>

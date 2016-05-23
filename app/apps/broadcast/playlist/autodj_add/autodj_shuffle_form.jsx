@@ -5,7 +5,8 @@ import {
   is,
 } from 'immutable';
 import AutoDJShuffleInput from './autodj_shuffle_input.jsx';
-import DatesRange from '../../../../widgets/time/dates_range.jsx';
+import WeekDatesPicker from '../../../../widgets/time/week_dates_picker.jsx';
+import HourRangePicker from '../../../../widgets/time/hour_range_picker.jsx';
 
 function getUnique(entries, idPath) {
   const emptyResult = entries.clear();
@@ -43,7 +44,7 @@ function sumValues(values) {
   return values.reduce((result, value) => result + value, 0);
 }
 
-function balanceLevels(levels, targetSum, precision = 2) {
+function balanceLevels(levels, targetSum, precision = 3) {
   const sum = sumValues(levels);
 
   if (sum === 0) {
@@ -76,23 +77,33 @@ function balanceLevels(levels, targetSum, precision = 2) {
 }
 
 const EMPTY_TAG = Map({ ratio: 0, tag: null });
-const EMPTY_SHUFFLE = List([EMPTY_TAG.set('ratio', 1)]);
+const EMPTY_SHUFFLE = List();
+const EMPTY_WEEKDAYS = Map();
 const EMPTY_RANGE = Map();
-const EMPTY_FORM = Map({ tags: EMPTY_SHUFFLE, range: EMPTY_RANGE });
+const EMPTY_FORM = Map({ tags: EMPTY_SHUFFLE, weekdays: EMPTY_WEEKDAYS, hours: EMPTY_RANGE });
 const ENTRY_ID_PATH = ['tag', 'id'];
 const ENTRY_RATIO_PATH = ['ratio'];
 
-function balanceEntriesAgainst(entriesToBalance, staticEntry) {
+function balanceEntriesAgainst(entriesToBalance, targetSum, staticEntry) {
   const restOfEntries = entriesToBalance.filter(
     v => !is(v, staticEntry)
   );
+  const restTargetSum = targetSum - staticEntry.getIn(ENTRY_RATIO_PATH, 0);
   const balancedRestRatios = balanceLevels(
     restOfEntries
       .groupBy(entry => entry.getIn(ENTRY_ID_PATH))
       .map(groupedEntries => groupedEntries.last().getIn(ENTRY_RATIO_PATH)),
-    1 - staticEntry.getIn(ENTRY_RATIO_PATH, 0)
+    restTargetSum
   );
-  const balancedAllRatios = balancedRestRatios.set(
+  const restBalancedSum = sumValues(balancedRestRatios);
+  const restTargetSumDiff = restTargetSum - restBalancedSum;
+  const liftedRestRatios = balanceLevels(
+    balancedRestRatios.map(
+      ratio => Math.max(0, ratio + restTargetSumDiff / balancedRestRatios.count())
+    ),
+    restTargetSum
+  );
+  const balancedAllRatios = liftedRestRatios.set(
     staticEntry.getIn(ENTRY_ID_PATH),
     staticEntry.getIn(ENTRY_RATIO_PATH)
   );
@@ -107,6 +118,15 @@ function balanceEntriesAgainst(entriesToBalance, staticEntry) {
   );
 }
 
+function balanceTagsAgainst(tags, newTag) {
+  if (tags.count() === 1) {
+    return tags.setIn([0].concat(ENTRY_RATIO_PATH), 1);
+  } else if (newTag) {
+    return balanceEntriesAgainst(tags, 1, newTag);
+  }
+  return tags;
+}
+
 import './autodj_shuffle_form.scss';
 
 const AutoDJShuffleForm = React.createClass({
@@ -117,8 +137,7 @@ const AutoDJShuffleForm = React.createClass({
   },
 
   getValue() {
-    const { value = EMPTY_FORM } = this.props;
-    return value;
+    return this.props.value || EMPTY_FORM;
   },
 
   getEntries() {
@@ -130,9 +149,15 @@ const AutoDJShuffleForm = React.createClass({
     return entries;
   },
 
-  getRange() {
+  getWeekdays() {
     const value = this.getValue();
-    const valueRange = value.get('range') || EMPTY_RANGE;
+    const valueRange = value.get('weekdays') || EMPTY_WEEKDAYS;
+    return valueRange;
+  },
+
+  getHours() {
+    const value = this.getValue();
+    const valueRange = value.get('hours') || EMPTY_RANGE;
     return valueRange;
   },
 
@@ -156,25 +181,29 @@ const AutoDJShuffleForm = React.createClass({
       ENTRY_ID_PATH
     );
 
-    if (updatedEntries.count() === 1) {
-      this.handleEntriesChange(updatedEntries.setIn([0].concat(ENTRY_RATIO_PATH), 1));
-    } else if (newEntry) {
-      this.handleEntriesChange(balanceEntriesAgainst(updatedEntries, newEntry));
-    } else {
-      this.handleEntriesChange(updatedEntries);
-    }
-  },
-
-  handleRangeChange(range) {
-    const value = this.getValue();
-    this.triggerChange(value.set('range', range));
-  },
-
-  addNewValue() {
     this.handleEntriesChange(
-      getUnique(
-        this.getEntries().push(EMPTY_TAG),
-        ENTRY_ID_PATH
+      balanceTagsAgainst(updatedEntries, newEntry)
+    );
+  },
+
+  setWeekdays(range) {
+    const value = this.getValue();
+    this.triggerChange(value.set('weekdays', range));
+  },
+
+  setHours(hours) {
+    const value = this.getValue();
+    this.triggerChange(value.set('hours', hours));
+  },
+
+  addNewValue(value) {
+    this.handleEntriesChange(
+      balanceTagsAgainst(
+        getUnique(
+          this.getEntries().push(value),
+          ENTRY_ID_PATH
+        ),
+        value
       )
     );
   },
@@ -182,9 +211,6 @@ const AutoDJShuffleForm = React.createClass({
   render() {
     return (
       <div className="AutoDJShuffleForm">
-        <div className="AutoDJShuffleForm__controls">
-          <button onClick={this.addNewValue}>+</button>
-        </div>
         <div className="AutoDJShuffleForm__fields">
           {this.getEntries().toArray().map((entry, i) => (
             <AutoDJShuffleInput
@@ -194,11 +220,22 @@ const AutoDJShuffleForm = React.createClass({
               onChange={this.handleEntryChange}
             />
           ))}
+          <AutoDJShuffleInput
+            tags={this.props.tags}
+            value={EMPTY_TAG}
+            onChange={this.addNewValue}
+          />
         </div>
         <div className="AutoDJShuffleForm__dates">
-          <DatesRange
-            value={this.getRange()}
-            onChange={this.handleRangeChange}
+          <WeekDatesPicker
+            value={this.getWeekdays()}
+            onChange={this.setWeekdays}
+          />
+        </div>
+        <div className="AutoDJShuffleForm__hours">
+          <HourRangePicker
+            value={this.getHours()}
+            onChange={this.setHours}
           />
         </div>
       </div>

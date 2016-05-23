@@ -39,12 +39,6 @@ export function loadRepository(id, requestOptions) {
   );
 }
 
-export function searchRepositories(query, requestOptions) {
-  performQuery(
-    {
-      // TODO query
-    },
-    requestOptions
-  );
-
+export function loadRepositories(requestOptions) {
+  performQuery({}, requestOptions);
 }

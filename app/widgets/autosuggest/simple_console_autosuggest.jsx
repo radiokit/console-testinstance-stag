@@ -49,19 +49,18 @@ const SimpleConsoleAutosuggest = React.createClass({
   render() {
     const { value, items, getItemName } = this.props;
     const valueName = value ? getItemName(value) : '';
-    const { query } = this.state;
-    const qualifier = query ? filterItems(query, getItemName) : v => v;
+    const inputValue = this.state.query === null ? valueName : this.state.query;
+    const qualifier = inputValue ? filterItems(inputValue, getItemName) : v => v;
     const selectedItems = qualifier(items)
         .toList()
         .sortBy(getItemName)
         .take(100)
       ;
-    const inputValue = query === null ? valueName : query;
     const inputProps = {
       value: inputValue,
       onChange: this.handleInputChange,
       type: 'search',
-      placeholder: 'Pick a item',
+      placeholder: this.props.placeholder || 'Pick an item',
     };
     return (
       <ConsoleAutosuggest
@@ -72,6 +71,7 @@ const SimpleConsoleAutosuggest = React.createClass({
         getSuggestionValue={() => inputValue}
         inputProps={inputProps}
         onSuggestionSelected={this.handleValueChange}
+        shouldRenderSuggestions={() => true}
       />
     );
   },

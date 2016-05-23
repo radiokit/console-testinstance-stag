@@ -51,7 +51,7 @@ const AutoDJShuffleInput = React.createClass({
     const {
       tag = null,
       ratio = 1,
-    } = this.props.value.toObject();
+    } = (this.props.value || Map()).toObject();
 
     return (
       <div className="AutoDJShuffleInput">
