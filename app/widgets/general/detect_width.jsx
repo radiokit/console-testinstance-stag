@@ -77,7 +77,7 @@ const DetectWidth = React.createClass({
     ];
     return (
       <div className={this.props.className} style={rootStyle} ref="root">
-        {this.state.width && this.renderChildren()}
+        {this.state.width && this.renderChildren() || null}
       </div>
     );
   },
