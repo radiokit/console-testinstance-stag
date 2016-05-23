@@ -3,10 +3,8 @@ import moment from 'moment';
 import classnames from 'classnames';
 import Translate from 'react-translate-component';
 import Counterpart from 'counterpart';
-import { Seq } from 'immutable';
-
 import ProgressModal from '../../../widgets/admin/modal_progress_widget.jsx';
-import FileAutosuggestInput from '../../../widgets/admin/schedule/file_autosuggest_input.jsx';
+import SimpleAutosuggest from '../../../widgets/autosuggest/simple_console_autosuggest.jsx';
 import RadioKit from '../../../services/RadioKit';
 
 
@@ -78,7 +76,7 @@ const ScheduleItemModal = React.createClass({
     scheduleItem.cue_out_at = moment(this.state.stoptDate).toISOString();
     scheduleItem.stop_at = moment(this.state.stoptDate).add(15, 'seconds').toISOString();
     if (!this.isUpdating()) {
-      scheduleItem.file = this.state.file.id;
+      scheduleItem.file = this.state.file.get('id');
     }
     return scheduleItem;
   },
@@ -101,11 +99,11 @@ const ScheduleItemModal = React.createClass({
 
   calculateStopDate(startDate, file) {
     const duration = (
-      file.stop_at
-      ? file.stop_at.diff(file.start_at)
-      : Seq(file.metadata_items)
-          .find((metadataItem) => metadataItem.value_duration !== null)
-          .value_duration
+      file.get('stop_at')
+      ? file.get('stop_at').diff(file.get('start_at'))
+      : file.get('metadata_schemas')
+          .find((metadataItem) => metadataItem.get('value_duration') !== null)
+          .get('value_duration')
     );
     return moment(startDate).add(duration, 'ms');
   },
@@ -142,9 +140,10 @@ const ScheduleItemModal = React.createClass({
   },
 
   show() {
-    this.setState(this.getInitialState());
     this.refs.modal.show();
+    this.setState(this.getInitialState());
   },
+
 
   renderFileInput() {
     if (!this.isUpdating()) {
@@ -155,18 +154,18 @@ const ScheduleItemModal = React.createClass({
             content={ `${this.props.contentPrefix}.form.file.label` }
             htmlFor="fileNameInput"
           />
-          <FileAutosuggestInput
-            data={this.props.data}
-            placeholder= {Counterpart.translate(`${this.props.contentPrefix}.form.file.hint`)}
-            searchKey="name"
-            limit={15}
-            className="input-group-content"
-            id="fileNameInput"
-            value={this.state.fileNameInput}
-            onFileSelected={this.handleSelectedFile}
-            onValueChanged={this.onFileInputChanged}
-            selectedFile={this.state.file}
-          />
+          <span className="twitter-typeahead">
+            <SimpleAutosuggest
+              items={this.props.data}
+              placeholder= {Counterpart.translate(`${this.props.contentPrefix}.form.file.hint`)}
+              value={this.state.file}
+              onChange={this.handleSelectedFile}
+              onInputChange={this.onFileInputChanged}
+              getItemName={(file) => file.get('name')}
+              id="fileNameInput"
+              className="input-group-content"
+            />
+          </span>
         </div>
       );
     }
@@ -294,8 +293,6 @@ const ScheduleItemModal = React.createClass({
         step={this.state.step}
         proceedType={this.state.proceedType}
         contentPrefix={this.props.contentPrefix}
-        onShow={this.onShow}
-        onHide={this.onHide}
         onCancel={this.handleCancel}
         onConfirm={this.handleConfirm}
         onSuccess={this.handleSuccess}

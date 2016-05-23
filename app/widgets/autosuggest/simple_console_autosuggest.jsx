@@ -55,6 +55,11 @@ const SimpleConsoleAutosuggest = React.createClass({
     );
   },
 
+  handleBlur() {
+    const query = this.props.value ? this.props.getItemName(this.props.value) : '';
+    this.setState({ query });
+  },
+
   render() {
     const { value, items, getItemName } = this.props;
     const valueName = value ? getItemName(value) : '';
@@ -70,6 +75,7 @@ const SimpleConsoleAutosuggest = React.createClass({
       onChange: this.handleInputChange,
       type: 'search',
       placeholder: this.props.placeholder || 'Pick an item',
+      onBlur: this.handleBlur,
     };
     return (
       <ConsoleAutosuggest
