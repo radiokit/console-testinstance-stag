@@ -1,7 +1,9 @@
 import React from 'react';
 import {
   OrderedMap,
+  List,
   Map,
+  is,
 } from 'immutable';
 import moment from 'moment';
 import {
@@ -24,9 +26,6 @@ import {
 
 const defaultViewportOffsetLength = 60000;
 const maxOffsetLengthInHours = 1;
-
-import Perf from 'react-addons-perf';
-window.Perf = Perf;
 
 const ScheduleDetails = React.createClass({
   propTypes: {
@@ -96,8 +95,13 @@ const ScheduleDetails = React.createClass({
   },
 
   render() {
-    const trackItems = sortTrackItems(this.props.items.map(scheduleItemToTrackItem));
-    const positionedTrackItems = assignTrackNumbersToTrackItems(trackItems)
+    const {
+      items = List(),
+    } = this.props;
+
+    const trackItems = items.map(scheduleItemToTrackItem);
+    const sortedTrackItems = sortTrackItems(trackItems);
+    const positionedTrackItems = assignTrackNumbersToTrackItems(sortedTrackItems);
     const pickedTrackItems = selectTrackItemsOfRange(
       positionedTrackItems,
       this.state.offsetStart,
@@ -154,20 +158,30 @@ export default connect(
   ScheduleDetails,
   ScheduleExpandedDomain,
   (data, props) => {
+    const {
+      offsetStart = 0,
+      currentBroadcastChannel = Map(),
+    } = props;
+
     // force data fetching for currently viewed range
-    const fromISO = moment(props.offsetStart)
+    const fromISO = moment(offsetStart)
       .subtract(maxOffsetLengthInHours, 'hours')
       .toISOString();
-    const toISO = moment(props.offsetStart)
+    const toISO = moment(offsetStart)
       .add(maxOffsetLengthInHours, 'hours')
       .toISOString();
-
     ScheduleExpandedDomain.fetch(fromISO, toISO, { maxAge: 60000 });
 
     const items = data
       .get('all', OrderedMap())
       .toList()
-      ;
+      .filter(
+        item => is(
+          item.getIn(['references', 'broadcast_channel_id']),
+          currentBroadcastChannel.get('id')
+        )
+      )
+    ;
     return {
       items,
       loading: data.get('loading', false),

@@ -7,6 +7,7 @@ export const readFields = [
   'name',
   'start_at',
   'stop_at',
+  'references',
   'file',
 ];
 export const updateFields = [
