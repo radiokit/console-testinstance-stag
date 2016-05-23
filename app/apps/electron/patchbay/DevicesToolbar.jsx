@@ -40,8 +40,8 @@ const DevicesToolbar = React.createClass({
   getTranslationPrefix(modalType) {
     const prefix = ({
       'Client.Standalone': 'client',
-      'Config.Routing.LinkRule': 'link'
-    })[this.props.selectedRecord.model]
+      'Config.Routing.LinkRule': 'link',
+    })[this.props.selectedRecord.model];
 
     return `apps.electron.patchbay.modals.${modalType}.${prefix}`;
   },
@@ -119,7 +119,7 @@ const DevicesToolbar = React.createClass({
               model: this.props.selectedRecord.model,
               selectedRecordIds: this.props.selectedRecord
                 ? List.of(this.props.selectedRecord.id)
-                : List.of(null)
+                : List.of(null),
             }}
           />
         </ToolbarGroup>
