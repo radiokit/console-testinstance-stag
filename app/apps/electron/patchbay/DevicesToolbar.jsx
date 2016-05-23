@@ -3,6 +3,7 @@ import {
   List,
 } from 'immutable';
 
+import Toolbar from '../../../widgets/admin/toolbar_widget.jsx';
 import CreateModal from '../../../widgets/admin/crud/create_modal.jsx';
 import UpdateModal from '../../../widgets/admin/crud/update_modal.jsx';
 import DeleteModal from '../../../widgets/admin/crud/delete_modal.jsx';
@@ -12,10 +13,9 @@ import IndexCreateAcknowledgement from './IndexCreateAcknowledgement.jsx';
 
 const DevicesToolbar = React.createClass({
   propTypes: {
-    selectedRecord: React.PropTypes.object,
-    onCRUD: React.PropTypes.func,
-    onActiveItemChange: React.PropTypes.func,
+    selectedRecord: React.PropTypes.object.isRequired,
   },
+
 
   contextTypes: {
     currentUserAccount: React.PropTypes.object.isRequired,
@@ -36,13 +36,6 @@ const DevicesToolbar = React.createClass({
     );
   },
 
-  onDelete() {
-    setTimeout(() => {
-      const { onCRUD, onActiveItemChange } = this.props;
-      onCRUD && onCRUD();
-      onActiveItemChange && onActiveItemChange(null);
-    }, 500);
-  },
 
   getTranslationPrefix(modalType) {
     const prefix = ({
@@ -86,50 +79,51 @@ const DevicesToolbar = React.createClass({
 
   render() {
     return (
-      <ToolbarGroup>
-        <ToolbarButtonModal
-          icon="plus"
-          labelTextKey="apps.electron.patchbay.index.add_button"
-          modalElement={CreateModal}
-          modalProps={{
-            contentPrefix: 'apps.electron.patchbay.index.modals.create',
-            form: this.buildNewForm(),
-            app: 'auth',
-            model: 'Client.Standalone',
-            acknowledgementElement: IndexCreateAcknowledgement,
-          }}
-        />
-        <ToolbarButtonModal
-          icon="folder"
-          labelTextKey="apps.electron.patchbay.update_button"
-          disabled={this.props.selectedRecord.model !== 'Client.Standalone'}
-          modalElement={UpdateModal}
-          key={(this.props.selectedRecord && this.props.selectedRecord.id || 'no-id') }
-          modalProps={{
-            contentPrefix: 'apps.electron.patchbay.modals.update',
-            form: this.buildUpdateForm(this.props.selectedRecord),
-            app: 'plumber',
-            model: 'Client.Standalone',
-            recordId: (this.props.selectedRecord.record ?
-                       this.props.selectedRecord.record.get('id') :
-                       'no-id'),
-          }}
-        />
-        <ToolbarButtonModal
-          icon="delete"
-          disabled={this.props.selectedRecord.record === null}
-          modalElement={DeleteModal}
-          modalProps={{
-            contentPrefix: this.getTranslationPrefix('delete'),
-            app: 'auth',
-            model: this.props.selectedRecord.model,
-            selectedRecordIds: this.props.selectedRecord
-              ? List.of(this.props.selectedRecord.id)
-              : List.of(null),
-            afterFormAccept: this.onDelete,
-          }}
-        />
-      </ToolbarGroup>
+      <Toolbar>
+        <ToolbarGroup>
+          <ToolbarButtonModal
+            icon="plus"
+            labelTextKey="apps.electron.patchbay.index.add_button"
+            modalElement={CreateModal}
+            modalProps={{
+              contentPrefix: 'apps.electron.patchbay.index.modals.create',
+              form: this.buildNewForm(),
+              app: 'auth',
+              model: 'Client.Standalone',
+              acknowledgementElement: IndexCreateAcknowledgement,
+            }}
+          />
+          <ToolbarButtonModal
+            icon="folder"
+            labelTextKey="apps.electron.patchbay.update_button"
+            disabled={this.props.selectedRecord.model !== 'Client.Standalone'}
+            modalElement={UpdateModal}
+            key={(this.props.selectedRecord && this.props.selectedRecord.id || 'no-id') }
+            modalProps={{
+              contentPrefix: 'apps.electron.patchbay.modals.update',
+              form: this.buildUpdateForm(this.props.selectedRecord),
+              app: 'auth',
+              model: 'Client.Standalone',
+              recordId: (this.props.selectedRecord.record ?
+                         this.props.selectedRecord.record.get('id') :
+                         'no-id'),
+            }}
+          />
+          <ToolbarButtonModal
+            icon="delete"
+            disabled={this.props.selectedRecord.record === null}
+            modalElement={DeleteModal}
+            modalProps={{
+              contentPrefix: this.getTranslationPrefix('delete'),
+              app: this.props.selectedRecord.app,
+              model: this.props.selectedRecord.model,
+              selectedRecordIds: this.props.selectedRecord
+                ? List.of(this.props.selectedRecord.id)
+                : List.of(null)
+            }}
+          />
+        </ToolbarGroup>
+      </Toolbar>
     );
   },
 });

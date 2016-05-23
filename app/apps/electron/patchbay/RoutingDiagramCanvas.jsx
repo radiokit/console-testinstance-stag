@@ -3,7 +3,6 @@ import {
   Map,
 } from 'immutable';
 
-import Toolbar from '../../../widgets/admin/toolbar_widget.jsx';
 import DevicesToolbar from './DevicesToolbar.jsx';
 
 
@@ -142,6 +141,7 @@ export default React.createClass({
         record: this.state.selectedLinkRule,
         id: this.state.selectedLinkRule.get('id'),
         model: 'Config.Routing.LinkRule',
+        app: 'plumber',
       });
     }
 
@@ -150,10 +150,11 @@ export default React.createClass({
         record: this.state.selectedClient,
         id: this.state.selectedClient.get('id'),
         model: 'Client.Standalone',
+        app: 'auth'
       });
     }
 
-    return { record: null, model: 'no-model', id: 'no-id' };
+    return { record: null, model: 'no-model', id: 'no-id', app: 'no-app' }; // FIXME use undefined
   },
 
 
@@ -178,11 +179,9 @@ export default React.createClass({
     // Render whole canvas, clients above link rules
     return (
       <div>
-        <Toolbar>
-          <DevicesToolbar
-            selectedRecord={this.getSelectedRecord()}
-          />
-        </Toolbar>
+        <DevicesToolbar
+          selectedRecord={this.getSelectedRecord()}
+        />
 
         <svg version="1.1" height="560" width="100%">
           <RoutingDiagramClientLayer
