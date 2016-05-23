@@ -11,10 +11,6 @@ counterpart.registerTranslations('pl', localePL);
 
 import validateForm from './autodj_form_sender_validator';
 
-function sendForm(form) {
-  // TODO
-}
-
 const AutoDJFormSender = React.createClass({
   propTypes: {
     afterFormAccept: React.PropTypes.func,
@@ -24,19 +20,26 @@ const AutoDJFormSender = React.createClass({
     return {};
   },
 
+  sendForm(form) {
+    this.setState({
+      form,
+    });
+  },
+
   handleFormAccept(form) {
-    const errors = validateForm(form);
-    if (errors === null) {
-      this.setState({ errors: null });
-      sendForm(form);
-    } else {
-      this.setState({ errors });
-    }
+    this.setState({
+      errors: validateForm(form),
+      form: null,
+    }, () => {
+      console.log('errors', this.state.errors);
+      this.state.errors.length === 0 && this.sendForm(form);
+    });
   },
 
   render() {
     const {
       errors = [],
+      form = null,
     } = this.state;
     const props = {
       ...this.props,
@@ -45,9 +48,12 @@ const AutoDJFormSender = React.createClass({
 
     return (
       <div className="AutoDJFormSender">
-        <div className="AutoDJFormSender__errors">
+        <pre className="AutoDJFormSender__errors">
           {errors.map(error => <div>{error}</div>)}
-        </div>
+        </pre>
+        <pre className="AutoDJFormSender__result">
+          {JSON.stringify(form, null, '  ')}
+        </pre>
         <AutoDJForm {...props} />
       </div>
     );

@@ -5,8 +5,8 @@ import {
 
 import Translate from 'react-translate-component';
 import Counterpart from 'counterpart';
-import localePL from './dates_range_pl';
-import localeEN from './dates_range_en';
+import localePL from './dates_range_picker_pl';
+import localeEN from './dates_range_picker_en';
 
 Counterpart.registerTranslations('en', localeEN);
 Counterpart.registerTranslations('pl', localePL);
@@ -14,7 +14,7 @@ Counterpart.registerTranslations('pl', localePL);
 const START = 'start';
 const END = 'end';
 
-const DatesRange = React.createClass({
+const DatesRangePicker = React.createClass({
   propTypes: {
     value: React.PropTypes.object,
     onChange: React.PropTypes.func,
@@ -103,4 +103,4 @@ const DatesRange = React.createClass({
   },
 });
 
-export default DatesRange;
+export default DatesRangePicker;

@@ -2,38 +2,53 @@ import {
   Map,
   List,
 } from 'immutable';
+import {
+  range,
+  reduce,
+} from 'lodash';
 import counterpart from 'counterpart';
 
-function validateRange(range = Map()) {
-  const { start, end } = range.toJS();
+function validateWeekdays(weekdays = Map()) {
   return [
-    !start && counterpart('AutoDJFormSender.rangeNoStartError'),
-    !end && counterpart('AutoDJFormSender.rangeNoEndError'),
-    new Date(start) >= new Date(end) && counterpart('AutoDJFormSender.rangeStartAfterEndError'),
+    !reduce(
+      range(0, 7),
+      (anyDaySelected, day) => anyDaySelected || weekdays.get(`day${day}`, false),
+      false
+    ) && counterpart('AutoDJFormSender.noDateSelected'),
+  ];
+}
+
+function validateHourRange(hours = Map()) {
+  return [
+    !hours.get('start') && counterpart('AutoDJFormSender.noStartDate'),
+    !hours.get('end') && counterpart('AutoDJFormSender.noEndDate'),
   ];
 }
 
 function validateRotationDetails(details = Map()) {
   return [
     details.get('tags', List()).count() === 0 && counterpart('AutoDJFormSender.noTagsError'),
-    details.get('range', List()).count() === 0 && counterpart('AutoDJFormSender.noRangeError'),
-    ...validateRange(details.get('range')),
+    ...validateWeekdays(details.get('weekdays')),
+    ...validateHourRange(details.get('hours')),
   ];
 }
 
 function validateShuffleInput(input = Map()) {
   return [
-    typeof input.get('tag') !== 'object' && counterpart('AutoDJFormSender.tagMissingError'),
-    typeof input.get('ratio') !== 'number' && counterpart('AutoDJFormSender.ratioMissingError'),
+    (typeof input.get('tag') !== 'object') && counterpart('AutoDJFormSender.tagMissingError'),
+    (typeof input.get('ratio') !== 'number') && counterpart('AutoDJFormSender.ratioMissingError'),
   ];
 }
 
 function validateShuffleDetails(details = Map()) {
   return [
     details.get('tags', List()).count() === 0 && counterpart('AutoDJFormSender.noTagsError'),
-    details.get('range', List()).count() === 0 && counterpart('AutoDJFormSender.noRangeError'),
-    ...validateRange(details.get('range')),
-    ...details.get('tags', List()).toArray().map(validateShuffleInput),
+    ...validateWeekdays(details.get('weekdays')),
+    ...validateHourRange(details.get('hours')),
+    ...details
+      .get('tags', List())
+      .map(validateShuffleInput)
+      .reduce((result, errors) => result.concat(errors), []),
   ];
 }
 

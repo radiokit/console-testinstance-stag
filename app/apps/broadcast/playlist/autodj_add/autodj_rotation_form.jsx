@@ -4,7 +4,7 @@ import {
   List,
 } from 'immutable';
 import TagPicker from './tag_picker.jsx';
-import DatesRange from '../../../../widgets/time/dates_range.jsx';
+import WeekDatesPicker from '../../../../widgets/time/week_dates_picker.jsx';
 
 const EMPTY_TAG_LIST = List();
 const EMPTY_RANGE = Map();
@@ -27,8 +27,8 @@ const AutoDJRotationForm = React.createClass({
     return this.getValue().get('tags', EMPTY_TAG_LIST);
   },
 
-  getRange() {
-    return this.getValue().get('range', EMPTY_RANGE);
+  getOccurrences() {
+    return this.getValue().get('weekdays', EMPTY_RANGE);
   },
 
   setValue(newValue) {
@@ -39,9 +39,9 @@ const AutoDJRotationForm = React.createClass({
     this.setValue(this.getValue().set('tags', newTags));
   },
 
-  setRange(newRange) {
+  setOccurences(newRange) {
     this.setValue(
-      this.getValue().set('range', newRange)
+      this.getValue().set('weekdays', newRange)
     );
   },
 
@@ -84,9 +84,9 @@ const AutoDJRotationForm = React.createClass({
           </div>
         </div>
         <div className="AutoDJRotationForm__dates">
-          <DatesRange
-            value={this.getRange()}
-            onChange={this.setRange}
+          <WeekDatesPicker
+            value={this.getOccurrences()}
+            onChange={this.setOccurences}
           />
         </div>
       </div>
