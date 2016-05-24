@@ -28,6 +28,22 @@ export default React.createClass({
     this.context.onCurrentBroadcastChannelChange(broadcastChannel);
   },
 
+  componentDidMount: function() {
+    switch (this.props.kind) {
+      case 'userAccount':
+        if(this.context.availableUserAccounts.count() === 1) {
+          this.context.onCurrentUserAccountChange(this.context.availableUserAccounts.first());
+        }
+        break;
+
+      case 'broadcastChannel':
+        if(this.context.availableBroadcastChannels.count() === 1) {
+          this.context.onCurrentBroadcastChannelChange(this.context.availableBroadcastChannels.first());
+        }
+        break;
+    }
+  },
+
   render() {
     switch (this.props.kind) {
       case 'userAccount':
