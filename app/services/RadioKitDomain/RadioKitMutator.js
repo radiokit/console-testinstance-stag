@@ -4,7 +4,7 @@ import {
   OrderedMap,
 } from 'immutable';
 import RadioKit from '../RadioKit';
-import { update } from './RadioKitQueries';
+import { update } from './RadioKitQueriesStream';
 import * as STATUS from './RadioKitQueryStatuses';
 import { debounce } from 'lodash';
 

@@ -1,14 +1,10 @@
 import {
   View,
 } from 'immview';
-import RadioKitQueries from './RadioKitQueries';
-import RadioKitEntities from './RadioKitEntities';
+import RadioKitEntitiesStream from './RadioKitEntitiesStream';
 
 export default new View(
-  {
-    queries: RadioKitQueries,
-    entities: RadioKitEntities,
-  },
+  RadioKitEntitiesStream,
   data => data
     .get('queries')
     .map(
@@ -23,8 +19,5 @@ export default new View(
           ], null))
           .filter(entity => !!entity)
       )
-    )
-    .sortBy(
-      (status) => status.get('time', Number.MAX_VALUE)
     )
 );
