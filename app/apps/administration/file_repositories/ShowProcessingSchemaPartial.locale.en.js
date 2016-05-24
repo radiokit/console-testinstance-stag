@@ -5,61 +5,73 @@ export default {
         show: {
           tabs: {
             body: {
-              imports_schema: {
+              processing_schema: {
                 table: {
                   index: {
                     actions: {
-                      create: "Add import",
+                      create: "Add processor",
                     },
 
                     table: {
                       header: {
                         name: "Name",
-                        key: "Key",
                         kind: "Kind",
                         connector_settings: "Settings",
                       },
-                      loading: "Loading imports...",
+                      loading: "Loading list of processors...",
                     },
 
                     modals: {
                       create: {
-                        header: "Add import",
+                        header: "Add processor",
                         action: {
-                          proceed: "Add import",
+                          proceed: "Add processor",
                           close: "Close",
                           cancel: "Cancel",
                         },
                         message: {
-                          progress: "Adding import...",
+                          progress: "Adding processor...",
                           acknowledgement: "Imports were added succesfully.",
                         },
                         form: {
                           name: {
                             label: "Field name",
-                            hint: "Choose any name that will allow you to distinguish this import from another.",
-                          },
-                          json_endpoint: {
-                            label: "Endpoint URL",
+                            hint: "Choose any name that will allow you to distinguish this processor from another.",
                           },
                           kind: {
                             label: "Value type",
                             values: {
-                              json: "JSON",
-                            }
+                              transcode: {
+                                audio: {
+                                  webbrowser: "Encoding audio to webbrowser format",
+                                },
+                              },
+                              analysis: {
+                                audio: {
+                                  duration: "Computing duration",
+                                  replaygain: "Computing ReplayGain",
+                                  tags: "Extraction of metadata",
+                                },
+                              },
+                              visualisation: {
+                                audio: {
+                                  waveform: "Waveform generation",
+                                },
+                              },
+                            },
                           },
                         },
                       },
                       delete: {
-                        header: "Remove import",
+                        header: "Remove processor",
                         action: {
-                          proceed: "Remove import",
+                          proceed: "Remove processor",
                           close: "Close",
                           cancel: "Cancel",
                         },
                         message: {
-                          progress: "Deleting imports... ",
-                          confirmation: "Do you really want to remove this import?",
+                          progress: "Deleting processors... ",
+                          confirmation: "Do you really want to remove this processor?",
                           acknowledgement: "Imports were succesfully removed.",
                         },
                       },

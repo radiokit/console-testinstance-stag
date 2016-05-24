@@ -19,7 +19,8 @@ export default {
                         kind: "Kind",
                         connector_state: "State",
                         connector_credentials: "Username",
-                      }
+                      },
+                      loading: "Loading exports...",                      
                     },
 
                     modals: {

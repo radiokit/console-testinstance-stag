@@ -19,7 +19,8 @@ export default {
                         kind: "Rodzaj",
                         connector_state: "Stan",
                         connector_credentials: "Użytkownik",
-                      }
+                      },
+                      loading: "Ładowanie eksportów...",
                     },
 
                     modals: {
