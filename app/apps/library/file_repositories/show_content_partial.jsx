@@ -1,6 +1,7 @@
 import React from 'react';
 import { Seq, List } from 'immutable';
 import { isEqual } from 'lodash';
+import multiDownload from 'multi-download';
 
 import DeleteModal from '../../../widgets/admin/crud/delete_modal.jsx';
 import TableBrowser from '../../../widgets/admin/table_browser_widget.jsx';
@@ -69,6 +70,21 @@ const ShowContentPartial =  React.createClass({
 
   reloadTable(){
       this.refs.tableBrowser.reloadData();
+  },
+
+  onDownloadClick(){
+    this.state.selectedRecordIds.count() > 0 && RadioKit
+      .query("vault", "Data.Record.File")
+      .select("private_download_url")
+      .where("id","in", this.state.selectedRecordIds.toJS())
+      .on("error", () => {
+        // FIXME
+      })
+      .on("fetch", (_event, _query, data) => {
+        if(this.isMounted()){
+          multiDownload(data.map((record) => { return record.get("private_download_url"); }).toJS());
+        }
+      }).fetch();
   },
 
   onDeleteClick(){

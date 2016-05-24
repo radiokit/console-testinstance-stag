@@ -7,9 +7,17 @@ Counterpart.registerTranslations("en", require('./IndexView.locale.en.js'));
 Counterpart.registerTranslations("pl", require('./IndexView.locale.pl.js'));
 
 const IndexView = React.createClass({
+  contextTypes: {
+    availableUserAccounts: React.PropTypes.object.isRequired,
+  },
+
 
   modifyIndexQuery(query) {
+    let availableUserAccountIds = this.context.availableUserAccounts.map((account) => { return account.get("id"); }).toJS();
+    let accountsCondition = ['references', 'din', 'user_account_id'].concat(availableUserAccountIds)
+
     return query
+      .where.apply(this, accountsCondition)
       .order('name', 'asc');
   },
 

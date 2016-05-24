@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 
+import './playlist_sidebar.scss';
 const PlaylistSidebar = React.createClass({
   propTypes: {
     currentBroadcastChannel: React.PropTypes.object.isRequired,
@@ -69,93 +70,95 @@ const PlaylistSidebar = React.createClass({
   // TODO add translation in week
   render() {
     return (
-      <div className="text-center">
-        <div className="btn-group margin-bottom-lg" role="group">
-          <button
-            type="button"
-            className="btn btn-default-light"
-            onClick={this.handleDayPreviousClick}
-          >
-            <i className="mdi mdi-chevron-left" />
-          </button>
+      <div className="PlaylistSidebar">
+        <div className="text-center">
+          <div className="btn-group margin-bottom-lg" role="group">
+            <button
+              type="button"
+              className="btn btn-default-light"
+              onClick={this.handleDayPreviousClick}
+            >
+              <i className="mdi mdi-chevron-left" />
+            </button>
 
-          <div className="btn btn-default-light">
-            {moment.utc(this.props.offsetStart).clone().startOf('day').format('Mo (ddd)')}
+            <div className="PlaylistSidebar-button btn btn-default-light">
+              {moment.utc(this.props.offsetStart).clone().startOf('day').format('D (ddd)')}
+            </div>
+
+            <button
+              type="button"
+              className="btn btn-default-light"
+              onClick={this.handleDayNextClick}
+            >
+             <i className="mdi mdi-chevron-right" />
+            </button>
           </div>
 
-          <button
-            type="button"
-            className="btn btn-default-light"
-            onClick={this.handleDayNextClick}
-          >
-           <i className="mdi mdi-chevron-right" />
-          </button>
-        </div>
+          <div className="btn-group margin-bottom-lg">
+            <button
+              type="button"
+              className="btn btn-default-light"
+              onClick={this.handleWeekPreviousClick}
+            >
+              <i className="mdi mdi-chevron-left" />
+            </button>
 
-        <div className="btn-group margin-bottom-lg">
-          <button
-            type="button"
-            className="btn btn-default-light"
-            onClick={this.handleWeekPreviousClick}
-          >
-            <i className="mdi mdi-chevron-left" />
-          </button>
+            <div className="PlaylistSidebar-button btn btn-default-light">
+              {moment.utc(this.props.offsetStart).clone().startOf('day').format('w')}
+            </div>
 
-          <div className="btn btn-default-light">
-            {moment.utc(this.props.offsetStart).clone().startOf('day').format('w')}
+            <button
+              type="button"
+              className="btn btn-default-light"
+              onClick={this.handleWeekNextClick}
+            >
+              <i className="mdi mdi-chevron-right" />
+            </button>
           </div>
 
-          <button
-            type="button"
-            className="btn btn-default-light"
-            onClick={this.handleWeekNextClick}
-          >
-            <i className="mdi mdi-chevron-right" />
-          </button>
-        </div>
+          <div className="btn-group margin-bottom-lg">
+            <button
+              type="button"
+              className="btn btn-default-light"
+              onClick={this.handleMonthPreviousClick}
+            >
+              <i className="mdi mdi-chevron-left" />
+            </button>
 
-        <div className="btn-group margin-bottom-lg">
-          <button
-            type="button"
-            className="btn btn-default-light"
-            onClick={this.handleMonthPreviousClick}
-          >
-            <i className="mdi mdi-chevron-left" />
-          </button>
+            <div className="PlaylistSidebar-button btn btn-default-light">
+              {moment.utc(this.props.offsetStart).clone().startOf('day').format('MMMM')}
+            </div>
 
-          <div className="btn btn-default-light">
-            {moment.utc(this.props.offsetStart).clone().startOf('day').format('MMMM')}
+            <button
+              type="button"
+              className="btn btn-default-light"
+              onClick={this.handleMonthNextClick}
+            >
+              <i className="mdi mdi-chevron-right" />
+            </button>
           </div>
 
-          <button
-            type="button"
-            className="btn btn-default-light"
-            onClick={this.handleMonthNextClick}
-          >
-            <i className="mdi mdi-chevron-right" />
-          </button>
-        </div>
+          <div className="btn-group margin-bottom-lg">
+            <button
+              type="button"
+              className="btn btn-default-light"
+              onClick={this.handleYearPreviousClick}
+            >
+              <i className="mdi mdi-chevron-left" />
+            </button>
 
-        <div className="btn-group margin-bottom-lg">
-          <button
-            type="button"
-            className="btn btn-default-light"
-            onClick={this.handleYearPreviousClick}
-          >
-            <i className="mdi mdi-chevron-left" />
-          </button>
+            <div className="PlaylistSidebar-button btn btn-default-light">
+              {moment.utc(this.props.offsetStart).clone().startOf('day').format('YYYY')}
+            </div>
 
-          <div className="btn btn-default-light">
-            {moment.utc(this.props.offsetStart).clone().startOf('day').format('YYYY')}
+            <button
+              type="button"
+              className="btn btn-default-light"
+              onClick={this.handleYearNextClick}
+            >
+              <i className="mdi mdi-chevron-right" />
+            </button>
           </div>
-
-          <button
-            type="button"
-            className="btn btn-default-light"
-            onClick={this.handleYearNextClick}
-          >
-            <i className="mdi mdi-chevron-right" />
-          </button>
         </div>
       </div>
     );

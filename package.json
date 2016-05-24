@@ -63,6 +63,7 @@
     "mdi": "^1.5.54",
     "moment": "^2.10.6",
     "moment-timezone": "^0.4.1",
+    "multi-download": "^2.0.0",
     "phoenix-socket": "^1.0.4",
     "radiokit-api": "^0.1.17",
     "react": "^0.14.2",

@@ -50,7 +50,7 @@ const DevicesToolbar = React.createClass({
       'Config.Routing.LinkRule': 'link'
     })[this.props.selectedRecord.model]
 
-    return 'apps.electron.patchbay.modals.${modalType}.${prefix}';
+    return `apps.electron.patchbay.modals.${modalType}.${prefix}`;
   },
 
 
@@ -108,7 +108,7 @@ const DevicesToolbar = React.createClass({
           modalProps={{
             contentPrefix: 'apps.electron.patchbay.modals.update',
             form: this.buildUpdateForm(this.props.selectedRecord),
-            app: 'plumber',
+            app: 'auth',
             model: 'Client.Standalone',
             recordId: (this.props.selectedRecord.record ?
                        this.props.selectedRecord.record.get('id') :
@@ -121,7 +121,7 @@ const DevicesToolbar = React.createClass({
           modalElement={DeleteModal}
           modalProps={{
             contentPrefix: this.getTranslationPrefix('delete'),
-            app: 'plumber',
+            app: 'auth',
             model: this.props.selectedRecord.model,
             selectedRecordIds: this.props.selectedRecord
               ? List.of(this.props.selectedRecord.id)

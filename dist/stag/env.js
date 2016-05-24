@@ -4,11 +4,10 @@ window.ENV = {
     baseUrl: "https://auth.radiokitapp-stag.org"
   },
   apps: {
-    "plumber" : { baseUrl: "https://radiokit-plumber-stag.herokuapp.com" },
-    "auth" : { baseUrl: "https://auth.radiokitapp-stag.org" },
-    "vault" : { baseUrl: "https://vault.radiokitapp-stag.org" },
-    "agenda": { baseUrl: "https://agenda.radiokitapp-stag.org" },
-    "diffusor": { baseUrl: "https://diffusor.radiokitapp-stag.org" },
+    "auth"     : { baseUrl: "https://auth.radiokitapp-stag.org" },
+    "agenda"   : { baseUrl: "https://agenda.radiokitapp-stag.org" },
+    "plumber"  : { baseUrl: "https://plumber.radiokitapp-stag.org" },
+    "vault"    : { baseUrl: "https://vault.radiokitapp-stag.org" },
   },
   external: {
   },

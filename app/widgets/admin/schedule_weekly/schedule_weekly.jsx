@@ -1,10 +1,48 @@
 import React from 'react';
 import moment from 'moment';
-import Immutable from 'immutable';
+import { Range, Map, OrderedMap, List } from 'immutable';
 import connect from 'immview-react-connect';
 import ScheduleDomain from '../../../services/ScheduleDomain';
 import { range } from 'lodash';
 import sprintf from 'tiny-sprintf';
+import ShortenedRow from '../schedule_daily/schedule_daily_shortened_row.jsx';
+import Translate from 'react-translate-component';
+import Counterpart from 'counterpart';
+
+import translationPL from './schedule_weekly_pl.js';
+import translationEN from './schedule_weekly_en.js';
+Counterpart.registerTranslations('pl', { schedule_weekly: translationPL });
+Counterpart.registerTranslations('en', { schedule_weekly: translationEN });
+
+import './schedule_weekly_widget.scss';
+
+function groupByDateAndHour(items, days) {
+  const hours = Range(0, 24);
+  const groupedItems = days.map(
+    day => (
+      hours.map(
+        hour => (
+          items.filter(
+            item => (
+              hour < 5 ?
+              (moment.utc(item.get('start_at')).isBefore(day.clone().hour(hour + 1)
+                .startOf('hour').add(1, 'day')) &&
+              moment.utc(item.get('stop_at')).isAfter(day.clone().hour(hour)
+                .startOf('hour').add(1, 'day')))
+              :
+              (moment.utc(item.get('start_at')).isBefore(day.clone().hour(hour + 1)
+                .startOf('hour')) &&
+              moment.utc(item.get('stop_at')).isAfter(day.clone().hour(hour)
+                .startOf('hour')))
+            )
+          )
+        )
+      )
+    )
+  );
+
+  return groupedItems;
+}
 
 const ScheduleWeekly = React.createClass({
   propTypes: {
@@ -36,25 +74,44 @@ const ScheduleWeekly = React.createClass({
   },
 
   render() {
-    const { firstHour, offsetStart } = this.props;
+    const { firstHour, offsetStart, items } = this.props;
     const hours = (firstHour > 0)
-    ? new Immutable
-      .Range(firstHour, 24)
-      .concat(new Immutable.Range(0, firstHour))
-    : new Immutable.Range(0, 24);
+    ? Range(firstHour, 24)
+      .concat(Range(0, firstHour))
+    : Range(0, 24);
 
     const days = this.getDays(moment.utc(offsetStart).startOf('week'));
+    const groupedItems = groupByDateAndHour(items, days);
 
     return (
-      <table className="ScheduleWeeklyWidget table table-banded table-hover">
-        <tbody>
-          <tr>
-            {days.map(day => (
-              <th>{day.format('L')}</th>
-            ))}
-          </tr>
-        </tbody>
-      </table>
+      <div>
+        <table className="ScheduleWeeklyWidget table table-banded table-hover">
+          <tbody>
+            <tr>
+              <th>
+                <Translate component="span" content="schedule_weekly.hour" />
+              </th>
+              {days.map(day => (
+                <th>{day.format('L')}</th>
+              ))}
+            </tr>
+              {hours.map(hour => (
+                <tr>
+                  <td>{sprintf('%02s:00', hour)}</td>
+                  {days.map(day => (
+                    <td className="ScheduleWeeklyWidget-Table-items">
+                      <ShortenedRow
+                        className="ScheduleWeeklyWidget-Table-item-ellipsed"
+                        key={day + hour}
+                        items={groupedItems[day.weekday()].get(hour, List())}
+                      />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
     );
   },
 });
@@ -63,7 +120,7 @@ export default connect(
   ScheduleWeekly,
   ScheduleDomain,
   (data, props) => {
-    const timeRange = Immutable.Map({
+    const timeRange = Map({
       from: moment.utc(props.offsetStart).startOf('week').add(5, 'hours')
         .subtract(1, 'day').toISOString(),
       to: moment.utc(props.offsetStart).endOf('week').add(5, 'hours')
@@ -73,7 +130,7 @@ export default connect(
       ScheduleDomain.fetch(timeRange.get('from'), timeRange.get('to'));
     }
     const items = data
-      .get('all', Immutable.OrderedMap())
+      .get('all', OrderedMap())
       .toList()
       .filter(
         item => (

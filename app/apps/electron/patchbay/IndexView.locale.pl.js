@@ -25,7 +25,12 @@ export default {
               proceed: "Edytuj urządzenie",
               cancel: "Anuluj",
               close: "Zamknij",
-            }
+            },
+
+            message: {
+              acknowledgement: "Zapisano zmiany.",
+            },
+
           },
 
           delete: {
@@ -39,7 +44,7 @@ export default {
               action: {
                 proceed: "Usuń",
                 cancel: "Anuluj",
-                cancel: "Zamknij",
+                close: "Zamknij",
               }
             },
 
@@ -53,7 +58,7 @@ export default {
               action: {
                 proceed: "Usuń",
                 cancel: "Anuluj",
-                cancel: "Zamknij",
+                close: "Zamknij",
               }
             }
           }

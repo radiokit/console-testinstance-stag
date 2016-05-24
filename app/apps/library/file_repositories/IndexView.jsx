@@ -1,9 +1,14 @@
 import React from 'react';
+import Counterpart from 'counterpart';
 
 import Index from '../../../widgets/admin/crud/index_widget.jsx';
 
-export default React.createClass({
 
+Counterpart.registerTranslations('en', require('./IndexView.locale.en.js'));
+Counterpart.registerTranslations('pl', require('./IndexView.locale.pl.js'));
+
+
+export default React.createClass({
   contextTypes: {
     currentUserAccount: React.PropTypes.object.isRequired,
   },

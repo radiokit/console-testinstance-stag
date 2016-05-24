@@ -22,6 +22,10 @@ export default {
     action: {
       cancel: 'Cancel',
       proceed: 'Proceed',
+      close: 'Close',
+    },
+    message: {
+      acknowledgement: 'File was successfully added.',
     },
   },
   update: {
@@ -40,16 +44,19 @@ export default {
     action: {
       cancel: 'Cancel',
       proceed: 'Proceed',
+      close: 'Close',
     },
   },
   delete: {
     header: 'Deleting track',
     message: {
       confirmation: 'The track is going to be removed.',
+      progress: 'Deleting items...',
     },
     action: {
       cancel: 'Cancel',
       proceed: 'Proceed',
+      close: 'Close',
     },
   },
 };
