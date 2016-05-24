@@ -1,20 +1,19 @@
 import {
   List,
   Map,
-  fromJS,
 } from 'immutable';
 import RadioKit from '../RadioKit';
-import { RadioKitQueries, update } from './RadioKitQueries';
+import { RadioKitQueriesStream, update } from './RadioKitQueriesStream';
 import { save, remove } from './RadioKitMutator';
 import * as STATUS from './RadioKitQueryStatuses';
 
 function getPreviousQuery(queryParams) {
-  return RadioKitQueries.read().getIn([queryParams]);
+  return RadioKitQueriesStream.read().getIn([queryParams]);
 }
 
 function checkIfQueryExists(queryParams, { autoSync = false, maxAge = Date.now() }) {
-  const currentQueryStatus = RadioKitQueries.read().getIn([queryParams, 'status']);
-  const currentQueryTime = RadioKitQueries.read().getIn([queryParams, 'time']) || 0;
+  const currentQueryStatus = RadioKitQueriesStream.read().getIn([queryParams, 'status']);
+  const currentQueryTime = RadioKitQueriesStream.read().getIn([queryParams, 'time']) || 0;
   if (autoSync) {
     if (currentQueryStatus === 'live') {
       return true;
@@ -57,7 +56,7 @@ function buildQuery(queryParams) {
 }
 
 /**
- * Perform a query agains RadioKit API
+ * Perform a query against RadioKit API
  * @param {Map{
  *    app: string,
  *    model: string,
@@ -99,7 +98,7 @@ function query(queryParams = Map(), options = {}) {
   const markAsErroneous = e => {
     update(queryParams, STATUS.error, List(), requestTime);
     /* eslint no-console: 0 */
-    console.error(e.stack);
+    console.error('RadioKitDomain::query', 'request failed', e.message, e.stack);
   };
 
   q = q
@@ -120,7 +119,7 @@ function query(queryParams = Map(), options = {}) {
 }
 
 function clear(app, model = null) {
-  RadioKitQueries.write(
+  RadioKitQueriesStream.write(
     RKDData => RKDData
       .filter(
         (status, params) => !(
