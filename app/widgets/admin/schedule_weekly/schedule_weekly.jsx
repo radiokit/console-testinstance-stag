@@ -16,32 +16,38 @@ Counterpart.registerTranslations('en', { schedule_weekly: translationEN });
 
 import './schedule_weekly_widget.scss';
 
-function groupByDateAndHour(items, days) {
-  const hours = Range(0, 24);
-  const groupedItems = days.map(
-    day => (
-      hours.map(
-        hour => (
-          items.filter(
-            item => (
-              hour < 5 ?
-              (moment.utc(item.get('start_at')).isBefore(day.clone().hour(hour + 1)
-                .startOf('hour').add(1, 'day')) &&
-              moment.utc(item.get('stop_at')).isAfter(day.clone().hour(hour)
-                .startOf('hour').add(1, 'day')))
-              :
-              (moment.utc(item.get('start_at')).isBefore(day.clone().hour(hour + 1)
-                .startOf('hour')) &&
-              moment.utc(item.get('stop_at')).isAfter(day.clone().hour(hour)
-                .startOf('hour')))
-            )
-          )
-        )
-      )
+const milisecondsInHour = 1000 * 60 * 60;
+const milisecondsInDay = milisecondsInHour * 24;
+
+function groupByDayAndHour(items, offsetStart) {
+  const result = range(0, 7).map(
+    () => range(0, 24).map(
+      () => []
     )
   );
 
-  return groupedItems;
+  items
+    .sort(
+      (a, b) => new Date(a.get('start_at')).valueOf() - new Date(b.get('start_at')).valueOf()
+    )
+    .forEach(
+      item => {
+        const itemStart = new Date(item.get('start_at')).valueOf();
+        const itemStop = new Date(item.get('stop_at')).valueOf();
+
+        result.forEach((day, iDay) => day.forEach((hour, iHour) => {
+          const hourOffset = offsetStart + iDay * milisecondsInDay + iHour * milisecondsInHour;
+          if (
+            itemStop > hourOffset &&
+            itemStart < hourOffset + milisecondsInHour
+          ) {
+            hour.push(item);
+          }
+        }));
+      }
+    );
+
+  return result.map(day => day.map(hour => List(hour)));
 }
 
 const ScheduleWeekly = React.createClass({
@@ -54,6 +60,7 @@ const ScheduleWeekly = React.createClass({
     onActiveItemChange: React.PropTypes.func,
     // connector
     items: React.PropTypes.object,
+    actualOffsetStart: React.PropTypes.number,
   },
 
   getDefaultProps() {
@@ -66,22 +73,25 @@ const ScheduleWeekly = React.createClass({
     };
   },
 
-  getDays(weekStart) {
-    const daysRange = range(0, 7);
-    return daysRange.map(day => (
-      moment.utc(weekStart).add(day, 'days')
-    ));
+  getDaysNames() {
+    const day = moment(this.props.actualOffsetStart).subtract(1, 'days');
+    return range(0, 7).map(() => day.add(1, 'days').format('L'));
   },
 
   render() {
-    const { firstHour, offsetStart, items } = this.props;
-    const hours = (firstHour > 0)
-    ? Range(firstHour, 24)
-      .concat(Range(0, firstHour))
-    : Range(0, 24);
+    const {
+      firstHour,
+      actualOffsetStart,
+      items,
+    } = this.props;
 
-    const days = this.getDays(moment.utc(offsetStart).startOf('week'));
-    const groupedItems = groupByDateAndHour(items, days);
+    const hours = (firstHour > 0)
+      ? Range(firstHour, 24)
+        .concat(Range(0, firstHour))
+      : Range(0, 24);
+
+    const days = this.getDaysNames();
+    const groupedItems = groupByDayAndHour(items, actualOffsetStart);
 
     return (
       <div>
@@ -91,19 +101,21 @@ const ScheduleWeekly = React.createClass({
               <th>
                 <Translate component="span" content="schedule_weekly.hour" />
               </th>
-              {days.map(day => (
-                <th>{day.format('L')}</th>
-              ))}
+              {
+                days.map(day => (
+                  <th>{day}</th>
+                ))
+              }
             </tr>
               {hours.map(hour => (
                 <tr>
                   <td>{sprintf('%02s:00', hour)}</td>
-                  {days.map(day => (
+                  {days.map((_, day) => (
                     <td className="ScheduleWeeklyWidget-Table-items">
                       <ShortenedRow
                         className="ScheduleWeeklyWidget-Table-item-ellipsed"
-                        key={day + hour}
-                        items={groupedItems[day.weekday()].get(hour, List())}
+                        key={`${day}.${hour}`}
+                        items={groupedItems[day][hour] || List()}
                       />
                     </td>
                   ))}
@@ -120,26 +132,35 @@ export default connect(
   ScheduleWeekly,
   ScheduleDomain,
   (data, props) => {
-    const timeRange = Map({
-      from: moment.utc(props.offsetStart).startOf('week').add(5, 'hours')
-        .subtract(1, 'day').toISOString(),
-      to: moment.utc(props.offsetStart).endOf('week').add(5, 'hours')
-        .add(1, 'day').toISOString(),
-    });
-    if (!data.getIn(['ranges', timeRange])) {
-      ScheduleDomain.fetch(timeRange.get('from'), timeRange.get('to'));
-    }
+    const {
+      offsetStart = 0,
+      currentBroadcastChannel = Map(),
+    } = props;
+
+    const from = moment(offsetStart)
+      .startOf('week')
+      .add(5, 'hours')
+      .subtract(1, 'day');
+    const to = moment(offsetStart)
+      .endOf('week')
+      .add(5, 'hours')
+      .add(1, 'day');
+
+    ScheduleDomain.fetch(from.toISOString(), to.toISOString());
+
     const items = data
       .get('all', OrderedMap())
-      .toList()
+      .toArray()
       .filter(
         item => (
-          item.get('stop_at') > timeRange.get('from') &&
-          item.get('start_at') < timeRange.get('to')
+          new Date(item.get('stop_at')) > from.valueOf() &&
+          new Date(item.get('start_at')) < to.valueOf() &&
+          item.getIn(['references', 'broadcast_channel_id']) === currentBroadcastChannel.get('id')
         )
       );
     return {
       items,
+      actualOffsetStart: from.valueOf(),
     };
   }
 );

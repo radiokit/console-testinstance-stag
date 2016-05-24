@@ -89,7 +89,16 @@ function getEntities(queries) {
     )
   );
 
-  return fromJS(indexedEntities);
+  return Map(mapValues(
+    indexedEntities,
+    apps => Map(mapValues(
+      apps,
+      models => Map(mapValues(
+        models,
+        ids => Map(ids)
+      ))
+    ))
+  ));
 }
 
 export default new View(

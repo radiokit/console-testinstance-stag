@@ -4,18 +4,16 @@ import classNames from 'classnames';
 import {
   range,
 } from 'lodash';
-
+import { shouldComponentUpdate } from '../../../helpers/immutable_component';
 import ShortenedRow from './schedule_daily_shortened_row.jsx';
 import ExpandedRow from './schedule_daily_expanded_row.jsx';
 
-const hourType = PropTypes.oneOf(range(0, 24));
+const milisecondsInHour = 1000 * 60 * 60;
 
 const CalendarRow = React.createClass({
   propTypes: {
-    firstHour: hourType.isRequired,
-    hour: hourType.isRequired,
+    offsetStart: React.PropTypes.number,
     items: PropTypes.object.isRequired,
-    now: PropTypes.object.isRequired,
     activeItem: PropTypes.object,
     onActiveItemChange: PropTypes.func.isRequired,
   },
@@ -25,6 +23,8 @@ const CalendarRow = React.createClass({
       expanded: false,
     };
   },
+
+  shouldComponentUpdate,
 
   getClassName(item) {
     let className = 'ScheduleDailyWidget-CalendarRow-item';
@@ -49,27 +49,25 @@ const CalendarRow = React.createClass({
     }
   },
 
-
   render() {
-    const { hour, firstHour, items, now } = this.props;
-    let hourStart;
-    if (firstHour > 0 && hour < firstHour) {
-      hourStart = now.clone().startOf('day').hour(hour).add(1, 'day');
-    } else {
-      hourStart = now.clone().startOf('day').hour(hour);
-    }
-    const hourStop = hourStart.clone().add(1, 'hour');
+    const { offsetStart, items } = this.props;
+    const now = Date.now();
 
     let rowTiming;
     let hourMarker;
-    if (now.clone().subtract(1, 'hour').isAfter(hourStart)) {
+    if (offsetStart > now) {
       rowTiming = 'ScheduleDailyWidget-CalendarRow--past';
-    } else if (now.isBetween(hourStart, hourStop) && !this.state.expanded) {
+    } else if (
+      offsetStart <= now &&
+      offsetStart + milisecondsInHour > now &&
+      !this.state.expanded
+    ) {
       rowTiming = 'ScheduleDailyWidget-CalendarRow--current';
       hourMarker = (
         <hr
+          key="HR"
           className="ScheduleDailyWidget-CalendarRow-currentTime"
-          style={{ top: `${(now.minutes() / 60) * 100}%` }}
+          style={{ top: `${(new Date(now - offsetStart).valueOf() / 60000) * 100}%` }}
         />
       );
     } else {
@@ -86,12 +84,14 @@ const CalendarRow = React.createClass({
         />
       );
     } else {
-      rowContent = (
+      rowContent = [
+        hourMarker,
         <ShortenedRow
+          key="ROW"
           items={items}
           className="ScheduleDailyWidget-CalendarRow-item-ellipsed"
-        />
-      );
+        />,
+      ];
     }
 
     return (
@@ -123,14 +123,13 @@ const CalendarRow = React.createClass({
             { 'ScheduleDailyWidget-CalendarRow--expanded-cell': this.state.expanded }
           )}
         >
-          {sprintf('%02s:00', hour)}
+          {sprintf('%02s:00', new Date(offsetStart).getHours())}
         </td>
         <td className={classNames(
             'ScheduleDailyWidget-CalendarRow-items',
             { 'ScheduleDailyWidget-CalendarRow--expanded-cell': this.state.expanded }
           )}
         >
-          {hourMarker}
           {rowContent}
         </td>
       </tr>
