@@ -6,6 +6,13 @@ import ScheduleDomain from '../../../services/ScheduleDomain';
 import { range } from 'lodash';
 import sprintf from 'tiny-sprintf';
 import ShortenedRow from '../schedule_daily/schedule_daily_shortened_row.jsx';
+import Translate from 'react-translate-component';
+import Counterpart from 'counterpart';
+
+import translationPL from './schedule_weekly_pl.js';
+import translationEN from './schedule_weekly_en.js';
+Counterpart.registerTranslations('pl', { schedule_weekly: translationPL });
+Counterpart.registerTranslations('en', { schedule_weekly: translationEN });
 
 import './schedule_weekly_widget.scss';
 
@@ -77,30 +84,34 @@ const ScheduleWeekly = React.createClass({
     const groupedItems = groupByDateAndHour(items, days);
 
     return (
-      <table className="ScheduleWeeklyWidget table table-banded table-hover">
-        <tbody>
-          <tr>
-            <th>{'Godzina'}</th>
-            {days.map(day => (
-              <th>{day.format('L')}</th>
-            ))}
-          </tr>
-            {hours.map(hour => (
-              <tr>
-                <td>{sprintf('%02s:00', hour)}</td>
-                {days.map(day => (
-                  <td className="ScheduleWeeklyWidget-Table-items">
-                    <ShortenedRow
-                      className="ScheduleWeeklyWidget-CalendarRow-item-ellipsed"
-                      key={day + hour}
-                      items={groupedItems[day.weekday()].get(hour, List())}
-                    />
-                  </td>
-                ))}
-              </tr>
-            ))}
-        </tbody>
-      </table>
+      <div>
+        <table className="ScheduleWeeklyWidget table table-banded table-hover">
+          <tbody>
+            <tr>
+              <th>
+                <Translate component="span" content="schedule_weekly.hour" />
+              </th>
+              {days.map(day => (
+                <th>{day.format('L')}</th>
+              ))}
+            </tr>
+              {hours.map(hour => (
+                <tr>
+                  <td>{sprintf('%02s:00', hour)}</td>
+                  {days.map(day => (
+                    <td className="ScheduleWeeklyWidget-Table-items">
+                      <ShortenedRow
+                        className="ScheduleWeeklyWidget-Table-item-ellipsed"
+                        key={day + hour}
+                        items={groupedItems[day.weekday()].get(hour, List())}
+                      />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
     );
   },
 });
