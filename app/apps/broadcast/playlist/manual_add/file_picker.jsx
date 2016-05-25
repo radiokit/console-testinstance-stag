@@ -1,9 +1,9 @@
 import React from 'react';
 import connect from 'immview-react-connect';
-import moment from 'moment';
 import FilePickerWidget from './file_picker_widget.jsx';
 import FilesDomain from '../../../../services/FilesDomain';
 
+const recentFilesLimit = 20;
 const FilePicker = React.createClass({
   propTypes: {
     placeholder: React.PropTypes.string,
@@ -20,13 +20,11 @@ const FilePicker = React.createClass({
   },
 
   componentDidMount() {
-    FilesDomain.loadFiles();
+    FilesDomain.loadRecentFiles({ limit: recentFilesLimit });
   },
 
   handleInputChange(input) {
-    // todo stuff
-    console.log(this.props.files.count());
-
+    // TODO FilesDomain.searchFiles()
     if (input === '') {
       this.setState({ displayRecent: true });
       this.props.onClearInput();
@@ -40,8 +38,8 @@ const FilePicker = React.createClass({
   getRecentFiles() {
     return this.props.files
       .sort((a, b) => (
-        moment(a.get('updated_at')).isAfter(b.get('updated_at')) ? -1 : 1)
-      ).take(20);
+        new Date(a.get('updated_at')) - new Date(b.get('updated_at'))
+      )).take(recentFilesLimit);
   },
 
   render() {
@@ -60,7 +58,6 @@ export default connect(
   FilesDomain.map(
     (data) => data
       .get('files')
-      .filter((record) => record.get('stage') === 'current')
       .filter(
         (record) => record
           .get('metadata_items')

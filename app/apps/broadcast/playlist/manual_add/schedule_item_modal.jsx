@@ -66,9 +66,9 @@ const ScheduleItemModal = React.createClass({
     this.recordCall = RadioKit
     .record('plumber', 'Media.Input.File.RadioKit.Vault', this.props.record.get('id'))
     .on('loading', () => this.changeStep('progress'))
-    .on('loaded', () => this.changeStep('acknowledgement'))
+    .on('loaded', () => this.createScheduleItem())
     .on('error', () => this.changeStep('error'))
-    .update(this.buildScheduleItem());
+    .destroy();
   },
 
   buildScheduleItem() {
@@ -78,9 +78,7 @@ const ScheduleItemModal = React.createClass({
     scheduleItem.cue_in_at = moment(this.state.startDate).toISOString();
     scheduleItem.cue_out_at = moment(this.state.stoptDate).toISOString();
     scheduleItem.stop_at = moment(this.state.stoptDate).add(15, 'seconds').toISOString();
-    if (!this.isUpdating()) {
-      scheduleItem.file = this.state.file.get('id');
-    }
+    scheduleItem.file = this.state.file.get('id');
     return scheduleItem;
   },
 
