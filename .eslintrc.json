@@ -32,6 +32,7 @@
         ]
       }
     ],
-    "no-use-before-define": ["error", { "functions": false, "classes": true }]
+    "no-use-before-define": ["error", { "functions": false, "classes": true }],
+    "prefer-arrow-callback": ["error", { "allowNamedFunctions": true }]
   }
 }
