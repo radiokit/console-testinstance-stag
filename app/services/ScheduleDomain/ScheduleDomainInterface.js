@@ -15,7 +15,7 @@ import {
 
 import RadioKitDomain from './../RadioKitDomain';
 
-function performQuery(from, to, options) {
+function performQuery(from, to, broadcastChannelId, options) {
   RadioKitDomain.query(
     fromJS({
       [key]: true,
@@ -23,6 +23,11 @@ function performQuery(from, to, options) {
       model,
       select: readFields,
       conditions: [
+        broadcastChannelId ? {
+          field: 'references',
+          comparison: 'deq',
+          value: `broadcast_channel_id ${broadcastChannelId}`,
+        } : null,
         from ? {
           field: 'start_at',
           comparison: 'lte',
@@ -45,8 +50,8 @@ function performQuery(from, to, options) {
  * @param {string|number} from
  * @param {string|number} to
  */
-export function fetch(from, to, requestOptions) {
-  performQuery(from, to, requestOptions);
+export function fetch(from, to, broadcastChannelId, requestOptions) {
+  performQuery(from, to, broadcastChannelId, requestOptions);
 }
 
 export function save(id, patch) {

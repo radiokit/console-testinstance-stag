@@ -1,55 +1,57 @@
 import React from 'react';
-import { Range, Map, OrderedMap, List } from 'immutable';
+import { Map, OrderedMap, List } from 'immutable';
+import {
+  range,
+} from 'lodash';
 import moment from 'moment';
+import { shouldComponentUpdate } from '../../../helpers/immutable_component';
 import CalendarRow from './schedule_daily_calendar_row.jsx';
 import connect from 'immview-react-connect';
 import ScheduleDomain from '../../../services/ScheduleDomain';
 
 import './schedule_daily_widget.scss';
 
+const milisecondsInHour = 1000 * 60 * 60;
+
 function groupByHour(items, offsetStart) {
-  const now = moment.utc(offsetStart);
-  const hours = Range(0, 24);
-  const itemsByHour = hours.map(
-    hour => (
-      items.filter(
-        item => (
-          hour < 5 ?
-          (moment.utc(item.get('start_at')).isBefore(now.clone().hour(hour + 1)
-            .startOf('hour').add(1, 'day')) &&
-          moment.utc(item.get('stop_at')).isAfter(now.clone().hour(hour)
-            .startOf('hour').add(1, 'day')))
-          :
-          (moment.utc(item.get('start_at')).isBefore(now.clone().hour(hour + 1)
-            .startOf('hour')) &&
-          moment.utc(item.get('stop_at')).isAfter(now.clone().hour(hour)
-            .startOf('hour')))
-        )
-      )
-    )
-  );
-  return itemsByHour;
+  const result = range(0, 24).map(() => []);
+
+  items
+    .forEach(
+      item => {
+        const itemStart = new Date(item.get('start_at')).valueOf();
+        const itemStop = new Date(item.get('stop_at')).valueOf();
+
+        for (let iHour = 0; iHour < 24; iHour++) {
+          const hourOffset = offsetStart + iHour * milisecondsInHour;
+          if (
+            itemStop > hourOffset &&
+            itemStart < hourOffset + milisecondsInHour
+          ) {
+            result[iHour].push(item);
+          }
+        }
+      }
+    );
+  const immResult = result.map(hour => List(hour));
+  return immResult;
 }
 
 const ScheduleDaily = React.createClass({
   propTypes: {
-    firstHour: React.PropTypes.number, // FIXME: ??
+    firstHour: React.PropTypes.number, // used in connector
     currentBroadcastChannel: React.PropTypes.object,
     offsetStart: React.PropTypes.number,
     onOffsetStartChange: React.PropTypes.func,
     activeItem: React.PropTypes.object,
     onActiveItemChange: React.PropTypes.func,
     // connector
-    items: React.PropTypes.object,
-  },
-
-  contextTypes: {
-    data: React.PropTypes.object,
+    items: React.PropTypes.array,
+    actualOffsetStart: React.PropTypes.number,
   },
 
   getDefaultProps() {
     return {
-      firstHour: 5,
       offsetStart: Date.now(),
       onOffsetStartChange: () => null,
       activeItem: null,
@@ -57,32 +59,26 @@ const ScheduleDaily = React.createClass({
     };
   },
 
+  shouldComponentUpdate,
+
   render() {
     const {
-      firstHour,
-      offsetStart,
       onActiveItemChange,
       activeItem,
       items,
+      actualOffsetStart,
     } = this.props;
 
-    const hours = (firstHour > 0)
-    ? Range(firstHour, 24)
-      .concat(Range(0, firstHour))
-    : Range(0, 24);
-
-    const itemsByHour = groupByHour(items, offsetStart).toOrderedMap();
+    const itemsByHour = groupByHour(items, actualOffsetStart);
 
     return (
       <table className="ScheduleDailyWidget table table-banded table-hover ">
         <tbody>
-          {hours.map((hour) => (
+          {range(0, 24).map((_, hour) => (
               <CalendarRow
                 key={hour}
-                hour={hour}
-                firstHour={firstHour}
-                items={itemsByHour.get(hour, List())}
-                now={moment.utc(offsetStart)}
+                offsetStart={actualOffsetStart + hour * milisecondsInHour}
+                items={itemsByHour[hour]}
                 onActiveItemChange={onActiveItemChange}
                 activeItem={activeItem}
               />
@@ -97,25 +93,34 @@ export default connect(
   ScheduleDaily,
   ScheduleDomain,
   (data, props) => {
-    const range = Map({
-      from: moment.utc(props.offsetStart).startOf('day').add(5, 'hours')
-        .subtract(1, 'day').toISOString(),
-      to: moment.utc(props.offsetStart).endOf('day').add(5, 'hours').add(1, 'day').toISOString(),
-    });
-    if (!data.getIn(['ranges', range])) {
-      ScheduleDomain.fetch(range.get('from'), range.get('to'));
-    }
+    const {
+      offsetStart = 0,
+      currentBroadcastChannel = Map(),
+      firstHour = 5,
+    } = props;
+
+    const from = moment(offsetStart)
+      .startOf('day')
+      .add(firstHour, 'hours');
+    const to = moment(offsetStart)
+      .endOf('day')
+      .add(firstHour, 'hours');
+
+    ScheduleDomain.fetch(from.toISOString(), to.toISOString(), currentBroadcastChannel.get('id'));
+
     const items = data
       .get('all', OrderedMap())
-      .toList()
+      .toArray()
       .filter(
         item => (
-          item.get('stop_at') > range.get('from') &&
-          item.get('start_at') < range.get('to')
+          new Date(item.get('stop_at')).valueOf() > from.valueOf() &&
+          new Date(item.get('start_at')).valueOf() < to.valueOf() &&
+          item.getIn(['references', 'broadcast_channel_id']) === currentBroadcastChannel.get('id')
         )
       );
     return {
       items,
+      actualOffsetStart: from.valueOf(),
     };
   }
 );

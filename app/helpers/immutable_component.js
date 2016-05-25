@@ -2,16 +2,21 @@ import {
   is,
 } from 'immutable';
 
-export default {
-  shouldComponentUpdate(nextProps, nextState) {
-    if (nextState !== this.state) {
+export function shouldComponentUpdate(nextProps, nextState) {
+  if (nextState !== this.state) {
+    return true;
+  }
+  const keys = Object.keys(this.constructor.propTypes);
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i];
+    const isEqual = is(this.props[key], nextProps[key]);
+    if (!isEqual) {
       return true;
     }
-    let should = false;
-    const keys = Object.keys(this.constructor.propTypes);
-    keys.forEach(key => {
-      should = should || !is(this.props[key], nextProps[key]);
-    });
-    return should;
-  },
+  }
+  return false;
+}
+
+export default {
+  shouldComponentUpdate,
 };

@@ -1,15 +1,12 @@
 import {
-  List,
+  Map,
 } from 'immutable';
-import RepositoriesReadyQueriesStream from './RepositoriesReadyQueriesStream';
 import {
-  indexBy,
-} from '../RadioKitQueriesUtils';
+  app,
+  model,
+} from './RepositoriesConfig';
+import RadioKitDomain from '../RadioKitDomain';
 
-export default RepositoriesReadyQueriesStream.map(
-  queries => queries
-    .sortBy(query => query.get('time'))
-    .map(query => query.get('data', List()))
-    .map(indexBy('id'))
-    .flatten(true)
+export default RadioKitDomain.map(
+  data => data.getIn(['entities', app, model], Map())
 );

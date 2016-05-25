@@ -2,18 +2,18 @@ import {
   View,
 } from 'immview';
 import {
+  Map,
+} from 'immutable';
+import {
+  app,
   model,
 } from './FilesConfig';
-import FilesReadyQueriesStream from './FilesReadyQueriesStream';
+import RadioKitDomain from '../RadioKitDomain';
 import MetadataItemsDomain from '../MetadataItemsDomain';
-import {
-  pickQueriesOfModel,
-  getEntitiesByIdFromQueries,
-} from './../RadioKitQueriesUtils';
 
-const FilesEntitiesStream = FilesReadyQueriesStream
-  .map(pickQueriesOfModel(model))
-  .map(getEntitiesByIdFromQueries);
+const FilesEntitiesStream = RadioKitDomain.map(
+  data => data.getIn(['entities', app, model], Map())
+);
 
 const FilesIdsStream = FilesEntitiesStream.map(
   files => files

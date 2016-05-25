@@ -11,6 +11,9 @@ import FilesDomain from '../FilesDomain';
 import ScheduleQueriesStream from './ScheduleQueriesStream';
 import ScheduleUpdateQueriesStream from './ScheduleUpdateQueriesStream';
 
+const loadingState = Map({ value: true });
+const idleState = Map({ value: true });
+
 function filterLoadingQueries(queries) {
   const loadingQueries = queries.filter(
     result => (
@@ -18,27 +21,27 @@ function filterLoadingQueries(queries) {
     )
   );
   const loadingQueriesCount = loadingQueries.count();
-  return Map({
-    value: loadingQueriesCount > 0,
-  });
+  return loadingQueriesCount > 0 ? loadingState : idleState;
 }
 
 const LoadingScheduleStream = ScheduleQueriesStream.map(filterLoadingQueries);
 
 const UpdatingScheduleStream = ScheduleUpdateQueriesStream.map(filterLoadingQueries);
 
-const LoadingFilesStream = FilesDomain.map(data => Map({ value: data.get('loading') }));
+const LoadingFilesStream = FilesDomain.map(
+  data => (data.get('loading') ? loadingState : idleState)
+);
 
 const ScheduleLoadingStream = new View({
   LoadingScheduleStream,
   UpdatingScheduleStream,
   LoadingFilesStream,
-}, data => Map({
-  value: (
+}, data => (
+  (
     data.getIn(['LoadingScheduleStream', 'value']) ||
     data.getIn(['UpdatingScheduleStream', 'value']) ||
     data.getIn(['LoadingFilesStream', 'value'])
-  ),
-}));
+  ) ? loadingState : idleState
+));
 
 export default ScheduleLoadingStream;

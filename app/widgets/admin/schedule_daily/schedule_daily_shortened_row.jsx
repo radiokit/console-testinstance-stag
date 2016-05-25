@@ -1,21 +1,34 @@
 import React from 'react';
 import moment from 'moment';
 
-function getTimestamp(item) {
-  return moment(item.get('start_at')).format();
-}
+import { shouldComponentUpdate } from '../../../helpers/immutable_component';
 
-const ShortenedRow = (props) => (
-  <div className={props.className}>
-    {props.items.sortBy(item => item.toJS().start_at).map(item => (
-      `${item.get('name') || item.get('id')} [${getTimestamp(item)}], `
-    ))}
-  </div>
-);
+const ShortenedRow = React.createClass({
+  propTypes: {
+    items: React.PropTypes.object.isRequired,
+    className: React.PropTypes.string.isRequired,
+  },
 
-ShortenedRow.propTypes = {
-  items: React.PropTypes.object.isRequired,
-  className: React.PropTypes.string.isRequired,
-};
+  shouldComponentUpdate,
+
+  render() {
+    const { props } = this;
+    return (
+      <div className={props.className}>
+        {
+          props
+            .items
+            .toArray()
+            .sort((a, b) => new Date(a.get('start_at')) - new Date(b.get('start_at')))
+            .map((item, i) => (
+              <span key={i}>
+                {`${item.get('name') || item.get('id')}`}
+              </span>
+            ))
+        }
+      </div>
+    );
+  },
+});
 
 export default ShortenedRow;

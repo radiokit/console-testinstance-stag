@@ -1,18 +1,25 @@
 import React from 'react';
+import {
+  fromJS,
+} from 'immutable';
 import moment from 'moment';
 
 const ExpandedRow = (props) => (
   <div className="ScheduleDailyWidget-CalendarRow-item-expanded">
     <ul className="ScheduleDailyWidget-CalendarRow-item-expanded-list">
-      {props.items.sortBy(item => item.toJS().start_at).map(item => (
-        <li key={item.get('id')}>
+      {props
+        .items
+        .toJS()
+        .sort((a, b) => new Date(a.start_at) - new Date(b.start_at))
+        .map(item => (
+        <li key={item.id}>
           <div
-            key={item.get('id')}
-            className={props.getClassName(item)}
-            onClick={() => props.markAsActive(item)}
+            key={item.id}
+            className={props.getClassName(fromJS(item))}
+            onClick={() => props.markAsActive(fromJS(item))}
           >
-            {item.get('name') || item.get('id')} -
-            - {moment(item.get('start_at')).format('HH:mm:ss.SSSS')}
+            {item.name || item.id} -
+            - {moment(item.start_at).format('HH:mm:ss.SSSS')}
           </div>
         </li>
       ))}

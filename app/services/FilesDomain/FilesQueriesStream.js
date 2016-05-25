@@ -4,9 +4,9 @@ import {
 } from './FilesConfig';
 
 const FilesQueriesStream = RadioKitDomain.map(
-  RKDData => RKDData.filter((result, queryParams) => (
-    queryParams.get(key)
-  ))
+  data => data
+    .get('queries')
+    .filter((result, queryParams) => queryParams.get(key))
 );
 
 export default FilesQueriesStream;

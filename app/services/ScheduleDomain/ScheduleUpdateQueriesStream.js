@@ -9,11 +9,11 @@ import {
 } from '../RadioKitQueriesUtils';
 
 const ScheduleUpdateQueriesStream = RadioKitDomain
-  .map(pickLoadingQueries)
   .map(
-    queries => queries.filter(
-      (_, queryParams) => queryParams.get(updateKey)
-    )
+    data => pickLoadingQueries(data.get('queries'))
+      .filter(
+        (_, queryParams) => queryParams.get(updateKey)
+      )
   );
 
 export default ScheduleUpdateQueriesStream;

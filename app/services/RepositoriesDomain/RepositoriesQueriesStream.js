@@ -4,7 +4,9 @@ import {
 } from './RepositoriesConfig';
 
 export default RadioKitDomain.map(
-  queries => queries.filter(
-    (_, params) => params.get(key)
-  )
+  queries => queries
+    .get('queries')
+    .filter(
+      (_, params) => params.get(key)
+    )
 );
