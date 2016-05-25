@@ -57,6 +57,18 @@ Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/modal
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/scope.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/form.js'));
 
+import { Dispatcher } from 'immview';
+Dispatcher.tick = f => {
+  (
+    window.requestIdleCallback ||
+    window.requestAnimationFrame ||
+    window.setImmediate ||
+    window.setTimeout
+  )(() => {
+    window.setTimeout(() => f(), 0);
+  });
+};
+
 function pingGoogleAnalytics() {
   if(typeof(ga) !== "undefined") {
     ga('send', 'pageview');
