@@ -6,7 +6,7 @@ import {
 
 import AutoDJShuffleForm from './autodj_shuffle_form.jsx';
 import AutoDJRotationForm from './autodj_rotation_form.jsx';
-import VaultRepositoryPicker from './vault_repository_picker.jsx';
+import VaultRepositoryPicker from '../../../../widgets/autosuggest/vault_repository_picker.jsx';
 
 import Translate from 'react-translate-component';
 import Counterpart from 'counterpart';

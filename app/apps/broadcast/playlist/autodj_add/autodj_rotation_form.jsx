@@ -3,7 +3,7 @@ import {
   Map,
   List,
 } from 'immutable';
-import TagPicker from './tag_picker.jsx';
+import TagPicker from '../../../../widgets/autosuggest/tag_picker.jsx';
 import WeekDatesPicker from '../../../../widgets/time/week_dates_picker.jsx';
 
 const EMPTY_TAG_LIST = List();
