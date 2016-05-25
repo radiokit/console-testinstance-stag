@@ -8,6 +8,7 @@ export const readFields = [
   'name',
   'stage',
   'file_size',
+  'updated_at',
 ];
 export const updateFields = [
   'name',

@@ -3,16 +3,13 @@ import moment from 'moment';
 import classnames from 'classnames';
 import Translate from 'react-translate-component';
 import Counterpart from 'counterpart';
-import ProgressModal from '../../../widgets/admin/modal_progress_widget.jsx';
-import SimpleAutosuggest from '../../../widgets/autosuggest/simple_console_autosuggest.jsx';
-import RadioKit from '../../../services/RadioKit';
-import FilesDomain from '../../../services/FilesDomain';
-
+import ProgressModal from '../../../../widgets/admin/modal_progress_widget.jsx';
+import RadioKit from '../../../../services/RadioKit';
+import FilePicker from './file_picker.jsx';
 
 import './schedule_item_modal.scss';
 const ScheduleItemModal = React.createClass({
   propTypes: {
-    files: React.PropTypes.object.isRequired,
     defaultTimeOffset: React.PropTypes.number.isRequired,
     contentPrefix: React.PropTypes.string.isRequired,
     onSuccess: React.PropTypes.func,
@@ -34,7 +31,6 @@ const ScheduleItemModal = React.createClass({
       name: null,
       duration: this.getInitialDuration(),
       expanded: false,
-      fileNameInput: '',
     };
   },
 
@@ -140,11 +136,8 @@ const ScheduleItemModal = React.createClass({
     this.setState({ name });
   },
 
-  onFileInputChanged(fileNameInput) {
-    if (fileNameInput === '') {
-      this.setState({ file: null });
-    }
-    this.setState({ fileNameInput });
+  onClearInput() {
+    this.setState({ file: null });
   },
 
   handleSuccess() {
@@ -167,13 +160,11 @@ const ScheduleItemModal = React.createClass({
             htmlFor="fileNameInput"
           />
           <span className="twitter-typeahead">
-            <SimpleAutosuggest
-              items={this.props.files}
+            <FilePicker
               placeholder= {Counterpart.translate(`${this.props.contentPrefix}.form.file.hint`)}
               value={this.state.file}
               onChange={this.handleSelectedFile}
-              onInputChange={this.onFileInputChanged}
-              getItemName={(file) => file.get('name')}
+              onClearInput={this.onClearInput}
               id="fileNameInput"
               className="input-group-content"
             />
@@ -353,6 +344,5 @@ const ScheduleItemModal = React.createClass({
     }
   },
 });
-
 
 export default ScheduleItemModal;

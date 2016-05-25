@@ -25,9 +25,6 @@ export default {
       proceed: 'Add to playlist',
       close: 'Close',
     },
-    message: {
-      acknowledgement: 'File was successfully added.',
-    },
     info: {
       type_and_desc: 'Type and description',
     },

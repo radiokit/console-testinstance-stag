@@ -2,7 +2,6 @@ import React from 'react';
 import {
   List,
 } from 'immutable';
-import { debounce } from 'lodash';
 import ConsoleAutosuggest from './console_autosuggest.jsx';
 
 import queryFits from '../../helpers/query_fits';
@@ -19,7 +18,7 @@ const filterItems =
 
 const SimpleConsoleAutosuggest = React.createClass({
   propTypes: {
-    placeholder: React.PropTypes.string,
+    placeholder: React.PropTypes.string.isRequired,
     value: React.PropTypes.object,
     onChange: React.PropTypes.func,
     onInputChange: React.PropTypes.func,
@@ -74,7 +73,7 @@ const SimpleConsoleAutosuggest = React.createClass({
       value: inputValue,
       onChange: this.handleInputChange,
       type: 'search',
-      placeholder: this.props.placeholder || 'Pick an item',
+      placeholder: this.props.placeholder,
       onBlur: this.handleBlur,
     };
     return (

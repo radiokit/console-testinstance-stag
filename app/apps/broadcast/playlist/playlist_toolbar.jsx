@@ -3,13 +3,11 @@ import { List } from 'immutable';
 import Counterpart from 'counterpart';
 import connect from 'immview-react-connect';
 
-import ScheduleItemModal from '../../../widgets/admin/schedule/schedule_item_modal.jsx';
+import ScheduleItemModal from './manual_add/schedule_item_modal.jsx';
 import DeleteModal from '../../../widgets/admin/crud/delete_modal.jsx';
 import ToolbarGroup from '../../../widgets/admin/toolbar_group_widget.jsx';
 import ToolbarButtonModal from '../../../widgets/admin/toolbar_button_modal_widget.jsx';
 import AutoDJAddModal from './autodj_add';
-import FilesDomain from '../../../services/FilesDomain';
-
 
 import translationPL from './playlist_toolbar_pl.js';
 import translationEN from './playlist_toolbar_en.js';
@@ -27,15 +25,6 @@ const PlaylistToolbar = React.createClass({
     activeItem: React.PropTypes.object,
     onActiveItemChange: React.PropTypes.func,
     onCRUD: React.PropTypes.func,
-    availableVaultFiles: React.PropTypes.object,
-  },
-
-  filterAvailableFiles(data) {
-    return data;
-  },
-
-  componentDidMount(){
-    FilesDomain.loadFiles();
   },
 
   onDelete() {
@@ -50,21 +39,6 @@ const PlaylistToolbar = React.createClass({
     return (
       <ToolbarGroup position="right">
 
-        <ToolbarButtonModal
-          icon="folder"
-          labelTextKey="playlist_toolbar.add_button"
-          modalElement={ScheduleItemModal}
-          key={(this.props.activeItem && this.props.activeItem.get('id')) || 'toolbar_add_button_no-id' }
-          modalProps={{
-            data: this.state.availableVaultFiles,
-            contentPrefix: 'apps.broadcast.playlist.edit_button',
-            form: this.buildUpdateForm(),
-            app: 'plumber',
-            model: 'Media.Input.File.Http',
-            recordId: (this.props.activeItem ? this.props.activeItem.get('id') : null),
-            afterFormAccept: this.props.onCRUD,
-          }}
-        />
 
         <ToolbarButtonModal
           icon="plus"
@@ -72,10 +46,8 @@ const PlaylistToolbar = React.createClass({
           modalElement={ScheduleItemModal}
           modalProps={{
             defaultTimeOffset: this.props.offsetStart,
-            files: this.props.availableVaultFiles,
             contentPrefix: 'playlist_toolbar.add',
             onSuccess: this.props.onCRUD,
-            searchDomain: FilesDomain,
           }}
         />
 
@@ -96,12 +68,10 @@ const PlaylistToolbar = React.createClass({
           disabled={this.props.activeItem === null}
           modalElement={ScheduleItemModal}
           modalProps={{
-            files: this.props.availableVaultFiles,
             contentPrefix: 'playlist_toolbar.update',
             defaultTimeOffset: this.props.offsetStart,
             record: this.props.activeItem,
             onSuccess: this.props.onCRUD,
-            searchDomain: FilesDomain,
           }}
         />
 
@@ -124,15 +94,4 @@ const PlaylistToolbar = React.createClass({
     );
   },
 });
-export default connect(PlaylistToolbar,
-  FilesDomain.map(
-    (data) => data
-      .get('files')
-      .filter((record) => record.get('stage') === 'current')
-  ),
-  (data) => {
-    return {
-      availableVaultFiles: data,
-    };
-  }
-);
+export default PlaylistToolbar;
