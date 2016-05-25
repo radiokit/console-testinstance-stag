@@ -7,7 +7,11 @@ import {
   OrderedMap,
   List,
 } from 'immutable';
-
+import {
+  app,
+  model,
+} from './ScheduleConfig';
+import RadioKitDomain from '../RadioKitDomain';
 import ScheduleLoadingStream from './ScheduleLoadingStream';
 import ScheduleReadyQueriesStream from './ScheduleReadyQueriesStream';
 
@@ -32,24 +36,21 @@ function getRangeFromParams(queryParams) {
 export default new View(
   {
     queries: ScheduleReadyQueriesStream,
+    entities: RadioKitDomain.map(data => data.getIn(['entities', app, model], Map())),
     loading: ScheduleLoadingStream,
   },
   (data) => {
     const rangesMap = OrderedMap().asMutable();
-    const idsMap = {};
     data.get('queries').forEach((queryStatus, queryParams) => {
       const range = getRangeFromParams(queryParams);
       const queryData = queryStatus.get('data', List());
       rangesMap.set(Map(range), queryData);
-      queryData.forEach(item => {
-        idsMap[item.get('id')] = item;
-      });
     });
 
     return Map({
-      loading: data.getIn(['loading', 'value'], false),
+      loading: !!data.getIn(['loading', 'value']),
       ranges: rangesMap.asImmutable(),
-      all: OrderedMap(idsMap),
+      all: data.get('entities'),
     });
   }
 );

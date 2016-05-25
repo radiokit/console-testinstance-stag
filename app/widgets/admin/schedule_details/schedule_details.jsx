@@ -3,7 +3,6 @@ import {
   OrderedMap,
   List,
   Map,
-  is,
 } from 'immutable';
 import moment from 'moment';
 import {
@@ -170,7 +169,12 @@ export default connect(
     const toISO = moment(offsetStart)
       .add(maxOffsetLengthInHours, 'hours')
       .toISOString();
-    ScheduleExpandedDomain.fetch(fromISO, toISO, currentBroadcastChannel.get('id'), { maxAge: 60000 });
+    ScheduleExpandedDomain.fetch(
+      fromISO,
+      toISO,
+      currentBroadcastChannel.get('id'),
+      { maxAge: 60000 }
+    );
 
     const items = data
       .get('all', OrderedMap())

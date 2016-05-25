@@ -50,8 +50,8 @@ function performQuery(from, to, broadcastChannelId, options) {
  * @param {string|number} from
  * @param {string|number} to
  */
-export function fetch(from, to, requestOptions) {
-  performQuery(from, to, requestOptions);
+export function fetch(from, to, broadcastChannelId, requestOptions) {
+  performQuery(from, to, broadcastChannelId, requestOptions);
 }
 
 export function save(id, patch) {

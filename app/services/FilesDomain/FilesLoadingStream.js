@@ -10,13 +10,16 @@ import {
 import FilesQueriesStream from './FilesQueriesStream';
 import MetadataItemsDomain from '../MetadataItemsDomain';
 
+const loadingState = Map({ value: true });
+const idleState = Map({ value: false });
+
 const FilesLoadingStream = FilesQueriesStream
   .map(pickLoadingQueries)
-  .map(queries => Map({ value: !!queries.count() }))
+  .map(queries => ((!!queries.count()) ? loadingState : idleState))
   ;
 
 const MetadataItemsLoadingStream = MetadataItemsDomain.map(
-  data => Map({ value: data.get('loading') })
+  data => (data.get('loading') ? loadingState : idleState)
 );
 
 const loadingStream = new View(

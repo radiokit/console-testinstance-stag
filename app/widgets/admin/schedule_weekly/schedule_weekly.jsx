@@ -139,12 +139,10 @@ export default connect(
 
     const from = moment(offsetStart)
       .startOf('week')
-      .add(5, 'hours')
-      .subtract(1, 'day');
+      .add(5, 'hours');
     const to = moment(offsetStart)
       .endOf('week')
-      .add(5, 'hours')
-      .add(1, 'day');
+      .add(5, 'hours');
 
     ScheduleDomain.fetch(from.toISOString(), to.toISOString(), currentBroadcastChannel.get('id'));
 
@@ -153,8 +151,8 @@ export default connect(
       .toArray()
       .filter(
         item => (
-          new Date(item.get('stop_at')) > from.valueOf() &&
-          new Date(item.get('start_at')) < to.valueOf() &&
+          new Date(item.get('stop_at')).valueOf() > from.valueOf() &&
+          new Date(item.get('start_at')).valueOf() < to.valueOf() &&
           item.getIn(['references', 'broadcast_channel_id']) === currentBroadcastChannel.get('id')
         )
       );

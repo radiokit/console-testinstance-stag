@@ -101,12 +101,10 @@ export default connect(
 
     const from = moment(offsetStart)
       .startOf('day')
-      .add(firstHour, 'hours')
-      .subtract(1, 'day');
+      .add(firstHour, 'hours');
     const to = moment(offsetStart)
       .endOf('day')
-      .add(firstHour, 'hours')
-      .add(1, 'day');
+      .add(firstHour, 'hours');
 
     ScheduleDomain.fetch(from.toISOString(), to.toISOString(), currentBroadcastChannel.get('id'));
 

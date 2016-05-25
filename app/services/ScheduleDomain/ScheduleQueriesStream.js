@@ -5,7 +5,9 @@ import {
 } from './ScheduleConfig';
 
 const ScheduleQueriesStream = RadioKitDomain.map(
-  RKDData => RKDData.filter((queryStatus, queryParams) => queryParams.get(key))
+  data => data
+    .get('queries')
+    .filter((queryStatus, queryParams) => queryParams.get(key))
 );
 
 export default ScheduleQueriesStream;
