@@ -15,7 +15,7 @@ import {
 
 import RadioKitDomain from './../RadioKitDomain';
 
-function performQuery(from, to, options) {
+function performQuery(from, to, broadcastChannelId, options) {
   RadioKitDomain.query(
     fromJS({
       [key]: true,
@@ -23,6 +23,11 @@ function performQuery(from, to, options) {
       model,
       select: readFields,
       conditions: [
+        broadcastChannelId ? {
+          field: 'references',
+          comparison: 'deq',
+          value: `broadcast_channel_id ${broadcastChannelId}`,
+        } : null,
         from ? {
           field: 'start_at',
           comparison: 'lte',

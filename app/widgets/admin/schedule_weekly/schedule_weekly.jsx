@@ -146,7 +146,7 @@ export default connect(
       .add(5, 'hours')
       .add(1, 'day');
 
-    ScheduleDomain.fetch(from.toISOString(), to.toISOString());
+    ScheduleDomain.fetch(from.toISOString(), to.toISOString(), currentBroadcastChannel.get('id'));
 
     const items = data
       .get('all', OrderedMap())

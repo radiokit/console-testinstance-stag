@@ -1,9 +1,9 @@
 import ScheduleDomain from '../ScheduleDomain';
 import { pushRange } from './ScheduleExpandedRangesStream';
 
-export function fetch(from, to, requestOptions) {
+export function fetch(from, to, broadcastChannelId, requestOptions) {
   pushRange(from, to);
-  ScheduleDomain.fetch(from, to, requestOptions);
+  ScheduleDomain.fetch(from, to, broadcastChannelId, requestOptions);
 }
 
 export function save(id, patch) {

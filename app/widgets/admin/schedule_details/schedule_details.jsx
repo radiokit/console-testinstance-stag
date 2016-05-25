@@ -170,15 +170,14 @@ export default connect(
     const toISO = moment(offsetStart)
       .add(maxOffsetLengthInHours, 'hours')
       .toISOString();
-    ScheduleExpandedDomain.fetch(fromISO, toISO, { maxAge: 60000 });
+    ScheduleExpandedDomain.fetch(fromISO, toISO, currentBroadcastChannel.get('id'), { maxAge: 60000 });
 
     const items = data
       .get('all', OrderedMap())
       .toList()
       .filter(
-        item => is(
-          item.getIn(['references', 'broadcast_channel_id']),
-          currentBroadcastChannel.get('id')
+        item => (
+          item.getIn(['references', 'broadcast_channel_id']) === currentBroadcastChannel.get('id')
         )
       )
     ;
