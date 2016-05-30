@@ -7,11 +7,30 @@ export default {
             body: {
               tags_schema: {
                 actions: {
-                  add_category: "Dodaj kategorię",
+                  add_category: "Dodaj grupę kategorii",
                 },
                 modals: {
 
                   edit_category: {
+                    header: "Edycja grupy kategorii",
+                    form: {
+                      name: {
+                        label: "Nazwa grupy kategorii",
+                        hint: "Zmień nazwę grupy kategorii"
+                      },
+                    },
+                    message: {
+                      confirmation: "Czy na pewno chcesz edytować wybraną grupę kategorii?",
+                      acknowledgement: "Edytowano grupę kategorii.",
+                      progress: "Trwa edytowanie grupy kategorii…",
+                    },
+                    action: {
+                      proceed: "Edytuj",
+                      cancel: "Anuluj",
+                      close: "Zamknij",
+                    }
+                  },
+                  edit_tag: {
                     header: "Edycja kategorii",
                     form: {
                       name: {
@@ -20,7 +39,7 @@ export default {
                       },
                     },
                     message: {
-                      confirmation: "Czy na pewno chcesz edytować wybraną kategorię ?",
+                      confirmation: "Czy na pewno chcesz edytować wybraną kategorię?",
                       acknowledgement: "Edytowano kategorię.",
                       progress: "Trwa edytowanie kategorii…",
                     },
@@ -30,30 +49,25 @@ export default {
                       close: "Zamknij",
                     }
                   },
-                  edit_tag: {
-                    header: "Edycja etykiety",
-                    form: {
-                      name: {
-                        label: "Nazwa etykiety",
-                        hint: "Zmień nazwę etykiety"
-                      },
-                    },
+
+                  delete_category: {
+                    header: "Usuwanie grupy kategorii",
                     message: {
-                      confirmation: "Czy na pewno chcesz edytować wybraną etykietę ?",
-                      acknowledgement: "Edytowano etykietę.",
-                      progress: "Trwa edytowanie etykiety…",
+                      confirmation: "Czy na pewno chcesz usunąć wybraną grupę kategorii?",
+                      acknowledgement: "Usunięto grupę kategorii.",
+                      progress: "Trwa usuwanie  grupy kategorii…",
                     },
                     action: {
-                      proceed: "Edytuj",
+                      proceed: "Usuń",
                       cancel: "Anuluj",
                       close: "Zamknij",
                     }
                   },
 
-                  delete_category: {
+                  delete_tag: {
                     header: "Usuwanie kategorii",
                     message: {
-                      confirmation: "Czy na pewno chcesz usunąć wybraną kategorię ?",
+                      confirmation: "Czy na pewno chcesz usunąć wybraną kategorię?",
                       acknowledgement: "Usunięto kategorię.",
                       progress: "Trwa usuwanie kategorii…",
                     },
@@ -64,51 +78,37 @@ export default {
                     }
                   },
 
-                  delete_tag: {
-                    header: "Usuwanie etykiety",
-                    message: {
-                      confirmation: "Czy na pewno chcesz usunąć wybraną etykietę ?",
-                      acknowledgement: "Usunięto etykietę.",
-                      progress: "Trwa usuwanie etykiety…",
-                    },
-                    action: {
-                      proceed: "Usuń",
-                      cancel: "Anuluj",
-                      close: "Zamknij",
-                    }
-                  },
-
                   create_category: {
-                    header: "Tworzenie kategorii",
+                    header: "Tworzenie grupy kategorii",
                     form: {
                       name: {
-                        label: "Nazwa kategorii",
-                        hint: "Wpisz nazwę nowej kategorii"
+                        label: "Nazwa grupy kategorii",
+                        hint: "Wpisz nazwę nowej grupy kategorii"
                       },
                     },
                     message: {
-                      acknowledgement: "Utworzono kategorię.",
-                      progress: "Trwa tworzenie kategorii…",
+                      acknowledgement: "Utworzono grupę kategorii.",
+                      progress: "Trwa tworzenie grupy kategorii…",
                     },
                     action: {
                       proceed: "Dodaj",
                       cancel: "Anuluj",
                       close: "Zamknij",
                     },
-                    empty_warning: "Kategoria służy jako zbiór etykiet. Dodaj przynajmniej jedną etykietę",
+                    empty_warning: "Grupa kategorii jest pusta. Dodaj przynajmniej jedną kategorię",
                   },
 
                   create_tag: {
-                    header: "Tworzenie etykiety",
+                    header: "Tworzenie kategorii",
                     form: {
                       name: {
-                        label: "Nazwa etykiety",
-                        hint: "Wpisz nazwę etykiety"
+                        label: "Nazwa kategorii",
+                        hint: "Wpisz nazwę kategorii"
                       },
                     },
                     message: {
-                      acknowledgement: "Utworzono etykietę.",
-                      progress: "Trwa tworzenie etykiety…",
+                      acknowledgement: "Utworzono kategorię.",
+                      progress: "Trwa tworzenie kategorii…",
                     },
                     action: {
                       proceed: "Dodaj",

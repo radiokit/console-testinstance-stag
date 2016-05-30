@@ -17,8 +17,8 @@ export default {
             upload: "Załaduj pliki",
             tags:{
               allTags: "Wszystkie",
-              assignTags: "Przypisz etykiety",
-              manageTags: "Zarządzaj etykietami",
+              assignTags: "Przypisz kategorie",
+              manageTags: "Zarządzaj kategoriami",
             },
             delete: "Trwale usuń",
             move_to:{
