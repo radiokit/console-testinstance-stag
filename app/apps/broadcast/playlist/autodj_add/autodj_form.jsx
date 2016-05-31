@@ -3,8 +3,6 @@ import {
   Map,
   List,
 } from 'immutable';
-import { range } from 'lodash';
-import moment from 'moment';
 
 import AutoDJShuffleForm from './autodj_shuffle_form.jsx';
 import AutoDJRotationForm from './autodj_rotation_form.jsx';
@@ -62,12 +60,6 @@ const AutoDJForm = React.createClass({
   getHours() {
     const { model } = this.state;
     return model.get('hours') || EMPTY_RANGE;
-  },
-
-  getDefaulWeekdayNames() {
-    return range(0, 7).map(
-      day => moment().day(1).add(day, 'days').format('dddd')
-    );
   },
 
   getWeekdays() {
@@ -192,7 +184,6 @@ const AutoDJForm = React.createClass({
             <WeekDatesPicker
               value={this.getWeekdays()}
               onChange={this.handleWeekdaysChange}
-              weekdayNames={this.getDefaulWeekdayNames()}
             />
           </div>
           <div>

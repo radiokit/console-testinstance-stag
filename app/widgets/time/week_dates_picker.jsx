@@ -16,18 +16,13 @@ const WeekDayPicker = React.createClass({
     weekdayNames: React.PropTypes.array,
   },
 
-  // getDefaultProps() {
-  //   return {
-  //     weekdayNames: range(0, 7).map(day => moment().day(1).add(day, 'days').format('dddd')),
-  //   };
-  // },
-
   triggerChange(value) {
     const { onChange = () => null } = this.props;
     onChange(value);
   },
 
   render() {
+    this.weekdayNames = range(0, 7).map(day => moment().day(1).add(day, 'days').format('dddd'));
     const { value = Map() } = this.props;
     return (
       <div className="WeekdayPicker">
@@ -42,7 +37,7 @@ const WeekDayPicker = React.createClass({
                   this.triggerChange(value.set(day, !!e.target.checked));
                 }}
               />
-              {this.props.weekdayNames[day]}
+              {this.weekdayNames[day]}
             </label>
           ))
         }
