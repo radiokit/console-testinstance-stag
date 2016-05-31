@@ -39,8 +39,11 @@ export default {
                             label: "Field name",
                             hint: "Choose any name that will allow you to distinguish this import from another.",
                           },
-                          json_endpoint: {
-                            label: "Endpoint URL",
+                          json_programmes_url: {
+                            label: "Programmes URL",
+                          },
+                          json_episodes_url: {
+                            label: "Episodes URL",
                           },
                           kind: {
                             label: "Value type",

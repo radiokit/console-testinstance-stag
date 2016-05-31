@@ -39,8 +39,11 @@ export default {
                             label: "Nazwa",
                             hint: "Nazwa importu zrozumiała dla użytkownika.",
                           },
-                          json_endpoint: {
-                            label: "Endpoint URL",
+                          json_programmes_url: {
+                            label: "URL do programów",
+                          },
+                          json_episodes_url: {
+                            label: "URL do epizodów",
                           },
                           kind: {
                             label: "Rodzaj",

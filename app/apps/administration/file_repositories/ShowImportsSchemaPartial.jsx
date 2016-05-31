@@ -36,21 +36,38 @@ const ShowImportsSchema = React.createClass({
           presence: true,
         },
       },
-      json_endpoint: {
+      json_programmes_url: {
         type: "string",
         validators: {
           presence: true,
         },
         fieldValueFunc: (params, value) => {
           let newParams = params;
-          newParams.connector_settings = { endpoint: value };
+          newParams.connector_settings = newParams.connector_settings || {};
+          newParams.connector_settings.programmes_url = value;
+          return newParams;
+        }
+      },
+      json_episodes_url: {
+        type: "string",
+        validators: {
+          presence: true,
+        },
+        fieldValueFunc: (params, value) => {
+          let newParams = params;
+          newParams.connector_settings = newParams.connector_settings || {};
+          newParams.connector_settings.episodes_url = value;
           return newParams;
         }
       },
       record_repository_id: {
         type: "hidden",
         value: this.props.record.get("id"),
-      }
+      },
+      tag_items_mappings: {
+        type: "hidden",
+        value: { "Title": "title", "Authors": "authors..name" },
+      },
     }
   },
 
