@@ -1,5 +1,12 @@
 import React from 'react';
-import SimpleConsoleAutosuggest from '../../../../widgets/autosuggest/simple_console_autosuggest.jsx';
+import SimpleConsoleAutosuggest from './simple_console_autosuggest.jsx';
+
+import counterpart from 'counterpart';
+import localePL from './tag_picker_pl';
+import localeEN from './tag_picker_en';
+
+counterpart.registerTranslations('en', localeEN);
+counterpart.registerTranslations('pl', localePL);
 
 const getTagName = repository => repository.get('name', '');
 
@@ -14,7 +21,7 @@ const TagPicker = React.createClass({
 
   getDefaultProps() {
     return {
-      placeholder: 'Pick a tag',
+      placeholder: counterpart('TagPicker.placeholder'),
     };
   },
 

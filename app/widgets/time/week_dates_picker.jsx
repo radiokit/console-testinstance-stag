@@ -13,7 +13,14 @@ const WeekDayPicker = React.createClass({
   propTypes: {
     value: React.PropTypes.object,
     onChange: React.PropTypes.func,
+    weekdayNames: React.PropTypes.array,
   },
+
+  // getDefaultProps() {
+  //   return {
+  //     weekdayNames: range(0, 7).map(day => moment().day(1).add(day, 'days').format('dddd')),
+  //   };
+  // },
 
   triggerChange(value) {
     const { onChange = () => null } = this.props;
@@ -30,10 +37,12 @@ const WeekDayPicker = React.createClass({
               <input
                 className="WeekdayPicker__input"
                 type="checkbox"
-                checked={value.get(`day${day}`, false)}
-                onChange={() => this.triggerChange(value.set(`day${day}`, !value.get(`day${day}`)))}
+                checked={value.get(day, false)}
+                onChange={e => {
+                  this.triggerChange(value.set(day, !!e.target.checked));
+                }}
               />
-              {moment().startOf('week').add(day, 'days').format('dddd')}
+              {this.props.weekdayNames[day]}
             </label>
           ))
         }

@@ -3,6 +3,8 @@ import {
   Map,
 } from 'immutable';
 
+import './hour_picker.scss';
+
 const HourPicker = React.createClass({
   propTypes: {
     value: React.PropTypes.object,

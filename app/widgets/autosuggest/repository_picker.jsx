@@ -1,5 +1,5 @@
 import React from 'react';
-import SimpleConsoleAutosuggest from '../../../../widgets/autosuggest/simple_console_autosuggest.jsx';
+import SimpleConsoleAutosuggest from './simple_console_autosuggest.jsx';
 
 const getRepositoryName = repository => repository.get('name', '');
 

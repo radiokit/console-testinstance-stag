@@ -9,7 +9,11 @@ import localeEN from './autodj_form_sender_en';
 counterpart.registerTranslations('en', localeEN);
 counterpart.registerTranslations('pl', localePL);
 
-import validateForm from './autodj_form_sender_validator';
+import {
+  validateForm,
+  formToWeeklyItem,
+  sendWeeklyItem,
+} from './autodj_form_sender_utils';
 
 const AutoDJFormSender = React.createClass({
   propTypes: {
@@ -21,10 +25,12 @@ const AutoDJFormSender = React.createClass({
   },
 
   sendForm(form) {
-    this.setState({
-      form,
-    });
-    // TODO
+    const { afterFormAccept } = this.props;
+    const entity = formToWeeklyItem(form);
+    const job = sendWeeklyItem(entity);
+    job
+      .then(afterFormAccept)
+      .catch(() => this.setState({ errors: ['AutoDJFormSender.sendingError'] }));
   },
 
   handleFormAccept(form) {
@@ -36,17 +42,9 @@ const AutoDJFormSender = React.createClass({
     });
   },
 
-  getErrorsClassName(errors) {
-    if (errors.length === 0) {
-      return 'AutoDJFormSender__errors-hidden';
-    }
-    return 'AutoDJFormSender__errors';
-  },
-
   render() {
     const {
       errors = [],
-      form = null,
     } = this.state;
 
     const props = {
@@ -57,12 +55,9 @@ const AutoDJFormSender = React.createClass({
     return (
       <div className="modal-body">
         <div className="AutoDJFormSender">
-          <pre className={this.getErrorsClassName(errors)} >
-            {errors.map(error => <div>{counterpart(error)}</div>)}
-          </pre>
-          <pre className="AutoDJFormSender__result">
-            {JSON.stringify(form, null, '  ')}
-          </pre>
+          <div className="AutoDJFormSender__errors">
+            {errors.map((error, i) => <div key={i}>{counterpart(error)}</div>)}
+          </div>
           <AutoDJForm {...props} />
         </div>
       </div>

@@ -140,8 +140,10 @@ export default React.createClass({
             loadedAccounts: true,
             availableUserAccounts: data.first().get("accounts")
           }, () => {
-            Counterpart.setLocale(this.state.currentUser.get("locale"));
-            Moment.locale(this.state.currentUser.get('locale'));
+            // Counterpart.setLocale(this.state.currentUser.get("locale"));
+            // Moment.locale(this.state.currentUser.get('locale'));
+            Counterpart.setLocale('pl');
+            Moment.locale('pl');
             this.loadBroadcastChannels();
           });
         }

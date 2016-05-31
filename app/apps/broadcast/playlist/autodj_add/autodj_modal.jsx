@@ -13,6 +13,9 @@ Counterpart.registerTranslations('pl', localePL);
 
 const AutoDJModal = React.createClass({
   propTypes: {
+    currentBroadcastChannel: React.PropTypes.string,
+    defaultTimeOffset: React.PropTypes.number.isRequired,
+    defaultTimePeriod: React.PropTypes.number,
     afterFormAccept: React.PropTypes.func,
   },
 
