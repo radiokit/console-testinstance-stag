@@ -18,8 +18,8 @@ const ExpandedRow = (props) => (
             className={props.getClassName(fromJS(item))}
             onClick={() => props.markAsActive(fromJS(item))}
           >
-            {item.name || item.id} -
-            - {moment(item.start_at).format('HH:mm:ss.SSSS')}
+            {moment(item.start_at).format('HH:mm:ss')} -
+            - {item.name || item.id}
           </div>
         </li>
       ))}

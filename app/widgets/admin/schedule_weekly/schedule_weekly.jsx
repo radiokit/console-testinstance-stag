@@ -94,8 +94,8 @@ const ScheduleWeekly = React.createClass({
     const groupedItems = groupByDayAndHour(items, actualOffsetStart);
 
     return (
-      <div>
-        <table className="ScheduleWeeklyWidget table table-banded table-hover">
+      <div className="ScheduleWeeklyWidget">
+        <table className="ScheduleWeeklyWidget-Table table table-banded table-hover">
           <tbody>
             <tr>
               <th>

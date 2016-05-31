@@ -211,7 +211,7 @@ const AutoDJShuffleForm = React.createClass({
   render() {
     return (
       <div className="AutoDJShuffleForm">
-        <div className="AutoDJShuffleForm__fields">
+        <div className="AutoDJShuffleForm__fields form-group">
           {this.getEntries().toArray().map((entry, i) => (
             <AutoDJShuffleInput
               key={i}
@@ -226,13 +226,13 @@ const AutoDJShuffleForm = React.createClass({
             onChange={this.addNewValue}
           />
         </div>
-        <div className="AutoDJShuffleForm__dates">
+        <div className="AutoDJShuffleForm__dates form-group">
           <WeekDatesPicker
             value={this.getWeekdays()}
             onChange={this.setWeekdays}
           />
         </div>
-        <div className="AutoDJShuffleForm__hours">
+        <div className="AutoDJShuffleForm__hours form-group">
           <HourRangePicker
             value={this.getHours()}
             onChange={this.setHours}

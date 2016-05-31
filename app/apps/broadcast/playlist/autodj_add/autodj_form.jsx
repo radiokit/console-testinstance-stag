@@ -16,6 +16,8 @@ import localeEN from './autodj_form_en';
 Counterpart.registerTranslations('en', localeEN);
 Counterpart.registerTranslations('pl', localePL);
 
+import './autodj_form_sender.scss';
+
 const AUTODJ_OPTIONS = [
   'shuffle',
   'rotation',
@@ -105,11 +107,12 @@ const AutoDJForm = React.createClass({
         className="AutoDJForm"
       >
         <fieldset>
-          <div>
+          <div className="form-group">
             <label htmlFor="autodjform_type">
               <Translate content="AutoDJForm.typeLabel" />
             </label>
             <select
+              className="form-control"
               name="autodjform_type"
               value={model.get('type')}
               onChange={this.handleTypeChange}
@@ -119,7 +122,7 @@ const AutoDJForm = React.createClass({
               ))}
             </select>
           </div>
-          <div>
+          <div className="form-group">
             <label>
               <Translate content="AutoDJForm.repositoryLabel" />
             </label>
@@ -134,6 +137,7 @@ const AutoDJForm = React.createClass({
         </fieldset>
         <fieldset>
           <Translate
+            className="btn btn-primary pull-right"
             component="button"
             content="AutoDJForm.acceptButton"
             onClick={this.triggerFormAccept}

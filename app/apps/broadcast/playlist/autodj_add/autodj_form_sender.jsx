@@ -36,6 +36,13 @@ const AutoDJFormSender = React.createClass({
     });
   },
 
+  getErrorsClassName(errors) {
+    if (errors.length === 0) {
+      return 'AutoDJFormSender__errors-hidden';
+    }
+    return 'AutoDJFormSender__errors';
+  },
+
   render() {
     const {
       errors = [],
@@ -48,14 +55,16 @@ const AutoDJFormSender = React.createClass({
     };
 
     return (
-      <div className="AutoDJFormSender">
-        <pre className="AutoDJFormSender__errors">
-          {errors.map(error => <div>{counterpart(error)}</div>)}
-        </pre>
-        <pre className="AutoDJFormSender__result">
-          {JSON.stringify(form, null, '  ')}
-        </pre>
-        <AutoDJForm {...props} />
+      <div className="modal-body">
+        <div className="AutoDJFormSender">
+          <pre className={this.getErrorsClassName(errors)} >
+            {errors.map(error => <div>{counterpart(error)}</div>)}
+          </pre>
+          <pre className="AutoDJFormSender__result">
+            {JSON.stringify(form, null, '  ')}
+          </pre>
+          <AutoDJForm {...props} />
+        </div>
       </div>
     );
   },

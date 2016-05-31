@@ -2,4 +2,8 @@
   &__errors {
 
   }
+  &__errors-hidden {
+    visibility: hidden;
+    margin-top: -30px;
+  }
 }

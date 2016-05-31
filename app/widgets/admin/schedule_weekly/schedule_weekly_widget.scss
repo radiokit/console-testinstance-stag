@@ -1,24 +1,26 @@
 .ScheduleWeeklyWidget {
-  table-layout: fixed;
-  margin:40px auto 0px auto;
-  overflow-x:scroll;
+  overflow-x: scroll;
+  min-width: 700px;
+  height: 100%;
 
-  .ScheduleWeeklyWidget-Table-items {
-    position: relative;
-    height: 37px;
+  .ScheduleWeeklyWidget-Table {
 
-    .ScheduleWeeklyWidget-Table-item-ellipsed {
-      width: 8em;
-      left: 0;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      line-height: 30px;
-      padding-left: 5px;
-      padding-right: 5px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    .ScheduleWeeklyWidget-Table-items {
+      height: 37px;
+
+      .ScheduleWeeklyWidget-Table-item-ellipsed {
+        width: 8em;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        line-height: 30px;
+        padding-left: 5px;
+        padding-right: 5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
   }
 }

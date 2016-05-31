@@ -55,7 +55,7 @@ const CalendarRow = React.createClass({
 
     let rowTiming;
     let hourMarker;
-    if (offsetStart > now) {
+    if (offsetStart + milisecondsInHour < now) {
       rowTiming = 'ScheduleDailyWidget-CalendarRow--past';
     } else if (
       offsetStart <= now &&
@@ -67,7 +67,7 @@ const CalendarRow = React.createClass({
         <hr
           key="HR"
           className="ScheduleDailyWidget-CalendarRow-currentTime"
-          style={{ top: `${(new Date(now - offsetStart).valueOf() / 60000) * 100}%` }}
+          style={{ top: `${((now - offsetStart) / 6000000) * 100}%` }}
         />
       );
     } else {

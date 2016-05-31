@@ -8,12 +8,12 @@ const HourPicker = React.createClass({
     value: React.PropTypes.object,
     onChange: React.PropTypes.func,
   },
-  
+
   triggerChange(newValue) {
     const { onChange = () => null } = this.props;
     onChange(newValue);
   },
-  
+
   render() {
     const { value = Map() } = this.props;
     return (
@@ -46,7 +46,7 @@ const HourPicker = React.createClass({
           type="number"
           value={value.get('seconds', 0)}
           min="0"
-          max="999"
+          max="59"
           onChange={
             e => this.triggerChange(
               value.set('seconds', parseInt(e.target.value, 10))

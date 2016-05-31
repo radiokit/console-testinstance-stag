@@ -51,14 +51,17 @@
       right: 12px;
       min-height: 1px;
       padding: 4px;
+      margin: 1px;
     }
 
     .ScheduleDailyWidget-CalendarRow-item-active {
-      background: #006C95;
+      background: yellow;
       left: 12px;
       right: 12px;
       min-height: 1px;
       padding: 4px;
+      border: solid 3px;
+      box-sizing: border-box;
     }
 
     .ScheduleDailyWidget-CalendarRow-item-ellipsed {

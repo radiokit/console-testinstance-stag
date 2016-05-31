@@ -25,14 +25,14 @@ const HourRangePicker = React.createClass({
     const { value = Map() } = this.props;
     return (
       <div className="HourRangePicker">
-        <div>
+        <div className="form-group">
           <Translate component="label" content="HourRangePicker.from" />
           <HourPicker
             value={value.get('start')}
             onChange={start => this.triggerChange(value.set('start', start))}
           />
         </div>
-        <div>
+        <div className="form-group">
           <Translate component="label" content="HourRangePicker.to" />
           <HourPicker
             value={value.get('end')}
