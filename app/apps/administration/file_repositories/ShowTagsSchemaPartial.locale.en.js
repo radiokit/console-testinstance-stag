@@ -7,21 +7,21 @@ export default {
             body: {
               tags_schema: {
                 actions: {
-                  add_category: "Add category",
+                  add_category: "Add group of tags",
                 },
                 modals: {
                   edit_category: {
-                    header: "Edit category",
+                    header: "Edit group of tags",
                     form: {
                       name: {
-                        label: "Category name",
-                        hint: "Type new category name"
+                        label: "Group name",
+                        hint: "Type name for group of tags"
                       },
                     },
                     message: {
-                      confirmation: "Do you want to edit this category",
-                      acknowledgement: "Category edited.",
-                      progress: "Editing category…",
+                      confirmation: "Do you want to edit this group of tags",
+                      acknowledgement: "Group of tags edited.",
+                      progress: "Editing group of tags…",
                     },
                     action: {
                       proceed: "Edit",
@@ -52,11 +52,11 @@ export default {
                   },
 
                   delete_category: {
-                    header: "Delete category",
+                    header: "Delete group of tags",
                     message: {
-                      confirmation: "Do you want to delete this category?",
-                      acknowledgement: "Category deleted.",
-                      progress: "Deleting category",
+                      confirmation: "Do you want to delete this group of tags?",
+                      acknowledgement: "Group deleted.",
+                      progress: "Deleting group of tags",
                     },
                     action: {
                       proceed: "Delete",
@@ -79,23 +79,23 @@ export default {
                   },
 
                   create_category: {
-                    header: "Create category",
+                    header: "Create group of tags",
                     form: {
                       name: {
-                        label: "Category name",
-                        hint: "Type new category name"
+                        label: "Group name",
+                        hint: "Type name for group of tags"
                       },
                     },
                     message: {
-                      acknowledgement: "Category created.",
-                      progress: "Creating category…",
+                      acknowledgement: "Group of tags created.",
+                      progress: "Creating group…",
                     },
                     action: {
                       proceed: "Create",
                       cancel: "Cancel",
                       close: "Close",
                     },
-                    empty_warning: "Category is used to aggregate tags. Add at least one tag",
+                    empty_warning: "Group of tags is empty. Add at least one tag",
                   },
 
                   create_tag: {

@@ -123,14 +123,14 @@ export default {
             }
           },
           tag: {
-            header: "Etykiety",
+            header: "Kategorie",
             message: {
-              confirmation: "Wybierz etykiety, które zostaną przypisane do zaznaczonych plików (%(count)s szt.):",
-              acknowledgement: "Przypisano etykiety do %(count)s plik(ów).",
-              progress: "Trwa przypisywanie etykiet…",
+              confirmation: "Wybierz kategorie, które zostaną przypisane do zaznaczonych plików (%(count)s szt.):",
+              acknowledgement: "Przypisano kategorie do %(count)s plik(ów).",
+              progress: "Trwa przypisywanie kategorii…",
             },
             action: {
-              proceed: "Przypisz etykiety",
+              proceed: "Przypisz kategorie",
               cancel: "Anuluj",
               close: "Zamknij",
             }
