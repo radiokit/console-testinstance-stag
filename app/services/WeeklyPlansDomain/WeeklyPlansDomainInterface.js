@@ -1,3 +1,6 @@
+import {
+  fromJS,
+} from 'immutable';
 import RadioKitDomain from '../RadioKitDomain';
 import {
   app,
@@ -8,7 +11,7 @@ import {
 
 export function loadChannelPlans(broadcastChannelId, requestOptions) {
   RadioKitDomain.query(
-    {
+    fromJS({
       [key]: true,
       app,
       model,
@@ -20,7 +23,7 @@ export function loadChannelPlans(broadcastChannelId, requestOptions) {
           value: broadcastChannelId,
         },
       ],
-    },
+    }),
     requestOptions
   );
 }

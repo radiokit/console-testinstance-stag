@@ -11,24 +11,30 @@ function validateWeekdays(weekdays = Map()) {
   return [
     !reduce(
       range(0, 7),
-      (anyDaySelected, day) => anyDaySelected || weekdays.get(`day${day}`, false),
+      (anyDaySelected, day) => anyDaySelected || weekdays.get(day, false),
       false
     ) && ('AutoDJFormSender.noDateSelected'),
   ];
+}
+
+function hourToSeconds(hour = Map()) {
+  return (hour.get('hour') | 0) * 3600 +
+    (hour.get('minutes') | 0) * 60 +
+    (hour.get('seconds') | 0);
 }
 
 function validateHourRange(hours = Map()) {
   return [
     !hours.get('start') && ('AutoDJFormSender.noStartDate'),
     !hours.get('end') && ('AutoDJFormSender.noEndDate'),
+    (hourToSeconds(hours.get('start')) > hourToSeconds(hours.get('end'))) &&
+      'AutoDJFormSender.startAfterEndError',
   ];
 }
 
 function validateRotationDetails(details = Map()) {
   return [
     details.get('tags', List()).count() === 0 && ('AutoDJFormSender.noTagsError'),
-    ...validateWeekdays(details.get('weekdays')),
-    ...validateHourRange(details.get('hours')),
   ];
 }
 
@@ -42,8 +48,6 @@ function validateShuffleInput(input = Map()) {
 function validateShuffleDetails(details = Map()) {
   return [
     details.get('tags', List()).count() === 0 && ('AutoDJFormSender.noTagsError'),
-    ...validateWeekdays(details.get('weekdays')),
-    ...validateHourRange(details.get('hours')),
     ...details
       .get('tags', List())
       .map(validateShuffleInput)
@@ -58,8 +62,11 @@ function validateNothing() {
 export default function validateForm(form = Map()) {
   return [
     !form.get('type') && ('AutoDJFormSender.noTypeError'),
+    !form.get('weeklyplan') && ('AutoDJFormSender.noWeeklyPlanError'),
     !form.get('repository') && ('AutoDJFormSender.noRepositoryError'),
     !form.get('details') && ('AutoDJFormSender.noDetailsError'),
+    ...validateWeekdays(form.get('weekdays')),
+    ...validateHourRange(form.get('hours')),
     ...({
       shuffle: validateShuffleDetails,
       rotation: validateRotationDetails,

@@ -4,4 +4,5 @@ export const key = 'WeeklyPlansDomain';
 export const readFields = [
   'id',
   'name',
+  'broadcast_channel_id',
 ];

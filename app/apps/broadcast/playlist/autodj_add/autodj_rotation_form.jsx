@@ -7,8 +7,7 @@ import TagPicker from '../../../../widgets/autosuggest/tag_picker.jsx';
 import WeekDatesPicker from '../../../../widgets/time/week_dates_picker.jsx';
 
 const EMPTY_TAG_LIST = List();
-const EMPTY_RANGE = Map();
-const EMPTY_VALUE = Map({ tags: EMPTY_TAG_LIST, range: EMPTY_RANGE });
+const EMPTY_VALUE = Map({ tags: EMPTY_TAG_LIST });
 
 import './autodj_rotation_form.scss';
 
@@ -27,22 +26,12 @@ const AutoDJRotationForm = React.createClass({
     return this.getValue().get('tags', EMPTY_TAG_LIST);
   },
 
-  getOccurrences() {
-    return this.getValue().get('weekdays', EMPTY_RANGE);
-  },
-
   setValue(newValue) {
     this.triggerChange(newValue, this.getValue());
   },
 
   setTags(newTags) {
     this.setValue(this.getValue().set('tags', newTags));
-  },
-
-  setOccurences(newRange) {
-    this.setValue(
-      this.getValue().set('weekdays', newRange)
-    );
   },
 
   triggerChange(newValue) {
@@ -82,12 +71,6 @@ const AutoDJRotationForm = React.createClass({
               onChange={this.handleTagCreation}
             />
           </div>
-        </div>
-        <div className="AutoDJRotationForm__dates">
-          <WeekDatesPicker
-            value={this.getOccurrences()}
-            onChange={this.setOccurences}
-          />
         </div>
       </div>
     );

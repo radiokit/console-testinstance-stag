@@ -11,6 +11,6 @@ const noEntities = Map();
 
 export default RadioKitDomain.map(
   function WeeklyPlansEntitiesProcess(data) {
-    return data.getIn(['entities', app, model], noEntities);
+    return data.getIn(['entities', app, model]) || noEntities;
   }
 );

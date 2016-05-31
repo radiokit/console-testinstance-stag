@@ -19,7 +19,6 @@ const WeeklyPlanConnectedPicker = React.createClass({
     return (
       <WeeklyPlanPicker
         {...this.props}
-        items
       />
     );
   },
@@ -30,7 +29,6 @@ export default connect(
   WeeklyPlanDomain,
   (data, props) => {
     WeeklyPlanDomain.loadChannelPlans(props.broadcastChannelId);
-
     return {
       items: data.get('entities').filter(
         plan => plan.get('broadcast_channel_id') === props.broadcastChannelId
