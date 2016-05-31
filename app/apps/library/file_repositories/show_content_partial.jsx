@@ -166,7 +166,17 @@ const ShowContentPartial =  React.createClass({
   buildTableRecordsQuery() {
     return RadioKit
       .query("vault", "Data.Record.File")
-      .select("id", "name", "metadata_items", "tag_items","stage")
+      .select(
+        "id",
+        "name",
+        "metadata_items.id",
+        "metadata_items.name",
+        "metadata_items.metadata_schema_id",
+        "tag_items.id",
+        "tag_items.name",
+        "tag_items.tag_category_id",
+        "stage"
+      )
       .joins("metadata_items")
       .joins("tag_items")
       .joins("tag_associations")

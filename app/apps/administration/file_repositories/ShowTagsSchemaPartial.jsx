@@ -4,6 +4,7 @@ import { sortBy } from 'lodash';
 import classnames from 'classnames';
 import Translate from 'react-translate-component';
 import Counterpart from 'counterpart';
+import RadioKit from '../../../services/RadioKit';
 
 import ToolbarGroup from '../../../widgets/admin/toolbar_group_widget.jsx';
 import ToolbarButton from '../../../widgets/admin/toolbar_button_widget.jsx';
@@ -14,13 +15,12 @@ import CreateModal from '../../../widgets/admin/crud/create_modal.jsx';
 import DeleteModal from '../../../widgets/admin/crud/delete_modal.jsx';
 import UpdateModal from '../../../widgets/admin/crud/update_modal.jsx';
 
-Counterpart.registerTranslations("en", require('./ShowTagsSchemaPartial.locale.en.js'));
-Counterpart.registerTranslations("pl", require('./ShowTagsSchemaPartial.locale.pl.js'));
+Counterpart.registerTranslations('en', require('./ShowTagsSchemaPartial.locale.en.js'));
+Counterpart.registerTranslations('pl', require('./ShowTagsSchemaPartial.locale.pl.js'));
 
 
 import './ShowTagsSchemaPartial.scss';
 const ShowTagsSchemaPartial = React.createClass({
-
   propTypes: {
     app: React.PropTypes.string.isRequired,
     contentPrefix: React.PropTypes.string.isRequired,
@@ -38,26 +38,22 @@ const ShowTagsSchemaPartial = React.createClass({
   },
 
   queryTagCategories() {
-    window.data
-      .query("vault", "Data.Tag.Category")
-      .select("id", "name", "tag_items")
-      .joins("tag_items")
-      .where("record_repository_id", "eq", this.props.record.get("id"))
-      .on("fetch", (_eventName, _record, data) => {
-        if (this.isMounted()) {
-          this.setState({
-            categories: data,
-            loaded: true,
-          });
-        }
+    RadioKit
+      .query('vault', 'Data.Tag.Category')
+      .select('id', 'name', 'tag_items.id', 'tag_items.name')
+      .joins('tag_items')
+      .where('record_repository_id', 'eq', this.props.record.get('id'))
+      .on('fetch', (_eventName, _record, data) => {
+        this.setState({
+          categories: data,
+          loaded: true,
+        });
       })
-      .on("error", () => {
-        if (this.isMounted()) {
-          this.setState({
-            loaded: true,
-            error: true,
-          });
-        }
+      .on('error', () => {
+        this.setState({
+          loaded: true,
+          error: true,
+        });
       })
       .fetch();
   },
@@ -65,15 +61,15 @@ const ShowTagsSchemaPartial = React.createClass({
   buildNewCategoryForm() {
     return {
       name: {
-        type: "string",
+        type: 'string',
         hint: true,
         validators: {
           presence: true,
         }
       },
       record_repository_id: {
-        type: "hidden",
-        value: this.props.record.get("id"),
+        type: 'hidden',
+        value: this.props.record.get('id'),
       }
     }
   },
@@ -81,14 +77,14 @@ const ShowTagsSchemaPartial = React.createClass({
   buildNewTagForm(category) {
     return {
       name: {
-        type: "string",
+        type: 'string',
         hint: true,
         validators: {
           presence: true,
         }
       },
       tag_category_id: {
-        type: "hidden",
+        type: 'hidden',
         value: category.id,
       }
     }
@@ -97,7 +93,7 @@ const ShowTagsSchemaPartial = React.createClass({
   buildEditCategoryForm(category) {
     return {
       name: {
-        type: "string",
+        type: 'string',
         hint: true,
         value: category.name,
         validators: {
@@ -110,7 +106,7 @@ const ShowTagsSchemaPartial = React.createClass({
   buildEditTagForm(tag) {
     return {
       name: {
-        type: "string",
+        type: 'string',
         hint: true,
         value: tag.name,
         validators: {
