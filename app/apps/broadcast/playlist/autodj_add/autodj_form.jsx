@@ -72,7 +72,6 @@ const AutoDJForm = React.createClass({
 
   getWeekdays() {
     const { model } = this.state;
-    debugger;
     return model.get('weekdays');
   },
 
