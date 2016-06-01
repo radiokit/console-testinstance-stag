@@ -1,15 +1,23 @@
 import {
+  Map,
+} from 'immutable';
+import {
   View,
 } from 'immview';
 import WeeklyPlansEntitiesStream from './WeeklyPlansEntitiesStream';
 import WeeklyPlansLoadingStream from './WeeklyPlansLoadingStream';
 
-export default new View(
+const WeeklyPlansDomainStream = new View(
   {
     entities: WeeklyPlansEntitiesStream,
     loading: WeeklyPlansLoadingStream,
   },
   function WeeklyPlansDomainProcess(data) {
-    return data.set('loading', data.getIn(['loading', 'value']));
+    return Map({
+      entities: data.get('entities'),
+      loading: data.getIn(['loading', 'value']),
+    });
   }
 );
+
+export default WeeklyPlansDomainStream;
