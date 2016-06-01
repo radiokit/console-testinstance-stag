@@ -34,7 +34,13 @@ const ShowSidebarPartial = React.createClass({
     const tags = record.get('tag_items', List()).groupBy(item => item.get('tag_category_id'));
     return record
       .get('tag_categories', List())
-      .map(category => category.set('tag_items', tags.get(category.get('id')) || List()))
+      .map(
+        category =>
+          category.set(
+            'tag_items',
+            tags.get(category.get('id')) || List()
+          )
+      )
       .toJS();
   },
 
