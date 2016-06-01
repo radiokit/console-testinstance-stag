@@ -11,24 +11,29 @@ import {
 import MetadataItemsQueriesStream from './MetadataItemsQueriesStream';
 import MetadataSchemasDomain from '../MetadataSchemasDomain';
 
+const loadingState = Map({ value: true });
+const idleState = Map({ value: false });
+
 const LoadingOwnQueriesStream = MetadataItemsQueriesStream
   .map(pickLoadingQueries)
-  .map(queries => Map({ value: !!queries.count() }));
+  .map(queries => (!!queries.count() ? loadingState : idleState));
 
 const LoadingMetadataSchemasStream = MetadataSchemasDomain
-  .map(data => Map({ value: data.get('loading') }));
+  .map(data => (data.get('loading') ? loadingState : idleState));
 
 const MetadataItemsLoadingStream = new View(
   {
     LoadingOwnQueriesStream,
     LoadingMetadataSchemasStream,
   },
-  data => Map({
-    value: (
+  data => (
+    (
       data.getIn(['LoadingOwnQueriesStream', 'value']) ||
       data.getIn(['LoadingMetadataSchemasStream', 'value'])
-    ),
-  })
+    )
+      ? loadingState
+      : idleState
+  )
 );
 
 export default MetadataItemsLoadingStream;

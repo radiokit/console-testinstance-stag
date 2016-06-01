@@ -6,6 +6,8 @@ import RepositoriesLoadingQueriesStream from './RepositoriesLoadingQueriesStream
 const loadingState = Map({ value: true });
 const idleState = Map({ value: false });
 
-export default RepositoriesLoadingQueriesStream.map(
-  queries => ((!!queries.count()) ? loadingState : idleState)
+const RepositoriesLoadingStream = RepositoriesLoadingQueriesStream.map(
+  queries => (!!queries.count() ? loadingState : idleState)
 );
+
+export default RepositoriesLoadingStream;

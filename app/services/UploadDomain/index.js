@@ -121,7 +121,7 @@ function upload(repositoryID, files) {
 const UploadDomain = new Domain(
   /* structure */
   queuesSummaries,
-  /* interface */
+  /* actions */
   {
     upload,
   }

@@ -2,10 +2,9 @@ import {
   Domain,
 } from 'immview';
 
-import ScheduleExpandedStream from './ScheduleExpandedStream';
-import * as ScheduleExpandedInterface from './ScheduleExpandedInterface';
+import stream from './ScheduleExpandedDomainStream';
+import actions from './ScheduleExpandedDomainActions';
 
-export default new Domain(
-  ScheduleExpandedStream,
-  ScheduleExpandedInterface
-);
+const ScheduleExpandedDomain = new Domain(stream, actions);
+
+export default ScheduleExpandedDomain;

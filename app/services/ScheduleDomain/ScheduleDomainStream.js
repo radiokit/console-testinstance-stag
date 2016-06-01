@@ -22,10 +22,10 @@ function getRangeFromParams(queryParams) {
   let to = 0;
 
   conditions.forEach(condition => {
-    if (condition.get('field') === 'start_at') {
+    if (condition.get('field') === 'stop_at') {
       from = condition.get('value', 0);
     }
-    if (condition.get('field') === 'stop_at') {
+    if (condition.get('field') === 'start_at') {
       to = condition.get('value', 0);
     }
   });

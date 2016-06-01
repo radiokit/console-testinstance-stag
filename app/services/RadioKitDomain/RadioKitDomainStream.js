@@ -6,7 +6,7 @@ import {
 } from 'immview';
 import RadioKitEntitiesStream from './RadioKitEntitiesStream';
 
-function refreshQueries(queries, entities) {
+function switchEntitiesOccurrencesInQueries(queries, entities) {
   return queries.map(
     (status, params) => status.set(
       'data',
@@ -24,13 +24,52 @@ function refreshQueries(queries, entities) {
 const emptyEntities = Map();
 const emptyQueries = Map();
 
-export default new View(
+const RadioKitDomainStream = new View(
   RadioKitEntitiesStream,
   data => {
     const entities = data.get('entities', emptyEntities);
     const queries = data.get('queries', emptyQueries);
     return Map({
-      queries: refreshQueries(queries, entities),
+      queries: switchEntitiesOccurrencesInQueries(queries, entities),
       entities,
     });
-  });
+  }
+);
+
+export default RadioKitDomainStream;
+
+/*
+
+ RadioKitDomainStream: View < Map {
+   queries: RadioKitQueries,
+   entities: RadioKitEntities,
+ } >
+
+ RadioKitQueries: Map < RadioKitQueryKey , RadioKitQueryStatus >
+
+ RadioKitQueryKey: Map{
+   app: string,
+   model: string,
+   id?: string,
+   conditions?: List< Map {
+     field: string,
+     comparison: string,
+     value: string
+   } >,
+   select?: List<string>,
+   joins?: List<string>
+ }
+
+ RadioKitQueryStatus: Map{
+   data: List<RadioKitEntity>,
+   time: number,
+   status: string,
+ }
+
+ RadioKitEntities: Map<string, RadioKitApp>
+
+ RadioKitApp: Map<string, RadioKitModel>
+
+ RadioKitModel: Map<string, RadioKitEntity>
+
+*/

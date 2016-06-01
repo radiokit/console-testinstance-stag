@@ -24,8 +24,77 @@ export default React.createClass({
     };
   },
 
+  componentWillReceiveProps(nextProps) {
+    this.buildForm(nextProps.selectedRecords);
+  },
+
+  getFieldTypeForSchema(schemaId) {
+    return this.state.form[schemaId].type;
+  },
+
   onDismiss() {
     this.props.onDismiss && this.props.onDismiss();
+  },
+
+  onFormSubmit(formFilled) {
+    this.setState({
+      formFilled,
+      formSubmitted: true,
+    });
+    this.refs.modal.startBatchOperation();
+  },
+
+  onConfirm() {
+    if (this.state.formSubmitted === false) {
+      this.refs.form.submit();
+    }
+  },
+
+  onPerform(index, recordId) {
+    const existingMetadataItems = this.props.selectedRecords
+      .filter((record) => record.get('id') === recordId)
+      .first().get('metadata_items');
+    const filledMetadataSchemasIds = Object.keys(this.state.formFilled);
+    const uniqueMetadataItemsIds = [];
+    const uniqueMetadataItems = [];
+    existingMetadataItems.forEach((metadata) => {
+      if (!uniqueMetadataItemsIds.includes(metadata.get('metadata_schema_id'))) {
+        uniqueMetadataItemsIds.push(metadata.get('metadata_schema_id'));
+        uniqueMetadataItems.push(metadata.toJS());
+      }
+    });
+    const allSchemasIds = this.props.metadataSchemas.map((schema) => schema.get('id')).toJS();
+    const usedSchemasIds = uniqueMetadataItems.map((metadataItem) => metadataItem.metadata_schema_id);
+    const updatedSchemasIds = intersection(usedSchemasIds, filledMetadataSchemasIds);
+    const unusedSchemasIds = difference(allSchemasIds, usedSchemasIds);
+    const newSchemasIds = intersection(unusedSchemasIds, filledMetadataSchemasIds);
+    if (isEmpty(updatedSchemasIds) && isEmpty(newSchemasIds)) {
+      this.finishUpdatingRecord();
+    }
+    this.setState({
+      updatingSchemas: updatedSchemasIds.length,
+      creatingSchemas: newSchemasIds.length,
+    });
+    // update or remove existing metadata fields for particular record
+    uniqueMetadataItems.filter((metadataItem) => filledMetadataSchemasIds.includes(metadataItem.metadata_schema_id)).forEach((metadataItem) => {
+      const schemaId = metadataItem.metadata_schema_id;
+      const value = this.state.formFilled[schemaId];
+      const valueKey = 'value_' + this.getFieldTypeForSchema(schemaId);
+      const payload = {};
+      payload[valueKey] = value;
+      this.updateMetadataItem(metadataItem, payload, !value || value === '');
+    });
+    // create new metadata item for particular record and schema
+    newSchemasIds.forEach((schemaId) => {
+      const value = this.state.formFilled[schemaId];
+      const valueKey = 'value_' + this.getFieldTypeForSchema(schemaId);
+      const payload = {
+        record_file_id: recordId,
+        metadata_schema_id: schemaId,
+      };
+      payload[valueKey] = value;
+      this.createMetadataItem(payload);
+    });
   },
 
   show() {
@@ -35,18 +104,6 @@ export default React.createClass({
       formSubmitted: false,
       formFilled: {},
     });
-  },
-
-  componentWillReceiveProps(nextProps) {
-    this.buildForm(nextProps.selectedRecords);
-  },
-
-  onFormSubmit(formFilled) {
-    this.setState({
-      formFilled,
-      formSubmitted: true,
-    });
-    this.refs.modal.startBatchOperation();
   },
 
   buildForm(selectedRecords) {
@@ -71,12 +128,6 @@ export default React.createClass({
       form[metadataSchema.get('id')] = row;
     });
     this.setState({ form });
-  },
-
-  onConfirm() {
-    if (this.state.formSubmitted === false) {
-      this.refs.form.submit();
-    }
   },
 
   decrementMetadataUpdate() {
@@ -137,57 +188,6 @@ export default React.createClass({
     });
   },
 
-  getFieldTypeForSchema(schemaId) {
-    return this.state.form[schemaId].type;
-  },
-
-  onPerform(index, recordId) {
-    const existingMetadataItems = this.props.selectedRecords
-      .filter((record) => record.get('id') === recordId)
-      .first().get('metadata_items');
-    const filledMetadataSchemasIds = Object.keys(this.state.formFilled);
-    const uniqueMetadataItemsIds = [];
-    const uniqueMetadataItems = [];
-    existingMetadataItems.forEach((metadata) => {
-      if (!uniqueMetadataItemsIds.includes(metadata.get('metadata_schema_id'))) {
-        uniqueMetadataItemsIds.push(metadata.get('metadata_schema_id'));
-        uniqueMetadataItems.push(metadata.toJS());
-      }
-    });
-    const allSchemasIds = this.props.metadataSchemas.map((schema) => schema.get('id')).toJS();
-    const usedSchemasIds = uniqueMetadataItems.map((metadataItem) => metadataItem.metadata_schema_id);
-    const updatedSchemasIds = intersection(usedSchemasIds, filledMetadataSchemasIds);
-    const unusedSchemasIds = difference(allSchemasIds, usedSchemasIds);
-    const newSchemasIds = intersection(unusedSchemasIds, filledMetadataSchemasIds);
-    if (isEmpty(updatedSchemasIds) && isEmpty(newSchemasIds)) {
-      this.finishUpdatingRecord();
-    }
-    this.setState({
-      updatingSchemas: updatedSchemasIds.length,
-      creatingSchemas: newSchemasIds.length,
-    });
-    // update or remove existing metadata fields for particular record
-    uniqueMetadataItems.filter((metadataItem) => filledMetadataSchemasIds.includes(metadataItem.metadata_schema_id)).forEach((metadataItem) => {
-      const schemaId = metadataItem.metadata_schema_id;
-      const value = this.state.formFilled[schemaId];
-      const valueKey = 'value_' + this.getFieldTypeForSchema(schemaId);
-      const payload = {};
-      payload[valueKey] = value;
-      this.updateMetadataItem(metadataItem, payload, !value || value === '');
-    });
-    // create new metadata item for particular record and schema
-    newSchemasIds.forEach((schemaId) => {
-      const value = this.state.formFilled[schemaId];
-      const valueKey = 'value_' + this.getFieldTypeForSchema(schemaId);
-      const payload = {
-        record_file_id: recordId,
-        metadata_schema_id: schemaId,
-      };
-      payload[valueKey] = value;
-      this.createMetadataItem(payload);
-    });
-  },
-
   render() {
     return (
       <ModalForEach
@@ -210,7 +210,7 @@ export default React.createClass({
           <MetadataFormWidget
             ref="form"
             form={this.state.form}
-            contentPrefix={this.props.contentPrefix + ".form"}
+            contentPrefix={this.props.contentPrefix + '.form'}
             onSubmit={this.onFormSubmit}
           />
         </div>

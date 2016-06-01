@@ -25,7 +25,7 @@ const CreateModal = React.createClass({
     this.refs.modal.show();
   },
 
-  onFormSubmit(fieldValues) {
+  handleFormSubmit(fieldValues) {
     this.recordCall = window.data
       .record(this.props.app, this.props.model)
       .on('loading', () => {
@@ -55,22 +55,22 @@ const CreateModal = React.createClass({
       .create(fieldValues);
   },
 
-  onSuccess() {
+  handleSuccess() {
     this.props.onSuccess && this.props.onSuccess();
   },
 
-  onDismiss() {
-    this.props.onDismiss && this.props.onDismiss();
-  },
-
-  onCancel() {
+  handleCancel() {
     if (this.recordCall) {
       this.recordCall.teardown();
     }
   },
 
-  onShow() {
+  handleShow() {
     this.setState(this.getInitialState());
+  },
+
+  handleDismiss() {
+    this.props.onDismiss && this.props.onDismiss();
   },
 
   show() {
@@ -83,14 +83,14 @@ const CreateModal = React.createClass({
         ref="modal"
         acknowledgementElement={ this.props.acknowledgementElement }
         contentPrefix={ this.props.contentPrefix }
-        onShow={ this.onShow }
+        onShow={ this.handleShow }
         step={ this.state.step }
         record={ this.state.record }
         form={ this.props.form }
-        onFormSubmit={ this.onFormSubmit }
-        onCancel={ this.onCancel }
-        onHide={this.onDismiss}
-        onSuccess={ this.props.onSuccess }
+        onFormSubmit={ this.handleFormSubmit }
+        onCancel={ this.handleCancel }
+        onHide={ this.handleDismiss }
+        onSuccess={ this.handleSuccess }
       />
     );
   },

@@ -2,10 +2,9 @@ import {
   Domain,
 } from 'immview';
 
-import RepositoriesDomainStream from './RepositoriesDomainStream';
-import * as RepositoriesDomainInterface from './RepositoriesDomainInterface';
+import stream from './RepositoriesDomainStream';
+import actions from './RepositoriesDomainActions';
 
-export default new Domain(
-  RepositoriesDomainStream,
-  RepositoriesDomainInterface
-);
+const RepositoriesDomain = new Domain(stream, actions);
+
+export default RepositoriesDomain;

@@ -1,7 +1,13 @@
 import React from 'react';
 import Translate from 'react-translate-component';
 import RadioKit from '../../../services/RadioKit';
-import { includes, pull, some, sortBy } from 'lodash';
+import {
+  includes,
+  pull,
+  some,
+  sortBy,
+  get as getValue,
+} from 'lodash';
 import classnames from 'classnames';
 
 import Checkbox from '../../../widgets/general/indeterminate_checkbox_widget.jsx';
@@ -26,21 +32,6 @@ const ShowContentTagModal = React.createClass({
     };
   },
 
-  calculateTagFrequencies(props) {
-    this.categoryFrequencies = new Set();
-    this.tagFrequencies = {};
-    props.initialAssociations.forEach((record) => {
-      this.tagFrequencies[record.get("tag_item_id")] = this.tagFrequencies[record.get("tag_item_id")] + 1 || 1;
-    });
-    Object.keys(this.tagFrequencies).forEach((tagId) => {
-      this.props.tagCategories.toJS().forEach((category) => {
-        if (includes(category.tag_items.map((tag) => tag.id), tagId)) {
-          this.categoryFrequencies.add(category.id);
-        }
-      });
-    });
-  },
-
   componentDidMount() {
     this.calculateTagFrequencies(this.props);
   },
@@ -49,6 +40,41 @@ const ShowContentTagModal = React.createClass({
     this.calculateTagFrequencies(nextProps);
     this.setState({
       shouldUpdate: true,
+    });
+  },
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextState.shouldUpdate;
+  },
+
+  getTagStatus(tagId) {
+    const occuranceCount = (this.tagFrequencies && this.tagFrequencies[tagId]) || 0;
+    if (occuranceCount === 0) {
+      return {
+        checked: false,
+        indeterminate: false,
+      };
+    }
+    const tagForAll = occuranceCount === this.props.selectedRecordIds.count();
+    return {
+      checked: tagForAll,
+      indeterminate: !tagForAll,
+    };
+  },
+
+  calculateTagFrequencies(props) {
+    this.categoryFrequencies = new Set();
+    this.tagFrequencies = {};
+    props.initialAssociations.forEach((record) => {
+      const tagItemId = record.get('tag_item_id');
+      this.tagFrequencies[tagItemId] = this.tagFrequencies[tagItemId] + 1 || 1;
+    });
+    Object.keys(this.tagFrequencies).forEach((tagId) => {
+      this.props.tagCategories.toJS().forEach((category) => {
+        if (includes(category.tag_items.map((tag) => tag.id), tagId)) {
+          this.categoryFrequencies.add(category.id);
+        }
+      });
     });
   },
 
@@ -90,45 +116,26 @@ const ShowContentTagModal = React.createClass({
     this.refs.modal.show();
   },
 
-  onDismiss() {
+  handleDismiss() {
     this.props.onDismiss && this.props.onDismiss();
-  },
-
-  getTagStatus(tagId) {
-    const occuranceCount = (this.tagFrequencies && this.tagFrequencies[tagId]) || 0;
-    if (occuranceCount === 0) {
-      return {
-        checked: false,
-        indeterminate: false,
-      };
-    }
-    else {
-      const tagForAll = occuranceCount === this.props.selectedRecordIds.count();
-      return {
-        checked: tagForAll,
-        indeterminate: !tagForAll,
-      };
-    }
   },
 
   createAssociation(association) {
     RadioKit
-      .record("vault", "Data.Tag.Association")
-      .on("loaded", () => {
-        if (this.isMounted()) {
-          if (this.state.insertCount === 0) {
-            if (this.state.deleteCompleted) {
-              this.recordIdUpdateComplete(association.record_file_id);
-            } else {
-              this.setState({
-                insertCompleted: true,
-              });
-            }
+      .record('vault', 'Data.Tag.Association')
+      .on('loaded', () => {
+        if (this.state.insertCount === 0) {
+          if (this.state.deleteCompleted) {
+            this.recordIdUpdateComplete(association.record_file_id);
           } else {
             this.setState({
-              insertCount: this.state.insertCount - 1,
+              insertCompleted: true,
             });
           }
+        } else {
+          this.setState({
+            insertCount: this.state.insertCount - 1,
+          });
         }
       })
       .create({
@@ -167,20 +174,21 @@ const ShowContentTagModal = React.createClass({
       .destroy();
   },
 
-  onPerform(index, recordId) {
+  handlePerform(index, recordId) {
     this.setState({
       shouldUpdate: true,
     });
     const newAssociations = this.state.selectedTagIds
-      .map((tagId) => {
-        return {
+      .map(
+        tagId => ({
           tag_item_id: tagId,
           record_file_id: recordId,
-        };
-      })
-      .filter((association) => {
-        return !(some(this.props.initialAssociations.toJS(), association));
-      });
+        })
+      )
+      .filter(
+        association =>
+          !(some(this.props.initialAssociations.toJS(), association))
+      );
     const unwantedAssociations = this.props.initialAssociations.toJS()
       .filter((a) => a.record_file_id === recordId)
       .filter((a) => includes(this.state.deselectedTagIds, a.tag_item_id));
@@ -204,7 +212,7 @@ const ShowContentTagModal = React.createClass({
     return (
       <div>
         <ul className="list">
-          { category.tag_items && sortBy(category.tag_items,'name').map((tag) => {
+          { category.tag_items && sortBy(category.tag_items, 'name').map((tag) => {
             const onTagSelected = () => this.selectTagId(tag.id);
             const onTagDeselected = () => this.deselectTagId(tag.id);
             const onTagRestored = () => this.resetTagId(tag.id);
@@ -221,7 +229,8 @@ const ShowContentTagModal = React.createClass({
                       onSelected={onTagSelected}
                       onDeselected={onTagDeselected}
                       onRestore={onTagRestored}
-                      indeterminate={tagStatus.indeterminate} />
+                      indeterminate={tagStatus.indeterminate}
+            />
                   </div>
                 </div>
               </li>
@@ -232,42 +241,43 @@ const ShowContentTagModal = React.createClass({
     );
   },
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return nextState.shouldUpdate;
-  },
-
   render() {
     const categories = this.props.tagCategories.toJS();
     return (
       <ModalForEach
         ref="modal"
-        onPerform={this.onPerform}
+        onPerform={this.handlePerform}
         contentPrefix="widgets.vault.file_browser.modals.tag"
         recordIds={this.props.selectedRecordIds}
-        onDismiss={this.onDismiss}
-        index={this.state.index}>
+        onDismiss={this.handleDismiss}
+        index={this.state.index}
+      >
         <div className="ShowContentTagModal">
           <Translate
             component="p"
             content="widgets.vault.file_browser.modals.tag.message.confirmation"
-            count={this.props.selectedRecordIds.count()} />
-          {categories.length > 0 && sortBy(categories,'name').map((category) => {
+            count={this.props.selectedRecordIds.count()}
+          />
+          {categories.length > 0 && sortBy(categories, 'name').map((category) => {
+            if (getValue(category, ['tag_items', 'length'], 0) === 0) {
+              return null;
+            }
+
             let expanded = this.isCategoryExpanded(category);
             let toggleClasses = classnames('btn btn-icon-toggle', {
-              'disabled': category.tag_items.length === 0,
-              'collapsed': !expanded,
+              disabled: getValue(category, ['tag_items', 'length'], 0) === 0,
+              collapsed: !expanded,
             });
-            if(category.tag_items.length === 0){
-              return null;
-            } else return (
-              <div key={category.id} id={ category.id + "-modal"}>
+            return (
+              <div key={category.id} id={ `${category.id}-modal` }>
                 <div className="expanded">
                   <div
                     className="card-head"
                     aria-expanded="true"
                     data-toggle="collapse"
-                    data-parent={ "#" + category.id + "-modal" }
-                    data-target={ "#" + category.id + "-tagList-modal" }>
+                    data-parent={ `#${category.id}-modal` }
+                    data-target={ `#${category.id}-tagList-modal` }
+                  >
                     <a className={toggleClasses} >
                       <i className="mdi mdi-chevron-right" />
                     </a>
@@ -275,31 +285,36 @@ const ShowContentTagModal = React.createClass({
                       { category.name }
                     </header>
                   </div>
-                  <div id={ category.id + "-tagList-modal" }
-                    className={ expanded ? "collapse in" : "collapse"}
-                    aria-expanded={expanded}>
+                  <div
+                    id={ `${category.id}-tagList-modal` }
+                    className={ expanded ? 'collapse in' : 'collapse'}
+                    aria-expanded={expanded}
+                  >
                     { this.renderCategoryTags(category) }
                   </div>
                 </div>
               </div>
-            )
+            );
           }) }
         </div>
         <div>
           <Translate
             component="p"
-            content="widgets.vault.file_browser.modals.tag.message.progress" />
+            content="widgets.vault.file_browser.modals.tag.message.progress"
+          />
         </div>
         <div>
           <Translate
             component="p"
             content="widgets.vault.file_browser.modals.tag.message.acknowledgement"
-            count={this.props.selectedRecordIds.count()} />
+            count={this.props.selectedRecordIds.count()}
+          />
         </div>
         <div>
           <Translate
             component="p"
-            content="widgets.vault.file_browser.modals.tag.message.cancelled" />
+            content="widgets.vault.file_browser.modals.tag.message.cancelled"
+          />
         </div>
       </ModalForEach>
     );

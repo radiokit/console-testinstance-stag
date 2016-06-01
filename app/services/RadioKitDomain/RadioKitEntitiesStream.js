@@ -2,9 +2,7 @@ import {
   View,
 } from 'immview';
 import {
-  fromJS,
   Map,
-  List,
 } from 'immutable';
 import {
   groupBy,
@@ -14,19 +12,6 @@ import {
 } from 'lodash';
 import { RadioKitQueriesStream } from './RadioKitQueriesStream';
 import * as STATUS from './RadioKitQueryStatuses';
-
-/**
- * Map<
- *  app:string,
- *  Map<
- *    model:string,
- *    Map<
- *      id:string,
- *      Map<string,*>
- *    >
- *  >
- * >
- */
 
 function compareQueries(a, b) {
   return (a[1].time | 0) - ((b[1].time || Number.MAX_VALUE) | 0);
@@ -39,13 +24,13 @@ function getEntities(queries) {
     [STATUS.loading]: [],
   };
 
-  queries.forEach((queryStatus, queryParams) => {
-    queryStatus.get('data', []).forEach(entity => {
-      entitiesOfStatus[queryStatus.get('status')].push([
+  queries.forEach((queryInfo, queryParams) => {
+    queryInfo.get('data', []).forEach((entity) => {
+      entitiesOfStatus[queryInfo.get('status')].push([
         queryParams,
         {
-          status: queryStatus.get('status'),
-          time: queryStatus.get('time', 0),
+          status: queryInfo.get('status'),
+          time: queryInfo.get('time', 0),
           entity,
         },
       ]);

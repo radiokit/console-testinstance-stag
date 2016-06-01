@@ -12,7 +12,7 @@ import ScheduleQueriesStream from './ScheduleQueriesStream';
 import ScheduleUpdateQueriesStream from './ScheduleUpdateQueriesStream';
 
 const loadingState = Map({ value: true });
-const idleState = Map({ value: true });
+const idleState = Map({ value: false });
 
 function filterLoadingQueries(queries) {
   const loadingQueries = queries.filter(
