@@ -1,10 +1,9 @@
 import {
   Domain,
 } from 'immview';
-import WeeklyPlansDomainStream from './WeeklyPlansDomainStream';
-import * as WeeklyPlansDomainInterface from './WeeklyPlansDomainInterface';
+import stream from './WeeklyPlansDomainStream';
+import actions from './WeeklyPlansDomainActions';
 
-export default new Domain(
-  WeeklyPlansDomainStream,
-  WeeklyPlansDomainInterface
-);
+const WeeklyPlansDomain = new Domain(stream, actions);
+
+export default WeeklyPlansDomain;

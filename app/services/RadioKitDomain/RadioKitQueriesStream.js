@@ -12,10 +12,6 @@ import {
 export const RadioKitQueriesStream = new Data(OrderedMap());
 export default RadioKitQueriesStream;
 
-RadioKitQueriesStream.subscribe(
-  v => v
-);
-
 export function update(queryParams, status, data, time) {
   RadioKitQueriesStream.write(
     queries => (

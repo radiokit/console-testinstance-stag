@@ -22,13 +22,15 @@ const WeekDayPicker = React.createClass({
   },
 
   render() {
-    this.weekdayNames = range(0, 7).map(day => moment().day(1).add(day, 'days').format('dddd'));
+    this.weekdayNames = this.weekdayNames || range(0, 7).map(day => moment().day(1).add(day, 'days').format('dddd'));
+
     const { value = Map() } = this.props;
+
     return (
       <div className="WeekdayPicker">
         {
           range(0, 7).map(day => (
-            <label className="WeekdayPicker__label">
+            <label className="WeekdayPicker__label" key={day}>
               <input
                 className="WeekdayPicker__input"
                 type="checkbox"

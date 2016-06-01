@@ -39,6 +39,15 @@ const ShowContentPartial = React.createClass({
     }
   },
 
+  getCategories() {
+    const { record } = this.props;
+    const tags = record.get('tag_items', List()).groupBy(item => item.get('tag_category_id'));
+    return record
+      .get('tag_categories', List())
+      .map(category => category.set('tag_items', tags.get(category.get('id')) || List()))
+    ;
+  },
+
   onTableSelect(selectedRecordIds, selectedRecords) {
     this.setState({
       selectedRecordIds,
@@ -240,7 +249,7 @@ const ShowContentPartial = React.createClass({
             modalElement={TagModal}
             modalProps={{
               selectedRecordIds: this.state.selectedRecordIds,
-              tagCategories: this.props.record.get('tag_categories'),
+              tagCategories: this.getCategories(),
               initialAssociations: this.state.selectedAssociations,
               onDismiss: this.refreshTagData,
             }}
