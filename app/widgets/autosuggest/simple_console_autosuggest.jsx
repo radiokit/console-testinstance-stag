@@ -1,4 +1,7 @@
 import React from 'react';
+import {
+  List,
+} from 'immutable';
 import { debounce } from 'lodash';
 import ConsoleAutosuggest from './console_autosuggest.jsx';
 
@@ -22,6 +25,12 @@ const SimpleConsoleAutosuggest = React.createClass({
     onInputChange: React.PropTypes.func,
     items: React.PropTypes.object.isRequired,
     getItemName: React.PropTypes.func.isRequired,
+  },
+
+  getDefaultProps() {
+    return {
+      items: List(),
+    };
   },
 
   getInitialState() {

@@ -4,7 +4,8 @@ export const key = 'RepositoriesDomain';
 export const readFields = [
   'id',
   'name',
-  'tag_items',
+  'tag_items.id',
+  'tag_items.name',
 ];
 export const readJoins = [
   'tag_items',

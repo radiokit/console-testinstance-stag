@@ -7,10 +7,13 @@ import {
 } from 'lodash';
 import moment from 'moment';
 
+import './weekday_picker.scss';
+
 const WeekDayPicker = React.createClass({
   propTypes: {
     value: React.PropTypes.object,
     onChange: React.PropTypes.func,
+    weekdayNames: React.PropTypes.array,
   },
 
   triggerChange(value) {
@@ -19,18 +22,22 @@ const WeekDayPicker = React.createClass({
   },
 
   render() {
+    this.weekdayNames = range(0, 7).map(day => moment().day(1).add(day, 'days').format('dddd'));
     const { value = Map() } = this.props;
     return (
-      <div>
+      <div className="WeekdayPicker">
         {
           range(0, 7).map(day => (
-            <label>
+            <label className="WeekdayPicker__label">
               <input
+                className="WeekdayPicker__input"
                 type="checkbox"
-                checked={value.get(`day${day}`, false)}
-                onChange={e => this.triggerChange(value.set(`day${day}`, !!e.target.value))}
+                checked={value.get(day, false)}
+                onChange={e => {
+                  this.triggerChange(value.set(day, !!e.target.checked));
+                }}
               />
-              {moment().startOf('week').add(day, 'days').format('dddd')}
+              {this.weekdayNames[day]}
             </label>
           ))
         }

@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Map,
 } from 'immutable';
-import TagPicker from './tag_picker.jsx';
+import TagPicker from '../../../../widgets/autosuggest/tag_picker.jsx';
 
 import './autodj_shuffle_input.scss';
 

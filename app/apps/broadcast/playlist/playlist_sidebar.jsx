@@ -70,97 +70,107 @@ const PlaylistSidebar = React.createClass({
   // TODO add translation in week
   render() {
     return (
-      <div className="PlaylistSidebar">
-        <div className="text-center">
-          <div className="btn-group margin-bottom-lg" role="group">
-            <button
-              type="button"
-              className="btn btn-default-light"
-              onClick={this.handleDayPreviousClick}
-            >
-              <i className="mdi mdi-chevron-left" />
-            </button>
+        <div className="PlaylistSidebar">
+          <div className="text-center">
+            <ul className="PlaylistSidebar--List">
+              <li>
+                <div className="btn-group margin-bottom-lg" role="group">
+                  <button
+                    type="button"
+                    className="btn btn-default-light"
+                    onClick={this.handleDayPreviousClick}
+                  >
+                    <i className="mdi mdi-chevron-left" />
+                  </button>
 
-            <div className="PlaylistSidebar-button btn btn-default-light">
-              {moment.utc(this.props.offsetStart).clone().startOf('day').format('D (ddd)')}
-            </div>
+                  <div className="PlaylistSidebar-button btn btn-default-light">
+                    {moment.utc(this.props.offsetStart).clone().startOf('day').format('D (ddd)')}
+                  </div>
 
-            <button
-              type="button"
-              className="btn btn-default-light"
-              onClick={this.handleDayNextClick}
-            >
-             <i className="mdi mdi-chevron-right" />
-            </button>
-          </div>
+                  <button
+                    type="button"
+                    className="btn btn-default-light"
+                    onClick={this.handleDayNextClick}
+                  >
+                   <i className="mdi mdi-chevron-right" />
+                  </button>
+                </div>
+              </li>
 
-          <div className="btn-group margin-bottom-lg">
-            <button
-              type="button"
-              className="btn btn-default-light"
-              onClick={this.handleWeekPreviousClick}
-            >
-              <i className="mdi mdi-chevron-left" />
-            </button>
+              <li>
+                <div className="btn-group margin-bottom-lg">
+                  <button
+                    type="button"
+                    className="btn btn-default-light"
+                    onClick={this.handleWeekPreviousClick}
+                  >
+                    <i className="mdi mdi-chevron-left" />
+                  </button>
 
-            <div className="PlaylistSidebar-button btn btn-default-light">
-              {moment.utc(this.props.offsetStart).clone().startOf('day').format('w')}
-            </div>
+                  <div className="PlaylistSidebar-button btn btn-default-light">
+                    {moment.utc(this.props.offsetStart).clone().startOf('day').format('w')}
+                  </div>
 
-            <button
-              type="button"
-              className="btn btn-default-light"
-              onClick={this.handleWeekNextClick}
-            >
-              <i className="mdi mdi-chevron-right" />
-            </button>
-          </div>
+                  <button
+                    type="button"
+                    className="btn btn-default-light"
+                    onClick={this.handleWeekNextClick}
+                  >
+                    <i className="mdi mdi-chevron-right" />
+                  </button>
+                </div>
+              </li>
 
-          <div className="btn-group margin-bottom-lg">
-            <button
-              type="button"
-              className="btn btn-default-light"
-              onClick={this.handleMonthPreviousClick}
-            >
-              <i className="mdi mdi-chevron-left" />
-            </button>
+              <li>
+                <div className="btn-group margin-bottom-lg">
+                  <button
+                    type="button"
+                    className="btn btn-default-light"
+                    onClick={this.handleMonthPreviousClick}
+                  >
+                    <i className="mdi mdi-chevron-left" />
+                  </button>
 
-            <div className="PlaylistSidebar-button btn btn-default-light">
-              {moment.utc(this.props.offsetStart).clone().startOf('day').format('MMMM')}
-            </div>
+                  <div className="PlaylistSidebar-button btn btn-default-light">
+                    {moment.utc(this.props.offsetStart).clone().startOf('day').format('MMMM')}
+                  </div>
 
-            <button
-              type="button"
-              className="btn btn-default-light"
-              onClick={this.handleMonthNextClick}
-            >
-              <i className="mdi mdi-chevron-right" />
-            </button>
-          </div>
+                  <button
+                    type="button"
+                    className="btn btn-default-light"
+                    onClick={this.handleMonthNextClick}
+                  >
+                    <i className="mdi mdi-chevron-right" />
+                  </button>
+                </div>
+              </li>
 
-          <div className="btn-group margin-bottom-lg">
-            <button
-              type="button"
-              className="btn btn-default-light"
-              onClick={this.handleYearPreviousClick}
-            >
-              <i className="mdi mdi-chevron-left" />
-            </button>
+              <li>
+                <div className="btn-group margin-bottom-lg">
+                  <button
+                    type="button"
+                    className="btn btn-default-light"
+                    onClick={this.handleYearPreviousClick}
+                  >
+                    <i className="mdi mdi-chevron-left" />
+                  </button>
 
-            <div className="PlaylistSidebar-button btn btn-default-light">
-              {moment.utc(this.props.offsetStart).clone().startOf('day').format('YYYY')}
-            </div>
+                  <div className="PlaylistSidebar-button btn btn-default-light">
+                    {moment.utc(this.props.offsetStart).clone().startOf('day').format('YYYY')}
+                  </div>
 
-            <button
-              type="button"
-              className="btn btn-default-light"
-              onClick={this.handleYearNextClick}
-            >
-              <i className="mdi mdi-chevron-right" />
-            </button>
+                  <button
+                    type="button"
+                    className="btn btn-default-light"
+                    onClick={this.handleYearNextClick}
+                  >
+                    <i className="mdi mdi-chevron-right" />
+                  </button>
+                </div>
+              </li>
+            </ul>
           </div>
         </div>
-      </div>
     );
   },
 });
