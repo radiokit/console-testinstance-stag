@@ -3,4 +3,6 @@ import {
   pickLoadingQueries,
 } from '../RadioKitQueriesUtils';
 
-export default RepositoriesQueriesStream.map(pickLoadingQueries);
+const RepositoriesLoadingQueriesStream = RepositoriesQueriesStream.map(pickLoadingQueries);
+
+export default RepositoriesLoadingQueriesStream;

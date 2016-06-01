@@ -5,10 +5,13 @@ import {
   pickLoadingQueries,
 } from '../RadioKitQueriesUtils';
 
+const loadingState = Map({ value: true });
+const idleState = Map({ value: false });
+
 import MetadataSchemasQueriesStream from './MetadataSchemasQueriesStream';
 
 const LoadingQueriesStream = MetadataSchemasQueriesStream.map(pickLoadingQueries);
 
-const LoadingStream = LoadingQueriesStream.map(queries => Map({ value: !!queries.count() }));
+const MetadataSchemasLoadingStream = LoadingQueriesStream.map(queries => (!!queries.count() ? loadingState : idleState));
 
-export default LoadingStream;
+export default MetadataSchemasLoadingStream;

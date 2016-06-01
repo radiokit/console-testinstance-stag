@@ -4,7 +4,7 @@ import ScheduleExpandedRangesWithFilesStream from './ScheduleExpandedRangesWithF
 import ScheduleExpandedEntitiesWithFilesStream from './ScheduleExpandedEntitiesWithFilesStream';
 import ScheduleExpandedLoadingStream from './ScheduleExpandedLoadingStream';
 
-export default new View(
+const ScheduleExpandedDomainStream = new View(
   {
     ScheduleExpandedRangesWithFilesStream,
     ScheduleExpandedEntitiesWithFilesStream,
@@ -17,3 +17,5 @@ export default new View(
     return Map({ all, ranges, loading });
   }
 );
+
+export default ScheduleExpandedDomainStream;

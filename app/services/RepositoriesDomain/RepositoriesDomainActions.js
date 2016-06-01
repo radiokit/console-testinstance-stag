@@ -24,21 +24,25 @@ function performQuery(queryAppendix, requestOptions) {
   );
 }
 
-export function loadRepository(id, requestOptions) {
-  performQuery(
-    {
-      conditions: [
-        {
-          field: 'id',
-          comparison: 'eq',
-          value: id,
-        },
-      ],
-    },
-    requestOptions
-  );
-}
+const actions = {
+  loadRepository(id, requestOptions) {
+    performQuery(
+      {
+        conditions: [
+          {
+            field: 'id',
+            comparison: 'eq',
+            value: id,
+          },
+        ],
+      },
+      requestOptions
+    );
+  },
 
-export function loadRepositories(requestOptions) {
-  performQuery({}, requestOptions);
-}
+  loadRepositories(requestOptions) {
+    performQuery({}, requestOptions);
+  },
+};
+
+export default actions;

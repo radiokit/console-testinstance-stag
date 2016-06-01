@@ -2,10 +2,7 @@ import {
   Domain,
 } from 'immview';
 
-import FilesDomainStream from './FilesDomainStream';
-import * as FilesDomainInterface from './FilesDomainInterface';
+import stream from './FilesDomainStream';
+import actions from './FilesDomainActions';
 
-export default new Domain(
-  FilesDomainStream,
-  FilesDomainInterface
-);
+export default new Domain(stream, actions);

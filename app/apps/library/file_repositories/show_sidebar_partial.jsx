@@ -1,5 +1,14 @@
 import React from 'react';
-import { differenceBy, pull, uniqBy, sortBy, concat, includes, some } from 'lodash';
+import {
+  differenceBy,
+  pull,
+  uniqBy,
+  sortBy,
+  concat,
+  includes,
+  some,
+  get as getValue,
+} from 'lodash';
 import classnames from 'classnames';
 import { List } from 'immutable';
 
@@ -104,12 +113,12 @@ const ShowSidebarPartial = React.createClass({
         { categories.length > 0 && sortBy(categories,'name').map((category) => {
           const onCategorySelected = () => this.selectCategory(category);
           const toggleClasses = classnames('btn btn-flat btn-icon-toggle collapsed', {
-            'disabled': category.tag_items.length === 0,
+            'disabled': getValue(category, ['tag_items', 'length'], 0) === 0,
           });
           const headerClasses = classnames('card-head Category', {
             'Category--selected': this.isCategorySelected(category),
           });
-          if (category.tag_items.length === 0) {
+          if (getValue(category, ['tag_items', 'length'], 0) === 0) {
             return null;
           } else return (
             <div id={ category.id } key={category.id}>

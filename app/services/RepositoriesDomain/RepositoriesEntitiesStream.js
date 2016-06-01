@@ -7,6 +7,8 @@ import {
 } from './RepositoriesConfig';
 import RadioKitDomain from '../RadioKitDomain';
 
-export default RadioKitDomain.map(
+const RepositoriesEntitiesStream = RadioKitDomain.map(
   data => data.getIn(['entities', app, model], Map())
 );
+
+export default RepositoriesEntitiesStream;

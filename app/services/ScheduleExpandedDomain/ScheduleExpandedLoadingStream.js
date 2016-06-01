@@ -3,15 +3,22 @@ import { View } from 'immview';
 import FilesDomain from '../FilesDomain';
 import ScheduleDomain from '../ScheduleDomain';
 
-export default new View(
+const loadingState = Map({ value: true });
+const idleState = Map({ value: false });
+
+const ScheduleExpandedLoadingStream = new View(
   {
     FilesDomain,
     ScheduleDomain,
   },
-  data => Map({
-    value: (
+  data => (
+    (
       data.getIn(['FilesDomain', 'loading']) ||
       data.getIn(['ScheduleDomain', 'loading'])
-    ),
-  })
+    )
+      ? loadingState
+      : idleState
+  )
 );
+
+export default ScheduleExpandedLoadingStream;

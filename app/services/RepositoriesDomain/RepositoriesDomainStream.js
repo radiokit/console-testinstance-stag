@@ -7,10 +7,12 @@ import {
 import RepositoriesEntitiesStream from './RepositoriesEntitiesStream';
 import RepositoriesLoadingStream from './RepositoriesLoadingStream';
 
-export default new View({
+const RepositoriesDomainStream = new View({
   RepositoriesEntitiesStream,
   RepositoriesLoadingStream,
 }, merged => Map({
   entities: merged.get('RepositoriesEntitiesStream'),
   loading: merged.getIn(['RepositoriesLoadingStream', 'value']),
 }));
+
+export default RepositoriesDomainStream;

@@ -1,6 +1,8 @@
 import ScheduleExpandedRangesWithFilesStream from './ScheduleExpandedRangesWithFilesStream';
 import { indexBy } from '../RadioKitQueriesUtils';
 
-export default ScheduleExpandedRangesWithFilesStream.map(
+const ScheduleExpandedEntitiesWithFilesStream = ScheduleExpandedRangesWithFilesStream.map(
   ranges => ranges.map(indexBy('id')).flatten(true)
 );
+
+export default ScheduleExpandedEntitiesWithFilesStream;

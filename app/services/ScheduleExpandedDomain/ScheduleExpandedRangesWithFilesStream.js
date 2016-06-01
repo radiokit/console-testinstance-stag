@@ -16,7 +16,6 @@ const ScheduleReadyRangesToExpandStream = new View(
   data => {
     const ranges = data.getIn(['ScheduleDomain', 'ranges']);
     const rangesToExpand = data.get('ScheduleExpandedRangesStream');
-
     return ranges.filter((_, range) => rangesToExpand.includes(range));
   }
 );
@@ -45,10 +44,12 @@ function downloadFiles(/* List */ fileIds) {
 }
 
 ScheduleReadyRangesToExpandStream
-  .map(ranges => ranges
+  .map(
+    ranges => ranges
       .map(scheduleItems => scheduleItems.map(scheduleItem => scheduleItem.get('file')))
       .flatten(true)
-      .toSet())
+      .toSet()
+  )
   .subscribe(downloadFiles);
 
 const ScheduleReadyQueriesWithFiles = new View(

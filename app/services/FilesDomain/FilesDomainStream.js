@@ -9,7 +9,7 @@ import FilesLoadingStream from './FilesLoadingStream';
 // import FilesSearchQueriesStream from './FilesSearchQueriesStream';
 import FilesExpandedEntitiesStream from './FilesExpandedEntitiesStream';
 
-export default new View({
+const FilesDomainStream = new View({
   files: FilesExpandedEntitiesStream,
   // search: FilesSearchQueriesStream,
   loading: FilesLoadingStream,
@@ -18,3 +18,5 @@ export default new View({
   // search: data.get('search'),
   loading: data.getIn(['loading', 'value']),
 }));
+
+export default FilesDomainStream;

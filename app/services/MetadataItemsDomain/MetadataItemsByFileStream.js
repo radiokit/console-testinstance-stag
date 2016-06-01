@@ -2,15 +2,15 @@ import {
   View,
 } from 'immview';
 import {
-  Map,
   List,
 } from 'immutable';
-import MetadataSchemasDomain from '../MetadataSchemasDomain';
-import MetadataItemsQueriesStream from './MetadataItemsQueriesStream';
 import {
   pickReadyQueries,
-  getQueriesContent,
 } from '../RadioKitQueriesUtils';
+
+import MetadataItemsQueriesStream from './MetadataItemsQueriesStream';
+
+import ExtendedMetadataItemsByFileIdStream from './ExtendedMetadataItemsByFileIdStream';
 
 /**
  * This stream will push only metadatas of files
@@ -19,58 +19,6 @@ import {
  * and it is like this because of possible create requests of metadatas
  * that otherwise would not be assigned to file
  */
-
-const MetadataItemsStream = MetadataItemsQueriesStream.map(getQueriesContent);
-
-const UniqueMetadataSchemasStream = MetadataItemsStream.map(
-  metadataItems => metadataItems
-    .map(entity => entity.get('metadata_schema_id'))
-    .toSet()
-);
-
-UniqueMetadataSchemasStream.subscribe(
-  metadataSchemaIds => metadataSchemaIds.forEach(
-    metadataSchemaId => MetadataSchemasDomain.loadMetadataSchema(metadataSchemaId, { noLoadingState: true })
-  )
-);
-
-const MetadataItemsByFileIdStream = MetadataItemsStream.map(
-  metadataItems => metadataItems
-    .groupBy(metadataItem => metadataItem.get('record_file_id'))
-);
-
-const ExtendedMetadataItemsByFileIdStream = new View(
-  { MetadataItemsByFileIdStream, MetadataSchemasDomain },
-  data => {
-    const metadataItemsByFile = data.get('MetadataItemsByFileIdStream');
-    const metadataSchemasById = data.getIn(['MetadataSchemasDomain', 'entities']) || Map();
-
-    const extendedMetadataItemsByFileId = metadataItemsByFile
-      .map(
-        metadataItemsOfFile => {
-          let allCanBeExtended = true;
-          const extendedMetadataItems = metadataItemsOfFile
-            .map(
-              entity => {
-                const metadataSchema = metadataSchemasById.get(entity.get('metadata_schema_id'));
-                if (!metadataSchema) {
-                  allCanBeExtended = false;
-                }
-                return entity
-                  .set('metadata_schema', metadataSchema)
-                  .remove('metadata_schema_id');
-              }
-            );
-          return allCanBeExtended
-            ? extendedMetadataItems
-            : null;
-        }
-      )
-      .filter(v => !!v)
-    ;
-
-    return extendedMetadataItemsByFileId;
-  });
 
 const ReadyQueriesStream = MetadataItemsQueriesStream.map(pickReadyQueries);
 
@@ -102,7 +50,8 @@ const MetadataItemsByFileStream = new View(
 
         return null;
       })
-      .filter(v => !!v);
+      .filter(v => !!v)
+    ;
   }
 );
 

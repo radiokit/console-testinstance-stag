@@ -2,14 +2,11 @@ import {
   Domain,
 } from 'immview';
 
-import RadioKitDomainStream from './RadioKitDomainStream';
-import * as RadioKitDomainInterface from './RadioKitDomainInterface';
+import stream from './RadioKitDomainStream';
+import actions from './RadioKitDomainActions';
 import * as STATUS from './RadioKitQueryStatuses';
 
-const RadioKitDomain = new Domain(
-  RadioKitDomainStream,
-  RadioKitDomainInterface,
-);
+const RadioKitDomain = new Domain(stream, actions);
 
 RadioKitDomain.STATUS = STATUS;
 

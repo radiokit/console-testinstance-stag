@@ -18,28 +18,28 @@ const ShowView = React.createClass({
       metadata_schema: {
         element: MetadataSchemaPartial,
         props: {
-          contentPrefix: "apps.administration.file_repositories.show.tabs.body.metadata_schema"
+          contentPrefix: 'apps.administration.file_repositories.show.tabs.body.metadata_schema',
         },
       },
       tags_schema: {
         element: TagsSchemaPartial,
         props: {
-          contentPrefix: "apps.administration.file_repositories.show.tabs.body.tags_schema"
+          contentPrefix: 'apps.administration.file_repositories.show.tabs.body.tags_schema',
         },
       },
       imports_schema: {
         element: ImportsSchemaPartial,
         props: {
-          contentPrefix: "apps.administration.file_repositories.show.tabs.body.imports_schema"
+          contentPrefix: 'apps.administration.file_repositories.show.tabs.body.imports_schema',
         },
       },
       exports_schema: {
         element: ExportsSchemaPartial,
         props: {
-          contentPrefix: "apps.administration.file_repositories.show.tabs.body.exports_schema"
+          contentPrefix: 'apps.administration.file_repositories.show.tabs.body.exports_schema',
         },
       },
-    }
+    };
   },
 
   render() {
@@ -48,9 +48,10 @@ const ShowView = React.createClass({
         contentPrefix="apps.administration.file_repositories"
         app="vault"
         model="Data.Record.Repository"
-        contentElement={ this.buildTabs() } />
+        contentElement={ this.buildTabs() }
+      />
     );
-  }
+  },
 });
 
 export default ShowView;

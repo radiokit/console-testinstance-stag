@@ -41,12 +41,12 @@ const ShowView = React.createClass({
 
   modifyShowQuery(query) {
     return query
-      .select("metadata_schemas") // metadata_schemas and tag_categories fields are required by the content partial
-      .joins("metadata_schemas")
-      .select("tag_categories")
-      .joins("tag_categories")
-      .select("tag_items")
-      .joins("tag_items");
+      .select('metadata_schemas.id', 'metadata_schemas.name', 'metadata_schemas.key', 'metadata_schemas.kind') // metadata_schemas and tag_categories fields are required by the content partial
+      .joins('metadata_schemas')
+      .select('tag_categories.id', 'tag_categories.name')
+      .joins('tag_categories')
+      .select('tag_items.id', 'tag_items.name', 'tag_items.tag_category_id')
+      .joins('tag_items');
   },
 
   render() {

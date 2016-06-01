@@ -21,7 +21,7 @@ import localeEN from './index_view_en';
 Counterpart.registerTranslations('en', localeEN);
 Counterpart.registerTranslations('pl', localePL);
 
-const PlayListIndex = React.createClass({
+const BroadcastPlaylist = React.createClass({
   propTypes: {
     routeParams: React.PropTypes.object,
     history: React.PropTypes.object,
@@ -124,4 +124,4 @@ const PlayListIndex = React.createClass({
   },
 });
 
-export default PlayListIndex;
+export default BroadcastPlaylist;
