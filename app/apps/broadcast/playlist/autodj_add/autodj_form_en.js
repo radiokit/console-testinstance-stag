@@ -4,5 +4,6 @@ export default {
     typeLabel: 'Type',
     repositoryLabel: 'Repository',
     acceptButton: 'Add',
+    weekdays: 'Repeat automatically on',
   },
 };

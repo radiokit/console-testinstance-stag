@@ -30,22 +30,29 @@ const WeekDayPicker = React.createClass({
       <div className="WeekdayPicker">
         {
           range(0, 7).map(day => (
-            <label className="WeekdayPicker__label" key={day}>
-              <input
-                className="WeekdayPicker__input"
-                type="checkbox"
-                checked={value.get(day, false)}
-                onChange={e => {
-                  this.triggerChange(value.set(day, !!e.target.checked));
-                }}
-              />
-              {this.weekdayNames[day]}
-            </label>
+            <span className="checkbox-inline checkbox-styled">
+              <label className="WeekdayPicker__label" key={day}>
+                <input
+                  className="WeekdayPicker__input"
+                  type="checkbox"
+                  checked={value.get(day, false)}
+                  onChange={e => {
+                    this.triggerChange(value.set(day, !!e.target.checked));
+                  }}
+                />
+                <span>{this.weekdayNames[day]}</span>
+              </label>
+            </span>
           ))
         }
       </div>
     );
   },
 });
-
+/*
+ <label>
+ <input type="checkbox" value="">
+ <span>Default checkbox</span>
+ </label>
+ */
 export default WeekDayPicker;

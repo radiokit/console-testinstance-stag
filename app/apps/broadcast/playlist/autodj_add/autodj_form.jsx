@@ -180,7 +180,8 @@ const AutoDJForm = React.createClass({
         </fieldset>
 
         <fieldset>
-          <div>
+          <div className="form-group">
+            <Translate component="h4" content="AutoDJForm.weekdays" />
             <WeekDatesPicker
               value={this.getWeekdays()}
               onChange={this.handleWeekdaysChange}
