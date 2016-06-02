@@ -9,7 +9,7 @@ counterpart.registerTranslations('en', localeEN);
 counterpart.registerTranslations('pl', localePL);
 
 function getWeeklyPlanName(weeklyplan) {
-  return weeklyplan.get('name') || '(no name)';
+  return weeklyplan.get('name') || counterpart('WeeklyPlanPicker.noName');
 }
 
 const WeeklyPlanPicker = React.createClass({
@@ -21,14 +21,11 @@ const WeeklyPlanPicker = React.createClass({
     items: React.PropTypes.object.isRequired,
   },
 
-  getDefaultProps: () => ({
-    placeholder: counterpart('WeeklyPlanPicker.placeholder'),
-  }),
-
   render() {
     return (
       <SimpleConsoleAutosuggest
         {...this.props}
+        placeholder={this.props.placeholder || counterpart('WeeklyPlanPicker.placeholder')}
         getItemName={getWeeklyPlanName}
       />
     );

@@ -19,16 +19,10 @@ const TagPicker = React.createClass({
     tags: React.PropTypes.object.isRequired,
   },
 
-  getDefaultProps() {
-    return {
-      placeholder: counterpart('TagPicker.placeholder'),
-    };
-  },
-
   render() {
     return (
       <SimpleConsoleAutosuggest
-        placeholder={this.props.placeholder}
+        placeholder={this.props.placeholder || counterpart('TagPicker.placeholder')}
         value={this.props.value}
         onChange={this.props.onChange}
         onInputChange={this.props.onInputChange}

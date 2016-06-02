@@ -9,9 +9,17 @@ import './autodj_shuffle_input.scss';
 const AutoDJShuffleInput = React.createClass({
   propTypes: {
     tags: React.PropTypes.object,
+    placeholder: React.PropTypes.string,
     // Map{ tag, ratio }
     value: React.PropTypes.object,
     onChange: React.PropTypes.func,
+    showRatio: React.PropTypes.bool,
+  },
+  
+  getDefaultProps() {
+    return {
+      showRatio: true,
+    };
   },
 
   triggerChange(newValue) {
@@ -57,13 +65,14 @@ const AutoDJShuffleInput = React.createClass({
       <div className="AutoDJShuffleInput">
         <div className="AutoDJShuffleInput__tag">
           <TagPicker
+            placeholder={this.props.placeholder}
             value={tag}
             onChange={this.handleTagChange}
             tags={this.props.tags}
           />
         </div>
         <div className="AutoDJShuffleInput__ratio">
-          {tag && (
+          {tag && this.props.showRatio && (
             <div className="AutoDJShuffleInput__ratio__input">
               <input
                 type="range"
@@ -75,14 +84,16 @@ const AutoDJShuffleInput = React.createClass({
               />
             </div>
           )}
-          {tag && (
+          {tag && this.props.showRatio && (
             <div className="AutoDJShuffleInput__ratio__value">
               {Math.round(ratio * 100)}%
             </div>
           )}
         </div>
         <div className="AutoDJShuffleInput__controls">
-          <button onClick={this.handleRemoval}>x</button>
+          {tag && (
+            <button onClick={this.handleRemoval}>x</button>
+          )}
         </div>
       </div>
     );
