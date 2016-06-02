@@ -55,14 +55,15 @@ function formToWeeklyItem(form) {
   return transformer(form);
 }
 
-export function sendWeeklyItem(entitiy) {
+export function sendWeeklyItem(entity) {
   return new Promise(
     (resolve, reject) => {
       RadioKit
         .record('agenda', 'Schedule.Weekly.Item')
-        .create(entitiy)
-        .on('loaded', (__, _, data) => resolve(data))
-        .on('error', () => reject)
+        .on('loaded', resolve)
+        .on('warning', reject)
+        .on('error', reject)
+        .create(entity)
       ;
     }
   );

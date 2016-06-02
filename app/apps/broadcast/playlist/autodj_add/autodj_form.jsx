@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 import {
   Map,
   List,
@@ -37,12 +38,17 @@ const EMPTY_MODEL = Map({
   hours: EMPTY_RANGE,
 });
 
+import { STEPS_NAMES } from './autodj_form_steps';
+
 const AutoDJForm = React.createClass({
   propTypes: {
     currentBroadcastChannel: React.PropTypes.string,
     defaultTimeOffset: React.PropTypes.number.isRequired,
     defaultTimePeriod: React.PropTypes.number,
+    step: React.PropTypes.number.isRequired,
+    onStep: React.PropTypes.func.isRequired,
     afterFormAccept: React.PropTypes.func,
+    afterFormCancel: React.PropTypes.func,
   },
 
   getDefaultProps() {
@@ -101,14 +107,29 @@ const AutoDJForm = React.createClass({
     this.handleModelChange(['weeklyplan'], weeklyplan);
   },
 
+  triggerFormCancel() {
+    this.setState(this.getInitialState());
+    const { afterFormCancel = () => null } = this.props;
+    afterFormCancel();
+  },
+
   triggerFormAccept() {
     const { model } = this.state;
     const { afterFormAccept = () => null } = this.props;
     afterFormAccept(model);
   },
 
+  triggerNextStep() {
+    this.props.onStep(this.props.step + 1);
+  },
+
+  triggerStep(step) {
+    this.props.onStep(step);
+  },
+
   render() {
     const { model } = this.state;
+    const { step } = this.props;
     const typeDetailsForm = ({
       [AUTODJ_OPTIONS[0]]: (
         model.getIn(['repository']) &&
@@ -137,75 +158,115 @@ const AutoDJForm = React.createClass({
         onSubmit={this.handleSubmit}
         className="AutoDJForm"
       >
-        <fieldset>
-          <div className="form-group">
-            <label htmlFor="autodjform_type">
-              <Translate content="AutoDJForm.typeLabel" />
-            </label>
-            <select
-              className="form-control"
-              name="autodjform_type"
-              value={model.get('type')}
-              onChange={this.handleTypeChange}
-            >
-              {AUTODJ_OPTIONS.map(option => (
-                <option key={option} value={option}>{option}</option>
-              ))}
-            </select>
-          </div>
-          <div className="form-group">
-            <label>
-              <Translate content="AutoDJForm.weeklyplanLabel" />
-            </label>
-            <WeeklyPlanConnectedPicker
-              broadcastChannelId={this.props.currentBroadcastChannel}
-              value={model.get('weeklyplan')}
-              onChange={this.handleWeeklyPlanChange}
-            />
-          </div>
+        <div className={classnames({ hidden: step >= STEPS_NAMES.indexOf('finishing') })}>
 
-          <div className="form-group">
-            <label>
-              <Translate content="AutoDJForm.repositoryLabel" />
-            </label>
-            <VaultRepositoryPicker
-              value={model.get('repository')}
-              onChange={this.handleRepositoryChange}
-            />
-          </div>
-        </fieldset>
+          <fieldset className={classnames({ hidden: step < STEPS_NAMES.indexOf('type') })}>
+            <div className="form-group">
+              <label htmlFor="autodjform_type">
+                <Translate content="AutoDJForm.typeLabel" />
+              </label>
+              <select
+                className="form-control"
+                name="autodjform_type"
+                value={model.get('type')}
+                onChange={this.handleTypeChange}
+              >
+                {AUTODJ_OPTIONS.map(option => (
+                  <option key={option} value={option}>{option}</option>
+                ))}
+              </select>
+            </div>
+          </fieldset>
+
+          <fieldset className={classnames({ hidden: step < STEPS_NAMES.indexOf('repository') })}>
+            <div className="form-group">
+              <label>
+                <Translate content="AutoDJForm.repositoryLabel" />
+              </label>
+              <VaultRepositoryPicker
+                value={model.get('repository')}
+                onChange={this.handleRepositoryChange}
+              />
+            </div>
+          </fieldset>
+
+          <fieldset className={classnames({ hidden: step < STEPS_NAMES.indexOf('details') })}>
+            <div className="form-group">
+              <Translate component="label" content="AutoDJForm.detailsLabel" />
+              {typeDetailsForm}
+            </div>
+          </fieldset>
+
+          <fieldset className={classnames({ hidden: step < STEPS_NAMES.indexOf('time') })}>
+            <div className="form-group">
+              <Translate component="label" content="AutoDJForm.weekdays" />
+              <WeekDatesPicker
+                value={this.getWeekdays()}
+                onChange={this.handleWeekdaysChange}
+              />
+            </div>
+            <div>
+              <HourRangePicker
+                value={this.getHours()}
+                onChange={this.handleHoursChange}
+              />
+            </div>
+          </fieldset>
+
+          <fieldset className={classnames({ hidden: step < STEPS_NAMES.indexOf('plan') })}>
+            <div className="form-group">
+              <label>
+                <Translate content="AutoDJForm.weeklyplanLabel" />
+              </label>
+              <WeeklyPlanConnectedPicker
+                broadcastChannelId={this.props.currentBroadcastChannel}
+                value={model.get('weeklyplan')}
+                onChange={this.handleWeeklyPlanChange}
+              />
+            </div>
+          </fieldset>
+
+        </div>
 
         <fieldset>
-          {typeDetailsForm}
-        </fieldset>
-
-        <fieldset>
-          <div className="form-group">
-            <Translate component="h4" content="AutoDJForm.weekdays" />
-            <WeekDatesPicker
-              value={this.getWeekdays()}
-              onChange={this.handleWeekdaysChange}
-            />
-          </div>
-          <div>
-            <HourRangePicker
-              value={this.getHours()}
-              onChange={this.handleHoursChange}
-            />
-          </div>
-        </fieldset>
-
-        <fieldset>
+          {
+            (
+              (step === STEPS_NAMES.indexOf('plan')) ||
+              (step === STEPS_NAMES.indexOf('time') && model.get('weeklyplan'))
+            )
+              ? (
+              <Translate
+                className="btn btn-primary pull-right"
+                component="button"
+                content="AutoDJForm.acceptButton"
+                onClick={this.triggerFormAccept}
+              />
+            ) : null
+          }{
+            (
+              (step < STEPS_NAMES.indexOf('time')) ||
+              (step === STEPS_NAMES.indexOf('time') && !model.get('weeklyplan'))
+            )
+            ? (
+              <Translate
+                className="btn btn-primary pull-right"
+                component="button"
+                content="AutoDJForm.nextButton"
+                onClick={this.triggerNextStep}
+              />
+            ) : null
+          }
           <Translate
-            className="btn btn-primary pull-right"
+            className="btn btn-default-bright pull-right"
             component="button"
-            content="AutoDJForm.acceptButton"
-            onClick={this.triggerFormAccept}
+            content="AutoDJForm.closeButton"
+            onClick={this.triggerFormCancel}
           />
         </fieldset>
       </form>
     );
   },
 });
+
 
 export default AutoDJForm;

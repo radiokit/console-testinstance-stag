@@ -15,31 +15,47 @@ import {
   sendWeeklyItem,
 } from './autodj_form_sender_utils';
 
+import { STEPS_NAMES } from './autodj_form_steps';
+
 const AutoDJFormSender = React.createClass({
   propTypes: {
     afterFormAccept: React.PropTypes.func,
+    afterFormCancel: React.PropTypes.func,
   },
 
   getInitialState() {
-    return {};
+    return {
+      step: 0,
+    };
   },
 
   sendForm(form) {
     const { afterFormAccept } = this.props;
     const entity = formToWeeklyItem(form);
     const job = sendWeeklyItem(entity);
-    job
+    return job
       .then(afterFormAccept)
-      .catch(() => this.setState({ errors: ['AutoDJFormSender.sendingError'] }));
+      .catch(() => this.setState({ step: STEPS_NAMES.indexOf('finishing') - 1, errors: ['AutoDJFormSender.sendingError'] }));
   },
 
   handleFormAccept(form) {
-    this.setState({
-      errors: validateForm(form),
-      form: null,
-    }, () => {
-      this.state.errors.length === 0 && this.sendForm(form);
-    });
+    const errors = validateForm(form);
+    if (errors.length === 0) {
+      this.setState({ step: STEPS_NAMES.indexOf('finishing'), errors });
+      this.sendForm(form);
+      return;
+    }
+    this.setState({ errors });
+  },
+
+  handleFormCancel() {
+    const { afterFormCancel = () => null } = this.props;
+    this.setState({ errors: [], step: 0 });
+    afterFormCancel();
+  },
+
+  handleStepChange(step) {
+    this.setState({ step });
   },
 
   render() {
@@ -50,6 +66,9 @@ const AutoDJFormSender = React.createClass({
     const props = {
       ...this.props,
       afterFormAccept: this.handleFormAccept,
+      afterFormCancel: this.handleFormCancel,
+      step: this.state.step,
+      onStep: this.handleStepChange,
     };
 
     return (
