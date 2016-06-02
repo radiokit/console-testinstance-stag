@@ -1,8 +1,6 @@
 import React from 'react';
-import clone from 'clone';
 
 import ToolbarButton from './toolbar_button_widget.jsx';
-
 
 export default React.createClass({
   propTypes: {
@@ -11,26 +9,47 @@ export default React.createClass({
     hintTooltipKey: React.PropTypes.string,
     contentPrefix: React.PropTypes.string,
     disabled: React.PropTypes.bool,
-    modalElement: React.PropTypes.oneOfType([React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]).isRequired,
+    modalElement: React.PropTypes.oneOfType([
+      React.PropTypes.func,
+      React.PropTypes.instanceOf(React.Component),
+    ]).isRequired,
     modalProps: React.PropTypes.object,
   },
 
+  getDefaultProps() {
+    return {
+      modalProps: {},
+      modalElement: () => (<noscript />),
+    };
+  },
 
-  onClick: function(e) {
+  onClick(e) {
     e.preventDefault();
-    //some modalElement's components may have unimplemented show function and only hold ref to modal
+    // some modalElement's components may have unimplemented show function
+    // and only hold ref to modal
     (this.refs.modal.show && this.refs.modal.show()) || this.refs.modal.refs.modal.show();
   },
 
-
-  render: function() {
-    let modalPropsMerged = clone(this.props.modalProps);
-    modalPropsMerged.ref = "modal";
+  render() {
+    const {
+      modalProps,
+      modalElement: Element,
+    } = this.props;
+    const modalPropsMerged = {
+      ...modalProps,
+      ref: 'modal',
+    };
     return (
       <span>
-        {React.createElement(this.props.modalElement, modalPropsMerged)}
-        <ToolbarButton icon={this.props.icon} labelTextKey={this.props.labelTextKey} hintTooltipKey={this.props.hintTooltipKey} disabled={this.props.disabled} onClick={this.onClick}/>
-      </span>
+        <Element {...modalPropsMerged} />
+        <ToolbarButton
+          icon={this.props.icon}
+          labelTextKey={this.props.labelTextKey}
+          hintTooltipKey={this.props.hintTooltipKey}
+          disabled={this.props.disabled}
+          onClick={this.onClick}
+        />
+     </span>
     );
-  }
+  },
 });
