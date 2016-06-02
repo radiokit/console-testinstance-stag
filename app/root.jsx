@@ -16,7 +16,7 @@ export default React.createClass({
   propTypes: {
     children: React.PropTypes.any,
     history: React.PropTypes.object,
-    routes: React.PropTypes.object,
+    routes: React.PropTypes.arrayOf(React.PropTypes.object),
     params: React.PropTypes.object,
   },
 

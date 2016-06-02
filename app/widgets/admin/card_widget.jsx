@@ -136,7 +136,7 @@ export default React.createClass({
         : null
         }
 
-        <CardBody cardPadding={this.props.cardPadding && this.props.sidebarElement}>
+        <CardBody cardPadding={!!(this.props.cardPadding && this.props.sidebarElement)}>
           {(this.props.sidebarElement)
           ? (
                 <CardSidebar>

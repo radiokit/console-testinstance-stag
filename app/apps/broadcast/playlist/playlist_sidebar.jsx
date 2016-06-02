@@ -21,9 +21,9 @@ const PlaylistSidebar = React.createClass({
     };
   },
 
-  triggerOffsetChange(op, quantity, unit) {
+  triggerOffsetChange(command, quantity, unit) {
     const { onOffsetStartChange } = this.props;
-    const offset = moment(this.props.offsetStart)[op](quantity, unit).valueOf();
+    const offset = moment(this.props.offsetStart)[command](quantity, unit).valueOf();
     onOffsetStartChange && onOffsetStartChange(offset);
   },
 
