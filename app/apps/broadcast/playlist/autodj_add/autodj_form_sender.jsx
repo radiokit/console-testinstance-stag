@@ -55,8 +55,10 @@ const AutoDJFormSender = React.createClass({
     return (
       <div className="modal-body">
         <div className="AutoDJFormSender">
-          <div className="AutoDJFormSender__errors">
-            {errors.map((error, i) => <div key={i}>{counterpart(error)}</div>)}
+          <div className="AutoDJFormSender__errors has-error">
+            {errors.map((error, i) => (
+              <div className="text-danger text-caption" key={i}>{counterpart(error)}</div>
+            ))}
           </div>
           <AutoDJForm {...props} />
         </div>

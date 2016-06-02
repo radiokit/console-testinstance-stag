@@ -1,15 +1,16 @@
 export default {
   AutoDJFormSender: {
     sendingError: 'Request rejected',
-    noDateSelected: null, // TODO
-    noStartDate: null, // TODO
-    noEndDate: null, // TODO
-    noTagsError: null, // TODO
-    tagMissingError: null, // TODO
-    ratioMissingError: null, // TODO
-    noTypeError: null, // TODO
-    noWeeklyPlanError: null, // TODO
-    noRepositoryError: null, // TODO
-    noDetailsError: null, // TODO
+    noDateSelected: 'No date selected',
+    noStartHour: 'No starting time',
+    noEndHour: 'No ending time',
+    noTagsError: 'No tags selected',
+    tagMissingError: 'No tag in entry',
+    ratioMissingError: 'No ratio in entry',
+    noTypeError: 'No type selected',
+    noWeeklyPlanError: 'No plan selected',
+    noRepositoryError: 'No repository selected',
+    noDetailsError: 'No details for selected type',
+    startAfterEndError: 'End time is before start time',
   },
 };

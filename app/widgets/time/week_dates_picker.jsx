@@ -22,7 +22,7 @@ const WeekDayPicker = React.createClass({
   },
 
   render() {
-    this.weekdayNames = this.weekdayNames || range(0, 7).map(day => moment().day(1).add(day, 'days').format('dddd'));
+    this.weekdayNames = this.weekdayNames || getWeekdays();
 
     const { value = Map() } = this.props;
 
@@ -49,10 +49,9 @@ const WeekDayPicker = React.createClass({
     );
   },
 });
-/*
- <label>
- <input type="checkbox" value="">
- <span>Default checkbox</span>
- </label>
- */
+
+function getWeekdays() {
+  return range(0, 7).map(day => moment().day(1).add(day, 'days').format('dddd'));
+}
+
 export default WeekDayPicker;
