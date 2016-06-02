@@ -49,19 +49,14 @@ export default {
 
     administration: {
       icon: 'settings',
-      user_accounts: {
-        index() {
-          return '/apps/administration/user_accounts/index';
-        },
-      },
       broadcast_channels: {
         index() {
           return '/apps/administration/broadcast_channels/index';
         },
       },
-      editors: {
+      users: {
         index() {
-          return '/apps/administration/editors/index';
+          return '/apps/administration/users/index';
         },
       },
       file_repositories: {

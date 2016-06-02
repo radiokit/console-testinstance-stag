@@ -5,66 +5,75 @@ export default {
         show: {
           tabs: {
             body: {
-              imports_schema: {
+              processing_schema: {
                 table: {
                   index: {
                     actions: {
-                      create: "Dodaj import",
+                      create: "Dodaj procesor",
                     },
 
                     table: {
                       header: {
                         name: "Nazwa",
-                        key: "Klucz",
                         kind: "Rodzaj",
                         connector_settings: "Ustawienia",
                       },
-                      loading: "Ładowanie importów...",
+                      loading: "Ładowanie listy procesórów...",
                     },
 
                     modals: {
                       create: {
-                        header: "Dodaj import",
+                        header: "Dodaj procesor",
                         action: {
                           proceed: "Dodaj",
                           close: "Close",
                           cancel: "Cancel",
                         },
                         message: {
-                          acknowledgement: "Dodano import",
-                          progress: "Dodawanie importów...",
+                          acknowledgement: "Dodano procesor",
+                          progress: "Dodawanie procesorów...",
                         },
                         form: {
                           name: {
                             label: "Nazwa",
-                            hint: "Nazwa importu zrozumiała dla użytkownika.",
-                          },
-                          json_programmes_url: {
-                            label: "URL do programów",
-                          },
-                          json_episodes_url: {
-                            label: "URL do epizodów",
+                            hint: "Nazwa procesora zrozumiała dla użytkownika.",
                           },
                           kind: {
                             label: "Rodzaj",
                             values: {
-                              json: "JSON",
+                              transcode: {
+                                audio: {
+                                  webbrowser: "Kodowanie dźwięków do formatu przeglądarek WWW",
+                                },
+                              },
+                              analysis: {
+                                audio: {
+                                  duration: "Obliczanie długości dźwięku",
+                                  replaygain: "Obliczanie ReplayGain",
+                                  tags: "Ekstrakcja metadanych",
+                                },
+                              },
+                              visualisation: {
+                                audio: {
+                                  waveform: "Generowanie obwiedni",
+                                }
+                              }
                             }
                           },
                         },
                       },
 
                       delete: {
-                        header: "Usuń importy",
+                        header: "Usuń procesory",
                         action: {
                           proceed: "Usuń",
                           close: "Zamknij",
                           cancel: "Anuluj",
                         },
                         message: {
-                          progress: "Usuwanie importów...",
-                          confirmation: "Czy napewno chcesz usunąć te importy?",
-                          acknowledgement: "Usunięto importy.",
+                          progress: "Usuwanie procesorów...",
+                          confirmation: "Czy napewno chcesz usunąć te procesory?",
+                          acknowledgement: "Usunięto procesory.",
                         },
                       },
                     },

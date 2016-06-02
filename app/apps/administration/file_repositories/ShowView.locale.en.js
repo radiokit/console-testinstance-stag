@@ -7,6 +7,7 @@ export default {
             headers: {
               metadata_schema: "Metadata",
               tags_schema: "Tags",
+              processing_schema: "Processors",
               imports_schema: "Imports",
               exports_schema: "Exports",
             },

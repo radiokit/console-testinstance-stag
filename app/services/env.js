@@ -15,7 +15,7 @@ function getEnv() {
     },
     external: {
     },
-    verbose: false,
+    verbose: true
   };
 }
 

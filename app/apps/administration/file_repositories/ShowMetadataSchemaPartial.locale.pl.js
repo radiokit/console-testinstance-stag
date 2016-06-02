@@ -17,7 +17,8 @@ export default {
                         name: "Field name",
                         key: "Key",
                         kind: "Value type",
-                      }
+                      },
+                      loading: "Ładowanie schematu metadanych...",
                     },
 
                     modals: {
