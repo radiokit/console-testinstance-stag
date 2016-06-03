@@ -30,19 +30,9 @@ export default {
           return '/apps/infrastructure/computing_nodes/index';
         },
       },
-      external_inputs: {
+      media: {
         index() {
-          return '/apps/infrastructure/external_inputs/index';
-        },
-      },
-      transmissions: {
-        index() {
-          return '/apps/infrastructure/transmissions/index';
-        },
-      },
-      patchbay: {
-        index() {
-          return '/apps/infrastructure/patchbay/index';
+          return '/apps/infrastructure/media/index';
         },
       },
     },

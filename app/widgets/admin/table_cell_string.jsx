@@ -5,10 +5,23 @@ export default React.createClass({
     record: React.PropTypes.object.isRequired,
     value: React.PropTypes.string,
     attribute: React.PropTypes.string.isRequired,
+    selectable: React.PropTypes.bool.isRequired,
+  },
+
+
+  getDefaultProps: function() {
+    return {
+      selectable: false
+    };
   },
 
 
   render: function() {
-    return (<span>{this.props.value}</span>);
+    if(this.props.selectable) {
+      return (<span className="selectable">{this.props.value}</span>);
+
+    } else {
+      return (<span>{this.props.value}</span>);
+    }
   }
 });
