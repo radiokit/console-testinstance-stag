@@ -76,7 +76,7 @@ const HourPicker = React.createClass({
                 )
               }
             />
-            <Translate component="label" content="HourPicker.hour" />
+            <Translate component="label" content="HourPicker.second" />
           </div>
         </div>
       </div>
