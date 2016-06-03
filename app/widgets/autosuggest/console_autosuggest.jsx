@@ -1,6 +1,7 @@
 import React from 'react';
 // github.com/moroshko/react-autosuggest
 import Autosuggest from 'react-autosuggest';
+import LoadingWidget from '../general/loading_widget.jsx';
 
 import './console_autosuggest.scss';
 const ConsoleAutosuggest = React.createClass({
@@ -17,17 +18,21 @@ const ConsoleAutosuggest = React.createClass({
     onSuggestionSelected: React.PropTypes.func,
     focusInputOnSuggestionClick: React.PropTypes.bool,
     id: React.PropTypes.string,
+    isLoading: React.PropTypes.bool,
   },
 
   render() {
     const { theme, ...autosuggestProps } = this.props;
 
     return (
-      <span className="twitter-typeahead">
-        <Autosuggest
-          {...autosuggestProps}
-        />
-      </span>
+      <div>
+        <span className="twitter-typeahead">
+          <Autosuggest
+            {...autosuggestProps}
+          />
+        </span>
+        { this.props.isLoading ? <LoadingWidget className="ConsoleAutosuggest__spinner" /> : null }
+      </div>
     );
   },
 });

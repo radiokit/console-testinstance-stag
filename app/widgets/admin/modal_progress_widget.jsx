@@ -16,6 +16,7 @@ export default React.createClass({
     progressMax: React.PropTypes.number,
     step: React.PropTypes.oneOf(['confirmation', 'progress', 'acknowledgement', 'cancelled', 'error']).isRequired,
     size: React.PropTypes.oneOf(['normal', 'large']),
+    disableProceed: React.PropTypes.bool,
     onSuccess: React.PropTypes.func,
     onDismiss:React.PropTypes.func,
   },
@@ -128,18 +129,19 @@ export default React.createClass({
                         content={this.props.contentPrefix + ".action.proceed"}
                         role="button"
                         className={"btn btn-" + this.props.proceedType}
+                        disabled={this.props.disableProceed}
                         onClick={this.onConfirm}
                       />
-                        {() => {
-                          if(this.props.warning && this.props.step === "confirmation") {
-                            return (
-                              <Translate
-                                content={"widgets.admin.modal.warnings." + this.props.warning}
-                                className={"ModalProgressWidget__Warning pull-left text-center text-" + this.props.proceedType}
-                              />
-                            );
-                          }
-                        }()}
+                      {() => {
+                        if(this.props.warning && this.props.step === "confirmation") {
+                          return (
+                            <Translate
+                              content={"widgets.admin.modal.warnings." + this.props.warning}
+                              className={"ModalProgressWidget__Warning pull-left text-center text-" + this.props.proceedType}
+                            />
+                          );
+                        }
+                      }()}
                     </div>
                   );
 

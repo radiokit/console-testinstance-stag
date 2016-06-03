@@ -8,6 +8,7 @@ export default {
     form: {
       file: {
         label: 'Nazwa pliku',
+        hint: 'Szukaj pliku',
       },
       name: {
         label: 'Nazwa utworu',
@@ -21,18 +22,22 @@ export default {
     },
     action: {
       cancel: 'Anuluj',
-      proceed: 'Kontynuuj',
+      proceed: 'Dodaj do ramówki',
       close: 'Zamknij',
     },
     message: {
+      progress: 'Dodawanie pliku...',
       acknowledgement: 'Plik został pomyślnie dodany.',
+    },
+    info: {
+      type_and_desc: 'Typ i opis',
     },
   },
   update: {
     header: 'Edycja utworu',
     form: {
-      name: {
-        label: 'Nazwa utworu',
+      file: {
+        label: 'Nazwa pliku',
       },
       start_at: {
         label: 'Czas rozpoczęcia',
@@ -40,6 +45,16 @@ export default {
       stop_at: {
         label: 'Czas zakończenia',
       },
+      name: {
+        label: 'Nazwa',
+      },
+    },
+    info: {
+      type_and_desc: 'Typ i opis',
+    },
+    message: {
+      progress: 'Edytowanie pliku...',
+      acknowledgement: 'Plik został pomyślnie edytowany.',
     },
     action: {
       cancel: 'Anuluj',
@@ -55,7 +70,7 @@ export default {
     },
     action: {
       cancel: 'Anuluj',
-      proceed: 'Kontynuuj',
+      proceed: 'Usuń',
       close: 'Zamknij',
     },
   },

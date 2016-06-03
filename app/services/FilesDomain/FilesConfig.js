@@ -6,7 +6,9 @@ export const model = 'Data.Record.File';
 export const readFields = [
   'id',
   'name',
+  'stage',
   'file_size',
+  'updated_at',
 ];
 export const updateFields = [
   'name',
