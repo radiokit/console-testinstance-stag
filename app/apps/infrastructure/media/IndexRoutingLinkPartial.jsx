@@ -22,10 +22,10 @@ export default React.createClass({
       input_stream_http_id: { renderer: "string", props: { selectable: true } },
       input_file_http_id: { renderer: "string", props: { selectable: true } },
       input_file_radiokit_vault_id: { renderer: "string", props: { selectable: true } },
+      input_media_routing_group_id: { renderer: "string", props: { selectable: true } },
       output_stream_rtp_id: { renderer: "string", props: { selectable: true } },
       output_stream_radiokit_diffusor_id: { renderer: "string", props: { selectable: true } },
-      routing_group_id: { renderer: "string", props: { selectable: true } },
-      routing_link_id: { renderer: "string", props: { selectable: true } },
+      output_media_routing_group_id: { renderer: "string", props: { selectable: true } },
     };
   },
 
@@ -53,10 +53,10 @@ export default React.createClass({
       output_stream_radiokit_diffusor_id: {
         type: 'string',
       },
-      routing_group_id: {
+      input_media_routing_group_id: {
         type: 'string',
       },
-      routing_link_id: {
+      output_media_routing_group_id: {
         type: 'string',
       },
 
