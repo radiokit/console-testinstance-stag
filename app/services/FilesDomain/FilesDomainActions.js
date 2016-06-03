@@ -54,7 +54,7 @@ const actions = {
     );
   },
 
-  loadRecentFiles(limit = 100, options = {}) {
+  loadRecentFiles(limit = 25, options = {}) {
     runFilesQuery(
       {
         conditions: [
@@ -75,14 +75,25 @@ const actions = {
     );
   },
 
-  searchFiles(query, options = {}) {
+  searchFiles(query, stage = 'current', options = {}) {
     runFilesQuery(
       {
+        conditions: [
+          {
+            field: 'stage',
+            comparison: 'eq',
+            value: stage,
+          },
+          {
+            field: 'name',
+            comparison: 'ilike',
+            value: `%${query}%`,
+          },
+        ],
         [searchKey]: true,
         [searchPhraseKey]: query,
         offset: 0,
         limit: 10,
-        // TODO
       },
       options
     );

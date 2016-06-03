@@ -1,9 +1,11 @@
 import React from 'react';
 import connect from 'immview-react-connect';
+import { debounce } from 'lodash';
 import FilePickerWidget from './file_picker_widget.jsx';
 import FilesDomain from '../../../../services/FilesDomain';
 
-const recentFilesLimit = 20;
+const recentFilesLimit = 10;
+
 const FilePicker = React.createClass({
   propTypes: {
     placeholder: React.PropTypes.string,
@@ -23,10 +25,11 @@ const FilePicker = React.createClass({
     FilesDomain.loadRecentFiles(recentFilesLimit);
   },
 
+  triggerSearch: debounce((input) => FilesDomain.searchFiles(input), 200),
+
   handleInputChange(input) {
-    // TODO FilesDomain.searchFiles()
-    console.log("files: ");
-    console.log(this.getRecentFiles().toJS());
+    this.triggerSearch(input);
+
     if (input === '') {
       this.setState({ displayRecent: true });
       this.props.onClearInput();

@@ -1,6 +1,7 @@
 import React from 'react';
 // github.com/moroshko/react-autosuggest
 import Autosuggest from 'react-autosuggest';
+import LoadingWidget from '../general/loading_widget.jsx';
 
 import './console_autosuggest.scss';
 const ConsoleAutosuggest = React.createClass({
@@ -27,6 +28,7 @@ const ConsoleAutosuggest = React.createClass({
         <Autosuggest
           {...autosuggestProps}
         />
+      <LoadingWidget className="ConsoleAutosuggest__spinner" />
       </span>
     );
   },
