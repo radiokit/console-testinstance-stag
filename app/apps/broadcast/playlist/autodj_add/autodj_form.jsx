@@ -45,10 +45,15 @@ const AutoDJForm = React.createClass({
     currentBroadcastChannel: React.PropTypes.string,
     defaultTimeOffset: React.PropTypes.number.isRequired,
     defaultTimePeriod: React.PropTypes.number,
+    
+    model: React.PropTypes.object.isRequired,
+    onModelChange: React.PropTypes.func,
+    
     step: React.PropTypes.number.isRequired,
     onStep: React.PropTypes.func.isRequired,
-    afterFormAccept: React.PropTypes.func,
-    afterFormCancel: React.PropTypes.func,
+    
+    onFormAccept: React.PropTypes.func,
+    onFormCancel: React.PropTypes.func,
   },
 
   getDefaultProps() {
@@ -57,20 +62,18 @@ const AutoDJForm = React.createClass({
     };
   },
 
-  getInitialState() {
-    return {
-      model: EMPTY_MODEL,
-    };
-  },
-
   getHours() {
-    const { model } = this.state;
+    const model = this.getModel();
     return model.get('hours') || EMPTY_RANGE;
   },
 
   getWeekdays() {
-    const { model } = this.state;
-    return model.get('weekdays');
+    const model = this.getModel();
+    return model.get('weekdays') || EMPTY_WEEKDAYS;
+  },
+  
+  getModel() {
+    return this.props.model;
   },
 
   handleHoursChange(hours) {
@@ -86,13 +89,19 @@ const AutoDJForm = React.createClass({
   },
 
   handleModelChange(path, value) {
-    const { model } = this.state;
-    this.setState({ model: model.setIn(path, value) });
+    const model = this.getModel();
+    const newModel = model.setIn(path, value);
+    const { onModelChange = () => null } = this.props;
+    onModelChange(newModel);
   },
 
   handleTypeChange(e) {
-    this.handleModelChange(['type'], e.target.value);
-    this.handleModelChange(['details'], null);
+    const { onModelChange = () => null } = this.props;
+    onModelChange(
+      this.getModel()
+        .setIn(['type'], e.target.value)
+        .setIn(['details'], null)
+    );
   },
 
   handleRepositoryChange(repository) {
@@ -108,15 +117,13 @@ const AutoDJForm = React.createClass({
   },
 
   triggerFormCancel() {
-    this.setState(this.getInitialState());
-    const { afterFormCancel = () => null } = this.props;
-    afterFormCancel();
+    const { onFormCancel = () => null } = this.props;
+    onFormCancel();
   },
 
   triggerFormAccept() {
-    const { model } = this.state;
-    const { afterFormAccept = () => null } = this.props;
-    afterFormAccept(model);
+    const { onFormAccept = () => null } = this.props;
+    onFormAccept();
   },
 
   triggerNextStep() {
@@ -128,10 +135,10 @@ const AutoDJForm = React.createClass({
   },
 
   render() {
-    const { model } = this.state;
+    const model = this.getModel();
     const { step } = this.props;
     const typeDetailsForm = ({
-      [AUTODJ_OPTIONS[0]]: (
+      shuffle: (
         model.getIn(['repository']) &&
         (
           <AutoDJShuffleForm
@@ -141,7 +148,7 @@ const AutoDJForm = React.createClass({
           />
         )
       ),
-      [AUTODJ_OPTIONS[1]]: (
+      rotation: (
         model.getIn(['repository']) &&
         (
           <AutoDJRotationForm
@@ -168,9 +175,10 @@ const AutoDJForm = React.createClass({
               <select
                 className="form-control"
                 name="autodjform_type"
-                value={model.get('type')}
+                value={model.get('type') || ''}
                 onChange={this.handleTypeChange}
               >
+                <option key={-1} value="">{counterpart('AutoDJForm.types.empty')}</option>
                 {AUTODJ_OPTIONS.map(option => (
                   <option key={option} value={option}>{counterpart(`AutoDJForm.types.${option}`)}</option>
                 ))}

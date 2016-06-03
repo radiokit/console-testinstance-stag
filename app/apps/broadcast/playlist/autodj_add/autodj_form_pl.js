@@ -9,7 +9,8 @@ export default {
     closeButton: 'Zamknij',
     weekdays: 'Powtarzaj automatycznie w następujące dni tygodnia',
     types: {
-      shuffle: 'Shuffle',
+      empty: 'Wybierz typ',
+      shuffle: 'Losowo',
     },
     steps: {
       type: 'Typ',

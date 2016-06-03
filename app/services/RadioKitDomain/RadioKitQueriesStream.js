@@ -13,7 +13,7 @@ export const RadioKitQueriesStream = new Data(OrderedMap());
 export default RadioKitQueriesStream;
 
 export function update(queryParams, status, data, time) {
-  console.log(queryParams.toJS(), status, data.toJS(), time);
+  // console.log(queryParams.toJS(), status, data.toJS(), time);
   RadioKitQueriesStream.write(
     queries => (
       queries

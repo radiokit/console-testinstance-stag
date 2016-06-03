@@ -54,7 +54,7 @@ const AutoDJModal = React.createClass({
     };
 
     return (
-      <Modal contentPrefix="AutoDJModal.modal" ref="modal">
+      <Modal contentPrefix="AutoDJModal.modal" ref="modal" size="large">
         <AutoDJFormSender {...formProps} />
       </Modal>
     );

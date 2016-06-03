@@ -9,7 +9,8 @@ export default {
     closeButton: 'Close',
     weekdays: 'Repeat automatically on',
     types: {
-      shuffle: 'Losowo',
+      empty: 'Pick a type',
+      shuffle: 'Shuffle',
     },
     steps: {
       type: 'Type',

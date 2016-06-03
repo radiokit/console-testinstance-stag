@@ -1,4 +1,7 @@
 import React from 'react';
+import {
+  Map,
+} from 'immutable';
 import AutoDJForm from './autodj_form.jsx';
 
 // import Translate from 'react-translate-component';
@@ -25,32 +28,41 @@ const AutoDJFormSender = React.createClass({
 
   getInitialState() {
     return {
+      errors: [],
+      model: Map(),
       step: 0,
     };
   },
 
-  sendForm(form) {
-    const { afterFormAccept } = this.props;
-    const entity = formToWeeklyItem(form);
-    const job = sendWeeklyItem(entity);
-    return job
-      .then(afterFormAccept)
-      .catch(() => this.setState({ step: STEPS_NAMES.indexOf('finishing') - 1, errors: ['AutoDJFormSender.sendingError'] }));
+  clearForm() {
+    this.setState(this.getInitialState());
   },
 
-  handleFormAccept(form) {
-    const errors = validateForm(form);
-    if (errors.length === 0) {
-      this.setState({ step: STEPS_NAMES.indexOf('finishing'), errors });
-      this.sendForm(form);
-      return;
-    }
+  sendForm() {
+    const { afterFormAccept } = this.props;
+    const entity = formToWeeklyItem(this.state.model);
+    const job = sendWeeklyItem(entity);
+    this.setState({ step: STEPS_NAMES.indexOf('finishing') });
+    return job
+      .then(this.clearForm.bind(this))
+      .then(afterFormAccept)
+      .catch(() => this.setState({
+        step: STEPS_NAMES.indexOf('finishing') - 1,
+        errors: ['AutoDJFormSender.sendingError'],
+      }));
+  },
+
+  handleFormAccept() {
+    const errors = validateForm(this.state.model);
     this.setState({ errors });
+    if (errors.length === 0) {
+      this.sendForm();
+    }
   },
 
   handleFormCancel() {
     const { afterFormCancel = () => null } = this.props;
-    this.setState({ errors: [], step: 0 });
+    this.clearForm();
     afterFormCancel();
   },
 
@@ -58,15 +70,22 @@ const AutoDJFormSender = React.createClass({
     this.setState({ step });
   },
 
+  handleModelChange(model) {
+    this.setState({ model });
+  },
+
   render() {
     const {
-      errors = [],
+      errors,
+      model,
     } = this.state;
 
     const props = {
       ...this.props,
-      afterFormAccept: this.handleFormAccept,
-      afterFormCancel: this.handleFormCancel,
+      model,
+      onModelChange: this.handleModelChange,
+      onFormAccept: this.handleFormAccept,
+      onFormCancel: this.handleFormCancel,
       step: this.state.step,
       onStep: this.handleStepChange,
     };
