@@ -8,6 +8,9 @@ export default {
     nextButton: 'Next',
     closeButton: 'Close',
     weekdays: 'Repeat automatically on',
+    types: {
+      shuffle: 'Losowo',
+    },
     steps: {
       type: 'Type',
       repository: 'Repository',

@@ -14,12 +14,12 @@ import WeekDatesPicker from '../../../../widgets/time/week_dates_picker.jsx';
 import HourRangePicker from '../../../../widgets/time/hour_range_picker.jsx';
 
 import Translate from 'react-translate-component';
-import Counterpart from 'counterpart';
+import counterpart from 'counterpart';
 import localePL from './autodj_form_pl';
 import localeEN from './autodj_form_en';
 
-Counterpart.registerTranslations('en', localeEN);
-Counterpart.registerTranslations('pl', localePL);
+counterpart.registerTranslations('en', localeEN);
+counterpart.registerTranslations('pl', localePL);
 
 import './autodj_form_sender.scss';
 
@@ -172,7 +172,7 @@ const AutoDJForm = React.createClass({
                 onChange={this.handleTypeChange}
               >
                 {AUTODJ_OPTIONS.map(option => (
-                  <option key={option} value={option}>{option}</option>
+                  <option key={option} value={option}>{counterpart(`AutoDJForm.types.${option}`)}</option>
                 ))}
               </select>
             </div>

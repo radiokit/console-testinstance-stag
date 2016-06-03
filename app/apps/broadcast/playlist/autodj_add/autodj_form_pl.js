@@ -8,6 +8,9 @@ export default {
     nextButton: 'Dalej',
     closeButton: 'Zamknij',
     weekdays: 'Powtarzaj automatycznie w następujące dni tygodnia',
+    types: {
+      shuffle: 'Shuffle',
+    },
     steps: {
       type: 'Typ',
       repository: 'Repozytorium',
