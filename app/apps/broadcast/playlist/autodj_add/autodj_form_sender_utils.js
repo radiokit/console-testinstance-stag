@@ -42,6 +42,7 @@ function shuffleFormToWeeklyItem(form) {
         item_id: tagItem.getIn(['tag', 'id']),
         percentage: Math.round(tagItem.getIn(['ratio']) * 100),
       })),
+    record_repository_id: form.getIn(['repository', 'id']),
   });
 }
 
