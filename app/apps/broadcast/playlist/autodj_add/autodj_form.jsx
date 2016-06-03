@@ -192,7 +192,7 @@ const AutoDJForm = React.createClass({
                 <Translate content="AutoDJForm.repositoryLabel" />
               </label>
               <VaultRepositoryPicker
-                value={model.get('repository')}
+                value={model.get('repository') || null}
                 onChange={this.handleRepositoryChange}
               />
             </div>

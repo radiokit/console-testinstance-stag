@@ -17,7 +17,7 @@ function formatHour(hour) {
   return `${
     sprintf('%02s', hour.get('hour') | 0)
     }:${
-    sprintf('%02s', hour.get('minute') | 0)
+    sprintf('%02s', hour.get('minutes') | 0)
     }:${
     sprintf('%02s', hour.get('seconds') | 0)
     }`;

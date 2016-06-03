@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   List,
+  is,
 } from 'immutable';
 import ConsoleAutosuggest from './console_autosuggest.jsx';
 
@@ -35,6 +36,12 @@ const SimpleConsoleAutosuggest = React.createClass({
 
   getInitialState() {
     return { query: null };
+  },
+
+  componentWillReceiveProps(nextProps) {
+    if (!is(this.props.value, nextProps.value)) {
+      this.setState(this.getInitialState());
+    }
   },
 
   handleInputChange(event, { newValue }) {
