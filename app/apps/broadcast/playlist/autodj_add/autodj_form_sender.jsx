@@ -1,4 +1,7 @@
 import React from 'react';
+import {
+  Map,
+} from 'immutable';
 import AutoDJForm from './autodj_form.jsx';
 
 // import Translate from 'react-translate-component';
@@ -15,48 +18,85 @@ import {
   sendWeeklyItem,
 } from './autodj_form_sender_utils';
 
+import { STEPS_NAMES } from './autodj_form_steps';
+
 const AutoDJFormSender = React.createClass({
   propTypes: {
     afterFormAccept: React.PropTypes.func,
+    afterFormCancel: React.PropTypes.func,
   },
 
   getInitialState() {
-    return {};
+    return {
+      errors: [],
+      model: Map(),
+      step: 0,
+    };
   },
 
-  sendForm(form) {
+  clearForm() {
+    this.setState(this.getInitialState());
+  },
+
+  sendForm() {
     const { afterFormAccept } = this.props;
-    const entity = formToWeeklyItem(form);
+    const entity = formToWeeklyItem(this.state.model);
     const job = sendWeeklyItem(entity);
-    job
+    this.setState({ step: STEPS_NAMES.indexOf('finishing') });
+    return job
+      .then(this.clearForm.bind(this))
       .then(afterFormAccept)
-      .catch(() => this.setState({ errors: ['AutoDJFormSender.sendingError'] }));
+      .catch(() => this.setState({
+        step: STEPS_NAMES.indexOf('finishing') - 1,
+        errors: ['AutoDJFormSender.sendingError'],
+      }));
   },
 
-  handleFormAccept(form) {
-    this.setState({
-      errors: validateForm(form),
-      form: null,
-    }, () => {
-      this.state.errors.length === 0 && this.sendForm(form);
-    });
+  handleFormAccept() {
+    const errors = validateForm(this.state.model);
+    this.setState({ errors });
+    if (errors.length === 0) {
+      this.sendForm();
+    }
+  },
+
+  handleFormCancel() {
+    const { afterFormCancel = () => null } = this.props;
+    this.clearForm();
+    afterFormCancel();
+  },
+
+  handleStepChange(step) {
+    this.setState({ step });
+  },
+
+  handleModelChange(model) {
+    this.setState({ model });
   },
 
   render() {
     const {
-      errors = [],
+      errors,
+      model,
     } = this.state;
 
     const props = {
       ...this.props,
-      afterFormAccept: this.handleFormAccept,
+      model,
+      onModelChange: this.handleModelChange,
+      onFormAccept: this.handleFormAccept,
+      onFormCancel: this.handleFormCancel,
+      step: this.state.step,
+      onStep: this.handleStepChange,
     };
 
     return (
       <div className="modal-body">
         <div className="AutoDJFormSender">
-          <div className="AutoDJFormSender__errors">
-            {errors.map((error, i) => <div key={i}>{counterpart(error)}</div>)}
+          <div className="AutoDJFormSender__errors has-error">
+            {errors.map((error, i) => (
+              <div className="text-danger text-caption" key={i}>{counterpart(error)}</div>
+            ))}
           </div>
           <AutoDJForm {...props} />
         </div>

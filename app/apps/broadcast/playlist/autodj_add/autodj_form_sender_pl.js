@@ -1,15 +1,16 @@
 export default {
   AutoDJFormSender: {
     sendingError: 'Żądanie odrzucone',
-    noDateSelected: null, // TODO
-    noStartDate: null, // TODO
-    noEndDate: null, // TODO
-    noTagsError: null, // TODO
-    tagMissingError: null, // TODO
-    ratioMissingError: null, // TODO
-    noTypeError: null, // TODO
-    noWeeklyPlanError: null, // TODO
-    noRepositoryError: null, // TODO
-    noDetailsError: null, // TODO
+    noDateSelected: 'Brak wybranej daty',
+    noStartHour: 'Brak początkowej godziny',
+    noEndHour: 'Brak końcowej godziny',
+    noTagsError: 'Nie wybrano tagów',
+    tagMissingError: 'Brakuje tagu',
+    ratioMissingError: 'Brakuje proporcji',
+    noTypeError: 'Nie wybrano typu',
+    noWeeklyPlanError: 'Nie wybrano planu',
+    noRepositoryError: 'Nie wybrano repozytorium',
+    noDetailsError: 'Nie wybrano szczegółów typu',
+    startAfterEndError: 'Czas końca jest wcześniej niż początku',
   },
 };

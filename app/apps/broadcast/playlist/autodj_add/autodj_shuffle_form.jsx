@@ -6,6 +6,14 @@ import {
 } from 'immutable';
 import AutoDJShuffleInput from './autodj_shuffle_input.jsx';
 
+// import Translate from 'react-translate-component';
+import counterpart from 'counterpart';
+import localePL from './autodj_shuffle_form_pl';
+import localeEN from './autodj_shuffle_form_en';
+
+counterpart.registerTranslations('en', localeEN);
+counterpart.registerTranslations('pl', localePL);
+
 function getUnique(entries, idPath) {
   const emptyResult = entries.clear();
 
@@ -77,6 +85,7 @@ function balanceLevels(levels, targetSum, precision = 3) {
 const EMPTY_TAG = Map({ ratio: 0, tag: null });
 const EMPTY_SHUFFLE = List();
 const EMPTY_FORM = Map({ tags: EMPTY_SHUFFLE });
+const ENTRY_TAG_PATH = ['tag'];
 const ENTRY_ID_PATH = ['tag', 'id'];
 const ENTRY_RATIO_PATH = ['ratio'];
 
@@ -189,19 +198,31 @@ const AutoDJShuffleForm = React.createClass({
   },
 
   render() {
+    const entries = this.getEntries().toArray();
+    const tags = this.props.tags.filter(
+      tag => !entries.reduce(
+        (found, entry) => found || (
+          entry.getIn(ENTRY_ID_PATH) === tag.get('id')
+        ),
+        false
+      )
+    );
     return (
       <div className="AutoDJShuffleForm">
         <div className="AutoDJShuffleForm__fields form-group">
-          {this.getEntries().toArray().map((entry, i) => (
+          {entries.map((entry, i) => (
             <AutoDJShuffleInput
               key={i}
-              tags={this.props.tags}
+              tags={tags}
               value={entry}
               onChange={this.handleEntryChange}
+              showRatio={entries.length >= 2}
             />
           ))}
           <AutoDJShuffleInput
-            tags={this.props.tags}
+            placeholder={ entries.length ? counterpart('AutoDJShuffleForm.pickMoreTags') : null }
+            key={entries.length}
+            tags={tags}
             value={EMPTY_TAG}
             onChange={this.addNewEntry}
           />

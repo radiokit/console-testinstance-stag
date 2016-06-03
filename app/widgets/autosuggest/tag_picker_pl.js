@@ -1,5 +1,5 @@
 export default {
-  WeeklyPlanPicker: {
+  TagPicker: {
     placeholder: 'Wybierz tag',
   },
 };

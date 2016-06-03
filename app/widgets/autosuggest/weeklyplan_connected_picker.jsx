@@ -9,6 +9,7 @@ const WeeklyPlanConnectedPicker = React.createClass({
     value: React.PropTypes.object,
     onChange: React.PropTypes.func,
     onInputChange: React.PropTypes.func,
+    pickDefaultIfSingle: React.PropTypes.bool,
     // connector input
     broadcastChannelId: React.PropTypes.string,
     // connector output
@@ -27,12 +28,18 @@ const WeeklyPlanConnectedPicker = React.createClass({
 export default connect(
   WeeklyPlanConnectedPicker,
   WeeklyPlanDomain,
-  (data, props) => {
-    WeeklyPlanDomain.loadChannelPlans(props.broadcastChannelId);
+  (data, { broadcastChannelId, value, onChange }) => {
+    WeeklyPlanDomain.loadChannelPlans(broadcastChannelId);
+    const items = data.get('entities').filter(
+      plan => plan.get('broadcast_channel_id') === broadcastChannelId
+    );
+
+    if (items.size === 1 && !value) {
+      onChange && onChange(items.first());
+    }
+
     return {
-      items: data.get('entities').filter(
-        plan => plan.get('broadcast_channel_id') === props.broadcastChannelId
-      ),
+      items,
     };
   }
 );

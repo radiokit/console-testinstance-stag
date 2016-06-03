@@ -25,8 +25,8 @@ function hourToSeconds(hour = Map()) {
 
 function validateHourRange(hours = Map()) {
   return [
-    !hours.get('start') && ('AutoDJFormSender.noStartDate'),
-    !hours.get('end') && ('AutoDJFormSender.noEndDate'),
+    !hours.get('start') && ('AutoDJFormSender.noStartHour'),
+    !hours.get('end') && ('AutoDJFormSender.noEndHour'),
     (hourToSeconds(hours.get('start')) > hourToSeconds(hours.get('end'))) &&
       'AutoDJFormSender.startAfterEndError',
   ];

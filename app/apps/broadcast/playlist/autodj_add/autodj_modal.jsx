@@ -17,6 +17,7 @@ const AutoDJModal = React.createClass({
     defaultTimeOffset: React.PropTypes.number.isRequired,
     defaultTimePeriod: React.PropTypes.number,
     afterFormAccept: React.PropTypes.func,
+    afterFormCancel: React.PropTypes.func,
   },
 
   getDefaultProps() {
@@ -39,14 +40,21 @@ const AutoDJModal = React.createClass({
     this.hide();
   },
 
+  handleFormCancel() {
+    const { afterFormCancel } = this.props;
+    afterFormCancel && afterFormCancel();
+    this.hide();
+  },
+
   render() {
     const formProps = {
       ...this.props,
       afterFormAccept: this.handleFormAccept,
+      afterFormCancel: this.handleFormCancel,
     };
 
     return (
-      <Modal contentPrefix="AutoDJModal.modal" ref="modal">
+      <Modal contentPrefix="AutoDJModal.modal" ref="modal" size="large">
         <AutoDJFormSender {...formProps} />
       </Modal>
     );

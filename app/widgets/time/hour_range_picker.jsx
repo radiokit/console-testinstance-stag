@@ -26,14 +26,18 @@ const HourRangePicker = React.createClass({
     return (
       <div className="HourRangePicker">
         <div className="form-group">
-          <Translate component="label" content="HourRangePicker.from" />
+          <label className="text-bold">
+            <Translate content="HourRangePicker.from" />
+          </label>
           <HourPicker
             value={value.get('start')}
             onChange={start => this.triggerChange(value.set('start', start))}
           />
         </div>
         <div className="form-group">
-          <Translate component="label" content="HourRangePicker.to" />
+          <label className="text-bold">
+            <Translate content="HourRangePicker.to" />
+          </label>
           <HourPicker
             value={value.get('end')}
             onChange={end => this.triggerChange(value.set('end', end))}

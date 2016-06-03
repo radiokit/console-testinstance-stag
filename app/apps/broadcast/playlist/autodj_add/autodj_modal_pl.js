@@ -1,7 +1,7 @@
 export default {
   AutoDJModal: {
     modal: {
-      header: 'AutoDJ',
+      header: 'Dodaj automatyczne wypełnianie ramówki',
     },
   },
 };
