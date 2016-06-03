@@ -20,13 +20,13 @@ import ElectronTransmissionsIndex from './apps/electron/transmissions/IndexView.
 import InfrastructureApp from './apps/infrastructure/app.jsx';
 import InfrastructureComputingNodesIndex from './apps/infrastructure/computing_nodes/index_view.jsx';
 import InfrastructureMediaIndex from './apps/infrastructure/media/IndexView.jsx';
+import InfrastructureroadcastChannelsIndex from './apps/infrastructure/broadcast_channels/IndexView.jsx';
+import InfrastructureBroadcastChannelsShow from './apps/infrastructure/broadcast_channels/ShowView.jsx';
 import LibraryApp from './apps/library/app.jsx';
 import LibraryFileRepositoriesIndex from './apps/library/file_repositories/IndexView.jsx';
 import LibraryFileRepositoriesShow from './apps/library/file_repositories/show_view.jsx';
 import ClipEditorApp from './apps/clip_editor/app.jsx';
 import AdministrationApp from './apps/administration/app.jsx';
-import AdministrationBroadcastChannelsIndex from './apps/administration/broadcast_channels/IndexView.jsx';
-import AdministrationBroadcastChannelsShow from './apps/administration/broadcast_channels/ShowView.jsx';
 import AdministrationUsersIndex from './apps/administration/users/IndexView.jsx';
 import AdministrationFileRepositoriesIndex from './apps/administration/file_repositories/IndexView.jsx';
 import AdministrationFileRepositoriesShow from './apps/administration/file_repositories/ShowView.jsx';
@@ -55,19 +55,28 @@ Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/scope
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/form.js'));
 
 import { Dispatcher } from 'immview';
-Dispatcher.tick = f => {
-  (
-    window.requestIdleCallback ||
-    window.requestAnimationFrame ||
-    window.setImmediate ||
-    window.setTimeout
-  )(() => {
-    window.setTimeout(() => f(), 0);
-  });
-};
+if (window.requestIdleCallback) {
+  const noTime = () => 0;
+  let timeLeft = noTime;
+  Dispatcher.tick = f => {
+    if (timeLeft() > 0) {
+      f();
+    } else {
+      window.requestIdleCallback(deadline => {
+        timeLeft = deadline.timeRemaining.bind(deadline);
+        f();
+      });
+      timeLeft = noTime();
+    }
+  };
+} else if (window.requestAnimationFrame) {
+  Dispatcher.tick = window.requestAnimationFrame.bind(window);
+} else {
+  Dispatcher.tick = f => window.setTimeout(f, 10);
+}
 
 function pingGoogleAnalytics() {
-  if(typeof(ga) !== "undefined") {
+  if (typeof ga !== 'undefined') {
     ga('send', 'pageview');
   }
 }
@@ -112,13 +121,13 @@ ReactDOM.render((
         <Route path="infrastructure" component={BroadcastApp}>
           <Route path="media/index" component={InfrastructureMediaIndex} onEnter={pingGoogleAnalytics}/>
           <Route path="computing_nodes/index" component={InfrastructureComputingNodesIndex} onEnter={pingGoogleAnalytics}/>
+          <Route path="broadcast_channels">
+            <Route path="index" component={InfrastructureroadcastChannelsIndex} onEnter={pingGoogleAnalytics}/>
+            <Route path="show/:id" component={InfrastructureBroadcastChannelsShow} onEnter={pingGoogleAnalytics}/>
+          </Route>
         </Route>
 
         <Route path="administration" component={AdministrationApp}>
-          <Route path="broadcast_channels">
-            <Route path="index" component={AdministrationBroadcastChannelsIndex} onEnter={pingGoogleAnalytics}/>
-            <Route path="show/:id" component={AdministrationBroadcastChannelsShow} onEnter={pingGoogleAnalytics}/>
-          </Route>
           <Route path="users/index" component={AdministrationUsersIndex} onEnter={pingGoogleAnalytics}/>
           <Route path="file_repositories">
             <Route path="index" component={AdministrationFileRepositoriesIndex} onEnter={pingGoogleAnalytics}/>

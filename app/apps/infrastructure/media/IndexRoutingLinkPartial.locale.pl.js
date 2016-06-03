@@ -24,8 +24,8 @@ export default {
                       input_file_radiokit_vault_id: "In File Vault ID",
                       output_stream_rtp_id: "Out Stream RTP ID",
                       output_stream_radiokit_diffusor_id: "Out Stream Diffusor ID",
-                      routing_group_id: "Routing Group ID",
-                      routing_link_id: "Routing Link ID",
+                      input_media_routing_group_id: "In Routing Group ID",
+                      output_media_routing_group_id: "Out Routing Group ID",
 
                     },
                   },
@@ -69,11 +69,11 @@ export default {
                         output_stream_radiokit_diffusor_id: {
                           label: "Out Stream Diffusor ID",
                         },
-                        routing_group_id: {
-                          label: "Routing Group ID",
+                        input_media_routing_group_id: {
+                          label: "In Routing Group ID",
                         },
-                        routing_link_id: {
-                          label: "Routing Link ID",
+                        output_media_routing_group_id: {
+                          label: "Out Routing Group ID",
                         },
                       },
 

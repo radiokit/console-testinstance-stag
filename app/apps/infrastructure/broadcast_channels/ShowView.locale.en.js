@@ -1,6 +1,6 @@
 export default {
   apps: {
-    administration: {
+    infrastructure: {
       broadcast_channels: {
         show: {
           tabs: {

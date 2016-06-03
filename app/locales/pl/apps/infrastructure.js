@@ -10,6 +10,9 @@ export default {
         media: {
           title: "Media",
         },
+        broadcast_channels: {
+          title: "Kanały"
+        },
 
       },
 

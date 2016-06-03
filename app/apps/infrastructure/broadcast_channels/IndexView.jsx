@@ -16,9 +16,10 @@ export default React.createClass({
 
   buildAttributes: function() {
     return {
-      name:         { renderer: "string" },
-      slug:         { renderer: "string" },
-      user_account: { renderer: "scope-user-account" },
+      name:                   { renderer: "string" },
+      slug:                   { renderer: "string" },
+      media_routing_group_id: { renderer: "string", props:{ selectable: true } },
+      user_account:           { renderer: "scope-user-account" },
     }
   },
 
@@ -33,6 +34,13 @@ export default React.createClass({
         }
       },
       slug: {
+        type: "string",
+        hint: true,
+        validators: {
+          presence: true,
+        }
+      },
+      media_routing_group_id: {
         type: "string",
         hint: true,
         validators: {
@@ -63,7 +71,7 @@ export default React.createClass({
 
   render: function() {
     return (
-      <Index contentPrefix="apps.administration.broadcast_channels" app="agenda" model="Broadcast.Channel" attributes={this.buildAttributes()} form={this.buildForm()} indexQueryFunc={this.modifyIndexQuery} />
+      <Index contentPrefix="apps.infrastructure.broadcast_channels" app="agenda" model="Broadcast.Channel" attributes={this.buildAttributes()} form={this.buildForm()} indexQueryFunc={this.modifyIndexQuery} />
     );
   }
 });

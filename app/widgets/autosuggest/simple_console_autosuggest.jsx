@@ -2,14 +2,13 @@ import React from 'react';
 import {
   List,
 } from 'immutable';
-import { debounce } from 'lodash';
 import ConsoleAutosuggest from './console_autosuggest.jsx';
 
 import queryFits from '../../helpers/query_fits';
 
 const itemQualifies =
   (query, getItemName) =>
-    item => queryFits(getItemName(item), query);
+    item => queryFits(getItemName(item), query, true);
 
 const filterItems =
   (query, getItemName) =>
@@ -19,12 +18,13 @@ const filterItems =
 
 const SimpleConsoleAutosuggest = React.createClass({
   propTypes: {
-    placeholder: React.PropTypes.string,
+    placeholder: React.PropTypes.string.isRequired,
     value: React.PropTypes.object,
     onChange: React.PropTypes.func,
     onInputChange: React.PropTypes.func,
     items: React.PropTypes.object.isRequired,
     getItemName: React.PropTypes.func.isRequired,
+    isLoading: React.PropTypes.bool,
   },
 
   getDefaultProps() {
@@ -55,6 +55,11 @@ const SimpleConsoleAutosuggest = React.createClass({
     );
   },
 
+  handleBlur() {
+    const query = this.props.value ? this.props.getItemName(this.props.value) : '';
+    this.setState({ query });
+  },
+
   render() {
     const { value, items, getItemName } = this.props;
     const valueName = value ? getItemName(value) : '';
@@ -69,7 +74,8 @@ const SimpleConsoleAutosuggest = React.createClass({
       value: inputValue,
       onChange: this.handleInputChange,
       type: 'search',
-      placeholder: this.props.placeholder || 'Pick an item',
+      placeholder: this.props.placeholder,
+      onBlur: this.handleBlur,
     };
     return (
       <ConsoleAutosuggest
@@ -81,6 +87,7 @@ const SimpleConsoleAutosuggest = React.createClass({
         inputProps={inputProps}
         onSuggestionSelected={this.handleValueChange}
         shouldRenderSuggestions={() => true}
+        isLoading={this.props.isLoading}
       />
     );
   },

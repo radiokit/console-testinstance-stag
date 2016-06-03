@@ -11,6 +11,9 @@ export default {
         media: {
           title: "Media",
         },
+        broadcast_channels: {
+          title: "Broadcast Channels",
+        },
       },
 
       computing_nodes: {

@@ -1,6 +1,6 @@
 export default {
   apps: {
-    administration: {
+    infrastructure: {
       broadcast_channels: {
         index: {
           header: "Channels",
@@ -14,6 +14,7 @@ export default {
             header: {
               name: "Name",
               slug: "Address",
+              media_routing_group_id: "Routing Group ID",
               user_account: "Account",
             },
           },
@@ -43,6 +44,9 @@ export default {
                 slug: {
                   label: "Unique address",
                   hint: "It is going to be part of stream URLs.",
+                },
+                media_routing_group_id: {
+                  label: "Routing Group ID",
                 },
                 description: {
                   label: "Description",

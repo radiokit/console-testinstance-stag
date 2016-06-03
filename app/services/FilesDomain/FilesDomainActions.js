@@ -54,14 +54,46 @@ const actions = {
     );
   },
 
-  searchFiles(query, options = {}) {
+  loadRecentFiles(limit = 25, options = {}) {
     runFilesQuery(
       {
+        conditions: [
+          {
+            field: 'stage',
+            comparison: 'eq',
+            value: 'current',
+          },
+        ],
+        order: {
+          field: 'updated_at',
+          direction: 'desc',
+        },
+        limit,
+        offset: 0,
+      },
+      options
+    );
+  },
+
+  searchFiles(query = '', stage = 'current', options = {}) {
+    runFilesQuery(
+      {
+        conditions: [
+          {
+            field: 'stage',
+            comparison: 'eq',
+            value: stage,
+          },
+          {
+            field: 'name',
+            comparison: 'ilike',
+            value: ['%'].concat(query.split('').map(letter => `${letter}%`)).join(''),
+          },
+        ],
         [searchKey]: true,
         [searchPhraseKey]: query,
         offset: 0,
         limit: 10,
-        // TODO
       },
       options
     );

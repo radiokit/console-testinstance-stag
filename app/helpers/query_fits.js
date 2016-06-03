@@ -1,13 +1,15 @@
-export const queryFits = (text, query) => {
-  const letters = query.split('');
-  let lastFoundLetterPosition = -1;
+export const queryFits = (text, query, caseInsensitive = true) => {
+  const queryToSplit = caseInsensitive ? query.toLowerCase() : query;
+  const pattern = caseInsensitive ? text.toLowerCase() : text;
+  const letters = queryToSplit.split('');
+  let seekableOffset = 0;
   for (let i = 0; i < letters.length; i++) {
     const letter = letters[i];
-    const letterPosition = text.substr(lastFoundLetterPosition + 1).indexOf(letter);
+    const letterPosition = pattern.substr(seekableOffset).indexOf(letter);
     if (letterPosition < 0) {
       return false;
     }
-    lastFoundLetterPosition += letterPosition;
+    seekableOffset += letterPosition + 1;
   }
   return true;
 };

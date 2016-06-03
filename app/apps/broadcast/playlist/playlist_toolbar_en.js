@@ -8,9 +8,7 @@ export default {
     form: {
       file: {
         label: 'File',
-      },
-      name: {
-        label: 'Name',
+        hint: 'Search files',
       },
       start_at: {
         label: 'Starts at',
@@ -18,14 +16,21 @@ export default {
       stop_at: {
         label: 'Stops at',
       },
+      name: {
+        label: 'Name',
+      },
     },
     action: {
       cancel: 'Cancel',
-      proceed: 'Proceed',
+      proceed: 'Add to playlist',
       close: 'Close',
     },
+    info: {
+      type_and_desc: 'Type and description',
+    },
     message: {
-      acknowledgement: 'File was successfully added.',
+      progress: 'Adding new track...',
+      acknowledgement: 'Track was successfully added',
     },
   },
   update: {
@@ -46,6 +51,13 @@ export default {
       proceed: 'Proceed',
       close: 'Close',
     },
+    info: {
+      type_and_desc: 'Type and description',
+    },
+    message: {
+      progress: 'Editing track...',
+      acknowledgement: 'Track was successfully edited',
+    },
   },
   delete: {
     header: 'Deleting track',
@@ -55,7 +67,7 @@ export default {
     },
     action: {
       cancel: 'Cancel',
-      proceed: 'Proceed',
+      proceed: 'Delete',
       close: 'Close',
     },
   },
