@@ -1,6 +1,6 @@
 export default {
   AutoDJForm: {
-    weeklyplanLabel: 'Plan',
+    weeklyplanLabel: 'Content type',
     typeLabel: 'Type',
     repositoryLabel: 'Repository',
     detailsLabel: 'Details',
