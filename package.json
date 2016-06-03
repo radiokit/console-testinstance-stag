@@ -1,6 +1,6 @@
 {
   "name": "radiokit-console",
-  "version": "1.0.0",
+  "version": "1.0.23",
   "description": "User interface for controlling various RadioKit systems",
   "scripts": {
     "predev": "npm i",
