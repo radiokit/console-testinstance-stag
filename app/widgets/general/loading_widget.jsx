@@ -62,7 +62,7 @@ export default React.createClass({
 
   render: function() {
     return (
-      <div className="`${this.props.className} widgets-general-loading--container`">
+      <div className={this.props.className || "widgets-general-loading--container"}>
         <div ref="spinner"/>
         {this.renderInfo()}
       </div>

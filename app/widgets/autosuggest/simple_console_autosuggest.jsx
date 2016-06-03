@@ -24,6 +24,7 @@ const SimpleConsoleAutosuggest = React.createClass({
     onInputChange: React.PropTypes.func,
     items: React.PropTypes.object.isRequired,
     getItemName: React.PropTypes.func.isRequired,
+    isLoading: React.PropTypes.bool,
   },
 
   getDefaultProps() {
@@ -86,6 +87,7 @@ const SimpleConsoleAutosuggest = React.createClass({
         inputProps={inputProps}
         onSuggestionSelected={this.handleValueChange}
         shouldRenderSuggestions={() => true}
+        isLoading={this.props.isLoading}
       />
     );
   },

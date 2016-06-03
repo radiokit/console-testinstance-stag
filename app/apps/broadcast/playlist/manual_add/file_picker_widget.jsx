@@ -10,6 +10,7 @@ const FilePickerWidget = React.createClass({
     onChange: React.PropTypes.func,
     onInputChange: React.PropTypes.func,
     files: React.PropTypes.object.isRequired,
+    isLoading: React.PropTypes.bool,
   },
 
   getDefaultProps() {
@@ -27,6 +28,7 @@ const FilePickerWidget = React.createClass({
         onInputChange={this.props.onInputChange}
         items={this.props.files}
         getItemName={getFileName}
+        isLoading={this.props.isLoading}
       />
     );
   },

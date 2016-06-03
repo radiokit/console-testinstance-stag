@@ -1,6 +1,7 @@
 import React from 'react';
 import connect from 'immview-react-connect';
 import { debounce } from 'lodash';
+import { Map } from 'immutable';
 import FilePickerWidget from './file_picker_widget.jsx';
 import FilesDomain from '../../../../services/FilesDomain';
 
@@ -13,6 +14,7 @@ const FilePicker = React.createClass({
     onChange: React.PropTypes.func,
     onClearInput: React.PropTypes.func,
     files: React.PropTypes.object.isRequired,
+    isLoadingFiles: React.PropTypes.bool,
   },
 
   getInitialState() {
@@ -53,6 +55,7 @@ const FilePicker = React.createClass({
         {...this.props}
         files={this.state.displayRecent ? this.getRecentFiles() : this.props.files}
         onInputChange={this.handleInputChange}
+        isLoading={this.props.isLoadingFiles}
       />
     );
   },
@@ -61,14 +64,18 @@ const FilePicker = React.createClass({
 export default connect(
   FilePicker,
   FilesDomain.map(
-    (data) => data
-      .get('files')
-      .filter(
-        (record) => record
-          .get('metadata_items')
-          .find((metadataItem) => metadataItem.get('value_duration') !== null)
-      )
+    (data) => Map({
+      files: data
+        .get('files')
+        .filter(
+          (record) => record
+            .get('metadata_items')
+            .find((metadataItem) => metadataItem.get('value_duration') !== null)
+        ),
+      isLoadingFiles: data.get('loading'),
+    })
   ), (data) => ({
-    files: data,
+    files: data.get('files'),
+    isLoadingFiles: data.get('isLoadingFiles'),
   })
 );
