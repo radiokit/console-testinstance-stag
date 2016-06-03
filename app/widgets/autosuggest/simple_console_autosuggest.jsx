@@ -8,7 +8,7 @@ import queryFits from '../../helpers/query_fits';
 
 const itemQualifies =
   (query, getItemName) =>
-    item => queryFits(getItemName(item), query, false);
+    item => queryFits(getItemName(item), query, true);
 
 const filterItems =
   (query, getItemName) =>

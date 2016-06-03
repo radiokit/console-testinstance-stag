@@ -75,7 +75,7 @@ const actions = {
     );
   },
 
-  searchFiles(query, stage = 'current', options = {}) {
+  searchFiles(query = '', stage = 'current', options = {}) {
     runFilesQuery(
       {
         conditions: [
@@ -87,7 +87,7 @@ const actions = {
           {
             field: 'name',
             comparison: 'ilike',
-            value: `%${query}%`,
+            value: ['%'].concat(query.split('').map(letter => `${letter}%`)).join(''),
           },
         ],
         [searchKey]: true,
