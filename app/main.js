@@ -19,9 +19,7 @@ import ElectronPatchbayIndex from './apps/electron/patchbay/IndexView.jsx';
 import ElectronTransmissionsIndex from './apps/electron/transmissions/IndexView.jsx';
 import InfrastructureApp from './apps/infrastructure/app.jsx';
 import InfrastructureComputingNodesIndex from './apps/infrastructure/computing_nodes/index_view.jsx';
-import InfrastructureExternalInputsIndex from './apps/infrastructure/external_inputs/index_view.jsx';
-import InfrastructureTransmissionsIndex from './apps/infrastructure/transmissions/index_view.jsx';
-import InfrastructurePatchbayIndex from './apps/infrastructure/patchbay/index_view.jsx';
+import InfrastructureMediaIndex from './apps/infrastructure/media/IndexView.jsx';
 import LibraryApp from './apps/library/app.jsx';
 import LibraryFileRepositoriesIndex from './apps/library/file_repositories/IndexView.jsx';
 import LibraryFileRepositoriesShow from './apps/library/file_repositories/show_view.jsx';
@@ -112,9 +110,7 @@ ReactDOM.render((
         <Route path="clipeditor" component={ClipEditorApp}></Route>
 
         <Route path="infrastructure" component={BroadcastApp}>
-          <Route path="external_inputs/index" component={InfrastructureExternalInputsIndex} onEnter={pingGoogleAnalytics}/>
-          <Route path="transmissions/index" component={InfrastructureTransmissionsIndex} onEnter={pingGoogleAnalytics}/>
-          <Route path="patchbay/index" component={InfrastructurePatchbayIndex} onEnter={pingGoogleAnalytics}/>
+          <Route path="media/index" component={InfrastructureMediaIndex} onEnter={pingGoogleAnalytics}/>
           <Route path="computing_nodes/index" component={InfrastructureComputingNodesIndex} onEnter={pingGoogleAnalytics}/>
         </Route>
 
