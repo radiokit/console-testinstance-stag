@@ -55,19 +55,28 @@ Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/scope
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/form.js'));
 
 import { Dispatcher } from 'immview';
-Dispatcher.tick = f => {
-  (
-    window.requestIdleCallback ||
-    window.requestAnimationFrame ||
-    window.setImmediate ||
-    window.setTimeout
-  )(() => {
-    window.setTimeout(() => f(), 0);
-  });
-};
+if (window.requestIdleCallback) {
+  const noTime = () => 0;
+  let timeLeft = noTime;
+  Dispatcher.tick = f => {
+    if (timeLeft() > 0) {
+      f();
+    } else {
+      window.requestIdleCallback(deadline => {
+        timeLeft = deadline.timeRemaining.bind(deadline);
+        f();
+      });
+      timeLeft = noTime();
+    }
+  };
+} else if (window.requestAnimationFrame) {
+  Dispatcher.tick = window.requestAnimationFrame.bind(window);
+} else {
+  Dispatcher.tick = f => window.setTimeout(f, 10);
+}
 
 function pingGoogleAnalytics() {
-  if(typeof(ga) !== "undefined") {
+  if (typeof ga !== 'undefined') {
     ga('send', 'pageview');
   }
 }
