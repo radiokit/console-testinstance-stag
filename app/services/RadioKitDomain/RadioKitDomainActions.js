@@ -34,7 +34,7 @@ function checkIfQueryExists(queryParams, { autoSync = false, maxAge = Date.now()
 }
 
 function buildQuery(queryParams) {
-  const { app, model, select, conditions, joins, limit, offset } = queryParams.toObject();
+  const { app, model, select, conditions, joins, limit, offset, order } = queryParams.toObject();
   let q = RadioKit.query(app, model);
   select && select.forEach(field => {
     q = q.select(field);
@@ -52,6 +52,9 @@ function buildQuery(queryParams) {
   if (typeof offset === 'number') {
     q = q.offset(offset);
   }
+  if (order) {
+    q.order(order.get('field'), order.get('direction'));
+  }
   return q;
 }
 
@@ -63,7 +66,8 @@ const actions = {
    *    model: string,
    *    select: List<string>,
    *    joins: List<string>,
-   *    conditions:List<Map{field:string,comparison:string,value:string}>
+   *    conditions:List<Map{field:string,comparison:string,value:string}>,
+   *    order: Map<field:string, direction:string}>
    * }} queryParams
    * @param {{
    *  autoSync: bool,

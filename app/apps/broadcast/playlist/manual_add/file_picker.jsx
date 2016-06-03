@@ -20,11 +20,13 @@ const FilePicker = React.createClass({
   },
 
   componentDidMount() {
-    FilesDomain.loadRecentFiles({ limit: recentFilesLimit });
+    FilesDomain.loadRecentFiles(recentFilesLimit);
   },
 
   handleInputChange(input) {
     // TODO FilesDomain.searchFiles()
+    console.log("files: ");
+    console.log(this.getRecentFiles().toJS());
     if (input === '') {
       this.setState({ displayRecent: true });
       this.props.onClearInput();
@@ -63,7 +65,6 @@ export default connect(
           .get('metadata_items')
           .find((metadataItem) => metadataItem.get('value_duration') !== null)
       )
-
   ), (data) => ({
     files: data,
   })

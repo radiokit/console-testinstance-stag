@@ -54,6 +54,27 @@ const actions = {
     );
   },
 
+  loadRecentFiles(limit = 100, options = {}) {
+    runFilesQuery(
+      {
+        conditions: [
+          {
+            field: 'stage',
+            comparison: 'eq',
+            value: 'current',
+          },
+        ],
+        order: {
+          field: 'updated_at',
+          direction: 'desc',
+        },
+        limit,
+        offset: 0,
+      },
+      options
+    );
+  },
+
   searchFiles(query, options = {}) {
     runFilesQuery(
       {
