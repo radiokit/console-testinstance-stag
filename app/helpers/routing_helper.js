@@ -35,15 +35,15 @@ export default {
           return '/apps/infrastructure/media/index';
         },
       },
+      broadcast_channels: {
+        index() {
+          return '/apps/infrastructure/broadcast_channels/index';
+        },
+      },
     },
 
     administration: {
       icon: 'settings',
-      broadcast_channels: {
-        index() {
-          return '/apps/administration/broadcast_channels/index';
-        },
-      },
       users: {
         index() {
           return '/apps/administration/users/index';

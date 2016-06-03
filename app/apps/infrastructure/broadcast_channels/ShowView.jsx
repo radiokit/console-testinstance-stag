@@ -18,7 +18,7 @@ export default React.createClass({
   buildTabs: function() {
     return {
       streams: {
-        element: StreamsPartial, props: { contentPrefix: "apps.administration.broadcast_channels.show.tabs.body.streams" },
+        element: StreamsPartial, props: { contentPrefix: "apps.infrastructure.broadcast_channels.show.tabs.body.streams" },
       },
     }
   },
@@ -26,7 +26,7 @@ export default React.createClass({
 
   render: function() {
     return (
-      <Show contentPrefix="apps.administration.broadcast_channels" app="agenda" model="Broadcast.Channel" contentElement={this.buildTabs()} />
+      <Show contentPrefix="apps.infrastructure.broadcast_channels" app="agenda" model="Broadcast.Channel" contentElement={this.buildTabs()} />
     );
   }
 });

@@ -7,9 +7,6 @@ export default {
         users: {
           title: "Użytkownicy",
         },
-        broadcast_channels: {
-          title: "Kanały"
-        },
         file_repositories: {
           title: "Repozytoria plików"
         },
