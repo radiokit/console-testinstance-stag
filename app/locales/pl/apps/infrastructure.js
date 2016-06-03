@@ -4,25 +4,13 @@ export default {
       navigation: {
         title: "Infrastruktura",
         subtitle: "Konfiguracja i monitoring sieci",
-        client_nodes: {
-          title: "Urządzenia audio",
-        },
-
         computing_nodes: {
           title: "Serwery audio",
         },
-
-        external_inputs: {
-          title: "Zewnętrzne źródła dźwięku",
+        media: {
+          title: "Media",
         },
 
-        transmissions: {
-          title: "Transmisje",
-        },
-
-        patchbay: {
-          title: "Krosownica",
-        },
       },
 
 

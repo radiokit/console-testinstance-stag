@@ -4,24 +4,12 @@ export default {
       navigation: {
         title: "Infrastructure",
         subtitle: "Network configuration and monitoring",
-        client_nodes: {
-          title: "Audio Devices",
-        },
 
         computing_nodes: {
           title: "Audio Servers",
         },
-
-        external_inputs: {
-          title: "External Audio Inputs",
-        },
-
-        transmissions: {
-          title: "Transmissions",
-        },
-
-        patchbay: {
-          title: "Patchbay",
+        media: {
+          title: "Media",
         },
       },
 
