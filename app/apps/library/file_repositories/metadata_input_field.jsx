@@ -35,7 +35,6 @@ const MetadataInputField = React.createClass({
     } else if (type === 'image') {
       const image = e.target.files[0];
       this.handleImageChange(image);
-      this.props.onFieldChanged(this.props.fieldId, image);
     } else {
       this.props.onFieldChanged(this.props.fieldId, value);
     }
@@ -47,6 +46,7 @@ const MetadataInputField = React.createClass({
       this.setState({
         imagePreviewUrl: reader.result,
       });
+      this.props.onFieldChanged(this.props.fieldId, reader.result);
     };
     reader.readAsDataURL(imageFile);
   },
