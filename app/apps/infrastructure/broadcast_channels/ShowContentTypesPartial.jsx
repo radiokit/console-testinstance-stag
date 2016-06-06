@@ -3,8 +3,8 @@ import Counterpart from 'counterpart';
 import { Data } from 'radiokit-api';
 import IndexTableBrowser from '../../../widgets/admin/crud/index_table_browser_widget.jsx';
 
-Counterpart.registerTranslations("en", require('./ShowStreamsPartial.locale.en.js'));
-Counterpart.registerTranslations("pl", require('./ShowStreamsPartial.locale.pl.js'));
+Counterpart.registerTranslations("en", require('./ShowContentTypesPartial.locale.en.js'));
+Counterpart.registerTranslations("pl", require('./ShowContentTypesPartial.locale.pl.js'));
 
 
 export default React.createClass({
@@ -25,28 +25,9 @@ export default React.createClass({
     return {
       name: {
         type: "string",
-        hint: true,
-      },
-      audio_codec: {
-        type: "enum",
-        values: ["mp3"],
         validators: {
           presence: true,
-        }
-      },
-      audio_quality: {
-        type: "enum",
-        values: ["medium"],
-        validators: {
-          presence: true,
-        }
-      },
-      protocol: {
-        type: "enum",
-        values: ["http"],
-        validators: {
-          presence: true,
-        }
+        },
       },
       broadcast_channel_id: {
         type: "hidden",
@@ -59,10 +40,6 @@ export default React.createClass({
   buildAttributes: function() {
     return {
       name:          { renderer: "string" },
-      audio_codec:   { renderer: "string" },
-      audio_quality: { renderer: "string" },
-      protocol:      { renderer: "string" },
-      public_urls:   { renderer: "string" },
     }
   },
 
@@ -72,7 +49,7 @@ export default React.createClass({
       <IndexTableBrowser
         contentPrefix={this.props.contentPrefix + ".table"}
         app="agenda"
-        model="Broadcast.Stream"
+        model="Broadcast.ContentType"
         form={this.buildForm()}
         attributes={this.buildAttributes()}
         indexQueryFunc={this.modifyIndexQuery}

@@ -1,5 +1,5 @@
 export default {
-  WeeklyPlanPicker: {
+  ContentTypePicker: {
     noName: '(Brak nazwy)',
     placeholder: 'Wybierz plan',
   },

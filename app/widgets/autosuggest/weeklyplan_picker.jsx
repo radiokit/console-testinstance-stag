@@ -8,11 +8,11 @@ import localeEN from './weeklyplan_picker_en';
 counterpart.registerTranslations('en', localeEN);
 counterpart.registerTranslations('pl', localePL);
 
-function getWeeklyPlanName(weeklyplan) {
-  return weeklyplan.get('name') || counterpart('WeeklyPlanPicker.noName');
+function getContentTypeName(weeklyplan) {
+  return weeklyplan.get('name') || counterpart('ContentTypePicker.noName');
 }
 
-const WeeklyPlanPicker = React.createClass({
+const ContentTypePicker = React.createClass({
   propTypes: {
     placeholder: React.PropTypes.string,
     value: React.PropTypes.object,
@@ -25,11 +25,11 @@ const WeeklyPlanPicker = React.createClass({
     return (
       <SimpleConsoleAutosuggest
         {...this.props}
-        placeholder={this.props.placeholder || counterpart('WeeklyPlanPicker.placeholder')}
-        getItemName={getWeeklyPlanName}
+        placeholder={this.props.placeholder || counterpart('ContentTypePicker.placeholder')}
+        getItemName={getContentTypeName}
       />
     );
   },
 });
 
-export default WeeklyPlanPicker;
+export default ContentTypePicker;

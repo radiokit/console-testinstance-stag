@@ -62,7 +62,7 @@ function validateNothing() {
 export default function validateForm(form = Map()) {
   return [
     !form.get('type') && ('AutoDJFormSender.noTypeError'),
-    !form.get('weeklyplan') && ('AutoDJFormSender.noWeeklyPlanError'),
+    !form.get('weeklyplan') && ('AutoDJFormSender.noContentTypeError'),
     !form.get('repository') && ('AutoDJFormSender.noRepositoryError'),
     !form.get('details') && ('AutoDJFormSender.noDetailsError'),
     ...validateWeekdays(form.get('weekdays')),

@@ -1,9 +1,9 @@
 import React from 'react';
 import connect from 'immview-react-connect';
-import WeeklyPlanDomain from '../../services/WeeklyPlansDomain';
-import WeeklyPlanPicker from './weeklyplan_picker.jsx';
+import ContentTypeDomain from '../../services/WeeklyPlansDomain';
+import ContentTypePicker from './weeklyplan_picker.jsx';
 
-const WeeklyPlanConnectedPicker = React.createClass({
+const ContentTypeConnectedPicker = React.createClass({
   propTypes: {
     placeholder: React.PropTypes.string,
     value: React.PropTypes.object,
@@ -18,7 +18,7 @@ const WeeklyPlanConnectedPicker = React.createClass({
 
   render() {
     return (
-      <WeeklyPlanPicker
+      <ContentTypePicker
         {...this.props}
       />
     );
@@ -26,10 +26,10 @@ const WeeklyPlanConnectedPicker = React.createClass({
 });
 
 export default connect(
-  WeeklyPlanConnectedPicker,
-  WeeklyPlanDomain,
+  ContentTypeConnectedPicker,
+  ContentTypeDomain,
   (data, { broadcastChannelId, value, onChange }) => {
-    WeeklyPlanDomain.loadChannelPlans(broadcastChannelId);
+    ContentTypeDomain.loadChannelPlans(broadcastChannelId);
     const items = data.get('entities').filter(
       plan => plan.get('broadcast_channel_id') === broadcastChannelId
     );
