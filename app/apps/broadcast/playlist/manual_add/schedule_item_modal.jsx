@@ -25,7 +25,7 @@ const ScheduleItemModal = React.createClass({
     return {
       proceedType: 'primary',
       step: 'confirmation',
-      file: this.isUpdating() ? this.props.record : null,
+      file: this.isBeingUpdated() ? this.props.record : null,
       startDate: this.getInitialStartDate(),
       stopDate: this.getInitialStopDate(),
       name: null,
@@ -72,14 +72,14 @@ const ScheduleItemModal = React.createClass({
   },
 
   buildScheduleItem() {
-    const scheduleItem = {};
-    scheduleItem.name = this.state.name;
-    scheduleItem.start_at = moment(this.state.startDate).subtract(15, 'seconds').toISOString();
-    scheduleItem.cue_in_at = moment(this.state.startDate).toISOString();
-    scheduleItem.cue_out_at = moment(this.state.stoptDate).toISOString();
-    scheduleItem.stop_at = moment(this.state.stoptDate).add(15, 'seconds').toISOString();
-    scheduleItem.file = this.state.file.get('id');
-    return scheduleItem;
+    return {
+      name: this.state.name,
+      start_at: moment(this.state.startDate).subtract(15, 'seconds').toISOString(),
+      cue_in_at: moment(this.state.startDate).toISOString(),
+      cue_out_at: moment(this.state.stopDate).toISOString(),
+      stop_at: moment(this.state.stopDate).add(15, 'seconds').toISOString(),
+      file: this.state.file.get('id'),
+    };
   },
 
   handleCancel() {
@@ -87,21 +87,21 @@ const ScheduleItemModal = React.createClass({
   },
 
   handleConfirm() {
-    if (this.isUpdating()) {
+    if (this.isBeingUpdated()) {
       this.updateScheduleItem();
     } else {
       this.createScheduleItem();
     }
   },
 
-  isUpdating() {
-    return this.props.record;
+  isBeingUpdated() {
+    return !!this.props.record;
   },
 
   calculateDuration(file) {
     const duration = (
       file.get('stop_at')
-      ? file.get('stop_at').diff(file.get('start_at'))
+      ? moment(file.get('stop_at')).diff(file.get('start_at'))
       : file.get('metadata_items')
           .find((metadataItem) => metadataItem.get('value_duration') !== null)
           .get('value_duration')
@@ -115,8 +115,6 @@ const ScheduleItemModal = React.createClass({
 
   handleSelectedFile(file) {
     if (file) {
-      // console.log("FILE: ");
-      // console.log(file.toJS());
       const duration = this.calculateDuration(file);
       const stopDate = moment(this.state.startDate).add(duration, 'ms');
       this.setState({ file, duration, stopDate });
@@ -149,7 +147,7 @@ const ScheduleItemModal = React.createClass({
 
 
   renderFileInput() {
-    if (!this.isUpdating()) {
+    if (!this.isBeingUpdated()) {
       return (
         <div className="form-group">
           <Translate
@@ -194,44 +192,44 @@ const ScheduleItemModal = React.createClass({
   },
 
   renderDateInputs() {
-    if (this.state.file) {
-      return (
-        <div>
-          <div className="form-group">
-            <Translate
-              component="label"
-              content={ `${this.props.contentPrefix}.form.start_at.label` }
-              htmlFor="startDate"
-            />
-            <input
-              id="startDate"
-              type="datetime-local"
-              className="form-control"
-              step={1}
-              onChange={(e) => this.handleStartDateChange(e.target.value)}
-              value={moment(this.state.startDate).format('YYYY-MM-DDTHH:mm:ss')}
-            />
-          </div>
-          <div className="form-group">
-            <Translate
-              component="label"
-              content={ `${this.props.contentPrefix}.form.stop_at.label` }
-              htmlFor="stoptDate"
-            />
-            <input
-              id="stopDate"
-              type="datetime-local"
-              className="form-control"
-              step={1}
-              readOnly
-              disabled
-              value={moment(this.state.stopDate).format('YYYY-MM-DDTHH:mm:ss')}
-            />
-          </div>
-        </div>
-      );
+    if (!this.isBeingUpdated()) {
+      return;
     }
-    return null;
+    return (
+      <div>
+        <div className="form-group">
+          <Translate
+            component="label"
+            content={ `${this.props.contentPrefix}.form.start_at.label` }
+            htmlFor="startDate"
+          />
+          <input
+            id="startDate"
+            type="datetime-local"
+            className="form-control"
+            step={1}
+            onChange={(e) => this.handleStartDateChange(e.target.value)}
+            value={moment(this.state.startDate).format('YYYY-MM-DDTHH:mm:ss')}
+          />
+        </div>
+        <div className="form-group">
+          <Translate
+            component="label"
+            content={ `${this.props.contentPrefix}.form.stop_at.label` }
+            htmlFor="stoptDate"
+          />
+          <input
+            id="stopDate"
+            type="datetime-local"
+            className="form-control"
+            step={1}
+            readOnly
+            disabled
+            value={moment(this.state.stopDate).format('YYYY-MM-DDTHH:mm:ss')}
+          />
+        </div>
+      </div>
+    );
   },
 
   renderOptionalFields() {
