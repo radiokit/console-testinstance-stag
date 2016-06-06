@@ -45,6 +45,10 @@ export default {
       stop_at: {
         label: 'Stops at',
       },
+      file: {
+        label: 'File name',
+        hint: 'Search files',
+      },
     },
     action: {
       cancel: 'Cancel',
