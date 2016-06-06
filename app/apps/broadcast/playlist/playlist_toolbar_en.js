@@ -1,6 +1,7 @@
 export default {
   header: 'Current Playlist',
   add_button: 'Add track',
+  add_dj_button: 'Add automaton',
   update_button: 'Edit track',
   delete_button: 'Remove track',
   add: {

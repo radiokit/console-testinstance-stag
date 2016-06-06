@@ -1,6 +1,7 @@
 export default {
   header: 'Ramówka',
   add_button: 'Dodaj utwór',
+  add_dj_button: 'Dodaj Automat',
   update_button: 'Edytuj utwór',
   delete_button: 'Usuń utwór',
   add: {
