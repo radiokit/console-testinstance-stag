@@ -25,7 +25,7 @@ const ScheduleItemModal = React.createClass({
     return {
       proceedType: 'primary',
       step: 'confirmation',
-      file: this.isBeingUpdated() ? this.props.record : null,
+      file: this.isInEditMode() ? this.props.record : null,
       startDate: this.getInitialStartDate(),
       stopDate: this.getInitialStopDate(),
       name: null,
@@ -87,14 +87,14 @@ const ScheduleItemModal = React.createClass({
   },
 
   handleConfirm() {
-    if (this.isBeingUpdated()) {
+    if (this.isInEditMode()) {
       this.updateScheduleItem();
     } else {
       this.createScheduleItem();
     }
   },
 
-  isBeingUpdated() {
+  isInEditMode() {
     return !!this.props.record;
   },
 
@@ -147,7 +147,7 @@ const ScheduleItemModal = React.createClass({
 
 
   renderFileInput() {
-    if (!this.isBeingUpdated()) {
+    if (!this.isInEditMode()) {
       return (
         <div className="form-group">
           <Translate
@@ -192,7 +192,7 @@ const ScheduleItemModal = React.createClass({
   },
 
   renderDateInputs() {
-    if (!this.isBeingUpdated()) {
+    if (!this.isInEditMode()) {
       return;
     }
     return (
