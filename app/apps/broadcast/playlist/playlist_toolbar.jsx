@@ -53,7 +53,7 @@ const PlaylistToolbar = React.createClass({
 
         <ToolbarButtonModal
           icon="plus"
-          labelTextKey="apps.broadcast.playlist.add_dj_button"
+          labelTextKey="playlist_toolbar.add_dj_button"
           modalElement={AutoDJAddModal}
           modalProps={{
             currentBroadcastChannel: this.props.currentBroadcastChannel.get('id'),

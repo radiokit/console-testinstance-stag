@@ -40,6 +40,8 @@ const EMPTY_MODEL = Map({
 
 import { STEPS_NAMES } from './autodj_form_steps';
 
+import './autodj_form.scss';
+
 const AutoDJForm = React.createClass({
   propTypes: {
     currentBroadcastChannel: React.PropTypes.string,
@@ -167,7 +169,7 @@ const AutoDJForm = React.createClass({
       >
         <div className={classnames({ hidden: step >= STEPS_NAMES.indexOf('finishing') })}>
 
-          <fieldset className={classnames({ hidden: step < STEPS_NAMES.indexOf('type') })}>
+          <fieldset className={classnames('AutoDJForm__section', { hidden: step < STEPS_NAMES.indexOf('type') })}>
             <div className="form-group">
               <label htmlFor="autodjform_type">
                 <Translate content="AutoDJForm.typeLabel" />
@@ -186,7 +188,7 @@ const AutoDJForm = React.createClass({
             </div>
           </fieldset>
 
-          <fieldset className={classnames({ hidden: step < STEPS_NAMES.indexOf('repository') })}>
+          <fieldset className={classnames('AutoDJForm__section', { hidden: step < STEPS_NAMES.indexOf('repository') })}>
             <div className="form-group">
               <label>
                 <Translate content="AutoDJForm.repositoryLabel" />
@@ -198,14 +200,14 @@ const AutoDJForm = React.createClass({
             </div>
           </fieldset>
 
-          <fieldset className={classnames({ hidden: step < STEPS_NAMES.indexOf('details') })}>
+          <fieldset className={classnames('AutoDJForm__section', { hidden: step < STEPS_NAMES.indexOf('details') })}>
             <div className="form-group">
               <Translate component="label" content="AutoDJForm.detailsLabel" />
               {typeDetailsForm}
             </div>
           </fieldset>
 
-          <fieldset className={classnames({ hidden: step < STEPS_NAMES.indexOf('time') })}>
+          <fieldset className={classnames('AutoDJForm__section AutoDJForm__section--separated', { hidden: step < STEPS_NAMES.indexOf('time') })}>
             <div className="form-group">
               <Translate component="label" content="AutoDJForm.weekdays" />
               <WeekDatesPicker
@@ -221,7 +223,7 @@ const AutoDJForm = React.createClass({
             </div>
           </fieldset>
 
-          <fieldset className={classnames({ hidden: step < STEPS_NAMES.indexOf('plan') })}>
+          <fieldset className={classnames('AutoDJForm__section', { hidden: step < STEPS_NAMES.indexOf('plan') })}>
             <div className="form-group">
               <label>
                 <Translate content="AutoDJForm.weeklyplanLabel" />

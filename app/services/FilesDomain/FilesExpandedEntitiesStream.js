@@ -15,38 +15,53 @@ const FilesEntitiesStream = RadioKitDomain.map(
   data => data.getIn(['entities', app, model], Map())
 );
 
-const FilesIdsStream = FilesEntitiesStream.map(
-  files => files
-    .map(file => file.get('id'))
-    .toSet()
-);
+const FilesIdsStream = FilesEntitiesStream.map(getUniqFileIds);
 
-FilesIdsStream.subscribe(
-  fileIds => fileIds.forEach(
-    fileId => MetadataItemsDomain.loadMetadataItemOfFile(fileId, { noLoadingState: true })
-  )
-);
+function getUniqFileIds(files) {
+  return files.map(file => file.get('id')).toSet();
+}
+
+FilesIdsStream.subscribe(loadMetadataForFiles);
+
+function loadMetadataForFiles(fileIds) {
+  fileIds.forEach(loadMetadataForFile);
+}
+
+function loadMetadataForFile(fileId) {
+  MetadataItemsDomain.loadMetadataItemOfFile(fileId, { noLoadingState: true });
+}
 
 const FilesExpandedEntitiesStream = new View(
   {
-    metadatas: MetadataItemsDomain,
+    metadataItems: MetadataItemsDomain,
     files: FilesEntitiesStream,
   },
   data => {
-    const { metadatas, files } = data.toObject();
-    return files
-      .map(
-        file => {
-          const metadatasForFile = metadatas.getIn(['entities', file.get('id')]);
-          if (metadatasForFile) {
-            return file.set('metadata_items', metadatasForFile);
-          }
-          return null;
-        }
-      )
-      .filter(v => !!v)
-    ;
+    const { metadataItems, files } = data.toObject();
+    return rejectFilesWithoutMetadataItems(
+      files.map(fillFileWithMetadata(metadataItems))
+    );
   }
 );
+
+function rejectFilesWithoutMetadataItems(files) {
+  return files.filter(
+    file => !!file.get('metadata_items')
+  );
+}
+
+function fillFileWithMetadata(metadataItems) {
+  return function fillFileWithGivenMetadata(file) {
+    const metadataItemsOfFile = getMetadataForFiles(metadataItems, file.get('id'));
+    if (metadataItemsOfFile) {
+      return file.set('metadata_items', metadataItemsOfFile);
+    }
+    return file;
+  };
+}
+
+function getMetadataForFiles(metadataItems, fileId) {
+  return metadataItems.getIn(['entities', fileId]);
+}
 
 export default FilesExpandedEntitiesStream;
