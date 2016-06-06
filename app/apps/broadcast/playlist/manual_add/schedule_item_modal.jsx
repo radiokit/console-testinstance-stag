@@ -192,7 +192,7 @@ const ScheduleItemModal = React.createClass({
   },
 
   renderDateInputs() {
-    if (!this.isInEditMode()) {
+    if (!this.state.file) {
       return;
     }
     return (
