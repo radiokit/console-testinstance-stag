@@ -13,10 +13,13 @@ const FilesDomainStream = new View({
   files: FilesExpandedEntitiesStream,
   // search: FilesSearchQueriesStream,
   loading: FilesLoadingStream,
-}, data => Map({
-  files: data.get('files'),
-  // search: data.get('search'),
-  loading: data.getIn(['loading', 'value']),
-}));
+}, data => {
+  const { files, loading } = data.toObject();
+  
+  return Map({
+    files,
+    loading: loading.get('value', false),
+  });
+});
 
 export default FilesDomainStream;

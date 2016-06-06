@@ -13,13 +13,17 @@ import MetadataItemsDomain from '../MetadataItemsDomain';
 const loadingState = Map({ value: true });
 const idleState = Map({ value: false });
 
+function getLoadStateDescriptor(condition) {
+  return condition ? loadingState : idleState;
+}
+
 const FilesQueriesLoadingStream = FilesQueriesStream
   .map(pickLoadingQueries)
-  .map(queries => ((!!queries.count()) ? loadingState : idleState))
+  .map(queries => getLoadStateDescriptor(queries.count() > 0))
   ;
 
 const MetadataItemsLoadingStream = MetadataItemsDomain.map(
-  data => (data.get('loading') ? loadingState : idleState)
+  MetadataItemsDomainState => getLoadStateDescriptor(MetadataItemsDomainState.get('loading', false))
 );
 
 const FilesLoadingStream = new View(
@@ -28,12 +32,10 @@ const FilesLoadingStream = new View(
     MetadataItemsLoadingStream,
   },
   data => (
-    (
-      data.getIn(['FilesQueriesLoadingStream', 'value']) ||
-      data.getIn(['MetadataItemsLoadingStream', 'value'])
+    getLoadStateDescriptor(
+      data.getIn(['FilesQueriesLoadingStream', 'value'], false) ||
+      data.getIn(['MetadataItemsLoadingStream', 'value'], false)
     )
-      ? loadingState
-      : idleState
   )
 );
 

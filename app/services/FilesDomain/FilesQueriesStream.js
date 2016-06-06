@@ -4,7 +4,7 @@ import {
 } from './FilesConfig';
 
 const FilesQueriesStream = RadioKitDomain.map(
-  data => data
+  RadioKitDomainState => RadioKitDomainState
     .get('queries')
     .filter((result, queryParams) => queryParams.get(key))
 );
