@@ -10,6 +10,7 @@ import FilePicker from './file_picker.jsx';
 import './schedule_item_modal.scss';
 const ScheduleItemModal = React.createClass({
   propTypes: {
+    currentBroadcastChannel: React.PropTypes.string.isRequired,
     defaultTimeOffset: React.PropTypes.number.isRequired,
     contentPrefix: React.PropTypes.string.isRequired,
     onSuccess: React.PropTypes.func,
@@ -28,7 +29,7 @@ const ScheduleItemModal = React.createClass({
       file: this.isInEditMode() ? this.props.record : null,
       startDate: this.getInitialStartDate(),
       stopDate: this.getInitialStopDate(),
-      name: null,
+      name: this.isInEditMode() ? this.props.record.get('name') : null,
       duration: this.getInitialDuration(),
       expanded: false,
     };
@@ -36,13 +37,13 @@ const ScheduleItemModal = React.createClass({
 
   getInitialStartDate() {
     return this.props.record
-      ? this.props.record.get('start_at')
+      ? this.props.record.get('cue_in_at')
       : moment(this.props.defaultTimeOffset).add(1, 'hour').startOf('hour');
   },
 
   getInitialStopDate() {
     return this.props.record
-      ? this.props.record.get('stop_at')
+      ? this.props.record.get('cue_out_at')
       : null;
   },
 
@@ -79,6 +80,9 @@ const ScheduleItemModal = React.createClass({
       cue_out_at: moment(this.state.stopDate).toISOString(),
       stop_at: moment(this.state.stopDate).add(15, 'seconds').toISOString(),
       file: this.state.file.get('id'),
+      references: {
+        broadcast_channel_id: this.props.currentBroadcastChannel,
+      },
     };
   },
 
@@ -117,7 +121,8 @@ const ScheduleItemModal = React.createClass({
     if (file) {
       const duration = this.calculateDuration(file);
       const stopDate = moment(this.state.startDate).add(duration, 'ms');
-      this.setState({ file, duration, stopDate });
+      const name = file.get('name');
+      this.setState({ file, duration, stopDate, name });
     } else {
       this.setState({ file: null });
     }
@@ -168,23 +173,6 @@ const ScheduleItemModal = React.createClass({
         </div>
       );
     }
-    return (
-      <div className="form-group">
-        <Translate
-          component="label"
-          content={ `${this.props.contentPrefix}.form.file.label` }
-          htmlFor="fileNameInput"
-        />
-        <input
-          id="fileNameInput"
-          value={this.props.record.get('name')}
-          readOnly="true"
-          disabled
-          type="text"
-          className="form-control ScheduleItemModal__input--readOnly"
-        />
-      </div>
-    );
   },
 
   toggleExpansion() {
@@ -192,7 +180,7 @@ const ScheduleItemModal = React.createClass({
   },
 
   renderDateInputs() {
-    if (!this.isInEditMode()) {
+    if (!this.state.file) {
       return;
     }
     return (

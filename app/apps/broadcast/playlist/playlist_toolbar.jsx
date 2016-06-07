@@ -45,6 +45,7 @@ const PlaylistToolbar = React.createClass({
           labelTextKey="playlist_toolbar.add_button"
           modalElement={ScheduleItemModal}
           modalProps={{
+            currentBroadcastChannel: this.props.currentBroadcastChannel.get('id'),
             defaultTimeOffset: this.props.offsetStart,
             contentPrefix: 'playlist_toolbar.add',
             onSuccess: this.props.onCRUD,
@@ -68,6 +69,7 @@ const PlaylistToolbar = React.createClass({
           disabled={this.props.activeItem === null}
           modalElement={ScheduleItemModal}
           modalProps={{
+            currentBroadcastChannel: this.props.currentBroadcastChannel.get('id'),
             contentPrefix: 'playlist_toolbar.update',
             defaultTimeOffset: this.props.offsetStart,
             record: this.props.activeItem,
