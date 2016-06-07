@@ -6,13 +6,10 @@ import Section from '../../../widgets/admin/section_widget.jsx';
 import Card from '../../../widgets/admin/card_widget.jsx';
 import Alert from '../../../widgets/admin/alert_widget.jsx';
 
-import ScheduleDaily from '../../../widgets/admin/schedule_daily/schedule_daily_widget.jsx';
-import ScheduleWeekly from '../../../widgets/admin/schedule_weekly/schedule_weekly.jsx';
-import ScheduleDetails from '../../../widgets/admin/schedule_details/schedule_details.jsx';
-import PlaylistSidebar from './playlist_sidebar.jsx';
-import PlaylistToolbar from './playlist_toolbar.jsx';
 import ScheduleDomain from '../../../services/ScheduleDomain';
 
+import ScheduleDailyIndex from './schedule_daily_index.jsx';
+import ScheduleDetailsIndex from './schedule_details_index.jsx';
 
 // import Translate from 'react-translate-component';
 import Counterpart from 'counterpart';
@@ -105,18 +102,17 @@ const BroadcastPlaylist = React.createClass({
             <GridCell size="large" center>
               <Card
                 contentPrefix="BroadcastPlaylist"
-                toolbarElement={PlaylistToolbar}
-                sidebarElement={PlaylistSidebar}
                 contentElement={{
-                  weekly: { element: ScheduleWeekly },
-                  daily: { element: ScheduleDaily },
-                  details: { element: ScheduleDetails },
+                  daily: { element: ScheduleDailyIndex },
+                  details: { element: ScheduleDetailsIndex },
                 }}
                 contentElementSelected={zoom}
                 onContentElementSelect={this.handleZoomChange}
-                contentProps={childProps}
-                sidebarProps={childProps}
-                toolbarProps={childProps}
+                contentProps={{
+                  contentProps: childProps,
+                  sidebarProps: childProps,
+                  toolbarProps: childProps,
+                }}
               />
             </GridCell>
           </GridRow>
