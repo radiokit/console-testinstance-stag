@@ -1,9 +1,6 @@
 import React, { PropTypes } from 'react';
 import sprintf from 'tiny-sprintf';
 import classNames from 'classnames';
-import {
-  range,
-} from 'lodash';
 import { shouldComponentUpdate } from '../../../helpers/immutable_component';
 import ShortenedRow from './schedule_daily_shortened_row.jsx';
 import ExpandedRow from './schedule_daily_expanded_row.jsx';

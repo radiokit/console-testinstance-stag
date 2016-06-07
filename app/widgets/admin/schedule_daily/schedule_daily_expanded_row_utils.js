@@ -7,6 +7,10 @@ import {
 } from 'lodash';
 
 export {
+  getScheduleItemStartTimestamp,
+  getScheduleItemEndTimestamp,
+  getScheduleItemStart,
+  getScheduleItemEnd,
   createPadArray,
   padLeft,
   formatHMS,
@@ -18,6 +22,22 @@ export {
   isRangeOnEdge,
 };
 
+function getScheduleItemStartTimestamp(item) {
+  return new Date(getScheduleItemStart(item)).valueOf();
+}
+
+function getScheduleItemEndTimestamp(item) {
+  return new Date(getScheduleItemEnd(item)).valueOf();
+}
+
+function getScheduleItemStart(item) {
+  return item.get('cue_in_at');
+}
+
+function getScheduleItemEnd(item) {
+  return item.get('cue_out_at');
+}
+
 function createPadArray(length, filler) {
   const padArray = [];
   for (let i = 0; i < length; i++) {
@@ -26,7 +46,7 @@ function createPadArray(length, filler) {
   return padArray;
 }
 
-function padLeft(txt, places = 0, filler = '0') {
+function padLeft(txt = '', places = 0, filler = '0') {
   const txtLength = Math.max(places, txt.length);
   const generouslyFilled = createPadArray(txtLength, filler).concat(txt.split(''));
   return generouslyFilled
@@ -35,8 +55,8 @@ function padLeft(txt, places = 0, filler = '0') {
     ;
 }
 
-function formatHMS(IsoDate) {
-  const dateCasted = new Date(IsoDate);
+function formatHMS(dateAlike) {
+  const dateCasted = new Date(dateAlike);
   return `${
     padLeft(dateCasted.getHours().toString(), 2)
     }:${
@@ -52,8 +72,8 @@ function itemsToRanges(items) {
 
 function itemToRange(item) {
   return createRange(
-    new Date(item.get('cue_in_at')).valueOf(),
-    new Date(item.get('cue_out_at')).valueOf()
+    getScheduleItemStartTimestamp(item),
+    getScheduleItemEndTimestamp(item)
   );
 }
 
@@ -74,12 +94,10 @@ function createRange(start, end) {
 }
 
 function subtractFromSingleRange(initialRange, rangesToSubtract) {
-  return (
-    reduce(
-      rangesToSubtract,
-      (resultRanges, currentRange) => subtractFromManyRanges(resultRanges, currentRange),
-      [initialRange]
-    )
+  return reduce(
+    rangesToSubtract,
+    (resultRanges, currentRange) => subtractFromManyRanges(resultRanges, currentRange),
+    [initialRange]
   );
 }
 

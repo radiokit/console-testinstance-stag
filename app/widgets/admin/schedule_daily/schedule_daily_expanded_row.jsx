@@ -4,6 +4,7 @@ import ExpandedRowItem from './schedule_daily_expanded_row_item.jsx';
 import ExpandedRowSilence from './schedule_daily_expanded_row_silence.jsx';
 
 import {
+  getScheduleItemStartTimestamp,
   itemsToRanges,
   subtractFromSingleRange,
   rangeToItem,
@@ -11,12 +12,12 @@ import {
   isRangeOnEdge,
 } from './schedule_daily_expanded_row_utils';
 
-const hourInMiliseconds = 1000 * 60 * 60;
+const hourInMilliseconds = 1000 * 60 * 60;
 
 const ExpandedRow = ({ items, activeItem, markAsActive, offsetStart }) => {
   const activeItemId = activeItem && activeItem.get('id') || '';
 
-  const offsetRange = [offsetStart, offsetStart + hourInMiliseconds];
+  const offsetRange = [offsetStart, offsetStart + hourInMilliseconds];
   const itemRanges = itemsToRanges(items);
   const silenceRanges = subtractFromSingleRange(offsetRange, itemRanges);
 
@@ -40,7 +41,9 @@ const ExpandedRow = ({ items, activeItem, markAsActive, offsetStart }) => {
             .toArray()
             .map(item => [ExpandedRowItem, item])
             .concat(silenceItems.map(silenceItem => [ExpandedRowSilence, silenceItem]))
-            .sort(([, a], [, b]) => getElementStartTimestamp(a) - getElementStartTimestamp(b))
+            .sort(
+              ([, a], [, b]) => getScheduleItemStartTimestamp(a) - getScheduleItemStartTimestamp(b)
+            )
             .map(([Element, item], i) => (
               <Element
                 key={i}
@@ -65,7 +68,3 @@ ExpandedRow.propTypes = {
 };
 
 export default ExpandedRow;
-
-function getElementStartTimestamp(item) {
-  return new Date(item.get('cue_in_at')).valueOf();
-}
