@@ -19,6 +19,12 @@ const MetadataInputField = React.createClass({
     placeholder: React.PropTypes.string,
   },
 
+  getInitialState() {
+    return {
+      imagePreviewUrl: null,
+    };
+  },
+
   onFieldChanged(e) {
     const value = e.target.value;
     const type = this.props.fieldSummary.type;
@@ -26,10 +32,23 @@ const MetadataInputField = React.createClass({
     if (type === 'datetime') {
       // convert local time to utc
       this.props.onFieldChanged(this.props.fieldId, moment(value).utc().toISOString());
-    }
-    else {
+    } else if (type === 'image') {
+      const image = e.target.files[0];
+      this.handleImageChange(image);
+    } else {
       this.props.onFieldChanged(this.props.fieldId, value);
     }
+  },
+
+  handleImageChange(imageFile) {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      this.setState({
+        imagePreviewUrl: reader.result,
+      });
+      this.props.onFieldChanged(this.props.fieldId, reader.result);
+    };
+    reader.readAsDataURL(imageFile);
   },
 
   toggleSelection(isSelected) {
@@ -43,6 +62,7 @@ const MetadataInputField = React.createClass({
     let step = null;
     let min = null;
     let max = null;
+    const { imagePreviewUrl } = this.state;
     switch (this.props.fieldSummary.type) {
       case 'string':
         inputType = 'text';
@@ -67,11 +87,16 @@ const MetadataInputField = React.createClass({
       case 'time':
         step = 1;
         break;
+      case 'image':
+        inputType = 'file';
       default:
     }
     return (
       <div key={ fieldId } className="form-group">
         <div className="MetadataFormWidget__inputGroup">
+          <div>
+            <img src={imagePreviewUrl} />
+          </div>
           <div className="input-group-content">
             <label
               htmlFor={ fieldId }
