@@ -8,7 +8,7 @@ export default {
     tagMissingError: 'Brakuje tagu',
     ratioMissingError: 'Brakuje proporcji',
     noTypeError: 'Nie wybrano typu',
-    noWeeklyPlanError: 'Nie wybrano planu',
+    noContentTypeError: 'Nie wybrano planu',
     noRepositoryError: 'Nie wybrano repozytorium',
     noDetailsError: 'Nie wybrano szczegółów typu',
     startAfterEndError: 'Czas końca jest wcześniej niż początku',

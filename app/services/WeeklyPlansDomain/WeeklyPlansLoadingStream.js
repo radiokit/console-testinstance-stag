@@ -11,7 +11,7 @@ const loadingState = Map({ value: true });
 const idleState = Map({ value: false });
 
 export default RadioKitDomain.map(
-  function WeeklyPlansLoadingProcess(data) {
+  function ContentTypesLoadingProcess(data) {
     return data
       .get('queries')
       .filter(

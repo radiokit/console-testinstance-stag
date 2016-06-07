@@ -9,7 +9,7 @@ import AutoDJShuffleForm from './autodj_shuffle_form.jsx';
 import AutoDJRotationForm from './autodj_rotation_form.jsx';
 import VaultRepositoryPicker from '../../../../widgets/autosuggest/vault_repository_picker.jsx';
 /* eslint max-len: 0 */
-import WeeklyPlanConnectedPicker from '../../../../widgets/autosuggest/weeklyplan_connected_picker.jsx';
+import ContentTypeConnectedPicker from '../../../../widgets/autosuggest/weeklyplan_connected_picker.jsx';
 import WeekDatesPicker from '../../../../widgets/time/week_dates_picker.jsx';
 import HourRangePicker from '../../../../widgets/time/hour_range_picker.jsx';
 
@@ -114,7 +114,7 @@ const AutoDJForm = React.createClass({
     this.handleModelChange(['details'], details);
   },
 
-  handleWeeklyPlanChange(weeklyplan) {
+  handleContentTypeChange(weeklyplan) {
     this.handleModelChange(['weeklyplan'], weeklyplan);
   },
 
@@ -228,10 +228,10 @@ const AutoDJForm = React.createClass({
               <label>
                 <Translate content="AutoDJForm.weeklyplanLabel" />
               </label>
-              <WeeklyPlanConnectedPicker
+              <ContentTypeConnectedPicker
                 broadcastChannelId={this.props.currentBroadcastChannel}
                 value={model.get('weeklyplan')}
-                onChange={this.handleWeeklyPlanChange}
+                onChange={this.handleContentTypeChange}
               />
             </div>
           </fieldset>

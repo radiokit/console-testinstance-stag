@@ -10,7 +10,7 @@ import RadioKitDomain from '../RadioKitDomain';
 const noEntities = Map();
 
 export default RadioKitDomain.map(
-  function WeeklyPlansEntitiesProcess(data) {
+  function ContentTypesEntitiesProcess(data) {
     return data.getIn(['entities', app, model]) || noEntities;
   }
 );
