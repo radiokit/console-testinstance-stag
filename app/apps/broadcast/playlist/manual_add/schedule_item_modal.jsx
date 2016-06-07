@@ -37,13 +37,13 @@ const ScheduleItemModal = React.createClass({
 
   getInitialStartDate() {
     return this.props.record
-      ? this.props.record.get('start_at')
+      ? this.props.record.get('cue_in_at')
       : moment(this.props.defaultTimeOffset).add(1, 'hour').startOf('hour');
   },
 
   getInitialStopDate() {
     return this.props.record
-      ? this.props.record.get('stop_at')
+      ? this.props.record.get('cue_out_at')
       : null;
   },
 
