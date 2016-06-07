@@ -26,14 +26,6 @@ const CalendarRow = React.createClass({
 
   shouldComponentUpdate,
 
-  getClassName(item) {
-    let className = 'ScheduleDailyWidget-CalendarRow-item';
-    if (this.props.activeItem && this.props.activeItem.get('id') === item.get('id')) {
-      className += '-active';
-    }
-    return className;
-  },
-
   toggleExpansion() {
     this.setState({
       expanded: !this.state.expanded,
@@ -50,7 +42,11 @@ const CalendarRow = React.createClass({
   },
 
   render() {
-    const { offsetStart, items } = this.props;
+    const {
+      offsetStart,
+      items,
+      activeItem,
+    } = this.props;
     const now = Date.now();
 
     let rowTiming;
@@ -78,9 +74,10 @@ const CalendarRow = React.createClass({
     if (this.state.expanded) {
       rowContent = (
         <ExpandedRow
+          offsetStart={offsetStart}
           items={items}
-          getClassName={(item) => this.getClassName(item)}
-          markAsActive={(item) => this.markAsActive(item)}
+          activeItem={activeItem}
+          markAsActive={this.markAsActive}
         />
       );
     } else {
