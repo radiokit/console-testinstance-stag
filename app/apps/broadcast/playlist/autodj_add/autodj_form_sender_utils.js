@@ -25,7 +25,7 @@ function formatHour(hour) {
 
 function shuffleFormToWeeklyItem(form) {
   return Map({
-    schedule_content_type_id: form.getIn(['weeklyplan', 'id']),
+    broadcast_content_type_id: form.getIn(['weeklyplan', 'id']),
     time_start: formatHour(form.getIn(['hours', 'start'])),
     time_stop: formatHour(form.getIn(['hours', 'end'])),
     on_monday: form.getIn(['weekdays', 0], false),
