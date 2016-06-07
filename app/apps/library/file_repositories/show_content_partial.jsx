@@ -129,7 +129,7 @@ const ShowContentPartial = React.createClass({
 
   buildTableAttributes() {
     const attributes = {
-      name: { renderer: 'string' },
+      name: { renderer: 'string', sortable: true },
     };
     return this.props.record.get('metadata_schemas').reduce((acc, metadataSchema) => {
       /* eslint no-param-reassign: 0 */

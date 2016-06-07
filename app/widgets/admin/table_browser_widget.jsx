@@ -41,6 +41,8 @@ export default React.createClass({
       loadingMatching: false,
       selectedMatching: false,
       selectedAll: false,
+      sortedAttribute: null,
+      sortedDirection: null,
     };
   },
 
@@ -55,6 +57,10 @@ export default React.createClass({
       .clone()
       .clearSelect()
       .select("id")
+
+    if(this.state.sortedAttribute) {
+      this.recordsQueryFull = this.recordsQueryFull.order(this.state.sortedAttribute, this.state.sortedDirection)
+    }
 
     this.recordsQueryFull
       .on("fetch", this.onRecordsQueryFetch);
@@ -157,6 +163,17 @@ export default React.createClass({
     });
   },
 
+  onSort: function(attribute, direction) {
+    this.setState({
+      sortedAttribute: attribute,
+      sortedDirection: direction
+    }, () => {
+      this.buildRecordsQuery();
+      this.loadRecords();
+    });
+  },
+
+
   onNextPageClick: function() {
     this.setState({
       offset: this.state.offset + this.props.limit
@@ -210,14 +227,28 @@ export default React.createClass({
   renderRefresh: function() {
     return (
       <ToolbarGroup position="right">
-        <ToolbarButton onClick={this.onRefreshClick} icon="reload" title={Counterpart.translate("widgets.admin.table_browser.refresh.title")}/>
+        <ToolbarButton
+          onClick={this.onRefreshClick}
+          icon="reload"
+          title={Counterpart.translate("widgets.admin.table_browser.refresh.title")}/>
       </ToolbarGroup>
     );
   },
 
   renderTable: function() {
       return (
-        <Table linkFunc={this.props.recordsLinkFunc} selectedRecordIds={this.state.selectedRecordIds} onSelectRecord={this.onSelectRecord} onSelectAll={this.onSelectAll} selectable={this.props.selectable} attributes={this.props.attributes} contentPrefix={this.props.contentPrefix} records={this.state.records} />
+        <Table
+          linkFunc={this.props.recordsLinkFunc}
+          selectedRecordIds={this.state.selectedRecordIds}
+          onSelectRecord={this.onSelectRecord}
+          onSelectAll={this.onSelectAll}
+          onSort={this.onSort}
+          selectable={this.props.selectable}
+          attributes={this.props.attributes}
+          sortedAttribute={this.state.sortedAttribute}
+          sortedDirection={this.state.sortedDirection}
+          contentPrefix={this.props.contentPrefix}
+          records={this.state.records} />
       );
   },
 

@@ -11,8 +11,11 @@ export default React.createClass({
     selectable: React.PropTypes.bool,
     headerSelected: React.PropTypes.bool,
     onSelectAll: React.PropTypes.func,
+    onSort: React.PropTypes.func,
     actions: React.PropTypes.arrayOf(React.PropTypes.string),
-    records: React.PropTypes.object.isRequired
+    records: React.PropTypes.object.isRequired,
+    sortedAttribute: React.PropTypes.string,
+    sortedDirection: React.PropTypes.string,
   },
 
 
@@ -32,6 +35,13 @@ export default React.createClass({
   },
 
 
+  onSort: function(attribute, direction) {
+    if(this.props.onSort) {
+      this.props.onSort(attribute, direction);
+    }
+  },
+
+
   renderSelector: function(record) {
     if(this.props.selectable) {
       return (<TableSelector header={true} onSelect={this.onSelect} selected={this.props.records.count() !== 0 && this.props.headerSelected} />);
@@ -44,12 +54,29 @@ export default React.createClass({
       <tr>
         {this.renderSelector()}
         {Object.keys(this.props.attributes).map((attribute) => {
+          let label;
+
           if(this.props.attributes[attribute].headerText) {
-            return (<th key={"cell-" + attribute}>{this.props.attributes[attribute].headerText}</th>);
+            label = this.props.attributes[attribute].headerText;
 
           } else {
-            return (<Translate key={"cell-" + attribute} component="th" content={this.props.contentPrefix + ".header." + attribute} />);
+            label = <Translate component="span" content={this.props.contentPrefix + ".header." + attribute} />;
           }
+
+          if(this.props.attributes[attribute].sortable === true) {
+            if(this.props.sortedAttribute === attribute) {
+              if(this.props.sortedDirection === "asc") {
+                label = <a onClick={this.onSort.bind(this, attribute, "desc")}>{label} <i className="mdi mdi-chevron-up" /></a>;
+              } else {
+                label = <a onClick={this.onSort.bind(this, attribute, "asc")}>{label} <i className="mdi mdi-chevron-down" /></a>;
+              }
+
+            } else {
+              label = <a onClick={this.onSort.bind(this, attribute, "asc")}>{label}</a>;
+            }
+          }
+
+          return (<th key={"cell-" + attribute}>{label}</th>);
         })}
 
         {this.props.actions.map((action) => {

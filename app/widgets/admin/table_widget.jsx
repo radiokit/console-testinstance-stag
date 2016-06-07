@@ -15,6 +15,9 @@ export default React.createClass({
     selectedRecordIds: React.PropTypes.object,
     onSelectRecord: React.PropTypes.func,
     onSelectAll: React.PropTypes.func,
+    onSort: React.PropTypes.func,
+    sortedAttribute: React.PropTypes.string,
+    sortedDirection: React.PropTypes.string,
   },
 
 
@@ -97,12 +100,34 @@ export default React.createClass({
   },
 
 
+  onSort: function(attribute, direction) {
+    if(this.props.onSort) {
+      this.props.onSort(attribute, direction);
+    }
+  },
+
+
   render: function() {
     return (
       <div className="TableWidget">
         <table className="table table-hover">
-        <TableHeader attributes={this.props.attributes} records={this.props.records} contentPrefix={this.props.contentPrefix} selectable={this.props.selectable} headerSelected={this.state.selectedRecordIds.count() >= this.props.records.count()} onSelectAll={this.onSelectAll} />
-        <TableBody linkFunc={this.props.linkFunc} attributes={this.props.attributes} records={this.props.records} selectable={this.props.selectable} selectedRecordIds={this.state.selectedRecordIds} onSelectRecord={this.onSelectRecord} />
+        <TableHeader
+          attributes={this.props.attributes}
+          records={this.props.records}
+          contentPrefix={this.props.contentPrefix}
+          selectable={this.props.selectable}
+          headerSelected={this.state.selectedRecordIds.count() >= this.props.records.count()}
+          onSelectAll={this.onSelectAll}
+          onSort={this.onSort}
+          sortedAttribute={this.props.sortedAttribute}
+          sortedDirection={this.props.sortedDirection} />
+        <TableBody
+          linkFunc={this.props.linkFunc}
+          attributes={this.props.attributes}
+          records={this.props.records}
+          selectable={this.props.selectable}
+          selectedRecordIds={this.state.selectedRecordIds}
+          onSelectRecord={this.onSelectRecord} />
         </table>
       </div>
     );
