@@ -26,12 +26,21 @@
   }
 
   &__metadataSchemaLabel {
-    padding: 15px;
-    border-right: 1px solid #d3d3d3;
+    padding: 15px 24px;
+    border-left: 1px solid #d3d3d3;
+    line-height: 17px;
+    width: 150px
   }
 
-  &__metadataSchemaLabel--empty {
-    border-right: none;
+  &__metadataSchemaName {
+    width: 70px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  &__metadataSchemaPlusBtn {
+    border-left: none;
+    padding: 15px;
   }
 
   &__metadataBtnGroup {

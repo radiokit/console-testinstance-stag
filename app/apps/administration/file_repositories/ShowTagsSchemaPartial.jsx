@@ -133,8 +133,8 @@ const ShowTagsSchemaPartial = React.createClass({
 
   renderMetadataSchemas(category) {
     const plusIconClasses = classnames(
-      'ShowTagsSchemaPartial__metadataSchemaLabel',
-      { 'ShowTagsSchemaPartial__metadataSchemaLabel--empty' : category.get('metadata_schemas').count() < 1}
+      'ShowTagsSchemaPartial__metadataSchemaPlusBtn',
+      { 'ShowTagsSchemaPartial__metadataSchemaPlusBtn--empty' : category.get('metadata_schemas').count() < 1}
     );
     return (
       <div>
@@ -173,7 +173,9 @@ const ShowTagsSchemaPartial = React.createClass({
                 updateRecord={ schema }
               />
               <span className="ShowTagsSchemaPartial__metadataSchemaLabel">
-                {schema.get('name')}
+                <span className="ShowTagsSchemaPartial__metadataSchemaName">
+                  {schema.get('name')}
+                </span>
                 <span className="ShowTagsSchemaPartial__metadataBtnGroup">
                   <a className="ShowTagsSchemaPartial__smallBtn btn btn-icon" onClick={ () => this.refs[updateModalRef].show() }>
                     <i className="mdi mdi-border-color" />
