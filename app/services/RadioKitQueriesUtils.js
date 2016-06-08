@@ -1,3 +1,6 @@
+import {
+  List,
+} from 'immutable';
 import RadioKitDomain from './RadioKitDomain';
 
 const { live, done, loading } = RadioKitDomain.STATUS;
@@ -48,4 +51,8 @@ export function getQueriesContent(queries) {
 
 export function getEntitiesByIdFromQueries(queries) {
   return indexBy('id')(getQueriesContent(queries));
+}
+
+export function getQueryData(query) {
+  return query.get('data', List());
 }

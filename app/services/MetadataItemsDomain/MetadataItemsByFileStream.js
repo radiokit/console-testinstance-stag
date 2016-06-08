@@ -2,15 +2,13 @@ import {
   View,
 } from 'immview';
 import {
-  List,
-} from 'immutable';
-import {
+  getQueryData,
   pickReadyQueries,
 } from '../RadioKitQueriesUtils';
 
 import MetadataItemsQueriesStream from './MetadataItemsQueriesStream';
 
-import ExtendedMetadataItemsByFileIdStream from './ExtendedMetadataItemsByFileIdStream';
+import MetadataItemsEntitiesExtendedStream from './MetadataItemsEntitiesExtendedStream';
 
 /**
  * This stream will push only metadatas of files
@@ -20,39 +18,45 @@ import ExtendedMetadataItemsByFileIdStream from './ExtendedMetadataItemsByFileId
  * that otherwise would not be assigned to file
  */
 
-const ReadyQueriesStream = MetadataItemsQueriesStream.map(pickReadyQueries);
+const MetadataItemsReadyQueriesStream = MetadataItemsQueriesStream.map(pickReadyQueries);
 
 const MetadataItemsByFileStream = new View(
   {
-    extendedMetadataItemsByFileId: ExtendedMetadataItemsByFileIdStream,
-    readyQueries: ReadyQueriesStream,
+    extendedMetadataItemsByFileId: MetadataItemsEntitiesExtendedStream,
+    readyQueries: MetadataItemsReadyQueriesStream,
   },
   data => {
     const { extendedMetadataItemsByFileId, readyQueries } = data.toObject();
 
-    return readyQueries
-      .groupBy(
-        (_, queryParams) => queryParams
-          .get('conditions')
-          .find(i => i.get('field') === 'record_file_id')
-          .get('value')
-      )
-      .map((queries, fileId) => {
-        const extendedMetadataItemsOfFile = extendedMetadataItemsByFileId.get(fileId);
-        if (extendedMetadataItemsOfFile) {
-          return extendedMetadataItemsOfFile;
-        }
+    const readyQueriesData = readyQueries.map(getQueryData);
+    const readyQueriesByFile = readyQueriesData.groupBy(
+      (_, queryParams) => getFileIdFromQueryParams(queryParams)
+    );
+    const lastQueriesByFile = readyQueriesByFile.map(getLatestQuery);
+    const extendedMetadataItemsByFile = lastQueriesByFile.map(
+      (queryResponse, fileId) =>
+        extendedMetadataItemsByFileId.get(fileId) || queryResponse
+    );
 
-        const lastQueryData = queries.last().get('data');
-        if (lastQueryData.count() === 0) {
-          return List();
-        }
-
-        return null;
-      })
-      .filter(v => !!v)
-    ;
+    return getNonEmptyValues(extendedMetadataItemsByFile);
   }
 );
 
 export default MetadataItemsByFileStream;
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+function getLatestQuery(queries) {
+  return queries.last();
+}
+
+function getFileIdFromQueryParams(queryParams) {
+  return queryParams
+    .get('conditions')
+    .find(i => i.get('field') === 'record_file_id')
+    .get('value');
+}
+
+function getNonEmptyValues(collection) {
+  return collection.filter(v => !!v);
+}
