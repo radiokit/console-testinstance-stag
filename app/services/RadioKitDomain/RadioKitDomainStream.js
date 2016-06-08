@@ -6,7 +6,7 @@ import {
 } from 'immview';
 import RadioKitEntitiesStream from './RadioKitEntitiesStream';
 
-function switchEntitiesOccurrencesInQueries(queries, entities) {
+function switchEntitiesInQueries(queries, entities) {
   return queries.map(
     (status, params) => status.set(
       'data',
@@ -30,7 +30,7 @@ const RadioKitDomainStream = new View(
     const entities = data.get('entities', emptyEntities);
     const queries = data.get('queries', emptyQueries);
     return Map({
-      queries: switchEntitiesOccurrencesInQueries(queries, entities),
+      queries: switchEntitiesInQueries(queries, entities),
       entities,
     });
   }
