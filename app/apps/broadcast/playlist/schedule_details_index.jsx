@@ -17,38 +17,19 @@ const ScheduleDetailsIndex = React.createClass({
     toolbarProps: React.PropTypes.object,
   },
 
-  renderSidebarElement() {
-    return RenderHelper.renderDelegatedComponent(
-      PlaylistSidebar,
-      this.props.sidebarProps
-    );
-  },
-
-  renderContentPartial() {
-    return (
-      <div>
-        <CardToolBar>
-          {RenderHelper.renderDelegatedComponent(
-            PlaylistToolbar,
-            this.props.toolbarProps
-          )}
-        </CardToolBar>
-        {RenderHelper.renderDelegatedComponent(
-          ScheduleDetails,
-          this.props.contentProps,
-        )}
-      </div>
-    );
-  },
-
   render() {
     return (
       <div>
         <PlaylistToolbar {...this.props.toolbarProps} />
         <CardBody cardPadding={true}>
           <CardSidebar>
-            {this.renderSidebarElement()}
-            {this.renderContentPartial()}
+            <PlaylistSidebar {...this.props.sidebarProps} />
+            <div>
+              <CardToolBar>
+                <PlaylistToolbar {...this.props.toolbarProps} />
+              </CardToolBar>
+              <ScheduleDetails {...this.props.contentProps} />
+            </div>
           </CardSidebar>
         </CardBody>
       </div>
