@@ -18,6 +18,10 @@ export default {
                         label: "Nazwa grupy kategorii",
                         hint: "Zmień nazwę grupy kategorii"
                       },
+                      key: {
+                        label: "Klucz",
+                        hint: "Klucz używany do integracji z innymi systemami"
+                      },
                     },
                     message: {
                       confirmation: "Czy na pewno chcesz edytować wybraną grupę kategorii?",
@@ -84,6 +88,10 @@ export default {
                       name: {
                         label: "Nazwa grupy kategorii",
                         hint: "Wpisz nazwę nowej grupy kategorii"
+                      },
+                      key: {
+                        label: "Klucz",
+                        hint: "Klucz używany do integracji z innymi systemami"
                       },
                     },
                     message: {

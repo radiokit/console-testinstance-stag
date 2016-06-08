@@ -17,6 +17,10 @@ export default {
                         label: "Group name",
                         hint: "Type name for group of tags"
                       },
+                      key: {
+                        label: "Key",
+                        hint: "Key used for integration with other systems"
+                      },
                     },
                     message: {
                       confirmation: "Do you want to edit this group of tags",
@@ -84,6 +88,10 @@ export default {
                       name: {
                         label: "Group name",
                         hint: "Type name for group of tags"
+                      },
+                      key: {
+                        label: "Key",
+                        hint: "Key used for integration with other systems"
                       },
                     },
                     message: {

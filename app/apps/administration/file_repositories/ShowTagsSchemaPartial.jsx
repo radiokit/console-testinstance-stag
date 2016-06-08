@@ -40,7 +40,7 @@ const ShowTagsSchemaPartial = React.createClass({
   queryTagCategories() {
     RadioKit
       .query('vault', 'Data.Tag.Category')
-      .select('id', 'name', 'tag_items.id', 'tag_items.name')
+      .select('id', 'name', 'key', 'tag_items.id', 'tag_items.name')
       .joins('tag_items')
       .where('record_repository_id', 'eq', this.props.record.get('id'))
       .on('fetch', (_eventName, _record, data) => {
@@ -66,6 +66,10 @@ const ShowTagsSchemaPartial = React.createClass({
         validators: {
           presence: true,
         }
+      },
+      key: {
+        type: 'string',
+        hint: true,
       },
       record_repository_id: {
         type: 'hidden',
@@ -98,7 +102,12 @@ const ShowTagsSchemaPartial = React.createClass({
         value: category.name,
         validators: {
           presence: true,
-        }
+        },
+      },
+      key: {
+        type: 'string',
+        hint: true,
+        value: category.key,
       }
     }
   },
@@ -112,7 +121,7 @@ const ShowTagsSchemaPartial = React.createClass({
         validators: {
           presence: true,
         }
-      }
+      },
     }
   },
 
