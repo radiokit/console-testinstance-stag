@@ -14,6 +14,7 @@ import Loading from '../../../widgets/general/loading_widget.jsx';
 import CreateModal from '../../../widgets/admin/crud/create_modal.jsx';
 import DeleteModal from '../../../widgets/admin/crud/delete_modal.jsx';
 import UpdateModal from '../../../widgets/admin/crud/update_modal.jsx';
+import MetadataSchemasModal from '../../../widgets/metadata/metadata_schema_form_modal.jsx';
 
 Counterpart.registerTranslations('en', require('./ShowTagsSchemaPartial.locale.en.js'));
 Counterpart.registerTranslations('pl', require('./ShowTagsSchemaPartial.locale.pl.js'));
@@ -40,8 +41,9 @@ const ShowTagsSchemaPartial = React.createClass({
   queryTagCategories() {
     RadioKit
       .query('vault', 'Data.Tag.Category')
-      .select('id', 'name', 'key', 'tag_items.id', 'tag_items.name')
+      .select('id', 'name', 'tag_items.id', 'tag_items.name', 'metadata_schemas.id', 'metadata_schemas.name')
       .joins('tag_items')
+      .joins('metadata_schemas')
       .where('record_repository_id', 'eq', this.props.record.get('id'))
       .on('fetch', (_eventName, _record, data) => {
         this.setState({
@@ -125,9 +127,20 @@ const ShowTagsSchemaPartial = React.createClass({
     }
   },
 
+
   refreshData() {
     this.queryTagCategories();
     this.setState(this.state);
+  },
+
+  renderMetadataSchemas(category) {
+    return (
+      <div>
+        {category.metadata_schemas.map(schema => {
+          return <span>{schema.name}</span>
+        })}
+      </div>
+    );
   },
 
   renderCategoryTags(category) {
@@ -194,6 +207,10 @@ const ShowTagsSchemaPartial = React.createClass({
     this.refs["editCategoryModal-" + category.name].show();
   },
 
+  showEditMetadataSchemas(category) {
+    this.refs["editMetadataSchemasModal-" + category.name].show();
+  },
+
   render() {
     return (
       <div className="ShowTagsSchemaPartial">
@@ -212,6 +229,8 @@ const ShowTagsSchemaPartial = React.createClass({
           const onNewTagListener = () => this.showNewTagModal(category);
           const onDeleteCategoryListener = () => this.showDeleteCategoryModal(category);
           const onEditCategoryListener = () => this.showEditCategoryModal(category);
+          const onEditCategoryMetadataSchemas = () => this.showEditMetadataSchemas(category);
+
           const toggleClassNames = classnames('btn', 'btn-flat', 'btn-icon-toggle', {'disabled' : category.tag_items.length === 0 });
           const newTagIconClassNames = classnames('btn', 'btn-icon', {'ShowTagsSchemaPartial__emptyCategory' : category.tag_items.length === 0 });
 
@@ -238,6 +257,14 @@ const ShowTagsSchemaPartial = React.createClass({
                 recordId={ category.id }
                 form={ this.buildEditCategoryForm(category) }
                 onDismiss={ this.refreshData } />
+              <MetadataSchemasModal
+                ref={ "editMetadataSchemasModal-" + category.name }
+                contentPrefix={ this.props.contentPrefix + ".modals.edit_category" }
+                app="vault"
+                record={ this.props.record }
+                model="Data.Tag.Category"
+                recordId={ category.id }
+                onDismiss={ this.refreshData } />
               <div className="expanded">
                 <div className="card-head" aria-expanded="true">
                   <a className={ toggleClassNames }
@@ -261,6 +288,9 @@ const ShowTagsSchemaPartial = React.createClass({
                         );
                       }
                     }()}
+                    <a className={newTagIconClassNames} onClick={ onEditCategoryMetadataSchemas }>
+                      <i className="mdi mdi-library-plus"></i>
+                    </a>
                     <a className={newTagIconClassNames} onClick={ onNewTagListener }>
                       <i className="mdi mdi-library-plus"></i>
                     </a>
