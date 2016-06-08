@@ -66,9 +66,9 @@ export default React.createClass({
           if(this.props.attributes[attribute].sortable === true) {
             if(this.props.sortedAttribute === attribute) {
               if(this.props.sortedDirection === "asc") {
-                label = <a style={{"white-space": "nowrap"}} onClick={this.onSort.bind(this, attribute, "desc")}>{label}<i className="mdi mdi-chevron-up" /></a>;
+                label = <a style={{whiteSpace: "nowrap"}} onClick={this.onSort.bind(this, attribute, "desc")}>{label}<i className="mdi mdi-chevron-up" /></a>;
               } else {
-                label = <a style={{"white-space": "nowrap"}} onClick={this.onSort.bind(this, attribute, "asc")}>{label}<i className="mdi mdi-chevron-down" /></a>;
+                label = <a style={{whiteSpace: "nowrap"}} onClick={this.onSort.bind(this, attribute, "asc")}>{label}<i className="mdi mdi-chevron-down" /></a>;
               }
 
             } else {
