@@ -173,8 +173,7 @@ export default React.createClass({
       sortedAttribute: attribute,
       sortedDirection: direction
     }, () => {
-      this.buildRecordsQuery();
-      this.loadRecords();
+      this.reloadData();
     });
   },
 
@@ -183,7 +182,7 @@ export default React.createClass({
     this.setState({
       offset: this.state.offset + this.props.limit
     }, () => {
-      this.loadRecords();
+      this.reloadData();
     });
   },
 
@@ -191,7 +190,7 @@ export default React.createClass({
     this.setState({
       offset: this.state.offset - this.props.limit
     }, () => {
-      this.loadRecords();
+      this.reloadData();
     });
   },
 
