@@ -59,7 +59,12 @@ export default React.createClass({
       .select("id")
 
     if(this.state.sortedAttribute) {
-      this.recordsQueryFull = this.recordsQueryFull.order(this.state.sortedAttribute, this.state.sortedDirection)
+      if(typeof(this.props.attributes[this.state.sortedAttribute].sortableFunc) === "function") {
+        this.recordsQueryFull = this.props.attributes[this.state.sortedAttribute].sortableFunc(this.recordsQueryFull, this.state.sortedAttribute, this.state.sortedDirection);
+
+      } else {
+        this.recordsQueryFull = this.recordsQueryFull.order(this.state.sortedAttribute, this.state.sortedDirection)
+      }
     }
 
     this.recordsQueryFull

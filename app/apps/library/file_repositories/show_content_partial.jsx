@@ -97,7 +97,24 @@ const ShowContentPartial = React.createClass({
   },
 
   reloadTable() {
+    // FIXME refs are pure evil
     this.refs.tableBrowser.reloadData();
+  },
+
+  isMetadataSchemaSortable(metadataSchema) {
+    let kind = metadataSchema.get("kind");
+
+    return (
+      kind === 'string' ||
+      kind === 'db' ||
+      kind === 'integer' ||
+      kind === 'text' ||
+      kind === 'float' ||
+      kind === 'date' ||
+      kind === 'time' ||
+      kind === 'datetime' ||
+      kind === 'url' ||
+      kind === 'duration');
   },
 
   moveFiles(newStage) {
@@ -136,6 +153,11 @@ const ShowContentPartial = React.createClass({
       acc[metadataSchema.get('key')] = {
         renderer: metadataSchema.get('kind'),
         headerText: metadataSchema.get('name'),
+        sortable: this.isMetadataSchemaSortable(metadataSchema),
+        sortableFunc: (query, attribute, direction) => {
+          return query
+            .scope("sorted_by_metadata", metadataSchema.get('key'), metadataSchema.get('kind'), direction);
+        },
         valueFunc: (record) => {
           const foundMetadataItem = record
             .get('metadata_items')
