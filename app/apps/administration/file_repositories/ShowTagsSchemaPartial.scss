@@ -13,11 +13,32 @@
     transform: rotate(0deg);
   }
 
+  &__listHeader {
+    width: 15%;
+  }
+
   &__tagName {
     padding-left: 36px;
     background-color: #f2f2f2;
   }
   &__emptyCategory {
     color: red;
+  }
+
+  &__metadataSchemaLabel {
+    padding: 15px;
+    border-right: 1px solid #d3d3d3;
+  }
+
+  &__metadataSchemaLabel--empty {
+    border-right: none;
+  }
+
+  &__metadataBtnGroup {
+    margin-left: 20px;
+  }
+
+  &__smallBtn {
+    padding: 3px;
   }
 }

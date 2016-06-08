@@ -8,8 +8,9 @@ Counterpart.registerTranslations('pl', require('./metadata_schema_form_modal.loc
 
 const MetadataSchemaFormModal = React.createClass({
   propTypes: {
-    contentPrefix: React.PropTypes.string.isRequired,
-    record: React.PropTypes.object.isRequired,
+    recordId: React.PropTypes.string,
+    recordKey: React.PropTypes.string,
+    repositoryId: React.PropTypes.string,
     app: React.PropTypes.string.isRequired,
     model: React.PropTypes.string.isRequired,
     onSuccess: React.PropTypes.func,
@@ -19,6 +20,7 @@ const MetadataSchemaFormModal = React.createClass({
     ),
     afterFormSubmit: React.PropTypes.func,
     afterFormAccept: React.PropTypes.func,
+    updateRecord: React.PropTypes.object,
   },
 
   getInitialState() {
@@ -30,6 +32,18 @@ const MetadataSchemaFormModal = React.createClass({
 
 
   buildMetadataSchemasForm() {
+    if (this.props.updateRecord) {
+      return {
+        name: {
+          type: 'string',
+          hint: true,
+          value: this.props.updateRecord.get('name'),
+          validators: {
+            presence: true,
+          },
+        },
+      };
+    }
     return {
       name: {
         type: 'string',
@@ -56,9 +70,13 @@ const MetadataSchemaFormModal = React.createClass({
           presence: true,
         },
       },
+      [this.props.recordKey]: {
+        type: 'hidden',
+        value: this.props.recordId,
+      },
       record_repository_id: {
         type: 'hidden',
-        value: this.props.record.get('id'),
+        value: this.props.repositoryId,
       },
     };
   },
@@ -68,33 +86,65 @@ const MetadataSchemaFormModal = React.createClass({
   },
 
   handleFormSubmit(fieldValues) {
-    this.recordCall = window.data
-      .record(this.props.app, this.props.model)
-      .on('loading', () => {
-        this.setState({
-          step: 'progress',
-        });
-      })
-      .on('loaded', (_event, _record, data) => {
-        this.setState({
-          step: 'acknowledgement',
-          record: data,
-        });
-        if (this.props.afterFormAccept) {
-          this.props.afterFormAccept();
-        }
-      })
-      .on('warning', () => {
-        this.setState({
-          step: 'error',
-        });
-      })
-      .on('error', () => {
-        this.setState({
-          step: 'error',
-        });
-      })
-      .create(fieldValues);
+    if (this.props.updateRecord) {
+      this.recordCall = window.data
+        .record('vault', 'Data.Metadata.Schema', this.props.updateRecord.get('id'))
+        .on('loading', () => {
+          this.setState({
+            step: 'progress',
+          });
+        })
+        .on('loaded', (_event, _record, data) => {
+          this.setState({
+            step: 'acknowledgement',
+            record: data,
+          });
+          if (this.props.afterFormAccept) {
+            this.props.afterFormAccept();
+          }
+        })
+        .on('warning', () => {
+          this.setState({
+            step: 'error',
+          });
+        })
+        .on('error', () => {
+          this.setState({
+            step: 'error',
+          });
+        })
+        .update(fieldValues);
+    } else {
+      this.recordCall = window.data
+        .record('vault', 'Data.Metadata.Schema')
+        .on('loading', () => {
+          this.setState({
+            step: 'progress',
+          });
+        })
+        .on('loaded', (_event, _record, data) => {
+          this.setState({
+            step: 'acknowledgement',
+            record: data,
+          });
+          if (this.props.afterFormAccept) {
+            this.props.afterFormAccept();
+          }
+        })
+        .on('warning', () => {
+          this.setState({
+            step: 'error',
+          });
+        })
+        .on('error', (data) => {
+          console.log('data:');
+          console.log(data);
+          this.setState({
+            step: 'error',
+          });
+        })
+        .create(fieldValues);
+    }
   },
 
   handleSuccess() {
@@ -120,7 +170,7 @@ const MetadataSchemaFormModal = React.createClass({
       <ModalForm
         ref="modal"
         acknowledgementElement={ this.props.acknowledgementElement }
-        contentPrefix={ '' }
+        contentPrefix={ `mode.${this.props.updateRecord ? 'update' : 'create'}`}
         onShow={ this.handleShow }
         step={ this.state.step }
         record={ this.state.record }

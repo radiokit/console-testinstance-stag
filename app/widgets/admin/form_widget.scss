@@ -1,6 +1,10 @@
-.FormWidget{
+.FormWidget {
 
-  .FormWidget__hint{
+  &__label {
+    line-height: 0;
+  }
+
+  &__hint {
     position: initial;
     margin-top: 5px;
     margin-bottom: 5px;

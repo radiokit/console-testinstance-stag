@@ -1,6 +1,5 @@
 import React from 'react';
 import { List } from 'immutable';
-import { sortBy } from 'lodash';
 import classnames from 'classnames';
 import Translate from 'react-translate-component';
 import Counterpart from 'counterpart';
@@ -14,7 +13,7 @@ import Loading from '../../../widgets/general/loading_widget.jsx';
 import CreateModal from '../../../widgets/admin/crud/create_modal.jsx';
 import DeleteModal from '../../../widgets/admin/crud/delete_modal.jsx';
 import UpdateModal from '../../../widgets/admin/crud/update_modal.jsx';
-import MetadataSchemasModal from '../../../widgets/metadata/metadata_schema_form_modal.jsx';
+import MetadataSchemaFormModal from '../../../widgets/metadata/metadata_schema_form_modal.jsx';
 
 Counterpart.registerTranslations('en', require('./ShowTagsSchemaPartial.locale.en.js'));
 Counterpart.registerTranslations('pl', require('./ShowTagsSchemaPartial.locale.pl.js'));
@@ -30,7 +29,7 @@ const ShowTagsSchemaPartial = React.createClass({
 
   getInitialState() {
     return {
-      categories: []
+      categories: List(),
     }
   },
 
@@ -91,7 +90,7 @@ const ShowTagsSchemaPartial = React.createClass({
       },
       tag_category_id: {
         type: 'hidden',
-        value: category.id,
+        value: category.get('id'),
       }
     }
   },
@@ -101,7 +100,7 @@ const ShowTagsSchemaPartial = React.createClass({
       name: {
         type: 'string',
         hint: true,
-        value: category.name,
+        value: category.get('name'),
         validators: {
           presence: true,
         },
@@ -119,7 +118,7 @@ const ShowTagsSchemaPartial = React.createClass({
       name: {
         type: 'string',
         hint: true,
-        value: tag.name,
+        value: tag.get('name'),
         validators: {
           presence: true,
         }
@@ -127,17 +126,67 @@ const ShowTagsSchemaPartial = React.createClass({
     }
   },
 
-
   refreshData() {
     this.queryTagCategories();
     this.setState(this.state);
   },
 
   renderMetadataSchemas(category) {
+    const plusIconClasses = classnames(
+      'ShowTagsSchemaPartial__metadataSchemaLabel',
+      { 'ShowTagsSchemaPartial__metadataSchemaLabel--empty' : category.get('metadata_schemas').count() < 1}
+    );
     return (
       <div>
-        {category.metadata_schemas.map(schema => {
-          return <span>{schema.name}</span>
+        <span>
+          <a className={plusIconClasses} onClick={ () => this.showEditMetadataSchemas(category) }>
+            <i className="mdi mdi-plus"></i>
+          </a>
+          {(() => {
+            if(category.get('metadata_schemas').count() < 1){
+              return (
+                <Translate
+                  content={this.props.contentPrefix + ".empty_metadata_schemas"}
+                  component="small"
+                />
+              );
+            }
+          })()}
+        </span>
+        {category.get('metadata_schemas').sortBy(schema => schema.get('name')).map(schema => {
+          const deleteModalRef = "deleteMetadataSchema-" + schema.get('id');
+          const updateModalRef = "updateMetadataSchema-" + schema.get('id');
+          return (
+            <span>
+              <DeleteModal
+                ref={deleteModalRef}
+                contentPrefix={ this.props.contentPrefix + ".modals.delete_metadata_schema" }
+                app="vault" model="Data.Metadata.Schema"
+                selectedRecordIds={ List.of(schema.get('id')) }
+                onDismiss={ this.refreshData }
+              />
+              <MetadataSchemaFormModal
+                ref={updateModalRef}
+                app="vault" model="Data.Metadata.Schema"
+                selectedRecordIds={ List.of(schema.get('id')) }
+                onDismiss={ this.refreshData }
+                updateRecord={ schema }
+              />
+              <span className="ShowTagsSchemaPartial__metadataSchemaLabel">
+                {schema.get('name')}
+                <span className="ShowTagsSchemaPartial__metadataBtnGroup">
+                  <a className="ShowTagsSchemaPartial__smallBtn btn btn-icon" onClick={ () => this.refs[updateModalRef].show() }>
+                    <i className="mdi mdi-border-color" />
+                  </a>
+                  <a className="ShowTagsSchemaPartial__smallBtn btn btn-icon"
+                    onClick={ () => this.refs[deleteModalRef].show()}
+                  >
+                    <i className="mdi mdi-close-box" />
+                  </a>
+                </span>
+              </span>
+            </span>
+          );
         })}
       </div>
     );
@@ -147,68 +196,110 @@ const ShowTagsSchemaPartial = React.createClass({
     return (
       <div className="ShowTagsSchemaPartial">
         <ul className="list">
-          { sortBy(category.tag_items,'name').map((tag) => {
-            const onDeleteTagListener = () => this.showDeleteTagModal(tag);
-            const onEditTagListener = () => this.showEditTagModal(tag);
-            return (
-              <li key={ tag.id } className="">
-                <DeleteModal
-                  ref={ "deleteTagModal-" + tag.name }
-                  contentPrefix={ this.props.contentPrefix + ".modals.delete_tag" }
-                  app="vault" model="Data.Tag.Item"
-                  selectedRecordIds={ List.of(tag.id) }
-                  onDismiss={ this.refreshData }/>
-                <UpdateModal
-                  ref={ "editTagModal-" + tag.name }
-                  contentPrefix={ this.props.contentPrefix + ".modals.edit_tag" }
-                  app="vault"
-                  model="Data.Tag.Item"
-                  recordId={ tag.id }
-                  form={ this.buildEditTagForm(tag) }
-                  onDismiss={ this.refreshData } />
-                <div className="ShowTagsSchemaPartial__tagName card-head card-head-sm">
-                  <header>
-                    { tag.name }
-                  </header>
-                  <div className="tools">
-                    <a className="btn btn-icon" onClick={ onEditTagListener }>
-                      <i className="mdi mdi-border-color" />
-                    </a>
-                    <a className="btn btn-flat ink-reaction btn-default" onClick={ onDeleteTagListener }>
-                      <i className="mdi mdi-delete" />
-                    </a>
+          { category.get('tag_items').sortBy(item => item.get('name')).map((tag) => {
+              return (
+                <li key={ tag.get('id') } className="">
+                  <DeleteModal
+                    ref={ "deleteTagModal-" + tag.get('id') }
+                    contentPrefix={ this.props.contentPrefix + ".modals.delete_tag" }
+                    app="vault" model="Data.Tag.Item"
+                    selectedRecordIds={ List.of(tag.get('id')) }
+                    onDismiss={ this.refreshData }/>
+                  <UpdateModal
+                    ref={ "editTagModal-" + tag.get('id') }
+                    contentPrefix={ this.props.contentPrefix + ".modals.edit_tag" }
+                    app="vault"
+                    model="Data.Tag.Item"
+                    recordId={ tag.get('id') }
+                    form={ this.buildEditTagForm(tag) }
+                    onDismiss={ this.refreshData } />
+                  <div className="ShowTagsSchemaPartial__tagName card-head card-head-sm">
+                    <header className="ShowTagsSchemaPartial__listHeader">
+                      { tag.get('name') }
+                    </header>
+                    <div className="tools">
+                      <a className="btn btn-icon" onClick={ () => this.showEditTagModal(tag) }>
+                        <i className="mdi mdi-border-color" />
+                      </a>
+                      <a
+                        className="btn btn-flat ink-reaction btn-default"
+                        onClick={ () => this.showDeleteTagModal(tag) }
+                      >
+                        <i className="mdi mdi-delete" />
+                      </a>
+                    </div>
                   </div>
-                </div>
-              </li>
-            );
-          })}
+                </li>
+              );
+            })
+          }
         </ul>
       </div>
     );
   },
 
   showDeleteTagModal(tag) {
-    this.refs["deleteTagModal-" + tag.name].show();
+    this.refs["deleteTagModal-" + tag.get('id')].show();
   },
 
   showDeleteCategoryModal(category) {
-    this.refs["deleteCategoryModal-" + category.name].show();
+    this.refs["deleteCategoryModal-" + category.get('id')].show();
   },
 
   showNewTagModal(category) {
-    this.refs["newTagModal-" + category.name].show();
+    this.refs["newTagModal-" + category.get('id')].show();
   },
 
   showEditTagModal(tag) {
-    this.refs["editTagModal-" + tag.name].show();
+    this.refs["editTagModal-" + tag.get('id')].show();
   },
 
   showEditCategoryModal(category) {
-    this.refs["editCategoryModal-" + category.name].show();
+    this.refs["editCategoryModal-" + category.get('id')].show();
   },
 
   showEditMetadataSchemas(category) {
-    this.refs["editMetadataSchemasModal-" + category.name].show();
+    this.refs["editMetadataSchemasModal-" + category.get('id')].show();
+  },
+
+  renderCrudModals(category) {
+    return (
+      <div>
+        <CreateModal
+          ref={ "newTagModal-" + category.get('id') }
+          contentPrefix={ this.props.contentPrefix + ".modals.create_tag" }
+          app="vault"
+          model="Data.Tag.Item"
+          form={ this.buildNewTagForm(category) }
+          onDismiss={ this.refreshData }
+        />
+        <DeleteModal
+          ref={ "deleteCategoryModal-" + category.get('id') }
+          contentPrefix={ this.props.contentPrefix + ".modals.delete_category" }
+          app="vault" model="Data.Tag.Category"
+          selectedRecordIds={ List.of(category.get('id')) }
+          onDismiss={ this.refreshData }
+        />
+        <UpdateModal
+          ref={ "editCategoryModal-" + category.get('id') }
+          contentPrefix={ this.props.contentPrefix + ".modals.edit_category" }
+          app="vault"
+          model="Data.Tag.Category"
+          recordId={ category.get('id') }
+          form={ this.buildEditCategoryForm(category) }
+          onDismiss={ this.refreshData }
+        />
+        <MetadataSchemaFormModal
+          ref={ "editMetadataSchemasModal-" + category.get('id') }
+          app="vault"
+          model="Data.Tag.Category"
+          recordKey={ 'tag_category_id' }
+          recordId={ category.get('id') }
+          repositoryId={this.props.record.get('id')}
+          onDismiss={ this.refreshData }
+        />
+      </div>
+    );
   },
 
   render() {
@@ -219,66 +310,46 @@ const ShowTagsSchemaPartial = React.createClass({
             icon="plus"
             labelTextKey={ this.props.contentPrefix + ".actions.add_category" }
             modalElement={ CreateModal }
-            modalProps={ {  contentPrefix: this.props.contentPrefix + ".modals.create_category",
-                            onDismiss: this.refreshData,
-                            form: this.buildNewCategoryForm(),
-                            app: "vault",
-                            model: "Data.Tag.Category" } } />
+            modalProps={
+              {
+                contentPrefix: this.props.contentPrefix + ".modals.create_category",
+                onDismiss: this.refreshData,
+                form: this.buildNewCategoryForm(),
+                app: "vault",
+                model: "Data.Tag.Category"
+              }
+           }
+        />
         </ToolbarGroup>
-        { this.state.categories.size > 0 && sortBy(this.state.categories.toJS(),'name').map((category) => {
-          const onNewTagListener = () => this.showNewTagModal(category);
-          const onDeleteCategoryListener = () => this.showDeleteCategoryModal(category);
-          const onEditCategoryListener = () => this.showEditCategoryModal(category);
-          const onEditCategoryMetadataSchemas = () => this.showEditMetadataSchemas(category);
-
-          const toggleClassNames = classnames('btn', 'btn-flat', 'btn-icon-toggle', {'disabled' : category.tag_items.length === 0 });
-          const newTagIconClassNames = classnames('btn', 'btn-icon', {'ShowTagsSchemaPartial__emptyCategory' : category.tag_items.length === 0 });
-
+        { this.state.categories.size > 0 &&
+          this.state.categories.sortBy(category => category.get('name')).map((category) => {
+          const toggleClassNames = classnames(
+            'btn', 'btn-flat', 'btn-icon-toggle',
+            { 'disabled' : category.get('tag_items').count() < 1 }
+          );
+          const newTagIconClassNames = classnames(
+            'btn', 'btn-icon',
+            { 'ShowTagsSchemaPartial__emptyCategory' : category.get('tag_items').count() < 1 }
+          );
           return (
-            <div id={ category.name } key={category.id}>
-              <CreateModal
-                ref={ "newTagModal-" + category.name }
-                contentPrefix={ this.props.contentPrefix + ".modals.create_tag" }
-                app="vault"
-                model="Data.Tag.Item"
-                form={ this.buildNewTagForm(category) }
-                onDismiss={ this.refreshData }/>
-              <DeleteModal
-                ref={ "deleteCategoryModal-" + category.name }
-                contentPrefix={ this.props.contentPrefix + ".modals.delete_category" }
-                app="vault" model="Data.Tag.Category"
-                selectedRecordIds={ List.of(category.id) }
-                onDismiss={ this.refreshData }/>
-              <UpdateModal
-                ref={ "editCategoryModal-" + category.name }
-                contentPrefix={ this.props.contentPrefix + ".modals.edit_category" }
-                app="vault"
-                model="Data.Tag.Category"
-                recordId={ category.id }
-                form={ this.buildEditCategoryForm(category) }
-                onDismiss={ this.refreshData } />
-              <MetadataSchemasModal
-                ref={ "editMetadataSchemasModal-" + category.name }
-                contentPrefix={ this.props.contentPrefix + ".modals.edit_category" }
-                app="vault"
-                record={ this.props.record }
-                model="Data.Tag.Category"
-                recordId={ category.id }
-                onDismiss={ this.refreshData } />
+            <div id={ category.get('id') } key={category.get('id')}>
+              {this.renderCrudModals(category)}
               <div className="expanded">
                 <div className="card-head" aria-expanded="true">
                   <a className={ toggleClassNames }
-                     data-toggle="collapse" data-parent={ "#" + category.name }
-                     data-target={ "#" + category.name + "-tagList" }>
+                     data-toggle="collapse" data-parent={ "#" + category.get('id') }
+                     data-target={ "#" + category.get('id') + "-tagList" }>
                     <i className="mdi mdi-chevron-right" />
                   </a>
-                  <header>
-                    { category.name }
+                  <header className="ShowTagsSchemaPartial__listHeader">
+                    { category.get('name') }
                   </header>
-
+                  <div>
+                    {this.renderMetadataSchemas(category)}
+                  </div>
                   <div className="tools">
                     {() => {
-                      if(category.tag_items.length === 0){
+                      if(category.get('tag_items').count() < 1){
                         return (
                           <Translate
                             content={this.props.contentPrefix + ".modals.create_category.empty_warning"}
@@ -288,21 +359,19 @@ const ShowTagsSchemaPartial = React.createClass({
                         );
                       }
                     }()}
-                    <a className={newTagIconClassNames} onClick={ onEditCategoryMetadataSchemas }>
+
+                    <a className={newTagIconClassNames} onClick={ () => this.showNewTagModal(category) }>
                       <i className="mdi mdi-library-plus"></i>
                     </a>
-                    <a className={newTagIconClassNames} onClick={ onNewTagListener }>
-                      <i className="mdi mdi-library-plus"></i>
-                    </a>
-                    <a className="btn btn-icon" onClick={ onEditCategoryListener }>
+                    <a className="btn btn-icon" onClick={ () => this.showEditCategoryModal(category) }>
                       <i className="mdi mdi-border-color"></i>
                     </a>
-                    <a className="btn btn-icon" onClick={ onDeleteCategoryListener }>
+                    <a className="btn btn-icon" onClick={ () => this.showDeleteCategoryModal(category) }>
                       <i className="mdi mdi-delete"></i>
                     </a>
                   </div>
                 </div>
-                <div id={ category.name + "-tagList" } className="collapse in" aria-expanded="true">
+                <div id={ category.get('id') + "-tagList" } className="collapse in" aria-expanded="true">
                   { this.renderCategoryTags(category) }
                 </div>
               </div>
