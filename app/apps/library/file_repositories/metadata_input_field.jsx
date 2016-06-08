@@ -88,14 +88,16 @@ const MetadataInputField = React.createClass({
         step = 1;
         break;
       case 'image':
+        inputValue = '';
         inputType = 'file';
+        break;
       default:
     }
     return (
       <div key={ fieldId } className="form-group">
         <div className="MetadataFormWidget__inputGroup">
           <div>
-            <img src={imagePreviewUrl} />
+            <img src={imagePreviewUrl} role="presentation" />
           </div>
           <div className="input-group-content">
             <label
