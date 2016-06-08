@@ -12,8 +12,6 @@ const ExpandedRowItem = ({ item, isActive, markAsActive }) => (
         'ScheduleDailyWidget-CalendarRow-item btn',
         {
           'ScheduleDailyWidget-CalendarRow-item--active btn-raised': isActive,
-          // 'style-accent': !isActive,
-          // 'style-accent-light': isActive,
         }
       )}
       onClick={() => markAsActive(item)}
