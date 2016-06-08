@@ -9,8 +9,10 @@ import RadioKitDomain from '../RadioKitDomain';
 
 const noEntities = Map();
 
-export default RadioKitDomain.map(
+const ContentTypesEntitiesStream = RadioKitDomain.map(
   function ContentTypesEntitiesProcess(data) {
     return data.getIn(['entities', app, model]) || noEntities;
   }
 );
+
+export default ContentTypesEntitiesStream;
