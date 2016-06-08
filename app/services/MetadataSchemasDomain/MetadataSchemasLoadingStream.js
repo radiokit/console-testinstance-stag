@@ -12,6 +12,7 @@ import MetadataSchemasQueriesStream from './MetadataSchemasQueriesStream';
 
 const LoadingQueriesStream = MetadataSchemasQueriesStream.map(pickLoadingQueries);
 
-const MetadataSchemasLoadingStream = LoadingQueriesStream.map(queries => (!!queries.count() ? loadingState : idleState));
+const MetadataSchemasLoadingStream = LoadingQueriesStream
+  .map(queries => (!!queries.count() ? loadingState : idleState));
 
 export default MetadataSchemasLoadingStream;
