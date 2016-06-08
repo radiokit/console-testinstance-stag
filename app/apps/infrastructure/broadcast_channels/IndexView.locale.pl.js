@@ -14,6 +14,7 @@ export default {
             header: {
               name: "Nazwa",
               slug: "Adres",
+              timezone: "Strefa czasowa",
               media_routing_group_id: "Routing Group ID",
               user_account: "Konto",
             },
@@ -44,6 +45,10 @@ export default {
                 slug: {
                   label: "Unikalny adres",
                   hint: "Ta wartość będzie używana do skonstruowania adresów strumieni.",
+                },
+                timezone: {
+                  label: "Strefa czasowa kanału",
+                  hint: "Strefa czasowa w formacie TZDATA",
                 },
                 media_routing_group_id: {
                   label: "Routing Group ID",

@@ -18,6 +18,7 @@ export default React.createClass({
     return {
       name:                   { renderer: "string" },
       slug:                   { renderer: "string" },
+      timezone:               { renderer: "string" },
       media_routing_group_id: { renderer: "string", props:{ selectable: true } },
       user_account:           { renderer: "scope-user-account" },
     }
@@ -34,6 +35,13 @@ export default React.createClass({
         }
       },
       slug: {
+        type: "string",
+        hint: true,
+        validators: {
+          presence: true,
+        }
+      },
+      timezone: {
         type: "string",
         hint: true,
         validators: {

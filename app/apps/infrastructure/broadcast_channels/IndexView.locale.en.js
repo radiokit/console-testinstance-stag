@@ -14,6 +14,7 @@ export default {
             header: {
               name: "Name",
               slug: "Address",
+              timezone: "Time zone",
               media_routing_group_id: "Routing Group ID",
               user_account: "Account",
             },
@@ -44,6 +45,10 @@ export default {
                 slug: {
                   label: "Unique address",
                   hint: "It is going to be part of stream URLs.",
+                },
+                timezone: {
+                  label: "Time zone",
+                  hint: "Time zone in the TZDATA format",
                 },
                 media_routing_group_id: {
                   label: "Routing Group ID",
