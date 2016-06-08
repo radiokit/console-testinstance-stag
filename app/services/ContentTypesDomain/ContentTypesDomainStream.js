@@ -4,10 +4,10 @@ import {
 import {
   View,
 } from 'immview';
-import WeeklyPlansEntitiesStream from './WeeklyPlansEntitiesStream';
-import WeeklyPlansLoadingStream from './WeeklyPlansLoadingStream';
+import WeeklyPlansEntitiesStream from './ContentTypesEntitiesStream';
+import WeeklyPlansLoadingStream from './ContentTypesLoadingStream';
 
-const WeeklyPlansDomainStream = new View(
+const ContentTypesDomainStream = new View(
   {
     entities: WeeklyPlansEntitiesStream,
     loading: WeeklyPlansLoadingStream,
@@ -20,4 +20,4 @@ const WeeklyPlansDomainStream = new View(
   }
 );
 
-export default WeeklyPlansDomainStream;
+export default ContentTypesDomainStream;

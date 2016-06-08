@@ -2,14 +2,14 @@ import React from 'react';
 import SimpleConsoleAutosuggest from './simple_console_autosuggest.jsx';
 
 import counterpart from 'counterpart';
-import localePL from './weeklyplan_picker_pl';
-import localeEN from './weeklyplan_picker_en';
+import localePL from './contenttype_picker_pl';
+import localeEN from './contenttype_picker_en';
 
 counterpart.registerTranslations('en', localeEN);
 counterpart.registerTranslations('pl', localePL);
 
-function getContentTypeName(weeklyplan) {
-  return weeklyplan.get('name') || counterpart('ContentTypePicker.noName');
+function getContentTypeName(contentType) {
+  return contentType.get('name') || counterpart('ContentTypePicker.noName');
 }
 
 const ContentTypePicker = React.createClass({

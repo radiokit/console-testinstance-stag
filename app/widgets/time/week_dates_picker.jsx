@@ -30,8 +30,8 @@ const WeekDayPicker = React.createClass({
       <div className="WeekdayPicker">
         {
           range(0, 7).map(day => (
-            <span className="checkbox-inline checkbox-styled">
-              <label className="WeekdayPicker__label" key={day}>
+            <span key={day} className="checkbox-inline checkbox-styled">
+              <label className="WeekdayPicker__label">
                 <input
                   className="WeekdayPicker__input"
                   type="checkbox"

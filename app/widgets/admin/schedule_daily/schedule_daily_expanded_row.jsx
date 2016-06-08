@@ -1,35 +1,69 @@
 import React from 'react';
-import {
-  fromJS,
-} from 'immutable';
-import moment from 'moment';
 
-const ExpandedRow = (props) => (
-  <div className="ScheduleDailyWidget-CalendarRow-item-expanded">
-    <ul className="ScheduleDailyWidget-CalendarRow-item-expanded-list">
-      {props
-        .items
-        .toJS()
-        .sort((a, b) => new Date(a.start_at) - new Date(b.start_at))
-        .map(item => (
-        <li key={item.id}>
-          <div
-            key={item.id}
-            className={props.getClassName(fromJS(item))}
-            onClick={() => props.markAsActive(fromJS(item))}
-          >
-            {moment(item.start_at).format('HH:mm:ss')} -
-            - {item.name || item.id}
-          </div>
-        </li>
-      ))}
-    </ul>
-  </div>
-);
+import ExpandedRowItem from './schedule_daily_expanded_row_item.jsx';
+import ExpandedRowSilence from './schedule_daily_expanded_row_silence.jsx';
+
+import {
+  getScheduleItemStartTimestamp,
+  itemsToRanges,
+  subtractFromSingleRange,
+  rangeToItem,
+  isRangeLongerThan,
+  isRangeOnEdge,
+} from './schedule_daily_expanded_row_utils';
+
+const hourInMilliseconds = 1000 * 60 * 60;
+
+const ExpandedRow = ({ items, activeItem, markAsActive, offsetStart }) => {
+  const activeItemId = activeItem && activeItem.get('id') || '';
+
+  const offsetRange = [offsetStart, offsetStart + hourInMilliseconds];
+  const itemRanges = itemsToRanges(items);
+  const silenceRanges = subtractFromSingleRange(offsetRange, itemRanges);
+
+  const isRangeLongerThanSecond = isRangeLongerThan.bind(null, 1000);
+  const isRangeOnOffsetEdges = isRangeOnEdge.bind(null, offsetRange[0], offsetRange[1]);
+
+  const silenceItems = silenceRanges
+    .filter(
+      range => (
+        isRangeLongerThanSecond(range) ||
+        isRangeOnOffsetEdges(range)
+      )
+    )
+    .map(rangeToItem);
+
+  const view = (
+    <div className="ScheduleDailyWidget-CalendarRow-item-expanded">
+      <ul className="ScheduleDailyWidget-CalendarRow-item-expanded-list">
+        {
+          items
+            .toArray()
+            .map(item => [ExpandedRowItem, item])
+            .concat(silenceItems.map(silenceItem => [ExpandedRowSilence, silenceItem]))
+            .sort(
+              ([, a], [, b]) => getScheduleItemStartTimestamp(a) - getScheduleItemStartTimestamp(b)
+            )
+            .map(([Element, item], i) => (
+              <Element
+                key={i}
+                item={ item }
+                isActive={ activeItemId === item.get('id') }
+                markAsActive={ markAsActive }
+              />
+            ))
+        }
+      </ul>
+    </div>
+  );
+
+  return view;
+};
 
 ExpandedRow.propTypes = {
+  offsetStart: React.PropTypes.number.isRequired,
   items: React.PropTypes.object.isRequired,
-  getClassName: React.PropTypes.func.isRequired,
+  activeItem: React.PropTypes.object,
   markAsActive: React.PropTypes.func.isRequired,
 };
 

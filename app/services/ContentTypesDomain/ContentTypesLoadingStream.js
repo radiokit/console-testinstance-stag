@@ -3,14 +3,14 @@ import {
 } from 'immutable';
 import {
   key,
-} from './WeeklyPlansConfig';
+} from './ContentTypesConfig';
 import RadioKitDomain from '../RadioKitDomain';
 
 const { loading } = RadioKitDomain.STATUS;
 const loadingState = Map({ value: true });
 const idleState = Map({ value: false });
 
-export default RadioKitDomain.map(
+const ContentTypesLoadingStream = RadioKitDomain.map(
   function ContentTypesLoadingProcess(data) {
     return data
       .get('queries')
@@ -26,3 +26,5 @@ export default RadioKitDomain.map(
     ;
   }
 );
+
+export default ContentTypesLoadingStream;

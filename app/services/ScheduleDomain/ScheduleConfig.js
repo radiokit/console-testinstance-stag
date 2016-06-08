@@ -7,6 +7,8 @@ export const readFields = [
   'name',
   'start_at',
   'stop_at',
+  'cue_in_at',
+  'cue_out_at',
   'references',
   'file',
 ];
@@ -15,4 +17,6 @@ export const updateFields = [
   'name',
   'start_at',
   'stop_at',
+  'cue_in_at',
+  'cue_out_at',
 ];

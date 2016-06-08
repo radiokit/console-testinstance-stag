@@ -19,8 +19,8 @@ function groupByHour(items, offsetStart) {
   items
     .forEach(
       item => {
-        const itemStart = new Date(item.get('start_at')).valueOf();
-        const itemStop = new Date(item.get('stop_at')).valueOf();
+        const itemStart = new Date(item.get('cue_in_at')).valueOf();
+        const itemStop = new Date(item.get('cue_out_at')).valueOf();
 
         for (let iHour = 0; iHour < 24; iHour++) {
           const hourOffset = offsetStart + iHour * milisecondsInHour;
@@ -113,8 +113,8 @@ export default connect(
       .toArray()
       .filter(
         item => (
-          new Date(item.get('stop_at')).valueOf() > from.valueOf() &&
-          new Date(item.get('start_at')).valueOf() < to.valueOf() &&
+          new Date(item.get('cue_out_at')).valueOf() > from.valueOf() &&
+          new Date(item.get('cue_in_at')).valueOf() < to.valueOf() &&
           item.getIn(['references', 'broadcast_channel_id']) === currentBroadcastChannel.get('id')
         )
       );

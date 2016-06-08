@@ -1,23 +1,77 @@
 .ScheduleDailyWidget {
   $ellipsed-line-height: 37px;
   $calendar-row-items-height: 40px;
-  .ScheduleDailyWidget-CalendarRow {
+
+  &-CalendarRow {
     transition: all 0.5s;
     height: auto;
 
-    &.ScheduleDailyWidget-CalendarRow--expanded {
+    &--expanded {
     }
 
-    &.ScheduleDailyWidget-CalendarRow--expanded-cell {
+    &--expanded-cell {
       vertical-align: top;
     }
 
-    &.ScheduleDailyWidget-CalendarRow--past {
+    &--past {
       color: #999;
     }
 
-    &.ScheduleDailyWidget-CalendarRow--current {
+    &--current {
       background: yellow;
+    }
+
+
+    &-item {
+      box-sizing: border-box;
+      width: 100%;
+      min-height: 1px;
+      max-height: 27px;
+      left: 12px;
+      right: 12px;
+      padding: 4px;
+      margin: 1px;
+
+      transition: background 0.2s ease;
+      background: orange;
+      color: black;
+      text-align: left;
+      text-transform: none;
+
+      &--active {
+        //padding: 1px;
+        //border: solid 3px orange;
+        background: yellow;
+      }
+    }
+
+    &-silence {
+      background: transparent;
+      color: gray;
+    }
+
+    &-item-ellipsed {
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      line-height: $ellipsed-line-height;
+      padding-left: 5px;
+      padding-right: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &-item-expanded {
+      min-height: 50px;
+    }
+
+    &-item-expanded-list {
+      list-style-type: none;
+      margin-bottom: 0;
+      padding-left: 0;
     }
   }
 
@@ -44,52 +98,6 @@
   .ScheduleDailyWidget-CalendarRow-items {
     position: relative;
     height: $calendar-row-items-height;
-
-    .ScheduleDailyWidget-CalendarRow-item {
-      background: orange;
-      width: 100%;
-      max-height: 27px;
-      left: 12px;
-      right: 12px;
-      min-height: 1px;
-      padding: 4px;
-      margin: 1px;
-    }
-
-    .ScheduleDailyWidget-CalendarRow-item-active {
-      background: yellow;
-      width: 100%;
-      max-height: 27px;
-      left: 12px;
-      right: 12px;
-      min-height: 1px;
-      padding: 4px;
-      border: solid 3px;
-      box-sizing: border-box;
-    }
-
-    .ScheduleDailyWidget-CalendarRow-item-ellipsed {
-      position: absolute;
-      left: 0;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      line-height: $ellipsed-line-height;
-      padding-left: 5px;
-      padding-right: 5px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .ScheduleDailyWidget-CalendarRow-item-expanded {
-      min-height: 50px;
-    }
-
-    .ScheduleDailyWidget-CalendarRow-item-expanded-list {
-      list-style-type: none;
-      margin-bottom: 0;
-      padding-left: 0;
-    }
+    padding-top: 3px;
   }
 }
