@@ -2,16 +2,21 @@ import {
   Data,
 } from 'immview';
 import {
-  fromJS,
+  Map,
+  List,
 } from 'immutable';
 
-export const ScheduleExpandedRangesStream = new Data(fromJS([]));
+const ScheduleExpandedRangesStream = new Data(List());
 
-export default ScheduleExpandedRangesStream;
+export {
+  ScheduleExpandedRangesStream,
+  ScheduleExpandedRangesStream as default,
+  pushRange,
+};
 
-export function pushRange(from, to) {
+function pushRange(from, to) {
   ScheduleExpandedRangesStream.write(
-    ScheduleExpandedRanges => ScheduleExpandedRanges
-      .push(fromJS({ from, to }))
+    ScheduleExpandedRanges =>
+      ScheduleExpandedRanges.push(Map({ from, to }))
   );
 }

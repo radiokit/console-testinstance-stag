@@ -84,7 +84,7 @@ function query(queryParams = Map(), options = {}) {
 
 function checkIfQueryExists(queryParams, { autoSync = false, maxAge = Date.now() }) {
   const currentQueryStatus = RadioKitQueriesStream.read().getIn([queryParams, 'status']);
-  const currentQueryTime = RadioKitQueriesStream.read().getIn([queryParams, 'time']) | 0;
+  const currentQueryTime = RadioKitQueriesStream.read().getIn([queryParams, 'time']) || 0;
 
   if (autoSync) {
     return currentQueryStatus === 'live';
