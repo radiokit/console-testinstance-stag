@@ -4,7 +4,7 @@ import {
 import {
   app,
   model,
-} from './WeeklyPlansConfig';
+} from './ContentTypesConfig';
 import RadioKitDomain from '../RadioKitDomain';
 
 const noEntities = Map();

@@ -7,7 +7,7 @@ import {
   model,
   key,
   readFields,
-} from './WeeklyPlansConfig';
+} from './ContentTypesConfig';
 
 const actions = {
   loadChannelPlans(broadcastChannelId, requestOptions) {

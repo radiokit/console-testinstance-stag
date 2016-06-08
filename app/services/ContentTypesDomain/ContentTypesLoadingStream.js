@@ -3,7 +3,7 @@ import {
 } from 'immutable';
 import {
   key,
-} from './WeeklyPlansConfig';
+} from './ContentTypesConfig';
 import RadioKitDomain from '../RadioKitDomain';
 
 const { loading } = RadioKitDomain.STATUS;
