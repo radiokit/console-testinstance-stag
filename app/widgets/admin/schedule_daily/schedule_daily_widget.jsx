@@ -1,5 +1,9 @@
 import React from 'react';
-import { Map, OrderedMap, List } from 'immutable';
+import {
+  Map,
+  OrderedMap,
+  List,
+} from 'immutable';
 import {
   range,
 } from 'lodash';
@@ -106,18 +110,26 @@ export default connect(
       .endOf('day')
       .add(firstHour, 'hours');
 
-    ScheduleDomain.fetch(from.toISOString(), to.toISOString(), currentBroadcastChannel.get('id'));
+    ScheduleDomain.fetch(
+      from.toISOString(),
+      to.toISOString(),
+      currentBroadcastChannel.get('id'),
+      { maxAge: 1000 * 60 * 10 }
+    );
 
     const items = data
-      .get('all', OrderedMap())
-      .toArray()
-      .filter(
-        item => (
-          new Date(item.get('cue_out_at')).valueOf() > from.valueOf() &&
-          new Date(item.get('cue_in_at')).valueOf() < to.valueOf() &&
-          item.getIn(['references', 'broadcast_channel_id']) === currentBroadcastChannel.get('id')
-        )
-      );
+      .getIn(
+      [
+        'ranges',
+        Map({
+          from: from.toISOString(),
+          to: to.toISOString(),
+          broadcastChannelId: currentBroadcastChannel.get('id'),
+        }),
+      ],
+        OrderedMap()
+      )
+      .toArray();
     return {
       items,
       actualOffsetStart: from.valueOf(),

@@ -6,6 +6,7 @@ import Counterpart from 'counterpart';
 import ProgressModal from '../../../../widgets/admin/modal_progress_widget.jsx';
 import RadioKit from '../../../../services/RadioKit';
 import FilePicker from './file_picker.jsx';
+import InputLocalDateTime from '../../../../widgets/time/input_local_date_time.jsx';
 
 import './schedule_item_modal.scss';
 const ScheduleItemModal = React.createClass({
@@ -38,7 +39,7 @@ const ScheduleItemModal = React.createClass({
   getInitialStartDate() {
     return this.props.record
       ? this.props.record.get('cue_in_at')
-      : moment(this.props.defaultTimeOffset).add(1, 'hour').startOf('hour');
+      : moment(this.props.defaultTimeOffset).add(1, 'hour').startOf('hour').toISOString();
   },
 
   getInitialStopDate() {
@@ -53,6 +54,15 @@ const ScheduleItemModal = React.createClass({
       : null;
   },
 
+  onDismiss() {
+    this.props.onDismiss && this.props.onDismiss();
+  },
+
+  onCancel() {
+    if (this.recordCall) {
+      this.recordCall.teardown();
+    }
+  },
 
   createScheduleItem() {
     this.recordCall = RadioKit
@@ -120,7 +130,7 @@ const ScheduleItemModal = React.createClass({
   handleSelectedFile(file) {
     if (file) {
       const duration = this.calculateDuration(file);
-      const stopDate = moment(this.state.startDate).add(duration, 'ms');
+      const stopDate = moment(this.state.startDate).add(duration, 'ms').toISOString();
       const name = file.get('name');
       this.setState({ file, duration, stopDate, name });
     } else {
@@ -129,7 +139,7 @@ const ScheduleItemModal = React.createClass({
   },
 
   handleStartDateChange(startDate) {
-    const stopDate = moment(startDate).add(this.state.duration, 'ms');
+    const stopDate = moment(startDate).add(this.state.duration, 'ms').toISOString();
     this.setState({ startDate, stopDate });
   },
 
@@ -137,7 +147,7 @@ const ScheduleItemModal = React.createClass({
     this.setState({ name });
   },
 
-  onClearInput() {
+  handleClearInput() {
     this.setState({ file: null });
   },
 
@@ -150,39 +160,36 @@ const ScheduleItemModal = React.createClass({
     this.setState(this.getInitialState());
   },
 
-
-  renderFileInput() {
-    if (!this.isInEditMode()) {
-      return (
-        <div className="form-group">
-          <Translate
-            component="label"
-            content={ `${this.props.contentPrefix}.form.file.label` }
-            htmlFor="fileNameInput"
-          />
-          <span className="twitter-typeahead">
-            <FilePicker
-              placeholder= {Counterpart.translate(`${this.props.contentPrefix}.form.file.hint`)}
-              value={this.state.file}
-              onChange={this.handleSelectedFile}
-              onClearInput={this.onClearInput}
-              id="fileNameInput"
-              className="input-group-content"
-            />
-          </span>
-        </div>
-      );
-    }
-  },
-
   toggleExpansion() {
     this.setState({ expanded: !this.state.expanded });
   },
 
-  renderDateInputs() {
-    if (!this.state.file) {
-      return;
+  renderFileInput() {
+    if (this.isInEditMode()) {
+      return null;
     }
+    return (
+      <div className="form-group">
+        <Translate
+          component="label"
+          content={ `${this.props.contentPrefix}.form.file.label` }
+          htmlFor="fileNameInput"
+        />
+        <span className="twitter-typeahead">
+          <FilePicker
+            placeholder= {Counterpart.translate(`${this.props.contentPrefix}.form.file.hint`)}
+            value={this.state.file}
+            onChange={this.handleSelectedFile}
+            onClearInput={this.handleClearInput}
+            id="fileNameInput"
+            className="input-group-content"
+          />
+        </span>
+      </div>
+    );
+  },
+
+  renderDateInputs() {
     return (
       <div>
         <div className="form-group">
@@ -191,13 +198,9 @@ const ScheduleItemModal = React.createClass({
             content={ `${this.props.contentPrefix}.form.start_at.label` }
             htmlFor="startDate"
           />
-          <input
-            id="startDate"
-            type="datetime-local"
-            className="form-control"
-            step={1}
-            onChange={(e) => this.handleStartDateChange(e.target.value)}
-            value={moment(this.state.startDate).format('YYYY-MM-DDTHH:mm:ss')}
+          <InputLocalDateTime
+            value={this.state.startDate}
+            onChange={this.handleStartDateChange}
           />
         </div>
         <div className="form-group">
@@ -206,14 +209,9 @@ const ScheduleItemModal = React.createClass({
             content={ `${this.props.contentPrefix}.form.stop_at.label` }
             htmlFor="stoptDate"
           />
-          <input
-            id="stopDate"
-            type="datetime-local"
-            className="form-control"
-            step={1}
-            readOnly
+          <InputLocalDateTime
             disabled
-            value={moment(this.state.stopDate).format('YYYY-MM-DDTHH:mm:ss')}
+            value={this.state.stopDate}
           />
         </div>
       </div>
@@ -247,26 +245,26 @@ const ScheduleItemModal = React.createClass({
           className={hiddedClasses}
           aria-expanded={this.state.expanded}
         >
-          {this.renderDescrptionFields()}
+          {this.renderDescriptionFields()}
         </div>
       </div>
     );
   },
 
-  renderDescrptionFields() {
+  renderDescriptionFields() {
     return (
       <div className="form-group">
-        <Translate
-          component="label"
-          content={ `${this.props.contentPrefix}.form.name.label` }
-          htmlFor="nameInput"
-        />
         <input
           id="nameInput"
           type="text"
           className="form-control"
           onChange={(e) => this.handleNameChange(e.target.value)}
           value={this.state.name}
+        />
+        <Translate
+          component="label"
+          content={ `${this.props.contentPrefix}.form.name.label` }
+          htmlFor="nameInput"
         />
       </div>
     );
@@ -316,16 +314,6 @@ const ScheduleItemModal = React.createClass({
 
       </ProgressModal>
     );
-  },
-
-  onDismiss() {
-    this.props.onDismiss && this.props.onDismiss();
-  },
-
-  onCancel() {
-    if (this.recordCall) {
-      this.recordCall.teardown();
-    }
   },
 });
 

@@ -22,15 +22,28 @@ function dispatchDeferred(func) {
   }
 }
 
+let instances = 0;
+let dispatchedTick = false;
+
 function mouseCheckTick() {
   if (activeMovable && lastNotProcessedMoveEvent) {
     activeMovable.handleMouseMove(lastNotProcessedMoveEvent);
     lastNotProcessedMoveEvent = null;
   }
-  dispatchDeferred(mouseCheckTick);
+  dispatchedTick = !!instances;
+  instances && dispatchDeferred(mouseCheckTick);
 }
 
-mouseCheckTick();
+function registerInstance() {
+  instances++;
+  if (!dispatchedTick) {
+    mouseCheckTick();
+  }
+}
+
+function unregisterInstance() {
+  instances--;
+}
 
 function preventDefault(e) {
   e.preventDefault();
@@ -58,11 +71,13 @@ const Movable = React.createClass({
   },
 
   componentWillMount() {
+    registerInstance();
     this.firstPosition = null;
     this.lastPosition = null;
   },
 
   componentWillUnmount() {
+    unregisterInstance();
     if (this === activeMovable) {
       this.handleMouseUp(lastNotProcessedMoveEvent);
     }

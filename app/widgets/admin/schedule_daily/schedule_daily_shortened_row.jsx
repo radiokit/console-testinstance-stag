@@ -15,15 +15,17 @@ const ShortenedRow = React.createClass({
     return (
       <div className={props.className}>
         {
-          props
-            .items
-            .toArray()
-            .sort((a, b) => new Date(a.get('start_at')) - new Date(b.get('start_at')))
-            .map((item, i) => (
-              <span key={i}>
-                {`${item.get('name') || item.get('id')}`}
-              </span>
-            ))
+          map(
+            map(
+              map(
+                props.items,
+                item => [new Date(item.get('start_at')), item]
+              )
+                .sort(([a], [b]) => a - b),
+              ([, item]) => item
+            ),
+            itemToSpan
+          )
         }
       </div>
     );
@@ -31,3 +33,20 @@ const ShortenedRow = React.createClass({
 });
 
 export default ShortenedRow;
+
+function map(collection, processor) {
+  const result = [];
+  collection
+    .forEach((item, i) => {
+      result.push(processor(item, i));
+    });
+  return result;
+}
+
+function itemToSpan(item, i) {
+  return (
+    <span key={i}>
+      {`${item.get('name') || item.get('id')}`}
+    </span>
+  );
+}
