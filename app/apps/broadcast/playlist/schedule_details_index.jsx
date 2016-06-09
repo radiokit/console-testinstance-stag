@@ -20,7 +20,7 @@ const ScheduleDetailsIndex = React.createClass({
   render() {
     return (
       <div>
-        <CardBody cardPadding={true}>
+        <CardBody cardPadding={false}>
           <CardSidebar>
             <PlaylistSidebar {...this.props.sidebarProps} />
             <div>
