@@ -1,8 +1,22 @@
+import {
+  List,
+} from 'immutable';
 import RadioKitDomain from './RadioKitDomain';
 
 const { live, done, loading } = RadioKitDomain.STATUS;
 
-export function pickQueriesOfModel(model) {
+export {
+  pickQueriesOfModel,
+  pickReadyQueries,
+  pickLoadingQueries,
+  indexWith,
+  indexBy,
+  getQueriesContent,
+  getEntitiesByIdFromQueries,
+  getQueryData,
+};
+
+function pickQueriesOfModel(model) {
   return function pickQueriesOfParticularModel(queries) {
     return queries.filter(
       (_, queryParams) => queryParams.get('model') === model
@@ -10,7 +24,7 @@ export function pickQueriesOfModel(model) {
   };
 }
 
-export function pickReadyQueries(queries) {
+function pickReadyQueries(queries) {
   return queries.filter(
     result => (
       result.get('status') === live ||
@@ -19,7 +33,7 @@ export function pickReadyQueries(queries) {
   );
 }
 
-export function pickLoadingQueries(queries) {
+function pickLoadingQueries(queries) {
   return queries.filter(
     result => (
       result.get('status') === loading
@@ -27,7 +41,7 @@ export function pickLoadingQueries(queries) {
   );
 }
 
-export function indexWith(func) {
+function indexWith(func) {
   return function indexWithFunc(collection) {
     return collection
       .groupBy(func)
@@ -35,17 +49,21 @@ export function indexWith(func) {
   };
 }
 
-export function indexBy(field) {
+function indexBy(field) {
   return indexWith(entity => entity.get(field));
 }
 
-export function getQueriesContent(queries) {
+function getQueriesContent(queries) {
   return queries
     .map(queryStatus => queryStatus.get('data').toList())
     .toList()
     .flatten(true);
 }
 
-export function getEntitiesByIdFromQueries(queries) {
+function getEntitiesByIdFromQueries(queries) {
   return indexBy('id')(getQueriesContent(queries));
+}
+
+function getQueryData(query) {
+  return query.get('data', List());
 }

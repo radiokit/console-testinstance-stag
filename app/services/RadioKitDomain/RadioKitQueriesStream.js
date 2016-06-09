@@ -9,10 +9,15 @@ import {
 /**
  * OrderedMap<queryParams,Map{status,data,time}>
  */
-export const RadioKitQueriesStream = new Data(OrderedMap());
-export default RadioKitQueriesStream;
+const RadioKitQueriesStream = new Data(OrderedMap());
 
-export function update(queryParams, status, data, time) {
+export {
+  RadioKitQueriesStream as default,
+  RadioKitQueriesStream,
+  updateQueryInQueriesStream,
+};
+
+function updateQueryInQueriesStream(queryParams, status, data, time) {
   RadioKitQueriesStream.write(
     queries => (
       queries
@@ -29,6 +34,6 @@ export function update(queryParams, status, data, time) {
         .sortBy(
           value => value.get('time', Number.MAX_VALUE)
         )
-      )
+    )
   );
 }

@@ -2,12 +2,26 @@ import RadioKitDomain from '../RadioKitDomain';
 
 import {
   key,
+  updateKey,
 } from './ScheduleConfig';
 
-const ScheduleQueriesStream = RadioKitDomain.map(
-  data => data
-    .get('queries')
-    .filter((queryStatus, queryParams) => queryParams.get(key))
+const RadioKitQueriesStream = RadioKitDomain.map(
+  data => data.get('queries')
 );
 
-export default ScheduleQueriesStream;
+const ScheduleQueriesStream = RadioKitQueriesStream.map(
+  queries => queries.filter(
+    (_, queryParams) => queryParams.get(key)
+  )
+);
+
+const ScheduleUpdateQueriesStream = RadioKitQueriesStream.map(
+  queries => queries.filter(
+    (_, queryParams) => queryParams.get(updateKey)
+  )
+);
+
+export {
+  ScheduleQueriesStream,
+  ScheduleUpdateQueriesStream,
+};

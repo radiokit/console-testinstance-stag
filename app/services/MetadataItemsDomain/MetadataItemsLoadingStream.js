@@ -16,10 +16,10 @@ const idleState = Map({ value: false });
 
 const LoadingOwnQueriesStream = MetadataItemsQueriesStream
   .map(pickLoadingQueries)
-  .map(queries => (!!queries.count() ? loadingState : idleState));
+  .map(queries => getBoolState(queries.count()));
 
 const LoadingMetadataSchemasStream = MetadataSchemasDomain
-  .map(data => (data.get('loading') ? loadingState : idleState));
+  .map(data => getBoolState(data.get('loading')));
 
 const MetadataItemsLoadingStream = new View(
   {
@@ -27,13 +27,17 @@ const MetadataItemsLoadingStream = new View(
     LoadingMetadataSchemasStream,
   },
   data => (
-    (
+    getBoolState(
       data.getIn(['LoadingOwnQueriesStream', 'value']) ||
       data.getIn(['LoadingMetadataSchemasStream', 'value'])
     )
-      ? loadingState
-      : idleState
   )
 );
 
 export default MetadataItemsLoadingStream;
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+function getBoolState(condition) {
+  return condition ? loadingState : idleState;
+}

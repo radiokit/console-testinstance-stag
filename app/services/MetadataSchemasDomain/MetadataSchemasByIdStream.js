@@ -1,18 +1,16 @@
 import {
+  Map,
+} from 'immutable';
+
+import {
+  app,
   model,
 } from './MetadataSchemasConfig';
-import {
-  pickReadyQueries,
-  pickQueriesOfModel,
-  getEntitiesByIdFromQueries,
-} from '../RadioKitQueriesUtils';
 
-import MetadataItemsQueriesStream from './MetadataSchemasQueriesStream';
+import RadioKitDomain from '../RadioKitDomain';
 
-const ReadyQueriesStream = MetadataItemsQueriesStream.map(pickReadyQueries);
-
-const MetadataSchemasQueriesStream = ReadyQueriesStream.map(pickQueriesOfModel(model));
-
-const MetadataSchemasByIdStream = MetadataSchemasQueriesStream.map(getEntitiesByIdFromQueries);
+const MetadataSchemasByIdStream = RadioKitDomain.map(
+  RadioKitData => RadioKitData.getIn(['entities', app, model]) || Map()
+);
 
 export default MetadataSchemasByIdStream;

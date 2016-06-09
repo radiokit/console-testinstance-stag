@@ -1,6 +1,7 @@
 export const app = 'plumber';
 export const model = 'Media.Input.File.RadioKit.Vault';
 export const key = 'ScheduleDomain';
+export const rangeKey = `${key}:range`;
 export const updateKey = `${key}:update`;
 export const readFields = [
   'id',

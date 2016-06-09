@@ -1,12 +1,16 @@
 import {
   View,
+  dispatch,
 } from 'immview';
 import {
+  Map,
   List,
 } from 'immutable';
 import ScheduleExpandedRangesStream from './ScheduleExpandedRangesStream';
 import FilesDomain from '../FilesDomain';
 import ScheduleDomain from '../ScheduleDomain';
+
+const fileDataMaxAge = 60 * 1000; // 1min
 
 const ScheduleReadyRangesToExpandStream = new View(
   {
@@ -20,52 +24,81 @@ const ScheduleReadyRangesToExpandStream = new View(
   }
 );
 
-const fileDataMaxAge = 60 * 1000; // 1min
-function downloadFiles(/* List */ fileIds) {
-  let fileIdsLeft = fileIds;
-  runDeferredFilePreload();
-
-  function deferredFilePreload() {
-    if (fileIds.count() > 0) {
-      const fileId = fileIdsLeft.first();
-      if (fileId) {
-        fileIdsLeft = fileIdsLeft.rest();
-        FilesDomain.loadFile(fileId, { maxAge: fileDataMaxAge, noLoadingState: true });
-        runDeferredFilePreload();
-      }
-    }
-  }
-
-  function runDeferredFilePreload() {
-    window.requestIdleCallback
-      ? window.requestIdleCallback(deferredFilePreload, { timeout: 100 })
-      : window.setTimeout(deferredFilePreload, 100);
-  }
-}
-
 ScheduleReadyRangesToExpandStream
   .map(
-    ranges => ranges
-      .map(scheduleItems => scheduleItems.map(scheduleItem => scheduleItem.get('file')))
-      .flatten(true)
-      .toSet()
+    ScheduleReadyRangesToExpand => ScheduleReadyRangesToExpand.map(getFileIdsOfScheduleItems)
   )
+  .map(concatChildren)
+  .map(getUniqValues)
   .subscribe(downloadFiles);
 
 const ScheduleReadyQueriesWithFiles = new View(
-  { queries: ScheduleReadyRangesToExpandStream, vault: FilesDomain },
-  data => data.get('queries', List()).map(
-    query => query
-      .map(scheduleItem => {
-        const fileID = scheduleItem.get('file');
-        const file = data.getIn(['vault', 'files', fileID]);
-        if (file) {
-          return scheduleItem.set('file', file);
-        }
-        return null;
-      })
-      .filter(item => !!item)
-  )
-);
+  {
+    ScheduleReadyRangesToExpandStream,
+    FilesDomain,
+  },
+  data => {
+    const files = data.getIn(['FilesDomain', 'files']) || Map();
+    const ranges = data.get('ScheduleReadyRangesToExpandStream') || List();
+
+    return ranges.map(
+      scheduleItems => getNonEmptyValues(
+        scheduleItems.map(scheduleItem => {
+          const scheduleItemExpanded = getScheduleItemExpandedWithFile(files, scheduleItem);
+          if (scheduleItemExpanded.get('file')) {
+            return scheduleItemExpanded;
+          }
+          return null;
+        })
+      )
+    );
+  });
 
 export default ScheduleReadyQueriesWithFiles;
+
+function getScheduleItemExpandedWithFile(files, scheduleItem) {
+  return scheduleItem.set(
+    'file',
+    files.get(
+      scheduleItem.get('file'),
+      null
+    )
+  );
+}
+
+function getNonEmptyValues(collection) {
+  return collection.filter(getNonEmptyValue);
+}
+
+function getNonEmptyValue(item) {
+  return !!item;
+}
+
+function getUniqValues(collection) {
+  return collection.toSet();
+}
+
+function concatChildren(collections) {
+  return collections.reduce(
+    (result, collection) => result.concat(collection || List()),
+    List()
+  );
+}
+
+function getFileIdsOfScheduleItems(scheduleItems) {
+  return scheduleItems.map(scheduleItem => scheduleItem.get('file'));
+}
+
+function downloadFiles(/* List */ fileIds) {
+  dispatch(() => deferredFilePreload(fileIds));
+
+  function deferredFilePreload(fileIdsLeft) {
+    if (fileIdsLeft.count() > 0) {
+      const fileId = fileIdsLeft.first();
+      if (fileId) {
+        FilesDomain.loadFile(fileId, { maxAge: fileDataMaxAge, noLoadingState: true });
+        dispatch(() => deferredFilePreload(fileIdsLeft.rest()));
+      }
+    }
+  }
+}

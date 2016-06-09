@@ -10,27 +10,29 @@ import {
 } from './MetadataSchemasConfig';
 
 const actions = {
-  loadMetadataSchema(id, options) {
-    RadioKitDomain.query(
-      fromJS({
-        key,
-        app,
-        model,
-        select: readFields,
-        conditions: [
-          {
-            field: 'id',
-            comparison: 'eq',
-            value: id,
-          },
-        ],
-      }),
-      {
-        maxAge: 60000,
-        ...options,
-      }
-    );
-  },
+  loadMetadataSchema,
 };
 
 export default actions;
+
+function loadMetadataSchema(id, options) {
+  RadioKitDomain.query(
+    fromJS({
+      key,
+      app,
+      model,
+      select: readFields,
+      conditions: [
+        {
+          field: 'id',
+          comparison: 'eq',
+          value: id,
+        },
+      ],
+    }),
+    {
+      maxAge: 60000,
+      ...options,
+    }
+  );
+}
