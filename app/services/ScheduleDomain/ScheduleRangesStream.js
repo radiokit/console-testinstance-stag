@@ -3,6 +3,9 @@ import {
   OrderedMap,
   List,
 } from 'immutable';
+import {
+  rangeKey,
+} from './ScheduleConfig';
 import ScheduleReadyQueriesStream from './ScheduleReadyQueriesStream';
 
 const ScheduleRangesStream = ScheduleReadyQueriesStream.map(transformQueriesToRanges);
@@ -20,19 +23,5 @@ function transformQueriesToRanges(queries) {
 }
 
 function getRangeFromParams(queryParams) {
-  const conditions = queryParams.get('conditions', List());
-
-  let from = 0;
-  let to = 0;
-
-  conditions.forEach(condition => {
-    if (condition.get('field') === 'stop_at') {
-      from = condition.get('value', 0);
-    }
-    if (condition.get('field') === 'start_at') {
-      to = condition.get('value', 0);
-    }
-  });
-
-  return { from, to };
+  return queryParams.get(rangeKey);
 }

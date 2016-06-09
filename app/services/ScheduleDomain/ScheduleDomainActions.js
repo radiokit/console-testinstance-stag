@@ -8,6 +8,7 @@ import {
   app,
   model,
   key,
+  rangeKey,
   updateKey,
   readFields,
   updateFields,
@@ -38,6 +39,7 @@ function fetch(from, to, broadcastChannelId, requestOptions) {
       app,
       model,
       select: readFields,
+      [rangeKey]: { from, to, broadcastChannelId },
       conditions: [
         broadcastChannelId ? {
           field: 'references',

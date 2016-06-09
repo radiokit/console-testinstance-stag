@@ -6,6 +6,25 @@ import {
 } from 'immview';
 import RadioKitEntitiesStream from './RadioKitEntitiesStream';
 
+const emptyEntities = Map();
+
+const emptyQueries = Map();
+const RadioKitDomainStream = new View(
+  RadioKitEntitiesStream,
+  data => {
+    const entities = data.get('entities', emptyEntities);
+    const queries = data.get('queries', emptyQueries);
+    return Map({
+      queries: switchEntitiesInQueries(queries, entities),
+      entities,
+    });
+  }
+);
+
+export default RadioKitDomainStream;
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 function switchEntitiesInQueries(queries, entities) {
   return queries.map(
     (status, params) => status.set(
@@ -20,23 +39,6 @@ function switchEntitiesInQueries(queries, entities) {
     )
   );
 }
-
-const emptyEntities = Map();
-const emptyQueries = Map();
-
-const RadioKitDomainStream = new View(
-  RadioKitEntitiesStream,
-  data => {
-    const entities = data.get('entities', emptyEntities);
-    const queries = data.get('queries', emptyQueries);
-    return Map({
-      queries: switchEntitiesInQueries(queries, entities),
-      entities,
-    });
-  }
-);
-
-export default RadioKitDomainStream;
 
 /*
 
