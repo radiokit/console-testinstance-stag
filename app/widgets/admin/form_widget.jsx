@@ -220,6 +220,10 @@ const FormWidget = React.createClass({
         input = (<input className="form-control" type="number" id={ fieldName } ref={ fieldName } required={ required } />);
         break;
 
+      case "decimal":
+        input = (<input className="form-control" type="number" step="0.01" id={ fieldName } ref={ fieldName } required={ required } />);
+        break;
+
       case "password":
         input = (<input className="form-control" type="password" id={ fieldName } ref={ fieldName } required={ required } />);
         break;
