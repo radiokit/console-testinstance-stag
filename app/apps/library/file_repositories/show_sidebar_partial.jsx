@@ -19,9 +19,34 @@ const ShowSidebarPartial = React.createClass({
 
   getInitialState() {
     return {
+      categories: this.getCategories(),
       selectedTagCategories: List(),
       selectedTagItems: List(),
     };
+  },
+
+  componentDidMount() {
+    RadioKit
+      .query('vault', 'Data.Tag.Category')
+      .select(
+        'id',
+        'name',
+        'tag_items.id',
+        'tag_items.name',
+        'tag_items.tag_category_id',
+        'metadata_schemas.id',
+      )
+      .joins('metadata_schemas')
+      .joins('tag_items')
+      .where('record_repository_id', 'eq', this.props.record.get('id'))
+      .on('error', () => {
+      })
+      .on('fetch', (_event, _query, data) => {
+        this.setState({
+          categories: data.filterNot(category => category.get('tag_items').isEmpty()),
+        });
+      })
+      .fetch();
   },
 
   getCategories() {
@@ -37,6 +62,14 @@ const ShowSidebarPartial = React.createClass({
           )
       );
   },
+
+  // <MetadataModal
+  //   contentPrefix="widgets.vault.file_browser.modals.metadata"
+  //   selectedRecordIds={this.state.selectedRecordIds}
+  //   selectedRecords={this.state.selectedRecords}
+  //   metadataSchemas={category.get('metadata_schemas')}
+  //   onDismiss={this.reloadTable}
+  // />
 
   updateFilter() {
     this.props.onTagFilterUpdate(this.state.selectedTagItems);
@@ -144,7 +177,7 @@ const ShowSidebarPartial = React.createClass({
   },
 
   onClearFilter() {
-    this.setState(this.getInitialState());
+    this.setState({ ...this.getInitialState(), categories: this.state.categories });
   },
 
   isCategorySelected(category) {
@@ -181,7 +214,6 @@ const ShowSidebarPartial = React.createClass({
   },
 
   render() {
-    const categories = this.getCategories();
     const allTagsClassName = classnames('card-head', {
       'AllTags': !this.props.tagFilter.isEmpty(),
       'AllTags--selected': this.props.tagFilter.isEmpty(),
@@ -194,11 +226,10 @@ const ShowSidebarPartial = React.createClass({
           </header>
         </div>
         {
-          categories.sortBy(category => category.get('name')).map((category) => {
+          this.state.categories.sortBy(category => category.get('name')).map((category) => {
             if (category.get('tag_items').isEmpty()) {
               return null;
             }
-
             const onCategorySelected = () => this.toggleCategorySelection(category);
             const toggleClasses = classnames('btn btn-flat btn-icon-toggle collapsed');
             const headerClasses = classnames('card-head Category', {
@@ -206,6 +237,7 @@ const ShowSidebarPartial = React.createClass({
             });
             return (
               <div id={category.get('id')} key={category.get('id')}>
+
                 <div className="expanded">
                   <div className={headerClasses} aria-expanded="true" onClick={onCategorySelected}>
                     <a className={toggleClasses}

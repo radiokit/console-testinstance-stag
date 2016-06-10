@@ -76,14 +76,18 @@ export default React.createClass({
       creatingSchemas: newSchemasIds.length,
     });
     // update or remove existing metadata fields for particular record
-    uniqueMetadataItems.filter((metadataItem) => filledMetadataSchemasIds.includes(metadataItem.metadata_schema_id)).forEach((metadataItem) => {
+    uniqueMetadataItems.filter(
+      (metadataItem) => filledMetadataSchemasIds
+        .includes(metadataItem.metadata_schema_id)
+    ).forEach((metadataItem) => {
       const schemaId = metadataItem.metadata_schema_id;
       const value = this.state.formFilled[schemaId];
       const valueKey = 'value_' + this.getFieldTypeForSchema(schemaId);
       const payload = {};
       payload[valueKey] = value;
       this.updateMetadataItem(metadataItem, payload, !value || value === '');
-    });
+    }
+  );
     // create new metadata item for particular record and schema
     newSchemasIds.forEach((schemaId) => {
       const value = this.state.formFilled[schemaId];
