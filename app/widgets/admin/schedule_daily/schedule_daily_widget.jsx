@@ -15,31 +15,9 @@ import ScheduleDomain from '../../../services/ScheduleDomain';
 
 import './schedule_daily_widget.scss';
 
-const milisecondsInHour = 1000 * 60 * 60;
+const MILLISECONDS_IN_HOUR = 1000 * 60 * 60;
 
-function groupByHour(items, offsetStart) {
-  const result = range(0, 24).map(() => []);
-
-  items
-    .forEach(
-      item => {
-        const itemStart = new Date(item.get('cue_in_at')).valueOf();
-        const itemStop = new Date(item.get('cue_out_at')).valueOf();
-
-        for (let iHour = 0; iHour < 24; iHour++) {
-          const hourOffset = offsetStart + iHour * milisecondsInHour;
-          if (
-            itemStop > hourOffset &&
-            itemStart < hourOffset + milisecondsInHour
-          ) {
-            result[iHour].push(item);
-          }
-        }
-      }
-    );
-  const immResult = result.map(hour => List(hour));
-  return immResult;
-}
+const DAY_START_HOURS_OFFSET = 5;
 
 const ScheduleDaily = React.createClass({
   propTypes: {
@@ -81,7 +59,8 @@ const ScheduleDaily = React.createClass({
           {range(0, 24).map((_, hour) => (
               <CalendarRow
                 key={hour}
-                offsetStart={actualOffsetStart + hour * milisecondsInHour}
+                hourLabel={(hour + DAY_START_HOURS_OFFSET) % 24}
+                offsetStart={actualOffsetStart + hour * MILLISECONDS_IN_HOUR}
                 items={itemsByHour[hour]}
                 onActiveItemChange={onActiveItemChange}
                 activeItem={activeItem}
@@ -100,15 +79,14 @@ export default connect(
     const {
       offsetStart = 0,
       currentBroadcastChannel = Map(),
-      firstHour = 5,
     } = props;
 
-    const from = moment(offsetStart)
+    const from = moment.tz(offsetStart, currentBroadcastChannel.get('timezone'))
       .startOf('day')
-      .add(firstHour, 'hours');
-    const to = moment(offsetStart)
-      .endOf('day')
-      .add(firstHour, 'hours');
+      .add(DAY_START_HOURS_OFFSET, 'hours');
+    const to = from
+      .clone()
+      .add(24, 'hours');
 
     ScheduleDomain.fetch(
       from.toISOString(),
@@ -136,3 +114,26 @@ export default connect(
     };
   }
 );
+
+function groupByHour(items, offsetStart) {
+  const result = range(0, 24).map(() => []);
+
+  items
+    .forEach(
+      item => {
+        const itemStart = new Date(item.get('cue_in_at')).valueOf();
+        const itemStop = new Date(item.get('cue_out_at')).valueOf();
+
+        for (let iHour = 0; iHour < 24; iHour++) {
+          const hourOffset = offsetStart + iHour * MILLISECONDS_IN_HOUR;
+          if (
+            itemStop > hourOffset &&
+            itemStart < hourOffset + MILLISECONDS_IN_HOUR
+          ) {
+            result[iHour].push(item);
+          }
+        }
+      }
+    );
+  return result.map(hour => List(hour));
+}
