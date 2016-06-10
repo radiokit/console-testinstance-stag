@@ -1,6 +1,5 @@
 import React from 'react';
 import { Seq, List } from 'immutable';
-import { isEqual } from 'lodash';
 import multiDownload from 'multi-download';
 
 import DeleteModal from '../../../widgets/admin/crud/delete_modal.jsx';
@@ -34,7 +33,7 @@ const ShowContentPartial = React.createClass({
   },
 
   componentDidUpdate(prevProps) {
-    if (!isEqual(prevProps.tagFilter, this.props.tagFilter)) {
+    if (prevProps.tagFilter != this.props.tagFilter) {
       this.reloadTable();
     }
   },
@@ -175,9 +174,9 @@ const ShowContentPartial = React.createClass({
   },
 
   buildTagFilterQuery(query) {
-    const tagIdsFilter = this.props.tagFilter.map((tag) => tag.id);
-    if (this.props.tagFilter.length > 0) {
-      return query.where('tag_associations.tag_item_id', 'in', tagIdsFilter);
+    const tagIdsFilter = this.props.tagFilter.map((tag) => tag.get('id'));
+    if (this.props.tagFilter.count() > 0) {
+      return query.where('tag_associations.tag_item_id', 'in', tagIdsFilter.toJS());
     }
     return query;
   },
@@ -199,7 +198,6 @@ const ShowContentPartial = React.createClass({
         'metadata_items.value_date',
         'metadata_items.value_datetime',
         'metadata_items.value_time',
-
         'metadata_items.value_file',
         'metadata_items.value_waveform',
         'metadata_items.value_image',

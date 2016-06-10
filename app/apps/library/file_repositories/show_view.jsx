@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Show from '../../../widgets/admin/crud/show_widget.jsx';
+import { List } from 'immutable';
 
 import SidebarPartial from './show_sidebar_partial.jsx';
 import ContentPartial from './show_content_partial.jsx';
@@ -13,7 +14,7 @@ const ShowView = React.createClass({
 
   getInitialState() {
     return {
-      tagFilter: [],
+      tagFilter: List(),
       stage: null,
     };
   },

@@ -1,17 +1,11 @@
 import React from 'react';
-import {
-  differenceBy,
-  pull,
-  uniqBy,
-  sortBy,
-  concat,
-  includes,
-  some,
-} from 'lodash';
 import classnames from 'classnames';
 import { List } from 'immutable';
-
+import RadioKit from '../../../services/RadioKit';
 import Translate from 'react-translate-component';
+
+import MetadataModal from './show_content_metadata_modal.jsx';
+
 
 import './ShowSidebarPartial.scss';
 const ShowSidebarPartial = React.createClass({
@@ -20,12 +14,13 @@ const ShowSidebarPartial = React.createClass({
     contentPrefix: React.PropTypes.string.isRequired,
     onTagFilterUpdate: React.PropTypes.func.isRequired,
     record: React.PropTypes.object.isRequired,
-    tagFilter: React.PropTypes.array,
+    tagFilter: React.PropTypes.object,
   },
 
   getInitialState() {
     return {
-      selectedCategoriesIds: [],
+      selectedTagCategories: List(),
+      selectedTagItems: List(),
     };
   },
 
@@ -40,68 +35,141 @@ const ShowSidebarPartial = React.createClass({
             'tag_items',
             tags.get(category.get('id')) || List()
           )
+      );
+  },
+
+  updateFilter() {
+    this.props.onTagFilterUpdate(this.state.selectedTagItems);
+    this.state.selectedTagItems.forEach(tag => {
+      if (!tag.get('metadata_items')) {
+        this.fetchMetadataItems(tag);
+      }
+    });
+  },
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.selectedTagItems.count() !== this.state.selectedTagItems.count()) {
+      this.updateFilter();
+    }
+  },
+
+  fetchMetadataItems(tag) {
+    RadioKit
+      .query('vault', 'Data.Tag.Item')
+      .select(
+        'id',
+        'name',
+        'tag_category_id',
+        'metadata_items.id',
+        'metadata_items.value_string',
+        'metadata_items.value_db',
+        'metadata_items.value_url',
+        'metadata_items.value_text',
+        'metadata_items.value_float',
+        'metadata_items.value_integer',
+        'metadata_items.value_duration',
+        'metadata_items.value_date',
+        'metadata_items.value_datetime',
+        'metadata_items.value_time',
+        'metadata_items.value_file',
+        'metadata_items.value_waveform',
+        'metadata_items.value_image',
+        'metadata_items.metadata_schema_id',
       )
-      .toJS();
+      .joins('metadata_items')
+      .where('id', 'eq', tag.get('id'))
+      .on('error', () => {
+      })
+      .on('fetch', (_event, _query, data) => {
+        const tagIndex = this.state.selectedTagItems.indexOf(tag);
+        if (tagIndex > -1) {
+          this.setState({
+            selectedTagItems: this.state.selectedTagItems.remove(tagIndex).push(data.first()),
+          });
+        }
+      })
+      .fetch();
   },
 
-  selectCategory(category) {
-    let newFilter = [...this.props.tagFilter];
-    let selectedCategoriesIds = this.state.selectedCategoriesIds;
-    if (this.isCategorySelected(category)) {
-      newFilter = differenceBy(newFilter, category.tag_items, 'id');
-      selectedCategoriesIds = pull(selectedCategoriesIds, category.id);
+  toggleCategorySelection(category) {
+    const isAdded = this.state.selectedTagCategories.includes(category);
+    if (isAdded) {
+      const selectedTagItems = this.state.selectedTagItems
+        .filterNot(tag => tag.get('tag_category_id') === category.get('id'));
+      const categoryIndex = this.state.selectedTagCategories.indexOf(category);
+      this.setState({
+        selectedTagCategories: this.state.selectedTagCategories.remove(categoryIndex),
+        selectedTagItems,
+      });
     } else {
-      newFilter = uniqBy(concat(newFilter, category.tag_items), 'id');
-      selectedCategoriesIds.push(category.id);
+      let tagsToAdd = List();
+      category.get('tag_items').forEach(newTag => {
+        if (!this.state.selectedTagItems.find(tag => tag.get('id') === newTag.get('id'))) {
+          tagsToAdd = tagsToAdd.push(newTag);
+        }
+      });
+      this.setState({
+        selectedTagCategories: this.state.selectedTagCategories.push(category),
+        selectedTagItems: this.state.selectedTagItems.concat(tagsToAdd),
+      });
     }
-    this.props.onTagFilterUpdate(newFilter);
-    this.setState({ selectedCategoriesIds });
   },
 
-  selectTag(tag, category) {
-    let newFilter = [...this.props.tagFilter];
-    if (this.isTagSelected(tag)) {
-      newFilter = differenceBy(newFilter, [tag], 'id');
+  toggleTagSelection(tag, category) {
+    const isAdded = this.isTagSelected(tag);
+    let selectedTagItems = this.state.selectedTagItems;
+    if (isAdded) {
+      const tagIndex = this.state.selectedTagItems.indexOf(tag);
+      selectedTagItems = this.state.selectedTagItems.remove(tagIndex);
     } else {
-      newFilter.push(tag);
+      selectedTagItems = this.state.selectedTagItems.push(tag);
     }
-    const usedTags = newFilter.filter((tagItem) => tagItem.tag_category_id === category.id);
-    let selectedCategoriesIds = this.state.selectedCategoriesIds;
-    if (usedTags.length === category.tag_items.length) {
-      selectedCategoriesIds.push(category.id);
-    } else {
-      selectedCategoriesIds = pull(selectedCategoriesIds, category.id);
+    const selectedTagCategories = this.updateSelectedCategories(selectedTagItems, category);
+    this.setState({
+      selectedTagItems,
+      selectedTagCategories,
+    });
+  },
+
+  updateSelectedCategories(selectedTagItems, category) {
+    const categorySelectedTagCount = selectedTagItems
+      .filter(tagItem => tagItem.get('tag_category_id') === category.get('id')).count();
+    if (category.get('tag_items').count() === categorySelectedTagCount) {
+      return this.state.selectedTagCategories.push(category);
+    } else if (this.isCategorySelected(category)) {
+      const index = this.state.selectedTagCategories.indexOf(category);
+      return this.state.selectedTagCategories.remove(index);
     }
-    this.props.onTagFilterUpdate(newFilter);
-    this.setState({ selectedCategoriesIds });
+    return this.state.selectedTagCategories;
   },
 
   onClearFilter() {
-    this.setState({
-      selectedCategoriesIds: [],
-    });
-    this.props.onTagFilterUpdate([]);
+    this.setState(this.getInitialState());
   },
 
   isCategorySelected(category) {
-    return includes(this.state.selectedCategoriesIds, category.id);
+    return this.state.selectedTagCategories.includes(category);
   },
 
   isTagSelected(tag) {
-    return some(this.props.tagFilter, tag);
+    return !!this.state.selectedTagItems.find(item => item.get('id') === tag.get('id'));
   },
 
   renderCategoryTags(category) {
     return (
       <div>
         <ul className="list">
-          { category.tag_items && sortBy(category.tag_items, 'name').map((tag) => {
-            const onTagSelected = () => this.selectTag(tag, category);
+          { category.get('tag_items').sortBy(item => item.get('name')).map((tag) => {
+            const onTagSelected = () => this.toggleTagSelection(tag, category);
+            const tagClassNames = classnames('card-head card-head-sm', {
+              'Tag': !this.isTagSelected(tag),
+              'Tag--selected': this.isTagSelected(tag),
+            });
             return (
-              <li key={ tag.id }>
-                <div className={`card-head card-head-sm Tag${this.isTagSelected(tag) ? '--selected' : ''}`} onClick={onTagSelected}>
+              <li key={ tag.get('id') }>
+                <div className={tagClassNames} onClick={onTagSelected} >
                   <header>
-                    { tag.name }
+                    { tag.get('name') }
                   </header>
                 </div>
               </li>
@@ -114,42 +182,48 @@ const ShowSidebarPartial = React.createClass({
 
   render() {
     const categories = this.getCategories();
+    const allTagsClassName = classnames('card-head', {
+      'AllTags': !this.props.tagFilter.isEmpty(),
+      'AllTags--selected': this.props.tagFilter.isEmpty(),
+    });
     return (
       <div className="ShowSidebarPartial">
-        <div className={`card-head AllTags${!this.props.tagFilter.length > 0 ? '--selected' : ''}`}>
+        <div className={ allTagsClassName }>
           <header onClick={this.onClearFilter}>
             <Translate content={ `${this.props.contentPrefix}.tags.all_tags` } />
           </header>
         </div>
-        { categories.length > 0 && sortBy(categories, 'name').map((category) => {
-          if (category.tag_items.length === 0) {
-            return null;
-          }
-          
-          const onCategorySelected = () => this.selectCategory(category);
-          const toggleClasses = classnames('btn btn-flat btn-icon-toggle collapsed');
-          const headerClasses = classnames('card-head Category', {
-            'Category--selected': this.isCategorySelected(category),
-          });
-          return (
-            <div id={category.id} key={category.id}>
-              <div className="expanded">
-                <div className={headerClasses} aria-expanded="true" onClick={onCategorySelected}>
-                  <a className={toggleClasses}
-                    data-toggle="collapse" data-parent={ `#${category.id}` }
-                    data-target={ `#${category.id}-tagList` }
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <i className="mdi mdi-chevron-right"/>
-                  </a>
-                  
-                  <header>
-                    { category.name }
-                  </header>
+        {
+          categories.sortBy(category => category.get('name')).map((category) => {
+            if (category.get('tag_items').isEmpty()) {
+              return null;
+            }
+
+            const onCategorySelected = () => this.toggleCategorySelection(category);
+            const toggleClasses = classnames('btn btn-flat btn-icon-toggle collapsed');
+            const headerClasses = classnames('card-head Category', {
+              'Category--selected': this.isCategorySelected(category),
+            });
+            return (
+              <div id={category.get('id')} key={category.get('id')}>
+                <div className="expanded">
+                  <div className={headerClasses} aria-expanded="true" onClick={onCategorySelected}>
+                    <a className={toggleClasses}
+                      data-toggle="collapse" data-parent={ `#${category.get('id')}` }
+                      data-target={ `#${category.get('id')}-tagList` }
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <i className="mdi mdi-chevron-right" />
+                    </a>
+                    <header>
+                      { category.get('name') }
+                    </header>
+                    <a className="btn btn-icon">
+                      <i className="mdi mdi-border-color"></i>
+                    </a>
                 </div>
-                
                 <div
-                  id={ `${category.id}-tagList` }
+                  id={ `${category.get('id')}-tagList` }
                   className="collapse"
                   aria-expanded="false"
                 >
@@ -158,7 +232,7 @@ const ShowSidebarPartial = React.createClass({
               </div>
             </div>
           );
-        })}
+          })}
       </div>
     );
   },
