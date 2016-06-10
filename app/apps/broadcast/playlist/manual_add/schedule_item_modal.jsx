@@ -12,6 +12,7 @@ import './schedule_item_modal.scss';
 const ScheduleItemModal = React.createClass({
   propTypes: {
     currentBroadcastChannel: React.PropTypes.string.isRequired,
+    currentBroadcastChannelEntity: React.PropTypes.object.isRequired,
     defaultTimeOffset: React.PropTypes.number.isRequired,
     contentPrefix: React.PropTypes.string.isRequired,
     onSuccess: React.PropTypes.func,
@@ -201,6 +202,7 @@ const ScheduleItemModal = React.createClass({
           <InputLocalDateTime
             value={this.state.startDate}
             onChange={this.handleStartDateChange}
+            tz={this.props.currentBroadcastChannelEntity.get('timezone')}
           />
         </div>
         <div className="form-group">
@@ -212,6 +214,7 @@ const ScheduleItemModal = React.createClass({
           <InputLocalDateTime
             disabled
             value={this.state.stopDate}
+            tz={this.props.currentBroadcastChannelEntity.get('timezone')}
           />
         </div>
       </div>

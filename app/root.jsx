@@ -129,7 +129,7 @@ export default React.createClass({
   loadBroadcastChannels() {
     RadioKit
       .query('agenda', 'Broadcast.Channel')
-      .select('id', 'name', 'references')
+      .select('id', 'name', 'references', 'timezone')
       .order('name', 'asc')
       .on('error', () => {
         this.setState({
