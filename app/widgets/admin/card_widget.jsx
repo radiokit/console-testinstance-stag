@@ -32,7 +32,7 @@ export default React.createClass({
 
   getDefaultProps() {
     return {
-      cardPadding: true,
+      cardPadding: false,
       headerVisible: true,
     };
   },
@@ -136,7 +136,7 @@ export default React.createClass({
         : null
         }
 
-        <CardBody cardPadding={!!(this.props.cardPadding && this.props.sidebarElement)}>
+        <CardBody cardPadding={this.props.cardPadding && !!this.props.sidebarElement} >
           {(this.props.sidebarElement)
           ? (
                 <CardSidebar>
