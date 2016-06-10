@@ -7,6 +7,8 @@ import Counterpart from 'counterpart';
 import './services/RadioKit'; // for legacy window binding
 import './services/Plumber'; // for legacy window binding
 
+// this is set to false on staging and production builds
+// and true on local builds
 if (__DEV__) {
   window.Perf = require('react-addons-perf');
 }
@@ -58,6 +60,19 @@ Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/modal
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/scope.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/form.js'));
 
+/*
+TODO
+
+Following function is for giving browser time to render
+in between pushing data through immview streams
+
+Despite it being quite smart
+it completely breaks broadcast playlist details view
+as it requires all changes to be applied synchronously
+
+Until ScheduleDetails is not holding uncommited changes
+this should be disabled
+
 import { Dispatcher } from 'immview';
 if (window.requestIdleCallback) {
   const targetFPS = 60;
@@ -84,6 +99,7 @@ if (window.requestIdleCallback) {
 } else {
   Dispatcher.tick = f => window.setTimeout(f);
 }
+*/
 
 function pingGoogleAnalytics() {
   if (typeof ga !== 'undefined') {
