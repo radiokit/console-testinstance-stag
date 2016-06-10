@@ -59,6 +59,8 @@ const TrackList = React.createClass({
     onClipChange: React.PropTypes.func,
     
     timeMarks: React.PropTypes.oneOf([null, 'relative', 'date']),
+    // usable only with timeMarks == 'date'
+    timeMarksDateTimezone: React.PropTypes.string,
   },
 
   getDefaultProps() {
@@ -223,6 +225,7 @@ const TrackList = React.createClass({
         {this.props.timeMarks && (
           <TrackTimeMarks
             type={this.props.timeMarks}
+            dateTimezone={this.props.timeMarksDateTimezone}
             offsetStart={offsetStart}
             offsetLength={offsetLength}
             width={this.props.width}
