@@ -16,9 +16,81 @@ export {
   remove,
 };
 
+const runQueueDebounced = debounce(runQueue, 3000);
+
+function save(params, patch, filterKeys) {
+  const mutation = params
+    .set('patch', filterEntity(patch, filterKeys))
+    .set('optimistic', patch)
+    .set('action', params.get('id') ? 'update' : 'create')
+  ;
+  dispatchMutation(mutation);
+}
+
+function filterEntity(entity, fields) {
+  if (!fields) {
+    return entity;
+  }
+  return entity
+    .filter((_, field) => fields.indexOf(field) >= 0);
+}
+
+function remove(params) {
+  const stub = List([Map({ id: params.get('id') })]);
+  const mutation = params
+    .set('patch', stub)
+    .set('optimistic', stub)
+    .set('result', stub)
+    .set('action', 'destroy')
+    ;
+  dispatchMutation(mutation);
+}
+
+function dispatchMutation(mutation) {
+  const { optimistic } = mutation.toObject();
+  updateQueryInQueriesStream(
+    mutationToParams(mutation),
+    STATUS.loading,
+    List([optimistic]),
+    Date.now()
+  );
+  pushMutationToQueue(mutation);
+}
+
 function mutationToParams(mutation) {
   const { app, model, id, action } = mutation.toObject();
   return Map({ app, model, id, action });
+}
+
+function pushMutationToQueue(mutation) {
+  const { app, model, id } = mutation.toObject();
+  const mutationQueueKey = Map({ app, model, id });
+  const alreadyDispatched = mutationQueue.get(mutationQueueKey) || Map();
+  const isDeletionDispatched = alreadyDispatched.get('action') === 'destroy';
+  if (!isDeletionDispatched) {
+    mutationQueue = mutationQueue.set(mutationQueueKey, mutation);
+    runQueueDebounced();
+  }
+}
+
+function runQueue() {
+  if (isQueueRunning) {
+    return;
+  }
+  const job = shiftJobFromQueue();
+  if (job) {
+    isQueueRunning = true;
+    perform(job).then(() => {
+      isQueueRunning = false;
+      runQueue();
+    });
+  }
+}
+
+function shiftJobFromQueue() {
+  const toRun = mutationQueue.first();
+  mutationQueue = mutationQueue.rest();
+  return toRun;
 }
 
 function perform(mutation) {
@@ -54,62 +126,3 @@ function perform(mutation) {
   });
 }
 
-function shiftJobFromQueue() {
-  const toRun = mutationQueue.first();
-  mutationQueue = mutationQueue.rest();
-  return toRun;
-}
-
-function runQueue() {
-  if (isQueueRunning) {
-    return;
-  }
-  const job = shiftJobFromQueue();
-  if (job) {
-    isQueueRunning = true;
-    perform(job).then(() => {
-      isQueueRunning = false;
-      runQueue();
-    });
-  }
-}
-
-const runQueueDebounced = debounce(runQueue, 3000);
-
-function pushMutationToQueue(mutation) {
-  const { app, model, id } = mutation.toObject();
-  const mutationQueueKey = Map({ app, model, id });
-  const alreadyDispatched = mutationQueue.get(mutationQueueKey) || Map();
-  const isDeletionDispatched = alreadyDispatched.get('action') === 'destroy';
-  if (!isDeletionDispatched) {
-    mutationQueue = mutationQueue.set(mutationQueueKey, mutation);
-    runQueueDebounced();
-  }
-}
-
-function dispatchMutation(mutation) {
-  const { patch } = mutation.toObject();
-  updateQueryInQueriesStream(
-    mutationToParams(mutation),
-    STATUS.loading,
-    List([patch.set('id', mutation.get('id'))]),
-    Date.now()
-  );
-  pushMutationToQueue(mutation);
-}
-
-function save(params, patch) {
-  const mutation = params
-    .set('action', params.get('id') ? 'update' : 'create')
-    .set('patch', patch);
-  dispatchMutation(mutation);
-}
-
-function remove(params) {
-  const stub = List([Map({ id: params.get('id') })]);
-  const mutation = params
-    .set('patch', stub)
-    .set('action', 'destroy')
-    .set('result', stub);
-  dispatchMutation(mutation);
-}
