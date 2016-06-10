@@ -68,6 +68,8 @@ const MetadataInputField = React.createClass({
         inputType = 'text';
         break;
       case 'db':
+        inputType = 'decimal';
+        break;
       case 'integer':
         inputType = 'number';
         break;

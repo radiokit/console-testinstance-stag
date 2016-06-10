@@ -4,12 +4,17 @@ import {
   OrderedMap,
 } from 'immutable';
 import RadioKit from '../RadioKit';
-import { update } from './RadioKitQueriesStream';
+import { updateQueryInQueriesStream } from './RadioKitQueriesStream';
 import * as STATUS from './RadioKitQueryStatuses';
 import { debounce } from 'lodash';
 
 let mutationQueue = OrderedMap();
 let isQueueRunning = false;
+
+export {
+  save,
+  remove,
+};
 
 function mutationToParams(mutation) {
   const { app, model, id, action } = mutation.toObject();
@@ -31,12 +36,12 @@ function perform(mutation) {
 
   return new Promise((resolve) => {
     const onSuccess = (data) => {
-      update(queryParams, STATUS.done, result || List([data]), requestTime);
+      updateQueryInQueriesStream(queryParams, STATUS.done, result || List([data]), requestTime);
       resolve();
     };
 
     const onError = () => {
-      update(queryParams, STATUS.error, List(), requestTime);
+      updateQueryInQueriesStream(queryParams, STATUS.error, List(), requestTime);
       resolve();
     };
 
@@ -84,7 +89,7 @@ function pushMutationToQueue(mutation) {
 
 function dispatchMutation(mutation) {
   const { patch } = mutation.toObject();
-  update(
+  updateQueryInQueriesStream(
     mutationToParams(mutation),
     STATUS.loading,
     List([patch.set('id', mutation.get('id'))]),
@@ -93,14 +98,14 @@ function dispatchMutation(mutation) {
   pushMutationToQueue(mutation);
 }
 
-export function save(params, patch) {
+function save(params, patch) {
   const mutation = params
     .set('action', params.get('id') ? 'update' : 'create')
     .set('patch', patch);
   dispatchMutation(mutation);
 }
 
-export function remove(params) {
+function remove(params) {
   const stub = List([Map({ id: params.get('id') })]);
   const mutation = params
     .set('patch', stub)

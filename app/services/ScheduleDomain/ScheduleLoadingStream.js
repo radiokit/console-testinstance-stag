@@ -5,43 +5,47 @@ import {
   Map,
 } from 'immutable';
 
-import RadioKitDomain from '../RadioKitDomain';
 import FilesDomain from '../FilesDomain';
 
-import ScheduleQueriesStream from './ScheduleQueriesStream';
-import ScheduleUpdateQueriesStream from './ScheduleUpdateQueriesStream';
+import {
+  pickLoadingQueries,
+} from '../RadioKitQueriesUtils';
+
+import {
+  ScheduleQueriesStream,
+  ScheduleUpdateQueriesStream,
+} from './ScheduleQueriesStream';
 
 const loadingState = Map({ value: true });
 const idleState = Map({ value: false });
 
-function filterLoadingQueries(queries) {
-  const loadingQueries = queries.filter(
-    result => (
-      result.get('status') === RadioKitDomain.STATUS.loading
-    )
-  );
-  const loadingQueriesCount = loadingQueries.count();
-  return loadingQueriesCount > 0 ? loadingState : idleState;
-}
+const LoadingScheduleQueriesStream = ScheduleQueriesStream.map(filterLoadingQueries);
 
-const LoadingScheduleStream = ScheduleQueriesStream.map(filterLoadingQueries);
-
-const UpdatingScheduleStream = ScheduleUpdateQueriesStream.map(filterLoadingQueries);
+const LoadingScheduleUpdateQueriesStream = ScheduleUpdateQueriesStream.map(filterLoadingQueries);
 
 const LoadingFilesStream = FilesDomain.map(
-  data => (data.get('loading') ? loadingState : idleState)
+  data => getBoolState(data.get('loading'))
 );
 
 const ScheduleLoadingStream = new View({
-  LoadingScheduleStream,
-  UpdatingScheduleStream,
+  LoadingScheduleQueriesStream,
+  LoadingScheduleUpdateQueriesStream,
   LoadingFilesStream,
 }, data => (
-  (
-    data.getIn(['LoadingScheduleStream', 'value']) ||
-    data.getIn(['UpdatingScheduleStream', 'value']) ||
+  getBoolState(
+    data.getIn(['LoadingScheduleQueriesStream', 'value']) ||
+    data.getIn(['LoadingScheduleUpdateQueriesStream', 'value']) ||
     data.getIn(['LoadingFilesStream', 'value'])
-  ) ? loadingState : idleState
+  )
 ));
 
 export default ScheduleLoadingStream;
+
+function getBoolState(condition) {
+  return condition ? loadingState : idleState;
+}
+
+function filterLoadingQueries(queries) {
+  const loadingQueries = pickLoadingQueries(queries);
+  return getBoolState(loadingQueries.count() > 0);
+}
