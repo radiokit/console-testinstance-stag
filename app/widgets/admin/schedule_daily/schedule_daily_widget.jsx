@@ -81,16 +81,19 @@ export default connect(
       currentBroadcastChannel = Map(),
     } = props;
 
-    const from = moment.tz(offsetStart, currentBroadcastChannel.get('timezone'))
-      .startOf('day')
-      .add(DAY_START_HOURS_OFFSET, 'hours');
-    const to = from
-      .clone()
-      .add(24, 'hours');
+    const from = calcDayStart(
+      offsetStart,
+      currentBroadcastChannel.get('timezone'),
+      DAY_START_HOURS_OFFSET
+    );
+    const to = from + 24 * MILLISECONDS_IN_HOUR;
+
+    const fromISO = new Date(from).toISOString();
+    const toISO = new Date(to).toISOString();
 
     ScheduleDomain.fetch(
-      from.toISOString(),
-      to.toISOString(),
+      fromISO,
+      toISO,
       currentBroadcastChannel.get('id'),
       { maxAge: 1000 * 60 * 10 }
     );
@@ -100,21 +103,45 @@ export default connect(
       [
         'ranges',
         Map({
-          from: from.toISOString(),
-          to: to.toISOString(),
+          from: fromISO,
+          to: toISO,
           broadcastChannelId: currentBroadcastChannel.get('id'),
         }),
       ],
         OrderedMap()
       )
       .toArray();
+
     return {
       items,
-      actualOffsetStart: from.valueOf(),
+      actualOffsetStart: from,
     };
   }
 );
 
+/**
+ * Returns a timestamp of a start of a day.
+ * Takes into consideration timezone and time offset expressed as amount of hours.
+ * @param {number} timestamp
+ * @param {string} timezone
+ * @param {number} dayStartHoursOffset
+ * @returns {number}
+ */
+function calcDayStart(timestamp, timezone, dayStartHoursOffset) {
+  return moment
+    .tz(timestamp, timezone)
+    .subtract(dayStartHoursOffset, 'hours')
+    .startOf('day')
+    .add(dayStartHoursOffset, 'hours')
+    .valueOf()
+  ;
+}
+
+/**
+ * @param {Iterable} items
+ * @param {number} offsetStart
+ * @returns {Array.<Iterable>}
+ */
 function groupByHour(items, offsetStart) {
   const result = range(0, 24).map(() => []);
 
