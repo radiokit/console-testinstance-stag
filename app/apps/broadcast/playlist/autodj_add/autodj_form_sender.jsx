@@ -1,7 +1,4 @@
 import React from 'react';
-import {
-  Map,
-} from 'immutable';
 import AutoDJForm from './autodj_form.jsx';
 
 // import Translate from 'react-translate-component';
@@ -18,7 +15,10 @@ import {
   sendWeeklyItem,
 } from './autodj_form_sender_utils';
 
-import { STEPS_NAMES } from './autodj_form_steps';
+import {
+  STEPS_NAMES,
+  EMPTY_MODEL,
+} from './autodj_form_commons';
 
 const AutoDJFormSender = React.createClass({
   propTypes: {
@@ -29,7 +29,7 @@ const AutoDJFormSender = React.createClass({
   getInitialState() {
     return {
       errors: [],
-      model: Map(),
+      model: EMPTY_MODEL,
       step: 0,
     };
   },

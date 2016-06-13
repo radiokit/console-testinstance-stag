@@ -16,13 +16,33 @@ const HourRangePicker = React.createClass({
     onChange: React.PropTypes.func,
   },
 
+  getValue() {
+    const { value = Map() } = this.props;
+    return value;
+  },
+
+  getStart() {
+    return this.getValue().get('start');
+  },
+
+  getEnd() {
+    return this.getValue().get('end');
+  },
+
   triggerChange(newValue) {
     const { onChange = () => null } = this.props;
-    onChange(newValue);
+    onChange(newValue, this.getValue());
+  },
+
+  triggerStartChange(start) {
+    this.triggerChange(this.getValue().set('start', start));
+  },
+
+  triggerEndChange(start) {
+    this.triggerChange(this.getValue().set('end', start));
   },
 
   render() {
-    const { value = Map() } = this.props;
     return (
       <div className="HourRangePicker">
         <div className="form-group">
@@ -30,8 +50,8 @@ const HourRangePicker = React.createClass({
             <Translate content="HourRangePicker.from" />
           </label>
           <HourPicker
-            value={value.get('start')}
-            onChange={start => this.triggerChange(value.set('start', start))}
+            value={this.getStart()}
+            onChange={this.triggerStartChange}
           />
         </div>
         <div className="form-group">
@@ -39,8 +59,8 @@ const HourRangePicker = React.createClass({
             <Translate content="HourRangePicker.to" />
           </label>
           <HourPicker
-            value={value.get('end')}
-            onChange={end => this.triggerChange(value.set('end', end))}
+            value={this.getEnd()}
+            onChange={this.triggerEndChange}
           />
         </div>
 
