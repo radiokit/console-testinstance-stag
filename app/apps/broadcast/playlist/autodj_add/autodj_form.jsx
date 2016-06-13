@@ -23,22 +23,12 @@ counterpart.registerTranslations('pl', localePL);
 
 import './autodj_form_sender.scss';
 
-const AUTODJ_OPTIONS = [
-  'shuffle',
-  // 'rotation', sending
-  // TODO 'query', form, validation, sending
-];
-const EMPTY_RANGE = Map();
-const EMPTY_WEEKDAYS = Map();
-const EMPTY_MODEL = Map({
-  type: AUTODJ_OPTIONS[0],
-  repository: null,
-  weeklyplan: null,
-  weekdays: EMPTY_WEEKDAYS,
-  hours: EMPTY_RANGE,
-});
-
-import { STEPS_NAMES } from './autodj_form_steps';
+import {
+  STEPS_NAMES,
+  AUTODJ_OPTIONS,
+  EMPTY_RANGE,
+  EMPTY_WEEKDAYS,
+} from './autodj_form_commons';
 
 import './autodj_form.scss';
 
