@@ -118,7 +118,7 @@ const ScheduleDetails = React.createClass({
       <div>
         <h1>
           Schedule Details
-          <span children={this.props.loading ? ' ...' : ''} />
+          {this.props.loading ? ' ...' : ''}
         </h1>
         <DetectWidth>{width => (
           <ScrollableTrackList
@@ -133,21 +133,11 @@ const ScheduleDetails = React.createClass({
             playlist={Map({ items: pickedTrackItems })}
             onItemChange={this.handleItemChange}
             timeMarks="date"
+            timeMarksDateTimezone={this.props.currentBroadcastChannel.get('timezone')}
             onChangeOffset={this.handleChangeOffset}
             onItemSelect={this.handleItemSelect}
           />
         )}</DetectWidth>
-        {/*
-        <pre>
-          {JSON.stringify(this.props.items.toJS(), null, '  ')}
-        </pre>
-        <pre>
-          {JSON.stringify(items.toJS(), null, '  ')}
-        </pre>
-        <pre>
-          {this.props.offsetStart}
-        </pre>
-        */}
       </div>
     );
   },
@@ -185,6 +175,7 @@ export default connect(
         )
       )
     ;
+
     return {
       items,
       loading: data.get('loading', false),

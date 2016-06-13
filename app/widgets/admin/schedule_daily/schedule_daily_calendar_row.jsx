@@ -10,6 +10,7 @@ const MILLISECONDS_IN_HOUR = 1000 * 60 * 60;
 const CalendarRow = React.createClass({
   propTypes: {
     offsetStart: React.PropTypes.number,
+    hourLabel: React.PropTypes.number,
     items: PropTypes.object.isRequired,
     activeItem: PropTypes.object,
     onActiveItemChange: PropTypes.func.isRequired,
@@ -43,6 +44,7 @@ const CalendarRow = React.createClass({
       offsetStart,
       items,
       activeItem,
+      hourLabel,
     } = this.props;
 
     const now = Date.now();
@@ -125,7 +127,7 @@ const CalendarRow = React.createClass({
             { 'ScheduleDailyWidget-CalendarRow--expanded-cell': isExpanded }
           )}
         >
-          {sprintf('%02s:00', new Date(offsetStart).getHours())}
+          {sprintf('%02s:00', hourLabel)}
         </td>
         <td className={classNames(
             'ScheduleDailyWidget-CalendarRow-items',

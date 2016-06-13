@@ -31,7 +31,7 @@ function loadMetadataSchema(id, options) {
       ],
     }),
     {
-      maxAge: 60000,
+      maxAge: 10 * 60 * 1000,
       ...options,
     }
   );
