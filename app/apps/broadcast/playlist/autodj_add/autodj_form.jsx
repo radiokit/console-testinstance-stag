@@ -5,7 +5,7 @@ import {
   List,
 } from 'immutable';
 
-import AutoDJShuffleForm from './autodj_shuffle_form.jsx';
+import AutoDJShuffleForm from './autodj_shuffle_form_connected.jsx';
 import AutoDJRotationForm from './autodj_rotation_form.jsx';
 import VaultRepositoryPicker from '../../../../widgets/autosuggest/vault_repository_picker.jsx';
 /* eslint max-len: 0 */
@@ -131,24 +131,16 @@ const AutoDJForm = React.createClass({
     const { step } = this.props;
     const typeDetailsForm = ({
       shuffle: (
-        model.getIn(['repository']) &&
-        (
-          <AutoDJShuffleForm
-            tags={model.getIn(['repository', 'tag_items'], List())}
-            value={model.get('details')}
-            onChange={this.handleDetailsChange}
-          />
-        )
+        <AutoDJShuffleForm
+          value={model.get('details')}
+          onChange={this.handleDetailsChange}
+        />
       ),
       rotation: (
-        model.getIn(['repository']) &&
-        (
-          <AutoDJRotationForm
-            tags={model.getIn(['repository', 'tag_items'], List())}
-            value={model.get('details')}
-            onChange={this.handleDetailsChange}
-          />
-        )
+        <AutoDJRotationForm
+          value={model.get('details')}
+          onChange={this.handleDetailsChange}
+        />
       ),
     })[model.get('type')];
 
@@ -170,23 +162,11 @@ const AutoDJForm = React.createClass({
                 value={model.get('type') || ''}
                 onChange={this.handleTypeChange}
               >
-                <option key={-1} value="">{counterpart('AutoDJForm.types.empty')}</option>
+                <option key={-1} value="" disabled>{counterpart('AutoDJForm.types.empty')}</option>
                 {AUTODJ_OPTIONS.map(option => (
                   <option key={option} value={option}>{counterpart(`AutoDJForm.types.${option}`)}</option>
                 ))}
               </select>
-            </div>
-          </fieldset>
-
-          <fieldset className={classnames('AutoDJForm__section', { hidden: step < STEPS_NAMES.indexOf('repository') })}>
-            <div className="form-group">
-              <label>
-                <Translate content="AutoDJForm.repositoryLabel" />
-              </label>
-              <VaultRepositoryPicker
-                value={model.get('repository') || null}
-                onChange={this.handleRepositoryChange}
-              />
             </div>
           </fieldset>
 
