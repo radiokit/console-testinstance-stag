@@ -1,13 +1,8 @@
 import React from 'react';
 import classnames from 'classnames';
-import {
-  Map,
-  List,
-} from 'immutable';
 
 import AutoDJShuffleForm from './autodj_shuffle_form_connected.jsx';
 import AutoDJRotationForm from './autodj_rotation_form.jsx';
-import VaultRepositoryPicker from '../../../../widgets/autosuggest/vault_repository_picker.jsx';
 /* eslint max-len: 0 */
 import ContentTypeConnectedPicker from '../../../../widgets/autosuggest/contenttype_connected_picker.jsx';
 import WeekDatesPicker from '../../../../widgets/time/week_dates_picker.jsx';
