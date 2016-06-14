@@ -6,7 +6,6 @@ import Translate from 'react-translate-component';
 import Counterpart from 'counterpart';
 import MetadataModal from './show_content_metadata_modal.jsx';
 
-
 import './show_sidebar_partial.scss';
 const ShowSidebarPartial = React.createClass({
 
@@ -50,6 +49,10 @@ const ShowSidebarPartial = React.createClass({
         });
       })
       .fetch();
+  },
+
+  onClearFilter() {
+    this.setState({ ...this.getInitialState(), categories: this.state.categories });
   },
 
   getCategories() {
@@ -151,7 +154,8 @@ const ShowSidebarPartial = React.createClass({
     const isAdded = this.isTagSelected(tag);
     let selectedTagItems = this.state.selectedTagItems;
     if (isAdded) {
-      const tagIndex = this.state.selectedTagItems.indexOf(tag);
+      const tagIndex = this.state.selectedTagItems
+        .findIndex((matchingTag) => matchingTag.get('id') === tag.get('id'));
       selectedTagItems = this.state.selectedTagItems.remove(tagIndex);
     } else {
       selectedTagItems = this.state.selectedTagItems.push(tag);
@@ -173,10 +177,6 @@ const ShowSidebarPartial = React.createClass({
       return this.state.selectedTagCategories.remove(index);
     }
     return this.state.selectedTagCategories;
-  },
-
-  onClearFilter() {
-    this.setState({ ...this.getInitialState(), categories: this.state.categories });
   },
 
   isCategorySelected(category) {

@@ -8,8 +8,6 @@ const MetadataInputField = React.createClass({
     fieldSummary: React.PropTypes.object.isRequired,
     fieldId: React.PropTypes.string.isRequired,
     contentPrefix: React.PropTypes.string.isRequired,
-    onFieldEnabled: React.PropTypes.func.isRequired,
-    onFieldDisabled: React.PropTypes.func.isRequired,
     onFieldChanged: React.PropTypes.func.isRequired,
     disabled: React.PropTypes.bool.isRequired,
     value: React.PropTypes.oneOfType([
