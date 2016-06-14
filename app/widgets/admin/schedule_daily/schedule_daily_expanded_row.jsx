@@ -14,7 +14,7 @@ import {
 
 const hourInMilliseconds = 1000 * 60 * 60;
 
-const ExpandedRow = ({ items, activeItem, markAsActive, offsetStart }) => {
+const ExpandedRow = ({ items, activeItem, markAsActive, offsetStart, timezone }) => {
   const activeItemId = activeItem && activeItem.get('id') || '';
 
   const offsetRange = [offsetStart, offsetStart + hourInMilliseconds];
@@ -47,6 +47,7 @@ const ExpandedRow = ({ items, activeItem, markAsActive, offsetStart }) => {
       <ul className="ScheduleDailyWidget-CalendarRow-item-expanded-list">
         <ScheduleDailyExpandedRowElements
           items={allItems}
+          timezone={timezone}
           markAsActive={markAsActive}
           activeItemId={activeItemId}
         />
@@ -59,6 +60,7 @@ const ExpandedRow = ({ items, activeItem, markAsActive, offsetStart }) => {
 
 ExpandedRow.propTypes = {
   offsetStart: React.PropTypes.number.isRequired,
+  timezone: React.PropTypes.string.isRequired,
   items: React.PropTypes.object.isRequired,
   activeItem: React.PropTypes.object,
   markAsActive: React.PropTypes.func.isRequired,
