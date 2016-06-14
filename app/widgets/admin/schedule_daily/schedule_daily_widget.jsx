@@ -30,6 +30,7 @@ const ScheduleDaily = React.createClass({
     // connector
     items: React.PropTypes.array,
     actualOffsetStart: React.PropTypes.number,
+    timezone: React.PropTypes.string,
   },
 
   getDefaultProps() {
@@ -49,18 +50,19 @@ const ScheduleDaily = React.createClass({
       activeItem,
       items,
       actualOffsetStart,
+      timezone,
     } = this.props;
 
     const itemsByHour = groupByHour(items, actualOffsetStart);
 
     return (
-      <table className="ScheduleDailyWidget table table-banded table-hover ">
+      <table className="ScheduleDailyWidget table table-banded table-hover">
         <tbody>
           {range(0, 24).map((_, hour) => (
               <CalendarRow
                 key={hour}
-                hourLabel={(hour + DAY_START_HOURS_OFFSET) % 24}
                 offsetStart={actualOffsetStart + hour * MILLISECONDS_IN_HOUR}
+                timezone={timezone}
                 items={itemsByHour[hour]}
                 onActiveItemChange={onActiveItemChange}
                 activeItem={activeItem}
@@ -81,9 +83,11 @@ export default connect(
       currentBroadcastChannel = Map(),
     } = props;
 
+    const timezone = currentBroadcastChannel.get('timezone');
+
     const from = calcDayStart(
       offsetStart,
-      currentBroadcastChannel.get('timezone'),
+      timezone,
       DAY_START_HOURS_OFFSET
     );
     const to = from + 24 * MILLISECONDS_IN_HOUR;
@@ -115,6 +119,7 @@ export default connect(
     return {
       items,
       actualOffsetStart: from,
+      timezone,
     };
   }
 );

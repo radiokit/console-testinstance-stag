@@ -6,6 +6,8 @@ import {
   reduce,
 } from 'lodash';
 
+import moment from 'moment-timezone';
+
 import padLeft from '../../../helpers/pad_left';
 
 export {
@@ -39,16 +41,10 @@ function getScheduleItemStart(item) {
   return item.get('cue_in_at');
 }
 
-
-function formatHMS(dateAlike) {
-  const dateCasted = new Date(dateAlike);
-  return `${
-    padLeft(dateCasted.getHours().toString(), 2)
-    }:${
-    padLeft(dateCasted.getMinutes().toString(), 2)
-    }:${
-    padLeft(dateCasted.getSeconds().toString(), 2)
-    }`;
+function formatHMS(dateAlike, timezone) {
+  return moment
+    .tz(dateAlike, timezone)
+    .format('kk:mm:SS');
 }
 
 function itemsToRanges(items) {

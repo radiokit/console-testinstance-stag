@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import sprintf from 'tiny-sprintf';
 import classNames from 'classnames';
+import moment from 'moment-timezone';
 import { shouldComponentUpdate } from '../../../helpers/immutable_component';
 import ShortenedRow from './schedule_daily_shortened_row.jsx';
 import ExpandedRow from './schedule_daily_expanded_row.jsx';
@@ -10,7 +11,7 @@ const MILLISECONDS_IN_HOUR = 1000 * 60 * 60;
 const CalendarRow = React.createClass({
   propTypes: {
     offsetStart: React.PropTypes.number,
-    hourLabel: React.PropTypes.number,
+    timezone: React.PropTypes.string,
     items: PropTypes.object.isRequired,
     activeItem: PropTypes.object,
     onActiveItemChange: PropTypes.func.isRequired,
@@ -44,7 +45,7 @@ const CalendarRow = React.createClass({
       offsetStart,
       items,
       activeItem,
-      hourLabel,
+      timezone,
     } = this.props;
 
     const now = Date.now();
@@ -84,6 +85,7 @@ const CalendarRow = React.createClass({
     const rowContent = (isExpanded)
       ? (
         <ExpandedRow
+          timezone={timezone}
           offsetStart={offsetStart}
           items={items}
           activeItem={activeItem}
@@ -127,7 +129,7 @@ const CalendarRow = React.createClass({
             { 'ScheduleDailyWidget-CalendarRow--expanded-cell': isExpanded }
           )}
         >
-          {sprintf('%02s:00', hourLabel)}
+          {formatHourMarker(offsetStart, timezone)}
         </td>
         <td className={classNames(
             'ScheduleDailyWidget-CalendarRow-items',
@@ -140,5 +142,9 @@ const CalendarRow = React.createClass({
     );
   },
 });
+
+function formatHourMarker(offset, timezone) {
+  return moment.tz(offset, timezone).format('kk');
+}
 
 export default CalendarRow;

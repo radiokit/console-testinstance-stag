@@ -5,7 +5,7 @@ import {
   formatHMS,
 } from './schedule_daily_expanded_row_utils';
 
-const ExpandedRowItem = ({ item, isActive, markAsActive }) => (
+const ExpandedRowItem = ({ item, isActive, markAsActive, timezone }) => (
   <li key={item.get('id')}>
     <div
       className={classNames(
@@ -16,7 +16,7 @@ const ExpandedRowItem = ({ item, isActive, markAsActive }) => (
       )}
       onClick={() => markAsActive(item)}
     >
-      {formatHMS(item.get('cue_in_at'))}
+      {formatHMS(item.get('cue_in_at'), timezone)}
       {' - '}
       {item.get('name') || item.get('id')}
     </div>
@@ -27,6 +27,7 @@ ExpandedRowItem.propTypes = {
   item: React.PropTypes.object,
   isActive: React.PropTypes.bool.isRequired,
   markAsActive: React.PropTypes.func.isRequired,
+  timezone: React.PropTypes.string.isRequired,
 };
 
 export default ExpandedRowItem;
