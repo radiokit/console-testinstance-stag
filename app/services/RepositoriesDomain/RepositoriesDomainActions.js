@@ -32,8 +32,16 @@ function loadRepository(id, requestOptions) {
   );
 }
 
-function loadRepositories(requestOptions) {
-  performQuery({}, requestOptions);
+function loadRepositories({ userAccountId, ...requestOptions }) {
+  performQuery({
+    conditions: [
+      userAccountId ? {
+        field: 'references',
+        comparison: 'deq',
+        value: `user_account_id ${userAccountId}`,
+      } : null,
+    ],
+  }, requestOptions);
 }
 
 function performQuery(queryAppendix, requestOptions) {

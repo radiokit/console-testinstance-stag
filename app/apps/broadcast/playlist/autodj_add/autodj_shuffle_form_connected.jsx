@@ -5,8 +5,16 @@ import RepositoriesDomain from '../../../../services/RepositoriesDomain';
 const AutoDJShuffleFormConnected = connect(
   AutoDJShuffleForm,
   RepositoriesDomain,
-  (RepositoriesDomainState) => {
-    RepositoriesDomain.loadRepositories({ maxAge: 10 * 60 * 1000 });
+  (RepositoriesDomainState, { availableUserAccounts }) => {
+    availableUserAccounts.forEach(
+      userAccount => {
+        RepositoriesDomain.loadRepositories({
+          userAccountId: userAccount.get('id'),
+          maxAge: 10 * 60 * 1000,
+        });
+      }
+    );
+
     const repositories = RepositoriesDomainState.get('entities');
     const isLoading = RepositoriesDomainState.get('loading');
 

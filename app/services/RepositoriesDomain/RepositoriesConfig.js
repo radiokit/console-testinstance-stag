@@ -6,6 +6,7 @@ export const readFields = [
   'name',
   'tag_items.id',
   'tag_items.name',
+  'references',
 ];
 export const readJoins = [
   'tag_items',
