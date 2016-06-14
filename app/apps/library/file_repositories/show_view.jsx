@@ -72,7 +72,6 @@ const ShowView = React.createClass({
         'metadata_schemas.tag_category_id',
       ) // metadata_schemas and tag_categories fields are required by the content partial
       .joins('metadata_schemas')
-      .where('metadata_schemas.tag_category_id', 'isnull')
       .select('tag_categories.id', 'tag_categories.name')
       .joins('tag_categories')
       .select('tag_items.id', 'tag_items.name', 'tag_items.tag_category_id')

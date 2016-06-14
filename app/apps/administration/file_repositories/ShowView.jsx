@@ -31,7 +31,7 @@ const ShowView = React.createClass({
       processing_schema: {
         element: ProcessingSchemaPartial,
         props: {
-          contentPrefix: "apps.administration.file_repositories.show.tabs.body.processing_schema"
+          contentPrefix: 'apps.administration.file_repositories.show.tabs.body.processing_schema',
         },
       },
       imports_schema: {

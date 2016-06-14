@@ -143,34 +143,43 @@ const ShowContentPartial = React.createClass({
     });
   },
 
+  getFilteredMetadataSchemas() {
+    return this.props.record.get('metadata_schemas')
+      .filter((schema) => schema.get('tag_category_id') === null);
+  },
+
   buildTableAttributes() {
     const attributes = {
       name: { renderer: 'string', sortable: true },
     };
-    return this.props.record.get('metadata_schemas').reduce((acc, metadataSchema) => {
+    return this.getFilteredMetadataSchemas()
+      .reduce((acc, metadataSchema) => {
       /* eslint no-param-reassign: 0 */
-      acc[metadataSchema.get('key')] = {
-        renderer: metadataSchema.get('kind'),
-        headerText: metadataSchema.get('name'),
-        sortable: this.isMetadataSchemaSortable(metadataSchema),
-        sortableFunc: (query, attribute, direction) => {
-          return query
-            .scope("sorted_by_metadata", metadataSchema.get('key'), metadataSchema.get('kind'), direction);
-        },
-        valueFunc: (record) => {
-          const foundMetadataItem = record
-            .get('metadata_items')
-            .find(
-              metadataItem => (metadataItem.get('metadata_schema_id') === metadataSchema.get('id'))
-            );
-          if (foundMetadataItem) {
-            return foundMetadataItem.get(`value_${metadataSchema.get('kind')}`);
-          }
-          return null;
-        },
-      };
-      return acc;
-    }, attributes);
+        acc[metadataSchema.get('key')] = {
+          renderer: metadataSchema.get('kind'),
+          headerText: metadataSchema.get('name'),
+          sortable: this.isMetadataSchemaSortable(metadataSchema),
+          sortableFunc: (query, attribute, direction) => {
+            return query
+              .scope(
+                'sorted_by_metadata', metadataSchema.get('key'),
+                metadataSchema.get('kind'), direction
+              );
+          },
+          valueFunc: (record) => {
+            const foundMetadataItem = record
+              .get('metadata_items')
+              .find(
+                metadataItem => (metadataItem.get('metadata_schema_id') === metadataSchema.get('id'))
+              );
+            if (foundMetadataItem) {
+              return foundMetadataItem.get(`value_${metadataSchema.get('kind')}`);
+            }
+            return null;
+          },
+        };
+        return acc;
+      }, attributes);
   },
 
   buildTagFilterQuery(query) {
@@ -302,7 +311,7 @@ const ShowContentPartial = React.createClass({
                   modalProps={{
                     contentPrefix: 'widgets.vault.file_browser.modals.metadata_file',
                     selectedRecords: this.state.selectedRecords,
-                    metadataSchemas: this.props.record.get('metadata_schemas'),
+                    metadataSchemas: this.getFilteredMetadataSchemas(),
                     onDismiss: this.reloadTable,
                     recordKey: 'record_file_id',
                   }}

@@ -15,35 +15,35 @@ export default React.createClass({
 
   modifyIndexQuery(query) {
     return query
-      .where("references", "deq", "user_account_id", this.context.currentUserAccount.get("id"))
-      .order("name", "asc")
+      .where('references', 'deq', 'user_account_id', this.context.currentUserAccount.get('id'))
+      .order('name', 'asc');
   },
 
   buildAttributes() {
     return {
-      name:             { renderer: "string" },
-      files_size_total: { renderer: "filesize" },
-      files_count:      { renderer: "integer" },
-      user_account:     { renderer: "scope-user-account" },
-    }
+      name: { renderer: 'string' },
+      files_size_total: { renderer: 'filesize' },
+      files_count: { renderer: 'integer' },
+      user_account: { renderer: 'scope-user-account' },
+    };
   },
 
   buildForm() {
     return {
       name: {
-        type: "string",
+        type: 'string',
         hint: true,
         validators: {
           presence: true,
-        }
+        },
       },
       user_account: {
-        type: "scope-user-account",
+        type: 'scope-user-account',
         validators: {
           presence: true,
-        }
+        },
       },
-    }
+    };
   },
 
   render() {
@@ -57,7 +57,8 @@ export default React.createClass({
         form={this.buildForm()}
         indexQueryFunc={this.modifyIndexQuery}
         createEnabled={false}
-        deleteEnabled={false} />
+        deleteEnabled={false}
+      />
     );
-  }
+  },
 });
