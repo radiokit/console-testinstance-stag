@@ -1,15 +1,17 @@
 import React, { PropTypes } from 'react';
 import sprintf from 'tiny-sprintf';
 import classNames from 'classnames';
+import moment from 'moment-timezone';
 import { shouldComponentUpdate } from '../../../helpers/immutable_component';
 import ShortenedRow from './schedule_daily_shortened_row.jsx';
 import ExpandedRow from './schedule_daily_expanded_row.jsx';
 
-const milisecondsInHour = 1000 * 60 * 60;
+const MILLISECONDS_IN_HOUR = 1000 * 60 * 60;
 
 const CalendarRow = React.createClass({
   propTypes: {
     offsetStart: React.PropTypes.number,
+    timezone: React.PropTypes.string,
     items: PropTypes.object.isRequired,
     activeItem: PropTypes.object,
     onActiveItemChange: PropTypes.func.isRequired,
@@ -43,42 +45,54 @@ const CalendarRow = React.createClass({
       offsetStart,
       items,
       activeItem,
+      timezone,
     } = this.props;
-    const now = Date.now();
 
-    let rowTiming;
-    let hourMarker;
-    if (offsetStart + milisecondsInHour < now) {
-      rowTiming = 'ScheduleDailyWidget-CalendarRow--past';
-    } else if (
+    const now = Date.now();
+    const canBeExpanded = items && items.size;
+    const isExpanded = canBeExpanded && this.state.expanded;
+
+    const toggleButton = canBeExpanded
+      ? (
+        <button
+          className="btn btn-icon-toggle"
+          onClick={this.toggleExpansion}
+        >
+          <i className={classNames('mdi', {
+            'mdi-plus': !isExpanded,
+            'mdi-minus': isExpanded,
+          })}
+          />
+        </button>
+      )
+      : null
+    ;
+
+    const hourMarker = (
       offsetStart <= now &&
-      offsetStart + milisecondsInHour > now &&
-      !this.state.expanded
-    ) {
-      rowTiming = 'ScheduleDailyWidget-CalendarRow--current';
-      hourMarker = (
+      offsetStart + MILLISECONDS_IN_HOUR > now &&
+      !isExpanded
+    )
+      ? (
         <hr
           key="HR"
           className="ScheduleDailyWidget-CalendarRow-currentTime"
           style={{ top: `${((now - offsetStart) / 6000000) * 100}%` }}
         />
-      );
-    } else {
-      rowTiming = null;
-    }
+      )
+      : null;
 
-    let rowContent;
-    if (this.state.expanded) {
-      rowContent = (
+    const rowContent = (isExpanded)
+      ? (
         <ExpandedRow
+          timezone={timezone}
           offsetStart={offsetStart}
           items={items}
           activeItem={activeItem}
           markAsActive={this.markAsActive}
         />
-      );
-    } else {
-      rowContent = [
+      )
+      : [
         hourMarker,
         <ShortenedRow
           key="ROW"
@@ -86,42 +100,40 @@ const CalendarRow = React.createClass({
           className="ScheduleDailyWidget-CalendarRow-item-ellipsed"
         />,
       ];
-    }
+
+    const rowClasses = classNames(
+      'ScheduleDailyWidget-CalendarRow',
+      {
+        'ScheduleDailyWidget-CalendarRow--past': (offsetStart + MILLISECONDS_IN_HOUR < now),
+        'ScheduleDailyWidget-CalendarRow--current': (
+          offsetStart <= now &&
+          offsetStart + MILLISECONDS_IN_HOUR > now &&
+          !isExpanded
+        ),
+        'ScheduleDailyWidget-CalendarRow--expanded': isExpanded,
+      }
+    );
 
     return (
-      <tr className={classNames(
-          'ScheduleDailyWidget-CalendarRow',
-          rowTiming,
-          { 'ScheduleDailyWidget-CalendarRow--expanded': this.state.expanded }
-        )}
-      >
+      <tr className={rowClasses}>
         <td className={classNames(
-            'ScheduleDailyWidget-CalendarRow-expandToggle',
-            { 'ScheduleDailyWidget-CalendarRow--expanded-cell': this.state.expanded }
-          )}
+              'ScheduleDailyWidget-CalendarRow-expandToggle',
+              { 'ScheduleDailyWidget-CalendarRow--expanded-cell': isExpanded }
+            )}
         >
-          <button
-            className="btn btn-icon-toggle"
-            onClick={this.toggleExpansion}
-          >
-            <i className={classNames('mdi', {
-              'mdi-plus': !this.state.expanded,
-              'mdi-minus': this.state.expanded,
-            })}
-            />
-          </button>
+          {toggleButton}
         </td>
 
         <td className={classNames(
             'ScheduleDailyWidget-CalendarRow-hour',
-            { 'ScheduleDailyWidget-CalendarRow--expanded-cell': this.state.expanded }
+            { 'ScheduleDailyWidget-CalendarRow--expanded-cell': isExpanded }
           )}
         >
-          {sprintf('%02s:00', new Date(offsetStart).getHours())}
+          {formatHourMarker(offsetStart, timezone)}
         </td>
         <td className={classNames(
             'ScheduleDailyWidget-CalendarRow-items',
-            { 'ScheduleDailyWidget-CalendarRow--expanded-cell': this.state.expanded }
+            { 'ScheduleDailyWidget-CalendarRow--expanded-cell': isExpanded }
           )}
         >
           {rowContent}
@@ -130,4 +142,9 @@ const CalendarRow = React.createClass({
     );
   },
 });
+
+function formatHourMarker(offset, timezone) {
+  return moment.tz(offset, timezone).format('kk');
+}
+
 export default CalendarRow;

@@ -1,5 +1,9 @@
 import React from 'react';
-import { Map, OrderedMap, List } from 'immutable';
+import {
+  Map,
+  OrderedMap,
+  List,
+} from 'immutable';
 import {
   range,
 } from 'lodash';
@@ -11,31 +15,9 @@ import ScheduleDomain from '../../../services/ScheduleDomain';
 
 import './schedule_daily_widget.scss';
 
-const milisecondsInHour = 1000 * 60 * 60;
+const MILLISECONDS_IN_HOUR = 1000 * 60 * 60;
 
-function groupByHour(items, offsetStart) {
-  const result = range(0, 24).map(() => []);
-
-  items
-    .forEach(
-      item => {
-        const itemStart = new Date(item.get('cue_in_at')).valueOf();
-        const itemStop = new Date(item.get('cue_out_at')).valueOf();
-
-        for (let iHour = 0; iHour < 24; iHour++) {
-          const hourOffset = offsetStart + iHour * milisecondsInHour;
-          if (
-            itemStop > hourOffset &&
-            itemStart < hourOffset + milisecondsInHour
-          ) {
-            result[iHour].push(item);
-          }
-        }
-      }
-    );
-  const immResult = result.map(hour => List(hour));
-  return immResult;
-}
+const DAY_START_HOURS_OFFSET = 5;
 
 const ScheduleDaily = React.createClass({
   propTypes: {
@@ -48,6 +30,7 @@ const ScheduleDaily = React.createClass({
     // connector
     items: React.PropTypes.array,
     actualOffsetStart: React.PropTypes.number,
+    timezone: React.PropTypes.string,
   },
 
   getDefaultProps() {
@@ -67,17 +50,19 @@ const ScheduleDaily = React.createClass({
       activeItem,
       items,
       actualOffsetStart,
+      timezone,
     } = this.props;
 
     const itemsByHour = groupByHour(items, actualOffsetStart);
 
     return (
-      <table className="ScheduleDailyWidget table table-banded table-hover ">
+      <table className="ScheduleDailyWidget table table-banded table-hover">
         <tbody>
           {range(0, 24).map((_, hour) => (
               <CalendarRow
                 key={hour}
-                offsetStart={actualOffsetStart + hour * milisecondsInHour}
+                offsetStart={actualOffsetStart + hour * MILLISECONDS_IN_HOUR}
+                timezone={timezone}
                 items={itemsByHour[hour]}
                 onActiveItemChange={onActiveItemChange}
                 activeItem={activeItem}
@@ -96,31 +81,91 @@ export default connect(
     const {
       offsetStart = 0,
       currentBroadcastChannel = Map(),
-      firstHour = 5,
     } = props;
 
-    const from = moment(offsetStart)
-      .startOf('day')
-      .add(firstHour, 'hours');
-    const to = moment(offsetStart)
-      .endOf('day')
-      .add(firstHour, 'hours');
+    const timezone = currentBroadcastChannel.get('timezone');
 
-    ScheduleDomain.fetch(from.toISOString(), to.toISOString(), currentBroadcastChannel.get('id'));
+    const from = calcDayStart(
+      offsetStart,
+      timezone,
+      DAY_START_HOURS_OFFSET
+    );
+    const to = from + 24 * MILLISECONDS_IN_HOUR;
+
+    const fromISO = new Date(from).toISOString();
+    const toISO = new Date(to).toISOString();
+
+    ScheduleDomain.fetch(
+      fromISO,
+      toISO,
+      currentBroadcastChannel.get('id'),
+      { maxAge: 1000 * 60 * 10 }
+    );
 
     const items = data
-      .get('all', OrderedMap())
-      .toArray()
-      .filter(
-        item => (
-          new Date(item.get('cue_out_at')).valueOf() > from.valueOf() &&
-          new Date(item.get('cue_in_at')).valueOf() < to.valueOf() &&
-          item.getIn(['references', 'broadcast_channel_id']) === currentBroadcastChannel.get('id')
-        )
-      );
+      .getIn(
+      [
+        'ranges',
+        Map({
+          from: fromISO,
+          to: toISO,
+          broadcastChannelId: currentBroadcastChannel.get('id'),
+        }),
+      ],
+        OrderedMap()
+      )
+      .toArray();
+
     return {
       items,
-      actualOffsetStart: from.valueOf(),
+      actualOffsetStart: from,
+      timezone,
     };
   }
 );
+
+/**
+ * Returns a timestamp of a start of a day.
+ * Takes into consideration timezone and time offset expressed as amount of hours.
+ * @param {number} timestamp
+ * @param {string} timezone
+ * @param {number} dayStartHoursOffset
+ * @returns {number}
+ */
+function calcDayStart(timestamp, timezone, dayStartHoursOffset) {
+  return moment
+    .tz(timestamp, timezone)
+    .subtract(dayStartHoursOffset, 'hours')
+    .startOf('day')
+    .add(dayStartHoursOffset, 'hours')
+    .valueOf()
+  ;
+}
+
+/**
+ * @param {Iterable} items
+ * @param {number} offsetStart
+ * @returns {Array.<Iterable>}
+ */
+function groupByHour(items, offsetStart) {
+  const result = range(0, 24).map(() => []);
+
+  items
+    .forEach(
+      item => {
+        const itemStart = new Date(item.get('cue_in_at')).valueOf();
+        const itemStop = new Date(item.get('cue_out_at')).valueOf();
+
+        for (let iHour = 0; iHour < 24; iHour++) {
+          const hourOffset = offsetStart + iHour * MILLISECONDS_IN_HOUR;
+          if (
+            itemStop > hourOffset &&
+            itemStart < hourOffset + MILLISECONDS_IN_HOUR
+          ) {
+            result[iHour].push(item);
+          }
+        }
+      }
+    );
+  return result.map(hour => List(hour));
+}

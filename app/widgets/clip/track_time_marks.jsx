@@ -1,53 +1,14 @@
 import React from 'react';
-
+import moment from 'moment-timezone';
 import makeUniqStyle from './uniqStyle';
 const uniqStyle = makeUniqStyle();
 
-import {
-  range,
-} from 'lodash';
+import padLeft from '../../helpers/pad_left';
 
-function padLeft(s = '', length = 0, fill = ' ') {
-  if (s.length >= length) {
-    return s;
-  }
-  return (range(0, length - 1).map(() => fill).join('') + s).split('').splice(-1 * length).join('');
-}
-
-function formatMiliseconds(n) {
-  return [
-    padLeft(Math.floor(n / 60000).toString(), 3, '0'),
-    ':',
-    padLeft(Math.floor((n % 60000) / 1000).toString(), 2, '0'),
-    ':',
-    padLeft(Math.floor(n % 1000).toString(), 3, '0'),
-    '',
-  ].join('');
-}
-
-function formatDate(n) {
-  const d = new Date(n);
-  return `${
-    d.getUTCFullYear()
-    }-${
-    padLeft(d.getUTCMonth() + 1, 2, '0')
-    }-${
-    padLeft(d.getUTCDate(), 2, '0')
-    } ${
-    padLeft(d.getUTCHours(), 2, '0')
-    }:${
-    padLeft(d.getUTCMinutes(), 2, '0')
-    }:${
-    padLeft(d.getUTCSeconds(), 2, '0')
-    }:${
-    padLeft(d.getUTCMilliseconds(), 2, '0')
-    }`;
-}
-
-const TrackTimeMarks = ({ offsetStart, offsetLength, width, type }) => {
+const TrackTimeMarks = ({ offsetStart, offsetLength, width, type, dateTimezone }) => {
   const formattingFunc = ({
     relative: formatMiliseconds,
-    date: formatDate,
+    date: formatDate.bind(null, dateTimezone),
   })[type];
 
   return (
@@ -78,9 +39,39 @@ const TrackTimeMarks = ({ offsetStart, offsetLength, width, type }) => {
 
 TrackTimeMarks.propTypes = {
   type: React.PropTypes.oneOf(['relative', 'date']).isRequired,
+  // usable only with type == 'date'
+  dateTimezone: React.PropTypes.string,
   offsetStart: React.PropTypes.number.isRequired,
   offsetLength: React.PropTypes.number.isRequired,
   width: React.PropTypes.number.isRequired,
 };
 
 export default TrackTimeMarks;
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+/**
+ * @param {number} ts
+ * @returns {string}
+ */
+function formatMiliseconds(ts) {
+  return [
+    padLeft(Math.floor(ts / 60000).toString(), 3, '0'),
+    ':',
+    padLeft(Math.floor((ts % 60000) / 1000).toString(), 2, '0'),
+    ':',
+    padLeft(Math.floor(ts % 1000).toString(), 3, '0'),
+    '',
+  ].join('');
+}
+
+/**
+ * @param {string} dateTimezone
+ * @param {number} ts
+ * @returns {string}
+ */
+function formatDate(dateTimezone, ts) {
+  return moment.tz(new Date(ts).valueOf(), dateTimezone).format(
+    'YYYY-MM-DD HH:mm:SSZZ'
+  );
+}

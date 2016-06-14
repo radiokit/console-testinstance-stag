@@ -13,14 +13,14 @@ export {
   sendWeeklyItem,
 };
 
-function formatHour(hour) {
-  return `${
-    sprintf('%02s', hour.get('hour') | 0)
-    }:${
-    sprintf('%02s', hour.get('minutes') | 0)
-    }:${
-    sprintf('%02s', hour.get('seconds') | 0)
-    }`;
+function formToWeeklyItem(form) {
+  const transformer = ({
+    shuffle: shuffleFormToWeeklyItem,
+  })[form.get('type')];
+  if (!transformer) {
+    throw new Error('AutoDJFormSender:utils:formToWeeklyItem - No type of details selected');
+  }
+  return transformer(form);
 }
 
 function shuffleFormToWeeklyItem(form) {
@@ -46,14 +46,14 @@ function shuffleFormToWeeklyItem(form) {
   });
 }
 
-function formToWeeklyItem(form) {
-  const transformer = ({
-    shuffle: shuffleFormToWeeklyItem,
-  })[form.get('type')];
-  if (!transformer) {
-    throw new Error('AutoDJFormSender:utils:formToWeeklyItem - No type of details selected');
-  }
-  return transformer(form);
+function formatHour(hour = Map()) {
+  return `${
+    sprintf('%02s', hour.get('hour') | 0)
+    }:${
+    sprintf('%02s', hour.get('minutes') | 0)
+    }:${
+    sprintf('%02s', hour.get('seconds') | 0)
+    }`;
 }
 
 export function sendWeeklyItem(entity) {

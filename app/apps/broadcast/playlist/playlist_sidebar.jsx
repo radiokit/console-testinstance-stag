@@ -1,6 +1,14 @@
 import React from 'react';
 import moment from 'moment';
 
+import Translate from 'react-translate-component';
+import Counterpart from 'counterpart';
+import localePL from './playlist_sidebar_pl';
+import localeEN from './playlist_sidebar_en';
+
+Counterpart.registerTranslations('en', localeEN);
+Counterpart.registerTranslations('pl', localePL);
+
 import './playlist_sidebar.scss';
 const PlaylistSidebar = React.createClass({
   propTypes: {
@@ -74,6 +82,31 @@ const PlaylistSidebar = React.createClass({
           <div className="text-center">
             <ul className="PlaylistSidebar--List">
               <li>
+                <div className="btn-group margin-bottom-lg">
+                  <button
+                    type="button"
+                    className="btn btn-default-light"
+                    onClick={this.handleWeekPreviousClick}
+                  >
+                    <i className="mdi mdi-chevron-left" />
+                  </button>
+
+                  <div className="PlaylistSidebar-button btn btn-default-light">
+                    <Translate component="span" content={'PlaylistSidebar.week'} />
+                    {moment.utc(this.props.offsetStart).clone().startOf('day').format('w')}
+                  </div>
+
+                  <button
+                    type="button"
+                    className="btn btn-default-light"
+                    onClick={this.handleWeekNextClick}
+                  >
+                    <i className="mdi mdi-chevron-right" />
+                  </button>
+                </div>
+              </li>
+
+              <li>
                 <div className="btn-group margin-bottom-lg" role="group">
                   <button
                     type="button"
@@ -93,30 +126,6 @@ const PlaylistSidebar = React.createClass({
                     onClick={this.handleDayNextClick}
                   >
                    <i className="mdi mdi-chevron-right" />
-                  </button>
-                </div>
-              </li>
-
-              <li>
-                <div className="btn-group margin-bottom-lg">
-                  <button
-                    type="button"
-                    className="btn btn-default-light"
-                    onClick={this.handleWeekPreviousClick}
-                  >
-                    <i className="mdi mdi-chevron-left" />
-                  </button>
-
-                  <div className="PlaylistSidebar-button btn btn-default-light">
-                    {moment.utc(this.props.offsetStart).clone().startOf('day').format('w')}
-                  </div>
-
-                  <button
-                    type="button"
-                    className="btn btn-default-light"
-                    onClick={this.handleWeekNextClick}
-                  >
-                    <i className="mdi mdi-chevron-right" />
                   </button>
                 </div>
               </li>

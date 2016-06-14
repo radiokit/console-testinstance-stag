@@ -9,7 +9,7 @@ const actions = {
 export default actions;
 
 function fetch(from, to, broadcastChannelId, requestOptions) {
-  pushRange(from, to);
+  pushRange(from, to, broadcastChannelId);
   ScheduleDomain.fetch(from, to, broadcastChannelId, requestOptions);
 }
 

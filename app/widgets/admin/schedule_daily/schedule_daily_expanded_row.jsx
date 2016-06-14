@@ -1,5 +1,5 @@
 import React from 'react';
-
+import ScheduleDailyExpandedRowElements from './schedule_daily_expanded_row_elements.jsx';
 import ExpandedRowItem from './schedule_daily_expanded_row_item.jsx';
 import ExpandedRowSilence from './schedule_daily_expanded_row_silence.jsx';
 
@@ -14,7 +14,7 @@ import {
 
 const hourInMilliseconds = 1000 * 60 * 60;
 
-const ExpandedRow = ({ items, activeItem, markAsActive, offsetStart }) => {
+const ExpandedRow = ({ items, activeItem, markAsActive, offsetStart, timezone }) => {
   const activeItemId = activeItem && activeItem.get('id') || '';
 
   const offsetRange = [offsetStart, offsetStart + hourInMilliseconds];
@@ -33,26 +33,24 @@ const ExpandedRow = ({ items, activeItem, markAsActive, offsetStart }) => {
     )
     .map(rangeToItem);
 
+  const allItems = items
+    .toArray()
+    .map(item => ({ component: ExpandedRowItem, item }))
+    .concat(silenceItems.map(silenceItem => ({ component: ExpandedRowSilence, item: silenceItem })))
+    .sort(
+      ({ item: a }, { item: b }) =>
+        getScheduleItemStartTimestamp(a) - getScheduleItemStartTimestamp(b)
+    );
+
   const view = (
     <div className="ScheduleDailyWidget-CalendarRow-item-expanded">
       <ul className="ScheduleDailyWidget-CalendarRow-item-expanded-list">
-        {
-          items
-            .toArray()
-            .map(item => [ExpandedRowItem, item])
-            .concat(silenceItems.map(silenceItem => [ExpandedRowSilence, silenceItem]))
-            .sort(
-              ([, a], [, b]) => getScheduleItemStartTimestamp(a) - getScheduleItemStartTimestamp(b)
-            )
-            .map(([Element, item], i) => (
-              <Element
-                key={i}
-                item={ item }
-                isActive={ activeItemId === item.get('id') }
-                markAsActive={ markAsActive }
-              />
-            ))
-        }
+        <ScheduleDailyExpandedRowElements
+          items={allItems}
+          timezone={timezone}
+          markAsActive={markAsActive}
+          activeItemId={activeItemId}
+        />
       </ul>
     </div>
   );
@@ -62,6 +60,7 @@ const ExpandedRow = ({ items, activeItem, markAsActive, offsetStart }) => {
 
 ExpandedRow.propTypes = {
   offsetStart: React.PropTypes.number.isRequired,
+  timezone: React.PropTypes.string.isRequired,
   items: React.PropTypes.object.isRequired,
   activeItem: React.PropTypes.object,
   markAsActive: React.PropTypes.func.isRequired,

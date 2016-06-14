@@ -74,8 +74,8 @@ function save(id, patch) {
       model,
       id,
     }),
-    patch
-      .filter((_, field) => updateFields.indexOf(field) >= 0)
+    patch,
+    updateFields
   );
 }
 

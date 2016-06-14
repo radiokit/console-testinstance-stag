@@ -6,12 +6,15 @@ import {
   reduce,
 } from 'lodash';
 
+import moment from 'moment-timezone';
+
+import padLeft from '../../../helpers/pad_left';
+
 export {
   getScheduleItemStartTimestamp,
   getScheduleItemEndTimestamp,
   getScheduleItemStart,
   getScheduleItemEnd,
-  createPadArray,
   padLeft,
   formatHMS,
   itemsToRanges,
@@ -21,6 +24,10 @@ export {
   isRangeLongerThan,
   isRangeOnEdge,
 };
+
+function getScheduleItemEnd(item) {
+  return item.get('cue_out_at');
+}
 
 function getScheduleItemStartTimestamp(item) {
   return new Date(getScheduleItemStart(item)).valueOf();
@@ -34,36 +41,10 @@ function getScheduleItemStart(item) {
   return item.get('cue_in_at');
 }
 
-function getScheduleItemEnd(item) {
-  return item.get('cue_out_at');
-}
-
-function createPadArray(length, filler) {
-  const padArray = [];
-  for (let i = 0; i < length; i++) {
-    padArray.push(filler);
-  }
-  return padArray;
-}
-
-function padLeft(txt = '', places = 0, filler = '0') {
-  const txtLength = Math.max(places, txt.length);
-  const generouslyFilled = createPadArray(txtLength, filler).concat(txt.split(''));
-  return generouslyFilled
-    .slice(generouslyFilled.length - txtLength, generouslyFilled.length)
-    .join('')
-    ;
-}
-
-function formatHMS(dateAlike) {
-  const dateCasted = new Date(dateAlike);
-  return `${
-    padLeft(dateCasted.getHours().toString(), 2)
-    }:${
-    padLeft(dateCasted.getMinutes().toString(), 2)
-    }:${
-    padLeft(dateCasted.getSeconds().toString(), 2)
-    }`;
+function formatHMS(dateAlike, timezone) {
+  return moment
+    .tz(dateAlike, timezone)
+    .format('kk:mm:SS');
 }
 
 function itemsToRanges(items) {

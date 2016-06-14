@@ -14,9 +14,9 @@ export {
   pushRange,
 };
 
-function pushRange(from, to) {
+function pushRange(from, to, broadcastChannelId) {
   ScheduleExpandedRangesStream.write(
     ScheduleExpandedRanges =>
-      ScheduleExpandedRanges.push(Map({ from, to }))
+      ScheduleExpandedRanges.push(Map({ from, to, broadcastChannelId }))
   );
 }

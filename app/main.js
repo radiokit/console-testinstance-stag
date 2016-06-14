@@ -7,6 +7,12 @@ import Counterpart from 'counterpart';
 import './services/RadioKit'; // for legacy window binding
 import './services/Plumber'; // for legacy window binding
 
+// this is set to false on staging and production builds
+// and true on local builds
+if (__DEV__) {
+  window.Perf = require('react-addons-perf');
+}
+
 import Root from './root.jsx';
 import Dashboard from './dashboard.jsx';
 import ScopeLayout from './layouts/scope_layout.jsx';
@@ -54,26 +60,46 @@ Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/modal
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/scope.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/form.js'));
 
+/*
+TODO
+
+Following function is for giving browser time to render
+in between pushing data through immview streams
+
+Despite it being quite smart
+it completely breaks broadcast playlist details view
+as it requires all changes to be applied synchronously
+
+Until ScheduleDetails is not holding uncommited changes
+this should be disabled
+
 import { Dispatcher } from 'immview';
 if (window.requestIdleCallback) {
+  const targetFPS = 60;
+  const frameTime = 1000 / targetFPS;
+  const logicCalcTime = 8;
+  const paintTime = frameTime - logicCalcTime;
   const noTime = () => 0;
   let timeLeft = noTime;
   Dispatcher.tick = f => {
-    if (timeLeft() > 0) {
+    if (timeLeft() > paintTime) {
       f();
     } else {
-      window.requestIdleCallback(deadline => {
-        timeLeft = deadline.timeRemaining.bind(deadline);
-        f();
+      window.requestAnimationFrame(() => {
+        window.requestIdleCallback(deadline => {
+          timeLeft = deadline.timeRemaining.bind(deadline);
+          f();
+        });
       });
-      timeLeft = noTime();
+      timeLeft = noTime;
     }
   };
 } else if (window.requestAnimationFrame) {
   Dispatcher.tick = window.requestAnimationFrame.bind(window);
 } else {
-  Dispatcher.tick = f => window.setTimeout(f, 10);
+  Dispatcher.tick = f => window.setTimeout(f);
 }
+*/
 
 function pingGoogleAnalytics() {
   if (typeof ga !== 'undefined') {

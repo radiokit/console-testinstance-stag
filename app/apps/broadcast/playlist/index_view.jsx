@@ -13,7 +13,6 @@ import PlaylistSidebar from './playlist_sidebar.jsx';
 import PlaylistToolbar from './playlist_toolbar.jsx';
 import ScheduleDomain from '../../../services/ScheduleDomain';
 
-
 // import Translate from 'react-translate-component';
 import Counterpart from 'counterpart';
 import localePL from './index_view_pl';
@@ -108,7 +107,6 @@ const BroadcastPlaylist = React.createClass({
                 toolbarElement={PlaylistToolbar}
                 sidebarElement={PlaylistSidebar}
                 contentElement={{
-                  weekly: { element: ScheduleWeekly },
                   daily: { element: ScheduleDaily },
                   details: { element: ScheduleDetails },
                 }}
