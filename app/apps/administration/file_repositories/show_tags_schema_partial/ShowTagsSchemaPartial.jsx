@@ -193,80 +193,77 @@ const ShowTagsSchemaPartial = React.createClass({
             icon="plus"
             labelTextKey={ this.props.contentPrefix + ".actions.add_category" }
             modalElement={ CreateModal }
-            modalProps={
-              {
-                contentPrefix: this.props.contentPrefix + ".modals.create_category",
-                onDismiss: this.refreshData,
-                form: this.buildNewCategoryForm(),
-                app: "vault",
-                model: "Data.Tag.Category"
-              }
-           }
-        />
+            modalProps={{
+              contentPrefix: this.props.contentPrefix + ".modals.create_category",
+              onDismiss: this.refreshData,
+              form: this.buildNewCategoryForm(),
+              app: 'vault',
+              model: 'Data.Tag.Category'
+            }}
+          />
         </ToolbarGroup>
         { this.state.categories.size > 0 &&
           this.state.categories.sortBy(category => category.get('name')).map((category) => {
-          const toggleClassNames = classnames(
-            'btn', 'btn-flat', 'btn-icon-toggle',
-            { 'disabled' : category.get('tag_items').count() < 1 }
-          );
-          const newTagIconClassNames = classnames(
-            'btn', 'btn-icon',
-            { 'ShowTagsSchemaPartial__emptyCategory' : category.get('tag_items').count() < 1 }
-          );
-          return (
-            <div id={ category.get('id') } key={category.get('id')}>
-              {this.renderCrudModals(category)}
-              <div className="expanded">
-                <div className="card-head" aria-expanded="true">
-                  <a className={ toggleClassNames }
-                     data-toggle="collapse" data-parent={ "#" + category.get('id') }
-                     data-target={ "#" + category.get('id') + "-tagList" }>
-                    <i className="mdi mdi-chevron-right" />
-                  </a>
-                  <header className="ShowTagsSchemaPartial__listHeader">
-                    { category.get('name') }
-                  </header>
-                  <MetadataSchemasRow
-                    category={category}
-                    contentPrefix={this.props.contentPrefix}
-                    onDataChanged={this.refreshData}
-                    onNewSchemaRequested={this.showNewMetadataSchemaModal}
-                  />
-                  <div className="tools">
-                    {() => {
-                      if(category.get('tag_items').count() < 1){
-                        return (
-                          <Translate
-                            content={this.props.contentPrefix + ".modals.create_category.empty_warning"}
-                            component="small"
-                            className="ShowTagsSchemaPartial__emptyCategory"
-                          />
-                        );
+            const toggleClassNames = classnames(
+              'btn', 'btn-flat', 'btn-icon-toggle',
+              { 'disabled' : category.get('tag_items').count() < 1 }
+            );
+            const newTagIconClassNames = classnames(
+              'btn', 'btn-icon',
+              { 'ShowTagsSchemaPartial__emptyCategory' : category.get('tag_items').count() < 1 }
+            );
+            return (
+              <div id={ category.get('id') } key={category.get('id')}>
+                {this.renderCrudModals(category)}
+                <div className="expanded">
+                  <div className="card-head" aria-expanded="true">
+                    <a className={ toggleClassNames }
+                       data-toggle="collapse" data-parent={ "#" + category.get('id') }
+                       data-target={ "#" + category.get('id') + "-tagList" }>
+                      <i className="mdi mdi-chevron-right" />
+                    </a>
+                    <header className="ShowTagsSchemaPartial__listHeader">
+                      { category.get('name') }
+                    </header>
+                    <MetadataSchemasRow
+                      category={category}
+                      contentPrefix={this.props.contentPrefix}
+                      onDataChanged={this.refreshData}
+                      onNewSchemaRequested={this.showNewMetadataSchemaModal}
+                    />
+                    <div className="tools">
+                      {
+                        (category.get('tag_items').count() < 1)
+                          ? (
+                            <Translate
+                              content={this.props.contentPrefix + ".modals.create_category.empty_warning"}
+                              component="small"
+                              className="ShowTagsSchemaPartial__emptyCategory"
+                            />
+                          )
+                          : null
                       }
-                    }()}
-
-                    <a className={newTagIconClassNames} onClick={ () => this.showNewTagModal(category) }>
-                      <i className="mdi mdi-library-plus"></i>
-                    </a>
-                    <a className="btn btn-icon" onClick={ () => this.showEditCategoryModal(category) }>
-                      <i className="mdi mdi-border-color"></i>
-                    </a>
-                    <a className="btn btn-icon" onClick={ () => this.showDeleteCategoryModal(category) }>
-                      <i className="mdi mdi-delete"></i>
-                    </a>
+                      <a className={newTagIconClassNames} onClick={ () => this.showNewTagModal(category) }>
+                        <i className="mdi mdi-library-plus"></i>
+                      </a>
+                      <a className="btn btn-icon" onClick={ () => this.showEditCategoryModal(category) }>
+                        <i className="mdi mdi-border-color"></i>
+                      </a>
+                      <a className="btn btn-icon" onClick={ () => this.showDeleteCategoryModal(category) }>
+                        <i className="mdi mdi-delete"></i>
+                      </a>
+                    </div>
+                  </div>
+                  <div id={ category.get('id') + "-tagList" } className="collapse in" aria-expanded="true">
+                    <TagList
+                      category={category}
+                      contentPrefix={this.props.contentPrefix}
+                      onDataChanged={this.refreshData}
+                    />
                   </div>
                 </div>
-                <div id={ category.get('id') + "-tagList" } className="collapse in" aria-expanded="true">
-                  <TagList
-                    category={category}
-                    contentPrefix={this.props.contentPrefix}
-                    onDataChanged={this.refreshData}
-                  />
-                </div>
               </div>
-            </div>
-          );
+            );
           })}
       </div>
     );

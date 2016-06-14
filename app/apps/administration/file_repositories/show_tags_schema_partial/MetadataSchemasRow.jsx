@@ -15,6 +15,10 @@ const MetadataSchemasRow = React.createClass({
     onNewSchemaRequested: React.PropTypes.func.isRequired,
   },
 
+  handleNewSchemaRequest() {
+    this.props.onNewSchemaRequested(this.props.category);
+  },
+
   render() {
     const plusIconClasses = classnames(
       'ShowTagsSchemaPartial__metadataSchemaPlusBtn',
@@ -28,20 +32,20 @@ const MetadataSchemasRow = React.createClass({
         <span>
           <a
             className={plusIconClasses}
-            onClick={ () => this.props.onNewSchemaRequested(this.props.category) }
+            onClick={ this.handleNewSchemaRequest }
           >
             <i className="mdi mdi-plus"></i>
           </a>
-          {(() => {
-            if (this.props.category.get('metadata_schemas').count() < 1) {
-              return (
+          {
+            (this.props.category.get('metadata_schemas').count() < 1)
+              ? (
                 <Translate
                   content={ `${this.props.contentPrefix}.empty_metadata_schemas`}
                   component="small"
                 />
-              );
-            }
-          })()}
+              )
+              : null
+          }
         </span>
         {
           this.props.category
@@ -51,7 +55,7 @@ const MetadataSchemasRow = React.createClass({
               const deleteModalRef = `deleteMetadataSchema-${schema.get('id')}`;
               const updateModalRef = `updateMetadataSchema-${schema.get('id')}`;
               return (
-                <span>
+                <span key={schema.get('id')}>
                   <DeleteModal
                     ref={deleteModalRef}
                     contentPrefix={ `${this.props.contentPrefix}.modals.delete_metadata_schema` }
