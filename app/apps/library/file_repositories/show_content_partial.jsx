@@ -296,15 +296,15 @@ const ShowContentPartial = React.createClass({
               <ToolbarGroup>
                 <ToolbarButtonModal
                   icon="barcode"
-                  labelTextKey="widgets.vault.file_browser.modals.metadata.header"
+                  labelTextKey="widgets.vault.file_browser.modals.metadata_file.header"
                   disabled={this.state.selectedRecordIds.count() === 0}
                   modalElement={MetadataModal}
                   modalProps={{
-                    contentPrefix: 'widgets.vault.file_browser.modals.metadata',
-                    selectedRecordIds: this.state.selectedRecordIds,
+                    contentPrefix: 'widgets.vault.file_browser.modals.metadata_file',
                     selectedRecords: this.state.selectedRecords,
                     metadataSchemas: this.props.record.get('metadata_schemas'),
                     onDismiss: this.reloadTable,
+                    recordKey: 'record_file_id',
                   }}
                 />
               </ToolbarGroup>

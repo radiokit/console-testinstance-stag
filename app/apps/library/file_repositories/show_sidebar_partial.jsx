@@ -3,11 +3,11 @@ import classnames from 'classnames';
 import { List } from 'immutable';
 import RadioKit from '../../../services/RadioKit';
 import Translate from 'react-translate-component';
-
+import Counterpart from 'counterpart';
 import MetadataModal from './show_content_metadata_modal.jsx';
 
 
-import './ShowSidebarPartial.scss';
+import './show_sidebar_partial.scss';
 const ShowSidebarPartial = React.createClass({
 
   propTypes: {
@@ -35,6 +35,9 @@ const ShowSidebarPartial = React.createClass({
         'tag_items.name',
         'tag_items.tag_category_id',
         'metadata_schemas.id',
+        'metadata_schemas.key',
+        'metadata_schemas.kind',
+        'metadata_schemas.name',
       )
       .joins('metadata_schemas')
       .joins('tag_items')
@@ -63,14 +66,6 @@ const ShowSidebarPartial = React.createClass({
       );
   },
 
-  // <MetadataModal
-  //   contentPrefix="widgets.vault.file_browser.modals.metadata"
-  //   selectedRecordIds={this.state.selectedRecordIds}
-  //   selectedRecords={this.state.selectedRecords}
-  //   metadataSchemas={category.get('metadata_schemas')}
-  //   onDismiss={this.reloadTable}
-  // />
-
   updateFilter() {
     this.props.onTagFilterUpdate(this.state.selectedTagItems);
     this.state.selectedTagItems.forEach(tag => {
@@ -78,6 +73,10 @@ const ShowSidebarPartial = React.createClass({
         this.fetchMetadataItems(tag);
       }
     });
+  },
+
+  updateTagData() {
+    this.state.selectedTagItems.forEach(tag => this.fetchMetadataItems(tag));
   },
 
   componentDidUpdate(prevProps, prevState) {
@@ -188,6 +187,15 @@ const ShowSidebarPartial = React.createClass({
     return !!this.state.selectedTagItems.find(item => item.get('id') === tag.get('id'));
   },
 
+  canEditMetadata(category) {
+    return category.get('metadata_schemas')
+      && category.get('metadata_schemas').count() > 0
+      && this.state.selectedTagItems.count() > 0
+      && this.state.selectedTagItems.reduce((isSameGroup, item) =>
+        isSameGroup && item.get('tag_category_id') === category.get('id')
+      , true);
+  },
+
   renderCategoryTags(category) {
     return (
       <div>
@@ -195,8 +203,8 @@ const ShowSidebarPartial = React.createClass({
           { category.get('tag_items').sortBy(item => item.get('name')).map((tag) => {
             const onTagSelected = () => this.toggleTagSelection(tag, category);
             const tagClassNames = classnames('card-head card-head-sm', {
-              'Tag': !this.isTagSelected(tag),
-              'Tag--selected': this.isTagSelected(tag),
+              'ShowSidebarPartial__tag': !this.isTagSelected(tag),
+              'ShowSidebarPartial__tag--selected': this.isTagSelected(tag),
             });
             return (
               <li key={ tag.get('id') }>
@@ -215,14 +223,14 @@ const ShowSidebarPartial = React.createClass({
 
   render() {
     const allTagsClassName = classnames('card-head', {
-      'AllTags': !this.props.tagFilter.isEmpty(),
-      'AllTags--selected': this.props.tagFilter.isEmpty(),
+      'ShowSidebarPartial__allTags': !this.props.tagFilter.isEmpty(),
+      'ShowSidebarPartial__allTags--selected': this.props.tagFilter.isEmpty(),
     });
     return (
       <div className="ShowSidebarPartial">
         <div className={ allTagsClassName }>
           <header onClick={this.onClearFilter}>
-            <Translate content={ `${this.props.contentPrefix}.tags.all_tags` } />
+            <Translate content={ `${this.props.contentPrefix}.sidebar.all_tags` } />
           </header>
         </div>
         {
@@ -231,13 +239,30 @@ const ShowSidebarPartial = React.createClass({
               return null;
             }
             const onCategorySelected = () => this.toggleCategorySelection(category);
-            const toggleClasses = classnames('btn btn-flat btn-icon-toggle collapsed');
-            const headerClasses = classnames('card-head Category', {
-              'Category--selected': this.isCategorySelected(category),
-            });
+            const toggleClasses = classnames(
+              'btn btn-flat btn-icon-toggle collapsed',
+              'ShowSidebarPartial__expandToggle'
+            );
+            const headerClasses = classnames(
+              'card-head ShowSidebarPartial__category',
+              { 'ShowSidebarPartial__category--selected': this.isCategorySelected(category) },
+            );
+            const metadataIconClasses = classnames(
+              'btn btn-icon',
+              'ShowSidebarPartial__editMetadataButton',
+              { 'hidden': !this.canEditMetadata(category) }
+            );
+            const metadataModalRef = `metadataModal-${category.get('id')}`;
             return (
               <div id={category.get('id')} key={category.get('id')}>
-
+                <MetadataModal
+                  ref={metadataModalRef}
+                  contentPrefix="widgets.vault.file_browser.modals.metadata_tag"
+                  selectedRecords={this.state.selectedTagItems}
+                  metadataSchemas={category.get('metadata_schemas')}
+                  onDismiss={ this.updateTagData }
+                  recordKey="tag_item_id"
+                />
                 <div className="expanded">
                   <div className={headerClasses} aria-expanded="true" onClick={onCategorySelected}>
                     <a className={toggleClasses}
@@ -250,7 +275,16 @@ const ShowSidebarPartial = React.createClass({
                     <header>
                       { category.get('name') }
                     </header>
-                    <a className="btn btn-icon">
+                    <a
+                      className={ metadataIconClasses }
+                      title={ Counterpart.translate( `${this.props.contentPrefix}.sidebar.edit_tag_metadata`) }
+                      onClick = {
+                        (e) => {
+                          e.stopPropagation();
+                          this.refs[metadataModalRef].show();
+                        }
+                      }
+                    >
                       <i className="mdi mdi-border-color"></i>
                     </a>
                 </div>

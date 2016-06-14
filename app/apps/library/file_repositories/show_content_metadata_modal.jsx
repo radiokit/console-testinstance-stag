@@ -1,6 +1,7 @@
 import React from 'react';
 import Translate from 'react-translate-component';
 import { head, intersection, isEmpty, difference } from 'lodash';
+import { List } from 'immutable';
 import RadioKit from '../../../services/RadioKit';
 import ModalForEach from '../../../widgets/admin/modal_foreach_widget.jsx';
 import MetadataFormWidget from './metadata_form_widget.jsx';
@@ -9,9 +10,9 @@ import MetadataFormWidget from './metadata_form_widget.jsx';
 export default React.createClass({
   propTypes: {
     contentPrefix: React.PropTypes.string.isRequired,
-    selectedRecordIds: React.PropTypes.object.isRequired,
     metadataSchemas: React.PropTypes.object.isRequired,
     selectedRecords: React.PropTypes.object.isRequired,
+    recordKey: React.PropTypes.string.isRequired,
     onDismiss: React.PropTypes.func,
   },
 
@@ -21,11 +22,15 @@ export default React.createClass({
       formSubmitted: false,
       form: {},
       formFilled: {},
+      selectedRecordIds: List(),
     };
   },
 
   componentWillReceiveProps(nextProps) {
     this.buildForm(nextProps.selectedRecords);
+    this.setState({
+      selectedRecordIds: this.props.selectedRecords.map(record => record.get('id')),
+    });
   },
 
   getFieldTypeForSchema(schemaId) {
@@ -82,18 +87,17 @@ export default React.createClass({
     ).forEach((metadataItem) => {
       const schemaId = metadataItem.metadata_schema_id;
       const value = this.state.formFilled[schemaId];
-      const valueKey = 'value_' + this.getFieldTypeForSchema(schemaId);
+      const valueKey = `value_${this.getFieldTypeForSchema(schemaId)}`;
       const payload = {};
       payload[valueKey] = value;
       this.updateMetadataItem(metadataItem, payload, !value || value === '');
-    }
-  );
+    });
     // create new metadata item for particular record and schema
     newSchemasIds.forEach((schemaId) => {
       const value = this.state.formFilled[schemaId];
-      const valueKey = 'value_' + this.getFieldTypeForSchema(schemaId);
+      const valueKey = `value_${this.getFieldTypeForSchema(schemaId)}`;
       const payload = {
-        record_file_id: recordId,
+        [this.props.recordKey]: recordId,
         metadata_schema_id: schemaId,
       };
       payload[valueKey] = value;
@@ -112,13 +116,13 @@ export default React.createClass({
 
   buildForm(selectedRecords) {
     const form = {};
-    this.props.metadataSchemas.forEach((metadataSchema) => {
+    this.props.metadataSchemas && this.props.metadataSchemas.forEach((metadataSchema) => {
       const multiValues = selectedRecords.map((record) => {
-        const metadataItems = record.get('metadata_items');
+        const metadataItems = record.get('metadata_items') || List();
         const metadata = metadataItems
           .filter((schema) => schema.get('metadata_schema_id') === metadataSchema.get('id'))
           .first();
-        return metadata ? metadata.get('value_' + metadataSchema.get('kind')) : '';
+        return metadata ? metadata.get(`value_${metadataSchema.get('kind')}`) : '';
       }).toJS();
       const flattenedValues = multiValues.filter((val, pos) => multiValues.indexOf(val) === pos);
       const hasMultiValues = flattenedValues.length > 1;
@@ -138,12 +142,10 @@ export default React.createClass({
     if (this.state.updatingSchemas === 1) {
       if (this.state.creatingSchemas === 0) {
         this.finishUpdatingRecord();
-      }
-      else {
+      } else {
         this.setState({ updatingSchemas: 0 });
       }
-    }
-    else {
+    } else {
       this.setState({ updatingSchemas: this.state.updatingSchemas - 1 });
     }
   },
@@ -156,8 +158,7 @@ export default React.createClass({
         this.decrementMetadataUpdate();
       })
       .destroy();
-    }
-    else {
+    } else {
       RadioKit
       .record('vault', 'Data.Metadata.Item', metadataItem.id)
       .on('loaded', () => {
@@ -174,12 +175,10 @@ export default React.createClass({
       if (this.state.creatingSchemas === 1) {
         if (this.state.updatingSchemas === 0) {
           this.finishUpdatingRecord();
-        }
-        else {
+        } else {
           this.setState({ creatingSchemas: 0 });
         }
-      }
-      else {
+      } else {
         this.setState({ creatingSchemas: this.state.creatingSchemas - 1 });
       }
     })
@@ -200,16 +199,16 @@ export default React.createClass({
         onPerform={this.onPerform}
         onConfirm={this.onConfirm}
         onDismiss={this.onDismiss}
-        contentPrefix="widgets.vault.file_browser.modals.metadata"
-        recordIds={this.props.selectedRecordIds}
+        contentPrefix={this.props.contentPrefix}
+        recordIds={this.state.selectedRecordIds}
         index={this.state.index}
         waitForConfirmationAcknowledgement
       >
         <div>
           <Translate
             component="p"
-            content="widgets.vault.file_browser.modals.metadata.message.confirmation"
-            count={this.props.selectedRecordIds.count()}
+            content={`${this.props.contentPrefix}.message.confirmation`}
+            count={this.state.selectedRecordIds.count()}
           />
           <MetadataFormWidget
             ref="form"
@@ -220,15 +219,25 @@ export default React.createClass({
         </div>
 
         <div>
-          <Translate component="p" content="widgets.vault.file_browser.modals.metadata.message.progress" />
+          <Translate
+            component="p"
+            content={`${this.props.contentPrefix}.message.progress`}
+          />
         </div>
 
         <div>
-          <Translate component="p" content="widgets.vault.file_browser.modals.metadata.message.acknowledgement" count={this.props.selectedRecordIds.count()} />
+          <Translate
+            component="p"
+            content={`${this.props.contentPrefix}.message.acknowledgement`}
+            count={this.state.selectedRecordIds.count()}
+          />
         </div>
 
         <div>
-          <Translate component="p" content="widgets.vault.file_browser.modals.metadata.message.cancelled" />
+          <Translate
+            component="p"
+            content={`${this.props.contentPrefix}.message.cancelled`}
+          />
         </div>
       </ModalForEach>
     );

@@ -1,6 +1,6 @@
 .ShowSidebarPartial {
 
-  .AllTags {
+  .ShowSidebarPartial__allTags {
 
     header {
       margin-left: 20px;
@@ -9,7 +9,7 @@
 
     &--selected{
 
-      @extend .AllTags;
+      @extend .ShowSidebarPartial__allTags;
       background-color: #1e587b;
       color: white;
       border-bottom: 1px solid white;
@@ -20,7 +20,7 @@
       padding-left: 36px;
   }
 
-  .Tag {
+  .ShowSidebarPartial__tag {
 
     header{
       font-size: 14px;
@@ -29,13 +29,20 @@
 
     background-color: #f2f2f2;
     &--selected{
-      @extend .Tag;
+      @extend .ShowSidebarPartial__tag;
       background-color: #297bac;
       color: white;
       border-bottom: 1px solid white;
     }
   }
-  .Category{
+
+  .ShowSidebarPartial__editMetadataButton {
+    position: absolute;
+    top: 25%;
+    right: 0;
+  }
+
+  .ShowSidebarPartial__category{
 
     header{
       font-size: 17px;
@@ -61,7 +68,7 @@
     }
 
     &--selected{
-      @extend .Category;
+      @extend .ShowSidebarPartial__category;
       background-color: #1e587b;
       color: white;
       border-bottom: 1px solid white;
