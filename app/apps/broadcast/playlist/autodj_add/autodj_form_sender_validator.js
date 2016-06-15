@@ -16,7 +16,6 @@ function validateForm(form = Map()) {
   return [
     !form.get('type') && ('AutoDJFormSender.noTypeError'),
     !form.get('weeklyplan') && ('AutoDJFormSender.noContentTypeError'),
-    !form.get('repository') && ('AutoDJFormSender.noRepositoryError'),
     !form.get('details') && ('AutoDJFormSender.noDetailsError'),
     ...validateWeekdays(form.get('weekdays')),
     ...validateHourRange(form.get('hours')),

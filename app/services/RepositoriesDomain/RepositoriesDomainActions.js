@@ -10,6 +10,40 @@ import {
   readJoins,
 } from './RepositoriesConfig';
 
+const actions = {
+  loadRepository,
+  loadRepositories,
+};
+
+export default actions;
+
+function loadRepository(id, requestOptions) {
+  performQuery(
+    {
+      conditions: [
+        {
+          field: 'id',
+          comparison: 'eq',
+          value: id,
+        },
+      ],
+    },
+    requestOptions
+  );
+}
+
+function loadRepositories({ userAccountId, ...requestOptions }) {
+  performQuery({
+    conditions: [
+      userAccountId ? {
+        field: 'references',
+        comparison: 'deq',
+        value: `user_account_id ${userAccountId}`,
+      } : null,
+    ],
+  }, requestOptions);
+}
+
 function performQuery(queryAppendix, requestOptions) {
   RadioKitDomain.query(
     fromJS({
@@ -23,26 +57,3 @@ function performQuery(queryAppendix, requestOptions) {
     requestOptions
   );
 }
-
-const actions = {
-  loadRepository(id, requestOptions) {
-    performQuery(
-      {
-        conditions: [
-          {
-            field: 'id',
-            comparison: 'eq',
-            value: id,
-          },
-        ],
-      },
-      requestOptions
-    );
-  },
-
-  loadRepositories(requestOptions) {
-    performQuery({}, requestOptions);
-  },
-};
-
-export default actions;

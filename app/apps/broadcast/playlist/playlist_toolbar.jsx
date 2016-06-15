@@ -18,6 +18,7 @@ Counterpart.registerTranslations('en', { playlist_toolbar: translationEN });
 const PlaylistToolbar = React.createClass({
   propTypes: {
     data: React.PropTypes.object,
+    availableUserAccounts: React.PropTypes.object.isRequired,
     currentBroadcastChannel: React.PropTypes.object.isRequired,
     offsetStart: React.PropTypes.number.isRequired,
     onOffsetStartChange: React.PropTypes.func,
@@ -58,6 +59,7 @@ const PlaylistToolbar = React.createClass({
           labelTextKey="playlist_toolbar.add_dj_button"
           modalElement={AutoDJAddModal}
           modalProps={{
+            availableUserAccounts: this.props.availableUserAccounts,
             currentBroadcastChannel: this.props.currentBroadcastChannel.get('id'),
             currentBroadcastChannelEntity: this.props.currentBroadcastChannel,
             defaultTimeOffset: this.props.offsetStart,
