@@ -3,7 +3,7 @@ import React from 'react';
 import Show from '../../../widgets/admin/crud/show_widget.jsx';
 import { List } from 'immutable';
 
-import SidebarPartial from './show_sidebar_partial.jsx';
+import SidebarPartial from './show_sidebar_partial';
 import ContentPartial from './show_content_partial.jsx';
 
 const ShowView = React.createClass({

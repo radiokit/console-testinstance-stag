@@ -21,7 +21,7 @@ const ShowContentPartial = React.createClass({
     model: React.PropTypes.string.isRequired,
     contentPrefix: React.PropTypes.string.isRequired,
     stage: React.PropTypes.oneOf(['incoming', 'current', 'archive', 'trash']).isRequired,
-    tagFilter: React.PropTypes.array.isRequired,
+    tagFilter: React.PropTypes.object.isRequired,
   },
 
   getInitialState() {

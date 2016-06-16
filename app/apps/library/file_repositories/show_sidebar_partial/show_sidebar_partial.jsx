@@ -1,10 +1,10 @@
 import React from 'react';
 import classnames from 'classnames';
 import { List } from 'immutable';
-import RadioKit from '../../../services/RadioKit';
+import RadioKit from '../../../../services/RadioKit';
 import Translate from 'react-translate-component';
-import Counterpart from 'counterpart';
-import MetadataModal from './show_content_metadata_modal.jsx';
+
+import TagCategory from './tag_category.jsx';
 
 import './show_sidebar_partial.scss';
 const ShowSidebarPartial = React.createClass({
@@ -28,21 +28,13 @@ const ShowSidebarPartial = React.createClass({
     RadioKit
       .query('vault', 'Data.Tag.Category')
       .select(
-        'id',
-        'name',
-        'tag_items.id',
-        'tag_items.name',
-        'tag_items.tag_category_id',
-        'metadata_schemas.id',
-        'metadata_schemas.key',
-        'metadata_schemas.kind',
+        'id', 'name', 'tag_items.id', 'tag_items.name', 'tag_items.tag_category_id',
+        'metadata_schemas.id', 'metadata_schemas.key', 'metadata_schemas.kind',
         'metadata_schemas.name',
       )
       .joins('metadata_schemas')
       .joins('tag_items')
       .where('record_repository_id', 'eq', this.props.record.get('id'))
-      .on('error', () => {
-      })
       .on('fetch', (_event, _query, data) => {
         this.setState({
           categories: data.filterNot(category => category.get('tag_items').isEmpty()),
@@ -92,24 +84,12 @@ const ShowSidebarPartial = React.createClass({
     RadioKit
       .query('vault', 'Data.Tag.Item')
       .select(
-        'id',
-        'name',
-        'tag_category_id',
-        'metadata_items.id',
-        'metadata_items.value_string',
-        'metadata_items.value_db',
-        'metadata_items.value_url',
-        'metadata_items.value_text',
-        'metadata_items.value_float',
-        'metadata_items.value_integer',
-        'metadata_items.value_duration',
-        'metadata_items.value_date',
-        'metadata_items.value_datetime',
-        'metadata_items.value_time',
-        'metadata_items.value_file',
-        'metadata_items.value_waveform',
-        'metadata_items.value_image',
-        'metadata_items.metadata_schema_id',
+        'id', 'name', 'tag_category_id', 'metadata_items.id', 'metadata_items.value_string',
+        'metadata_items.value_db', 'metadata_items.value_url', 'metadata_items.value_text',
+        'metadata_items.value_date', 'metadata_items.value_datetime', 'metadata_items.value_time',
+        'metadata_items.value_file', 'metadata_items.value_waveform', 'metadata_items.value_image',
+        'metadata_items.value_float', 'metadata_items.value_integer',
+        'metadata_items.metadata_schema_id', 'metadata_items.value_duration',
       )
       .joins('metadata_items')
       .where('id', 'eq', tag.get('id'))
@@ -196,31 +176,6 @@ const ShowSidebarPartial = React.createClass({
       , true);
   },
 
-  renderCategoryTags(category) {
-    return (
-      <div>
-        <ul className="list">
-          { category.get('tag_items').sortBy(item => item.get('name')).map((tag) => {
-            const onTagSelected = () => this.toggleTagSelection(tag, category);
-            const tagClassNames = classnames('card-head card-head-sm', {
-              'ShowSidebarPartial__tag': !this.isTagSelected(tag),
-              'ShowSidebarPartial__tag--selected': this.isTagSelected(tag),
-            });
-            return (
-              <li key={ tag.get('id') }>
-                <div className={tagClassNames} onClick={onTagSelected} >
-                  <header>
-                    { tag.get('name') }
-                  </header>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-    );
-  },
-
   render() {
     const allTagsClassName = classnames('card-head', {
       'ShowSidebarPartial__allTags': !this.props.tagFilter.isEmpty(),
@@ -238,66 +193,19 @@ const ShowSidebarPartial = React.createClass({
             if (category.get('tag_items').isEmpty()) {
               return null;
             }
-            const onCategorySelected = () => this.toggleCategorySelection(category);
-            const toggleClasses = classnames(
-              'btn btn-flat btn-icon-toggle collapsed',
-              'ShowSidebarPartial__expandToggle'
-            );
-            const headerClasses = classnames(
-              'card-head ShowSidebarPartial__category',
-              { 'ShowSidebarPartial__category--selected': this.isCategorySelected(category) },
-            );
-            const metadataIconClasses = classnames(
-              'btn btn-icon',
-              'ShowSidebarPartial__editMetadataButton',
-              { 'hidden': !this.canEditMetadata(category) }
-            );
-            const metadataModalRef = `metadataModal-${category.get('id')}`;
             return (
-              <div id={category.get('id')} key={category.get('id')}>
-                <MetadataModal
-                  ref={metadataModalRef}
-                  contentPrefix="widgets.vault.file_browser.modals.metadata_tag"
-                  selectedRecords={this.state.selectedTagItems}
-                  metadataSchemas={category.get('metadata_schemas')}
-                  onDismiss={ this.updateTagData }
-                  recordKey="tag_item_id"
-                />
-                <div className="expanded">
-                  <div className={headerClasses} aria-expanded="true" onClick={onCategorySelected}>
-                    <a className={toggleClasses}
-                      data-toggle="collapse" data-parent={ `#${category.get('id')}` }
-                      data-target={ `#${category.get('id')}-tagList` }
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <i className="mdi mdi-chevron-right" />
-                    </a>
-                    <header>
-                      { category.get('name') }
-                    </header>
-                    <a
-                      className={ metadataIconClasses }
-                      title={ Counterpart.translate( `${this.props.contentPrefix}.sidebar.edit_tag_metadata`) }
-                      onClick = {
-                        (e) => {
-                          e.stopPropagation();
-                          this.refs[metadataModalRef].show();
-                        }
-                      }
-                    >
-                      <i className="mdi mdi-border-color"></i>
-                    </a>
-                </div>
-                <div
-                  id={ `${category.get('id')}-tagList` }
-                  className="collapse"
-                  aria-expanded="false"
-                >
-                  { this.renderCategoryTags(category) }
-                </div>
-              </div>
-            </div>
-          );
+              <TagCategory
+                key={category.get('id')}
+                contentPrefix={this.props.contentPrefix}
+                category={category}
+                selectedTagItems={this.state.selectedTagItems}
+                selected={this.isCategorySelected(category)}
+                onCategorySelected={this.toggleCategorySelection}
+                onTagSelected={this.toggleTagSelection}
+                canEditMetadata={this.canEditMetadata(category)}
+                onDataChanged={this.updateTagData}
+              />
+            );
           })}
       </div>
     );
