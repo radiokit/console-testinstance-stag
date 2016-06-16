@@ -7,6 +7,7 @@ export default {
           table: {
             header: {
               name: 'Name',
+              broadcast_content_type_name: 'Content type',
               time_start: 'Hour from',
               time_stop: 'Hour to',
               on_monday: 'Mon',

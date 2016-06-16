@@ -16,6 +16,7 @@ export default React.createClass({
 
   modifyIndexQuery(query) {
     return query
+      .select('broadcast_content_type.name')
       .joins('broadcast_content_type')
       .where('broadcast_content_type.broadcast_channel_id', 'eq', this.context.currentBroadcastChannel.get('id'));
   },
@@ -24,6 +25,7 @@ export default React.createClass({
   buildAttributes() {
     return {
       name: { renderer: 'string' },
+      broadcast_content_type_name: { renderer: 'string', valueFunc: record => record.get('broadcast_content_type').get('name') },
       time_start: { renderer: 'string', sortable: true },
       time_stop: { renderer: 'string', sortable: true },
       on_monday: { renderer: 'boolean', sortable: true },
