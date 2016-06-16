@@ -7,7 +7,6 @@ import ScheduleItemModal from './manual_add/schedule_item_modal.jsx';
 import DeleteModal from '../../../widgets/admin/crud/delete_modal.jsx';
 import ToolbarGroup from '../../../widgets/admin/toolbar_group_widget.jsx';
 import ToolbarButtonModal from '../../../widgets/admin/toolbar_button_modal_widget.jsx';
-import AutoDJAddModal from './autodj_add';
 
 import translationPL from './playlist_toolbar_pl.js';
 import translationEN from './playlist_toolbar_en.js';
@@ -51,19 +50,6 @@ const PlaylistToolbar = React.createClass({
             defaultTimeOffset: this.props.offsetStart,
             contentPrefix: 'playlist_toolbar.add',
             onSuccess: this.props.onCRUD,
-          }}
-        />
-
-        <ToolbarButtonModal
-          icon="plus"
-          labelTextKey="playlist_toolbar.add_dj_button"
-          modalElement={AutoDJAddModal}
-          modalProps={{
-            availableUserAccounts: this.props.availableUserAccounts,
-            currentBroadcastChannel: this.props.currentBroadcastChannel.get('id'),
-            currentBroadcastChannelEntity: this.props.currentBroadcastChannel,
-            defaultTimeOffset: this.props.offsetStart,
-            afterFormAccept: this.props.onCRUD,
           }}
         />
 

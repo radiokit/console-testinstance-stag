@@ -2,12 +2,14 @@ import React from 'react';
 import Counterpart from 'counterpart';
 
 import Index from '../../../widgets/admin/crud/index_widget.jsx';
+import AutoDJAddModal from './autodj_add';
 
 Counterpart.registerTranslations('en', require('./IndexView.locale.en.js'));
 Counterpart.registerTranslations('pl', require('./IndexView.locale.pl.js'));
 
 export default React.createClass({
   contextTypes: {
+    availableUserAccounts: React.PropTypes.object.isRequired,
     currentBroadcastChannel: React.PropTypes.object.isRequired,
   },
 
@@ -52,6 +54,13 @@ export default React.createClass({
         model="Schedule.Weekly.item"
         attributes={this.buildAttributes()}
         form={this.buildForm()}
+        createModalElement={AutoDJAddModal}
+        createModalProps={{
+          availableUserAccounts: this.context.availableUserAccounts,
+          currentBroadcastChannel: this.context.currentBroadcastChannel.get('id'),
+          currentBroadcastChannelEntity: this.context.currentBroadcastChannel,
+          defaultTimeOffset: Date.now(),
+        }}
         indexQueryFunc={this.modifyIndexQuery}
       />
     );

@@ -22,6 +22,8 @@ export default React.createClass({
     attributes: React.PropTypes.object.isRequired,
     readEnabled: React.PropTypes.bool.isRequired,
     createEnabled: React.PropTypes.bool.isRequired,
+    createModalElement: React.PropTypes.oneOfType([React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]),
+    createModalProps: React.PropTypes.object,
     readEnabled: React.PropTypes.bool.isRequired,
     deleteEnabled: React.PropTypes.bool.isRequired,
     selectable: React.PropTypes.bool.isRequired,
@@ -160,23 +162,34 @@ export default React.createClass({
         <ToolBarGroup>
           {() => {
             if(this.props.createEnabled === true) {
-              return <ToolBarButtonModal
-                icon="plus"
-                labelTextKey={`${this.props.contentPrefix}.index.actions.create`}
-                modalElement={CreateModal}
-                modalProps={
-                  {
-                    acknowledgementElement: this.props.createAcknowledgementElement,
-                    contentPrefix: this.props.contentPrefix + ".index.modals.create",
-                    selectedRecordIds: this.state.selectedRecordIds,
-                    form: this.props.form,
-                    app: this.props.app,
-                    model: this.props.model,
-                    onDismiss: this.onRefresh,
-                  }
-                } />;
+              if(this.props.createModalElement) {
+                return <ToolBarButtonModal
+                  icon="plus"
+                  labelTextKey={`${this.props.contentPrefix}.index.actions.create`}
+                  modalElement={this.props.createModalElement}
+                  modalProps={this.props.createModalProps}
+                />;
+
+              } else {
+                return <ToolBarButtonModal
+                  icon="plus"
+                  labelTextKey={`${this.props.contentPrefix}.index.actions.create`}
+                  modalElement={CreateModal}
+                  modalProps={
+                    {
+                      acknowledgementElement: this.props.createAcknowledgementElement,
+                      contentPrefix: this.props.contentPrefix + ".index.modals.create",
+                      selectedRecordIds: this.state.selectedRecordIds,
+                      form: this.props.form,
+                      app: this.props.app,
+                      model: this.props.model,
+                      onDismiss: this.onRefresh,
+                    }
+                  } />;
+              }
             }
           }()}
+
           {() => {
             if(this.props.updateEnabled && this.props.updateEnabled && this.props.updateForm) {
               return <ToolBarButtonModal
