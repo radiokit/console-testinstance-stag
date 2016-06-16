@@ -12,20 +12,8 @@ import {
   model,
   readFields,
   updateFields,
+  joins,
 } from './FilesConfig';
-
-function runFilesQuery(queryAppendix = {}, requestOptions) {
-  RadioKitDomain.query(
-    fromJS({
-      [key]: true,
-      app,
-      model,
-      select: readFields,
-      ...queryAppendix,
-    }),
-    requestOptions
-  );
-}
 
 const actions = {
   loadFile(id, requestOptions) {
@@ -54,7 +42,7 @@ const actions = {
     );
   },
 
-  loadRecentFiles(limit = 25, options = {}) {
+  loadRecentFiles(limit = 25, userAccountID = null, options = {}) {
     runFilesQuery(
       {
         conditions: [
@@ -63,6 +51,11 @@ const actions = {
             comparison: 'eq',
             value: 'current',
           },
+          userAccountID ? {
+            field: 'record_repository.references',
+            comparison: 'deq',
+            value: `user_account_id ${userAccountID}`,
+          } : null,
         ],
         order: {
           field: 'updated_at',
@@ -75,7 +68,7 @@ const actions = {
     );
   },
 
-  searchFiles(query = '', stage = 'current', options = {}) {
+  searchFiles(query = '', userAccountID = null, stage = 'current', options = {}) {
     runFilesQuery(
       {
         conditions: [
@@ -89,6 +82,11 @@ const actions = {
             comparison: 'ilike',
             value: ['%'].concat(query.split('').map(letter => `${letter}%`)).join(''),
           },
+          userAccountID ? {
+            field: 'record_repository.references',
+            comparison: 'deq',
+            value: `user_account_id ${userAccountID}`,
+          } : null,
         ],
         [searchKey]: true,
         [searchPhraseKey]: query,
@@ -116,3 +114,19 @@ const actions = {
 };
 
 export default actions;
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+function runFilesQuery(queryAppendix = {}, requestOptions) {
+  RadioKitDomain.query(
+    fromJS({
+      [key]: true,
+      app,
+      model,
+      select: readFields,
+      joins,
+      ...queryAppendix,
+    }),
+    requestOptions
+  );
+}
