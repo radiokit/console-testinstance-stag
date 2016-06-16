@@ -122,10 +122,16 @@ function buildQuery(queryParams) {
     q = q.select(field);
   });
   conditions && conditions.forEach(condition => {
+    if (!condition) {
+      return;
+    }
     const { field, comparison, value } = condition.toObject();
     q = q.where(field, comparison, value);
   });
   joins && joins.forEach(join => {
+    if (!join) {
+      return;
+    }
     q = q.joins(join);
   });
   if (typeof limit === 'number' || typeof offset === 'number') {

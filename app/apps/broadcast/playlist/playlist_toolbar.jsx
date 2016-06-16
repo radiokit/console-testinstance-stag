@@ -39,7 +39,6 @@ const PlaylistToolbar = React.createClass({
     return (
       <ToolbarGroup position="right">
 
-
         <ToolbarButtonModal
           icon="plus"
           labelTextKey="playlist_toolbar.add_button"
@@ -47,6 +46,7 @@ const PlaylistToolbar = React.createClass({
           modalProps={{
             currentBroadcastChannel: this.props.currentBroadcastChannel.get('id'),
             currentBroadcastChannelEntity: this.props.currentBroadcastChannel,
+            availableUserAccounts: this.props.availableUserAccounts,
             defaultTimeOffset: this.props.offsetStart,
             contentPrefix: 'playlist_toolbar.add',
             onSuccess: this.props.onCRUD,
@@ -61,6 +61,7 @@ const PlaylistToolbar = React.createClass({
           modalProps={{
             currentBroadcastChannel: this.props.currentBroadcastChannel.get('id'),
             currentBroadcastChannelEntity: this.props.currentBroadcastChannel,
+            availableUserAccounts: this.props.availableUserAccounts,
             contentPrefix: 'playlist_toolbar.update',
             defaultTimeOffset: this.props.offsetStart,
             record: this.props.activeItem,

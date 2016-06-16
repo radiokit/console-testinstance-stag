@@ -17,3 +17,6 @@ export const updateFields = [
   'extra',
   'destroy_at',
 ];
+export const joins = [
+  'record_repository',
+];
