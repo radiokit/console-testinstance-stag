@@ -10,6 +10,9 @@ export default {
         live: {
           title: 'Live',
         },
+        auto: {
+          title: 'Auto',
+        },
       },
       playlist: {
         header: 'Current Playlist',

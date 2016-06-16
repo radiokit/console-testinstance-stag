@@ -20,6 +20,7 @@ import AppsIndex from './apps/apps_index.jsx';
 import BroadcastApp from './apps/broadcast/app.jsx';
 import BroadcastPlaylistIndex from './apps/broadcast/playlist/index_view.jsx';
 import BroadcastLiveIndex from './apps/broadcast/live/index_view.jsx';
+import BroadcastAutoIndex from './apps/broadcast/auto/IndexView.jsx';
 import ElectronApp from './apps/electron/app.jsx';
 import ElectronPatchbayIndex from './apps/electron/patchbay/IndexView.jsx';
 import ElectronTransmissionsIndex from './apps/electron/transmissions/IndexView.jsx';
@@ -118,26 +119,29 @@ ReactDOM.render((
             <Route path="playlist(/:date/:zoom)" component={BroadcastPlaylistIndex} onEnter={pingGoogleAnalytics} />
           </Route>
           <Route component={ScopeLayout} scope="broadcastChannel">
-            <Route path="live/index" component={BroadcastLiveIndex} onEnter={pingGoogleAnalytics}/>
+            <Route path="live/index" component={BroadcastLiveIndex} onEnter={pingGoogleAnalytics} />
+          </Route>
+          <Route component={ScopeLayout} scope="broadcastChannel">
+            <Route path="auto/index" component={BroadcastAutoIndex} onEnter={pingGoogleAnalytics} />
           </Route>
         </Route>
 
         <Route path="library" component={LibraryApp}>
           <Route path="file_repositories">
             <Route component={ScopeLayout} scope="userAccount">
-              <Route path="index" component={LibraryFileRepositoriesIndex} onEnter={pingGoogleAnalytics}/>
+              <Route path="index" component={LibraryFileRepositoriesIndex} onEnter={pingGoogleAnalytics} />
             </Route>
-            <Route path="show/:id" component={LibraryFileRepositoriesShow} onEnter={pingGoogleAnalytics}/>
+            <Route path="show/:id" component={LibraryFileRepositoriesShow} onEnter={pingGoogleAnalytics} />
           </Route>
         </Route>
 
         <Route path="electron" component={ElectronApp}>
           <Route component={ScopeLayout} scope="userAccount">
             <Route path="transmissions">
-              <Route path="index" component={ElectronTransmissionsIndex} onEnter={pingGoogleAnalytics}/>
+              <Route path="index" component={ElectronTransmissionsIndex} onEnter={pingGoogleAnalytics} />
             </Route>
             <Route path="patchbay">
-              <Route path="index" component={ElectronPatchbayIndex} onEnter={pingGoogleAnalytics}/>
+              <Route path="index" component={ElectronPatchbayIndex} onEnter={pingGoogleAnalytics} />
             </Route>
           </Route>
         </Route>
@@ -145,19 +149,19 @@ ReactDOM.render((
         <Route path="clipeditor" component={ClipEditorApp}></Route>
 
         <Route path="infrastructure" component={BroadcastApp}>
-          <Route path="media/index" component={InfrastructureMediaIndex} onEnter={pingGoogleAnalytics}/>
-          <Route path="computing_nodes/index" component={InfrastructureComputingNodesIndex} onEnter={pingGoogleAnalytics}/>
+          <Route path="media/index" component={InfrastructureMediaIndex} onEnter={pingGoogleAnalytics} />
+          <Route path="computing_nodes/index" component={InfrastructureComputingNodesIndex} onEnter={pingGoogleAnalytics} />
           <Route path="broadcast_channels">
-            <Route path="index" component={InfrastructureroadcastChannelsIndex} onEnter={pingGoogleAnalytics}/>
-            <Route path="show/:id" component={InfrastructureBroadcastChannelsShow} onEnter={pingGoogleAnalytics}/>
+            <Route path="index" component={InfrastructureroadcastChannelsIndex} onEnter={pingGoogleAnalytics} />
+            <Route path="show/:id" component={InfrastructureBroadcastChannelsShow} onEnter={pingGoogleAnalytics} />
           </Route>
         </Route>
 
         <Route path="administration" component={AdministrationApp}>
-          <Route path="users/index" component={AdministrationUsersIndex} onEnter={pingGoogleAnalytics}/>
+          <Route path="users/index" component={AdministrationUsersIndex} onEnter={pingGoogleAnalytics} />
           <Route path="file_repositories">
-            <Route path="index" component={AdministrationFileRepositoriesIndex} onEnter={pingGoogleAnalytics}/>
-            <Route path="show/:id" component={AdministrationFileRepositoriesShow} onEnter={pingGoogleAnalytics}/>
+            <Route path="index" component={AdministrationFileRepositoriesIndex} onEnter={pingGoogleAnalytics} />
+            <Route path="show/:id" component={AdministrationFileRepositoriesShow} onEnter={pingGoogleAnalytics} />
           </Route>
         </Route>
 
