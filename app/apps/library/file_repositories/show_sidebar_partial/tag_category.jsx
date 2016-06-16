@@ -40,7 +40,7 @@ const TagCategory = React.createClass({
       return null;
     }
     return (
-        <div id={this.props.category.get('id')}>
+        <div>
           <MetadataModal
             ref={metadataModalRef}
             contentPrefix="widgets.vault.file_browser.modals.metadata_tag"
