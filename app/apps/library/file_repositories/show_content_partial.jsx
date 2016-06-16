@@ -1,6 +1,5 @@
 import React from 'react';
 import { Seq, List } from 'immutable';
-import { isEqual } from 'lodash';
 import multiDownload from 'multi-download';
 
 import DeleteModal from '../../../widgets/admin/crud/delete_modal.jsx';
@@ -22,7 +21,7 @@ const ShowContentPartial = React.createClass({
     model: React.PropTypes.string.isRequired,
     contentPrefix: React.PropTypes.string.isRequired,
     stage: React.PropTypes.oneOf(['incoming', 'current', 'archive', 'trash']).isRequired,
-    tagFilter: React.PropTypes.array.isRequired,
+    tagFilter: React.PropTypes.object.isRequired,
   },
 
   getInitialState() {
@@ -34,7 +33,7 @@ const ShowContentPartial = React.createClass({
   },
 
   componentDidUpdate(prevProps) {
-    if (!isEqual(prevProps.tagFilter, this.props.tagFilter)) {
+    if (prevProps.tagFilter != this.props.tagFilter) {
       this.reloadTable();
     }
   },
@@ -144,40 +143,49 @@ const ShowContentPartial = React.createClass({
     });
   },
 
+  getFilteredMetadataSchemas() {
+    return this.props.record.get('metadata_schemas')
+      .filter((schema) => schema.get('tag_category_id') === null);
+  },
+
   buildTableAttributes() {
     const attributes = {
       name: { renderer: 'string', sortable: true },
     };
-    return this.props.record.get('metadata_schemas').reduce((acc, metadataSchema) => {
+    return this.getFilteredMetadataSchemas()
+      .reduce((acc, metadataSchema) => {
       /* eslint no-param-reassign: 0 */
-      acc[metadataSchema.get('key')] = {
-        renderer: metadataSchema.get('kind'),
-        headerText: metadataSchema.get('name'),
-        sortable: this.isMetadataSchemaSortable(metadataSchema),
-        sortableFunc: (query, attribute, direction) => {
-          return query
-            .scope("sorted_by_metadata", metadataSchema.get('key'), metadataSchema.get('kind'), direction);
-        },
-        valueFunc: (record) => {
-          const foundMetadataItem = record
-            .get('metadata_items')
-            .find(
-              metadataItem => (metadataItem.get('metadata_schema_id') === metadataSchema.get('id'))
-            );
-          if (foundMetadataItem) {
-            return foundMetadataItem.get(`value_${metadataSchema.get('kind')}`);
-          }
-          return null;
-        },
-      };
-      return acc;
-    }, attributes);
+        acc[metadataSchema.get('key')] = {
+          renderer: metadataSchema.get('kind'),
+          headerText: metadataSchema.get('name'),
+          sortable: this.isMetadataSchemaSortable(metadataSchema),
+          sortableFunc: (query, attribute, direction) => {
+            return query
+              .scope(
+                'sorted_by_metadata', metadataSchema.get('key'),
+                metadataSchema.get('kind'), direction
+              );
+          },
+          valueFunc: (record) => {
+            const foundMetadataItem = record
+              .get('metadata_items')
+              .find(
+                metadataItem => (metadataItem.get('metadata_schema_id') === metadataSchema.get('id'))
+              );
+            if (foundMetadataItem) {
+              return foundMetadataItem.get(`value_${metadataSchema.get('kind')}`);
+            }
+            return null;
+          },
+        };
+        return acc;
+      }, attributes);
   },
 
   buildTagFilterQuery(query) {
-    const tagIdsFilter = this.props.tagFilter.map((tag) => tag.id);
-    if (this.props.tagFilter.length > 0) {
-      return query.where('tag_associations.tag_item_id', 'in', tagIdsFilter);
+    const tagIdsFilter = this.props.tagFilter.map((tag) => tag.get('id'));
+    if (this.props.tagFilter.count() > 0) {
+      return query.where('tag_associations.tag_item_id', 'in', tagIdsFilter.toJS());
     }
     return query;
   },
@@ -199,7 +207,6 @@ const ShowContentPartial = React.createClass({
         'metadata_items.value_date',
         'metadata_items.value_datetime',
         'metadata_items.value_time',
-
         'metadata_items.value_file',
         'metadata_items.value_waveform',
         'metadata_items.value_image',
@@ -298,15 +305,15 @@ const ShowContentPartial = React.createClass({
               <ToolbarGroup>
                 <ToolbarButtonModal
                   icon="barcode"
-                  labelTextKey="widgets.vault.file_browser.modals.metadata.header"
+                  labelTextKey="widgets.vault.file_browser.modals.metadata_file.header"
                   disabled={this.state.selectedRecordIds.count() === 0}
                   modalElement={MetadataModal}
                   modalProps={{
-                    contentPrefix: 'widgets.vault.file_browser.modals.metadata',
-                    selectedRecordIds: this.state.selectedRecordIds,
+                    contentPrefix: 'widgets.vault.file_browser.modals.metadata_file',
                     selectedRecords: this.state.selectedRecords,
-                    metadataSchemas: this.props.record.get('metadata_schemas'),
+                    metadataSchemas: this.getFilteredMetadataSchemas(),
                     onDismiss: this.reloadTable,
+                    recordKey: 'record_file_id',
                   }}
                 />
               </ToolbarGroup>

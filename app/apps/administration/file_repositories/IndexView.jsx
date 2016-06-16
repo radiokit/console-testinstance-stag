@@ -66,7 +66,7 @@ const IndexView = React.createClass({
             },
           },
         }}
-        updateEnabled = {true}
+        updateEnabled
         indexQueryFunc={ this.modifyIndexQuery }
       />
     );

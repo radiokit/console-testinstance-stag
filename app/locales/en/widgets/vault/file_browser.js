@@ -136,7 +136,7 @@ export default {
             }
           },
 
-          metadata: {
+          metadata_file: {
             header: "Metadata",
             form: {
               retain: "Do not change",
@@ -147,6 +147,24 @@ export default {
               acknowledgement: "Applied metadata to %(count)s file(s).",
               progress: "Applying metadata in progress…",
               cancelled: "Some files for which operations were already undertaken will have new metadata, but tagging was cancelled for the remaining part.",
+            },
+            action: {
+              proceed: "Apply metadata",
+              cancel: "Cancel",
+              close: "Close",
+            }
+          },
+          metadata_tag: {
+            header: "Metadata",
+            form: {
+              retain: "Do not change",
+              multiple_val: "Multiple values",
+            },
+            message: {
+              confirmation: "Edit metadata that should be applied to %(count)s selected categories(s):",
+              acknowledgement: "Applied metadata to %(count)s categories(s).",
+              progress: "Applying metadata in progress…",
+              cancelled: "Some categories for which operations were already undertaken will have new metadata, but tagging was cancelled for the remaining part.",
             },
             action: {
               proceed: "Apply metadata",

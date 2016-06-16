@@ -9,80 +9,121 @@ export default {
                 table: {
                   index: {
                     actions: {
-                      create: "Dodaj pole metadanych",
+                      create: 'Dodaj pole metadanych',
                     },
 
                     table: {
                       header: {
-                        name: "Field name",
-                        key: "Key",
-                        kind: "Value type",
+                        name: 'Field name',
+                        key: 'Key',
+                        kind: 'Value type',
                       },
-                      loading: "Ładowanie schematu metadanych...",
+                      loading: 'Ładowanie schematu metadanych...',
                     },
 
                     modals: {
                       create: {
-                        header: "Dodaj pole metadanych",
+                        header: 'Dodaj pole metadanych',
                         action: {
-                          proceed: "Dodaj",
-                          close: "Close",
-                          cancel: "Cancel",
+                          proceed: 'Dodaj',
+                          close: 'Close',
+                          cancel: 'Cancel',
                         },
                         message: {
-                          acknowledgement: "Dodano pole metadanych",
-                          progress: "Dodawanie pól metedanych...",
+                          acknowledgement: 'Dodano pole metadanych',
+                          progress: 'Dodawanie pól metedanych...',
                         },
                         form: {
                           name: {
-                            label: "Nazwa pola",
-                            hint: "Choose any name that will describe contents of this field, e.g. \"composer\".",
+                            label: 'Nazwa pola',
+                            hint: 'Choose any name that will describe contents of this field, e.g. \'composer\'.',
                           },
                           key: {
-                            label: "Key",
-                            hint: "Unique key describing role of this field for the system.",
+                            label: 'Key',
+                            hint: 'Unique key describing role of this field for the system.',
                           },
                           kind: {
-                            label: "Value type",
+                            label: 'Value type',
                             values: {
-                              string: "Text (one line)",
-                              db: "Decibels",
-                              integer: "Number (integer)",
-                              text: "Text (multiline)",
-                              float: "Number (with decimal part)",
-                              date: "Date",
-                              time: "Time",
-                              datetime: "Date & Time",
-                              url: "URL",
-                              duration: "Duration",
-                              waveform: "Waveform",
-                              image: "Obraz",
-                              file: "Plik",
-                            }
+                              string: 'Text (one line)',
+                              db: 'Decibels',
+                              integer: 'Number (integer)',
+                              text: 'Text (multiline)',
+                              float: 'Number (with decimal part)',
+                              date: 'Date',
+                              time: 'Time',
+                              datetime: 'Date & Time',
+                              url: 'URL',
+                              duration: 'Duration',
+                              waveform: 'Waveform',
+                              image: 'Obraz',
+                              file: 'Plik',
+                            },
                           },
                         },
                       },
                       delete: {
-                        header: "Usuń pola metadanych",
+                        header: 'Usuń pola metadanych',
                         action: {
-                          proceed: "Usuń",
-                          close: "Zamknij",
-                          cancel: "Anuluj",
+                          proceed: 'Usuń',
+                          close: 'Zamknij',
+                          cancel: 'Anuluj',
                         },
                         message: {
-                          progress: "Usuwanie pól metadanych...",
-                          confirmation: "Czy napewno chcesz usunąć te pola metadanych?",
-                          acknowledgement: "Usunięto pola metadanych.",
+                          progress: 'Usuwanie pól metadanych...',
+                          confirmation: 'Czy napewno chcesz usunąć te pola metadanych?',
+                          acknowledgement: 'Usunięto pola metadanych.',
+                        },
+                      },
+                      update: {
+                        header: 'Edytuj pola metadanych',
+                        action: {
+                          proceed: 'Edytuj',
+                          close: 'Zamknij',
+                          cancel: 'Anuluj',
+                        },
+                        message: {
+                          progress: 'Edytowanie pól metadanych...',
+                          confirmation: 'Czy napewno chcesz edytować te pola metadanych?',
+                          acknowledgement: 'Edytowano pola metadanych.',
+                        },
+                        form: {
+                          name: {
+                            label: 'Nazwa pola',
+                            hint: 'Choose any name that will describe contents of this field, e.g. \'composer\'.',
+                          },
+                          key: {
+                            label: 'Key',
+                            hint: 'Unique key describing role of this field for the system.',
+                          },
+                          kind: {
+                            label: 'Value type',
+                            values: {
+                              string: 'Text (one line)',
+                              db: 'Decibels',
+                              integer: 'Number (integer)',
+                              text: 'Text (multiline)',
+                              float: 'Number (with decimal part)',
+                              date: 'Date',
+                              time: 'Time',
+                              datetime: 'Date & Time',
+                              url: 'URL',
+                              duration: 'Duration',
+                              waveform: 'Waveform',
+                              image: 'Obraz',
+                              file: 'Plik',
+                            },
+                          },
                         },
                       },
                     },
                   },
                 },
-              }
-            }
-          }
+              },
+            },
+          },
         },
       },
-    }
-  }
-}
+    },
+  },
+};

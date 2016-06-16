@@ -1,0 +1,53 @@
+.ShowTagsSchemaPartial {
+
+  .mdi-chevron-right {
+    transition: all 0.1s linear;
+    font-size: 1.4em;
+  }
+
+  .card-head .mdi-chevron-right {
+    transform: rotate(90deg);
+  }
+
+  .card-head .collapsed  .mdi-chevron-right {
+    transform: rotate(0deg);
+  }
+
+  &__listHeader {
+    width: 15%;
+  }
+
+  &__tagName {
+    padding-left: 36px;
+    background-color: #f2f2f2;
+  }
+  &__emptyCategory {
+    color: red;
+  }
+
+  &__metadataSchemaLabel {
+    padding: 15px 24px;
+    border-left: 1px solid #d3d3d3;
+    line-height: 17px;
+    width: 150px
+  }
+
+  &__metadataSchemaName {
+    width: 70px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  &__metadataSchemaPlusBtn {
+    border-left: none;
+    padding: 15px;
+  }
+
+  &__metadataBtnGroup {
+    margin-left: 20px;
+  }
+
+  &__smallBtn {
+    padding: 3px;
+  }
+}

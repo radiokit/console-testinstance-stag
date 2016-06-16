@@ -6,7 +6,7 @@ import MetadataSchemaPartial from './ShowMetadataSchemaPartial.jsx';
 import ProcessingSchemaPartial from './ShowProcessingSchemaPartial.jsx';
 import ImportsSchemaPartial from './ShowImportsSchemaPartial.jsx';
 import ExportsSchemaPartial from './ShowExportsSchemaPartial.jsx';
-import TagsSchemaPartial from './ShowTagsSchemaPartial.jsx';
+import TagsSchemaPartial from './show_tags_schema_partial';
 
 Counterpart.registerTranslations("en", require('./ShowView.locale.en.js'));
 Counterpart.registerTranslations("pl", require('./ShowView.locale.pl.js'));
@@ -31,7 +31,7 @@ const ShowView = React.createClass({
       processing_schema: {
         element: ProcessingSchemaPartial,
         props: {
-          contentPrefix: "apps.administration.file_repositories.show.tabs.body.processing_schema"
+          contentPrefix: 'apps.administration.file_repositories.show.tabs.body.processing_schema',
         },
       },
       imports_schema: {
