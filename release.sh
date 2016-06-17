@@ -5,33 +5,34 @@ then
   exit 1
 fi
 
+ENV="$1"
 CURRENT_REVISION=`git rev-parse HEAD`
 CURRENT_DIR=`pwd`
-TMP_DIR="/tmp/site-console-$1"
+TMP_DIR="/tmp/site-console-$ENV"
 BRANCH="gh-pages"
-REPO_URL="git@github.com:radiokit/site-console-$1.git"
+REPO_URL="git@github.com:radiokit/site-console-$ENV.git"
 
 rm -rf $TMP_DIR
 
-echo "Releasing $CURRENT_REVISION to '$1' environment..."
-git clone --depth=1 $REPO_URL $TMP_DIR -b $BRANCH || (echo "Error"; exit 2)
-rm -rvf $TMP_DIR/* || (echo "Error"; exit 2)
+echo "Releasing $CURRENT_REVISION to '$ENV' environment..."
+git clone --depth=1 $REPO_URL $TMP_DIR -b $BRANCH && \
+rm -rvf $TMP_DIR/* && \
 
-cp -rv dist/shared/files/* $TMP_DIR/ || (echo "Error"; exit 2)
-cp -rv dist/$1/* $TMP_DIR/ || (echo "Error"; exit 2)
+cp -rv dist/shared/files/* $TMP_DIR/ && \
+cp -rv dist/$ENV/files/* $TMP_DIR/ && \
 
-npm run $1 || (echo "Error"; exit 2)
+npm run $ENV && \
 
-BUNDLE_FILENAME=$(basename `find $TMP_DIR/*.bundle.js`) || (echo "Error"; exit 2)
-cat dist/shared/templates/index.html | sed s/BUNDLE_FILENAME/$BUNDLE_FILENAME/ > $TMP_DIR/index.html || (echo "Error"; exit 2)
-cp -v $TMP_DIR/index.html $TMP_DIR/404.html || (echo "Error"; exit 2)
+BUNDLE_FILENAME=$(basename `find $TMP_DIR/*.bundle.js`) && \
+cat dist/$ENV/templates/index.html | sed s/BUNDLE_FILENAME/$BUNDLE_FILENAME/ > $TMP_DIR/index.html && \
+cp -v $TMP_DIR/index.html $TMP_DIR/404.html && \
 
-cd $TMP_DIR || (echo "Error"; exit 2) 
-git add -A || (echo "Error"; exit 2)
-git commit -m "Releasing revision $CURRENT_REVISION" || (echo "Error"; exit 2)
-git push origin $BRANCH || (echo "Error"; exit 2)
+cd $TMP_DIR && \
+git add -A && \
+git commit -m "Releasing revision $CURRENT_REVISION" && \
+git push origin $BRANCH && \
 
-cd $CURRENT_DIR || (echo "Error"; exit 2)
+cd $CURRENT_DIR && \
 
-rm -rvf $TMP_DIR || (echo "Error"; exit 2)
+rm -rvf $TMP_DIR && \
 echo -e "\n\nFinished successfully!\n"
