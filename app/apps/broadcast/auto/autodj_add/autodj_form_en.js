@@ -8,6 +8,8 @@ export default {
     nextButton: 'Next',
     closeButton: 'Close',
     weekdays: 'Repeat automatically on',
+    nameLabel: 'Name',
+    nameHelpBlock: 'optional',
     types: {
       empty: 'Pick a type',
       shuffle: 'Shuffle',
