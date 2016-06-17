@@ -1,5 +1,6 @@
 import React from 'react';
 import AutoDJForm from './autodj_form.jsx';
+import { find } from 'lodash';
 
 // import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
@@ -41,15 +42,33 @@ const AutoDJFormSender = React.createClass({
   sendForm() {
     const { afterFormAccept } = this.props;
     const entity = formToWeeklyItem(this.state.model);
-    const job = sendWeeklyItem(entity);
-    this.setState({ step: STEPS_NAMES.indexOf('finishing') });
-    return job
-      .then(this.clearForm.bind(this))
-      .then(afterFormAccept)
-      .catch(() => this.setState({
-        step: STEPS_NAMES.indexOf('finishing') - 1,
-        errors: ['AutoDJFormSender.sendingError'],
-      }));
+    this.setState(
+      { step: STEPS_NAMES.indexOf('finishing') },
+      () => {
+        sendWeeklyItem(entity)
+          .then(this.clearForm.bind(this))
+          .then(afterFormAccept)
+          .catch(e => {
+            if (e && e.errors) {
+              const sameTimeAsAlreadyExisting = find(
+                e.errors,
+                reason => reason && reason.key === 'no_overlaps'
+              );
+              if (sameTimeAsAlreadyExisting) {
+                this.setState({
+                  step: STEPS_NAMES.indexOf('finishing') - 1,
+                  errors: ['AutoDJFormSender.overlapsError'],
+                });
+                return;
+              }
+            }
+            this.setState({
+              step: STEPS_NAMES.indexOf('finishing') - 1,
+              errors: ['AutoDJFormSender.sendingError'],
+            });
+          });
+      }
+    );
   },
 
   handleFormAccept() {
