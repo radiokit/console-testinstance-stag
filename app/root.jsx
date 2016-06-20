@@ -130,6 +130,7 @@ export default React.createClass({
     RadioKit
       .query('agenda', 'Broadcast.Channel')
       .select('id', 'name', 'references', 'timezone')
+      .where('references', 'din', 'user_account_id', this.state.availableUserAccounts)
       .order('name', 'asc')
       .on('error', () => {
         this.setState({
@@ -175,7 +176,7 @@ export default React.createClass({
     const loading = (
       <LoadingLayout />
     );
-    
+
     if (!this.state.authenticationState) {
       return loading;
     }
