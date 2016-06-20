@@ -127,14 +127,16 @@ export default React.createClass({
   },
 
   loadBroadcastChannels() {
-    let availableUserAccountIds = this.state.availableUserAccounts.map((account) => {
-      return account.get("id");
+    const availableUserAccountIds = this.state.availableUserAccounts.map((account) => {
+      return account.get('id');
     }).toJS();
+    const accountsCondition = ['references', 'din', 'user_account_id']
+      .concat(availableUserAccountIds)
 
     RadioKit
       .query('agenda', 'Broadcast.Channel')
       .select('id', 'name', 'references', 'timezone')
-      .where('references', 'din', 'user_account_id', availableUserAccountIds)
+      .where.apply(this, accountsCondition)
       .order('name', 'asc')
       .on('error', () => {
         this.setState({
