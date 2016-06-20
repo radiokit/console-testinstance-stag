@@ -1,6 +1,7 @@
 export default {
   AutoDJFormSender: {
     sendingError: 'Żądanie odrzucone',
+    overlapsError: 'Wybrany czas jest już zajęty',
     noDateSelected: 'Brak wybranej daty',
     noStartHour: 'Brak początkowej godziny',
     noEndHour: 'Brak końcowej godziny',
