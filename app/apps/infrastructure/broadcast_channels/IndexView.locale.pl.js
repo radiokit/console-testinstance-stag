@@ -52,6 +52,7 @@ export default {
                 },
                 media_routing_group_id: {
                   label: "Routing Group ID",
+                  hint: "Skopiuj Id mixgrupy z sekcji media, lub skontaktuj się z administratorem",
                 },
                 description: {
                   label: "Opis",
