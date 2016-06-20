@@ -5,6 +5,7 @@ import FilePickerWidget from './file_picker_widget.jsx';
 import FilesDomain from '../../../../services/FilesDomain';
 
 const recentFilesLimit = 10;
+
 const searchFiles = debounce((input, userAccountID) => {
   FilesDomain.searchFiles(input, userAccountID);
 }, 200);
@@ -28,9 +29,8 @@ const FilePicker = React.createClass({
   },
 
   componentDidMount() {
-    const { availableUserAccounts } = this.props;
-
-    (availableUserAccounts || []).forEach(
+    const { availableUserAccounts = [] } = this.props;
+    availableUserAccounts.forEach(
       userAccount => {
         FilesDomain.loadRecentFiles(recentFilesLimit, userAccount.get('id'));
       }
@@ -53,12 +53,10 @@ const FilePicker = React.createClass({
   },
 
   handleInputChange(input) {
-    const { availableUserAccounts } = this.props;
+    const { availableUserAccounts = [] } = this.props;
 
-    (availableUserAccounts || []).forEach(
-      userAccount => {
-        searchFiles(input, userAccount.get('id'));
-      }
+    availableUserAccounts.forEach(
+      userAccount => searchFiles(input, userAccount.get('id'))
     );
 
     if (input === '') {
@@ -84,7 +82,11 @@ const FilePicker = React.createClass({
 export default connect(
   FilePicker,
   FilesDomain,
-  (FilesDomainState) => {
+  (FilesDomainState, { value }) => {
+    if (value) {
+      FilesDomain.loadFile(value.get('id'), { maxAge: 60 * 1000 });
+    }
+
     const files = FilesDomainState
       .get('files')
       .filter(
