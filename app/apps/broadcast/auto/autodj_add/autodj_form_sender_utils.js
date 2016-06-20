@@ -5,6 +5,9 @@ import {
 import RadioKit from '../../../../services/RadioKit';
 import sprintf from 'tiny-sprintf';
 import validateForm from './autodj_form_sender_validator';
+import {
+  get as getValue,
+} from 'lodash';
 
 export {
   validateForm,
@@ -12,6 +15,8 @@ export {
   formToWeeklyItem,
   sendWeeklyItem,
 };
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 function formToWeeklyItem(form) {
   const transformer = ({
@@ -25,6 +30,7 @@ function formToWeeklyItem(form) {
 
 function shuffleFormToWeeklyItem(form) {
   return Map({
+    name: form.getIn(['name']),
     broadcast_content_type_id: form.getIn(['weeklyplan', 'id']),
     time_start: formatHour(form.getIn(['hours', 'start'])),
     time_stop: formatHour(form.getIn(['hours', 'end'])),
@@ -61,10 +67,14 @@ export function sendWeeklyItem(entity) {
       RadioKit
         .record('agenda', 'Schedule.Weekly.Item')
         .on('loaded', resolve)
-        .on('warning', reject)
-        .on('error', reject)
+        .on('warning', (_, error) => reject(getWeeklyItemError(error)))
+        .on('error', (_, error) => reject(getWeeklyItemError(error)))
         .create(entity)
       ;
     }
   );
+}
+
+function getWeeklyItemError(error) {
+  return JSON.parse(getValue(error, ['__ajax', '__request', 'responseText']) || '{}').error;
 }

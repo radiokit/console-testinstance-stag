@@ -23,7 +23,11 @@ const FilePickerWidget = React.createClass({
     return (
       <SimpleConsoleAutosuggest
         placeholder={this.props.placeholder}
-        value={this.props.value}
+        value={
+          this.props.value &&
+          this.props.files.find(file => this.props.value.get('id') === file.get('id')) ||
+          null
+        }
         onChange={this.props.onChange}
         onInputChange={this.props.onInputChange}
         items={this.props.files}
