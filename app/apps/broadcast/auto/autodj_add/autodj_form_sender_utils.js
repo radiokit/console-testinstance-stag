@@ -16,6 +16,8 @@ export {
   sendWeeklyItem,
 };
 
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 function formToWeeklyItem(form) {
   const transformer = ({
     shuffle: shuffleFormToWeeklyItem,
@@ -28,6 +30,7 @@ function formToWeeklyItem(form) {
 
 function shuffleFormToWeeklyItem(form) {
   return Map({
+    name: form.getIn(['name']),
     broadcast_content_type_id: form.getIn(['weeklyplan', 'id']),
     time_start: formatHour(form.getIn(['hours', 'start'])),
     time_stop: formatHour(form.getIn(['hours', 'end'])),

@@ -32,6 +32,7 @@ export const EMPTY_RANGE = Map({
 export const EMPTY_WEEKDAYS = Map();
 
 export const EMPTY_MODEL = Map({
+  name: '',
   type: AUTODJ_OPTIONS[0],
   repository: null,
   weeklyplan: null,

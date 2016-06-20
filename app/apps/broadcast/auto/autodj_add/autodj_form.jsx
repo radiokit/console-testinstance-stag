@@ -60,6 +60,11 @@ const AutoDJForm = React.createClass({
     return model.get('weekdays') || EMPTY_WEEKDAYS;
   },
   
+  getName() {
+    const model = this.getModel();
+    return model.get('name') || '';
+  },
+  
   getModel() {
     return this.props.model;
   },
@@ -102,6 +107,10 @@ const AutoDJForm = React.createClass({
 
   handleContentTypeChange(weeklyplan) {
     this.handleModelChange(['weeklyplan'], weeklyplan);
+  },
+  
+  handleNameChange(e) {
+    this.handleModelChange(['name'], e.target.value);
   },
 
   triggerFormCancel() {
@@ -182,11 +191,21 @@ const AutoDJForm = React.createClass({
                 onChange={this.handleWeekdaysChange}
               />
             </div>
-            <div>
+            <div className="form-group">
               <HourRangePicker
                 value={this.getHours()}
                 onChange={this.handleHoursChange}
               />
+            </div>
+            <div className="form-group">
+              <Translate component="label" content="AutoDJForm.nameLabel" />
+              <input
+                type="text"
+                className="form-control"
+                value={this.getName()}
+                onChange={this.handleNameChange}
+              />
+              <Translate component="p" className="help-block" content="AutoDJForm.nameHelpBlock" />
             </div>
           </fieldset>
 
