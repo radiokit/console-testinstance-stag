@@ -126,11 +126,11 @@ const ShowTagsSchemaPartial = React.createClass({
   },
 
   showDeleteCategoryModal(category) {
-    this.refs["deleteCategoryModal-" + category.get('id')].show();
+    this.getManualRef(`deleteCategoryModal-${category.get('id')}`).show();
   },
 
   showNewTagModal(category) {
-    this.refs["newTagModal-" + category.get('id')].show();
+    this.getManualRef(`newTagModal-${category.get('id')}`).show();
   },
 
   showEditTagModal(tag) {
@@ -138,34 +138,42 @@ const ShowTagsSchemaPartial = React.createClass({
   },
 
   showEditCategoryModal(category) {
-    this.refs["editCategoryModal-" + category.get('id')].show();
+    this.getManualRef(`editCategoryModal-${category.get('id')}`).show();
   },
 
   showNewMetadataSchemaModal(category) {
-    this.refs["newMetadataSchemasModal-" + category.get('id')].show();
+    this.getManualRef(`newMetadataSchemasModal-${category.get('id')}`).show();
+  },
+
+  setManualRef(name, element) {
+    (this.manualRef = this.manualRef || {})[name] = element;
+  },
+
+  getManualRef(name) {
+    return (this.manualRef = this.manualRef || {})[name] || {};
   },
 
   renderCrudModals(category) {
     return (
       <div>
         <CreateModal
-          ref={ "newTagModal-" + category.get('id') }
-          contentPrefix={ this.props.contentPrefix + ".modals.create_tag" }
+          ref={ element => this.setManualRef(`newTagModal-${category.get('id')}`, element) }
+          contentPrefix={ this.props.contentPrefix + '.modals.create_tag' }
           app="vault"
           model="Data.Tag.Item"
           form={ this.buildNewTagForm(category) }
           onDismiss={ this.refreshData }
         />
         <DeleteModal
-          ref={ "deleteCategoryModal-" + category.get('id') }
-          contentPrefix={ this.props.contentPrefix + ".modals.delete_category" }
+          ref={ element => this.setManualRef(`deleteCategoryModal-${category.get('id')}`, element) }
+          contentPrefix={ this.props.contentPrefix + '.modals.delete_category' }
           app="vault" model="Data.Tag.Category"
           selectedRecordIds={ List.of(category.get('id')) }
           onDismiss={ this.refreshData }
         />
         <UpdateModal
-          ref={ "editCategoryModal-" + category.get('id') }
-          contentPrefix={ this.props.contentPrefix + ".modals.edit_category" }
+          ref={ element => this.setManualRef(`editCategoryModal-${category.get('id')}`, element) }
+          contentPrefix={ this.props.contentPrefix + '.modals.edit_category' }
           app="vault"
           model="Data.Tag.Category"
           recordId={ category.get('id') }
@@ -173,7 +181,7 @@ const ShowTagsSchemaPartial = React.createClass({
           onDismiss={ this.refreshData }
         />
         <MetadataSchemaFormModal
-          ref={ "newMetadataSchemasModal-" + category.get('id') }
+          ref={ element => this.setManualRef(`newMetadataSchemasModal-${category.get('id')}`, element) }
           app="vault"
           model="Data.Tag.Category"
           recordKey={ 'tag_category_id' }
