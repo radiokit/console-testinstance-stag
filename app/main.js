@@ -9,7 +9,7 @@ import './services/Plumber'; // for legacy window binding
 
 // this is set to false on staging and production builds
 // and true on local builds
-if (__DEV__) {
+if (process.env.NODE_ENV) {
   window.Perf = require('react-addons-perf');
 }
 
