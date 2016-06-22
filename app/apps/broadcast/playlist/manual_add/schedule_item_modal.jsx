@@ -1,6 +1,10 @@
 import React from 'react';
 import moment from 'moment';
 import classnames from 'classnames';
+import {
+  fromJS,
+  Map,
+} from 'immutable';
 import Translate from 'react-translate-component';
 import Counterpart from 'counterpart';
 import ProgressModal from '../../../../widgets/admin/modal_progress_widget.jsx';
@@ -11,6 +15,7 @@ import InputLocalDateTime from '../../../../widgets/time/input_local_date_time.j
 import './schedule_item_modal.scss';
 const ScheduleItemModal = React.createClass({
   propTypes: {
+    availableUserAccounts: React.PropTypes.object.isRequired,
     currentBroadcastChannel: React.PropTypes.string.isRequired,
     currentBroadcastChannelEntity: React.PropTypes.object.isRequired,
     defaultTimeOffset: React.PropTypes.number.isRequired,
@@ -28,31 +33,45 @@ const ScheduleItemModal = React.createClass({
     return {
       proceedType: 'primary',
       step: 'confirmation',
-      file: this.isInEditMode() ? this.props.record : null,
-      startDate: this.getInitialStartDate(),
-      stopDate: this.getInitialStopDate(),
-      name: this.isInEditMode() ? this.props.record.get('name') : null,
-      duration: this.getInitialDuration(),
       expanded: false,
+      model: this.getInitialModel(),
     };
   },
 
-  getInitialStartDate() {
-    return this.props.record
-      ? this.props.record.get('cue_in_at')
-      : moment(this.props.defaultTimeOffset).add(1, 'hour').startOf('hour').toISOString();
+  getInitialModel() {
+    const scheduleItemToEdit = this.getProvidedScheduleItem();
+    if (scheduleItemToEdit) {
+      return scheduleItemToModel(scheduleItemToEdit);
+    }
+    return getDefaultModel();
   },
 
-  getInitialStopDate() {
-    return this.props.record
-      ? this.props.record.get('cue_out_at')
-      : null;
+  getProvidedScheduleItem() {
+    return this.props.record;
   },
 
-  getInitialDuration() {
-    return this.props.record
-      ? this.calculateDuration(this.props.record)
-      : null;
+  getEditedModel() {
+    return this.state.model || this.getInitialModel();
+  },
+
+  setEditedModel(model) {
+    this.setState({ model });
+  },
+
+  getEditedScheduleItem() {
+    const scheduleItem = modelToScheduleItem(this.getEditedModel());
+    scheduleItem.references = {
+      broadcast_channel_id: this.props.currentBroadcastChannel,
+    };
+    return scheduleItem;
+  },
+
+  getFile() {
+    const model = this.getEditedModel();
+    if (model.file) {
+      return Map({ id: model.file });
+    }
+    return null;
   },
 
   onDismiss() {
@@ -60,41 +79,35 @@ const ScheduleItemModal = React.createClass({
   },
 
   onCancel() {
-    if (this.recordCall) {
-      this.recordCall.teardown();
+  },
+
+  saveModel() {
+    if (this.getProvidedScheduleItem()) {
+      this.updateScheduleItem();
+    } else {
+      this.createScheduleItem();
     }
   },
 
   createScheduleItem() {
-    this.recordCall = RadioKit
-    .record('plumber', 'Media.Input.File.RadioKit.Vault')
-    .on('loading', () => this.changeStep('progress'))
-    .on('loaded', () => this.changeStep('acknowledgement'))
-    .on('error', () => this.changeStep('error'))
-    .create(this.buildScheduleItem());
+    this.changeStep('progress');
+    saveScheduleItem(this.getEditedScheduleItem())
+      .then(() => this.changeStep('acknowledgement'))
+      .catch(() => this.changeStep('error'));
   },
 
   updateScheduleItem() {
-    this.recordCall = RadioKit
-    .record('plumber', 'Media.Input.File.RadioKit.Vault', this.props.record.get('id'))
-    .on('loading', () => this.changeStep('progress'))
-    .on('loaded', () => this.createScheduleItem())
-    .on('error', () => this.changeStep('error'))
-    .destroy();
+    this.changeStep('progress');
+    deleteScheduleItem(this.getProvidedScheduleItem())
+      .then(() => saveScheduleItem(this.getEditedScheduleItem()))
+      .then(() => this.changeStep('acknowledgement'))
+      .catch(() => this.changeStep('error'));
   },
 
-  buildScheduleItem() {
-    return {
-      name: this.state.name,
-      start_at: moment(this.state.startDate).subtract(15, 'seconds').toISOString(),
-      cue_in_at: moment(this.state.startDate).toISOString(),
-      cue_out_at: moment(this.state.stopDate).toISOString(),
-      stop_at: moment(this.state.stopDate).add(15, 'seconds').toISOString(),
-      file: this.state.file.get('id'),
-      references: {
-        broadcast_channel_id: this.props.currentBroadcastChannel,
-      },
-    };
+  clearFile() {
+    const model = this.getEditedModel();
+    const newModel = { ...model, name: null, file: null, end: model.start };
+    this.setEditedModel(newModel);
   },
 
   handleCancel() {
@@ -102,26 +115,7 @@ const ScheduleItemModal = React.createClass({
   },
 
   handleConfirm() {
-    if (this.isInEditMode()) {
-      this.updateScheduleItem();
-    } else {
-      this.createScheduleItem();
-    }
-  },
-
-  isInEditMode() {
-    return !!this.props.record;
-  },
-
-  calculateDuration(file) {
-    const duration = (
-      file.get('stop_at')
-      ? moment(file.get('stop_at')).diff(file.get('start_at'))
-      : file.get('metadata_items')
-          .find((metadataItem) => metadataItem.get('value_duration') !== null)
-          .get('value_duration')
-    );
-    return duration;
+    this.saveModel();
   },
 
   changeStep(step) {
@@ -129,27 +123,37 @@ const ScheduleItemModal = React.createClass({
   },
 
   handleSelectedFile(file) {
+    const model = this.getEditedModel();
     if (file) {
-      const duration = this.calculateDuration(file);
-      const stopDate = moment(this.state.startDate).add(duration, 'ms').toISOString();
-      const name = file.get('name');
-      this.setState({ file, duration, stopDate, name });
+      const newModel = {
+        ...model,
+        file: getFileId(file),
+        end: model.start + getFileDuration(file),
+        name: model.name || getFileName(file),
+      };
+      this.setEditedModel(newModel);
     } else {
-      this.setState({ file: null });
+      this.clearFile();
     }
   },
 
   handleStartDateChange(startDate) {
-    const stopDate = moment(startDate).add(this.state.duration, 'ms').toISOString();
-    this.setState({ startDate, stopDate });
+    const model = this.getEditedModel();
+    const duration = model.end - model.start;
+    const start = new Date(startDate).valueOf();
+    const end = start + duration;
+    const newModel = { ...model, start, end };
+    this.setEditedModel(newModel);
   },
 
   handleNameChange(name) {
-    this.setState({ name });
+    const model = this.getEditedModel();
+    const newModel = { ...model, name };
+    this.setEditedModel(newModel);
   },
 
   handleClearInput() {
-    this.setState({ file: null });
+    this.clearFile();
   },
 
   handleSuccess() {
@@ -166,9 +170,6 @@ const ScheduleItemModal = React.createClass({
   },
 
   renderFileInput() {
-    if (this.isInEditMode()) {
-      return null;
-    }
     return (
       <div className="form-group">
         <Translate
@@ -178,8 +179,9 @@ const ScheduleItemModal = React.createClass({
         />
         <span className="twitter-typeahead">
           <FilePicker
-            placeholder= {Counterpart.translate(`${this.props.contentPrefix}.form.file.hint`)}
-            value={this.state.file}
+            availableUserAccounts={this.props.availableUserAccounts}
+            placeholder={Counterpart.translate(`${this.props.contentPrefix}.form.file.hint`)}
+            value={this.getFile()}
             onChange={this.handleSelectedFile}
             onClearInput={this.handleClearInput}
             id="fileNameInput"
@@ -200,7 +202,7 @@ const ScheduleItemModal = React.createClass({
             htmlFor="startDate"
           />
           <InputLocalDateTime
-            value={this.state.startDate}
+            value={tsToIso(this.getEditedModel().start)}
             onChange={this.handleStartDateChange}
             tz={this.props.currentBroadcastChannelEntity.get('timezone')}
           />
@@ -213,7 +215,7 @@ const ScheduleItemModal = React.createClass({
           />
           <InputLocalDateTime
             disabled
-            value={this.state.stopDate}
+            value={tsToIso(this.getEditedModel().end)}
             tz={this.props.currentBroadcastChannelEntity.get('timezone')}
           />
         </div>
@@ -262,7 +264,7 @@ const ScheduleItemModal = React.createClass({
           type="text"
           className="form-control"
           onChange={(e) => this.handleNameChange(e.target.value)}
-          value={this.state.name}
+          value={this.getEditedModel().name}
         />
         <Translate
           component="label"
@@ -284,25 +286,22 @@ const ScheduleItemModal = React.createClass({
         onCancel={this.handleCancel}
         onConfirm={this.handleConfirm}
         onSuccess={this.handleSuccess}
-        disableProceed={!this.state.file}
+        disableProceed={!isModelValid(this.getEditedModel())}
       >
         <div className="ScheduleItemModal modal-body">
           {this.renderFileInput()}
           {
-            (() => {
-              if (this.state.file) {
-                return (
-                  <div>
-                    {this.renderDateInputs()}
-                    {this.renderOptionalFields()}
-                  </div>
-                );
-              }
-              return null;
-            })()
-        }
+            this.getEditedModel().file
+              ? (
+                <div>
+                  {this.renderDateInputs()}
+                  {this.renderOptionalFields()}
+                </div>
+              )
+              : null
+          }
         </div>
-         <div>
+        <div>
           <Translate
             component="p"
             content={ `${this.props.contentPrefix}.message.progress` }
@@ -321,3 +320,81 @@ const ScheduleItemModal = React.createClass({
 });
 
 export default ScheduleItemModal;
+
+function saveScheduleItem(scheduleItem) {
+  return new Promise((resolve, reject) => {
+    RadioKit
+      .record('plumber', 'Media.Input.File.RadioKit.Vault')
+      .on('loaded', resolve)
+      .on('error', reject)
+      .create(scheduleItem);
+  });
+}
+
+function deleteScheduleItem(scheduleItem) {
+  return new Promise((resolve, reject) => {
+    RadioKit
+      .record('plumber', 'Media.Input.File.RadioKit.Vault', scheduleItem.get('id'))
+      .on('loaded', resolve)
+      .on('error', reject)
+      .destroy();
+  });
+}
+
+function isModelValid(model) {
+  return (
+    !!model.file &&
+    !!model.start &&
+    !!model.end
+  );
+}
+
+function modelToScheduleItem(model) {
+  return {
+    file: model.file,
+    cue_in_at: tsToIso(model.start),
+    cue_out_at: tsToIso(model.end),
+    start_at: tsToIso(model.start - 15 * 1000),
+    stop_at: tsToIso(model.end + 15 * 1000),
+    name: model.name,
+  };
+}
+
+function getDefaultModel() {
+  return {
+    id: null,
+    file: null,
+    start: Date.now(),
+    end: Date.now(),
+    name: null,
+  };
+}
+
+function scheduleItemToModel(scheduleItem) {
+  return {
+    file: scheduleItem.get('file'),
+    start: scheduleItem.get('cue_in_at'),
+    end: scheduleItem.get('cue_out_at'),
+    name: scheduleItem.get('name'),
+  };
+}
+
+function tsToIso(ts) {
+  return new Date(ts).toISOString();
+}
+
+function getFileDuration(file) {
+  return file.get('metadata_items')
+    .find(
+      metadataItem => metadataItem.getIn(['metadata_schema', 'key']) === 'duration'
+    )
+    .get('value_duration');
+}
+
+function getFileName(file) {
+  return file.get('name');
+}
+
+function getFileId(file) {
+  return file.get('id');
+}

@@ -29,6 +29,7 @@ const BroadcastPlaylist = React.createClass({
 
   contextTypes: {
     data: React.PropTypes.object.isRequired,
+    availableUserAccounts: React.PropTypes.object,
     currentBroadcastChannel: React.PropTypes.object.isRequired,
   },
 
@@ -86,6 +87,7 @@ const BroadcastPlaylist = React.createClass({
 
     const childProps = {
       data: this.context.data,
+      availableUserAccounts: this.context.availableUserAccounts,
       currentBroadcastChannel: this.context.currentBroadcastChannel,
 
       offsetStart: parseInt(date, 10),

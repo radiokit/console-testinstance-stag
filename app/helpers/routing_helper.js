@@ -21,6 +21,11 @@ export default {
           return '/apps/broadcast/playlist';
         },
       },
+      auto: {
+        index() {
+          return '/apps/broadcast/auto/index';
+        },
+      },
     },
 
     infrastructure: {

@@ -42,9 +42,6 @@ export default {
               trash: "Files that are supposed to be deleted, purged automatically after 30 days",
             },
           },
-          tags: {
-            all_tags:"All"
-          },
           modals: {
             delete: {
               header: "Delete selected files",

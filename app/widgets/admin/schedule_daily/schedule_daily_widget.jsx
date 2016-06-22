@@ -15,7 +15,9 @@ import ScheduleDomain from '../../../services/ScheduleDomain';
 
 import './schedule_daily_widget.scss';
 
-const MILLISECONDS_IN_HOUR = 1000 * 60 * 60;
+const MILLISECONDS_PER_MINUTE = 1000 * 60;
+const MILLISECONDS_PER_HOUR = MILLISECONDS_PER_MINUTE * 60;
+const MILLISECONDS_PER_DAY = MILLISECONDS_PER_HOUR * 24;
 
 const DAY_START_HOURS_OFFSET = 5;
 
@@ -61,7 +63,7 @@ const ScheduleDaily = React.createClass({
           {range(0, 24).map((_, hour) => (
               <CalendarRow
                 key={hour}
-                offsetStart={actualOffsetStart + hour * MILLISECONDS_IN_HOUR}
+                offsetStart={actualOffsetStart + hour * MILLISECONDS_PER_HOUR}
                 timezone={timezone}
                 items={itemsByHour[hour]}
                 onActiveItemChange={onActiveItemChange}
@@ -77,7 +79,7 @@ const ScheduleDaily = React.createClass({
 export default connect(
   ScheduleDaily,
   ScheduleDomain,
-  (data, props) => {
+  (ScheduleDomainState, props) => {
     const {
       offsetStart = 0,
       currentBroadcastChannel = Map(),
@@ -90,19 +92,14 @@ export default connect(
       timezone,
       DAY_START_HOURS_OFFSET
     );
-    const to = from + 24 * MILLISECONDS_IN_HOUR;
+    const to = from + MILLISECONDS_PER_DAY;
 
     const fromISO = new Date(from).toISOString();
     const toISO = new Date(to).toISOString();
 
-    ScheduleDomain.fetch(
-      fromISO,
-      toISO,
-      currentBroadcastChannel.get('id'),
-      { maxAge: 1000 * 60 * 10 }
-    );
+    ensureSchedule(fromISO, toISO, currentBroadcastChannel.get('id'));
 
-    const items = data
+    const items = ScheduleDomainState
       .getIn(
       [
         'ranges',
@@ -123,6 +120,20 @@ export default connect(
     };
   }
 );
+
+/**
+ * @param {string} from
+ * @param {string} to
+ * @param {string} broadcastChannelId
+ */
+function ensureSchedule(from, to, broadcastChannelId) {
+  ScheduleDomain.fetch(
+    from,
+    to,
+    broadcastChannelId,
+    { maxAge: MILLISECONDS_PER_MINUTE * 10 }
+  );
+}
 
 /**
  * Returns a timestamp of a start of a day.
@@ -148,24 +159,26 @@ function calcDayStart(timestamp, timezone, dayStartHoursOffset) {
  * @returns {Array.<Iterable>}
  */
 function groupByHour(items, offsetStart) {
-  const result = range(0, 24).map(() => []);
-
-  items
-    .forEach(
-      item => {
+  return items
+    .reduce(
+      (partialResult, item) => {
         const itemStart = new Date(item.get('cue_in_at')).valueOf();
         const itemStop = new Date(item.get('cue_out_at')).valueOf();
 
         for (let iHour = 0; iHour < 24; iHour++) {
-          const hourOffset = offsetStart + iHour * MILLISECONDS_IN_HOUR;
+          const hourOffset = offsetStart + iHour * MILLISECONDS_PER_HOUR;
           if (
             itemStop > hourOffset &&
-            itemStart < hourOffset + MILLISECONDS_IN_HOUR
+            itemStart < hourOffset + MILLISECONDS_PER_HOUR
           ) {
-            result[iHour].push(item);
+            partialResult[iHour].push(item);
           }
         }
-      }
-    );
-  return result.map(hour => List(hour));
+
+        return partialResult;
+      },
+      range(0, 24).map(() => [])
+    )
+    .map(hour => List(hour))
+    ;
 }

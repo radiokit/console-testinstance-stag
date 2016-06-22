@@ -1,13 +1,8 @@
 import React from 'react';
 import classnames from 'classnames';
-import {
-  Map,
-  List,
-} from 'immutable';
 
-import AutoDJShuffleForm from './autodj_shuffle_form.jsx';
+import AutoDJShuffleForm from './autodj_shuffle_form_connected.jsx';
 import AutoDJRotationForm from './autodj_rotation_form.jsx';
-import VaultRepositoryPicker from '../../../../widgets/autosuggest/vault_repository_picker.jsx';
 /* eslint max-len: 0 */
 import ContentTypeConnectedPicker from '../../../../widgets/autosuggest/contenttype_connected_picker.jsx';
 import WeekDatesPicker from '../../../../widgets/time/week_dates_picker.jsx';
@@ -34,6 +29,7 @@ import './autodj_form.scss';
 
 const AutoDJForm = React.createClass({
   propTypes: {
+    availableUserAccounts: React.PropTypes.object,
     currentBroadcastChannel: React.PropTypes.string,
     defaultTimeOffset: React.PropTypes.number.isRequired,
     defaultTimePeriod: React.PropTypes.number,
@@ -62,6 +58,11 @@ const AutoDJForm = React.createClass({
   getWeekdays() {
     const model = this.getModel();
     return model.get('weekdays') || EMPTY_WEEKDAYS;
+  },
+  
+  getName() {
+    const model = this.getModel();
+    return model.get('name') || '';
   },
   
   getModel() {
@@ -107,6 +108,10 @@ const AutoDJForm = React.createClass({
   handleContentTypeChange(weeklyplan) {
     this.handleModelChange(['weeklyplan'], weeklyplan);
   },
+  
+  handleNameChange(e) {
+    this.handleModelChange(['name'], e.target.value);
+  },
 
   triggerFormCancel() {
     const { onFormCancel = () => null } = this.props;
@@ -128,27 +133,20 @@ const AutoDJForm = React.createClass({
 
   render() {
     const model = this.getModel();
-    const { step } = this.props;
+    const { step, availableUserAccounts } = this.props;
     const typeDetailsForm = ({
       shuffle: (
-        model.getIn(['repository']) &&
-        (
-          <AutoDJShuffleForm
-            tags={model.getIn(['repository', 'tag_items'], List())}
-            value={model.get('details')}
-            onChange={this.handleDetailsChange}
-          />
-        )
+        <AutoDJShuffleForm
+          availableUserAccounts={availableUserAccounts}
+          value={model.get('details')}
+          onChange={this.handleDetailsChange}
+        />
       ),
       rotation: (
-        model.getIn(['repository']) &&
-        (
-          <AutoDJRotationForm
-            tags={model.getIn(['repository', 'tag_items'], List())}
-            value={model.get('details')}
-            onChange={this.handleDetailsChange}
-          />
-        )
+        <AutoDJRotationForm
+          value={model.get('details')}
+          onChange={this.handleDetailsChange}
+        />
       ),
     })[model.get('type')];
 
@@ -170,23 +168,11 @@ const AutoDJForm = React.createClass({
                 value={model.get('type') || ''}
                 onChange={this.handleTypeChange}
               >
-                <option key={-1} value="">{counterpart('AutoDJForm.types.empty')}</option>
+                <option key={-1} value="" disabled>{counterpart('AutoDJForm.types.empty')}</option>
                 {AUTODJ_OPTIONS.map(option => (
                   <option key={option} value={option}>{counterpart(`AutoDJForm.types.${option}`)}</option>
                 ))}
               </select>
-            </div>
-          </fieldset>
-
-          <fieldset className={classnames('AutoDJForm__section', { hidden: step < STEPS_NAMES.indexOf('repository') })}>
-            <div className="form-group">
-              <label>
-                <Translate content="AutoDJForm.repositoryLabel" />
-              </label>
-              <VaultRepositoryPicker
-                value={model.get('repository') || null}
-                onChange={this.handleRepositoryChange}
-              />
             </div>
           </fieldset>
 
@@ -205,11 +191,21 @@ const AutoDJForm = React.createClass({
                 onChange={this.handleWeekdaysChange}
               />
             </div>
-            <div>
+            <div className="form-group">
               <HourRangePicker
                 value={this.getHours()}
                 onChange={this.handleHoursChange}
               />
+            </div>
+            <div className="form-group">
+              <Translate component="label" content="AutoDJForm.nameLabel" />
+              <input
+                type="text"
+                className="form-control"
+                value={this.getName()}
+                onChange={this.handleNameChange}
+              />
+              <Translate component="p" className="help-block" content="AutoDJForm.nameHelpBlock" />
             </div>
           </fieldset>
 

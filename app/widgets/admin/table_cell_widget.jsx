@@ -8,6 +8,7 @@ import TableCellUrl from './table_cell_url.jsx';
 import TableCellCounter from './table_cell_counter.jsx';
 import TableCellText from './table_cell_text.jsx';
 import TableCellFloat from './table_cell_float.jsx';
+import TableCellBoolean from './table_cell_boolean.jsx';
 import TableCellInteger from './table_cell_integer.jsx';
 import TableCellPercent from './table_cell_percent.jsx';
 import TableCellDuration from './table_cell_duration.jsx';
@@ -67,6 +68,10 @@ export default React.createClass({
 
         case "string":
           cell = (<TableCellString {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value}/>);
+          break;
+
+        case "boolean":
+          cell = (<TableCellBoolean {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value}/>);
           break;
 
         case "waveform":

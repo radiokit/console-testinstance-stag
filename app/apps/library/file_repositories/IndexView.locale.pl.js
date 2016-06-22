@@ -3,13 +3,19 @@ export default {
     library: {
       file_repositories: {
         index: {
-          header: "Repozytoria plików",
+          header: 'Repozytoria plików',
 
           table: {
-            loading: "Pobieranie repozytoriów plików",
+            loading: 'Pobieranie repozytoriów plików',
+          },
+        },
+        show: {
+          sidebar: {
+            all_tags: 'Wszystkie',
+            edit_tag_metadata: 'Edytuj metadane',
           },
         },
       },
-    }
-  }
-}
+    },
+  },
+};

@@ -387,8 +387,13 @@ const FormWidget = React.createClass({
       if (fieldConfig.type !== "hidden") {
         return (
           <div key={ fieldName } className={ formGroupKlass }>
-            <Translate htmlFor={ fieldName } component="label" content={ `${this.props.contentPrefix}.${fieldName}.label` } />
             { input }
+            <Translate
+              htmlFor={ fieldName }
+              component="label"
+              content={ `${this.props.contentPrefix}.${fieldName}.label` }
+              className="FormWidget__label"
+            />
             { hint }
           </div>
         );

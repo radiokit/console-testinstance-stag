@@ -44,7 +44,7 @@ function getScheduleItemStart(item) {
 function formatHMS(dateAlike, timezone) {
   return moment
     .tz(dateAlike, timezone)
-    .format('kk:mm:SS');
+    .format('kk:mm:ss');
 }
 
 function itemsToRanges(items) {

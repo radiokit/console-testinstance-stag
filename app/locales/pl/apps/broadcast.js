@@ -10,6 +10,9 @@ export default {
         live: {
           title: 'Nadawanie na żywo',
         },
+        auto: {
+          title: 'Automat',
+        },
       },
       playlist: {
         header: 'Ramówka',
