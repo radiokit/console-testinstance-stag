@@ -52,7 +52,7 @@ export default {
                 },
                 media_routing_group_id: {
                   label: "Routing Group ID",
-                  hint: "Copy Routing ID from Media section or contact administrator"
+                  hint: "Copy Routing ID from Media section or contact administrator",
                 },
                 description: {
                   label: "Description",
