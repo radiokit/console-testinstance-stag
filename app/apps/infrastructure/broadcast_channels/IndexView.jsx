@@ -8,9 +8,21 @@ Counterpart.registerTranslations("pl", require('./IndexView.locale.pl.js'));
 
 
 export default React.createClass({
+  contextTypes: {
+    availableUserAccounts: React.PropTypes.object.isRequired,
+  },
+
   modifyIndexQuery: function(query) {
+    const availableUserAccountIds = this.context.availableUserAccounts.map((account) => {
+      return account.get('id');
+    }).toJS();
+
+    const accountsCondition = ['references', 'din', 'user_account_id']
+      .concat(availableUserAccountIds)
+
     return query
       .order("name", "asc")
+      .where.apply(this, accountsCondition)
   },
 
 
