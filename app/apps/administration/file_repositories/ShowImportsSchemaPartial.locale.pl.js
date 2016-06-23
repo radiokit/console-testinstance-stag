@@ -27,8 +27,8 @@ export default {
                         header: "Dodaj import",
                         action: {
                           proceed: "Dodaj",
-                          close: "Close",
-                          cancel: "Cancel",
+                          close: "Zamknij",
+                          cancel: "Anuluj",
                         },
                         message: {
                           acknowledgement: "Dodano import",

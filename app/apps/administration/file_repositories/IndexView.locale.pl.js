@@ -34,6 +34,24 @@ export default {
               }
             },
 
+            update: {
+              header: "Edytuj",
+              form: {
+                name: {
+                  label: "Nazwa repozytorium",
+                  hint: "Wybierz jakąkolwiek nazwę, która pozwoli Ci odróżnić to repozytorium plików od innych."
+                }
+              },
+              message: {
+                acknowledgement: "Nazwa repozytorium zmieniona pomyślnie.",
+              },
+              action: {
+                proceed: "Zmień nazwę repozytorium",
+                cancel: "Anuluj",
+                close: "Zamknij",
+              }
+            },
+
             create: {
               header: "Dodawanie repozytorium plików",
               form: {

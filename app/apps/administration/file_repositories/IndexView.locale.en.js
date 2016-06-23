@@ -34,6 +34,24 @@ export default {
               }
             },
 
+            update: {
+              header: "Edit",
+              form: {
+                name: {
+                  label: "Name of the repository",
+                  hint: "Choose any name that will help you to distinguish this file repository from others."
+                }
+              },
+              message: {
+                acknowledgement: "Repository name changed succesfully.",
+              },
+              action: {
+                proceed: "Change repository name",
+                cancel: "Cancel",
+                close: "Close",
+              }
+            },
+
             create: {
               header: "Add file repository",
               form: {
