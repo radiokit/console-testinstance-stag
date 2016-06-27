@@ -150,6 +150,9 @@ const FormWidget = React.createClass({
           params[fieldName] = this.refs[fieldName].getInput();
           break;
 
+        case "skipped":
+          break;
+
         default:
           params[fieldName] = this.refs[fieldName].value
           break;
@@ -353,6 +356,10 @@ const FormWidget = React.createClass({
 
       case "hidden":
         // Render nothing
+        break;
+
+      case "skipped":
+        input = (<Input className="form-control" type="text" id={ fieldName } ref={ fieldName } required={ required } value={ defaultVal } disabled={ true }/>);
         break;
 
       default:

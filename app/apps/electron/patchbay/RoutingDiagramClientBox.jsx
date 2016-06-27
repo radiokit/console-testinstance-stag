@@ -77,7 +77,7 @@ const RoutingDiagramClientBox = (props) => {
                 fontSize="10px"
                 stroke="none"
                 fill="#fff">
-                {audioInterface.get("name")}
+                {audioInterface.get("name") === "" ? audioInterface.get("os_name") : audioInterface.get("name") }
               </text>
             </g>
           );

@@ -81,9 +81,8 @@ const DevicesToolbar = React.createClass({
     if (element.model === 'Resource.Architecture.AudioInterface') {
       return {
         os_name: {
-          type: 'string',
+          type: 'skipped',
           value: element.record ? element.record.get('os_name') : '',
-          disabled: true,
         },
         name: {
           type: 'string',
