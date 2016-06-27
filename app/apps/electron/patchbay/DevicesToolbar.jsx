@@ -14,6 +14,7 @@ import IndexCreateAcknowledgement from './IndexCreateAcknowledgement.jsx';
 const DevicesToolbar = React.createClass({
   propTypes: {
     selectedRecord: React.PropTypes.object.isRequired,
+    onUpdateSuccess: React.PropTypes.func,
   },
 
 
@@ -76,7 +77,6 @@ const DevicesToolbar = React.createClass({
     };
   },
 
-
   render() {
     return (
       <Toolbar>
@@ -107,6 +107,7 @@ const DevicesToolbar = React.createClass({
               recordId: (this.props.selectedRecord.record ?
                          this.props.selectedRecord.record.get('id') :
                          'no-id'),
+              onSuccess: this.props.onUpdateSuccess,
             }}
           />
           <ToolbarButtonModal

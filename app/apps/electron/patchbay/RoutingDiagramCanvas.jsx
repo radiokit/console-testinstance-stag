@@ -171,6 +171,13 @@ export default React.createClass({
     delete this.clientsCoordinates;
   },
 
+  onUpdateSuccess() {
+    this.setState({
+      selectedLinkRule: null,
+      selectedClient: null,
+      selectedAudioInterface: null,
+    });
+  },
 
   render() {
     let filteredLinkRules = this.props.linkRules
@@ -190,6 +197,7 @@ export default React.createClass({
       <div>
         <DevicesToolbar
           selectedRecord={this.getSelectedRecord()}
+          onUpdateSuccess={this.onUpdateSuccess}
         />
 
         <svg version="1.1" height="560" width="100%">
