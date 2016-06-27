@@ -210,10 +210,11 @@ const FormWidget = React.createClass({
       let hint;
       let required = this.isFieldRequired(fieldConfig);
       let defaultVal = fieldConfig.value;
+      let disabled = fieldConfig.disabled;
 
       switch (fieldConfig.type) {
       case "string":
-        input = (<Input className="form-control" type="text" id={ fieldName } ref={ fieldName } required={ required } value={ defaultVal } />);
+        input = (<Input className="form-control" type="text" id={ fieldName } ref={ fieldName } required={ required } value={ defaultVal } disabled={ disabled }/>);
         break;
 
       case "number":

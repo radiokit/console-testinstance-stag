@@ -16,6 +16,9 @@ export default {
             header: "Edit device",
 
             form: {
+              os_name: {
+                label: "Hardware I/O"
+              },
               name: {
                 label: "Name of the device"
               }
@@ -30,7 +33,7 @@ export default {
             message: {
               acknowledgement: "Update successful.",
             },
-            
+
           },
 
           delete: {

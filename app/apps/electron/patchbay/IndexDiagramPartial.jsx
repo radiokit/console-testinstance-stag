@@ -98,7 +98,7 @@ export default React.createClass({
 
       this.audioInterfacesQuery = window.data
         .query('plumber', 'Resource.Architecture.AudioInterface')
-        .select('id', 'name', 'direction', 'references')
+        .select('id', 'name', 'os_name', 'direction', 'references')
         .order('name', 'asc')
         .where.apply(this, clientsCondition)
         .on('fetch', (_event, _query, data) => {

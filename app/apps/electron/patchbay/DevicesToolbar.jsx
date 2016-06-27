@@ -69,12 +69,30 @@ const DevicesToolbar = React.createClass({
   },
 
   buildUpdateForm(element) {
-    return {
-      name: {
-        type: 'string',
-        value: element.record ? element.record.get('name') : '',
-      },
-    };
+    if (element.model === 'Client.Standalone') {
+      return {
+        name: {
+          type: 'string',
+          value: element.record ? element.record.get('name') : '',
+        },
+      };
+    }
+
+    if (element.model === 'Resource.Architecture.AudioInterface') {
+      return {
+        os_name: {
+          type: 'string',
+          value: element.record ? element.record.get('os_name') : '',
+          disabled: true,
+        },
+        name: {
+          type: 'string',
+          value: element.record ? element.record.get('name') : '',
+        },
+      };
+    }
+
+    return {}
   },
 
   render() {
