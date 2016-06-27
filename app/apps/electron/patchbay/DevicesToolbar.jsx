@@ -67,11 +67,11 @@ const DevicesToolbar = React.createClass({
     };
   },
 
-  buildUpdateForm(client) {
+  buildUpdateForm(element) {
     return {
       name: {
         type: 'string',
-        value: client.record ? client.record.get('name') : '',
+        value: element.record ? element.record.get('name') : '',
       },
     };
   },
@@ -96,7 +96,7 @@ const DevicesToolbar = React.createClass({
           <ToolbarButtonModal
             icon="folder"
             labelTextKey="apps.electron.patchbay.update_button"
-            disabled={this.props.selectedRecord.model !== 'Client.Standalone'}
+            disabled={this.props.selectedRecord.record === null}
             modalElement={UpdateModal}
             key={(this.props.selectedRecord && this.props.selectedRecord.id || 'no-id') }
             modalProps={{

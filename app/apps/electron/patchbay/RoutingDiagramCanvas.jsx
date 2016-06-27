@@ -150,7 +150,16 @@ export default React.createClass({
         record: this.state.selectedClient,
         id: this.state.selectedClient.get('id'),
         model: 'Client.Standalone',
-        app: 'auth'
+        app: 'auth',
+      });
+    }
+
+    if (this.state.selectedAudioInterface) {
+      return ({
+        record: this.state.selectedAudioInterface,
+        id: this.state.selectedAudioInterface.get('id'),
+        model: 'Resource.Architecture.AudioInterface',
+        app: 'plumber',
       });
     }
 
