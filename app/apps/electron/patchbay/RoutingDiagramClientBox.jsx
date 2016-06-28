@@ -28,7 +28,7 @@ const RoutingDiagramClientBox = (props) => {
         ry="2"
         width={RoutingDiagramDimensions.getClientWidth()-2}
         height={RoutingDiagramDimensions.getClientHeight(audioInterfacesOfClientCount)-2}
-        fill={props.selectedClient && props.selectedClient.get("id") === props.client.get("id") ? "#f00" : "#006c90" }
+        fill={props.selectedClient && props.selectedClient.get("id") === props.client.get("id") ? "#fff0a0" : "#006c90" }
         stroke="#2b323a" />
 
       <text
@@ -65,7 +65,7 @@ const RoutingDiagramClientBox = (props) => {
                 ry="2"
                 width={RoutingDiagramDimensions.getAudioInterfaceWidth()}
                 height={RoutingDiagramDimensions.getAudioInterfaceHeight()}
-                fill={props.selectedAudioInterface && props.selectedAudioInterface.get("id") === audioInterface.get("id") ? "yellow" : "white"}
+                fill={props.selectedAudioInterface && props.selectedAudioInterface.get("id") === audioInterface.get("id") ? "#fff0a0" : "#fff"}
                 stroke="#2b323a"
                 onClick={props.onAudioInterfaceClick.bind(null, audioInterface)} />
 
@@ -76,7 +76,7 @@ const RoutingDiagramClientBox = (props) => {
                 fontFamily="Roboto,Helvetica,Arial,sans"
                 fontSize="10px"
                 stroke="none"
-                fill="#fff">
+                fill={props.selectedClient && props.selectedClient.get("id") === props.client.get("id") ? "#000" : "#fff" }>
                 {audioInterface.get("name") === "" ? audioInterface.get("os_name") : audioInterface.get("name") }
               </text>
             </g>
