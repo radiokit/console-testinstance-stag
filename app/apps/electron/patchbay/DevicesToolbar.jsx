@@ -108,6 +108,38 @@ const DevicesToolbar = React.createClass({
             },
           },
         },
+        bitrate_playback: {
+          type: 'slider',
+          value: this.props.selectedRecord.record.get('extra') ?
+            (this.props.selectedRecord.record.get('extra').get('bitrate_playback') || 8) :
+            8,
+          min: 8,
+          max: 500,
+        },
+        bitrate_capture: {
+          type: 'slider',
+          value: this.props.selectedRecord.record.get('extra') ?
+            (this.props.selectedRecord.record.get('extra').get('bitrate_playback') || 8) :
+            8,
+          min: 8,
+          max: 500,
+        },
+        latency_playback: {
+          type: 'slider',
+          value: this.props.selectedRecord.record.get('extra') ?
+            (this.props.selectedRecord.record.get('extra').get('latency_playback') || 10) :
+            10,
+          min: 10,
+          max: 60000,
+        },
+        latency_capture: {
+          type: 'slider',
+          value: this.props.selectedRecord.record.get('extra') ?
+            (this.props.selectedRecord.record.get('extra').get('latency_capture') || 10) :
+            10,
+          min: 10,
+          max: 60000,
+        },
       };
     }
 

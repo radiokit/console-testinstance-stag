@@ -5,6 +5,8 @@ import clone from 'clone';
 import DateTimePicker from './date_time_picker.jsx';
 import Input from './form_input.jsx';
 
+import '../../../vendor/assets/javascripts/materialadmin/libs/jquery-ui/jquery-ui.min.js';
+import '../../../vendor/assets/stylesheets/materialadmin/libs/jquery-ui/jquery-ui-theme.css';
 import './form_widget.scss';
 const FormWidget = React.createClass({
   propTypes: {
@@ -154,7 +156,19 @@ const FormWidget = React.createClass({
           break;
 
         case "toggle":
-          params[fieldName] = document.querySelector('input[name=' + fieldName + ']:checked').value;
+          let checkedField = document.querySelector('input[name=' + fieldName + ']:checked');
+          if (checkedField) {
+            params[fieldName] = checkedField.value;
+          }
+
+          break;
+
+        case "slider":
+          if (!params.extra) {
+            params.extra = {};
+          }
+
+          params.extra[fieldName] = parseInt(this.refs[fieldName].innerHTML);
           break;
 
         default:
@@ -373,12 +387,10 @@ const FormWidget = React.createClass({
           const option = fieldConfig.toggleOptions[index];
           const className  = fieldConfig.checked === option.value ? "btn ink-reaction btn-primary active" : "btn ink-reaction btn-primary"
 
-          debugger
           let toggleOption = (
             <label key={index} className={className}>
-							<input type="radio" name={fieldName} value={option.value}>
-                {option.label}
-              </input>
+							<input type="radio" name={fieldName} value={option.value} />
+              {option.name}
 						</label>
           );
 
@@ -389,6 +401,17 @@ const FormWidget = React.createClass({
           <div ref={ fieldName } className="btn-group" data-toggle="buttons" style={{ float: 'none' }}>
 			      {toggleOptions}
 					</div>)
+        break;
+
+      case "slider":
+        input = (
+					<div className="input-group">
+						<div className="input-group-content form-control-static">
+							<div className="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><span className="ui-slider-handle ui-state-default ui-corner-all" tabIndex="0" style={{ left: '20%' }}></span></div>
+						</div>
+						<div className="input-group-addon" id={fieldName} ref={fieldName}>{fieldConfig.value}</div>
+					</div>
+        );
         break;
 
       default:
