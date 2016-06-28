@@ -75,6 +75,7 @@ const RoutingDiagramLinkRulePath = (props) => {
               ${stopPoint}`}
         strokeWidth="2"
         stroke={props.selectedLinkRule && props.selectedLinkRule.get("id") === props.linkRule.get("id") ? "#f00" : "#2b323a"}
+        strokeDasharray={props.linkRule.toJS().active ? "0" : "5"}
         fill="none"
         onClick={props.onLinkRuleClick} />
       </g>
