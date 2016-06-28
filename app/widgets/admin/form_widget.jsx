@@ -386,7 +386,7 @@ const FormWidget = React.createClass({
         }
 
         input = (
-          <div ref={ fieldName } className="btn-group" data-toggle="buttons">
+          <div ref={ fieldName } className="btn-group" data-toggle="buttons" style={{ float: 'none' }}>
 			      {toggleOptions}
 					</div>)
         break;
