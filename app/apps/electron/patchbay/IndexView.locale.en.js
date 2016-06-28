@@ -21,13 +21,18 @@ export default {
               },
               name: {
                 label: "Name of the device"
-              }
+              },
+              active: {
+                label: "Active",
+              },
             },
 
             action: {
               proceed: "Update device",
               cancel: "Cancel",
               close: "Close",
+              enable: "Enable",
+              disable: "Disable",
             },
 
             message: {

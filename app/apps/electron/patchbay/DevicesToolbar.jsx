@@ -10,6 +10,7 @@ import DeleteModal from '../../../widgets/admin/crud/delete_modal.jsx';
 import ToolbarGroup from '../../../widgets/admin/toolbar_group_widget.jsx';
 import ToolbarButtonModal from '../../../widgets/admin/toolbar_button_modal_widget.jsx';
 import IndexCreateAcknowledgement from './IndexCreateAcknowledgement.jsx';
+import Counterpart from 'counterpart';
 
 const DevicesToolbar = React.createClass({
   propTypes: {
@@ -98,11 +99,11 @@ const DevicesToolbar = React.createClass({
           checked: element.active,
           toggleOptions: {
             true: {
-              label: 'Enabled',
+              label: Counterpart.translate('apps.electron.patchbay.modals.update.action.enable'),
               value: 'true',
             },
             false: {
-              label: 'Disabled',
+              label: Counterpart.translate('apps.electron.patchbay.modals.update.action.disable'),
               value: 'false',
             },
           },
