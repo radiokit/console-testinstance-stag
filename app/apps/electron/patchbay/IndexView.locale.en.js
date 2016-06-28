@@ -25,6 +25,18 @@ export default {
               active: {
                 label: "Active",
               },
+              bitrate_playback: {
+                label: "Playback bitrate",
+              },
+              bitrate_capture: {
+                label: "Capture bitrate",
+              },
+              latency_playback: {
+                label: "Playback latency",
+              },
+              latency_capture: {
+                label: "Capture latency",
+              },
             },
 
             action: {

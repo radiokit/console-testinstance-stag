@@ -168,7 +168,7 @@ const FormWidget = React.createClass({
             params.extra = {};
           }
 
-          params.extra[fieldName] = parseInt(this.refs[fieldName].innerHTML);
+          params.extra[fieldName] = parseInt(this.refs[fieldName].value);
           break;
 
         default:
@@ -222,7 +222,6 @@ const FormWidget = React.createClass({
 
     return loadedDeferredFields;
   },
-
 
   renderForm() {
     let fields = Object.keys(this.props.form).map((fieldName) => {
@@ -405,12 +404,9 @@ const FormWidget = React.createClass({
 
       case "slider":
         input = (
-					<div className="input-group">
-						<div className="input-group-content form-control-static">
-							<div className="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><span className="ui-slider-handle ui-state-default ui-corner-all" tabIndex="0" style={{ left: '20%' }}></span></div>
-						</div>
-						<div className="input-group-addon" id={fieldName} ref={fieldName}>{fieldConfig.value}</div>
-					</div>
+          <div>
+					  <input ref={fieldName} id={fieldName} type="range" defaultValue={fieldConfig.value} min={fieldConfig.min} max={fieldConfig.max} style={{ cursor: "pointer"}}/>
+          </div>
         );
         break;
 
