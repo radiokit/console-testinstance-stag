@@ -119,7 +119,7 @@ const DevicesToolbar = React.createClass({
         bitrate_capture: {
           type: 'slider',
           value: this.props.selectedRecord.record.get('extra') ?
-            (this.props.selectedRecord.record.get('extra').get('bitrate_playback') || 8) :
+            (this.props.selectedRecord.record.get('extra').get('bitrate_capture') || 8) :
             8,
           min: 8,
           max: 500,

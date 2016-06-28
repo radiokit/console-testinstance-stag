@@ -223,6 +223,13 @@ const FormWidget = React.createClass({
     return loadedDeferredFields;
   },
 
+  onSliderChange(e) {
+    const fieldName = e.target.name;
+    const valueField = document.getElementById(`${fieldName}_id`);
+
+    valueField.value = e.target.value;
+  },
+
   renderForm() {
     let fields = Object.keys(this.props.form).map((fieldName) => {
       let fieldConfig = this.props.form[fieldName];
@@ -389,7 +396,7 @@ const FormWidget = React.createClass({
           let toggleOption = (
             <label key={index} className={className}>
 							<input type="radio" name={fieldName} value={option.value} />
-              {option.name}
+              {option.label}
 						</label>
           );
 
@@ -404,8 +411,9 @@ const FormWidget = React.createClass({
 
       case "slider":
         input = (
-          <div>
-					  <input ref={fieldName} id={fieldName} type="range" defaultValue={fieldConfig.value} min={fieldConfig.min} max={fieldConfig.max} style={{ cursor: "pointer"}}/>
+          <div style={{marginBottom: "10px", width: "100%", height: "15px"}}>
+					  <input name={fieldName} ref={fieldName} type="range" defaultValue={fieldConfig.value} min={fieldConfig.min} max={fieldConfig.max} style={{ cursor: "pointer", float: "left", width: "85%" }} onChange={this.onSliderChange} />
+            <input type="text" id={fieldName + '_id'} defaultValue={fieldConfig.value} style={{ float: "left", width: "10%", marginLeft: "10px", position: "relative", bottom: "5px" }} />
           </div>
         );
         break;
