@@ -142,6 +142,7 @@ export default React.createClass({
         id: this.state.selectedLinkRule.get('id'),
         model: 'Config.Routing.LinkRule',
         app: 'plumber',
+        active: this.state.selectedLinkRule.get('active').toString(),
       });
     }
 

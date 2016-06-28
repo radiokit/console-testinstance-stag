@@ -153,6 +153,10 @@ const FormWidget = React.createClass({
         case "skipped":
           break;
 
+        case "toggle":
+          params[fieldName] = document.querySelector('input[name=' + fieldName + ']:checked').value;
+          break;
+
         default:
           params[fieldName] = this.refs[fieldName].value
           break;
@@ -360,6 +364,31 @@ const FormWidget = React.createClass({
 
       case "skipped":
         input = (<Input className="form-control" type="text" id={ fieldName } ref={ fieldName } required={ required } value={ defaultVal } disabled={ true }/>);
+        break;
+
+      case "toggle":
+        let toggleOptions = [];
+
+        for (const index in fieldConfig.toggleOptions) {
+          const option = fieldConfig.toggleOptions[index];
+          const className  = fieldConfig.checked === option.value ? "btn ink-reaction btn-primary active" : "btn ink-reaction btn-primary"
+
+          debugger
+          let toggleOption = (
+            <label key={index} className={className}>
+							<input type="radio" name={fieldName} value={option.value}>
+                {option.label}
+              </input>
+						</label>
+          );
+
+          toggleOptions.push(toggleOption);
+        }
+
+        input = (
+          <div ref={ fieldName } className="btn-group" data-toggle="buttons">
+			      {toggleOptions}
+					</div>)
         break;
 
       default:

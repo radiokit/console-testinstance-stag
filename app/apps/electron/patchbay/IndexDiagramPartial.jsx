@@ -120,7 +120,7 @@ export default React.createClass({
     if (!this.linkRulesQuery) {
       this.linkRulesQuery = window.data
         .query('plumber', 'Config.Routing.LinkRule')
-        .select('id', 'source_audio_interface_id', 'destination_audio_interface_id')
+        .select('id', 'source_audio_interface_id', 'destination_audio_interface_id', 'active')
         .where('source_audio_interface_id', 'in', this.state.loadedAudioInterfaces.map((audioInterface) => { return audioInterface.get('id'); }).toJS())
         .on('fetch', (_event, _query, data) => {
           if(this.isMounted()) {

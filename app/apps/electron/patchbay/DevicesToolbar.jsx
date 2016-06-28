@@ -91,7 +91,26 @@ const DevicesToolbar = React.createClass({
       };
     }
 
-    return {}
+    if (element.model === 'Config.Routing.LinkRule') {
+      return {
+        active: {
+          type: 'toggle',
+          checked: element.active,
+          toggleOptions: {
+            true: {
+              label: 'Enabled',
+              value: 'true',
+            },
+            false: {
+              label: 'Disabled',
+              value: 'false',
+            },
+          },
+        },
+      };
+    }
+
+    return {};
   },
 
   render() {
