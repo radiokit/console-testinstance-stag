@@ -154,6 +154,9 @@ const FormWidget = React.createClass({
         case "skipped":
           break;
 
+        case "separator":
+          break;
+
         case "toggle":
           let checkedField = document.querySelector('input[name=' + fieldName + ']:checked');
           if (checkedField) {
@@ -417,6 +420,10 @@ const FormWidget = React.createClass({
         );
         break;
 
+      case "separator":
+        input = (<hr />);
+        break;
+
       default:
         throw new Error("Unknown input type '" + fieldConfig.type + "'");
       }
@@ -447,7 +454,15 @@ const FormWidget = React.createClass({
         formGroupKlass = "form-group";
       }
 
-      if (fieldConfig.type !== "hidden") {
+      if (fieldConfig.type === 'separator') {
+        return (
+          <div className='separator'>
+            { input }
+          </div>
+        );
+      }
+
+      if (fieldConfig.type !== 'hidden') {
         return (
           <div key={ fieldName } className={ formGroupKlass }>
             { input }
