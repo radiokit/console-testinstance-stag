@@ -5,8 +5,7 @@ import clone from 'clone';
 import DateTimePicker from './date_time_picker.jsx';
 import Input from './form_input.jsx';
 
-import '../../../vendor/assets/javascripts/materialadmin/libs/jquery-ui/jquery-ui.min.js';
-import '../../../vendor/assets/stylesheets/materialadmin/libs/jquery-ui/jquery-ui-theme.css';
+import './form_widget_slider.scss';
 import './form_widget.scss';
 const FormWidget = React.createClass({
   propTypes: {
