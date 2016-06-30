@@ -20,7 +20,7 @@ const RoutingDiagramClientLayer = (props) => {
         clientsCoordinates={props.clientsCoordinates}
         onDragMove={props.onClientDragMove.bind(null, client)}
         onDragStop={props.onClientDragStop.bind(null, client)}
-        onClientBoxClick={props.onClientBoxClick.bind(null, client)}
+        onClientBoxClick={props.onClientBoxClick.bind(null, client, clientX, clientY)}
         selectedClient={props.selectedClient} />
     );
   }

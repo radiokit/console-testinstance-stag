@@ -108,22 +108,27 @@ export default React.createClass({
   },
 
 
-  onClientBoxClick(client) {
-    if (this.state.selectedClient) {
-      if (this.state.selectedClient.get('id') === client.get('id')) {
-        this.setState({
-          selectedClient: null,
-        });
+  onClientBoxClick(client, x, y) {
+    const clientX = client.get('extra').get('electron').get('diagram').get('x');
+    const clientY = client.get('extra').get('electron').get('diagram').get('y');
+
+    if (clientX === x && clientY === y) {
+      if (this.state.selectedClient) {
+        if (this.state.selectedClient.get('id') === client.get('id')) {
+          this.setState({
+            selectedClient: null,
+          });
+        } else {
+          this.setState({
+            selectedClient: client,
+          });
+        }
       } else {
         this.setState({
+          selectedLinkRule: null,
           selectedClient: client,
         });
       }
-    } else {
-      this.setState({
-        selectedLinkRule: null,
-        selectedClient: client,
-      });
     }
   },
 
