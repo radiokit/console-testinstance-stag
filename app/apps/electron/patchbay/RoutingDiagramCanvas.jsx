@@ -55,6 +55,8 @@ export default React.createClass({
     if (this.state.selectedAudioInterface === null) {
       this.setState({
         selectedAudioInterface: audioInterface,
+        selectedLinkRule: null,
+        selectedClient: null,
       });
     } else {
       if (this.state.selectedAudioInterface.get('id') === audioInterface.get('id')) {
@@ -108,6 +110,7 @@ export default React.createClass({
     } else {
       this.setState({
         selectedClient: null,
+        selectedAudioInterface: null,
         selectedLinkRule: linkRule,
       });
     }
@@ -127,11 +130,14 @@ export default React.createClass({
         } else {
           this.setState({
             selectedClient: client,
+            selectedLinkRule: null,
+            selectedAudioInterface: null,
           });
         }
       } else {
         this.setState({
           selectedLinkRule: null,
+          selectedAudioInterface: null,
           selectedClient: client,
         });
       }
