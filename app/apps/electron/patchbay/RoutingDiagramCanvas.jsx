@@ -57,32 +57,38 @@ export default React.createClass({
         selectedAudioInterface: audioInterface,
       });
     } else {
-      if (this.state.selectedAudioInterface.get('direction') !== audioInterface.get('direction')) {
-        let sourceAudioInterface;
-        let destinationAudioInterface;
-
-        if (this.state.selectedAudioInterface.get('direction') === 'capture') {
-          sourceAudioInterface = this.state.selectedAudioInterface;
-          destinationAudioInterface = audioInterface;
-        } else {
-          sourceAudioInterface = audioInterface;
-          destinationAudioInterface = this.state.selectedAudioInterface;
-        }
-
+      if (this.state.selectedAudioInterface.get('id') === audioInterface.get('id')) {
         this.setState({
           selectedAudioInterface: null,
-        }, () => {
-          window.data
-            .record('plumber', 'Config.Routing.LinkRule')
-            .create({
-              source_audio_interface_id: sourceAudioInterface.get('id'),
-              destination_audio_interface_id: destinationAudioInterface.get('id'),
-            });
         });
       } else {
-        this.setState({
-          selectedAudioInterface: audioInterface,
-        });
+        if (this.state.selectedAudioInterface.get('direction') !== audioInterface.get('direction')) {
+          let sourceAudioInterface;
+          let destinationAudioInterface;
+
+          if (this.state.selectedAudioInterface.get('direction') === 'capture') {
+            sourceAudioInterface = this.state.selectedAudioInterface;
+            destinationAudioInterface = audioInterface;
+          } else {
+            sourceAudioInterface = audioInterface;
+            destinationAudioInterface = this.state.selectedAudioInterface;
+          }
+
+          this.setState({
+            selectedAudioInterface: null,
+          }, () => {
+            window.data
+              .record('plumber', 'Config.Routing.LinkRule')
+              .create({
+                source_audio_interface_id: sourceAudioInterface.get('id'),
+                destination_audio_interface_id: destinationAudioInterface.get('id'),
+              });
+          });
+        } else {
+          this.setState({
+            selectedAudioInterface: audioInterface,
+          });
+        }
       }
     }
   },
