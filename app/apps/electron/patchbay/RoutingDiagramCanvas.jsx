@@ -189,6 +189,7 @@ export default React.createClass({
     delete this.clientsCoordinates;
   },
 
+
   onUpdateSuccess() {
     this.setState({
       selectedLinkRule: null,
@@ -196,6 +197,18 @@ export default React.createClass({
       selectedAudioInterface: null,
     });
   },
+
+
+  deselectAll(e) {
+    if (e.target.getAttribute('data-role') === 'background') {
+      this.setState({
+        selectedClient: null,
+        selectedAudioInterface: null,
+        selectedLinkRule: null,
+      });
+    }
+  },
+
 
   render() {
     let filteredLinkRules = this.props.linkRules
@@ -218,7 +231,7 @@ export default React.createClass({
           onUpdateSuccess={this.onUpdateSuccess}
         />
 
-        <svg version="1.1" height="560" width="100%">
+      <svg version="1.1" height="560" width="100%" data-role="background" onClick={this.deselectAll}>
           <RoutingDiagramClientLayer
             clients={this.props.clients}
             audioInterfaces={this.props.audioInterfaces}
