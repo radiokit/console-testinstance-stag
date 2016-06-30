@@ -4,8 +4,7 @@ import RoutingDiagramClientDraggable from './RoutingDiagramClientDraggable.jsx';
 
 
 const RoutingDiagramClientLayer = (props) => {
-  let clients = props.clients.map((client) => {
-    // If client was moved, use its new coordinates, otherwise get one that came with props
+  function renderClient(client) {
     let clientX = props.clientsCoordinates.has(client.get("id")) ? props.clientsCoordinates.get(client.get("id")).get("x") : client.get("extra").get("electron").get("diagram").get("x");
     let clientY = props.clientsCoordinates.has(client.get("id")) ? props.clientsCoordinates.get(client.get("id")).get("y") : client.get("extra").get("electron").get("diagram").get("y");
 
@@ -24,11 +23,32 @@ const RoutingDiagramClientLayer = (props) => {
         onClientBoxClick={props.onClientBoxClick.bind(null, client)}
         selectedClient={props.selectedClient} />
     );
-  });
+  }
+
+  const clients = props.selectedClient ? props.clients
+    .filter((client) => {
+      return client.get('id') !== props.selectedClient.get('id')
+    }) : props.clients
+
+  const selectedClient = props.selectedClient ? props.clients
+    .find((client) => {
+      return client.get('id') === props.selectedClient.get('id')
+    }) : null
+
+
+  const allClients = clients ? clients
+    .map((client) => {
+      return renderClient(client);
+    }) : [];
+
+  const topClient = selectedClient ?
+      renderClient(selectedClient) :
+      null;
 
   return (
     <g>
-      {clients}
+      {allClients}
+      {topClient}
     </g>
   );
 }

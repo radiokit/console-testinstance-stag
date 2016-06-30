@@ -39,14 +39,12 @@ export default React.createClass({
       dragStartClientX: e.clientX,
       dragStartClientY: e.clientY,
     }, () => {
-      this.refs.container.parentNode.appendChild(this.refs.container);
-
       if (this.props.onDragStart) {
         this.props.onDragStart(this.state.x, this.state.y);
       }
 
       if (this.props.onElementClick) {
-        setTimeout(() => {
+        setTimeout(() => { // po co set timeout? FIXME
           if (!this.state.dragging) {
             this.props.onElementClick();
           }
@@ -68,6 +66,8 @@ export default React.createClass({
 
   stopDragging: function() {
     if(this.state.dragging) {
+      // if this.state.dragStartX === this.state.x ...
+      //  handler klikniecia
       this.setState({
         dragging: false,
         dragStartX: null,
