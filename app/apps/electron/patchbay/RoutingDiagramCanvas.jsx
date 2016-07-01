@@ -24,9 +24,17 @@ export default React.createClass({
       selectedAudioInterface: null,
       selectedClient: null,
       selectedLinkRule: null,
+      draggingClient: false,
+      lastSelectedClient: null,
     };
   },
 
+  onClientDragStart(client) {
+    this.setState({
+      draggingClient: true,
+      dragStartX: client.get('extra')
+    })
+  },
 
   onClientDragMove(client, x, y) {
     this.clientsCoordinates =
@@ -39,6 +47,10 @@ export default React.createClass({
     if (this.props.onClientDragStop) {
       this.props.onClientDragStop(client, x, y);
     }
+
+    this.setState({
+      draggingClient: false,
+    })
   },
 
 
@@ -130,6 +142,7 @@ export default React.createClass({
         } else {
           this.setState({
             selectedClient: client,
+            lastSelectedClient: client,
             selectedLinkRule: null,
             selectedAudioInterface: null,
           });
@@ -139,6 +152,7 @@ export default React.createClass({
           selectedLinkRule: null,
           selectedAudioInterface: null,
           selectedClient: client,
+          lastSelectedClient: client,
         });
       }
     }
@@ -239,9 +253,11 @@ export default React.createClass({
             onAudioInterfaceClick={this.onAudioInterfaceClick}
             selectedAudioInterface={this.state.selectedAudioInterface}
             onClientDragMove={this.onClientDragMove}
+            onClientDragStart={this.onClientDragStart}
             onClientDragStop={this.onClientDragStop}
             onClientBoxClick={this.onClientBoxClick}
             selectedClient={this.state.selectedClient}
+            lastSelectedClient={this.state.lastSelectedClient}
           />
           <RoutingDiagramLinkRuleLayer
             clients={this.props.clients}
@@ -251,6 +267,13 @@ export default React.createClass({
             onLinkRuleClick={this.onLinkRuleClick}
             clientsCoordinates={this.clientsCoordinates}
           />
+        {() => {
+          if(this.state.draggingClient === true) {
+            return (
+              <rect fillOpacity="0" height="100%" width="100%" onMouseMove={this.onMouseMove} />
+            )
+          }
+        }()}
         </svg>
       </div>
     );
