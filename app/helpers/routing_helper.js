@@ -26,6 +26,11 @@ export default {
           return '/apps/broadcast/auto/index';
         },
       },
+      switch: {
+        index() {
+          return '/apps/broadcast/switch/index';
+        },
+      },
     },
 
     infrastructure: {
