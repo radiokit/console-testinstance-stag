@@ -9,6 +9,8 @@ import RoutingHelper from '../../../helpers/routing_helper.js';
 Counterpart.registerTranslations('en', require('./IndexView.locale.en.js'));
 Counterpart.registerTranslations('pl', require('./IndexView.locale.pl.js'));
 
+import './IndexView.scss';
+
 export default React.createClass({
   contextTypes: {
     availableUserAccounts: React.PropTypes.object.isRequired,
@@ -36,6 +38,8 @@ export default React.createClass({
           if (this.isMounted()) {
             this.setState({
               loadedStreams: data,
+            }, () => {
+              this.loadRoutingLinks();
             });
           }
         })
@@ -45,11 +49,16 @@ export default React.createClass({
 
   loadRoutingLinks() {
     if (!this.routingLinksQuery) {
+      const streamsIds = this.state.loadedStreams.toJS().map((stream) => {
+        return stream.id;
+      });
+
       this.routingLinksQuery = window.data
         .query('plumber', 'Media.Routing.Link')
-        .select('id', 'input_media_routing_group_id')
+        .select('id', 'input_stream_rtp_id', 'output_media_routing_group_id')
         .order('id', 'asc')
         .where('output_media_routing_group_id', 'eq', this.context.currentBroadcastChannel.get('media_routing_group_id'))
+        .where('input_stream_rtp_id', 'in', streamsIds)
         .on('fetch', (_event, _query, data) => {
           if (this.isMounted()) {
             this.setState({
@@ -78,11 +87,23 @@ export default React.createClass({
       const streams = this.state.loadedStreams.toJS();
 
       streams.forEach((stream) => {
+        let routingLink;
+        let className = 'btn btn-block btn-default text-center small-padding';
+
+        if (this.state.loadedRoutingLinks) {
+          routingLink = this.state.loadedRoutingLinks.toJS().find((link) => {
+            return link.input_stream_rtp_id === stream.id;
+          });
+        }
+
+        if (routingLink) {
+          className = `${className} playing`;
+        }
 
         const streamElement = (
           <div className="col-md-4" key={stream.id}>
             <Card cardPadding={false} headerVisible={false}>
-              <a className="btn btn-block btn-default text-center small-padding" onClick={() => this.createRoutingLink(stream)}>
+              <a className={className} onClick={() => this.createRoutingLink(stream)}>
                 <i className={`text-xxxxl mdi mdi-${RoutingHelper.apps.electron.icon}`} />
                 <span style={{ position: 'relative', bottom: '18px' }}>
                   {stream.id}
@@ -105,7 +126,6 @@ export default React.createClass({
 
   componentDidMount() {
     this.loadStreams();
-    this.loadRoutingLinks();
   },
 
   componentWillUnmount() {
