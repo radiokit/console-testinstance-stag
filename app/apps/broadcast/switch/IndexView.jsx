@@ -81,6 +81,20 @@ export default React.createClass({
       .create(routingLinkParams);
   },
 
+  deleteRoutingLink(routingLink) {
+    window.data
+      .record('plumber', 'Media.Routing.Link', routingLink.id)
+      .destroy();
+  },
+
+  toggleRoutingLink(routingLink, stream) {
+    if (routingLink) {
+      this.deleteRoutingLink(routingLink);
+    } else {
+      this.createRoutingLink(stream);
+    }
+  },
+
   renderStreams() {
     if (this.state.loadedStreams) {
       const streamsList = [];
@@ -97,7 +111,7 @@ export default React.createClass({
         const streamElement = (
           <div className="col-md-4" key={stream.id}>
             <Card cardPadding={false} headerVisible={false}>
-              <a className={className} onClick={() => this.createRoutingLink(stream)}>
+              <a className={className} onClick={() => this.toggleRoutingLink(routingLink, stream)}>
                 <i className={`text-xxxxl mdi mdi-${RoutingHelper.apps.electron.icon}`} />
                 <span style={{ position: 'relative', bottom: '18px' }}>
                   {stream.id}
