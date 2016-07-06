@@ -18,6 +18,7 @@ export default React.createClass({
   getInitialState() {
     return {
       loadedStreams: null,
+      loadedRoutingLinks: null,
     };
   },
 
@@ -26,7 +27,7 @@ export default React.createClass({
       const streamsRoles = ['loopcast'];
       const streamsCondition = ['references', 'din', 'role'].concat(streamsRoles);
 
-      this.audioInterfacesQuery = window.data
+      this.streamsQuery = window.data
         .query('plumber', 'Media.Input.Stream.RTP')
         .select('id', 'references')
         .order('id', 'asc')
@@ -42,18 +43,37 @@ export default React.createClass({
     }
   },
 
+  loadRoutingLinks() {
+    if (!this.routingLinksQuery) {
+      this.routingLinksQuery = window.data
+        .query('plumber', 'Media.Routing.Link')
+        .select('id', 'input_media_routing_group_id')
+        .order('id', 'asc')
+        .where('output_media_routing_group_id', 'eq', this.context.currentBroadcastChannel.get('id'))
+        .on('fetch', (_event, _query, data) => {
+          if (this.isMounted()) {
+            this.setState({
+              loadedRoutingLinks: data,
+            });
+          }
+        })
+        .enableAutoUpdate();
+    }
+  },
+
   renderStreams() {
     if (this.state.loadedStreams) {
       const streamsList = [];
       const streams = this.state.loadedStreams.toJS();
 
       streams.forEach((stream) => {
+
         const streamElement = (
           <div className="col-md-4">
             <Card cardPadding={false} headerVisible={false}>
               <a className="btn btn-block btn-default text-center small-padding">
                 <i className={`text-xxxxl mdi mdi-${RoutingHelper.apps.electron.icon}`} />
-                <span style={{position: "relative", bottom: "18px"}}>
+                <span style={{ position: 'relative', bottom: '18px' }}>
                   {stream.id}
                 </span>
               </a>
@@ -74,12 +94,18 @@ export default React.createClass({
 
   componentDidMount() {
     this.loadStreams();
+    this.loadRoutingLinks();
   },
 
   componentWillUnmount() {
     if (this.streamsQuery) {
       this.streamsQuery.teardown();
       delete this.streamsQuery;
+    }
+
+    if (this.routingLinksQuery) {
+      this.routingLinksQuery.teardown();
+      delete this.routingLinksQuery;
     }
   },
 

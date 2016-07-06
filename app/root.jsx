@@ -135,7 +135,7 @@ export default React.createClass({
 
     RadioKit
       .query('agenda', 'Broadcast.Channel')
-      .select('id', 'name', 'references', 'timezone')
+      .select('id', 'name', 'references', 'timezone', 'media_routing_group_id')
       .where.apply(this, accountsCondition)
       .order('name', 'asc')
       .on('error', () => {
