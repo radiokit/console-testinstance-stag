@@ -49,7 +49,7 @@ export default React.createClass({
         .query('plumber', 'Media.Routing.Link')
         .select('id', 'input_media_routing_group_id')
         .order('id', 'asc')
-        .where('output_media_routing_group_id', 'eq', this.context.currentBroadcastChannel.get('id'))
+        .where('output_media_routing_group_id', 'eq', this.context.currentBroadcastChannel.get('media_routing_group_id'))
         .on('fetch', (_event, _query, data) => {
           if (this.isMounted()) {
             this.setState({
@@ -61,6 +61,17 @@ export default React.createClass({
     }
   },
 
+  createRoutingLink(stream) {
+    const routingLinkParams = {
+      input_stream_rtp_id: stream.id,
+      output_media_routing_group_id: this.context.currentBroadcastChannel.get('media_routing_group_id'),
+    };
+
+    window.data
+      .record('plumber', 'Media.Routing.Link')
+      .create(routingLinkParams);
+  },
+
   renderStreams() {
     if (this.state.loadedStreams) {
       const streamsList = [];
@@ -69,9 +80,9 @@ export default React.createClass({
       streams.forEach((stream) => {
 
         const streamElement = (
-          <div className="col-md-4">
+          <div className="col-md-4" key={stream.id}>
             <Card cardPadding={false} headerVisible={false}>
-              <a className="btn btn-block btn-default text-center small-padding">
+              <a className="btn btn-block btn-default text-center small-padding" onClick={() => this.createRoutingLink(stream)}>
                 <i className={`text-xxxxl mdi mdi-${RoutingHelper.apps.electron.icon}`} />
                 <span style={{ position: 'relative', bottom: '18px' }}>
                   {stream.id}
