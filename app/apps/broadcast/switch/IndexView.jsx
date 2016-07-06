@@ -87,14 +87,8 @@ export default React.createClass({
       const streams = this.state.loadedStreams.toJS();
 
       streams.forEach((stream) => {
-        let routingLink;
         let className = 'btn btn-block btn-default text-center small-padding';
-
-        if (this.state.loadedRoutingLinks) {
-          routingLink = this.state.loadedRoutingLinks.toJS().find((link) => {
-            return link.input_stream_rtp_id === stream.id;
-          });
-        }
+        const routingLink = this.getRoutingLinkForStream(stream);
 
         if (routingLink) {
           className = `${className} playing`;
@@ -122,6 +116,18 @@ export default React.createClass({
     return (
       <div></div>
     );
+  },
+
+  getRoutingLinkForStream(stream) {
+    let routingLink;
+
+    if (this.state.loadedRoutingLinks) {
+      routingLink = this.state.loadedRoutingLinks.toJS().find((link) => {
+        return link.input_stream_rtp_id === stream.id;
+      });
+    }
+
+    return routingLink;
   },
 
   componentDidMount() {
