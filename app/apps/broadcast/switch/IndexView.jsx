@@ -5,6 +5,7 @@ import GridRow from '../../../widgets/admin/grid_row_widget.jsx';
 import Section from '../../../widgets/admin/section_widget.jsx';
 import Card from '../../../widgets/admin/card_widget.jsx';
 import RoutingHelper from '../../../helpers/routing_helper.js';
+import RadioKit from '../../../services/RadioKit.js';
 
 Counterpart.registerTranslations('en', require('./IndexView.locale.en.js'));
 Counterpart.registerTranslations('pl', require('./IndexView.locale.pl.js'));
@@ -29,7 +30,7 @@ export default React.createClass({
       const streamsRoles = ['loopcast'];
       const streamsCondition = ['references', 'din', 'role'].concat(streamsRoles);
 
-      this.streamsQuery = window.data
+      this.streamsQuery = RadioKit
         .query('plumber', 'Media.Input.Stream.RTP')
         .select('id', 'references')
         .order('id', 'asc')
@@ -53,7 +54,7 @@ export default React.createClass({
         return stream.id;
       });
 
-      this.routingLinksQuery = window.data
+      this.routingLinksQuery = RadioKit
         .query('plumber', 'Media.Routing.Link')
         .select('id', 'input_stream_rtp_id', 'output_media_routing_group_id')
         .order('id', 'asc')
@@ -76,13 +77,13 @@ export default React.createClass({
       output_media_routing_group_id: this.context.currentBroadcastChannel.get('media_routing_group_id'),
     };
 
-    window.data
+    RadioKit
       .record('plumber', 'Media.Routing.Link')
       .create(routingLinkParams);
   },
 
   deleteRoutingLink(routingLink) {
-    window.data
+    RadioKit
       .record('plumber', 'Media.Routing.Link', routingLink.id)
       .destroy();
   },
@@ -102,17 +103,24 @@ export default React.createClass({
 
       streams.forEach((stream) => {
         let className = 'btn btn-block btn-default text-center small-padding';
+        let iconClassName = 'text-xxxxl mdi'
+        let onAirInfo;
         const routingLink = this.getRoutingLinkForStream(stream);
 
         if (routingLink) {
           className = `${className} playing`;
+          iconClassName = `${iconClassName} mdi-radio-tower`;
+          onAirInfo = (<span className="on-air">{Counterpart.translate('apps.broadcast.switch.stream.on_air')}</span>);
+        } else {
+          iconClassName = `${iconClassName} mdi-power`;
         }
 
         const streamElement = (
           <div className="col-md-4" key={stream.id}>
+            {onAirInfo}
             <Card cardPadding={false} headerVisible={false}>
               <a className={className} onClick={() => this.toggleRoutingLink(routingLink, stream)}>
-                <i className={`text-xxxxl mdi mdi-${RoutingHelper.apps.electron.icon}`} />
+                <i className={iconClassName} />
                 <span style={{ position: 'relative', bottom: '18px' }}>
                   {stream.id}
                 </span>
