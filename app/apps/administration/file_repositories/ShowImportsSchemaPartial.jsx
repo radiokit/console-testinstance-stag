@@ -66,7 +66,7 @@ const ShowImportsSchema = React.createClass({
       },
       tag_items_mappings: {
         type: "hidden",
-        value: { "Title": "title", "Authors": "authors..name" },
+        value: { "series": "title", "authors": "authors..name" },
       },
     }
   },
