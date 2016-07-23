@@ -44,7 +44,7 @@ const DevicesToolbar = React.createClass({
   getTranslationPrefix(modalType) {
     const prefix = ({
       'Device.Client': 'client',
-      'Endpoint.UDP': 'link',
+      'Topology.AudioLink': 'link',
     })[this.props.selectedRecord.model];
 
     return `apps.electron.patchbay.toolbar.modals.${modalType}.${prefix}`;
@@ -94,7 +94,7 @@ const DevicesToolbar = React.createClass({
       };
     }
 
-    if (element.model === 'Endpoint.UDP') {
+    if (element.model === 'Topology.AudioLink') {
       return {
         name: {
           type: 'string',

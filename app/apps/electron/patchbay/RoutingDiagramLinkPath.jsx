@@ -27,10 +27,10 @@ const RoutingDiagramLinkPath = (props) => {
   });
 
   // Cache some values
-  let linkSourceX = linkCoordinates[props.link.get('references').get('electron.source_audio_interface_id')].x;
-  let linkSourceY = linkCoordinates[props.link.get('references').get('electron.source_audio_interface_id')].y;
-  let linkDestinationX = linkCoordinates[props.link.get('references').get('electron.destination_audio_interface_id')].x;
-  let linkDestinationY = linkCoordinates[props.link.get('references').get('electron.destination_audio_interface_id')].y;
+  let linkSourceX = linkCoordinates[props.link.get('source_resource_audio_interface_id')].x;
+  let linkSourceY = linkCoordinates[props.link.get('source_resource_audio_interface_id')].y;
+  let linkDestinationX = linkCoordinates[props.link.get('destination_resource_audio_interface_id')].x;
+  let linkDestinationY = linkCoordinates[props.link.get('destination_resource_audio_interface_id')].y;
   const horizontalDistance = linkDestinationX - linkSourceX;
   let horizontalCurveOffset;
   if (linkDestinationX <= linkSourceX) {

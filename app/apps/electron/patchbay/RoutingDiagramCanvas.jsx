@@ -83,12 +83,10 @@ export default React.createClass({
             selectedAudioInterface: null,
           }, () => {
             window.data
-              .record('medium', 'Endpoint.UDP')
+              .record('jungle', 'Topology.AudioLink')
               .create({
-                references: {
-                  'electron.source_audio_interface_id': sourceAudioInterface.get('id'),
-                  'electron.destination_audio_interface_id': destinationAudioInterface.get('id'),
-                },
+                source_resource_audio_interface_id: sourceAudioInterface.get('id'),
+                destination_resource_audio_interface_id: destinationAudioInterface.get('id'),
                 extra: {
                   electron: {
                     bitrate: 64,
@@ -171,8 +169,8 @@ export default React.createClass({
       return ({
         record: this.state.selectedLink,
         id: this.state.selectedLink.get('id'),
-        model: 'Endpoint.UDP',
-        app: 'medium',
+        model: 'Topology.AudioLink',
+        app: 'jungle',
         active: this.state.selectedLink.get('active').toString(),
       });
     }
@@ -225,18 +223,6 @@ export default React.createClass({
 
 
   render() {
-    let filteredLinks = this.props.links
-      .filter((link) => {
-        return ( // FIXME should be obsolete if backend was returing limited data
-          this.props.audioInterfaces.find((audioInterface) => { return audioInterface.get('id') === link.get('references').get('electron.source_audio_interface_id'); }) ||
-          this.props.audioInterfaces.find((audioInterface) => { return audioInterface.get('id') === link.get('references').get('destination_audio_interface_id'); })
-        ) && (
-          link.get('references').get('electron.source_audio_interface_id') !== null &&
-          link.get('references').get('destination_audio_interface_id') !== null
-        );
-      });
-
-
     // Render whole canvas, clients above link rules
     return (
       <div>
@@ -262,7 +248,7 @@ export default React.createClass({
           <RoutingDiagramLinkLayer
             clients={this.props.clients}
             audioInterfaces={this.props.audioInterfaces}
-            links={filteredLinks}
+            links={this.props.links}
             selectedLink={this.state.selectedLink}
             onLinkClick={this.onLinkClick}
             clientsCoordinates={this.clientsCoordinates}

@@ -126,12 +126,12 @@ export default React.createClass({
           audioInterface.get('id')
         ).toJS();
 
-      const linksCondition = ['references', 'din', 'electron.source_audio_interface_id']
+      const linksCondition = ['source_resource_audio_interface_id', 'in']
         .concat(audioInterfaceIDs);
 
       this.linksQuery = window.data
-        .query('medium', 'Endpoint.UDP')
-        .select('id', 'active', 'references', 'extra')
+        .query('jungle', 'Topology.AudioLink')
+        .select('id', 'active', 'source_resource_audio_interface_id', 'destination_resource_audio_interface_id', 'extra')
         .where.apply(this, linksCondition)
         .on('fetch', (_event, _query, data) => {
           if(this.isMounted()) {
