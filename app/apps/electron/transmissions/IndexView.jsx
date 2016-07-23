@@ -51,7 +51,7 @@ export default React.createClass({
 
   loadClients: function() {
     window.data
-      .query("auth", "Client.Standalone")
+      .query("auth", "Device.Client")
       .select("id", "name")
       .where("account_id", "eq", this.context.currentUserAccount.get("id"))
       .on("fetch", (_event, _query, data) => {
@@ -117,7 +117,7 @@ export default React.createClass({
             if(input.has("audio_interface") && input.get("audio_interface") !== null && input.get("audio_interface").has("references") && input.get("audio_interface").get("references") !== null) {
               let audioInterfaceOwnerGlobalID = input.get("audio_interface").get("references").get("owner");
               let audioInterfaceOwner = this.state.availableClients.find((client) => {
-                let clientGlobalID = Data.buildRecordGlobalID("auth", "Client.Standalone", client.get("id"));
+                let clientGlobalID = Data.buildRecordGlobalID("auth", "Device.Client", client.get("id"));
                 return clientGlobalID === audioInterfaceOwnerGlobalID;
               });
 

@@ -7,14 +7,14 @@ import DevicesToolbar from './DevicesToolbar.jsx';
 
 
 import RoutingDiagramClientLayer from './RoutingDiagramClientLayer.jsx';
-import RoutingDiagramLinkRuleLayer from './RoutingDiagramLinkRuleLayer.jsx';
+import RoutingDiagramLinkLayer from './RoutingDiagramLinkLayer.jsx';
 
 
 export default React.createClass({
   propTypes: {
     clients: React.PropTypes.object.isRequired,
     audioInterfaces: React.PropTypes.object.isRequired,
-    linkRules: React.PropTypes.object.isRequired,
+    links: React.PropTypes.object.isRequired,
     onClientDragStop: React.PropTypes.func,
   },
 
@@ -23,7 +23,7 @@ export default React.createClass({
     return {
       selectedAudioInterface: null,
       selectedClient: null,
-      selectedLinkRule: null,
+      selectedLink: null,
       draggingClient: false,
       lastSelectedClient: null,
     };
@@ -54,20 +54,11 @@ export default React.createClass({
   },
 
 
-  getLinkRulesOfAudioInterface(audioInterface) {
-    return this.props.linkRules.filter((linkRule) => {
-      return (
-        linkRule.get('source_audio_interface_id') === audioInterface.get('id')
-      );
-    });
-  },
-
-
   onAudioInterfaceClick(audioInterface) {
     if (this.state.selectedAudioInterface === null) {
       this.setState({
         selectedAudioInterface: audioInterface,
-        selectedLinkRule: null,
+        selectedLink: null,
         selectedClient: null,
       });
     } else {
@@ -92,10 +83,19 @@ export default React.createClass({
             selectedAudioInterface: null,
           }, () => {
             window.data
-              .record('plumber', 'Config.Routing.LinkRule')
+              .record('medium', 'Endpoint.UDP')
               .create({
-                source_audio_interface_id: sourceAudioInterface.get('id'),
-                destination_audio_interface_id: destinationAudioInterface.get('id'),
+                references: {
+                  'electron.source_audio_interface_id': sourceAudioInterface.get('id'),
+                  'electron.destination_audio_interface_id': destinationAudioInterface.get('id'),
+                },
+                extra: {
+                  electron: {
+                    bitrate: 64,
+                    latency: 100,
+                    audio_type: 'generic',
+                  },
+                }
               });
           });
         } else {
@@ -108,22 +108,22 @@ export default React.createClass({
   },
 
 
-  onLinkRuleClick(linkRule) {
-    if (this.state.selectedLinkRule) {
-      if (this.state.selectedLinkRule.get('id') === linkRule.get('id')) {
+  onLinkClick(link) {
+    if (this.state.selectedLink) {
+      if (this.state.selectedLink.get('id') === link.get('id')) {
         this.setState({
-          selectedLinkRule: null,
+          selectedLink: null,
         });
       } else {
         this.setState({
-          selectedLinkRule: linkRule,
+          selectedLink: link,
         });
       }
     } else {
       this.setState({
         selectedClient: null,
         selectedAudioInterface: null,
-        selectedLinkRule: linkRule,
+        selectedLink: link,
       });
     }
   },
@@ -143,13 +143,13 @@ export default React.createClass({
           this.setState({
             selectedClient: client,
             lastSelectedClient: client,
-            selectedLinkRule: null,
+            selectedLink: null,
             selectedAudioInterface: null,
           });
         }
       } else {
         this.setState({
-          selectedLinkRule: null,
+          selectedLink: null,
           selectedAudioInterface: null,
           selectedClient: client,
           lastSelectedClient: client,
@@ -167,13 +167,13 @@ export default React.createClass({
 
 
   getSelectedRecord() {
-    if (this.state.selectedLinkRule) {
+    if (this.state.selectedLink) {
       return ({
-        record: this.state.selectedLinkRule,
-        id: this.state.selectedLinkRule.get('id'),
-        model: 'Config.Routing.LinkRule',
-        app: 'plumber',
-        active: this.state.selectedLinkRule.get('active').toString(),
+        record: this.state.selectedLink,
+        id: this.state.selectedLink.get('id'),
+        model: 'Endpoint.UDP',
+        app: 'medium',
+        active: this.state.selectedLink.get('active').toString(),
       });
     }
 
@@ -181,8 +181,8 @@ export default React.createClass({
       return ({
         record: this.state.selectedClient,
         id: this.state.selectedClient.get('id'),
-        model: 'Client.Standalone',
-        app: 'auth',
+        model: 'Device.Client',
+        app: 'jungle',
       });
     }
 
@@ -190,8 +190,8 @@ export default React.createClass({
       return ({
         record: this.state.selectedAudioInterface,
         id: this.state.selectedAudioInterface.get('id'),
-        model: 'Resource.Architecture.AudioInterface',
-        app: 'plumber',
+        model: 'Resource.AudioInterface',
+        app: 'jungle',
       });
     }
 
@@ -206,7 +206,7 @@ export default React.createClass({
 
   onUpdateSuccess() {
     this.setState({
-      selectedLinkRule: null,
+      selectedLink: null,
       selectedClient: null,
       selectedAudioInterface: null,
     });
@@ -218,21 +218,21 @@ export default React.createClass({
       this.setState({
         selectedClient: null,
         selectedAudioInterface: null,
-        selectedLinkRule: null,
+        selectedLink: null,
       });
     }
   },
 
 
   render() {
-    let filteredLinkRules = this.props.linkRules
-      .filter((linkRule) => {
+    let filteredLinks = this.props.links
+      .filter((link) => {
         return ( // FIXME should be obsolete if backend was returing limited data
-          this.props.audioInterfaces.find((audioInterface) => { return audioInterface.get('id') === linkRule.get('source_audio_interface_id'); }) ||
-          this.props.audioInterfaces.find((audioInterface) => { return audioInterface.get('id') === linkRule.get('destination_audio_interface_id'); })
+          this.props.audioInterfaces.find((audioInterface) => { return audioInterface.get('id') === link.get('references').get('electron.source_audio_interface_id'); }) ||
+          this.props.audioInterfaces.find((audioInterface) => { return audioInterface.get('id') === link.get('references').get('destination_audio_interface_id'); })
         ) && (
-          linkRule.get('source_audio_interface_id') !== null &&
-          linkRule.get('destination_audio_interface_id') !== null
+          link.get('references').get('electron.source_audio_interface_id') !== null &&
+          link.get('references').get('destination_audio_interface_id') !== null
         );
       });
 
@@ -259,12 +259,12 @@ export default React.createClass({
             selectedClient={this.state.selectedClient}
             lastSelectedClient={this.state.lastSelectedClient}
           />
-          <RoutingDiagramLinkRuleLayer
+          <RoutingDiagramLinkLayer
             clients={this.props.clients}
             audioInterfaces={this.props.audioInterfaces}
-            linkRules={filteredLinkRules}
-            selectedLinkRule={this.state.selectedLinkRule}
-            onLinkRuleClick={this.onLinkRuleClick}
+            links={filteredLinks}
+            selectedLink={this.state.selectedLink}
+            onLinkClick={this.onLinkClick}
             clientsCoordinates={this.clientsCoordinates}
           />
         {() => {

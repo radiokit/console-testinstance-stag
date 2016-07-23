@@ -8,6 +8,8 @@ function getEnv() {
       baseUrl: 'https://auth.radiokitapp-stag.org',
     },
     apps: {
+      jungle: { baseUrl: 'https://jungle.radiokitapp-stag.org' },
+      medium: { baseUrl: 'https://medium.radiokitapp-stag.org' },
       auth: { baseUrl: 'https://auth.radiokitapp-stag.org' },
       agenda: { baseUrl: 'https://agenda.radiokitapp-stag.org' },
       plumber: { baseUrl: 'https://plumber.radiokitapp-stag.org' },

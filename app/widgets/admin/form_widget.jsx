@@ -37,23 +37,28 @@ const FormWidget = React.createClass({
 
 
   isFieldRequired(fieldConfig) {
-    return fieldConfig.hasOwnProperty("validators") && fieldConfig.validators.hasOwnProperty("presence") && fieldConfig.validators.presence === true;
+    return fieldConfig.hasOwnProperty('validators') &&
+      fieldConfig.validators.hasOwnProperty('presence') &&
+      fieldConfig.validators.presence === true;
   },
 
 
   validate() {
-    let errors = {};
+    const errors = {};
 
     Object.keys(this.props.form).map((fieldName) => {
-      let fieldConfig = this.props.form[fieldName];
-      if (fieldConfig.type !== "hidden") {
-        let required = this.isFieldRequired(fieldConfig);
+      const fieldConfig = this.props.form[fieldName];
+      if (fieldConfig.type !== 'hidden') {
+        const required = this.isFieldRequired(fieldConfig);
 
-        if (required && this.refs[fieldName].value.trim() === "") {
+        if (required &&
+          (!this.refs[fieldName].value ||
+            (typeof(this.refs[fieldName].value) === 'string' &&
+              this.refs[fieldName].value.trim() === ''))) {
           if (errors.hasOwnProperty(fieldName)) {
-            errors[fieldName].push("presence");
+            errors[fieldName].push('presence');
           } else {
-            errors[fieldName] = ["presence"];
+            errors[fieldName] = ['presence'];
           }
         }
       }
@@ -61,23 +66,20 @@ const FormWidget = React.createClass({
 
     if (Object.keys(errors).length === 0) {
       return true;
-
-    } else {
-      this.setState({
-        errors: errors
-      });
-      return false;
     }
+
+    this.setState({ errors });
+    return false;
   },
 
 
   componentDidMount() {
-    if(this.formHasDeferredFields()) {
+    if (this.formHasDeferredFields()) {
       Object.keys(this.props.form).map((fieldName) => {
-        let fieldConfig = this.props.form[fieldName];
+        const fieldConfig = this.props.form[fieldName];
 
         switch (fieldConfig.type) {
-          case "query":
+          case 'query':
             let query = window.data
               .query(fieldConfig.appName, fieldConfig.model)
               .select("id", "name")
@@ -92,7 +94,7 @@ const FormWidget = React.createClass({
                 }
               });
 
-            if(typeof(fieldConfig.modifyQueryFunc) === "function") {
+            if (typeof(fieldConfig.modifyQueryFunc) === 'function') {
               query = fieldConfig.modifyQueryFunc(query);
             }
 
@@ -104,78 +106,75 @@ const FormWidget = React.createClass({
     }
   },
 
-  buildFieldValues: function() {
+  buildFieldValues() {
     let params = {};
     Object.keys(this.props.form).map((fieldName) => {
-      let fieldConfig = this.props.form[fieldName];
+      const fieldConfig = this.props.form[fieldName];
 
-      if(fieldConfig.fieldValueFunc) {
+      if (fieldConfig.fieldValueFunc) {
         params = fieldConfig.fieldValueFunc(params, this.refs[fieldName].value);
-
       } else {
         switch (fieldConfig.type) {
-        case "scope-user-account":
-          if (params.hasOwnProperty("references")) {
-            params.references["user_account_id"] = this.refs[fieldName].value;
-          } else {
-            params.references = {
-              user_account_id: this.refs[fieldName].value
-            };
-          }
-          break;
+          case 'scope-user-account':
+            if (params.hasOwnProperty('references')) {
+              params.references.user_account_id = this.refs[fieldName].value;
+            } else {
+              params.references = {
+                user_account_id: this.refs[fieldName].value,
+              };
+            }
+            break;
 
-        case "scope-broadcast-channel":
-          if (params.hasOwnProperty("references")) {
-            params.references["broadcast_channel_id"] = this.refs[fieldName].value;
-          } else {
-            params.references = {
-              broadcast_channel_id: this.refs[fieldName].value
-            };
-          }
-          break;
+          case 'scope-broadcast-channel':
+            if (params.hasOwnProperty('references')) {
+              params.references.broadcast_channel_id = this.refs[fieldName].value;
+            } else {
+              params.references = {
+                broadcast_channel_id: this.refs[fieldName].value,
+              };
+            }
+            break;
 
-        case "hidden":
-          params[fieldName] = fieldConfig.value;
-          break;
+          case 'hidden':
+            params[fieldName] = fieldConfig.value;
+            break;
 
-        case "set":
-          let values = [];
-          let options = this.refs[fieldName].selectedOptions;
-          for(let i = 0; i < options.length; i++) {
-            values.push(options[i].value);
-          }
-          params[fieldName] = values;
-          break;
-
-        case "datetime":
-          params[fieldName] = this.refs[fieldName].getInput();
-          break;
-
-        case "skipped":
-          break;
-
-        case "separator":
-          break;
-
-        case "toggle":
-          let checkedField = document.querySelector('input[name=' + fieldName + ']:checked');
-          if (checkedField) {
-            params[fieldName] = checkedField.value;
+          case 'set': {
+            const values = [];
+            const options = this.refs[fieldName].selectedOptions;
+            for (let i = 0; i < options.length; i++) {
+              values.push(options[i].value);
+            }
+            params[fieldName] = values;
+            break;
           }
 
-          break;
+          case 'datetime':
+            params[fieldName] = this.refs[fieldName].getInput();
+            break;
 
-        case "slider":
-          if (!params.extra) {
-            params.extra = {};
+          case 'skipped':
+            break;
+
+          case 'separator':
+            break;
+
+          case 'toggle': {
+            // FIXME
+            const checkedField = document.querySelector('input[name=' + fieldName + ']:checked');
+            if (checkedField) {
+              params[fieldName] = checkedField.value;
+            }
+            break;
           }
 
-          params.extra[fieldName] = parseInt(this.refs[fieldName].value);
-          break;
+          case 'slider':
+            params[fieldName] = parseInt(this.refs[fieldName].value, 10);
+            break;
 
-        default:
-          params[fieldName] = this.refs[fieldName].value
-          break;
+          default:
+            params[fieldName] = this.refs[fieldName].value;
+            break;
         }
       }
     });
@@ -194,10 +193,10 @@ const FormWidget = React.createClass({
     let hasDeferredFields = false;
 
     Object.keys(this.props.form).map((fieldName) => {
-      let fieldConfig = this.props.form[fieldName];
+      const fieldConfig = this.props.form[fieldName];
 
       switch (fieldConfig.type) {
-        case "query":
+        case 'query':
           hasDeferredFields = true;
           break;
       }
@@ -214,7 +213,7 @@ const FormWidget = React.createClass({
       let fieldConfig = this.props.form[fieldName];
 
       switch (fieldConfig.type) {
-        case "query":
+        case 'query':
           if(!this.state.deferredFieldsData.hasOwnProperty(fieldName)) {
             loadedDeferredFields = false;
           }
@@ -242,190 +241,194 @@ const FormWidget = React.createClass({
       let disabled = fieldConfig.disabled;
 
       switch (fieldConfig.type) {
-      case "string":
-        input = (<Input className="form-control" type="text" id={ fieldName } ref={ fieldName } required={ required } value={ defaultVal } disabled={ disabled }/>);
-        break;
+        case "string":
+          input = (<Input className="form-control" type="text" id={ fieldName } ref={ fieldName } required={ required } value={ defaultVal } disabled={ disabled }/>);
+          break;
 
-      case "number":
-        input = (<input className="form-control" type="number" id={ fieldName } ref={ fieldName } required={ required } />);
-        break;
+        case "number":
+          input = (<input className="form-control" type="number" id={ fieldName } ref={ fieldName } required={ required } />);
+          break;
 
-      case "decimal":
-        input = (<input className="form-control" type="number" step="0.01" id={ fieldName } ref={ fieldName } required={ required } />);
-        break;
+        case "decimal":
+          input = (<input className="form-control" type="number" step="0.01" id={ fieldName } ref={ fieldName } required={ required } />);
+          break;
 
-      case "password":
-        input = (<input className="form-control" type="password" id={ fieldName } ref={ fieldName } required={ required } />);
-        break;
+        case "password":
+          input = (<input className="form-control" type="password" id={ fieldName } ref={ fieldName } required={ required } />);
+          break;
 
-      case "tel":
-        input = (<input className="form-control" type="tel" id={ fieldName } ref={ fieldName } required={ required } />);
-        break;
+        case "tel":
+          input = (<input className="form-control" type="tel" id={ fieldName } ref={ fieldName } required={ required } />);
+          break;
 
-      case "email":
-        input = (<input className="form-control" type="email" id={ fieldName } ref={ fieldName } required={ required } />);
-        break;
+        case "email":
+          input = (<input className="form-control" type="email" id={ fieldName } ref={ fieldName } required={ required } />);
+          break;
 
-      case "set":
-        if(Array.isArray(fieldConfig.values)) {
-          let setValuesSorted;
+        case 'set':
+          if(Array.isArray(fieldConfig.values)) {
+            let setValuesSorted;
+            if (!fieldConfig.hasOwnProperty("sorted") || fieldConfig.sorted === false) {
+              setValuesSorted = fieldConfig.values.sort((a, b) => {
+                let translatedA = Counterpart.translate(`${this.props.contentPrefix}.${fieldName}.values.${a}`);
+                let translatedB = Counterpart.translate(`${this.props.contentPrefix}.${fieldName}.values.${b}`);
+                return translatedA == translatedB ? 0 : (translatedA < translatedB ? -1 : 1);
+              });
+            } else {
+              setValuesSorted = fieldConfig.values;
+            }
+
+            input = (
+              <select className="form-control" id={ fieldName } ref={ fieldName } required={ required } multiple>
+                { setValuesSorted.map((value) => {
+                    return (<Translate key={ value } value={ value } component="option" content={ `${this.props.contentPrefix}.${fieldName}.values.${value}` } />);
+                  }) }
+              </select>
+            );
+
+          } else {
+            input = (
+              <select className="form-control" id={ fieldName } ref={ fieldName } required={ required } multiple>
+                { Object.keys(fieldConfig.values).map((key) => {
+                    let value = fieldConfig.values[key];
+                    return (<option key={ key } value={ key }>{value}</option>);
+                  }) }
+              </select>
+            );
+          }
+
+          break;
+
+        case "enum":
+          let enumValuesSorted;
           if (!fieldConfig.hasOwnProperty("sorted") || fieldConfig.sorted === false) {
-            setValuesSorted = fieldConfig.values.sort((a, b) => {
+            enumValuesSorted = fieldConfig.values.sort((a, b) => {
               let translatedA = Counterpart.translate(`${this.props.contentPrefix}.${fieldName}.values.${a}`);
               let translatedB = Counterpart.translate(`${this.props.contentPrefix}.${fieldName}.values.${b}`);
               return translatedA == translatedB ? 0 : (translatedA < translatedB ? -1 : 1);
             });
           } else {
-            setValuesSorted = fieldConfig.values;
+            enumValuesSorted = fieldConfig.values;
           }
 
           input = (
-            <select className="form-control" id={ fieldName } ref={ fieldName } required={ required } multiple>
-              { setValuesSorted.map((value) => {
+            <select className="form-control" id={ fieldName } ref={ fieldName } required={ required }>
+              { enumValuesSorted.map((value) => {
                   return (<Translate key={ value } value={ value } component="option" content={ `${this.props.contentPrefix}.${fieldName}.values.${value}` } />);
                 }) }
             </select>
           );
+          break;
 
-        } else {
+        case 'query':
           input = (
-            <select className="form-control" id={ fieldName } ref={ fieldName } required={ required } multiple>
-              { Object.keys(fieldConfig.values).map((key) => {
-                  let value = fieldConfig.values[key];
-                  return (<option key={ key } value={ key }>{value}</option>);
+            <select className="form-control" id={ fieldName } ref={ fieldName } required={ required }>
+              { this.state.deferredFieldsData[fieldName].map((record) => {
+                return (<option key={ record.get("id") } value={ record.get("id") }>
+                          { record.get("name") }
+                        </option>);
+              })}
+            </select>
+          );
+          break;
+
+        case 'scope-user-account':
+          input = (
+            <select className="form-control" id={ fieldName } ref={ fieldName } required={ required }>
+              { this.context.availableUserAccounts.map((userAccount) => {
+                  return (<option key={ userAccount.get("id") } value={ userAccount.get("id") }>
+                            { userAccount.get("name") }
+                          </option>);
                 }) }
             </select>
           );
-        }
+          break;
 
-        break;
-
-      case "enum":
-        let enumValuesSorted;
-        if (!fieldConfig.hasOwnProperty("sorted") || fieldConfig.sorted === false) {
-          enumValuesSorted = fieldConfig.values.sort((a, b) => {
-            let translatedA = Counterpart.translate(`${this.props.contentPrefix}.${fieldName}.values.${a}`);
-            let translatedB = Counterpart.translate(`${this.props.contentPrefix}.${fieldName}.values.${b}`);
-            return translatedA == translatedB ? 0 : (translatedA < translatedB ? -1 : 1);
-          });
-        } else {
-          enumValuesSorted = fieldConfig.values;
-        }
-
-        input = (
-          <select className="form-control" id={ fieldName } ref={ fieldName } required={ required }>
-            { enumValuesSorted.map((value) => {
-                return (<Translate key={ value } value={ value } component="option" content={ `${this.props.contentPrefix}.${fieldName}.values.${value}` } />);
-              }) }
-          </select>
-        );
-        break;
-
-      case "query":
-        input = (
-          <select className="form-control" id={ fieldName } ref={ fieldName } required={ required }>
-            { this.state.deferredFieldsData[fieldName].map((record) => {
-              return (<option key={ record.get("id") } value={ record.get("id") }>
-                        { record.get("name") }
-                      </option>);
-            })}
-          </select>
-        );
-        break;
-
-      case "scope-user-account":
-        input = (
-          <select className="form-control" id={ fieldName } ref={ fieldName } required={ required }>
-            { this.context.availableUserAccounts.map((userAccount) => {
-                return (<option key={ userAccount.get("id") } value={ userAccount.get("id") }>
-                          { userAccount.get("name") }
-                        </option>);
-              }) }
-          </select>
-        );
-        break;
-
-      case "scope-broadcast-channel":
-        input = (
-          <select className="form-control" id={ fieldName } ref={ fieldName } required={ required }>
-            { this.context.availableBroadcastChannels && this.context.availableBroadcastChannels.map((broadcastChannel) => {
-                return (<option key={ broadcastChannel.get("id") } value={ broadcastChannel.get("id") }>
-                          { broadcastChannel.get("name") }
-                        </option>);
-              }) }
-          </select>
-        );
-        break;
-
-      case "object":
-        let objectsSorted = fieldConfig.values.sort((a, b) => {
-          return a.name == b.name ? 0 : (a.name < b.name ? -1 : 1);
-        });
-
-        input = (
-          <select className="form-control" if={ fieldName } ref={ fieldName } required={ required }>
-            { objectsSorted.map((value) => {
-                return (
-                  <option key={value.id} value={value.id}>{value.name}</option>
-                );
-              })
-            }
-          </select>
-        );
-        break;
-
-      case "datetime":
-        input = (
-          <DateTimePicker ref={fieldName} required={required} defaultValue={fieldConfig.value} />
-        );
-        break;
-
-      case "hidden":
-        // Render nothing
-        break;
-
-      case "skipped":
-        input = (<Input className="form-control" type="text" id={ fieldName } ref={ fieldName } required={ required } value={ defaultVal } disabled={ true }/>);
-        break;
-
-      case "toggle":
-        let toggleOptions = [];
-
-        for (const index in fieldConfig.toggleOptions) {
-          const option = fieldConfig.toggleOptions[index];
-          const className  = fieldConfig.checked === option.value ? "btn ink-reaction btn-primary active" : "btn ink-reaction btn-primary"
-
-          let toggleOption = (
-            <label key={index} className={className}>
-							<input type="radio" name={fieldName} value={option.value} />
-              {option.label}
-						</label>
+        case "scope-broadcast-channel":
+          input = (
+            <select className="form-control" id={ fieldName } ref={ fieldName } required={ required }>
+              { this.context.availableBroadcastChannels && this.context.availableBroadcastChannels.map((broadcastChannel) => {
+                  return (<option key={ broadcastChannel.get("id") } value={ broadcastChannel.get("id") }>
+                            { broadcastChannel.get("name") }
+                          </option>);
+                }) }
+            </select>
           );
+          break;
 
-          toggleOptions.push(toggleOption);
-        }
+        case "object":
+          let objectsSorted = fieldConfig.values.sort((a, b) => {
+            return a.name == b.name ? 0 : (a.name < b.name ? -1 : 1);
+          });
 
-        input = (
-          <div ref={ fieldName } className="btn-group" data-toggle="buttons" style={{ float: 'none' }}>
-			      {toggleOptions}
-					</div>)
-        break;
+          input = (
+            <select className="form-control" if={ fieldName } ref={ fieldName } required={ required }>
+              { objectsSorted.map((value) => {
+                  return (
+                    <option key={value.id} value={value.id}>{value.name}</option>
+                  );
+                })
+              }
+            </select>
+          );
+          break;
 
-      case "slider":
-        input = (
-          <div style={{marginBottom: "10px", width: "100%", height: "15px"}}>
-					  <input name={fieldName} ref={fieldName} type="range" defaultValue={fieldConfig.value} min={fieldConfig.min} max={fieldConfig.max} style={{ cursor: "pointer", float: "left", width: "85%" }} onChange={this.onSliderChange} />
-            <input type="number" id={fieldName + '_id'} defaultValue={fieldConfig.value} style={{ float: "left", width: "10%", marginLeft: "10px", position: "relative", bottom: "5px" }} />
-          </div>
-        );
-        break;
+        case "datetime":
+          input = (
+            <DateTimePicker ref={fieldName} required={required} defaultValue={fieldConfig.value} />
+          );
+          break;
 
-      case "separator":
-        input = (<hr />);
-        break;
+        case 'hidden':
+          // Render nothing
+          break;
 
-      default:
-        throw new Error("Unknown input type '" + fieldConfig.type + "'");
+        case 'skipped':
+          input = (<Input className="form-control" type="text" id={ fieldName } ref={ fieldName } required={ required } value={ defaultVal } disabled={ true }/>);
+          break;
+
+        case 'toggle':
+          let toggleOptions = [];
+
+          for (const index in fieldConfig.toggleOptions) {
+            const option = fieldConfig.toggleOptions[index];
+            const className  = fieldConfig.checked === option.value ? "btn ink-reaction btn-primary active" : "btn ink-reaction btn-primary"
+
+            const toggleOption = (
+              <label key={index} className={className}>
+  							<input type="radio" name={fieldName} value={option.value} />
+                {option.label}
+  						</label>
+            );
+
+            toggleOptions.push(toggleOption);
+          }
+
+          input = (
+            <div
+              ref={ fieldName }
+              className="btn-group"
+              data-toggle="buttons"
+              style={{ float: 'none' }}
+            >{toggleOptions}</div>
+          );
+          break;
+
+        case 'slider':
+          input = (
+            <div style={{marginBottom: "10px", width: "100%", height: "15px"}}>
+  					  <input name={fieldName} ref={fieldName} type="range" defaultValue={fieldConfig.value} min={fieldConfig.min} max={fieldConfig.max} style={{ cursor: "pointer", float: "left", width: "85%" }} onChange={this.onSliderChange} />
+              <input type="number" id={fieldName + '_id'} defaultValue={fieldConfig.value} style={{ float: "left", width: "10%", marginLeft: "10px", position: "relative", bottom: "5px" }} />
+            </div>
+          );
+          break;
+
+        case 'separator':
+          input = (<hr />);
+          break;
+
+        default:
+          throw new Error("Unknown input type '" + fieldConfig.type + "'");
       }
 
       if (fieldConfig.hint) {
@@ -485,6 +488,7 @@ const FormWidget = React.createClass({
     );
   },
 
+
   render() {
     if (this.formHasDeferredFields()) {
       if (this.formLoadedDeferredFields()) {
@@ -492,7 +496,6 @@ const FormWidget = React.createClass({
       } else {
         return (<div>...</div>); // FIXME
       }
-
     } else {
       return this.renderForm();
     }

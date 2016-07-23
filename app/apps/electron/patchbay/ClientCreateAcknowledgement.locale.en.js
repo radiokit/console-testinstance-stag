@@ -3,7 +3,6 @@ export default {
     electron: {
       patchbay: {
         index: {
-          add_button: "Add device",
           modals: {
             create: {
               header: "Add device",

@@ -2,8 +2,8 @@ import React from 'react';
 import * as Immutable from 'immutable';
 import { Data } from 'radiokit-api';
 
+import LoadingWidget from '../../../widgets/general/loading_widget.jsx';
 import RoutingDiagramCanvas from './RoutingDiagramCanvas.jsx';
-
 
 export default React.createClass({
   propTypes: {
@@ -19,7 +19,7 @@ export default React.createClass({
     return {
       loadedClients: null,
       loadedAudioInterfaces: null,
-      loadedLinkRules: null,
+      loadedLinks: null,
     };
   },
 
@@ -27,10 +27,10 @@ export default React.createClass({
   loadClients() {
     if (!this.clientsQuery) {
       this.clientsQuery = window.data
-        .query('auth', 'Client.Standalone')
+        .query('jungle', 'Device.Client')
         .select('id', 'name', 'extra')
-        .where('application', 'eq', 'electron')
-        .where('account_id', 'eq', this.context.currentUserAccount.get('id'))
+        .where('references', 'deq', 'account',
+          Data.buildRecordGlobalID('auth', 'Account', this.context.currentUserAccount.get('id')))
         .on('fetch', (_event, _query, data) => {
           if (this.isMounted()) {
             this.setState({
@@ -93,21 +93,22 @@ export default React.createClass({
 
   loadAudioInterfaces() {
     if (!this.audioInterfacesQuery) {
-      let clientsGlobalIDs = this.state.loadedClients.map((client) => { return Data.buildRecordGlobalID('auth', 'Client.Standalone', client.get('id')); }).toJS();
-      let clientsCondition = ['references', 'din', 'owner'].concat(clientsGlobalIDs)
+      const clientsIDs = this.state.loadedClients.map((client) =>
+        client.get('id')
+      ).toJS();
+      const clientsCondition = ['device_client_id', 'in'].concat(clientsIDs);
 
       this.audioInterfacesQuery = window.data
-        .query('plumber', 'Resource.Architecture.AudioInterface')
-        .select('id', 'name', 'os_name', 'direction', 'references')
+        .query('jungle', 'Resource.AudioInterface')
+        .select('id', 'device_client_id', 'name', 'os_name', 'direction', 'references')
         .order('name', 'asc')
         .where.apply(this, clientsCondition)
         .on('fetch', (_event, _query, data) => {
-
           if(this.isMounted()) {
             this.setState({
-              loadedAudioInterfaces: data
+              loadedAudioInterfaces: data,
             }, () => {
-              this.loadLinkRules();
+              this.loadLinks();
             });
           }
         })
@@ -116,16 +117,26 @@ export default React.createClass({
   },
 
 
-  loadLinkRules() {
-    if (!this.linkRulesQuery) {
-      this.linkRulesQuery = window.data
-        .query('plumber', 'Config.Routing.LinkRule')
-        .select('id', 'source_audio_interface_id', 'destination_audio_interface_id', 'active', 'extra')
-        .where('source_audio_interface_id', 'in', this.state.loadedAudioInterfaces.map((audioInterface) => { return audioInterface.get('id'); }).toJS())
+  loadLinks() {
+    if (!this.linksQuery) {
+      const audioInterfaceIDs = this.state.loadedAudioInterfaces
+        .filter((audioInterface) =>
+          audioInterface.get('direction') === 'capture'
+        ).map((audioInterface) =>
+          audioInterface.get('id')
+        ).toJS();
+
+      const linksCondition = ['references', 'din', 'electron.source_audio_interface_id']
+        .concat(audioInterfaceIDs);
+
+      this.linksQuery = window.data
+        .query('medium', 'Endpoint.UDP')
+        .select('id', 'active', 'references', 'extra')
+        .where.apply(this, linksCondition)
         .on('fetch', (_event, _query, data) => {
           if(this.isMounted()) {
             this.setState({
-              loadedLinkRules: data
+              loadedLinks: data,
             });
           }
         })
@@ -135,7 +146,7 @@ export default React.createClass({
 
 
   onClientDragStop(client, x, y) {
-    window.data.record('auth', 'Client.Standalone', client.get('id'))
+    window.data.record('jungle', 'Device.Client', client.get('id'))
       .update({
         extra: {
           electron: {
@@ -155,9 +166,9 @@ export default React.createClass({
 
 
   componentWillUnmount() {
-    if (this.linkRulesQuery) {
-      this.linkRulesQuery.teardown();
-      delete this.linkRulesQuery;
+    if (this.linksQuery) {
+      this.linksQuery.teardown();
+      delete this.linksQuery;
     }
 
     if (this.audioInterfacesQuery) {
@@ -173,17 +184,17 @@ export default React.createClass({
 
 
   render() {
-    if (this.state.loadedClients === null || this.state.loadedAudioInterfaces === null || this.state.loadedLinkRules === null) {
-      return (
-        <div>Loading</div>
-      ); // FIXME use LoadingWidget
+    if (this.state.loadedClients === null ||
+      this.state.loadedAudioInterfaces === null ||
+      this.state.loadedLinks === null) {
+      return <LoadingWidget />;
     }
 
     return (
       <RoutingDiagramCanvas
         clients={this.state.loadedClients}
         audioInterfaces={this.state.loadedAudioInterfaces}
-        linkRules={this.state.loadedLinkRules}
+        links={this.state.loadedLinks}
         onClientDragStop={this.onClientDragStop}
       />
     );

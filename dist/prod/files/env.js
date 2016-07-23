@@ -4,6 +4,8 @@ window.ENV = {
     baseUrl: "https://auth.radiokitapp.org"
   },
   apps: {
+    "jungle"   : { baseUrl: "https://jungle.radiokitapp.org" },
+    "medium"   : { baseUrl: "https://medium.radiokitapp.org" },
     "auth"     : { baseUrl: "https://auth.radiokitapp.org" },
     "agenda"   : { baseUrl: "https://agenda.radiokitapp.org" },
     "plumber"  : { baseUrl: "https://plumber.radiokitapp.org" },

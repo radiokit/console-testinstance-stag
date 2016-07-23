@@ -2,11 +2,11 @@ import React from 'react';
 import Translate from 'react-translate-component';
 import Counterpart from 'counterpart';
 
-Counterpart.registerTranslations('en', require('./IndexCreateAcknowledgement.locale.en.js'));
-Counterpart.registerTranslations('pl', require('./IndexCreateAcknowledgement.locale.pl.js'));
+Counterpart.registerTranslations('en', require('./ClientCreateAcknowledgement.locale.en.js'));
+Counterpart.registerTranslations('pl', require('./ClientCreateAcknowledgement.locale.pl.js'));
 
 
-const IndexCreateAcknowledgement = React.createClass({
+const ClientCreateAcknowledgement = React.createClass({
   propTypes: {
     contentPrefix: React.PropTypes.string.isRequired,
     record: React.PropTypes.object.isRequired,
@@ -98,4 +98,4 @@ const IndexCreateAcknowledgement = React.createClass({
   },
 });
 
-export default IndexCreateAcknowledgement;
+export default ClientCreateAcknowledgement;
