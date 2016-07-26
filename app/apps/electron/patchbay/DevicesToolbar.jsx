@@ -8,8 +8,10 @@ import UpdateModal from '../../../widgets/admin/crud/update_modal.jsx';
 import DeleteModal from '../../../widgets/admin/crud/delete_modal.jsx';
 import ToolbarGroup from '../../../widgets/admin/toolbar_group_widget.jsx';
 import ToolbarButtonModal from '../../../widgets/admin/toolbar_button_modal_widget.jsx';
+import ToolbarButton from '../../../widgets/admin/toolbar_button_widget.jsx';
 import ClientCreateAcknowledgement from './ClientCreateAcknowledgement.jsx';
 import Counterpart from 'counterpart';
+import RadioKit from '../../../services/RadioKit';
 
 Counterpart.registerTranslations('en', require('./DevicesToolbar.locale.en.js'));
 Counterpart.registerTranslations('pl', require('./DevicesToolbar.locale.pl.js'));
@@ -141,6 +143,26 @@ const DevicesToolbar = React.createClass({
     return {};
   },
 
+  getActivateDeactivateButtonLabelKey() {
+    const selectedRecord = this.props.selectedRecord;
+    let activeKey = 'not_selected';
+
+    if (selectedRecord.model === 'Topology.AudioLink') {
+      activeKey = selectedRecord.record.get('active') ? 'disable' : 'enable';
+    }
+
+    return `apps.electron.patchbay.toolbar.audiolink.active.${activeKey}`;
+  },
+
+  toggleAudioLink() {
+    RadioKit
+      .record('jungle', 'Topology.AudioLink', this.props.selectedRecord.record.get('id'))
+      .on('loaded', () => {
+        this.props.onUpdateSuccess();
+      })
+      .update({ active: !this.props.selectedRecord.record.get('active') });
+  },
+
   render() {
     return (
       <Toolbar>
@@ -187,6 +209,12 @@ const DevicesToolbar = React.createClass({
                 ? Immutable.List.of(this.props.selectedRecord.id)
                 : Immutable.List.of(null),
             }}
+          />
+          <ToolbarButton
+            icon="power"
+            labelTextKey={ this.getActivateDeactivateButtonLabelKey() }
+            disabled={this.props.selectedRecord.model !== 'Topology.AudioLink'}
+            onClick={this.toggleAudioLink}
           />
         </ToolbarGroup>
 

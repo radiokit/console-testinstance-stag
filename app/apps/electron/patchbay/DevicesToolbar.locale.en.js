@@ -8,6 +8,13 @@ export default {
             edit: 'Edit device',
             delete: 'Delete device',
           },
+          audiolink: {
+            active: {
+              not_selected: 'Select Audio Link',
+              enable: 'Enable',
+              disable: 'Disable',
+            },
+          },
 
           modals: {
             update: {
@@ -19,13 +26,6 @@ export default {
                 },
                 name: {
                   label: 'Name of the device',
-                },
-                active: {
-                  label: 'Active',
-                  values: {
-                    enable: 'Enable',
-                    disable: 'Disable',
-                  },
                 },
                 bitrate: {
                   label: 'Bitrate (kbit/s)',
