@@ -122,7 +122,9 @@ const DevicesToolbar = React.createClass({
           min: 16,
           max: 320,
           fieldValueFunc: (params, value) =>
-            RecordHelper.setExtra(Immutable.fromJS(params), ['electron', 'bitrate'], value).toJS(),
+            // It is very important that value is integer. So we do parseInt()
+            // Otherwise the standalone client application may crash.
+            RecordHelper.setExtra(Immutable.fromJS(params), ['electron', 'bitrate'], parseInt(value)).toJS(),
         },
         latency: {
           type: 'slider',
@@ -130,7 +132,9 @@ const DevicesToolbar = React.createClass({
           min: 10,
           max: 5000,
           fieldValueFunc: (params, value) =>
-            RecordHelper.setExtra(Immutable.fromJS(params), ['electron', 'latency'], value).toJS(),
+            // It is very important that value is integer. So we do parseInt()
+            // Otherwise the standalone client application may crash.
+            RecordHelper.setExtra(Immutable.fromJS(params), ['electron', 'latency'], parseInt(value)).toJS(),
         },
       };
     }
