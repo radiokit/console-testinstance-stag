@@ -98,34 +98,29 @@ const DevicesToolbar = React.createClass({
 
     if (element.model === 'Topology.AudioLink') {
       return {
-        name: {
-          type: 'string',
-          hint: true,
-          validators: {
-            presence: true,
-          },
-        },
-        audio_type: {
-          type: 'toggle',
-          checked: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'audio_type'], 'generic'),
-          toggleOptions: {
-            generic: {
-              label: Counterpart.translate('apps.electron.patchbay.toolbar.modals.update.form.audio_type.values.generic'),
-              value: 'generic',
-            },
-            voice: {
-              label: Counterpart.translate('apps.electron.patchbay.toolbar.modals.update.form.audio_type.values.voice'),
-              value: 'voice',
-            },
-          },
-          fieldValueFunc: (params, value) =>
-            RecordHelper.setExtra(Immutable.fromJS(params), ['electron', 'audio_type'], value).toJS(),
-        },
+        // audio_type: {
+        //   type: 'toggle',
+        //   checked: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'audio_type'], 'generic'),
+        //   toggleOptions: {
+        //     generic: {
+        //       label: Counterpart.translate('apps.electron.patchbay.toolbar.modals.update.form.audio_type.values.generic'),
+        //       value: 'generic',
+        //     },
+        //     voice: {
+        //       label: Counterpart.translate('apps.electron.patchbay.toolbar.modals.update.form.audio_type.values.voice'),
+        //       value: 'voice',
+        //     },
+        //   },
+        //   fieldValueFunc: (params, value) => {
+        //     console.log("A", params, value);
+        //     return RecordHelper.setExtra(Immutable.fromJS(params), ['electron', 'audio_type'], value).toJS();
+        //   }
+        // },
         bitrate: {
           type: 'slider',
           value: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'bitrate'], 64),
-          min: 8,
-          max: 500,
+          min: 16,
+          max: 320,
           fieldValueFunc: (params, value) =>
             RecordHelper.setExtra(Immutable.fromJS(params), ['electron', 'bitrate'], value).toJS(),
         },

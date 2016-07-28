@@ -5,8 +5,8 @@ export default {
         toolbar: {
           client: {
             create: 'Add device',
-            edit: 'Edit device',
-            delete: 'Delete device',
+            edit: 'Edit',
+            delete: 'Delete',
           },
           audiolink: {
             active: {
@@ -18,20 +18,20 @@ export default {
 
           modals: {
             update: {
-              header: 'Edit device',
+              header: 'Edit',
 
               form: {
                 os_name: {
-                  label: 'Hardware I/O',
+                  label: 'Name as in the system',
                 },
                 name: {
-                  label: 'Name of the device',
+                  label: 'Your name',
                 },
                 bitrate: {
                   label: 'Bitrate (kbit/s)',
                 },
                 latency: {
-                  label: 'Latency (ms)',
+                  label: 'Buffer (ms)',
                 },
                 audio_type: {
                   label: 'Audio type',
@@ -43,7 +43,7 @@ export default {
               },
 
               action: {
-                proceed: 'Update device',
+                proceed: 'Update',
                 cancel: 'Cancel',
                 close: 'Close',
               },
@@ -57,8 +57,8 @@ export default {
               client: {
                 header: 'Delete device',
                 message: {
-                  confirmation: 'Are you sure that you want to delete %(count)s selected device(s)?',
-                  acknowledgement: 'Deleted %(count)s device(s).',
+                  confirmation: 'Are you sure that you want to delete selected device?',
+                  acknowledgement: 'Deleted device.',
                   progress: 'Deleting in progress…',
                 },
                 action: {

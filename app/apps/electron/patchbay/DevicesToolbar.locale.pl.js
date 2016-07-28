@@ -5,35 +5,57 @@ export default {
         toolbar: {
           client: {
             create: 'Dodaj urządzenie',
-            edit: 'Edytuj urządzenie',
-            delete: 'Usuń urządzenie',
+            edit: 'Edytuj',
+            delete: 'Usuń',
+          },
+          audiolink: {
+            active: {
+              not_selected: 'Wybierz łącze',
+              enable: 'Włącz',
+              disable: 'Wyłącz',
+            },
           },
 
           modals: {
             update: {
-              header: 'Edycja urządzenia',
+              header: 'Edytuj',
 
               form: {
+                os_name: {
+                  label: 'Nazwa w systemie',
+                },
                 name: {
-                  label: 'Nazwa urządzenia',
+                  label: 'Twoja nazwa',
+                },
+                bitrate: {
+                  label: 'Bitrate (kbit/s)',
+                },
+                latency: {
+                  label: 'Bufor (ms)',
+                },
+                audio_type: {
+                  label: 'Rodzaj dźwięku',
+                  values: {
+                    generic: 'Uniwersalny',
+                    voice: 'Głos',
+                  },
                 },
               },
 
               action: {
-                proceed: 'Edytuj urządzenie',
+                proceed: 'Aktualizuj',
                 cancel: 'Anuluj',
                 close: 'Zamknij',
               },
 
               message: {
-                acknowledgement: 'Zapisano zmiany.',
+                acknowledgement: 'Aktualizacja zakończona powodzeniem.',
               },
-
             },
 
             delete: {
               client: {
-                header: 'Usuwanie podłączonego urządzenia',
+                header: 'Usuń urządzenie',
                 message: {
                   confirmation: 'Czy na pewno chcesz usunąć zaznaczone urządzenie?',
                   acknowledgement: 'Usunięto urządzenie.',
@@ -47,11 +69,11 @@ export default {
               },
 
               link: {
-                header: 'Usuwanie powiązania',
+                header: 'Usuń łącze',
                 message: {
-                  confirmation: 'Czy na pewno chcesz usunąć zaznaczone powiązanie?',
-                  acknowledgement: 'Usunięto powiązanie.',
-                  progress: 'Trwa usuwanie powiązania',
+                  confirmation: 'Czy na pewno chcesz usunąć zaznaczone łącze?',
+                  acknowledgement: 'Usunięto łącze.',
+                  progress: 'Trwa usuwanie łącza…',
                 },
                 action: {
                   proceed: 'Usuń',

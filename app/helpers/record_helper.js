@@ -26,8 +26,8 @@ export default {
     let current = record.get('extra');
 
     for (let i = 0; i < path.length; i++) {
-      if (record.has(path[i])) {
-        current = record.get(path[i]);
+      if (current.has(path[i])) {
+        current = current.get(path[i]);
       } else {
         return defaultValue;
       }
