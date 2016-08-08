@@ -93,6 +93,8 @@ export default {
 
             "name": "Nazwa",
             "duration-accurate": "Czas trwania (dokładny)",
+
+            "play": "Odtwórz",
           },
         },
 

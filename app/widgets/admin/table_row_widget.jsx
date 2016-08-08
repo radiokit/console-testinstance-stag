@@ -43,7 +43,6 @@ export default React.createClass({
   },
 
 
-
   render: function() {
     let klass;
     if(this.props.selected) {
