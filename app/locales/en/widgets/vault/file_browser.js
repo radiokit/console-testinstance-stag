@@ -93,6 +93,8 @@ export default {
 
             "name": "Name",
             "duration-accurate": "Duration (accurate)",
+
+            "play": "Play",
           },
         },
 

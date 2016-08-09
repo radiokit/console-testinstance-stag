@@ -24,6 +24,7 @@ import TableCellFile from './table_cell_file.jsx';
 import TableCellImage from './table_cell_image.jsx';
 import TableCellScopeUserAccount from './table_cell_scope_user_account.jsx';
 import TableCellScopeBroadcastChannel from './table_cell_scope_broadcast_channel.jsx';
+import TableCellPlayButton from './table_cell_play_button.jsx';
 
 export default React.createClass({
   propTypes: {
@@ -148,6 +149,10 @@ export default React.createClass({
 
         case "scope-broadcast-channel":
           cell = (<TableCellScopeBroadcastChannel {...this.props.attributeConfig.props} record={this.props.record} />);
+          break;
+
+        case "play":
+          cell = (<TableCellPlayButton {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value} />);
           break;
 
         default:

@@ -151,7 +151,9 @@ const ShowContentPartial = React.createClass({
   buildTableAttributes() {
     const attributes = {
       name: { renderer: 'string', sortable: true },
+      play: { renderer: 'play', sortable: false, valueFunc: this.getFilteredMetadataSchemas },
     };
+
     return this.getFilteredMetadataSchemas()
       .reduce((acc, metadataSchema) => {
       /* eslint no-param-reassign: 0 */
