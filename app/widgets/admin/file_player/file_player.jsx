@@ -19,6 +19,18 @@ const FilePlayer = React.createClass({
     };
   },
 
+  componentWillReceiveProps(newProps) {
+    if (
+      newProps.player.get('state') !== State.hidden &&
+      this.props.player.get('state') === State.hidden &&
+      !this.state.expanded
+    ) {
+      this.setState({
+        expanded: true,
+      });
+    }
+  },
+
   componentDidUpdate() {
     if (this.refs.audioWidget) {
       this.refs.audioWidget.changeTagState(this.props.player.get('state'));

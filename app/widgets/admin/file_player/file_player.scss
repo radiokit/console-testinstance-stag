@@ -2,15 +2,13 @@
 .fileplayer {
   position: fixed;
   bottom: 0;
-  right: -325px;
-  width: 360px;
-  background: #fff;
-  color: #000;
+  right: calc(40px - 100%);
+  width: 100%;
+  background: #2b323a;
+  color: rgba(255, 255, 255, 0.5);
   z-index: 1005;
   display: flex;
   transition: right 150ms ease;
-  border-top: 1px solid #f2f3f3;
-  border-left: 1px solid #f2f3f3;
 
   &.fileplayer--expanded {
     right: 0;
@@ -35,18 +33,20 @@
 }
 
 %fileplayerButton {
-  border: #f2f3f3;
-  background: #f2f3f3;
-  padding: 5px;
+  border: none;
+  background: none;
+  padding: 2px;
   margin-bottom: 5px;
   border-radius: 8px;
   outline: none;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 18px;
 
   i {
     cursor: pointer;
   }
 
   &:hover {
-    background: #dfe1e1;
+    color: rgba(255, 255, 255, 0.9);
   }
 }
