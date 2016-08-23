@@ -15,6 +15,7 @@ const RoutingDiagramLinkPath = (props) => {
     let audioInterfacesOfClient = RoutingDiagramHelpers.getAudioInterfacesOfClient(client, props.audioInterfaces);
 
     audioInterfacesOfClient
+      .filter(audioInterface => audioInterface.get('direction') === 'capture')
       .forEach((audioInterface, index) => {
         let audioInterfaceX = (audioInterface.get('direction') === 'capture' ? RoutingDiagramDimensions.getClientWidth() : 0) + RoutingDiagramDimensions.getAudioInterfaceWidth() / -2;
         let audioInterfaceY = (index * (RoutingDiagramDimensions.getAudioInterfaceMargin() + RoutingDiagramDimensions.getAudioInterfaceHeight()) + RoutingDiagramDimensions.getAudioInterfaceMargin());
@@ -23,7 +24,19 @@ const RoutingDiagramLinkPath = (props) => {
           x: clientX + audioInterfaceX + (audioInterface.get('direction') === 'playback' ? 0 : RoutingDiagramDimensions.getAudioInterfaceWidth()),
           y: clientY + audioInterfaceY + (RoutingDiagramDimensions.getAudioInterfaceHeight() / 2)
         };
-    });
+      });
+
+    audioInterfacesOfClient
+      .filter(audioInterface => audioInterface.get('direction') === 'playback')
+      .forEach((audioInterface, index) => {
+        let audioInterfaceX = (audioInterface.get('direction') === 'capture' ? RoutingDiagramDimensions.getClientWidth() : 0) + RoutingDiagramDimensions.getAudioInterfaceWidth() / -2;
+        let audioInterfaceY = (index * (RoutingDiagramDimensions.getAudioInterfaceMargin() + RoutingDiagramDimensions.getAudioInterfaceHeight()) + RoutingDiagramDimensions.getAudioInterfaceMargin());
+
+        linkCoordinates[audioInterface.get('id')] = {
+          x: clientX + audioInterfaceX + (audioInterface.get('direction') === 'playback' ? 0 : RoutingDiagramDimensions.getAudioInterfaceWidth()),
+          y: clientY + audioInterfaceY + (RoutingDiagramDimensions.getAudioInterfaceHeight() / 2)
+        };
+      });
   });
 
   // Cache some values
