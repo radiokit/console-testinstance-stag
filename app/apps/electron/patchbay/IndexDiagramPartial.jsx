@@ -92,56 +92,52 @@ export default React.createClass({
 
 
   loadAudioInterfaces() {
-    if (!this.audioInterfacesQuery) {
-      const clientsIDs = this.state.loadedClients.map((client) =>
-        client.get('id')
-      ).toJS();
-      const clientsCondition = ['device_client_id', 'in'].concat(clientsIDs);
+    const clientsIDs = this.state.loadedClients.map((client) =>
+      client.get('id')
+    ).toJS();
+    const clientsCondition = ['device_client_id', 'in'].concat(clientsIDs);
 
-      this.audioInterfacesQuery = window.data
-        .query('jungle', 'Resource.AudioInterface')
-        .select('id', 'device_client_id', 'name', 'os_name', 'direction', 'references')
-        .order('name', 'asc')
-        .where.apply(this, clientsCondition)
-        .on('fetch', (_event, _query, data) => {
-          if(this.isMounted()) {
-            this.setState({
-              loadedAudioInterfaces: data,
-            }, () => {
-              this.loadLinks();
-            });
-          }
-        })
-        .enableAutoUpdate();
-    }
+    window.data
+      .query('jungle', 'Resource.AudioInterface')
+      .select('id', 'device_client_id', 'name', 'os_name', 'direction', 'references')
+      .order('name', 'asc')
+      .where.apply(this, clientsCondition)
+      .on('fetch', (_event, _query, data) => {
+        if(this.isMounted()) {
+          this.setState({
+            loadedAudioInterfaces: data,
+          }, () => {
+            this.loadLinks();
+          });
+        }
+      })
+      .fetch();
   },
 
 
   loadLinks() {
-    if (!this.linksQuery) {
-      const audioInterfaceIDs = this.state.loadedAudioInterfaces
-        .filter((audioInterface) =>
-          audioInterface.get('direction') === 'capture'
-        ).map((audioInterface) =>
-          audioInterface.get('id')
-        ).toJS();
+    const audioInterfaceIDs = this.state.loadedAudioInterfaces
+      .filter((audioInterface) =>
+        audioInterface.get('direction') === 'capture'
+      ).map((audioInterface) =>
+        audioInterface.get('id')
+      ).toJS();
 
-      const linksCondition = ['source_resource_audio_interface_id', 'in']
-        .concat(audioInterfaceIDs);
+    const linksCondition = ['source_resource_audio_interface_id', 'in']
+      .concat(audioInterfaceIDs);
 
-      this.linksQuery = window.data
-        .query('jungle', 'Topology.AudioLink')
-        .select('id', 'active', 'source_resource_audio_interface_id', 'destination_resource_audio_interface_id', 'extra')
-        .where.apply(this, linksCondition)
-        .on('fetch', (_event, _query, data) => {
-          if(this.isMounted()) {
-            this.setState({
-              loadedLinks: data,
-            });
-          }
-        })
-        .enableAutoUpdate();
-    }
+    window.data
+      .query('jungle', 'Topology.AudioLink')
+      .select('id', 'active', 'source_resource_audio_interface_id', 'destination_resource_audio_interface_id', 'extra')
+      .where.apply(this, linksCondition)
+      .on('fetch', (_event, _query, data) => {
+        if(this.isMounted()) {
+          this.setState({
+            loadedLinks: data,
+          });
+        }
+      })
+      .fetch();
   },
 
 
@@ -166,16 +162,6 @@ export default React.createClass({
 
 
   componentWillUnmount() {
-    if (this.linksQuery) {
-      this.linksQuery.teardown();
-      delete this.linksQuery;
-    }
-
-    if (this.audioInterfacesQuery) {
-      this.audioInterfacesQuery.teardown();
-      delete this.audioInterfacesQuery;
-    }
-
     if (this.clientsQuery) {
       this.clientsQuery.teardown();
       delete this.clientsQuery;
