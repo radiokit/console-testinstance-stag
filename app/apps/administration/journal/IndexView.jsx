@@ -23,8 +23,7 @@ export default React.createClass({
         contentPrefix="apps.administration.journal"
         app="auth"
         model="Entry"
-        attributes={this.buildAttributes()}
-        form={this.buildForm()} />
+        attributes={this.buildAttributes()} />
     );
   },
 });
