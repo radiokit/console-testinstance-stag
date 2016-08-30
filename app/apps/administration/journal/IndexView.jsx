@@ -12,12 +12,13 @@ export default React.createClass({
 
   buildAttributes() {
     return {
-      reporter_app: { renderer: "string" },
-      reporter_instance: { renderer: "string" },
-      severity: { renderer: "string" },
-      params: { renderer: "string" },
-      action: { renderer: "string" },
-      triggered_at: { renderer: "string" },
+      reporter_app:       { renderer: "journal-reporter-app" },
+      reporter_instance:  { renderer: "journal-reporter-instance" },
+      severity:           { renderer: "journal-severity" },
+      params:             { renderer: "journal-params" },
+      action:             { renderer: "journal-action" },
+      triggered_at:       { renderer: "datetime" },
+      inserted_at:        { renderer: "datetime" },
     };
   },
 
@@ -27,7 +28,7 @@ export default React.createClass({
       <Index
         contentPrefix="apps.administration.journal"
         app="journal"
-        model="Entries"
+        model="Entry"
         attributes={this.buildAttributes()}
         createEnabled={false}
         deleteEnabled={false}/>

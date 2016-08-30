@@ -24,6 +24,11 @@ import TableCellFile from './table_cell_file.jsx';
 import TableCellImage from './table_cell_image.jsx';
 import TableCellScopeUserAccount from './table_cell_scope_user_account.jsx';
 import TableCellScopeBroadcastChannel from './table_cell_scope_broadcast_channel.jsx';
+import TableCellJournalAction from './table_cell_journal_action.jsx';
+import TableCellJournalParams from './table_cell_journal_params.jsx';
+import TableCellJournalReporterApp from './table_cell_journal_reporter_app.jsx';
+import TableCellJournalReporterInstance from './table_cell_journal_reporter_instance.jsx';
+import TableCellJournalSeverity from './table_cell_journal_severity.jsx';
 
 export default React.createClass({
   propTypes: {
@@ -148,6 +153,26 @@ export default React.createClass({
 
         case "scope-broadcast-channel":
           cell = (<TableCellScopeBroadcastChannel {...this.props.attributeConfig.props} record={this.props.record} />);
+          break;
+
+        case "journal-action":
+          cell = (<TableCellJournalAction {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value}/>);
+          break;
+
+        case "journal-params":
+          cell = (<TableCellJournalParams {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value}/>);
+          break;
+
+        case "journal-reporter-app":
+          cell = (<TableCellJournalReporterApp {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value}/>);
+          break;
+
+        case "journal-reporter-instance":
+          cell = (<TableCellJournalReporterInstance {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value}/>);
+          break;
+
+        case "journal-severity":
+          cell = (<TableCellJournalSeverity {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value}/>);
           break;
 
         default:
