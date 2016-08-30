@@ -25,7 +25,7 @@ export default React.createClass({
     indexQueryFunc: React.PropTypes.func,
     app: React.PropTypes.string.isRequired,
     model: React.PropTypes.string.isRequired,
-    form: React.PropTypes.object.isRequired,
+    form: React.PropTypes.object,
     updateForm: React.PropTypes.object,
     type: React.PropTypes.oneOf(['tableBrowser', 'list']).isRequired,
     attributes: React.PropTypes.object.isRequired,

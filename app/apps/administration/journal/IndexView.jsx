@@ -28,7 +28,9 @@ export default React.createClass({
         contentPrefix="apps.administration.journal"
         app="journal"
         model="Entries"
-        attributes={this.buildAttributes()} />
+        attributes={this.buildAttributes()}
+        createEnabled={false}
+        deleteEnabled={false}/>
     );
   },
 });
