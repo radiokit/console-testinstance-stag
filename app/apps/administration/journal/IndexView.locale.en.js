@@ -8,10 +8,19 @@ export default {
 
           table: {
             loading: "Fetching list of events",
+            header: {
+              product: "Product",
+              severity: "Severity",
+              params: "Parameters",
+              action: "Action",
+              triggered_at: "Triggered at",
+              inserted_at: "Inserted at",
           },
-
+         },
         },
       },
     }
   }
+
+
 }

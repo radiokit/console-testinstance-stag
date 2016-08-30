@@ -12,8 +12,7 @@ export default React.createClass({
 
   buildAttributes() {
     return {
-      reporter_app:       { renderer: "journal-reporter-app" },
-      reporter_instance:  { renderer: "journal-reporter-instance" },
+      product:       { renderer: "journal-product" },
       severity:           { renderer: "journal-severity" },
       params:             { renderer: "journal-params" },
       action:             { renderer: "journal-action" },
