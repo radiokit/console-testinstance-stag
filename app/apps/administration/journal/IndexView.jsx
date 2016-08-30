@@ -12,7 +12,12 @@ export default React.createClass({
 
   buildAttributes() {
     return {
-      email: { renderer: "string" },
+      reporter_app: { renderer: "string" },
+      reporter_instance: { renderer: "string" },
+      severity: { renderer: "string" },
+      params: { renderer: "string" },
+      action: { renderer: "string" },
+      triggered_at: { renderer: "string" },
     };
   },
 
@@ -21,8 +26,8 @@ export default React.createClass({
     return (
       <Index
         contentPrefix="apps.administration.journal"
-        app="auth"
-        model="Entry"
+        app="journal"
+        model="Entries"
         attributes={this.buildAttributes()} />
     );
   },
