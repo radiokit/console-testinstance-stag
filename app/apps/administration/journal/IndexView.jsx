@@ -23,7 +23,6 @@ export default React.createClass({
         contentPrefix="apps.administration.journal"
         app="auth"
         model="Entry"
-        createEnabled: false
         attributes={this.buildAttributes()}
         form={this.buildForm()} />
     );
