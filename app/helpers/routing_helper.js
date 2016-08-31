@@ -72,6 +72,7 @@ export default {
         index() {
           return '/apps/library/file_repositories/index';
         },
+      },
       file_repositories_limited: {
         index() {
           return '/apps/library/file_repositories_limited/index';
@@ -79,5 +80,4 @@ export default {
         },
       },
     },
-  },
 };
