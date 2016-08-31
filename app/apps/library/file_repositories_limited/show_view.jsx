@@ -32,21 +32,6 @@ const ShowView = React.createClass({
           stage: 'incoming', tagFilter: this.state.tagFilter,
         },
       },
-      current: {
-        element: ContentPartial, props: {
-          stage: 'current', tagFilter: this.state.tagFilter,
-        },
-      },
-      archive: {
-        element: ContentPartial, props: {
-          stage: 'archive', tagFilter: this.state.tagFilter,
-        },
-      },
-      trash: {
-        element: ContentPartial, props: {
-          stage: 'trash', tagFilter: this.state.tagFilter,
-        },
-      },
     };
   },
 

@@ -224,14 +224,7 @@ const ShowContentPartial = React.createClass({
   },
 
   renderMoveToButton(stage) {
-    return (
-      <ToolbarButton
-        icon="folder-move"
-        labelTextKey={`${this.props.contentPrefix}.actions.move_to.${stage}`}
-        disabled={this.state.selectedRecordIds.count() === 0}
-        onClick = {() => this.moveFiles(stage)}
-      />
-    );
+  
   },
 
   render() {
@@ -264,24 +257,7 @@ const ShowContentPartial = React.createClass({
             disabled={this.state.selectedRecordIds.count() === 0}
             onClick={this.onDownloadClick}
           />
-          <ToolbarButton
-            icon="delete"
-            labelTextKey={`${
-              this.props.contentPrefix
-              }.actions.${
-              (this.props.stage === 'trash' ? 'delete' : 'move_to.trash')
-              }`}
-            disabled={this.state.selectedRecordIds.count() === 0}
-            onClick={this.onDeleteClick}
-          />
-          <DeleteModal
-            ref="deleteModal"
-            contentPrefix={`${this.props.contentPrefix}.modals.delete`}
-            selectedRecordIds={this.state.selectedRecordIds}
-            app="vault"
-            model="Data.Record.File"
-            onSuccess={ this.reloadTable }
-          />
+
         </ToolbarGroup>
 
         <ToolbarGroup>
