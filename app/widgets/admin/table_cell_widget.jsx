@@ -156,10 +156,9 @@ export default React.createClass({
           cell = (<TableCellScopeBroadcastChannel {...this.props.attributeConfig.props} record={this.props.record} />);
           break;
 
-<<<<<<< HEAD
         case "play":
           cell = (<TableCellPlayButton {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value} />);
-=======
+
         case "journal-action":
           cell = (<TableCellJournalAction {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value}/>);
           break;
@@ -175,7 +174,7 @@ export default React.createClass({
 
         case "journal-severity":
           cell = (<TableCellJournalSeverity {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value}/>);
->>>>>>> journal-interface
+
           break;
 
         default:
