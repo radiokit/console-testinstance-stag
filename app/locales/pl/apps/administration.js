@@ -10,6 +10,9 @@ export default {
         file_repositories: {
           title: "Repozytoria plików"
         },
+        journal: {
+          title: "Dziennik"
+        },
       },
     }
   }
