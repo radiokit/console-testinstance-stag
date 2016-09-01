@@ -59,6 +59,11 @@ export default {
           return '/apps/administration/users/index';
         },
       },
+        journal: {
+          index() {
+            return '/apps/administration/journal/index';
+          },
+      },
       file_repositories: {
         index() {
           return '/apps/administration/file_repositories/index';

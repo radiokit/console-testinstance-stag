@@ -36,6 +36,7 @@ import LibraryFileRepositoriesShow from './apps/library/file_repositories/show_v
 import ClipEditorApp from './apps/clip_editor/app.jsx';
 import AdministrationApp from './apps/administration/app.jsx';
 import AdministrationUsersIndex from './apps/administration/users/IndexView.jsx';
+import AdministrationJournalIndex from './apps/administration/journal/IndexView.jsx';
 import AdministrationFileRepositoriesIndex from './apps/administration/file_repositories/IndexView.jsx';
 import AdministrationFileRepositoriesShow from './apps/administration/file_repositories/ShowView.jsx';
 
@@ -163,6 +164,7 @@ ReactDOM.render((
 
         <Route path="administration" component={AdministrationApp}>
           <Route path="users/index" component={AdministrationUsersIndex} onEnter={pingGoogleAnalytics} />
+          <Route path="journal/index" component={AdministrationJournalIndex} onEnter={pingGoogleAnalytics} />
           <Route path="file_repositories">
             <Route path="index" component={AdministrationFileRepositoriesIndex} onEnter={pingGoogleAnalytics} />
             <Route path="show/:id" component={AdministrationFileRepositoriesShow} onEnter={pingGoogleAnalytics} />
