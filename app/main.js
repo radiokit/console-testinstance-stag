@@ -33,6 +33,8 @@ import InfrastructureBroadcastChannelsShow from './apps/infrastructure/broadcast
 import LibraryApp from './apps/library/app.jsx';
 import LibraryFileRepositoriesIndex from './apps/library/file_repositories/IndexView.jsx';
 import LibraryFileRepositoriesShow from './apps/library/file_repositories/show_view.jsx';
+import LibraryFileRepositoriesLimitedIndex from './apps/library/file_repositories_limited/IndexView.jsx';
+import LibraryFileRepositoriesLimitedShow from './apps/library/file_repositories_limited/show_view.jsx';
 import ClipEditorApp from './apps/clip_editor/app.jsx';
 import AdministrationApp from './apps/administration/app.jsx';
 import AdministrationUsersIndex from './apps/administration/users/IndexView.jsx';
@@ -137,6 +139,12 @@ ReactDOM.render((
               <Route path="index" component={LibraryFileRepositoriesIndex} onEnter={pingGoogleAnalytics} />
             </Route>
             <Route path="show/:id" component={LibraryFileRepositoriesShow} onEnter={pingGoogleAnalytics} />
+          </Route>
+          <Route path="file_repositories_limited">
+            <Route component={ScopeLayout} scope="userAccount">
+              <Route path="index" component={LibraryFileRepositoriesLimitedIndex} onEnter={pingGoogleAnalytics} />
+            </Route>
+            <Route path="show/:id" component={LibraryFileRepositoriesLimitedShow} onEnter={pingGoogleAnalytics} />
           </Route>
         </Route>
 
