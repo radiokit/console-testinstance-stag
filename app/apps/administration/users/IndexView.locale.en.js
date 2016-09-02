@@ -50,6 +50,7 @@ export default {
                   values: {
                     electron: "Electron",
                     library: "Library",
+                    library_limited: "Library (upload only)",
                     administration: "Administration",
                     broadcast: "Broadcast",
                     freezer: "Freezer",

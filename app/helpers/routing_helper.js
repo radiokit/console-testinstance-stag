@@ -78,9 +78,13 @@ export default {
           return '/apps/library/file_repositories/index';
         },
       },
-      file_repositories_limited: {
-        index() {
-          return '/apps/library/file_repositories_limited/index';
+    },
+
+      library_limited: {
+        icon: 'library-music',
+        file_repositories: {
+          index() {
+            return '/apps/library_limited/file_repositories/index';
           },
         },
       },

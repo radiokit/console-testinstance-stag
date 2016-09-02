@@ -1,6 +1,12 @@
 export default {
   apps: {
-    library: {
+    library_limited: {
+      navigation: {
+        title: 'Library (only upload)',
+        file_repositories: {
+          title: "Incoming",
+        },
+      },
       file_repositories: {
         index: {
           header: 'Library sections',

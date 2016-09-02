@@ -47,6 +47,7 @@ export default {
                   values: {
                     electron: "Electron",
                     library: "Biblioteka",
+                    library_limited: "Biblioteka (tylko upload)",
                     administration: "Administracja",
                     broadcast: "Emisja",
                     freezer: "Freezer",
