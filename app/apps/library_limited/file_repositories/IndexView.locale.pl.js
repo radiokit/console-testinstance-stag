@@ -3,6 +3,7 @@ export default {
     library_limited: {
       navigation: {
         title: 'Biblioteka (tylko upload)',
+        subtitle: 'Miejsce do uploadu Twoich plików audio',
         file_repositories: {
           title: "Nowe",
         },

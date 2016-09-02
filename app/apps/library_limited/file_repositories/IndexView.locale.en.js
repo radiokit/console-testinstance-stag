@@ -3,6 +3,7 @@ export default {
     library_limited: {
       navigation: {
         title: 'Library (only upload)',
+        subtitle: 'Place to upload all of your files',
         file_repositories: {
           title: "Incoming",
         },
