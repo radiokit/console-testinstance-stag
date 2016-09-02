@@ -158,6 +158,7 @@ export default React.createClass({
 
         case "play":
           cell = (<TableCellPlayButton {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value} />);
+          break;
 
         case "journal-action":
           cell = (<TableCellJournalAction {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value}/>);
