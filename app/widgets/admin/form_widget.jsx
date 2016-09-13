@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Translate from 'react-translate-component';
 import Counterpart from 'counterpart';
 import clone from 'clone';
@@ -176,8 +177,17 @@ const FormWidget = React.createClass({
     return params;
   },
 
-  onToggleClick(fieldName, e) {
-    this.refs[fieldName].value = e.target.textContent;
+  onToggleClick(fieldName, toggleFields, e) {
+    const that = this;
+    const targetValue = e.target.textContent;
+    this.refs[fieldName].value = targetValue;
+
+    if (toggleFields) {
+      toggleFields.forEach(function(field) {
+        const showHide = targetValue === 'true' ? '' : 'none';
+        ReactDOM.findDOMNode(that.refs[field]).parentElement.style.display = showHide;
+      });
+    }
   },
 
   onFormSubmit(e) {
@@ -395,9 +405,10 @@ const FormWidget = React.createClass({
           for (const index in fieldConfig.toggleOptions) {
             const option = fieldConfig.toggleOptions[index];
             const className  = fieldConfig.checked === option.value ? "btn ink-reaction btn-primary active" : "btn ink-reaction btn-primary"
+            const toggleFields = fieldConfig.toggleFields;
 
             const toggleOption = (
-              <label key={index} className={className} onClick={(e) => this.onToggleClick(fieldName, e)}>
+              <label key={index} className={className} onClick={(e) => this.onToggleClick(fieldName, toggleFields, e)}>
   							<input type="radio" name={fieldName} value={option.value} />
                 {option.label}
   						</label>
