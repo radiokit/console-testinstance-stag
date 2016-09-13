@@ -136,16 +136,16 @@ const DevicesToolbar = React.createClass({
             // Otherwise the standalone client application may crash.
             RecordHelper.setExtra(Immutable.fromJS(params), ['electron', 'latency'], parseInt(value)).toJS(),
         },
-        dataCorrectionOverhead: {
+        dataloss: {
           type: 'slider',
-          value: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'dataCorrectionOverhead'], 10),
+          value: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'dataloss'], 10),
           min: 0,
           max: 100,
           hint: true,
           fieldValueFunc: (params, value) =>
             // It is very important that value is integer. So we do parseInt()
             // Otherwise the standalone client application may crash.
-            RecordHelper.setExtra(Immutable.fromJS(params), ['electron', 'dataCorrectionOverhead'], parseInt(value)).toJS(),
+            RecordHelper.setExtra(Immutable.fromJS(params), ['electron', 'dataloss'], parseInt(value)).toJS(),
         },
       };
     }

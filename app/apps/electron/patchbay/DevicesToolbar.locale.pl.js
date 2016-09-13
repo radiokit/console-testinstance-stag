@@ -33,7 +33,7 @@ export default {
                 latency: {
                   label: 'Bufor (ms)',
                 },
-                dataCorrectionOverhead: {
+                dataloss: {
                   label: 'Narzut na korekcję danych',
                   hint: 'Określa, jaki procent danych może być utracony w trakcie transmisji. Zwiększanie tej wartości obniży jakość, chyba że zwiększysz także bitrate',
                 },
