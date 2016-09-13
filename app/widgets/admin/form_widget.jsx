@@ -246,10 +246,11 @@ const FormWidget = React.createClass({
       let required = this.isFieldRequired(fieldConfig);
       let defaultVal = fieldConfig.value;
       let disabled = fieldConfig.disabled;
+      let display = fieldConfig.visibility;
 
       switch (fieldConfig.type) {
         case "string":
-          input = (<Input className="form-control" type="text" id={ fieldName } ref={ fieldName } required={ required } value={ defaultVal } disabled={ disabled }/>);
+          input = (<Input className="form-control" type="text" id={ fieldName } ref={ fieldName } required={ required } value={ defaultVal } disabled={ disabled } />);
           break;
 
         case "number":
@@ -483,7 +484,7 @@ const FormWidget = React.createClass({
 
       if (fieldConfig.type !== 'hidden') {
         return (
-          <div key={ fieldName } className={ formGroupKlass }>
+          <div key={ fieldName } className={ formGroupKlass } style={{ display }}>
             { input }
             <Translate
               htmlFor={ fieldName }

@@ -167,30 +167,35 @@ const DevicesToolbar = React.createClass({
         sender_ip: {
           type: 'string',
           value: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'sender_ip'], 1025),
+          visibility: this.getManualSettingsVisibility('manual_settings'),
           fieldValueFunc: (params, value) =>
             RecordHelper.setExtra(Immutable.fromJS(params), ['electron', 'sender_ip'], value).toJS(),
         },
         sender_control_port: {
           type: 'string',
           value: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'sender_control_port'], 1025),
+          visibility: this.getManualSettingsVisibility('manual_settings'),
           fieldValueFunc: (params, value) =>
             RecordHelper.setExtra(Immutable.fromJS(params), ['electron', 'sender_control_port'], value).toJS(),
         },
         receiver_ip: {
           type: 'string',
           value: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'receiver_ip'], 1025),
+          visibility: this.getManualSettingsVisibility('manual_settings'),
           fieldValueFunc: (params, value) =>
             RecordHelper.setExtra(Immutable.fromJS(params), ['electron', 'receiver_ip'], value).toJS(),
         },
         receiver_data_port: {
           type: 'string',
           value: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'receiver_data_port'], 1025),
+          visibility: this.getManualSettingsVisibility('manual_settings'),
           fieldValueFunc: (params, value) =>
             RecordHelper.setExtra(Immutable.fromJS(params), ['electron', 'receiver_data_port'], value).toJS(),
         },
         receiver_control_port: {
           type: 'string',
           value: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'receiver_control_port'], 1025),
+          visibility: this.getManualSettingsVisibility('manual_settings'),
           fieldValueFunc: (params, value) =>
             RecordHelper.setExtra(Immutable.fromJS(params), ['electron', 'receiver_control_port'], value).toJS(),
         },
@@ -218,6 +223,16 @@ const DevicesToolbar = React.createClass({
         this.props.onUpdateSuccess();
       })
       .update({ active: !this.props.selectedRecord.record.get('active') });
+  },
+
+  getManualSettingsVisibility(fieldName) {
+    const setting = RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', fieldName]);
+
+    if (setting !== 'true') {
+      return 'none';
+    }
+
+    return 'block';
   },
 
   render() {
