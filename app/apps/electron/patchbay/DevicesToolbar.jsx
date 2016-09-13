@@ -166,13 +166,15 @@ const DevicesToolbar = React.createClass({
         },
         sender_ip: {
           type: 'string',
-          value: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'sender_ip'], 1025),
+          value: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'sender_ip'], '0.0.0.0'),
           visibility: this.getManualSettingsVisibility('peer_to_peer'),
           fieldValueFunc: (params, value) =>
             RecordHelper.setExtra(Immutable.fromJS(params), ['electron', 'sender_ip'], value).toJS(),
         },
         sender_control_port: {
-          type: 'string',
+          type: 'number',
+          min: 1025,
+          max: 65535,
           value: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'sender_control_port'], 1025),
           visibility: this.getManualSettingsVisibility('peer_to_peer'),
           fieldValueFunc: (params, value) =>
@@ -180,20 +182,24 @@ const DevicesToolbar = React.createClass({
         },
         receiver_ip: {
           type: 'string',
-          value: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'receiver_ip'], 1025),
+          value: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'receiver_ip'], '0.0.0.0'),
           visibility: this.getManualSettingsVisibility('peer_to_peer'),
           fieldValueFunc: (params, value) =>
             RecordHelper.setExtra(Immutable.fromJS(params), ['electron', 'receiver_ip'], value).toJS(),
         },
         receiver_data_port: {
-          type: 'string',
+          type: 'number',
+          min: 1025,
+          max: 65535,
           value: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'receiver_data_port'], 1025),
           visibility: this.getManualSettingsVisibility('peer_to_peer'),
           fieldValueFunc: (params, value) =>
             RecordHelper.setExtra(Immutable.fromJS(params), ['electron', 'receiver_data_port'], value).toJS(),
         },
         receiver_control_port: {
-          type: 'string',
+          type: 'number',
+          min: 1025,
+          max: 65535,
           value: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'receiver_control_port'], 1025),
           visibility: this.getManualSettingsVisibility('peer_to_peer'),
           fieldValueFunc: (params, value) =>

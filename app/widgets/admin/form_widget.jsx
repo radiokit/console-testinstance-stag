@@ -238,6 +238,21 @@ const FormWidget = React.createClass({
     valueField.value = e.target.value;
   },
 
+  numberInputOnBlur(fieldName) {
+    const target = this.refs[fieldName];
+    const currentValue = target.value;
+    const minValue = target.min;
+    const maxValue = target.max;
+
+    if (currentValue > maxValue) {
+      target.value = maxValue;
+    }
+
+    if (currentValue < minValue) {
+      target.value = minValue;
+    }
+  },
+
   renderForm() {
     let fields = Object.keys(this.props.form).map((fieldName) => {
       let fieldConfig = this.props.form[fieldName];
@@ -254,10 +269,10 @@ const FormWidget = React.createClass({
           break;
 
         case "number":
-          const minValue = fieldConfig.minValue;
-          const maxValue = fieldConfig.maxValue;
+          const minValue = fieldConfig.min;
+          const maxValue = fieldConfig.max;
 
-          input = (<input className="form-control" type="number" id={ fieldName } ref={ fieldName } required={ required } min={ minValue } max={ maxValue } dafaultValue={ defaultVal }/>);
+          input = (<input className="form-control" type="number" id={ fieldName } ref={ fieldName } required={ required } min={ minValue } max={ maxValue } defaultValue={ defaultVal } onBlur={ () => this.numberInputOnBlur(fieldName) }/>);
           break;
 
         case "decimal":
