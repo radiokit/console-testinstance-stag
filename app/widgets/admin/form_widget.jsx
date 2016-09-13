@@ -417,8 +417,8 @@ const FormWidget = React.createClass({
         case 'slider':
           input = (
             <div style={{marginBottom: "10px", width: "100%", height: "15px"}}>
-  					  <input name={fieldName} ref={fieldName} type="range" defaultValue={fieldConfig.value} min={fieldConfig.min} max={fieldConfig.max} style={{ cursor: "pointer", float: "left", width: "85%" }} onChange={this.onSliderChange} />
-              <input type="number" id={fieldName + '_id'} defaultValue={fieldConfig.value} style={{ float: "left", width: "10%", marginLeft: "10px", position: "relative", bottom: "5px" }} />
+  					  <input name={fieldName} type="range" defaultValue={fieldConfig.value} min={fieldConfig.min} max={fieldConfig.max} style={{ cursor: "pointer", float: "left", width: "85%" }} onChange={this.onSliderChange} />
+              <input type="number" id={fieldName + '_id'} ref={fieldName} defaultValue={fieldConfig.value} style={{ float: "left", width: "10%", marginLeft: "10px", position: "relative", bottom: "5px" }} />
             </div>
           );
           break;
