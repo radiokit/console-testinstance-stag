@@ -244,12 +244,16 @@ const FormWidget = React.createClass({
     const minValue = target.min;
     const maxValue = target.max;
 
-    if (currentValue > maxValue) {
-      target.value = maxValue;
+    if (minValue) {
+      if (currentValue < minValue) {
+        target.value = minValue;
+      }
     }
 
-    if (currentValue < minValue) {
-      target.value = minValue;
+    if (maxValue) {
+      if (currentValue > maxValue) {
+        target.value = maxValue;
+      }
     }
   },
 
