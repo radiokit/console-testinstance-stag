@@ -163,6 +163,26 @@ const DevicesToolbar = React.createClass({
           fieldValueFunc: (params, value) =>
             RecordHelper.setExtra(Immutable.fromJS(params), ['electron', 'manual_settings'], value).toJS(),
         },
+        sender_ip: {
+          type: 'string',
+          value: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'sender_ip'], 1025),
+        },
+        sender_control_port: {
+          type: 'string',
+          value: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'sender_control_port'], 1025),
+        },
+        receiver_ip: {
+          type: 'string',
+          value: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'receiver_ip'], 1025),
+        },
+        receiver_data_port: {
+          type: 'string',
+          value: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'receiver_data_port'], 1025),
+        },
+        receiver_control_port: {
+          type: 'string',
+          value: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'receiver_control_port'], 1025),
+        },
       };
     }
 

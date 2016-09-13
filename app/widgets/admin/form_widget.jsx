@@ -243,7 +243,10 @@ const FormWidget = React.createClass({
           break;
 
         case "number":
-          input = (<input className="form-control" type="number" id={ fieldName } ref={ fieldName } required={ required } />);
+          const minValue = fieldConfig.minValue;
+          const maxValue = fieldConfig.maxValue;
+
+          input = (<input className="form-control" type="number" id={ fieldName } ref={ fieldName } required={ required } min={ minValue } max={ maxValue } dafaultValue={ defaultVal }/>);
           break;
 
         case "decimal":
@@ -386,6 +389,7 @@ const FormWidget = React.createClass({
 
         case 'toggle':
           let toggleOptions = [];
+          let optionalFields = [];
           const defaultValue = fieldConfig.value ? fieldConfig.value : '';
 
           for (const index in fieldConfig.toggleOptions) {
@@ -409,7 +413,9 @@ const FormWidget = React.createClass({
               data-toggle="buttons"
               style={{ float: 'none' }}
               value={ defaultValue }
-            >{toggleOptions}</div>
+            >
+              {toggleOptions}
+            </div>
           );
           break;
 
