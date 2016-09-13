@@ -147,6 +147,22 @@ const DevicesToolbar = React.createClass({
             // Otherwise the standalone client application may crash.
             RecordHelper.setExtra(Immutable.fromJS(params), ['electron', 'dataloss'], parseInt(value)).toJS(),
         },
+        manual_settings: {
+          type: 'toggle',
+          checked: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'manual_settings'], 'true'),
+          toggleOptions: {
+            true: {
+              label: Counterpart.translate('apps.electron.patchbay.toolbar.modals.update.form.manual_settings.values.true'),
+              value: 'true',
+            },
+            false: {
+              label: Counterpart.translate('apps.electron.patchbay.toolbar.modals.update.form.manual_settings.values.false'),
+              value: 'false',
+            },
+          },
+          fieldValueFunc: (params, value) =>
+            RecordHelper.setExtra(Immutable.fromJS(params), ['electron', 'manual_settings'], value).toJS(),
+        },
       };
     }
 

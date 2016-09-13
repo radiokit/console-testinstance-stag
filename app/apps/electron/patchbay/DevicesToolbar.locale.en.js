@@ -37,6 +37,12 @@ export default {
                   label: 'Data correction overhead',
                   hint: 'How many percent of the data is expected to be lost in transmission. Increasing this will decrease quality unless you increase bandwidth too',
                 },
+                manual_settings: {
+                  values: {
+                    true: 'true',
+                    false: 'false',
+                  },
+                },
                 audio_type: {
                   label: 'Audio type',
                   values: {

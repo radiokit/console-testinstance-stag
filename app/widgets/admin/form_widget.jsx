@@ -159,14 +159,8 @@ const FormWidget = React.createClass({
           case 'separator':
             break;
 
-          case 'toggle': {
-            // FIXME
-            const checkedField = document.querySelector('input[name=' + fieldName + ']:checked');
-            if (checkedField) {
-              params[fieldName] = checkedField.value;
-            }
+          case 'toggle':
             break;
-          }
 
           case 'slider':
             params[fieldName] = parseInt(this.refs[fieldName].value, 10);
@@ -182,6 +176,9 @@ const FormWidget = React.createClass({
     return params;
   },
 
+  onToggleClick(fieldName, e) {
+    this.refs[fieldName].value = e.target.textContent;
+  },
 
   onFormSubmit(e) {
     e.preventDefault();
@@ -389,13 +386,14 @@ const FormWidget = React.createClass({
 
         case 'toggle':
           let toggleOptions = [];
+          const defaultValue = fieldConfig.value ? fieldConfig.value : '';
 
           for (const index in fieldConfig.toggleOptions) {
             const option = fieldConfig.toggleOptions[index];
             const className  = fieldConfig.checked === option.value ? "btn ink-reaction btn-primary active" : "btn ink-reaction btn-primary"
 
             const toggleOption = (
-              <label key={index} className={className}>
+              <label key={index} className={className} onClick={(e) => this.onToggleClick(fieldName, e)}>
   							<input type="radio" name={fieldName} value={option.value} />
                 {option.label}
   						</label>
@@ -410,6 +408,7 @@ const FormWidget = React.createClass({
               className="btn-group"
               data-toggle="buttons"
               style={{ float: 'none' }}
+              value={ defaultValue }
             >{toggleOptions}</div>
           );
           break;
