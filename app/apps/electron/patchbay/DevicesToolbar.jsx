@@ -149,7 +149,7 @@ const DevicesToolbar = React.createClass({
         },
         peer_to_peer: {
           type: 'toggle',
-          checked: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'peer_to_peer'], 'true'),
+          checked: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'peer_to_peer'], 'false'),
           toggleOptions: {
             true: {
               label: Counterpart.translate('apps.electron.patchbay.toolbar.modals.update.form.peer_to_peer.values.true'),
