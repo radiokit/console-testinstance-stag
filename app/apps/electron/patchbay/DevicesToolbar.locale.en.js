@@ -37,11 +37,27 @@ export default {
                   label: 'Data correction overhead',
                   hint: 'How many percent of the data is expected to be lost in transmission. Increasing this will decrease quality unless you increase bandwidth too',
                 },
-                manual_settings: {
+                peer_to_peer: {
+                  label: 'Peer to peer',
                   values: {
                     true: 'true',
                     false: 'false',
                   },
+                },
+                sender_ip: {
+                  label: 'Sender\'s IP',
+                },
+                sender_control_port: {
+                  label: 'Sender\'s control port',
+                },
+                receiver_ip: {
+                  label: 'Receiver\'s IP',
+                },
+                receiver_data_port: {
+                  label: 'Receiver\'s data port',
+                },
+                receiver_control_port: {
+                  label: 'Receiver\'s control port',
                 },
                 audio_type: {
                   label: 'Audio type',

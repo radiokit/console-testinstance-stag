@@ -147,55 +147,55 @@ const DevicesToolbar = React.createClass({
             // Otherwise the standalone client application may crash.
             RecordHelper.setExtra(Immutable.fromJS(params), ['electron', 'dataloss'], parseInt(value)).toJS(),
         },
-        manual_settings: {
+        peer_to_peer: {
           type: 'toggle',
-          checked: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'manual_settings'], 'true'),
+          checked: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'peer_to_peer'], 'true'),
           toggleOptions: {
             true: {
-              label: Counterpart.translate('apps.electron.patchbay.toolbar.modals.update.form.manual_settings.values.true'),
+              label: Counterpart.translate('apps.electron.patchbay.toolbar.modals.update.form.peer_to_peer.values.true'),
               value: 'true',
             },
             false: {
-              label: Counterpart.translate('apps.electron.patchbay.toolbar.modals.update.form.manual_settings.values.false'),
+              label: Counterpart.translate('apps.electron.patchbay.toolbar.modals.update.form.peer_to_peer.values.false'),
               value: 'false',
             },
           },
           toggleFields: ['sender_ip', 'sender_control_port', 'receiver_ip', 'receiver_data_port', 'receiver_control_port'],
           fieldValueFunc: (params, value) =>
-            RecordHelper.setExtra(Immutable.fromJS(params), ['electron', 'manual_settings'], value).toJS(),
+            RecordHelper.setExtra(Immutable.fromJS(params), ['electron', 'peer_to_peer'], value).toJS(),
         },
         sender_ip: {
           type: 'string',
           value: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'sender_ip'], 1025),
-          visibility: this.getManualSettingsVisibility('manual_settings'),
+          visibility: this.getManualSettingsVisibility('peer_to_peer'),
           fieldValueFunc: (params, value) =>
             RecordHelper.setExtra(Immutable.fromJS(params), ['electron', 'sender_ip'], value).toJS(),
         },
         sender_control_port: {
           type: 'string',
           value: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'sender_control_port'], 1025),
-          visibility: this.getManualSettingsVisibility('manual_settings'),
+          visibility: this.getManualSettingsVisibility('peer_to_peer'),
           fieldValueFunc: (params, value) =>
             RecordHelper.setExtra(Immutable.fromJS(params), ['electron', 'sender_control_port'], value).toJS(),
         },
         receiver_ip: {
           type: 'string',
           value: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'receiver_ip'], 1025),
-          visibility: this.getManualSettingsVisibility('manual_settings'),
+          visibility: this.getManualSettingsVisibility('peer_to_peer'),
           fieldValueFunc: (params, value) =>
             RecordHelper.setExtra(Immutable.fromJS(params), ['electron', 'receiver_ip'], value).toJS(),
         },
         receiver_data_port: {
           type: 'string',
           value: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'receiver_data_port'], 1025),
-          visibility: this.getManualSettingsVisibility('manual_settings'),
+          visibility: this.getManualSettingsVisibility('peer_to_peer'),
           fieldValueFunc: (params, value) =>
             RecordHelper.setExtra(Immutable.fromJS(params), ['electron', 'receiver_data_port'], value).toJS(),
         },
         receiver_control_port: {
           type: 'string',
           value: RecordHelper.getExtra(this.props.selectedRecord.record, ['electron', 'receiver_control_port'], 1025),
-          visibility: this.getManualSettingsVisibility('manual_settings'),
+          visibility: this.getManualSettingsVisibility('peer_to_peer'),
           fieldValueFunc: (params, value) =>
             RecordHelper.setExtra(Immutable.fromJS(params), ['electron', 'receiver_control_port'], value).toJS(),
         },
