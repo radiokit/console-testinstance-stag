@@ -90,7 +90,7 @@ const FilePlayer = React.createClass({
             <i className={`mdi mdi-chevron-${(this.state.expanded ? 'right' : 'left')}`} />
           </button>
         </div>
-        <div className="fileplayer-content">
+        <div className="fileplayer-content" style={{ width: '100%' }}>
           <h5 className="fileplayer-title">{playerState.getIn(['source', 'name'])}</h5>
           <AudioWidget
             onPlay={this.onPlay}

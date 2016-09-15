@@ -25,6 +25,11 @@ import TableCellImage from './table_cell_image.jsx';
 import TableCellScopeUserAccount from './table_cell_scope_user_account.jsx';
 import TableCellScopeBroadcastChannel from './table_cell_scope_broadcast_channel.jsx';
 import TableCellPlayButton from './table_cell_play_button.jsx';
+import TableCellJournalAction from './table_cell_journal_action.jsx';
+import TableCellJournalParams from './table_cell_journal_params.jsx';
+import TableCellJournalProduct from './table_cell_journal_product.jsx';
+import TableCellJournalSeverity from './table_cell_journal_severity.jsx';
+
 
 export default React.createClass({
   propTypes: {
@@ -153,6 +158,24 @@ export default React.createClass({
 
         case "play":
           cell = (<TableCellPlayButton {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value} />);
+          break;
+
+        case "journal-action":
+          cell = (<TableCellJournalAction {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value}/>);
+          break;
+
+        case "journal-params":
+          cell = (<TableCellJournalParams {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value}/>);
+          break;
+
+        case "journal-product":
+          cell = (<TableCellJournalProduct {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value}/>);
+          break;
+
+
+        case "journal-severity":
+          cell = (<TableCellJournalSeverity {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value}/>);
+
           break;
 
         default:

@@ -8,6 +8,9 @@ export default {
         file_repositories: {
           title: "Biblioteka",
         },
+        file_repositories_limited: {
+          title: "Nowe",
+        },
       },
 
 

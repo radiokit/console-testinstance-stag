@@ -50,6 +50,7 @@ const FilePlayerAudioWidget = React.createClass({
         onEnded={this.props.onEnd}
         onError={this.props.onError}
         onAbort={this.props.onAbort}
+        style={{ width: '100%' }}
       >
         <source
           src={this.props.source}

@@ -33,9 +33,13 @@ import InfrastructureBroadcastChannelsShow from './apps/infrastructure/broadcast
 import LibraryApp from './apps/library/app.jsx';
 import LibraryFileRepositoriesIndex from './apps/library/file_repositories/IndexView.jsx';
 import LibraryFileRepositoriesShow from './apps/library/file_repositories/show_view.jsx';
+import LibraryLimitedApp from './apps/library_limited/app.jsx';
+import LibraryLimitedFileRepositoriesIndex from './apps/library_limited/file_repositories/IndexView.jsx';
+import LibraryLimitedFileRepositoriesShow from './apps/library_limited/file_repositories/show_view.jsx';
 import ClipEditorApp from './apps/clip_editor/app.jsx';
 import AdministrationApp from './apps/administration/app.jsx';
 import AdministrationUsersIndex from './apps/administration/users/IndexView.jsx';
+import AdministrationJournalIndex from './apps/administration/journal/IndexView.jsx';
 import AdministrationFileRepositoriesIndex from './apps/administration/file_repositories/IndexView.jsx';
 import AdministrationFileRepositoriesShow from './apps/administration/file_repositories/ShowView.jsx';
 
@@ -139,6 +143,16 @@ ReactDOM.render((
           </Route>
         </Route>
 
+        <Route path="library_limited" component={LibraryLimitedApp}>
+          <Route path="file_repositories">
+            <Route component={ScopeLayout} scope="userAccount">
+              <Route path="index" component={LibraryLimitedFileRepositoriesIndex} onEnter={pingGoogleAnalytics} />
+            </Route>
+            <Route path="show/:id" component={LibraryLimitedFileRepositoriesShow} onEnter={pingGoogleAnalytics} />
+          </Route>
+        </Route>
+
+
         <Route path="electron" component={ElectronApp}>
           <Route component={ScopeLayout} scope="userAccount">
             <Route path="transmissions">
@@ -163,6 +177,7 @@ ReactDOM.render((
 
         <Route path="administration" component={AdministrationApp}>
           <Route path="users/index" component={AdministrationUsersIndex} onEnter={pingGoogleAnalytics} />
+          <Route path="journal/index" component={AdministrationJournalIndex} onEnter={pingGoogleAnalytics} />
           <Route path="file_repositories">
             <Route path="index" component={AdministrationFileRepositoriesIndex} onEnter={pingGoogleAnalytics} />
             <Route path="show/:id" component={AdministrationFileRepositoriesShow} onEnter={pingGoogleAnalytics} />

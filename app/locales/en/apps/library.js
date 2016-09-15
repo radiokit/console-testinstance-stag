@@ -7,6 +7,9 @@ export default {
         file_repositories: {
           title: "Library",
         },
+        file_repositories_limited: {
+          title: "Incoming"
+        },
       },
 
 

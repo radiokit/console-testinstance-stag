@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Translate from 'react-translate-component';
 import Counterpart from 'counterpart';
 import clone from 'clone';
@@ -159,14 +160,8 @@ const FormWidget = React.createClass({
           case 'separator':
             break;
 
-          case 'toggle': {
-            // FIXME
-            const checkedField = document.querySelector('input[name=' + fieldName + ']:checked');
-            if (checkedField) {
-              params[fieldName] = checkedField.value;
-            }
+          case 'toggle':
             break;
-          }
 
           case 'slider':
             params[fieldName] = parseInt(this.refs[fieldName].value, 10);
@@ -182,6 +177,18 @@ const FormWidget = React.createClass({
     return params;
   },
 
+  onToggleClick(fieldName, toggleFields, e) {
+    const that = this;
+    const targetValue = e.target.textContent;
+    this.refs[fieldName].value = targetValue;
+
+    if (toggleFields) {
+      toggleFields.forEach(function(field) {
+        const showHide = targetValue === 'true' ? '' : 'none';
+        ReactDOM.findDOMNode(that.refs[field]).parentElement.style.display = showHide;
+      });
+    }
+  },
 
   onFormSubmit(e) {
     e.preventDefault();
@@ -231,6 +238,25 @@ const FormWidget = React.createClass({
     valueField.value = e.target.value;
   },
 
+  numberInputOnBlur(fieldName) {
+    const target = this.refs[fieldName];
+    const currentValue = target.value;
+    const minValue = target.min;
+    const maxValue = target.max;
+
+    if (minValue) {
+      if (currentValue < minValue) {
+        target.value = minValue;
+      }
+    }
+
+    if (maxValue) {
+      if (currentValue > maxValue) {
+        target.value = maxValue;
+      }
+    }
+  },
+
   renderForm() {
     let fields = Object.keys(this.props.form).map((fieldName) => {
       let fieldConfig = this.props.form[fieldName];
@@ -239,14 +265,18 @@ const FormWidget = React.createClass({
       let required = this.isFieldRequired(fieldConfig);
       let defaultVal = fieldConfig.value;
       let disabled = fieldConfig.disabled;
+      let display = fieldConfig.visibility;
 
       switch (fieldConfig.type) {
         case "string":
-          input = (<Input className="form-control" type="text" id={ fieldName } ref={ fieldName } required={ required } value={ defaultVal } disabled={ disabled }/>);
+          input = (<Input className="form-control" type="text" id={ fieldName } ref={ fieldName } required={ required } value={ defaultVal } disabled={ disabled } />);
           break;
 
         case "number":
-          input = (<input className="form-control" type="number" id={ fieldName } ref={ fieldName } required={ required } />);
+          const minValue = fieldConfig.min;
+          const maxValue = fieldConfig.max;
+
+          input = (<input className="form-control" type="number" id={ fieldName } ref={ fieldName } required={ required } min={ minValue } max={ maxValue } defaultValue={ defaultVal } onBlur={ () => this.numberInputOnBlur(fieldName) }/>);
           break;
 
         case "decimal":
@@ -389,13 +419,16 @@ const FormWidget = React.createClass({
 
         case 'toggle':
           let toggleOptions = [];
+          let optionalFields = [];
+          const defaultValue = fieldConfig.value ? fieldConfig.value : '';
 
           for (const index in fieldConfig.toggleOptions) {
             const option = fieldConfig.toggleOptions[index];
             const className  = fieldConfig.checked === option.value ? "btn ink-reaction btn-primary active" : "btn ink-reaction btn-primary"
+            const toggleFields = fieldConfig.toggleFields;
 
             const toggleOption = (
-              <label key={index} className={className}>
+              <label key={index} className={className} onClick={(e) => this.onToggleClick(fieldName, toggleFields, e)}>
   							<input type="radio" name={fieldName} value={option.value} />
                 {option.label}
   						</label>
@@ -410,15 +443,18 @@ const FormWidget = React.createClass({
               className="btn-group"
               data-toggle="buttons"
               style={{ float: 'none' }}
-            >{toggleOptions}</div>
+              value={ defaultValue }
+            >
+              {toggleOptions}
+            </div>
           );
           break;
 
         case 'slider':
           input = (
             <div style={{marginBottom: "10px", width: "100%", height: "15px"}}>
-  					  <input name={fieldName} ref={fieldName} type="range" defaultValue={fieldConfig.value} min={fieldConfig.min} max={fieldConfig.max} style={{ cursor: "pointer", float: "left", width: "85%" }} onChange={this.onSliderChange} />
-              <input type="number" id={fieldName + '_id'} defaultValue={fieldConfig.value} style={{ float: "left", width: "10%", marginLeft: "10px", position: "relative", bottom: "5px" }} />
+  					  <input name={fieldName} type="range" defaultValue={fieldConfig.value} min={fieldConfig.min} max={fieldConfig.max} style={{ cursor: "pointer", float: "left", width: "85%" }} onChange={this.onSliderChange} />
+              <input type="number" id={fieldName + '_id'} ref={fieldName} defaultValue={fieldConfig.value} style={{ float: "left", width: "10%", marginLeft: "10px", position: "relative", bottom: "5px" }} />
             </div>
           );
           break;
@@ -467,7 +503,7 @@ const FormWidget = React.createClass({
 
       if (fieldConfig.type !== 'hidden') {
         return (
-          <div key={ fieldName } className={ formGroupKlass }>
+          <div key={ fieldName } className={ formGroupKlass } style={{ display }}>
             { input }
             <Translate
               htmlFor={ fieldName }

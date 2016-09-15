@@ -10,6 +10,7 @@ window.ENV = {
     "agenda"   : { baseUrl: "https://agenda.radiokitapp-stag.org" },
     "plumber"  : { baseUrl: "https://plumber.radiokitapp-stag.org" },
     "vault"    : { baseUrl: "https://vault.radiokitapp-stag.org" },
+    "journal"  : { baseUrl: "https://journal.radiokitapp-stag.org" },
   },
   external: {
   },

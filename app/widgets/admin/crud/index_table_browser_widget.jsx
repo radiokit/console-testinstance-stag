@@ -17,7 +17,7 @@ export default React.createClass({
     indexQueryFunc: React.PropTypes.func,
     app: React.PropTypes.string.isRequired,
     model: React.PropTypes.string.isRequired,
-    form: React.PropTypes.object.isRequired,
+    form: React.PropTypes.object,
     updateForm: React.PropTypes.object,
     attributes: React.PropTypes.object.isRequired,
     readEnabled: React.PropTypes.bool.isRequired,
