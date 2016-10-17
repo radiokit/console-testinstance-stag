@@ -10,6 +10,7 @@ export default {
               processing_schema: "Procesory",
               imports_schema: "Importy",
               exports_schema: "Eksporty",
+              variants_schema: "Warianty",
             },
           },
         },

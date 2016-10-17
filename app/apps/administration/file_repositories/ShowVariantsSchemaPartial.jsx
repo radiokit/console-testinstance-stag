@@ -3,10 +3,10 @@ import Counterpart from 'counterpart';
 
 import IndexTableBrowser from '../../../widgets/admin/crud/index_table_browser_widget.jsx';
 
-Counterpart.registerTranslations("en", require('./ShowProcessingSchemaPartial.locale.en.js'));
-Counterpart.registerTranslations("pl", require('./ShowProcessingSchemaPartial.locale.pl.js'));
+Counterpart.registerTranslations("en", require('./ShowVariantsSchemaPartial.locale.en.js'));
+Counterpart.registerTranslations("pl", require('./ShowVariantsSchemaPartial.locale.pl.js'));
 
-const ShowProcessingsSchema = React.createClass({
+const ShowVariantssSchema = React.createClass({
 
   propTypes: {
     contentPrefix: React.PropTypes.string.isRequired,
@@ -25,9 +25,16 @@ const ShowProcessingsSchema = React.createClass({
         type: "string",
         hint: true,
       },
-      kind: {
+      key: {
+        type: "string",
+        hint: false,
+        validators: {
+          presence: true,
+        },
+      },
+      format_kind: {
         type: "enum",
-        values: ["analysis.audio.duration", "analysis.audio.replaygain", "analysis.audio.tags", "visualisation.audio.waveform"],
+        values: ["mp3", "opus"],
         hint: false,
         validators: {
           presence: true,
@@ -43,7 +50,8 @@ const ShowProcessingsSchema = React.createClass({
   buildAttributes() {
     return {
       name:                  { renderer: "string" },
-      kind:                  { renderer: "string" },
+      key:                   { renderer: "string" },
+      format_kind:           { renderer: "string" },
     }
   },
 
@@ -53,7 +61,7 @@ const ShowProcessingsSchema = React.createClass({
       <IndexTableBrowser
         contentPrefix = { this.props.contentPrefix + ".table" }
         app = "vault"
-        model = "Data.Processing.Schema"
+        model = "Data.Variant.Schema"
         form = { this.buildForm() }
         attributes = { this.buildAttributes() }
         indexQueryFunc = { this.modifyIndexQuery }/>
@@ -61,4 +69,4 @@ const ShowProcessingsSchema = React.createClass({
   }
 });
 
-export default ShowProcessingsSchema;
+export default ShowVariantssSchema;
