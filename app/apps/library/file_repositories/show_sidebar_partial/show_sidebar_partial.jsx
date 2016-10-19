@@ -87,7 +87,7 @@ const ShowSidebarPartial = React.createClass({
         'id', 'name', 'tag_category_id', 'metadata_items.id', 'metadata_items.value_string',
         'metadata_items.value_db', 'metadata_items.value_url', 'metadata_items.value_text',
         'metadata_items.value_date', 'metadata_items.value_datetime', 'metadata_items.value_time',
-        'metadata_items.value_file', 'metadata_items.value_waveform', 'metadata_items.value_image',
+        'metadata_items.value_file', 'metadata_items.value_image',
         'metadata_items.value_float', 'metadata_items.value_integer',
         'metadata_items.metadata_schema_id', 'metadata_items.value_duration',
       )

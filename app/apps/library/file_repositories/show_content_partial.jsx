@@ -210,7 +210,6 @@ const ShowContentPartial = React.createClass({
         'metadata_items.value_datetime',
         'metadata_items.value_time',
         'metadata_items.value_file',
-        'metadata_items.value_waveform',
         'metadata_items.value_image',
         'metadata_items.metadata_schema_id',
         'tag_items.id',

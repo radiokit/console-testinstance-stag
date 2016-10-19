@@ -19,7 +19,6 @@ import TableCellIcon from './table_cell_icon.jsx';
 import TableCellToggle from './table_cell_toggle.jsx';
 import TableCellFileSize from './table_cell_filesize.jsx';
 import TableCellPeakmeter from './table_cell_peakmeter.jsx';
-import TableCellWaveform from './table_cell_waveform.jsx';
 import TableCellFile from './table_cell_file.jsx';
 import TableCellImage from './table_cell_image.jsx';
 import TableCellScopeUserAccount from './table_cell_scope_user_account.jsx';
@@ -78,10 +77,6 @@ export default React.createClass({
 
         case "boolean":
           cell = (<TableCellBoolean {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value}/>);
-          break;
-
-        case "waveform":
-          cell = (<TableCellWaveform {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value}/>);
           break;
 
         case "image":
