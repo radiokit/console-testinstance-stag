@@ -53,11 +53,6 @@ export default {
                                   tags: "Ekstrakcja metadanych",
                                 },
                               },
-                              visualisation: {
-                                audio: {
-                                  waveform: "Generowanie obwiedni",
-                                }
-                              }
                             }
                           },
                         },

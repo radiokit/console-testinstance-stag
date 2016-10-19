@@ -53,11 +53,6 @@ export default {
                                   tags: "Extraction of metadata",
                                 },
                               },
-                              visualisation: {
-                                audio: {
-                                  waveform: "Waveform generation",
-                                },
-                              },
                             },
                           },
                         },
