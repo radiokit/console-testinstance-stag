@@ -31,7 +31,7 @@ export default {
                         },
                         message: {
                           progress: "Adding variant...",
-                          acknowledgement: "Imports were added succesfully.",
+                          acknowledgement: "Variants were added succesfully.",
                         },
                         form: {
                           name: {
@@ -60,7 +60,7 @@ export default {
                         message: {
                           progress: "Deleting variants... ",
                           confirmation: "Do you really want to remove this variant?",
-                          acknowledgement: "Imports were succesfully removed.",
+                          acknowledgement: "Variants were succesfully removed.",
                         },
                       },
                     },

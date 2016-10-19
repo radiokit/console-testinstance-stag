@@ -31,7 +31,7 @@ export default {
                         },
                         message: {
                           progress: "Adding processor...",
-                          acknowledgement: "Imports were added succesfully.",
+                          acknowledgement: "Processors were added succesfully.",
                         },
                         form: {
                           name: {
@@ -72,7 +72,7 @@ export default {
                         message: {
                           progress: "Deleting processors... ",
                           confirmation: "Do you really want to remove this processor?",
-                          acknowledgement: "Imports were succesfully removed.",
+                          acknowledgement: "Processors were succesfully removed.",
                         },
                       },
                     },
