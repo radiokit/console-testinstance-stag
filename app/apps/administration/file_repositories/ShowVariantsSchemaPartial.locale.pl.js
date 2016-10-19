@@ -5,70 +5,63 @@ export default {
         show: {
           tabs: {
             body: {
-              processing_schema: {
+              variants_schema: {
                 table: {
                   index: {
                     actions: {
-                      create: "Dodaj procesor",
+                      create: "Dodaj wariant",
                     },
 
                     table: {
                       header: {
                         name: "Nazwa",
-                        kind: "Rodzaj",
-                        connector_settings: "Ustawienia",
+                        key: "Klucz",
+                        format_kind: "Format",
                       },
-                      loading: "Ładowanie listy procesórów...",
+                      loading: "Ładowanie listy wariantów...",
                     },
 
                     modals: {
                       create: {
-                        header: "Dodaj procesor",
+                        header: "Dodaj wariant",
                         action: {
                           proceed: "Dodaj",
                           close: "Close",
                           cancel: "Cancel",
                         },
                         message: {
-                          acknowledgement: "Dodano procesor",
-                          progress: "Dodawanie procesorów...",
+                          acknowledgement: "Dodano wariant",
+                          progress: "Dodawanie wariantów...",
                         },
                         form: {
                           name: {
                             label: "Nazwa",
                             hint: "Nazwa procesora zrozumiała dla użytkownika.",
                           },
-                          kind: {
+                          key: {
+                            label: "Klucz",
+                          },
+                          format_kind: {
                             label: "Rodzaj",
                             values: {
-                              transcode: {
-                                audio: {
-                                  webbrowser: "Kodowanie dźwięków do formatu przeglądarek WWW",
-                                },
-                              },
-                              analysis: {
-                                audio: {
-                                  duration: "Obliczanie długości dźwięku",
-                                  replaygain: "Obliczanie ReplayGain",
-                                  tags: "Ekstrakcja metadanych",
-                                },
-                              },
+                              mp3: "MP3",
+                              opus: "Ogg/Opus",
                             }
                           },
                         },
                       },
 
                       delete: {
-                        header: "Usuń procesory",
+                        header: "Usuń warianty",
                         action: {
                           proceed: "Usuń",
                           close: "Zamknij",
                           cancel: "Anuluj",
                         },
                         message: {
-                          progress: "Usuwanie procesorów...",
-                          confirmation: "Czy napewno chcesz usunąć te procesory?",
-                          acknowledgement: "Usunięto procesory.",
+                          progress: "Usuwanie wariantów...",
+                          confirmation: "Czy napewno chcesz usunąć te warianty?",
+                          acknowledgement: "Usunięto warianty.",
                         },
                       },
                     },
