@@ -47,7 +47,7 @@ const ShowMetadataSchema = React.createClass({
         type: 'enum',
         values: [
           'string', 'db', 'integer', 'text', 'float', 'date', 'time',
-          'datetime', 'url', 'duration', 'waveform', 'image', 'file',
+          'datetime', 'url', 'duration', 'image', 'file',
         ],
         hint: false,
         validators: {
