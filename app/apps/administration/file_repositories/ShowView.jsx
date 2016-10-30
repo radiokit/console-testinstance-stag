@@ -7,6 +7,7 @@ import ProcessingSchemaPartial from './ShowProcessingSchemaPartial.jsx';
 import ImportsSchemaPartial from './ShowImportsSchemaPartial.jsx';
 import ExportsSchemaPartial from './ShowExportsSchemaPartial.jsx';
 import VariantsSchemaPartial from './ShowVariantsSchemaPartial.jsx';
+import AffiliatesSchemaPartial from './ShowAffiliatesSchemaPartial.jsx';
 import TagsSchemaPartial from './show_tags_schema_partial';
 
 Counterpart.registerTranslations("en", require('./ShowView.locale.en.js'));
