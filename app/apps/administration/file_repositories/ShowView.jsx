@@ -36,10 +36,10 @@ const ShowView = React.createClass({
           contentPrefix: 'apps.administration.file_repositories.show.tabs.body.variants_schema',
         },
       },
-      afilliates_schema: {
+      affiliates_schema: {
         element: AffiliatesSchemaPartial,
         props: {
-          contentPrefix: 'apps.administration.file_repositories.show.tabs.body.afilliates_schema',
+          contentPrefix: 'apps.administration.file_repositories.show.tabs.body.affiliates_schema',
         },
       },
       processing_schema: {
