@@ -35,6 +35,12 @@ const ShowView = React.createClass({
           contentPrefix: 'apps.administration.file_repositories.show.tabs.body.variants_schema',
         },
       },
+      afilliates_schema: {
+        element: AffiliatesSchemaPartial,
+        props: {
+          contentPrefix: 'apps.administration.file_repositories.show.tabs.body.afilliates_schema',
+        },
+      },
       processing_schema: {
         element: ProcessingSchemaPartial,
         props: {
