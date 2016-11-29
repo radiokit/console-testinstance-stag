@@ -30,7 +30,7 @@ export default React.createClass({
   },
 
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       record: this.props.record,
       loaded: false,
@@ -49,24 +49,24 @@ export default React.createClass({
   },
 
 
-  buildShowQuery: function() {
+  buildShowQuery() {
     let query = window.data
       .query(this.props.app, this.props.model)
       .select("id", "name")
       .where("id", "eq", this.context.params.id);
 
-    if(this.props.showQueryFunc) {
+    if (this.props.showQueryFunc) {
       query = this.props.showQueryFunc(query);
     }
     return query;
   },
 
 
-  componentDidMount: function() {
-    if(!this.props.record) {
+  componentDidMount() {
+    if (!this.props.record) {
       this.recordQuery = this.buildShowQuery()
         .on("fetch", (_eventName, _record, data) => {
-          if(this.isMounted()) {
+          if (this.isMounted()) {
             this.setState({
               record: data.first(),
               loaded: true,
@@ -74,7 +74,7 @@ export default React.createClass({
           }
         })
         .on("error", () => {
-          if(this.isMounted()) {
+          if (this.isMounted()) {
             this.setState({
               loaded: true,
               error: true,
@@ -86,45 +86,44 @@ export default React.createClass({
   },
 
 
-  componentWillUnmount: function() {
-    if(!this.props.record) {
+  componentWillUnmount() {
+    if (!this.props.record) {
       this.recordQuery.teardown();
     }
   },
 
 
-  render: function() {
-    if(!this.props.record && this.state.loaded === false) {
+  render() {
+    if (!this.props.record && this.state.loaded === false) {
       return <Loading />;
-
-    } else {
-      if(this.state.error === false) {
-        return (
-          <Section>
-            <GridRow>
-              <GridCell size="large" center={true}>
-                <Card
-                    contentPrefix={`${this.props.contentPrefix}.show`}
-                    headerText={this.state.record.get("name")}
-                    sidebarElement={this.props.sidebarElement}
-                    sidebarProps={{
-                      contentPrefix: this.props.contentPrefix + ".show",
-                      app: this.props.app,
-                      model: this.props.model,
-                      record: this.state.record }}
-                    contentElement={this.props.contentElement}
-                    contentProps={{
-                      contentPrefix: this.props.contentPrefix + ".show",
-                      app: this.props.app,
-                      model: this.props.model,
-                      record: this.state.record }} />
-              </GridCell>
-            </GridRow>
-          </Section>
-        );
-      } else {
-        return <Alert type="error" infoTextKey="general.errors.communication.general" />;
-      }
     }
-  }
+
+    if (this.state.error === false) {
+      return (
+        <Section>
+          <GridRow>
+            <GridCell size="large" center>
+              <Card
+                contentPrefix={`${this.props.contentPrefix}.show`}
+                headerText={this.state.record.get('name')}
+                sidebarElement={this.props.sidebarElement}
+                sidebarProps={{
+                  contentPrefix: this.props.contentPrefix + ".show",
+                  app: this.props.app,
+                  model: this.props.model,
+                  record: this.state.record }}
+                contentElement={this.props.contentElement}
+                contentProps={{
+                  contentPrefix: this.props.contentPrefix + ".show",
+                  app: this.props.app,
+                  model: this.props.model,
+                  record: this.state.record }} />
+            </GridCell>
+          </GridRow>
+        </Section>
+      );
+    }
+
+    return <Alert type="error" infoTextKey="general.errors.communication.general" />;
+  },
 });

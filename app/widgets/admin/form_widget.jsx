@@ -116,12 +116,23 @@ const FormWidget = React.createClass({
         params = fieldConfig.fieldValueFunc(params, this.refs[fieldName].value);
       } else {
         switch (fieldConfig.type) {
+          // FIXME deprecated, use scope-organization-account instead
           case 'scope-user-account':
             if (params.hasOwnProperty('references')) {
               params.references.user_account_id = this.refs[fieldName].value;
             } else {
               params.references = {
                 user_account_id: this.refs[fieldName].value,
+              };
+            }
+            break;
+
+          case 'scope-organization-account':
+            if (params.hasOwnProperty('references')) {
+              params.references.organization_account_id = this.refs[fieldName].value;
+            } else {
+              params.references = {
+                organization_account_id: this.refs[fieldName].value,
               };
             }
             break;
@@ -358,6 +369,18 @@ const FormWidget = React.createClass({
                           { record.get("name") }
                         </option>);
               })}
+            </select>
+          );
+          break;
+
+        case 'scope-organization-account':
+          input = (
+            <select className="form-control" id={ fieldName } ref={ fieldName } required={ required }>
+              { this.context.availableUserAccounts.map((userAccount) => {
+                  return (<option key={ userAccount.get("id") } value={ userAccount.get("id") }>
+                            { userAccount.get("name") }
+                          </option>);
+                }) }
             </select>
           );
           break;

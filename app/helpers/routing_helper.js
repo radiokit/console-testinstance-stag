@@ -1,5 +1,14 @@
 export default {
   apps: {
+    almanac: {
+      icon: 'calendar-text',
+      resources: {
+        index() {
+          return '/apps/almanac/resources/index';
+        },
+      },
+    },
+
     electron: {
       icon: 'blur-radial',
       // transmissions: {

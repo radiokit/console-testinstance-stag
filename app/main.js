@@ -25,6 +25,9 @@ import BroadcastSwitchIndex from './apps/broadcast/switch/IndexView.jsx';
 import ElectronApp from './apps/electron/app.jsx';
 import ElectronPatchbayIndex from './apps/electron/patchbay/IndexView.jsx';
 import ElectronTransmissionsIndex from './apps/electron/transmissions/IndexView.jsx';
+import AlmanacApp from './apps/almanac/app.jsx';
+import AlmanacResourcesIndex from './apps/almanac/resources/IndexView.jsx';
+import AlmanacResourcesShow from './apps/almanac/resources/ShowView.jsx';
 import InfrastructureApp from './apps/infrastructure/app.jsx';
 import InfrastructureComputingNodesIndex from './apps/infrastructure/computing_nodes/index_view.jsx';
 import InfrastructureMediaIndex from './apps/infrastructure/media/IndexView.jsx';
@@ -44,6 +47,7 @@ import AdministrationFileRepositoriesIndex from './apps/administration/file_repo
 import AdministrationFileRepositoriesShow from './apps/administration/file_repositories/ShowView.jsx';
 
 Counterpart.registerTranslations("en", require('./locales/en/general.js'));
+Counterpart.registerTranslations("en", require('./locales/en/apps/almanac.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/broadcast.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/library.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/electron.js'));
@@ -55,6 +59,7 @@ Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/modal
 Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/scope.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/form.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/general.js'));
+Counterpart.registerTranslations("pl", require('./locales/pl/apps/almanac.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/broadcast.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/library.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/electron.js'));
@@ -131,6 +136,15 @@ ReactDOM.render((
           </Route>
           <Route component={ScopeLayout} scope="broadcastChannel">
             <Route path="switch/index" component={BroadcastSwitchIndex} onEnter={pingGoogleAnalytics} />
+          </Route>
+        </Route>
+
+        <Route path="almanac" component={AlmanacApp}>
+          <Route path="resources">
+            <Route component={ScopeLayout} scope="userAccount">
+              <Route path="index" component={AlmanacResourcesIndex} onEnter={pingGoogleAnalytics} />
+              <Route path="show/:id" component={AlmanacResourcesShow} onEnter={pingGoogleAnalytics} />
+            </Route>
           </Route>
         </Route>
 

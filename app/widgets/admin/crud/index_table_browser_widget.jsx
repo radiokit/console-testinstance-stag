@@ -101,6 +101,8 @@ export default React.createClass({
    *   contain volatile information and have no real backend representation,
    * # fields that have "scope-user-account" or "scope-broadcast-channel" set as
    #   renderer as these fields need access to "references" field.
+   * # fields that have "scope-organization-account" or "scope-broadcast-channel" set as
+   #   renderer as these fields need access to "references" field.
    *
    * After all it calls `indexQueryFunc` passed to props (if it was defined).
    * It passes generic query mentioned before as the only argument and expects
@@ -113,7 +115,7 @@ export default React.createClass({
     Object.keys(this.props.attributes).map((attributeName) => {
       let attributeConfig = this.props.attributes[attributeName];
 
-      if(attributeConfig.renderer === "scope-user-account" || attributeConfig.renderer === "scope-broadcast-channel") {
+      if(attributeConfig.renderer === "scope-user-account" || attributeConfig.renderer === "scope-organization-account" || attributeConfig.renderer === "scope-broadcast-channel") {
         attributesForSelect.push("references");
 
       } else if(attributeConfig.hasOwnProperty("attribute") && typeof(attributeConfig.attribute) === "string") {

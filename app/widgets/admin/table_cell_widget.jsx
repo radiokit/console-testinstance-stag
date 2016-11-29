@@ -22,6 +22,7 @@ import TableCellPeakmeter from './table_cell_peakmeter.jsx';
 import TableCellFile from './table_cell_file.jsx';
 import TableCellImage from './table_cell_image.jsx';
 import TableCellScopeUserAccount from './table_cell_scope_user_account.jsx';
+import TableCellScopeOrganizationAccount from './table_cell_scope_organization_account.jsx';
 import TableCellScopeBroadcastChannel from './table_cell_scope_broadcast_channel.jsx';
 import TableCellPlayButton from './table_cell_play_button.jsx';
 import TableCellJournalAction from './table_cell_journal_action.jsx';
@@ -59,6 +60,7 @@ export default React.createClass({
       this.props.attributeConfig.renderer === "peakmeter" ||
       this.props.attributeConfig.renderer === "lambda" ||
       this.props.attributeConfig.renderer === "scope-user-account" ||
+      this.props.attributeConfig.renderer === "scope-organization-account" ||
       this.props.attributeConfig.renderer === "scope-broadcast-channel") {
       let cell;
 
@@ -143,8 +145,13 @@ export default React.createClass({
           cell = (<TableCellFileSize {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value} />);
           break;
 
+        // FIXME deprecated, use scope-organization-account instead
         case "scope-user-account":
           cell = (<TableCellScopeUserAccount {...this.props.attributeConfig.props} record={this.props.record} />);
+          break;
+
+        case "scope-organization-account":
+          cell = (<TableCellScopeOrganizationAccount {...this.props.attributeConfig.props} record={this.props.record} />);
           break;
 
         case "scope-broadcast-channel":
