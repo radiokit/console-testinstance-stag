@@ -5,7 +5,7 @@ export default {
         show: {
           tabs: {
             body: {
-              reservations: {
+              events: {
                 table: {
                   index: {
                     actions: {
