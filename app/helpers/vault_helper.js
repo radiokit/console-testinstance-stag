@@ -6,7 +6,7 @@ export default {
       .query('vault', 'Data.Record.Repository')
       .select('id', 'metadata_schemas')
       .joins('metadata_schemas')
-      .where('references', 'deq', 'user_account_id', context.context.currentUserAccount.get('id'))
+      .where('references', 'deq', 'user_account_id', context.context.currentAccount.get('id'))
       .where('references', 'deq', 'role', role)
       .on(
         'error',

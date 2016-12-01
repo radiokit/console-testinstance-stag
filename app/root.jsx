@@ -1,16 +1,18 @@
 import React from 'react';
 import Counterpart from 'counterpart';
-import LoadingLayout from './layouts/loading_layout.jsx';
-import AdminLayout from './layouts/admin_layout.jsx';
-import Alert from './widgets/admin/alert_widget.jsx';
 import Moment from 'moment';
+import Immutable from 'immutable';
+import RadioKitAPI from 'radiokit-api';
+
+import LoadingLayout from './layouts/LoadingLayout.jsx';
+import LoginLayout from './layouts/LoginLayout.jsx';
+import AdminLayout from './layouts/AdminLayout.jsx';
+import Alert from './widgets/admin/alert_widget.jsx';
 
 import '../node_modules/mdi/css/materialdesignicons.css';
 import '../node_modules/roboto-fontface/css/roboto-fontface-regular.scss';
 import '../node_modules/roboto-fontface/css/roboto-fontface-bold.scss';
 
-import ENV from './services/env';
-import RadioKit from './services/RadioKit';
 
 export default React.createClass({
   propTypes: {
@@ -25,12 +27,12 @@ export default React.createClass({
     loadedUser: React.PropTypes.bool,
     currentUser: React.PropTypes.object,
     loadedAccounts: React.PropTypes.bool,
-    availableUserAccounts: React.PropTypes.object,
-    currentUserAccount: React.PropTypes.object,
+    availableAccounts: React.PropTypes.object,
+    currentAccount: React.PropTypes.object,
     loadedBroadcastChannels: React.PropTypes.bool,
     availableBroadcastChannels: React.PropTypes.object,
     currentBroadcastChannel: React.PropTypes.object,
-    onCurrentUserAccountChange: React.PropTypes.func,
+    onCurrentAccountChange: React.PropTypes.func,
     onCurrentBroadcastChannelChange: React.PropTypes.func,
     routes: React.PropTypes.arrayOf(React.PropTypes.object),
     params: React.PropTypes.object,
@@ -42,72 +44,52 @@ export default React.createClass({
       loadedUser: false,
       currentUser: null,
       loadedAccounts: false,
-      availableUserAccounts: null,
-      currentUserAccount: null,
+      availableAccounts: null,
+      currentAccount: null,
       loadedBroadcastChannels: false,
       availableBroadcastChannels: null,
       currentBroadcastChannel: null,
       loadingError: false,
+      data: null,
     };
   },
 
   getChildContext() {
     return {
-      data: RadioKit,
+      data: this.state.data,
       loadedUser: this.state.loadedUser,
       currentUser: this.state.currentUser,
       loadedAccounts: this.state.loadedAccounts,
-      availableUserAccounts: this.state.availableUserAccounts,
-      currentUserAccount: this.state.currentUserAccount,
+      availableAccounts: this.state.availableAccounts,
+      currentAccount: this.state.currentAccount,
       loadedBroadcastChannels: this.state.loadedBroadcastChannels,
       availableBroadcastChannels: this.state.availableBroadcastChannels,
       currentBroadcastChannel: this.state.currentBroadcastChannel,
-      onCurrentUserAccountChange: this.onCurrentUserAccountChange,
+      onCurrentAccountChange: this.onCurrentAccountChange,
       onCurrentBroadcastChannelChange: this.onCurrentBroadcastChannelChange,
       routes: this.props.routes,
       params: this.props.params,
     };
   },
 
-  componentDidMount() {
-    RadioKit.on('auth::success', (_eventName, redirect) => {
-      this.setState({ authenticationState: 'success' }, () => {
-        this.props.history.replaceState(null, redirect);
-      });
-    });
 
-    RadioKit.on('auth::failure', () => {
-      this.setState({ authenticationState: 'failure' });
-    });
-
-    // TODO bind to error events globally
-
-    RadioKit.signIn();
-  },
-
-  componentWillUpdate(nextProps, nextState) {
-    const { authenticationState } = this.state;
-    const nextAuthenticationState = nextState.authenticationState;
-    if (authenticationState !== 'success' && nextAuthenticationState === 'success') {
-      this.loadUser();
-    }
-  },
-
-  onCurrentUserAccountChange(userAccount) {
+  onCurrentAccountChange(userAccount) {
     this.setState({
-      currentUserAccount: userAccount,
+      currentAccount: userAccount,
     });
   },
+
 
   onCurrentBroadcastChannelChange(broadcastChannel) {
     this.setState({
-      currentUserAccount: this.state.availableUserAccounts.find(
+      currentAccount: this.state.availableAccounts.find(
         userAccount =>
         userAccount.get('id') === broadcastChannel.getIn(['references', 'user_account_id'])
       ),
       currentBroadcastChannel: broadcastChannel,
     });
   },
+
 
   initializeGoogleAnalytics(currentUser) {
     if (window.ga && ENV.external.googleAnalyticsID) {
@@ -126,8 +108,9 @@ export default React.createClass({
     }
   },
 
+
   loadBroadcastChannels() {
-    const availableUserAccountIds = this.state.availableUserAccounts.map((account) => {
+    const availableUserAccountIds = this.state.availableAccounts.map((account) => {
       return account.get('id');
     }).toJS();
     const accountsCondition = ['references', 'din', 'user_account_id']
@@ -152,78 +135,75 @@ export default React.createClass({
       .fetch();
   },
 
-  loadUser() {
-    RadioKit
-      .query('auth', 'User')
-      .joins('accounts')
-      .method('me') // FIXME methods should be deprecated in favour of tokens
-      .on('error', () => {
-        this.setState({
-          loadingError: true,
-        });
-      })
-      .on('fetch', (_event, _query, data) => {
-        this.initializeGoogleAnalytics(data.first());
-        this.setState({
-          loadedUser: true,
-          currentUser: data.first(),
-          loadedAccounts: true,
-          availableUserAccounts: data.first().get('accounts'),
-        }, () => {
-          Counterpart.setLocale(this.state.currentUser.get('locale'));
-          Moment.locale(this.state.currentUser.get('locale'));
-          this.loadBroadcastChannels();
-        });
-      })
-      .fetch();
+
+  getEnv() {
+    if (typeof(window.ENV) === 'object') {
+      return window.ENV;
+    }
+    return {
+      auth: {
+        clientId: '123',
+        baseUrl: 'https://auth.radiokitapp-stag.org',
+      },
+      apps: {
+        jungle: { baseUrl: 'https://jungle.radiokitapp-stag.org' },
+        medium: { baseUrl: 'https://medium.radiokitapp-stag.org' },
+        auth: { baseUrl: 'https://auth.radiokitapp-stag.org' },
+        agenda: { baseUrl: 'https://agenda.radiokitapp-stag.org' },
+        plumber: { baseUrl: 'https://plumber.radiokitapp-stag.org' },
+        vault: { baseUrl: 'https://vault.radiokitapp-stag.org' },
+        journal: { baseUrl: 'https://journal.radiokitapp-stag.org' }
+      },
+      external: {
+      },
+      verbose: false,
+    };
   },
 
+
+  onAuthenticated(session) {
+    let data = RadioKitAPI.Data.Interface(this.getEnv());
+    data[auth] = { accessToken: session.getAccessToken() };
+
+    window.data = data; // FIXME legacy
+
+    this.setState({
+      data: data,
+      currentUser: Immutable.fromJS(session.getUser()),
+     });
+  },
+
+
   render() {
-    const loading = (
-      <LoadingLayout />
+    if (!this.state.currentUser) {
+      return <LoginLayout onAuthenticated={this.onAuthenticated} />;
+    }
+
+
+    if (
+      this.state.loadedUser === false ||
+      this.state.loadedAccounts === false ||
+      this.state.loadedBroadcastChannels === false
+    ) {
+      return <LoadingLayout />;
+    }
+
+    if (this.state.availableAccounts.size === 0) {
+      return (
+        <Alert
+          type="error"
+          fullscreen
+          infoTextKey="general.errors.authentication.no_accounts"
+        />
+      );
+    }
+
+    return (
+      <AdminLayout>
+        {this.props.children}
+      </AdminLayout>
     );
 
-    if (!this.state.authenticationState) {
-      return loading;
-    }
-
-    if (this.state.authenticationState === 'failure') {
-      return (
-        <Alert type="error" fullscreen infoTextKey="general.errors.authentication.general" />
-      );
-    }
-
-    if (this.state.authenticationState === 'success') {
-      if (this.state.loadingError) {
-        return (
-          <Alert type="error" fullscreen infoTextKey="general.errors.communication.general" />
-        );
-      }
-
-      if (
-        this.state.loadedUser === false ||
-        this.state.loadedAccounts === false ||
-        this.state.loadedBroadcastChannels === false
-      ) {
-        return loading;
-      }
-
-      if (this.state.availableUserAccounts.size === 0) {
-        return (
-          <Alert
-            type="error"
-            fullscreen
-            infoTextKey="general.errors.authentication.no_accounts"
-          />
-        );
-      }
-
-      return (
-        <AdminLayout>
-          {this.props.children}
-        </AdminLayout>
-      );
-    }
     return null;
   },
 });

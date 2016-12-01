@@ -12,16 +12,16 @@ export default React.createClass({
   },
 
   contextTypes: {
-    currentUserAccount: React.PropTypes.object,
-    availableUserAccounts: React.PropTypes.object.isRequired,
+    currentAccount: React.PropTypes.object,
+    availableAccounts: React.PropTypes.object.isRequired,
     currentBroadcastChannel: React.PropTypes.object,
     availableBroadcastChannels: React.PropTypes.object.isRequired,
-    onCurrentUserAccountChange: React.PropTypes.func,
+    onCurrentAccountChange: React.PropTypes.func,
     onCurrentBroadcastChannelChange: React.PropTypes.func,
   },
 
   onUserAccountClick(userAccount) {
-    this.context.onCurrentUserAccountChange(userAccount);
+    this.context.onCurrentAccountChange(userAccount);
   },
 
   onBroadcastChannelClick(broadcastChannel) {
@@ -31,8 +31,8 @@ export default React.createClass({
   componentDidMount: function() {
     switch (this.props.kind) {
       case 'userAccount':
-        if(this.context.availableUserAccounts.count() === 1) {
-          this.context.onCurrentUserAccountChange(this.context.availableUserAccounts.first());
+        if(this.context.availableAccounts.count() === 1) {
+          this.context.onCurrentAccountChange(this.context.availableAccounts.first());
         }
         break;
 
@@ -48,12 +48,12 @@ export default React.createClass({
     switch (this.props.kind) {
       case 'userAccount':
         {
-          if (this.context.currentUserAccount) {
+          if (this.context.currentAccount) {
             return (<div>{this.props.children}</div>);
           }
           let contentElement = (
               <ul className="list divider-full-bleed">
-                {(this.context.availableUserAccounts || []).map((userAccount) => {
+                {(this.context.availableAccounts || []).map((userAccount) => {
                   return (
                     <li key={userAccount.get('id')} className="tile">
                       <a onClick={this.onUserAccountClick.bind(this, userAccount)} className="tile-content"

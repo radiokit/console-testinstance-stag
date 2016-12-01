@@ -3,9 +3,7 @@
   "version": "1.0.41",
   "description": "User interface for controlling various RadioKit systems",
   "scripts": {
-    "predev": "npm i",
     "dev": "node server.js",
-    "prestart": "echo 'INSTALL'; npm i",
     "start": "echo 'RUN'; node server.js",
     "stag": "NODE_ENV=stag webpack --progress --config webpack.stag.config.js",
     "prod": "NODE_ENV=prod webpack --progress --config webpack.prod.config.js"
@@ -67,6 +65,7 @@
     "multi-download": "^2.0.0",
     "phoenix-socket": "^1.0.4",
     "radiokit-api": "0.1.19",
+    "radiokit-toolkit-auth": "^1.0.7",
     "react": "^0.14.2",
     "react-addons-css-transition-group": "^0.14.8",
     "react-autosuggest": "^3.7.3",

@@ -10,12 +10,12 @@ Counterpart.registerTranslations('pl', require('./IndexView.locale.pl.js'));
 
 export default React.createClass({
   contextTypes: {
-    currentUserAccount: React.PropTypes.object.isRequired,
+    currentAccount: React.PropTypes.object.isRequired,
   },
 
   modifyIndexQuery(query) {
     return query
-      .where('references', 'deq', 'user_account_id', this.context.currentUserAccount.get('id'))
+      .where('references', 'deq', 'user_account_id', this.context.currentAccount.get('id'))
       .order('name', 'asc');
   },
 

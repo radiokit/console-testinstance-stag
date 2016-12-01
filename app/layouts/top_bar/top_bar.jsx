@@ -16,7 +16,7 @@ Counterpart.registerTranslations("pl", {topBarPartial: localePL});
 
 const TopBar = React.createClass({
   contextTypes: {
-    currentUserAccount: React.PropTypes.object,
+    currentAccount: React.PropTypes.object,
     currentBroadcastChannel: React.PropTypes.object,
     routes: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
     currentUser: React.PropTypes.object.isRequired,
@@ -60,12 +60,12 @@ const TopBar = React.createClass({
   },
 
   renderUserAccountDropdown() {
-    if ((this.isScopePresentInCurrentRoute("userAccount") || this.isScopePresentInCurrentRoute("broadcastChannel")) && this.context.currentUserAccount) {
+    if ((this.isScopePresentInCurrentRoute("userAccount") || this.isScopePresentInCurrentRoute("broadcastChannel")) && this.context.currentAccount) {
       return (
         <li className="header-nav-brand">
           <div className="brand-holder">
             <span className="header-nav-breadcrumb-separator mdi mdi-chevron-right"/>
-            <span className="header-nav-breadcrumb-label">{this.context.currentUserAccount.get("name")}</span>
+            <span className="header-nav-breadcrumb-label">{this.context.currentAccount.get("name")}</span>
           </div>
         </li>);
     }

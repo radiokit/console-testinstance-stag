@@ -18,7 +18,7 @@ const FormWidget = React.createClass({
 
   contextTypes: {
     availableBroadcastChannels: React.PropTypes.object,
-    availableUserAccounts: React.PropTypes.object.isRequired,
+    availableAccounts: React.PropTypes.object.isRequired,
   },
 
 
@@ -376,7 +376,7 @@ const FormWidget = React.createClass({
         case 'scope-organization-account':
           input = (
             <select className="form-control" id={ fieldName } ref={ fieldName } required={ required }>
-              { this.context.availableUserAccounts.map((userAccount) => {
+              { this.context.availableAccounts.map((userAccount) => {
                   return (<option key={ userAccount.get("id") } value={ userAccount.get("id") }>
                             { userAccount.get("name") }
                           </option>);
@@ -388,7 +388,7 @@ const FormWidget = React.createClass({
         case 'scope-user-account':
           input = (
             <select className="form-control" id={ fieldName } ref={ fieldName } required={ required }>
-              { this.context.availableUserAccounts.map((userAccount) => {
+              { this.context.availableAccounts.map((userAccount) => {
                   return (<option key={ userAccount.get("id") } value={ userAccount.get("id") }>
                             { userAccount.get("name") }
                           </option>);

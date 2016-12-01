@@ -8,12 +8,12 @@ Counterpart.registerTranslations("pl", require('./IndexView.locale.pl.js'));
 
 const IndexView = React.createClass({
   contextTypes: {
-    availableUserAccounts: React.PropTypes.object.isRequired,
+    availableAccounts: React.PropTypes.object.isRequired,
   },
 
 
   modifyIndexQuery(query) {
-    let availableUserAccountIds = this.context.availableUserAccounts.map((account) => { return account.get("id"); }).toJS();
+    let availableUserAccountIds = this.context.availableAccounts.map((account) => { return account.get("id"); }).toJS();
     let accountsCondition = ['references', 'din', 'user_account_id'].concat(availableUserAccountIds)
 
     return query

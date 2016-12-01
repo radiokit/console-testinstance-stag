@@ -12,7 +12,7 @@ const searchFiles = debounce((input, userAccountID) => {
 
 const FilePicker = React.createClass({
   propTypes: {
-    availableUserAccounts: React.PropTypes.object,
+    availableAccounts: React.PropTypes.object,
     placeholder: React.PropTypes.string,
     value: React.PropTypes.object,
     onChange: React.PropTypes.func,
@@ -29,8 +29,8 @@ const FilePicker = React.createClass({
   },
 
   componentDidMount() {
-    const { availableUserAccounts = [] } = this.props;
-    availableUserAccounts.forEach(
+    const { availableAccounts = [] } = this.props;
+    availableAccounts.forEach(
       userAccount => {
         FilesDomain.loadRecentFiles(recentFilesLimit, userAccount.get('id'));
       }
@@ -53,9 +53,9 @@ const FilePicker = React.createClass({
   },
 
   handleInputChange(input) {
-    const { availableUserAccounts = [] } = this.props;
+    const { availableAccounts = [] } = this.props;
 
-    availableUserAccounts.forEach(
+    availableAccounts.forEach(
       userAccount => searchFiles(input, userAccount.get('id'))
     );
 

@@ -11,7 +11,10 @@ export default React.createClass({
     size: React.PropTypes.oneOf(['small', 'large']),
     autofocus: React.PropTypes.bool,
     error: React.PropTypes.bool,
+    disabled: React.PropTypes.bool,
     tabIndex: React.PropTypes.number,
+    onChange: React.PropTypes.func,
+    type: React.PropTypes.oneOf(['text', 'email', 'password']),
   },
 
 
@@ -24,6 +27,8 @@ export default React.createClass({
       size: null,
       autofocus: false,
       error: false,
+      type: 'text',
+      disabled: false,
     };
   },
 
@@ -34,6 +39,13 @@ export default React.createClass({
   },
 
 
+  onChange: function(e) {
+    if(this.props.onChange) {
+      this.props.onChange(e.target.value);
+    }
+  },
+
+
   renderInput: function() {
     switch(this.props.size) {
       case "large": var klass = "form-control input-lg"; break;
@@ -41,7 +53,7 @@ export default React.createClass({
       default:      var klass = "form-control"; break;
     }
 
-    return (<input ref="input" type="text" className={klass} autoFocus={this.props.autofocus} tabIndex={this.props.tabIndex} />);
+    return (<input ref="input" type={this.props.type} className={klass} autoFocus={this.props.autofocus} tabIndex={this.props.tabIndex} onChange={this.onChange} disabled={this.props.disabled} />);
   },
 
 
@@ -50,7 +62,6 @@ export default React.createClass({
       return (<Translate content={this.props.labelTextKey} component="label" />);
     }
   },
-
 
 
   renderHint: function() {

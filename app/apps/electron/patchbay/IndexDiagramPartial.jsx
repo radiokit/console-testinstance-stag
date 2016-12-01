@@ -11,7 +11,7 @@ export default React.createClass({
   },
 
   contextTypes: {
-    currentUserAccount: React.PropTypes.object.isRequired,
+    currentAccount: React.PropTypes.object.isRequired,
   },
 
 
@@ -30,7 +30,7 @@ export default React.createClass({
         .query('jungle', 'Device.Client')
         .select('id', 'name', 'extra')
         .where('references', 'deq', 'account',
-          Data.buildRecordGlobalID('auth', 'Account', this.context.currentUserAccount.get('id')))
+          Data.buildRecordGlobalID('auth', 'Account', this.context.currentAccount.get('id')))
         .on('fetch', (_event, _query, data) => {
           if (this.isMounted()) {
             this.setState({

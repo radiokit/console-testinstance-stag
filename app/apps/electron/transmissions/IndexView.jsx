@@ -18,7 +18,7 @@ Counterpart.registerTranslations("pl", require('./IndexView.locale.pl.js'));
 
 export default React.createClass({
   contextTypes: {
-    currentUserAccount: React.PropTypes.object.isRequired,
+    currentAccount: React.PropTypes.object.isRequired,
   },
 
 
@@ -53,7 +53,7 @@ export default React.createClass({
     window.data
       .query("auth", "Device.Client")
       .select("id", "name")
-      .where("account_id", "eq", this.context.currentUserAccount.get("id"))
+      .where("account_id", "eq", this.context.currentAccount.get("id"))
       .on("fetch", (_event, _query, data) => {
         if(this.isMounted()) {
           this.setState({

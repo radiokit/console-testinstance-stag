@@ -29,7 +29,7 @@ import './autodj_form.scss';
 
 const AutoDJForm = React.createClass({
   propTypes: {
-    availableUserAccounts: React.PropTypes.object,
+    availableAccounts: React.PropTypes.object,
     currentBroadcastChannel: React.PropTypes.string,
     defaultTimeOffset: React.PropTypes.number.isRequired,
     defaultTimePeriod: React.PropTypes.number,
@@ -133,11 +133,11 @@ const AutoDJForm = React.createClass({
 
   render() {
     const model = this.getModel();
-    const { step, availableUserAccounts } = this.props;
+    const { step, availableAccounts } = this.props;
     const typeDetailsForm = ({
       shuffle: (
         <AutoDJShuffleForm
-          availableUserAccounts={availableUserAccounts}
+          availableAccounts={availableAccounts}
           value={model.get('details')}
           onChange={this.handleDetailsChange}
         />

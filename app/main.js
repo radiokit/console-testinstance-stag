@@ -4,7 +4,6 @@ import createBrowserHistory from 'history/lib/createBrowserHistory';
 import { Router, Route, IndexRoute } from 'react-router';
 import Counterpart from 'counterpart';
 
-import './services/RadioKit'; // for legacy window binding
 import './services/Plumber'; // for legacy window binding
 
 // this is set to false on staging and production builds
@@ -15,7 +14,7 @@ if (process.env.NODE_ENV) {
 
 import Root from './root.jsx';
 import Dashboard from './dashboard.jsx';
-import ScopeLayout from './layouts/scope_layout.jsx';
+import ScopeLayout from './layouts/ScopeLayout.jsx';
 import AppsIndex from './apps/apps_index.jsx';
 import BroadcastApp from './apps/broadcast/app.jsx';
 import BroadcastPlaylistIndex from './apps/broadcast/playlist/index_view.jsx';

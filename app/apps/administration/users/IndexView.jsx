@@ -10,11 +10,11 @@ Counterpart.registerTranslations('pl', require('./IndexView.locale.pl.js'));
 export default React.createClass({
   contextTypes: {
     currentUser: React.PropTypes.object.isRequired,
-    availableUserAccounts: React.PropTypes.object.isRequired,
+    availableAccounts: React.PropTypes.object.isRequired,
   },
 
   modifyIndexQuery(query) {
-    let availableUserAccountIds = this.context.availableUserAccounts.map((account) => { return account.get("id"); }).toJS();
+    let availableUserAccountIds = this.context.availableAccounts.map((account) => { return account.get("id"); }).toJS();
     let accountsCondition = ['accounts.id', 'in'].concat(availableUserAccountIds)
 
     return query
@@ -52,7 +52,7 @@ export default React.createClass({
       account_ids: {
         type: 'set',
         untranslated: true,
-        values: this.context.availableUserAccounts.reduce((reduction, account) => { return reduction.set(account.get("id"), account.get("name")); }, new Immutable.Map()).toJS(),
+        values: this.context.availableAccounts.reduce((reduction, account) => { return reduction.set(account.get("id"), account.get("name")); }, new Immutable.Map()).toJS(),
         hint: true,
       },
 

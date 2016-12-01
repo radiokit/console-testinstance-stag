@@ -14,7 +14,7 @@ import './IndexView.scss';
 
 export default React.createClass({
   contextTypes: {
-    availableUserAccounts: React.PropTypes.object.isRequired,
+    availableAccounts: React.PropTypes.object.isRequired,
     currentBroadcastChannel: React.PropTypes.object.isRequired,
   },
 
