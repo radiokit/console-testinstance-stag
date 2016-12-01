@@ -110,13 +110,13 @@ export default React.createClass({
 
 
   loadBroadcastChannels() {
-    const availableUserAccountIds = this.state.availableAccounts.map((account) => {
+    const availableAccountsIds = this.state.availableAccounts.map((account) => {
       return account.get('id');
     }).toJS();
     const accountsCondition = ['references', 'din', 'user_account_id']
-      .concat(availableUserAccountIds)
+      .concat(availableAccountsIds)
 
-    RadioKit
+    this.state.data
       .query('agenda', 'Broadcast.Channel')
       .select('id', 'name', 'references', 'timezone', 'media_routing_group_id')
       .where.apply(this, accountsCondition)
@@ -130,6 +130,29 @@ export default React.createClass({
         this.setState({
           loadedBroadcastChannels: true,
           availableBroadcastChannels: data,
+        });
+      })
+      .fetch();
+  },
+
+
+  loadAccounts() {
+    this.state.data
+      .query('jungle', 'Assoc.ClientUserOrganizationAccount')
+      .select('organization_account.id', 'organization_account.name')
+      .where('client_user_id', 'eq', this.state.currentUser.get('id'))
+      // .order('organization_account.name', 'asc') // TODO
+      .on('error', () => {
+        this.setState({
+          loadingError: true,
+        });
+      })
+      .on('fetch', (_event, _query, data) => {
+        this.setState({
+          loadedAccounts: true,
+          availableAccounts: data.map((record) => record.get("organization_account")),
+        }, () => {
+          this.loadBroadcastChannels();
         });
       })
       .fetch();
@@ -162,15 +185,18 @@ export default React.createClass({
 
 
   onAuthenticated(session) {
-    let data = RadioKitAPI.Data.Interface(this.getEnv());
-    data[auth] = { accessToken: session.getAccessToken() };
+    let env = this.getEnv();
+    env['auth'] = { accessToken: session.getAccessToken() };
 
+    const data = new RadioKitAPI.Data.Interface(env);
     window.data = data; // FIXME legacy
 
     this.setState({
       data: data,
       currentUser: Immutable.fromJS(session.getUser()),
-     });
+    }, () => {
+      this.loadAccounts();
+    });
   },
 
 
@@ -181,7 +207,6 @@ export default React.createClass({
 
 
     if (
-      this.state.loadedUser === false ||
       this.state.loadedAccounts === false ||
       this.state.loadedBroadcastChannels === false
     ) {
