@@ -26,6 +26,7 @@ export default React.createClass({
     createModalProps: React.PropTypes.object,
     readEnabled: React.PropTypes.bool.isRequired,
     deleteEnabled: React.PropTypes.bool.isRequired,
+    updateEnabled: React.PropTypes.bool.isRequired,
     selectable: React.PropTypes.bool.isRequired,
     createAcknowledgementElement: React.PropTypes.oneOfType([React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]),
   },
@@ -41,7 +42,7 @@ export default React.createClass({
     return {
       readEnabled: true,
       createEnabled: true,
-      readEnabled: true,
+      updateEnabled: false, // FIXME add missing locales and change this to true
       deleteEnabled: true,
       selectable: true,
     }
@@ -134,20 +135,23 @@ export default React.createClass({
     return query;
   },
 
+
   fillUpdateForm() {
-    //Update modal requires only one record
-    if(this.state.selectedRecords.count() === 1){
+    const form = this.props.form ? this.props.form : this.props.updateForm;
+
+    // Update modal requires only one record
+    if(this.state.selectedRecords.count() === 1) {
       const record = this.state.selectedRecords.first();
-      let form = JSON.parse(JSON.stringify(this.props.updateForm))
-      Object.keys(this.props.updateForm).forEach((key) => {
+      Object.keys(form).forEach((key) => {
         form[key].value = record.get(key);
       });
       return form;
     }
     else {
-      return this.props.updateForm;
+      return form;
     }
   },
+
 
   render: function() {
     return (
@@ -193,7 +197,7 @@ export default React.createClass({
           }()}
 
           {() => {
-            if(this.props.updateEnabled && this.props.updateEnabled && this.props.updateForm) {
+            if(this.props.updateEnabled === true) {
               return <ToolBarButtonModal
                 icon="border-color"
                 hintTooltipKey={`${this.props.contentPrefix}.index.actions.update`}

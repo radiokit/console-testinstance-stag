@@ -15,7 +15,7 @@ export default {
 
                     modals: {
                       delete: {
-                        header: 'Usuwanie rezerwacjia',
+                        header: 'Usuwanie rezerwacji',
                         action: {
                           proceed: 'Usuń',
                           cancel: 'Anuluj',
@@ -28,14 +28,36 @@ export default {
                         },
                       },
                       create: {
-                        header: 'Dodawanie rezerwacjia',
+                        header: 'Dodawanie rezerwacji',
                         action: {
-                          proceed: 'Dodaj rezerwację',
+                          proceed: 'Dodawanie rezerwacji',
                           cancel: 'Anuluj',
                           close: 'Zamknij',
                         },
                         message: {
-                          acknowledgement: 'Pomyślnie utworzono rezerwację.',
+                          acknowledgement: 'Pomyślnie dodano rezerwację',
+                        },
+                        form: {
+                          description: {
+                            label: 'Opis',
+                          },
+                          start_at: {
+                            label: 'Start',
+                          },
+                          stop_at: {
+                            label: 'Stop',
+                          },
+                        },
+                      },
+                      update: {
+                        header: 'Edycja rezerwacji',
+                        action: {
+                          proceed: 'Zapisz rezerwację',
+                          cancel: 'Anuluj',
+                          close: 'Zamknij',
+                        },
+                        message: {
+                          acknowledgement: 'Pomyślnie zapisano rezerwację',
                         },
                         form: {
                           description: {

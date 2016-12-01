@@ -54,6 +54,7 @@ export default React.createClass({
         contentPrefix={`${this.props.contentPrefix}.table`}
         app="agenda"
         model="Reservation.Event"
+        updateEnabled
         form={this.buildForm()}
         attributes={this.buildAttributes()}
         indexQueryFunc={this.modifyIndexQuery}

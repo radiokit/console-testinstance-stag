@@ -54,6 +54,7 @@ export default React.createClass({
         contentPrefix="apps.almanac.resources"
         app="agenda"
         model="Reservation.Resource"
+        updateEnabled
         attributes={this.buildAttributes()}
         form={this.buildForm()}
         indexQueryFunc={this.modifyIndexQuery}

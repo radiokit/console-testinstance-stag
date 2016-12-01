@@ -49,6 +49,28 @@ export default {
                           },
                         },
                       },
+                      update: {
+                        header: 'Edit reservation',
+                        action: {
+                          proceed: 'Save reservation',
+                          cancel: 'Cancel',
+                          close: 'Close',
+                        },
+                        message: {
+                          acknowledgement: 'Reservation saved succesfully',
+                        },
+                        form: {
+                          description: {
+                            label: 'Description',
+                          },
+                          start_at: {
+                            label: 'Start at',
+                          },
+                          stop_at: {
+                            label: 'Stop at',
+                          },
+                        },
+                      },
                     },
 
                     table: {
