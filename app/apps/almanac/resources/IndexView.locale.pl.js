@@ -54,6 +54,29 @@ export default {
                 close: 'Zamknij',
               },
             },
+
+            update: {
+              header: 'Edycja zasobu',
+              form: {
+                name: {
+                  label: 'Nazwa',
+                  hint: 'Wybierz jakąkolwiek nazwę, która pozwoli Ci odróżnić ten zasób od innych.',
+                },
+                organization_account: {
+                  label: 'Konto',
+                },
+              },
+
+              message: {
+                acknowledgement: 'Pomyślnie zapisano zasób',
+              },
+
+              action: {
+                proceed: 'Zapisz zasób',
+                cancel: 'Anuluj',
+                close: 'Zamknij',
+              },
+            },
           },
         },
       },

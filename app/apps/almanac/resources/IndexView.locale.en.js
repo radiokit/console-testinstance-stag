@@ -54,6 +54,29 @@ export default {
                 close: 'Close',
               },
             },
+
+            update: {
+              header: 'Edit resource',
+              form: {
+                name: {
+                  label: 'Name',
+                  hint: 'Choose any name that will help you to distinguish this resource from others.',
+                },
+                organization_account: {
+                  label: 'Account',
+                },
+              },
+
+              message: {
+                acknowledgement: 'Resource saved succesfully',
+              },
+
+              action: {
+                proceed: 'Save resource',
+                cancel: 'Cancel',
+                close: 'Close',
+              },
+            },
           },
         },
       },
