@@ -1,5 +1,6 @@
 import React from 'react';
 import MetadataInputField from './metadata_input_field.jsx';
+import MetadataTextareaField from './metadata_textarea_field.jsx';
 import Counterpart from 'counterpart';
 
 import './metadata_form_widget.scss';
@@ -52,6 +53,15 @@ const MetadataFormWidget = React.createClass({
     this.setState({ userProvidedVals: newInputVals });
   },
 
+  getFieldComponentClass(fieldType) {
+    switch (fieldType) {
+      case 'text':
+        return MetadataTextareaField;
+      default:
+        return MetadataInputField;
+    }
+  },
+
   isFieldEnabled(fieldId) {
     return this.state.userProvidedVals[fieldId] !== undefined;
   },
@@ -60,6 +70,7 @@ const MetadataFormWidget = React.createClass({
     const fields = Object.keys(this.props.form).map((fieldId) => {
       const fieldSummary = this.props.form[fieldId];
       const disabled = !this.isFieldEnabled(fieldId);
+      const FieldComponent = this.getFieldComponentClass(fieldSummary.type);
 
       const modelValue = this.state.userProvidedVals[fieldId];
       const inputValue = (
@@ -74,7 +85,7 @@ const MetadataFormWidget = React.createClass({
       const inputPlaceholder = fieldSummary.hasMultiValues ?
         Counterpart.translate(`${this.props.contentPrefix}.multiple_val`) : '';
       return (
-        <MetadataInputField
+        <FieldComponent
           key = {fieldId}
           contentPrefix = {this.props.contentPrefix}
           fieldId={fieldId}
