@@ -15,10 +15,10 @@ export default React.createClass({
 
   modifyIndexQuery(query) {
     let availableUserAccountIds = this.context.availableAccounts.map((account) => { return account.get("id"); }).toJS();
-    let accountsCondition = ['accounts.id', 'in'].concat(availableUserAccountIds)
+    let accountsCondition = ['organization_accounts.id', 'in'].concat(availableUserAccountIds)
 
     return query
-      .joins("accounts")
+      .joins("organization_accounts")
       .where.apply(this, accountsCondition)
       .order("email", "asc")
   },
