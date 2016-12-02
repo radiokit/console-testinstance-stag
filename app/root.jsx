@@ -151,7 +151,7 @@ export default React.createClass({
       .on('fetch', (_event, _query, data) => {
         this.setState({
           loadedAccounts: true,
-          availableAccounts: data.map((record) => record.get("organization_account")),
+          availableAccounts: data.map((record) => record.get("organization_account")).sortBy((record) => record.get('name')),
         }, () => {
           this.loadBroadcastChannels();
         });
