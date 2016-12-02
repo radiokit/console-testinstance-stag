@@ -76,9 +76,6 @@ export default React.createClass({
   onCurrentAccountChange(userAccount) {
     this.setState({
       currentAccount: userAccount,
-    }, () => {
-      Counterpart.setLocale(userAccount.get('locale'));
-      Moment.locale(userAccount.get('locale'));
     });
   },
 
@@ -196,12 +193,14 @@ export default React.createClass({
     const data = new RadioKitAPI.Data.Interface(env);
     window.data = data; // FIXME legacy
 
+    const locale = session.getUser().locale;
+    Counterpart.setLocale(locale);
+    Moment.locale(locale);
+
     this.setState({
       data: data,
       currentUser: Immutable.fromJS(session.getUser()),
     }, () => {
-      Counterpart.setLocale(this.state.currentUser.get('locale'));
-      Moment.locale(this.state.currentUser.get('locale'));
       this.loadAccounts();
     });
   },
