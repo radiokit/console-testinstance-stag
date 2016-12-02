@@ -69,8 +69,8 @@ export default React.createClass({
     return (
       <Index
         contentPrefix="apps.administration.users"
-        app="auth"
-        model="User"
+        app="jungle"
+        model="Client.User"
         attributes={this.buildAttributes()}
         form={this.buildForm()}
         indexQueryFunc={this.modifyIndexQuery} />
