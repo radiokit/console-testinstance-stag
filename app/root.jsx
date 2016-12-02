@@ -141,6 +141,7 @@ export default React.createClass({
       .query('jungle', 'Assoc.ClientUserOrganizationAccount')
       .select('organization_account.id', 'organization_account.name')
       .where('client_user_id', 'eq', this.state.currentUser.get('id'))
+      .joins('organization_account')
       // .order('organization_account.name', 'asc') // TODO
       .on('error', () => {
         this.setState({
