@@ -76,6 +76,9 @@ export default React.createClass({
   onCurrentAccountChange(userAccount) {
     this.setState({
       currentAccount: userAccount,
+    }, () => {
+      Counterpart.setLocale(userAccount.get('locale'));
+      Moment.locale(userAccount.get('locale'));
     });
   },
 
