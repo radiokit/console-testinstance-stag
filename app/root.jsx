@@ -200,6 +200,8 @@ export default React.createClass({
       data: data,
       currentUser: Immutable.fromJS(session.getUser()),
     }, () => {
+      Counterpart.setLocale(this.state.currentUser.get('locale'));
+      Moment.locale(this.state.currentUser.get('locale'));
       this.loadAccounts();
     });
   },
