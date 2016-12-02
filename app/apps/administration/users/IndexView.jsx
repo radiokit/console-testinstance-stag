@@ -71,6 +71,7 @@ export default React.createClass({
         contentPrefix="apps.administration.users"
         app="jungle"
         model="Client.User"
+        createEnabled={false}
         attributes={this.buildAttributes()}
         form={this.buildForm()}
         indexQueryFunc={this.modifyIndexQuery} />
