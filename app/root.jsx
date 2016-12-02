@@ -184,6 +184,7 @@ export default React.createClass({
       external: {
       },
       verbose: false,
+      env: "dev"
     };
   },
 
@@ -206,7 +207,9 @@ export default React.createClass({
 
   render() {
     if (!this.state.currentUser) {
-      return <LoginLayout onAuthenticated={this.onAuthenticated} />;
+      return <LoginLayout
+        onAuthenticated={this.onAuthenticated}
+        env={this.getEnv()} />;
     }
 
 

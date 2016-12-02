@@ -14,5 +14,6 @@ window.ENV = {
   },
   external: {
   },
-  verbose: true
+  verbose: true,
+  env: "stag"
 };

@@ -15,5 +15,6 @@ window.ENV = {
   external: {
     googleAnalyticsID: "UA-68358393-2"
   },
-  verbose: false
+  verbose: false,
+  env: "prod"
 };

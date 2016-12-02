@@ -19,6 +19,7 @@ require('./LoginLayout.scss');
 export default React.createClass({
   propTypes: {
     onAuthenticated: React.PropTypes.func.isRequired,
+    env: React.PropTypes.object.isRequired,
   },
 
 
@@ -55,7 +56,11 @@ export default React.createClass({
       emailError: false,
       passwordError: false,
     }, () => {
-      Auth.Session.User.authenticateAsync(this.state.email, this.state.password)
+      let options = {};
+      if(this.props.env.env !== 'prod') {
+        options['baseUrl'] = 'https://jungle.radiokitapp-stag.org';
+      }
+      Auth.Session.User.authenticateAsync(this.state.email, this.state.password, options)
         .then((session) => {
           this.props.onAuthenticated(session);
         })
