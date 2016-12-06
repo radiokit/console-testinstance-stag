@@ -44,6 +44,7 @@ export default React.createClass({
       description: { renderer: 'string' },
       start_at: { renderer: 'string' },
       stop_at: { renderer: 'string' },
+      client_user: { renderer: 'reference-client-user' },
     };
   },
 

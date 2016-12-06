@@ -80,6 +80,7 @@ export default {
                         description: 'Description',
                         start_at: 'Start at',
                         stop_at: 'Stop at',
+                        client_user: 'User',
                       },
                     },
                   },

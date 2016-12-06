@@ -116,7 +116,10 @@ export default React.createClass({
     Object.keys(this.props.attributes).map((attributeName) => {
       let attributeConfig = this.props.attributes[attributeName];
 
-      if(attributeConfig.renderer === "scope-user-account" || attributeConfig.renderer === "scope-organization-account" || attributeConfig.renderer === "scope-broadcast-channel") {
+      if(attributeConfig.renderer === "scope-user-account" ||
+         attributeConfig.renderer === "scope-organization-account" ||
+         attributeConfig.renderer === "scope-broadcast-channel" ||
+         attributeConfig.renderer === "reference-client-user") {
         attributesForSelect.push("references");
 
       } else if(attributeConfig.hasOwnProperty("attribute") && typeof(attributeConfig.attribute) === "string") {

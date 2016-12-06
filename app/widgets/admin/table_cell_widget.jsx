@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router';
 
 import TableCellLambda from './table_cell_lambda.jsx';
 import TableCellString from './table_cell_string.jsx';
@@ -24,6 +23,7 @@ import TableCellImage from './table_cell_image.jsx';
 import TableCellScopeUserAccount from './table_cell_scope_user_account.jsx';
 import TableCellScopeOrganizationAccount from './table_cell_scope_organization_account.jsx';
 import TableCellScopeBroadcastChannel from './table_cell_scope_broadcast_channel.jsx';
+import TableCellReferenceClientUser from './TableCellReferenceClientUser.jsx';
 import TableCellPlayButton from './table_cell_play_button.jsx';
 import TableCellJournalAction from './table_cell_journal_action.jsx';
 import TableCellJournalParams from './table_cell_journal_params.jsx';
@@ -31,163 +31,297 @@ import TableCellJournalProduct from './table_cell_journal_product.jsx';
 import TableCellJournalSeverity from './table_cell_journal_severity.jsx';
 
 
-export default React.createClass({
-  propTypes: {
-    attributeName: React.PropTypes.string.isRequired,
-    attributeConfig: React.PropTypes.object.isRequired,
-    record: React.PropTypes.object.isRequired,
-    onClick: React.PropTypes.func,
-  },
-
-
-  render: function() {
-    let value;
-    let cellKlass = `cell-${this.props.attributeConfig.renderer}`;
-    let cellKey = `cell-${this.props.attributeName}`;
-    if(this.props.onClick) {
-      cellKlass += " clickable";
-    }
-
-
-    if(typeof(this.props.attributeConfig.valueFunc) === "function") {
-      value = this.props.attributeConfig.valueFunc(this.props.record, this.props.attributeName);
-
-    } else {
-      value = this.props.record.get(this.props.attributeName);
-    }
-
-    if(value !== null ||
-      this.props.attributeConfig.renderer === "peakmeter" ||
-      this.props.attributeConfig.renderer === "lambda" ||
-      this.props.attributeConfig.renderer === "scope-user-account" ||
-      this.props.attributeConfig.renderer === "scope-organization-account" ||
-      this.props.attributeConfig.renderer === "scope-broadcast-channel") {
-      let cell;
-
-      switch(this.props.attributeConfig.renderer) {
-        case "lambda":
-          cell = (<TableCellLambda {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value}/>);
-          break;
-
-        case "counter":
-          cell = (<TableCellCounter {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value}/>);
-          break;
-
-        case "string":
-          cell = (<TableCellString {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value}/>);
-          break;
-
-        case "boolean":
-          cell = (<TableCellBoolean {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value}/>);
-          break;
-
-        case "image":
-          cell = (<TableCellImage {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value}/>);
-          break;
-
-        case "file":
-          cell = (<TableCellFile {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value}/>);
-          break;
-
-        case "db":
-          cell = (<TableCellDb {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value} />);
-          break;
-
-        case "url":
-          cell = (<TableCellUrl {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value} />);
-          break;
-
-        case "text":
-          cell = (<TableCellText {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value} />);
-          break;
-
-        case "float":
-          cell = (<TableCellFloat {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value} />);
-          break;
-
-        case "integer":
-          cell = (<TableCellInteger {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value} />);
-          break;
-
-        case "percent":
-          cell = (<TableCellPercent {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value} />);
-          break;
-
-        case "duration":
-          cell = (<TableCellDuration {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value} />);
-          break;
-
-        case "date":
-          cell = (<TableCellDate {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value} />);
-          break;
-
-        case "datetime":
-          cell = (<TableCellDateTime {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value} />);
-          break;
-
-        case "time":
-          cell = (<TableCellTime {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value} />);
-          break;
-
-        case "icon":
-          cell = (<TableCellIcon {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value} />);
-          break;
-
-        case "toggle":
-          cell = (<TableCellToggle {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value} />);
-          break;
-
-        case "peakmeter":
-          cell = (<TableCellPeakmeter {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} />);
-          break;
-
-        case "filesize":
-          cell = (<TableCellFileSize {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value} />);
-          break;
-
-        // FIXME deprecated, use scope-organization-account instead
-        case "scope-user-account":
-          cell = (<TableCellScopeUserAccount {...this.props.attributeConfig.props} record={this.props.record} />);
-          break;
-
-        case "scope-organization-account":
-          cell = (<TableCellScopeOrganizationAccount {...this.props.attributeConfig.props} record={this.props.record} />);
-          break;
-
-        case "scope-broadcast-channel":
-          cell = (<TableCellScopeBroadcastChannel {...this.props.attributeConfig.props} record={this.props.record} />);
-          break;
-
-        case "play":
-          cell = (<TableCellPlayButton {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value} />);
-          break;
-
-        case "journal-action":
-          cell = (<TableCellJournalAction {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value}/>);
-          break;
-
-        case "journal-params":
-          cell = (<TableCellJournalParams {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value}/>);
-          break;
-
-        case "journal-product":
-          cell = (<TableCellJournalProduct {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value}/>);
-          break;
-
-
-        case "journal-severity":
-          cell = (<TableCellJournalSeverity {...this.props.attributeConfig.props} record={this.props.record} attribute={this.props.attributeName} value={value}/>);
-
-          break;
-
-        default:
-          throw new Error("Unknown table cell renderer '" + this.props.attributeConfig.renderer + "'");
-      }
-
-      return (<td onClick={this.props.onClick} className={cellKlass} key={cellKey}>{cell}</td>);
-
-    } else {
-      return (<td onClick={this.props.onClick} className={cellKlass} key={cellKey}/>);
-    }
+const TableCellWidget = (props) => {
+  let value;
+  let cellKlass = `cell-${props.attributeConfig.renderer}`;
+  let cellKey = `cell-${props.attributeName}`;
+  if (props.onClick) {
+    cellKlass += ' clickable';
   }
-});
+
+
+  if (typeof(props.attributeConfig.valueFunc) === 'function') {
+    value = props.attributeConfig.valueFunc(props.record, props.attributeName);
+  } else {
+    value = props.record.get(props.attributeName);
+  }
+
+  if (value !== null ||
+    props.attributeConfig.renderer === 'peakmeter' ||
+    props.attributeConfig.renderer === 'lambda' ||
+    props.attributeConfig.renderer === 'scope-user-account' ||
+    props.attributeConfig.renderer === 'scope-organization-account' ||
+    props.attributeConfig.renderer === 'scope-broadcast-channel' ||
+    props.attributeConfig.renderer === 'reference-client-user') {
+    let cell;
+
+    switch (props.attributeConfig.renderer) {
+      case 'lambda':
+        cell = (
+          <TableCellLambda {...props.attributeConfig.props}
+            record={props.record}
+            attribute={props.attributeName}
+            value={value}
+          />);
+        break;
+
+      case 'counter':
+        cell = (
+          <TableCellCounter {...props.attributeConfig.props}
+            record={props.record}
+            attribute={props.attributeName}
+            value={value}
+          />);
+        break;
+
+      case 'string':
+        cell = (
+          <TableCellString {...props.attributeConfig.props}
+            record={props.record}
+            attribute={props.attributeName}
+            value={value}
+          />);
+        break;
+
+      case 'boolean':
+        cell = (
+          <TableCellBoolean {...props.attributeConfig.props}
+            record={props.record}
+            attribute={props.attributeName}
+            value={value}
+          />);
+        break;
+
+      case 'image':
+        cell = (
+          <TableCellImage {...props.attributeConfig.props}
+            record={props.record}
+            attribute={props.attributeName}
+            value={value}
+          />);
+        break;
+
+      case 'file':
+        cell = (
+          <TableCellFile {...props.attributeConfig.props}
+            record={props.record}
+            attribute={props.attributeName}
+            value={value}
+          />);
+        break;
+
+      case 'db':
+        cell = (
+          <TableCellDb {...props.attributeConfig.props}
+            record={props.record}
+            attribute={props.attributeName}
+            value={value}
+          />);
+        break;
+
+      case 'url':
+        cell = (
+          <TableCellUrl {...props.attributeConfig.props}
+            record={props.record}
+            attribute={props.attributeName}
+            value={value}
+          />);
+        break;
+
+      case 'text':
+        cell = (
+          <TableCellText {...props.attributeConfig.props}
+            record={props.record}
+            attribute={props.attributeName}
+            value={value}
+          />);
+        break;
+
+      case 'float':
+        cell = (
+          <TableCellFloat {...props.attributeConfig.props}
+            record={props.record}
+            attribute={props.attributeName}
+            value={value}
+          />);
+        break;
+
+      case 'integer':
+        cell = (
+          <TableCellInteger {...props.attributeConfig.props}
+            record={props.record}
+            attribute={props.attributeName}
+            value={value}
+          />);
+        break;
+
+      case 'percent':
+        cell = (
+          <TableCellPercent {...props.attributeConfig.props}
+            record={props.record}
+            attribute={props.attributeName}
+            value={value}
+          />);
+        break;
+
+      case 'duration':
+        cell = (
+          <TableCellDuration {...props.attributeConfig.props}
+            record={props.record}
+            attribute={props.attributeName}
+            value={value}
+          />);
+        break;
+
+      case 'date':
+        cell = (
+          <TableCellDate {...props.attributeConfig.props}
+            record={props.record}
+            attribute={props.attributeName}
+            value={value}
+          />);
+        break;
+
+      case 'datetime':
+        cell = (
+          <TableCellDateTime {...props.attributeConfig.props}
+            record={props.record}
+            attribute={props.attributeName}
+            value={value}
+          />);
+        break;
+
+      case 'time':
+        cell = (
+          <TableCellTime {...props.attributeConfig.props}
+            record={props.record}
+            attribute={props.attributeName}
+            value={value}
+          />);
+        break;
+
+      case 'icon':
+        cell = (
+          <TableCellIcon {...props.attributeConfig.props}
+            record={props.record}
+            attribute={props.attributeName}
+            value={value}
+          />);
+        break;
+
+      case 'toggle':
+        cell = (
+          <TableCellToggle {...props.attributeConfig.props}
+            record={props.record}
+            attribute={props.attributeName}
+            value={value}
+          />);
+        break;
+
+      case 'peakmeter':
+        cell = (
+          <TableCellPeakmeter {...props.attributeConfig.props}
+            record={props.record}
+            attribute={props.attributeName}
+          />);
+        break;
+
+      case 'filesize':
+        cell = (
+          <TableCellFileSize {...props.attributeConfig.props}
+            record={props.record}
+            attribute={props.attributeName}
+            value={value}
+          />);
+        break;
+
+      // FIXME deprecated, use scope-organization-account instead
+      case 'scope-user-account':
+        cell = (
+          <TableCellScopeUserAccount {...props.attributeConfig.props}
+            record={props.record}
+          />);
+        break;
+
+      case 'scope-organization-account':
+        cell = (
+          <TableCellScopeOrganizationAccount {...props.attributeConfig.props}
+            record={props.record}
+          />);
+        break;
+
+      case 'scope-broadcast-channel':
+        cell = (
+          <TableCellScopeBroadcastChannel {...props.attributeConfig.props}
+            record={props.record}
+          />);
+        break;
+
+      case 'reference-client-user':
+        cell = (
+          <TableCellReferenceClientUser {...props.attributeConfig.props}
+            record={props.record}
+          />);
+        break;
+
+      case 'play':
+        cell = (
+          <TableCellPlayButton {...props.attributeConfig.props}
+            record={props.record}
+            attribute={props.attributeName}
+            value={value}
+          />);
+        break;
+
+      case 'journal-action':
+        cell = (
+          <TableCellJournalAction {...props.attributeConfig.props}
+            record={props.record}
+            attribute={props.attributeName}
+            value={value}
+          />);
+        break;
+
+      case 'journal-params':
+        cell = (
+          <TableCellJournalParams {...props.attributeConfig.props}
+            record={props.record}
+            attribute={props.attributeName}
+            value={value}
+          />);
+        break;
+
+      case 'journal-product':
+        cell = (
+          <TableCellJournalProduct {...props.attributeConfig.props}
+            record={props.record}
+            attribute={props.attributeName}
+            value={value}
+          />);
+        break;
+
+      case 'journal-severity':
+        cell = (
+          <TableCellJournalSeverity {...props.attributeConfig.props}
+            record={props.record}
+            attribute={props.attributeName}
+            value={value}
+          />);
+        break;
+
+      default:
+        throw new Error(`Unknown table cell renderer ${props.attributeConfig.renderer}`);
+    }
+    return (<td onClick={props.onClick} className={cellKlass} key={cellKey}>{cell}</td>);
+  }
+  return (<td onClick={props.onClick} className={cellKlass} key={cellKey} />);
+};
+
+TableCellWidget.propTypes = {
+  attributeName: React.PropTypes.string.isRequired,
+  attributeConfig: React.PropTypes.object.isRequired,
+  record: React.PropTypes.object.isRequired,
+  onClick: React.PropTypes.func,
+};
+
+export default TableCellWidget;

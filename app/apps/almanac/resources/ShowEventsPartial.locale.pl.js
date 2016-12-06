@@ -80,6 +80,7 @@ export default {
                         description: 'Opis',
                         start_at: 'Start',
                         stop_at: 'Stop',
+                        client_user: 'Użytkownik',
                       },
                     },
                   },
@@ -89,6 +90,6 @@ export default {
           },
         },
       },
-    }
-  }
-}
+    },
+  },
+};
