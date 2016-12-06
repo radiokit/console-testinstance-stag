@@ -16,6 +16,7 @@ export default React.createClass({
   getInitialState() {
     return {
       loaded: false,
+      clientUser: null,
     };
   },
 
@@ -30,9 +31,13 @@ export default React.createClass({
         .where('id', 'eq', this.props.record.get('references').get('client_user_id'))
         .on('fetch', (_event, _query, data) => {
           if (this.isMounted()) {
-            if (data.size() !== 0) {
+            if (data.size !== 0) {
               this.setState({
                 clientUser: data.first(),
+                loaded: true,
+              });
+            } else {
+              this.setState({
                 loaded: true,
               });
             }
@@ -47,7 +52,7 @@ export default React.createClass({
     if (this.props.record.has('references') &&
        this.props.record.get('references') &&
        this.props.record.get('references').has('client_user_id')) {
-      if (this.state.loaded) {
+      if (this.state.loaded && this.state.clientUser) {
         const userInfo = this.state.clientUser.get('name') ?
           this.state.clientUser.get('name') : this.state.clientUser.get('email');
 
