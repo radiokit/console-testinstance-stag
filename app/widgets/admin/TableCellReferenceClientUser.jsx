@@ -26,6 +26,7 @@ export default React.createClass({
        this.props.record.get('references').has('client_user_id')) {
       this.context.data
         .query('jungle', 'Client.User')
+        .select('id', 'name', 'email')
         .where('id', 'eq', this.props.record.get('references').get('client_user_id'))
         .on('fetch', (_event, _query, data) => {
           if (this.isMounted()) {
