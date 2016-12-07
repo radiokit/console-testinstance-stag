@@ -64,7 +64,7 @@
     "moment-timezone": "^0.4.1",
     "multi-download": "^2.0.0",
     "phoenix-socket": "^1.0.4",
-    "radiokit-api": "0.1.19",
+    "radiokit-api": "0.1.20",
     "radiokit-toolkit-auth": "^1.0.8",
     "react": "^0.14.2",
     "react-addons-css-transition-group": "^0.14.8",
