@@ -74,9 +74,12 @@ export default {
 
   fetchUrlForFile() {
     this.setState(this.state.set('state', State.loading));
+
+    // FIXME Workaround for DEPO-184, using private_temporary_url
+    // because it points directly to the storage.
     RadioKit
       .query('vault', 'Data.Record.File')
-      .select('id', 'public_url')
+      .select('id', 'private_temporary_url')
       .where('id', 'eq', this.state.getIn(['source', 'id']))
       .on('fetch', (_wtf1, _wtf2, data) => {
         this.parseFileResponse(data.first());
@@ -88,7 +91,7 @@ export default {
   },
 
   parseFileResponse(file) {
-    const url = file.get('public_url');
+    const url = file.get('private_temporary_url');
     const query = parseUri(url);
 
     if (this.state.getIn(['source', 'id']) === file.get('id')) {
