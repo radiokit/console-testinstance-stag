@@ -12,6 +12,7 @@ export default React.createClass({
     autofocus: React.PropTypes.bool,
     error: React.PropTypes.bool,
     disabled: React.PropTypes.bool,
+    name: React.PropTypes.string,
     tabIndex: React.PropTypes.number,
     onChange: React.PropTypes.func,
     type: React.PropTypes.oneOf(['text', 'email', 'password']),
@@ -29,6 +30,7 @@ export default React.createClass({
       error: false,
       type: 'text',
       disabled: false,
+      name: null,
     };
   },
 
@@ -53,7 +55,7 @@ export default React.createClass({
       default:      var klass = "form-control"; break;
     }
 
-    return (<input ref="input" type={this.props.type} className={klass} autoFocus={this.props.autofocus} tabIndex={this.props.tabIndex} onChange={this.onChange} disabled={this.props.disabled} />);
+    return (<input ref="input" type={this.props.type} className={klass} autoFocus={this.props.autofocus} tabIndex={this.props.tabIndex} onChange={this.onChange} disabled={this.props.disabled} name={this.props.name} />);
   },
 
 
