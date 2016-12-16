@@ -26,11 +26,16 @@ export default React.createClass({
       omission: '…',
     });
 
+    let titleValue = null;
+    if(this.props.value !== truncatedValue) {
+      titleValue = this.props.value;
+    }
+
     if(this.props.selectable) {
-      return (<span className="selectable">{truncatedValue}</span>);
+      return (<span className="selectable" title={titleValue}>{truncatedValue}</span>);
 
     } else {
-      return (<span>{truncatedValue}</span>);
+      return (<span title={titleValue}>{truncatedValue}</span>);
     }
   }
 });
