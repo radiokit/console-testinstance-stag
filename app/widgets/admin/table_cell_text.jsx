@@ -6,6 +6,7 @@ export default React.createClass({
     record: React.PropTypes.object.isRequired,
     value: React.PropTypes.string,
     attribute: React.PropTypes.string.isRequired,
+    selectable: React.PropTypes.bool.isRequired,
     truncateLength: React.PropTypes.number.isRequired,
   },
 
@@ -13,6 +14,7 @@ export default React.createClass({
   getDefaultProps: function() {
     return {
       truncateLength: 60,
+      selectable: false,
     };
   },
 
@@ -24,6 +26,11 @@ export default React.createClass({
       omission: '…',
     });
 
-    return (<span>{truncatedValue}</span>);
+    if(this.props.selectable) {
+      return (<span className="selectable">{truncatedValue}</span>);
+
+    } else {
+      return (<span>{truncatedValue}</span>);
+    }
   }
 });
