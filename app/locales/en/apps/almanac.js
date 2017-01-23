@@ -4,6 +4,9 @@ export default {
       navigation: {
         title: 'Almanac',
         subtitle: 'Radio management',
+        announcements: {
+          title: 'Announcements',
+        },
         resources: {
           title: 'Reservable resources',
         },

@@ -27,6 +27,7 @@ import ElectronTransmissionsIndex from './apps/electron/transmissions/IndexView.
 import AlmanacApp from './apps/almanac/app.jsx';
 import AlmanacResourcesIndex from './apps/almanac/resources/IndexView.jsx';
 import AlmanacResourcesShow from './apps/almanac/resources/ShowView.jsx';
+import AlmanacAnnouncementsIndex from './apps/almanac/announcements/IndexView.jsx';
 import InfrastructureApp from './apps/infrastructure/app.jsx';
 import InfrastructureComputingNodesIndex from './apps/infrastructure/computing_nodes/index_view.jsx';
 import InfrastructureMediaIndex from './apps/infrastructure/media/IndexView.jsx';
@@ -143,6 +144,11 @@ ReactDOM.render((
             <Route component={ScopeLayout} scope="userAccount">
               <Route path="index" component={AlmanacResourcesIndex} onEnter={pingGoogleAnalytics} />
               <Route path="show/:id" component={AlmanacResourcesShow} onEnter={pingGoogleAnalytics} />
+            </Route>
+          </Route>
+          <Route path="announcements">
+            <Route component={ScopeLayout} scope="userAccount">
+              <Route path="index" component={AlmanacAnnouncementsIndex} onEnter={pingGoogleAnalytics} />
             </Route>
           </Route>
         </Route>

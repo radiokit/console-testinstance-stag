@@ -2,6 +2,11 @@ export default {
   apps: {
     almanac: {
       icon: 'calendar-text',
+      announcements: {
+        index() {
+          return '/apps/almanac/announcements/index';
+        },
+      },
       resources: {
         index() {
           return '/apps/almanac/resources/index';
