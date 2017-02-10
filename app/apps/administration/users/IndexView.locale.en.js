@@ -12,10 +12,8 @@ export default {
           table: {
             loading: "Fetching list of users",
             header: {
+              name: "Name",
               email: "e-mail",
-              first_name: "First name",
-              last_name: "Last name",
-              phone: "Phone",
             },
           },
 
@@ -37,6 +35,9 @@ export default {
             create: {
               header: "Add user",
               form: {
+                name: {
+                  label: "Name",
+                },
                 email: {
                   label: "e-mail",
                   hint: "Type user's e-mail address. It will serve as login.",
@@ -55,6 +56,7 @@ export default {
                     broadcast: "Broadcast",
                     freezer: "Freezer",
                     infrastructure: "Infrastructure",
+                    almanac: "Almanac",
                   },
                   hint: "Select applications enabled for this user. Hold Ctrl while clicking to select/deselect multiple applications.",
                 },

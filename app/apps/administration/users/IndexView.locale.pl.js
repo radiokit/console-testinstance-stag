@@ -12,6 +12,7 @@ export default {
           table: {
             loading: "Ładowanie listy użytkowników",
             header: {
+              name: "Imię i nazwisko",
               email: "e-mail",
             },
           },
@@ -34,6 +35,9 @@ export default {
             create: {
               header: "Dodaj użytkownika",
               form: {
+                name: {
+                  label: "Imię i nazwisko",
+                },
                 email: {
                   label: "e-mail",
                   hint: "Podaj e-mail użytkownika.",
@@ -52,6 +56,7 @@ export default {
                     broadcast: "Emisja",
                     freezer: "Freezer",
                     infrastructure: "Infrastruktura",
+                    almanac: "Almanac",
                   },
                   hint: "Wybierz aplikacje dostępne dla tego użytkownika. Przytrzymaj Ctrl podczas klikania by zaznaczyć/odznaczyć wiele aplikacji.",
                 },

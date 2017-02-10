@@ -3,6 +3,8 @@ import Counterpart from 'counterpart';
 import Immutable from 'immutable';
 
 import Index from '../../../widgets/admin/crud/index_widget.jsx';
+import UserCreateAcknowledgement from './UserCreateAcknowledgement.jsx';
+
 
 Counterpart.registerTranslations('en', require('./IndexView.locale.en.js'));
 Counterpart.registerTranslations('pl', require('./IndexView.locale.pl.js'));
@@ -26,6 +28,7 @@ export default React.createClass({
 
   buildAttributes() {
     return {
+      name: { renderer: "string" },
       email: { renderer: "string" },
     };
   },
@@ -33,6 +36,10 @@ export default React.createClass({
 
   buildForm() {
     return {
+      name: {
+        type: 'string',
+      },
+
       email: {
         type: 'email',
         hint: true,
@@ -47,13 +54,6 @@ export default React.createClass({
         validators: {
           presence: true,
         },
-      },
-
-      account_ids: {
-        type: 'set',
-        untranslated: true,
-        values: this.context.availableAccounts.reduce((reduction, account) => { return reduction.set(account.get("id"), account.get("name")); }, new Immutable.Map()).toJS(),
-        hint: true,
       },
 
       apps_available: {
@@ -71,10 +71,10 @@ export default React.createClass({
         contentPrefix="apps.administration.users"
         app="jungle"
         model="Client.User"
-        createEnabled={false}
         attributes={this.buildAttributes()}
         form={this.buildForm()}
-        indexQueryFunc={this.modifyIndexQuery} />
+        indexQueryFunc={this.modifyIndexQuery}
+        createAcknowledgementElement={UserCreateAcknowledgement} />
     );
   },
 });
