@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@bitbucket.org:radiokit/console.git"
+    "url": "git@github.com:radiokit/console.git"
   },
   "contributors": [
     "Marcin Lewandowski <marcin@radiokit.org>",
