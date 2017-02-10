@@ -1,6 +1,8 @@
 import React from 'react';
 import {Link} from 'react-router';
 import Gravatar from 'gravatar-api';
+import Auth from 'radiokit-toolkit-auth';
+
 
 import AdminHelper from '../../helpers/admin_helper.js';
 import UploadIndicatorWidget from '../../widgets/admin/upload_indicator/upload_indicator_widget.jsx';
@@ -37,6 +39,12 @@ const TopBar = React.createClass({
   onToggleVisibilityClick: function (e) {
     e.preventDefault();
     AdminHelper.toggleMenuBarVisibility();
+  },
+
+  onLogoutLinkClick: function (e) {
+    e.preventDefault();
+    Auth.Session.User.clearCachedCredentials();
+    window.location.reload();
   },
 
   renderToggle() {
@@ -95,6 +103,14 @@ const TopBar = React.createClass({
               {this.context.currentUser.get("email")}
             </span>
           </a>
+          <ul className="dropdown-menu animation-dock">
+            <li>
+              <a onClick={this.onLogoutLinkClick}>
+                <i className="mdi mdi-logout text-danger" />
+                <Translate content="topBarPartial.logoutLink"/>
+              </a>
+            </li>
+          </ul>
         </li>
       </ul>
     );

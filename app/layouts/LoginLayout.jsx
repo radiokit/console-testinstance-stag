@@ -35,6 +35,14 @@ export default React.createClass({
   },
 
 
+  componentDidMount() {
+    const session = Auth.Session.User.getCredentialsFromLocalStorage();
+    if(session !== null) {
+      this.props.onAuthenticated(session);
+    }
+  },
+
+
   onFormSubmit(e) {
     e.preventDefault();
 
@@ -60,7 +68,7 @@ export default React.createClass({
       if(this.props.env.env !== 'prod') {
         options['baseUrl'] = 'https://jungle.radiokitapp-stag.org';
       }
-      Auth.Session.User.authenticateAsync(this.state.email, this.state.password, options)
+      Auth.Session.User.authenticateAsync(this.state.email, this.state.password, options, true)
         .then((session) => {
           this.props.onAuthenticated(session);
         })
