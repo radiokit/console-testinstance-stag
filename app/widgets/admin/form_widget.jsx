@@ -113,7 +113,17 @@ const FormWidget = React.createClass({
       const fieldConfig = this.props.form[fieldName];
 
       if (fieldConfig.fieldValueFunc) {
-        params = fieldConfig.fieldValueFunc(params, this.refs[fieldName].value);
+        switch (fieldConfig.type) {
+          case 'set': {
+            params = fieldConfig.fieldValueFunc(params, this.refs[fieldName].selectedOptions);
+            break;
+          }
+
+          default:
+            params = fieldConfig.fieldValueFunc(params, this.refs[fieldName].value);
+            break;
+        }
+        
       } else {
         switch (fieldConfig.type) {
           // FIXME deprecated, use scope-organization-account instead

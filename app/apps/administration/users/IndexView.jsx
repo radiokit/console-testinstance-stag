@@ -61,6 +61,23 @@ export default React.createClass({
         values: this.context.currentUser.get("apps_available").toJS(),
         hint: true,
       },
+
+      organization_account_associations: {
+        type: 'set',
+        untranslated: true,
+        values: this.context.availableAccounts.reduce((reduction, account) => {
+          return reduction.set(account.get("id"), account.get("name"));
+        }, new Immutable.Map()).toJS(),
+        hint: true,
+        fieldValueFunc: (params, selectedOptions) => {
+          params["organization_account_associations"] = [];
+          for (let i = 0; i < selectedOptions.length; i++) {
+            params["organization_account_associations"]
+              .push({organization_account_id: selectedOptions[i].value});
+          }
+          return params;
+        },
+      },
     };
   },
 
