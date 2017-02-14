@@ -42,7 +42,7 @@ export default {
                   label: "e-mail",
                   hint: "Podaj e-mail użytkownika.",
                 },
-                account_ids: {
+                organization_account_associations: {
                   label: "Konta",
                   hint: "Wybierz konta do których należy ten użytkownik. Przytrzymaj Ctrl podczas klikania by zaznaczyć/odznaczyć wiele kont.",
                 },

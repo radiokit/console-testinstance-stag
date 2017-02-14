@@ -42,7 +42,7 @@ export default {
                   label: "e-mail",
                   hint: "Type user's e-mail address. It will serve as login.",
                 },
-                account_ids: {
+                organization_account_associations: {
                   label: "Accounts",
                   hint: "Select accounts to which this user belongs. Hold Ctrl while clicking to select/deselect multiple accounts.",
                 },
