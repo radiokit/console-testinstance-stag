@@ -1,9 +1,12 @@
 export default {
   apps: {
     broadcast: {
-      auto: {
+      switch: {
         index: {
           header: 'Switch',
+        },
+        stream: {
+          on_air: 'ON AIR',
         },
       },
     },
