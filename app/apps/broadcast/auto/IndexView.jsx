@@ -9,7 +9,7 @@ Counterpart.registerTranslations('pl', require('./IndexView.locale.pl.js'));
 
 export default React.createClass({
   contextTypes: {
-    availableUserAccounts: React.PropTypes.object.isRequired,
+    availableAccounts: React.PropTypes.object.isRequired,
     currentBroadcastChannel: React.PropTypes.object.isRequired,
   },
 
@@ -58,7 +58,7 @@ export default React.createClass({
         form={this.buildForm()}
         createModalElement={AutoDJAddModal}
         createModalProps={{
-          availableUserAccounts: this.context.availableUserAccounts,
+          availableAccounts: this.context.availableAccounts,
           currentBroadcastChannel: this.context.currentBroadcastChannel.get('id'),
           currentBroadcastChannelEntity: this.context.currentBroadcastChannel,
           defaultTimeOffset: Date.now(),

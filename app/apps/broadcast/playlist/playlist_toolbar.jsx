@@ -17,7 +17,7 @@ Counterpart.registerTranslations('en', { playlist_toolbar: translationEN });
 const PlaylistToolbar = React.createClass({
   propTypes: {
     data: React.PropTypes.object,
-    availableUserAccounts: React.PropTypes.object.isRequired,
+    availableAccounts: React.PropTypes.object.isRequired,
     currentBroadcastChannel: React.PropTypes.object.isRequired,
     offsetStart: React.PropTypes.number.isRequired,
     onOffsetStartChange: React.PropTypes.func,
@@ -46,7 +46,7 @@ const PlaylistToolbar = React.createClass({
           modalProps={{
             currentBroadcastChannel: this.props.currentBroadcastChannel.get('id'),
             currentBroadcastChannelEntity: this.props.currentBroadcastChannel,
-            availableUserAccounts: this.props.availableUserAccounts,
+            availableAccounts: this.props.availableAccounts,
             defaultTimeOffset: this.props.offsetStart,
             contentPrefix: 'playlist_toolbar.add',
             onSuccess: this.props.onCRUD,
@@ -61,7 +61,7 @@ const PlaylistToolbar = React.createClass({
           modalProps={{
             currentBroadcastChannel: this.props.currentBroadcastChannel.get('id'),
             currentBroadcastChannelEntity: this.props.currentBroadcastChannel,
-            availableUserAccounts: this.props.availableUserAccounts,
+            availableAccounts: this.props.availableAccounts,
             contentPrefix: 'playlist_toolbar.update',
             defaultTimeOffset: this.props.offsetStart,
             record: this.props.activeItem,

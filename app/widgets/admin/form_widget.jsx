@@ -18,7 +18,7 @@ const FormWidget = React.createClass({
 
   contextTypes: {
     availableBroadcastChannels: React.PropTypes.object,
-    availableUserAccounts: React.PropTypes.object.isRequired,
+    availableAccounts: React.PropTypes.object.isRequired,
   },
 
 
@@ -113,15 +113,36 @@ const FormWidget = React.createClass({
       const fieldConfig = this.props.form[fieldName];
 
       if (fieldConfig.fieldValueFunc) {
-        params = fieldConfig.fieldValueFunc(params, this.refs[fieldName].value);
+        switch (fieldConfig.type) {
+          case 'set': {
+            params = fieldConfig.fieldValueFunc(params, this.refs[fieldName].selectedOptions);
+            break;
+          }
+
+          default:
+            params = fieldConfig.fieldValueFunc(params, this.refs[fieldName].value);
+            break;
+        }
+        
       } else {
         switch (fieldConfig.type) {
+          // FIXME deprecated, use scope-organization-account instead
           case 'scope-user-account':
             if (params.hasOwnProperty('references')) {
               params.references.user_account_id = this.refs[fieldName].value;
             } else {
               params.references = {
                 user_account_id: this.refs[fieldName].value,
+              };
+            }
+            break;
+
+          case 'scope-organization-account':
+            if (params.hasOwnProperty('references')) {
+              params.references.organization_account_id = this.refs[fieldName].value;
+            } else {
+              params.references = {
+                organization_account_id: this.refs[fieldName].value,
               };
             }
             break;
@@ -362,10 +383,22 @@ const FormWidget = React.createClass({
           );
           break;
 
+        case 'scope-organization-account':
+          input = (
+            <select className="form-control" id={ fieldName } ref={ fieldName } required={ required }>
+              { this.context.availableAccounts.map((userAccount) => {
+                  return (<option key={ userAccount.get("id") } value={ userAccount.get("id") }>
+                            { userAccount.get("name") }
+                          </option>);
+                }) }
+            </select>
+          );
+          break;
+
         case 'scope-user-account':
           input = (
             <select className="form-control" id={ fieldName } ref={ fieldName } required={ required }>
-              { this.context.availableUserAccounts.map((userAccount) => {
+              { this.context.availableAccounts.map((userAccount) => {
                   return (<option key={ userAccount.get("id") } value={ userAccount.get("id") }>
                             { userAccount.get("name") }
                           </option>);

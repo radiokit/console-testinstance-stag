@@ -60,10 +60,13 @@ const MetadataInputField = React.createClass({
     let step = null;
     let min = null;
     let max = null;
+    let maxLength = null;
+
     const { imagePreviewUrl } = this.state;
     switch (this.props.fieldSummary.type) {
       case 'string':
         inputType = 'text';
+        maxLength = 255;
         break;
       case 'db':
         inputType = 'decimal';
@@ -106,18 +109,19 @@ const MetadataInputField = React.createClass({
               {this.props.fieldSummary.name}
             </label>
             <input
-              type= {inputType}
-              id={ fieldId }
-              ref={ fieldId }
-              required={ this.props.fieldSummary.required }
+              type = {inputType}
+              id ={ fieldId }
+              ref ={ fieldId }
+              required = { this.props.fieldSummary.required }
               disabled = { this.props.disabled }
-              value={ inputValue }
+              value = { inputValue }
               placeholder = {this.props.placeholder}
-              className="form-control"
+              className = "form-control"
               onChange = {this.onFieldChanged}
               step = {step}
               min = {min}
               max = {max}
+              maxLength = {maxLength}
             />
           </div>
           <div className="MetadataFormWidget__checkbox">

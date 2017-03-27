@@ -24,7 +24,7 @@ const DevicesToolbar = React.createClass({
 
 
   contextTypes: {
-    currentUserAccount: React.PropTypes.object.isRequired,
+    currentAccount: React.PropTypes.object.isRequired,
   },
 
 
@@ -68,7 +68,7 @@ const DevicesToolbar = React.createClass({
       },
       account_id: {
         type: 'hidden',
-        value: this.context.currentUserAccount.get('id'),
+        value: this.context.currentAccount.get('id'),
       },
     };
   },

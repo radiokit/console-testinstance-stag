@@ -4,7 +4,6 @@ import createBrowserHistory from 'history/lib/createBrowserHistory';
 import { Router, Route, IndexRoute } from 'react-router';
 import Counterpart from 'counterpart';
 
-import './services/RadioKit'; // for legacy window binding
 import './services/Plumber'; // for legacy window binding
 
 // this is set to false on staging and production builds
@@ -15,7 +14,7 @@ if (process.env.NODE_ENV) {
 
 import Root from './root.jsx';
 import Dashboard from './dashboard.jsx';
-import ScopeLayout from './layouts/scope_layout.jsx';
+import ScopeLayout from './layouts/ScopeLayout.jsx';
 import AppsIndex from './apps/apps_index.jsx';
 import BroadcastApp from './apps/broadcast/app.jsx';
 import BroadcastPlaylistIndex from './apps/broadcast/playlist/index_view.jsx';
@@ -25,6 +24,10 @@ import BroadcastSwitchIndex from './apps/broadcast/switch/IndexView.jsx';
 import ElectronApp from './apps/electron/app.jsx';
 import ElectronPatchbayIndex from './apps/electron/patchbay/IndexView.jsx';
 import ElectronTransmissionsIndex from './apps/electron/transmissions/IndexView.jsx';
+import AlmanacApp from './apps/almanac/app.jsx';
+import AlmanacResourcesIndex from './apps/almanac/resources/IndexView.jsx';
+import AlmanacResourcesShow from './apps/almanac/resources/ShowView.jsx';
+import AlmanacAnnouncementsIndex from './apps/almanac/announcements/IndexView.jsx';
 import InfrastructureApp from './apps/infrastructure/app.jsx';
 import InfrastructureComputingNodesIndex from './apps/infrastructure/computing_nodes/index_view.jsx';
 import InfrastructureMediaIndex from './apps/infrastructure/media/IndexView.jsx';
@@ -44,6 +47,7 @@ import AdministrationFileRepositoriesIndex from './apps/administration/file_repo
 import AdministrationFileRepositoriesShow from './apps/administration/file_repositories/ShowView.jsx';
 
 Counterpart.registerTranslations("en", require('./locales/en/general.js'));
+Counterpart.registerTranslations("en", require('./locales/en/apps/almanac.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/broadcast.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/library.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/electron.js'));
@@ -55,6 +59,7 @@ Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/modal
 Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/scope.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/form.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/general.js'));
+Counterpart.registerTranslations("pl", require('./locales/pl/apps/almanac.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/broadcast.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/library.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/electron.js'));
@@ -131,6 +136,20 @@ ReactDOM.render((
           </Route>
           <Route component={ScopeLayout} scope="broadcastChannel">
             <Route path="switch/index" component={BroadcastSwitchIndex} onEnter={pingGoogleAnalytics} />
+          </Route>
+        </Route>
+
+        <Route path="almanac" component={AlmanacApp}>
+          <Route path="resources">
+            <Route component={ScopeLayout} scope="userAccount">
+              <Route path="index" component={AlmanacResourcesIndex} onEnter={pingGoogleAnalytics} />
+              <Route path="show/:id" component={AlmanacResourcesShow} onEnter={pingGoogleAnalytics} />
+            </Route>
+          </Route>
+          <Route path="announcements">
+            <Route component={ScopeLayout} scope="userAccount">
+              <Route path="index" component={AlmanacAnnouncementsIndex} onEnter={pingGoogleAnalytics} />
+            </Route>
           </Route>
         </Route>
 

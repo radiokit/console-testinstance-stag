@@ -9,11 +9,11 @@ Counterpart.registerTranslations("pl", require('./IndexView.locale.pl.js'));
 
 export default React.createClass({
   contextTypes: {
-    availableUserAccounts: React.PropTypes.object.isRequired,
+    availableAccounts: React.PropTypes.object.isRequired,
   },
 
   modifyIndexQuery: function(query) {
-    const availableUserAccountIds = this.context.availableUserAccounts.map((account) => {
+    const availableUserAccountIds = this.context.availableAccounts.map((account) => {
       return account.get('id');
     }).toJS();
 

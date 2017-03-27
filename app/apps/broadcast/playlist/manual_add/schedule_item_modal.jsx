@@ -15,7 +15,7 @@ import InputLocalDateTime from '../../../../widgets/time/input_local_date_time.j
 import './schedule_item_modal.scss';
 const ScheduleItemModal = React.createClass({
   propTypes: {
-    availableUserAccounts: React.PropTypes.object.isRequired,
+    availableAccounts: React.PropTypes.object.isRequired,
     currentBroadcastChannel: React.PropTypes.string.isRequired,
     currentBroadcastChannelEntity: React.PropTypes.object.isRequired,
     defaultTimeOffset: React.PropTypes.number.isRequired,
@@ -179,7 +179,7 @@ const ScheduleItemModal = React.createClass({
         />
         <span className="twitter-typeahead">
           <FilePicker
-            availableUserAccounts={this.props.availableUserAccounts}
+            availableAccounts={this.props.availableAccounts}
             placeholder={Counterpart.translate(`${this.props.contentPrefix}.form.file.hint`)}
             value={this.getFile()}
             onChange={this.handleSelectedFile}

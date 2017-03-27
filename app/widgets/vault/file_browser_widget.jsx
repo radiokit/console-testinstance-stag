@@ -35,7 +35,7 @@ export default React.createClass({
 
 
   contextTypes: {
-    currentUserAccount: React.PropTypes.object.isRequired,
+    currentAccount: React.PropTypes.object.isRequired,
   },
 
 

@@ -26,6 +26,7 @@ export default React.createClass({
     createModalProps: React.PropTypes.object,
     readEnabled: React.PropTypes.bool.isRequired,
     deleteEnabled: React.PropTypes.bool.isRequired,
+    updateEnabled: React.PropTypes.bool.isRequired,
     selectable: React.PropTypes.bool.isRequired,
     createAcknowledgementElement: React.PropTypes.oneOfType([React.PropTypes.func, React.PropTypes.instanceOf(React.Component)]),
   },
@@ -41,7 +42,7 @@ export default React.createClass({
     return {
       readEnabled: true,
       createEnabled: true,
-      readEnabled: true,
+      updateEnabled: false, // FIXME add missing locales and change this to true
       deleteEnabled: true,
       selectable: true,
     }
@@ -101,6 +102,8 @@ export default React.createClass({
    *   contain volatile information and have no real backend representation,
    * # fields that have "scope-user-account" or "scope-broadcast-channel" set as
    #   renderer as these fields need access to "references" field.
+   * # fields that have "scope-organization-account" or "scope-broadcast-channel" set as
+   #   renderer as these fields need access to "references" field.
    *
    * After all it calls `indexQueryFunc` passed to props (if it was defined).
    * It passes generic query mentioned before as the only argument and expects
@@ -113,7 +116,10 @@ export default React.createClass({
     Object.keys(this.props.attributes).map((attributeName) => {
       let attributeConfig = this.props.attributes[attributeName];
 
-      if(attributeConfig.renderer === "scope-user-account" || attributeConfig.renderer === "scope-broadcast-channel") {
+      if(attributeConfig.renderer === "scope-user-account" ||
+         attributeConfig.renderer === "scope-organization-account" ||
+         attributeConfig.renderer === "scope-broadcast-channel" ||
+         attributeConfig.renderer === "reference-client-user") {
         attributesForSelect.push("references");
 
       } else if(attributeConfig.hasOwnProperty("attribute") && typeof(attributeConfig.attribute) === "string") {
@@ -132,20 +138,23 @@ export default React.createClass({
     return query;
   },
 
+
   fillUpdateForm() {
-    //Update modal requires only one record
-    if(this.state.selectedRecords.count() === 1){
+    const form = this.props.form ? this.props.form : this.props.updateForm;
+
+    // Update modal requires only one record
+    if(this.state.selectedRecords.count() === 1) {
       const record = this.state.selectedRecords.first();
-      let form = JSON.parse(JSON.stringify(this.props.updateForm))
-      Object.keys(this.props.updateForm).forEach((key) => {
+      Object.keys(form).forEach((key) => {
         form[key].value = record.get(key);
       });
       return form;
     }
     else {
-      return this.props.updateForm;
+      return form;
     }
   },
+
 
   render: function() {
     return (
@@ -191,7 +200,7 @@ export default React.createClass({
           }()}
 
           {() => {
-            if(this.props.updateEnabled && this.props.updateEnabled && this.props.updateForm) {
+            if(this.props.updateEnabled === true) {
               return <ToolBarButtonModal
                 icon="border-color"
                 hintTooltipKey={`${this.props.contentPrefix}.index.actions.update`}

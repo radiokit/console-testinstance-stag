@@ -53,6 +53,9 @@ export default {
                                   tags: "Ekstrakcja metadanych",
                                 },
                               },
+                              metadata: {
+                                slug: "Generowanie unikalnych publicznych URL",
+                              },
                             }
                           },
                         },

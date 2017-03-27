@@ -5,8 +5,8 @@ import RepositoriesDomain from '../../../../services/RepositoriesDomain';
 const AutoDJShuffleFormConnected = connect(
   AutoDJShuffleForm,
   RepositoriesDomain,
-  (RepositoriesDomainState, { availableUserAccounts }) => {
-    availableUserAccounts.forEach(
+  (RepositoriesDomainState, { availableAccounts }) => {
+    availableAccounts.forEach(
       userAccount => {
         RepositoriesDomain.loadRepositories({
           userAccountId: userAccount.get('id'),
