@@ -24,6 +24,7 @@ export default React.createClass({
   buildAttributes() {
     return {
       name: { renderer: 'string' },
+      notification_emails: { renderer: 'string' },
       organization_account: { renderer: 'scope-organization-account' },
     };
   },
@@ -37,6 +38,10 @@ export default React.createClass({
         validators: {
           presence: true,
         },
+      },
+      notification_emails: {
+        type: 'string',
+        hint: true,
       },
       organization_account: {
         type: 'scope-organization-account',
