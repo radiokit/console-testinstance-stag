@@ -152,6 +152,7 @@ const ShowContentPartial = React.createClass({
     const attributes = {
       name: { renderer: 'string', sortable: true },
       play: { renderer: 'play', sortable: false, valueFunc: this.getFilteredMetadataSchemas },
+      inserted_at: { renderer: 'datetime', sortable: true },
     };
 
     return this.getFilteredMetadataSchemas()
@@ -198,6 +199,7 @@ const ShowContentPartial = React.createClass({
       .select(
         'id',
         'name',
+        'inserted_at',
         'metadata_items.id',
         'metadata_items.value_string',
         'metadata_items.value_db',

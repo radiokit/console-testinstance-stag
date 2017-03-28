@@ -95,6 +95,7 @@ export default {
             "duration-accurate": "Duration (accurate)",
 
             "play": "Play",
+            "inserted_at": "Uploaded at",
           },
         },
 

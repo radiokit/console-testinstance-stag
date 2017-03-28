@@ -95,6 +95,7 @@ export default {
             "duration-accurate": "Czas trwania (dokładny)",
 
             "play": "Odtwórz",
+            "inserted_at": "Data dodania",
           },
         },
 
