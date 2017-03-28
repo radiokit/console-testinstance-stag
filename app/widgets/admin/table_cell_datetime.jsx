@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 
 export default React.createClass({
   propTypes: {
@@ -9,6 +10,8 @@ export default React.createClass({
 
 
   render: function() {
-    return (<span>{this.props.value}</span>);
+    const datetime = moment(this.props.value).format('lll z');
+
+    return (<span>{datetime}</span>);
   }
 });
