@@ -56,6 +56,9 @@ export default {
                               metadata: {
                                 slug: "Generation of unique public URLs",
                               },
+                              affiliate: {
+                                itunes: "Fetching affilate URLs from iTunes",
+                              },
                             },
                           },
                         },

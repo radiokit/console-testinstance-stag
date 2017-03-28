@@ -27,7 +27,7 @@ const ShowProcessingsSchema = React.createClass({
       },
       kind: {
         type: "enum",
-        values: ["analysis.audio.duration", "analysis.audio.replaygain", "analysis.audio.tags", "metadata.slug"],
+        values: ["analysis.audio.duration", "analysis.audio.replaygain", "analysis.audio.tags", "metadata.slug", "affiliate.itunes"],
         hint: false,
         validators: {
           presence: true,

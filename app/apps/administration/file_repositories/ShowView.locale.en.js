@@ -11,7 +11,6 @@ export default {
               imports_schema: "Imports",
               exports_schema: "Exports",
               variants_schema: "Variants",
-              affiliates_schema: "Affiliates",
             },
           },
         },

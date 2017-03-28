@@ -56,6 +56,9 @@ export default {
                               metadata: {
                                 slug: "Generowanie unikalnych publicznych URL",
                               },
+                              affiliate: {
+                                itunes: "Pobieranie linków partnerskich z iTunes",
+                              },
                             }
                           },
                         },
