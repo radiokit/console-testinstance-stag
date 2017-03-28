@@ -10,8 +10,8 @@ export default React.createClass({
 
 
   render: function() {
-    const datetime = moment(this.props.value).format('lll z');
+    const datetime = moment(this.props.value).format('lll');
 
-    return (<span>{datetime}</span>);
+    return (<span>{datetime} UTC</span>);
   }
 });
