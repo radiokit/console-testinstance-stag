@@ -151,6 +151,7 @@ const ShowContentPartial = React.createClass({
   buildTableAttributes() {
     const attributes = {
       name: { renderer: 'string', sortable: true },
+      inserted_at: { renderer: 'datetime', sortable: true },
     };
     return this.getFilteredMetadataSchemas()
       .reduce((acc, metadataSchema) => {
@@ -196,6 +197,7 @@ const ShowContentPartial = React.createClass({
       .select(
         'id',
         'name',
+        'inserted_at',
         'metadata_items.id',
         'metadata_items.value_string',
         'metadata_items.value_db',
