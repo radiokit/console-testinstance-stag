@@ -13,7 +13,6 @@ export default {
             loading: 'Pobieranie listy zasobów',
             header: {
               name: 'Nazwa',
-              notification_emails: 'Powiadamiani użytkownicy',
               organization_account: 'Konto',
             },
           },
@@ -40,10 +39,6 @@ export default {
                   label: 'Nazwa',
                   hint: 'Wybierz jakąkolwiek nazwę, która pozwoli Ci odróżnić ten zasób od innych.',
                 },
-                notification_emails: {
-                  label: 'Powiadamiani użytkownicy',
-                  hint: 'Oddzielona przecinkami lista adresów e-mail użytkowników, którzy mają być powiadamiani o rezerwacjach tego zasobu',
-                },
                 organization_account: {
                   label: 'Konto',
                 },
@@ -66,10 +61,6 @@ export default {
                 name: {
                   label: 'Nazwa',
                   hint: 'Wybierz jakąkolwiek nazwę, która pozwoli Ci odróżnić ten zasób od innych.',
-                },
-                notification_emails: {
-                  label: 'Powiadamiani użytkownicy',
-                  hint: 'Oddzielona przecinkami lista adresów e-mail użytkowników, którzy mają być powiadamiani o rezerwacjach tego zasobu',
                 },
                 organization_account: {
                   label: 'Konto',

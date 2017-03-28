@@ -13,7 +13,6 @@ export default {
             loading: 'Fetching list of resources',
             header: {
               name: 'Name',
-              notification_emails: 'Notified users',
               organization_account: 'Account',
             },
           },
@@ -40,10 +39,6 @@ export default {
                   label: 'Name',
                   hint: 'Choose any name that will help you to distinguish this resource from others.',
                 },
-                notification_emails: {
-                  label: 'Notified users',
-                  hint: 'List of comma-separated e-mails of users that should be notified about reservations\' changes',
-                },
                 organization_account: {
                   label: 'Account',
                 },
@@ -66,10 +61,6 @@ export default {
                 name: {
                   label: 'Name',
                   hint: 'Choose any name that will help you to distinguish this resource from others.',
-                },
-                notification_emails: {
-                  label: 'Notified users',
-                  hint: 'List of comma-separated e-mails of users that should be notified about reservations\' changes',
                 },
                 organization_account: {
                   label: 'Account',
