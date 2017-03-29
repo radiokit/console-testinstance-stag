@@ -51,6 +51,9 @@ export default {
                                   duration: "Computing duration",
                                   replaygain: "Computing ReplayGain",
                                   tags: "Extraction of metadata",
+                                  id3: {
+                                    catalognumber: "Extraction of Catalog Number from MP3/ID3 metadata",
+                                  },
                                 },
                               },
                               metadata: {

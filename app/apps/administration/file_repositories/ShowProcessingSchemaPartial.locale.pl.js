@@ -51,6 +51,9 @@ export default {
                                   duration: "Obliczanie długości dźwięku",
                                   replaygain: "Obliczanie ReplayGain",
                                   tags: "Ekstrakcja metadanych",
+                                  id3: {
+                                    catalognumber: "Ekstrakcja numeru katalogowego z metadanych MP3/ID3",
+                                  },
                                 },
                               },
                               metadata: {
