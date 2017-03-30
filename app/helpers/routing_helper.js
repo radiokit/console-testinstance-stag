@@ -83,6 +83,11 @@ export default {
           return '/apps/administration/file_repositories/index';
         },
       },
+      stats: {
+        index() {
+          return '/apps/administration/stats/index';
+        },
+      },
     },
 
     library: {

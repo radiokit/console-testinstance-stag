@@ -14,7 +14,10 @@ export default {
           title: "File Repositories",
         },
         journal: {
-          title: "Journal"
+          title: "Journal",
+        },
+        stats: {
+          title: "Stats",
         },
       },
     }

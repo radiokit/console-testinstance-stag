@@ -13,6 +13,9 @@ export default {
         journal: {
           title: "Dziennik"
         },
+        stats: {
+          title: "Statystyki",
+        },
       },
     }
   }

@@ -1,0 +1,17 @@
+.StatsChart {
+  overflow: hidden;
+  display:flex;
+  flex-flow: column;
+
+  .StatsChart-status {
+    padding: {
+      left: 40px;
+      top: 10px;
+      bottom: 5px;
+    }
+  }
+  .StatsChart-innerContainer {
+    flex: 1;
+    overflow: hidden;
+  }
+}

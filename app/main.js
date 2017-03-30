@@ -45,6 +45,7 @@ import AdministrationUsersIndex from './apps/administration/users/IndexView.jsx'
 import AdministrationJournalIndex from './apps/administration/journal/IndexView.jsx';
 import AdministrationFileRepositoriesIndex from './apps/administration/file_repositories/IndexView.jsx';
 import AdministrationFileRepositoriesShow from './apps/administration/file_repositories/ShowView.jsx';
+import AdministrationStatsIndex from './apps/administration/stats/IndexView.jsx';
 
 Counterpart.registerTranslations("en", require('./locales/en/general.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/almanac.js'));
@@ -201,6 +202,7 @@ ReactDOM.render((
             <Route path="index" component={AdministrationFileRepositoriesIndex} onEnter={pingGoogleAnalytics} />
             <Route path="show/:id" component={AdministrationFileRepositoriesShow} onEnter={pingGoogleAnalytics} />
           </Route>
+          <Route path="stats/index" component={AdministrationStatsIndex} onEnter={pingGoogleAnalytics} />
         </Route>
 
       </Route>
