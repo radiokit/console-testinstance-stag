@@ -59,7 +59,7 @@ export default React.createClass({
 
   content() {
     const tableQuery =
-      window.data.query('circumstances', 'raw_target')
+      window.data.query('circumstances', 'target')
         .select('id', 'name');
         // .joins('cache_on_demand_play_per_target_per_day'),
     return (
