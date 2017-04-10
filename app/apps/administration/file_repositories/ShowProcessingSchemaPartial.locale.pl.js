@@ -62,6 +62,9 @@ export default {
                               affiliate: {
                                 itunes: "Pobieranie linków partnerskich z iTunes",
                               },
+                              cover: {
+                                discogs: "Pobieranie okładki z Discogs",
+                              },
                             }
                           },
                         },

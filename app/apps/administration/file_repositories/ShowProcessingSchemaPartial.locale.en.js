@@ -62,6 +62,9 @@ export default {
                               affiliate: {
                                 itunes: "Fetching affilate URLs from iTunes",
                               },
+                              cover: {
+                                discogs: "Fetching cover art from Discogs",
+                              },
                             },
                           },
                         },

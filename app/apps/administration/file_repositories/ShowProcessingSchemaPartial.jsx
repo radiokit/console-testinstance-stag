@@ -33,7 +33,8 @@ const ShowProcessingsSchema = React.createClass({
           "analysis.audio.tags",
           "analysis.audio.id3.catalognumber",
           "metadata.slug",
-          "affiliate.itunes"
+          "affiliate.itunes",
+          "cover.discogs"
         ],
         hint: false,
         validators: {
