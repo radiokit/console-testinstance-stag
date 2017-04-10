@@ -114,7 +114,7 @@ export default React.createClass({
     data.labels = dateRange.toArray('days');
     this.setState({ data });
     this.setState({ status: 'loading' });
-    window.data.query('circumstances', 'cache_on_demand_play_per_target_per_day')
+    window.data.query('circumstances', 'cache_stream_play_per_target_per_day')
       .joins('target')
       .select('target.id', 'target.name', 'day', 'play_count')
       .where('day', 'gte', dateRange.start.format(this.dateFormat))

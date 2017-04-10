@@ -13,7 +13,7 @@ export default {
             loading: "Fetching list of users",
             header: {
               email: "e-mail",
-              name: "name",
+              name: "List of targets",
               watchedCnt: "amount of watched movies",
             },
           },

@@ -13,6 +13,7 @@ export default {
             loading: "Ładowanie listy użytkowników",
             header: {
               email: "e-mail",
+              name: "Grupy docelowe",
             },
           },
 
