@@ -94,14 +94,14 @@ export default React.createClass({
         type: 'time',
         time: {
           tooltipFormat: 'DD.MM.YY',
-          displayFormat: 'DD.MM.YY',
+          displayFormat: 'DD.MM',
         },
         position: 'bottom',
       }],
       yAxes: [{
         ticks: {
           suggestedMin: 0,
-          suggestedMax: 100,
+          suggestedMax: 50,
         },
       }],
     },
