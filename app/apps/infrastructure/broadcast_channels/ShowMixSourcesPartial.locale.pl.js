@@ -5,52 +5,60 @@ export default {
         show: {
           tabs: {
             body: {
-              content_types: {
+              mix_sources: {
                 table: {
                   index: {
                     actions: {
-                      create: "Dodaj rodzaj treści",
-                      delete: "Usuń zaznaczone rodzaje treści",
+                      create: "Dodaj źródło",
+                      delete: "Usuń zaznaczone źródła",
                     },
 
                     modals: {
                       delete: {
-                        header: "Usuwanie rodzajów treści",
+                        header: "Usuwanie źródeł",
                         action: {
                           proceed: "Usuń",
                           cancel: "Anuluj",
                           close: "Zamknij",
                         },
                         message: {
-                          confirmation: "Czy na pewno chcesz usunąć zaznaczone rodzaje treści (%(count)s szt.)?",
-                          acknowledgement: "Usunięto %(count)s rodzajów treści.",
-                          progress: "Trwa usuwanie rodzajów treści…",
+                          confirmation: "Czy na pewno chcesz usunąć zaznaczone źródła (%(count)s szt.)?",
+                          acknowledgement: "Usunięto %(count)s źródeł.",
+                          progress: "Trwa usuwanie źródeł…",
                         },
                       },
                       create: {
-                        header: "Dodawanie rodzajów treści",
+                        header: "Dodawanie źródeł",
                         action: {
-                          proceed: "Dodaj rodzaj treści",
+                          proceed: "Dodaj źródło",
                           cancel: "Anuluj",
                           close: "Zamknij",
                         },
                         message: {
-                          acknowledgement: "Pomyślnie utworzono rodzaj treści.",
+                          acknowledgement: "Pomyślnie utworzono źródło.",
                         },
                         form: {
                           name: {
                             label: "Nazwa",
-                            hint: "Wybierz jakąkolwiek nazwę, która pozwoli Ci odróżnić ten rodzaj treści od innych.",
+                            hint: "Wybierz jakąkolwiek nazwę, która pozwoli Ci odróżnić to źródło od innych.",
+                          },
+                          description: {
+                            label: "Opis",
+                          },
+                          metadata_string: {
+                            label: "Metadane",
                           },
                         },
                       },
                     },
 
                     table: {
-                      loading: "Ładowanie rodzajów treści...",
+                      loading: "Ładowanie źródeł...",
 
                       header: {
                         name: "Nazwa",
+                        description: "Opis",
+                        metadata_string: "Metadane",
                       },
                     },
                   },

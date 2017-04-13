@@ -7,6 +7,7 @@ export default {
             headers: {
               streams: "Strumienie",
               content_types: "Rodzaje treści",
+              mix_sources: "Źródła",
             },
           },
         },

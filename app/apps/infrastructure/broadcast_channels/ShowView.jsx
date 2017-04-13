@@ -3,8 +3,7 @@ import Counterpart from 'counterpart';
 
 import Show from '../../../widgets/admin/crud/show_widget.jsx';
 
-import StreamsPartial from './ShowStreamsPartial.jsx';
-import ContentTypesPartial from './ShowContentTypesPartial.jsx';
+import MixSourcesPartial from './ShowMixSourcesPartial.jsx';
 
 
 Counterpart.registerTranslations("en", require('./ShowView.locale.en.js'));
@@ -19,11 +18,8 @@ export default React.createClass({
 
   buildTabs: function() {
     return {
-      streams: {
-        element: StreamsPartial, props: { contentPrefix: "apps.infrastructure.broadcast_channels.show.tabs.body.streams" },
-      },
-      content_types: {
-        element: ContentTypesPartial, props: { contentPrefix: "apps.infrastructure.broadcast_channels.show.tabs.body.content_types" },
+      mix_sources: {
+        element: MixSourcesPartial, props: { contentPrefix: "apps.infrastructure.broadcast_channels.show.tabs.body.mix_sources" },
       },
     }
   },

@@ -7,6 +7,7 @@ export default {
             headers: {
               streams: "Streams",
               content_types: "Content Types",
+              mix_sources: "Mix Sources",
             },
           },
         },

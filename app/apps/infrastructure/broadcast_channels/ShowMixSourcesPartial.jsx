@@ -3,8 +3,8 @@ import Counterpart from 'counterpart';
 import { Data } from 'radiokit-api';
 import IndexTableBrowser from '../../../widgets/admin/crud/index_table_browser_widget.jsx';
 
-Counterpart.registerTranslations("en", require('./ShowContentTypesPartial.locale.en.js'));
-Counterpart.registerTranslations("pl", require('./ShowContentTypesPartial.locale.pl.js'));
+Counterpart.registerTranslations("en", require('./ShowMixSourcesPartial.locale.en.js'));
+Counterpart.registerTranslations("pl", require('./ShowMixSourcesPartial.locale.pl.js'));
 
 
 export default React.createClass({
@@ -16,7 +16,7 @@ export default React.createClass({
 
   modifyIndexQuery(query) {
     return query
-      .where("broadcast_channel_id", "eq", this.props.record.get("id"))
+      .where("channel_id", "eq", this.props.record.get("id"))
       .order("name", "asc")
   },
 
@@ -25,11 +25,15 @@ export default React.createClass({
     return {
       name: {
         type: "string",
-        validators: {
-          presence: true,
-        },
+        hint: true,
       },
-      broadcast_channel_id: {
+      description: {
+        type: "string",
+      },
+      metadata_string: {
+        type: "string",
+      },
+      channel_id: {
         type: "hidden",
         value: this.props.record.get("id"),
       }
@@ -39,7 +43,9 @@ export default React.createClass({
 
   buildAttributes: function() {
     return {
-      name:          { renderer: "string" },
+      name:            { renderer: "string" },
+      description:     { renderer: "string" },
+      metadata_string: { renderer: "string" },      
     }
   },
 
@@ -49,7 +55,7 @@ export default React.createClass({
       <IndexTableBrowser
         contentPrefix={this.props.contentPrefix + ".table"}
         app="agenda"
-        model="Broadcast.ContentType"
+        model="Broadcast.Mix.Source"
         form={this.buildForm()}
         attributes={this.buildAttributes()}
         indexQueryFunc={this.modifyIndexQuery}
