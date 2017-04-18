@@ -48,6 +48,9 @@ export default {
                           metadata_string: {
                             label: "Metadane",
                           },
+                          switch_mount: {
+                            label: "Mount na Switchu",
+                          },
                         },
                       },
                     },
@@ -59,6 +62,7 @@ export default {
                         name: "Nazwa",
                         description: "Opis",
                         metadata_string: "Metadane",
+                        switch_mount: "Mount na switchu",
                       },
                     },
                   },

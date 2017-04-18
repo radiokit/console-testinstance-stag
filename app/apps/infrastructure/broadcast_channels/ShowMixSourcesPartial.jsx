@@ -33,6 +33,9 @@ export default React.createClass({
       metadata_string: {
         type: "string",
       },
+      switch_mount: {
+        type: "string",
+      },
       channel_id: {
         type: "hidden",
         value: this.props.record.get("id"),
@@ -46,6 +49,7 @@ export default React.createClass({
       name:            { renderer: "string" },
       description:     { renderer: "string" },
       metadata_string: { renderer: "string" },      
+      switch_mount:    { renderer: "string" },      
     }
   },
 

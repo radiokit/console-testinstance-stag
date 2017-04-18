@@ -48,6 +48,9 @@ export default {
                           metadata_string: {
                             label: "Metadata",
                           },
+                          switch_mount: {
+                            label: "Switch Mount",
+                          },
                         },
                       },
                     },
@@ -59,6 +62,7 @@ export default {
                         name: "Name",
                         description: "Description",
                         metadata_string: "Metadata",
+                        switch_mount: "Switch Mount",
                       },
                     },
                   },
