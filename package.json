@@ -1,6 +1,6 @@
 {
   "name": "radiokit-console",
-  "version": "1.0.60",
+  "version": "1.0.61",
   "description": "User interface for controlling various RadioKit systems",
   "scripts": {
     "dev": "node server.js",
