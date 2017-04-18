@@ -45,10 +45,6 @@ export default React.createClass({
   buildTableAttributes() {
     return {
       name: { renderer: 'string' },
-    /*
-      email: { renderer: 'string' },
-      watchedCnt: { renderer: 'integer' },
-      */
     };
   },
 
@@ -61,7 +57,6 @@ export default React.createClass({
     const tableQuery =
       window.data.query('circumstances', 'target')
         .select('id', 'name');
-        // .joins('cache_on_demand_play_per_target_per_day'),
     return (
       <div className="Stats">
         <div className="Stats-header">

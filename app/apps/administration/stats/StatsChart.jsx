@@ -63,7 +63,7 @@ export default React.createClass({
                 .filter(watch => watch.get('target').get('id') === u.get('id'))
                 .groupBy(watch =>
                   moment(watch.get('day'), this.dateFormat).diff(dateRange.start, 'days'))
-                .map(watch => watch.first().get('play_count'));
+                .map(watch => watch.first().get('connections'));
               return {
                 id: u.get('id'),
                 name: u.get('name'),
@@ -107,7 +107,7 @@ export default React.createClass({
     },
   },
 
-  dateFormat: 'YYYY-MM-DD',
+  dateFormat: 'YYYY-MM-DD HH:mm:ss',
 
   reload({ dateRange, users }) {
     const { data } = this.state;
@@ -116,7 +116,7 @@ export default React.createClass({
     this.setState({ status: 'loading' });
     window.data.query('circumstances', 'cache_stream_play_per_target_per_day')
       .joins('target')
-      .select('target.id', 'target.name', 'day', 'play_count')
+      .select('target.id', 'target.name', 'day', 'connections', 'listeners')
       .where('day', 'gte', dateRange.start.format(this.dateFormat))
       .where('day', 'lte', dateRange.end.format(this.dateFormat))
       .where('target.id', 'in', users.map(u => u.get('id')).toJS())
