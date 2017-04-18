@@ -14,6 +14,8 @@ export default {
             header: {
               name: "Nazwa",
               slug: "Adres",
+              metadata_string: "Metadane",
+              metadata_updated_at: "Czas aktualizacji metadanych",
               timezone: "Strefa czasowa",
               media_routing_group_id: "Routing Group ID",
               user_account: "Konto",
@@ -54,6 +56,9 @@ export default {
                   label: "Routing Group ID",
                   hint: "Skopiuj Id mixgrupy z sekcji media, lub skontaktuj się z administratorem",
                 },
+                metadata_string: {
+                  label: "Metadane",
+                },                
                 description: {
                   label: "Opis",
                 },

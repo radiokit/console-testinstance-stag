@@ -31,6 +31,8 @@ export default React.createClass({
       name:                   { renderer: "string" },
       slug:                   { renderer: "string" },
       timezone:               { renderer: "string" },
+      metadata_string:        { renderer: "string" },
+      metadata_updated_at:    { renderer: "datetime" },
       media_routing_group_id: { renderer: "string", props:{ selectable: true } },
       user_account:           { renderer: "scope-user-account" },
     }
@@ -76,6 +78,10 @@ export default React.createClass({
         hint: false,
       },
       genre: {
+        type: "string",
+        hint: false,
+      },
+      metadata_string: {
         type: "string",
         hint: false,
       },

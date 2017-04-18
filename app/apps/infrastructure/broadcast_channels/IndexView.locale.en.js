@@ -14,6 +14,8 @@ export default {
             header: {
               name: "Name",
               slug: "Address",
+              metadata_string: "Metadata",
+              metadata_updated_at: "Metadata updated at",
               timezone: "Time zone",
               media_routing_group_id: "Routing Group ID",
               user_account: "Account",
@@ -53,6 +55,9 @@ export default {
                 media_routing_group_id: {
                   label: "Routing Group ID",
                   hint: "Copy Routing ID from Media section or contact administrator",
+                },
+                metadata_string: {
+                  label: "Metadata",
                 },
                 description: {
                   label: "Description",
