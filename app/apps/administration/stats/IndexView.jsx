@@ -49,7 +49,6 @@ export default React.createClass({
   },
 
   parseTableRows(data) {
-    // console.log(data.toJS());
     return data;
   },
 
