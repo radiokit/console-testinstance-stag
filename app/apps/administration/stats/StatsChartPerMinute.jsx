@@ -51,37 +51,53 @@ export default React.createClass({
   onDataReceived(_event, _query, data) {
     const { dateRange, users } = this.props;
     const dateRangeArray = dateRange.toArray('minutes');
-    this.setState({
-      status: 'upToDate',
-      data: {
-        labels: dateRangeArray,
-        datasets:
-          users
+    const display_data = users
             .groupBy(u => u).map(u => u.get(0))
             .map(u => {
-              const watchesCounts = data
+              const connections = data
                 .filter(watch => watch.get('target').get('id') === u.get('id'))
                 .groupBy(watch =>
                   moment(watch.get('minute'), this.dateFormat).diff(dateRange.start, 'minutes'))
                 .map(watch => watch.first().get('connections'));
+              const listeners = data
+                .filter(watch => watch.get('target').get('id') === u.get('id'))
+                .groupBy(watch =>
+                  moment(watch.get('minute'), this.dateFormat).diff(dateRange.start, 'minutes'))
+                .map(watch => watch.first().get('listeners'));
               return {
                 id: u.get('id'),
                 name: u.get('name'),
-                watches: dateRangeArray.map((_v, k) => watchesCounts.get(k) || 0),
+                connections: dateRangeArray.map((_v, k) => connections.get(k) || 0),
+                listeners: dateRangeArray.map((_v, k) => listeners.get(k) || 0),
               };
             })
             .toArray()
             .map(u => {
               const colorNum = parseInt(u.id.replace(/\D/g, ''), 10) % 500;
-              return {
-                label: u.name,
-                data: u.watches,
-                fill: false,
-                borderColor: getColor(colorNum, 50, 0.8),
-                backgroundColor: getColor(colorNum, 80, 0.8),
-                borderWidth: 2,
-              };
-            }),
+              console.log(colorNum);
+              return [
+                {
+                  label: u.name + " (Connections)",
+                  data: u.connections,
+                  borderColor: getColor(colorNum, 50, 1),
+                  backgroundColor: getColor(colorNum, 80, 0.2),
+                  borderWidth: 2,
+                },
+                {
+                  label: u.name + " (Listeners)",
+                  data: u.listeners,
+                  borderColor: getColor(colorNum, 30, 1),
+                  backgroundColor: getColor(colorNum, 60, 0.2),
+                  borderWidth: 2,
+                }
+              ];
+            });
+
+    this.setState({
+      status: 'upToDate',
+      data: {
+        labels: dateRangeArray,
+        datasets: [].concat.apply([], display_data),
       },
     });
   },
@@ -89,8 +105,20 @@ export default React.createClass({
   chartOptions: {
     responsive: false,
     maintainAspectRatio: false,
+    hover: {
+      animationDuration: 0
+    },
     elements: {
       point: {radius: 0},
+    },
+    legend: {
+      display: false,
+    },
+    maintainAspectRatio: false,
+    elements: {
+      line: {
+        fill: 'bottom',
+      },
     },
     scales: {
       xAxes: [{
