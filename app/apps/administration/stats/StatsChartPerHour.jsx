@@ -94,7 +94,7 @@ export default React.createClass({
       xAxes: [{
         type: 'time',
         time: {
-          tooltipFormat: 'YYYY-MM-DD HH:mm:ss',
+          tooltipFormat: 'YYYY-MM-DD HH:mm',
           displayFormat: 'HH:mm',
         },
         position: 'bottom',
