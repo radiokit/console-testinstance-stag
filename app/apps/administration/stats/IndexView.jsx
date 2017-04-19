@@ -31,7 +31,7 @@ export default React.createClass({
   },
 
   onDateRangeSelect(range) {
-    const dateRange = moment.range(range.startDate, range.endDate);
+    const dateRange = moment.range(range.startDate.startOf('day'), range.endDate.endOf('day'));
     if (this.state.dateRange.isSame(dateRange)) return;
     this.setState({ dateRange });
   },

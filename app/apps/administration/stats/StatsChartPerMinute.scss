@@ -1,0 +1,17 @@
+.StatsChartPerMinute {
+  overflow: hidden;
+  display:flex;
+  flex-flow: column;
+
+  .StatsChartPerMinute-status {
+    padding: {
+      left: 40px;
+      top: 10px;
+      bottom: 5px;
+    }
+  }
+  .StatsChartPerMinute-innerContainer {
+    flex: 1;
+    overflow: hidden;
+  }
+}
