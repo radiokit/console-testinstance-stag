@@ -78,14 +78,14 @@ export default React.createClass({
               console.log(colorNum);
               return [
                 {
-                  label: u.name + " (Connections)",
+                  label: u.name + Counterpart(this.contentPrefix + ".labels.connections"),
                   data: u.connections,
                   borderColor: getColor(colorNum, 50, 1),
                   backgroundColor: getColor(colorNum, 80, 0.2),
                   borderWidth: 2,
                 },
                 {
-                  label: u.name + " (Listeners)",
+                  label: u.name + Counterpart(this.contentPrefix + ".labels.listeners"),
                   data: u.listeners,
                   borderColor: getColor(colorNum, 30, 1),
                   backgroundColor: getColor(colorNum, 60, 0.2),

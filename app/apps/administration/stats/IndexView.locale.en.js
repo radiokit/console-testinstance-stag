@@ -7,7 +7,11 @@ export default {
             upToDate: "Chart is up to date",
             loading: "Loading chart data...",
             error: "Could not load chart data",
-          }
+          },
+          labels: {
+            connections: " (Connections)",
+            listeners: " (Listeners)",
+          },
         },
         index: {
           show : {

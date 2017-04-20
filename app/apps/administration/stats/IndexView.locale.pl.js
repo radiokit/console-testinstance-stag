@@ -7,7 +7,11 @@ export default {
             upToDate: "Statystyki są aktualne",
             loading: "Pobieranie danych...",
             error: "Nie można pobrać danych",
-          }
+          },
+          labels: {
+            connections: " (Odsłuchania)",
+            listeners: " (Słuchacze)",
+          },
         },
         index: {
           show : {
