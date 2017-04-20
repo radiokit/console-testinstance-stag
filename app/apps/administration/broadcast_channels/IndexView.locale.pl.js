@@ -1,6 +1,6 @@
 export default {
   apps: {
-    infrastructure: {
+    administration: {
       broadcast_channels: {
         index: {
           header: "Kanały",

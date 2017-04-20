@@ -19,7 +19,7 @@ export default React.createClass({
   buildTabs: function() {
     return {
       mix_sources: {
-        element: MixSourcesPartial, props: { contentPrefix: "apps.infrastructure.broadcast_channels.show.tabs.body.mix_sources" },
+        element: MixSourcesPartial, props: { contentPrefix: "apps.administration.broadcast_channels.show.tabs.body.mix_sources" },
       },
     }
   },
@@ -27,7 +27,7 @@ export default React.createClass({
 
   render: function() {
     return (
-      <Show contentPrefix="apps.infrastructure.broadcast_channels" app="agenda" model="Broadcast.Channel" contentElement={this.buildTabs()} />
+      <Show contentPrefix="apps.administration.broadcast_channels" app="agenda" model="Broadcast.Channel" contentElement={this.buildTabs()} />
     );
   }
 });

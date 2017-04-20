@@ -1,13 +1,13 @@
 export default {
   apps: {
-    infrastructure: {
+    administration: {
       broadcast_channels: {
         show: {
           tabs: {
             headers: {
-              streams: "Streams",
-              content_types: "Content Types",
-              mix_sources: "Mix Sources",
+              streams: "Strumienie",
+              content_types: "Rodzaje treści",
+              mix_sources: "Źródła",
             },
           },
         },

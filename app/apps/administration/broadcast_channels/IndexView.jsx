@@ -97,7 +97,7 @@ export default React.createClass({
 
   render: function() {
     return (
-      <Index contentPrefix="apps.infrastructure.broadcast_channels" app="agenda" model="Broadcast.Channel" attributes={this.buildAttributes()} form={this.buildForm()} indexQueryFunc={this.modifyIndexQuery} />
+      <Index contentPrefix="apps.administration.broadcast_channels" app="agenda" model="Broadcast.Channel" attributes={this.buildAttributes()} form={this.buildForm()} indexQueryFunc={this.modifyIndexQuery} />
     );
   }
 });

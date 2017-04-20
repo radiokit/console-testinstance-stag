@@ -64,7 +64,7 @@ export default {
                     administration: "Administracja",
                     broadcast: "Emisja",
                     freezer: "Freezer",
-                    infrastructure: "Infrastruktura",
+                    administration: "Infrastruktura",
                   },
                   hint: "Wybierz aplikacje dostępne dla tego użytkownika. Przytrzymaj Ctrl podczas klikania by zaznaczyć/odznaczyć wiele aplikacji.",
                 },

@@ -47,15 +47,6 @@ export default {
       },
     },
 
-    infrastructure: {
-      icon: 'server-network',
-      broadcast_channels: {
-        index() {
-          return '/apps/infrastructure/broadcast_channels/index';
-        },
-      },
-    },
-
     administration: {
       icon: 'settings',
       users: {
@@ -71,6 +62,11 @@ export default {
       stats: {
         index() {
           return '/apps/administration/stats/index';
+        },
+      },
+      broadcast_channels: {
+        index() {
+          return '/apps/administration/broadcast_channels/index';
         },
       },
     },

@@ -28,9 +28,6 @@ import AlmanacApp from './apps/almanac/app.jsx';
 import AlmanacResourcesIndex from './apps/almanac/resources/IndexView.jsx';
 import AlmanacResourcesShow from './apps/almanac/resources/ShowView.jsx';
 import AlmanacAnnouncementsIndex from './apps/almanac/announcements/IndexView.jsx';
-import InfrastructureApp from './apps/infrastructure/app.jsx';
-import InfrastructureroadcastChannelsIndex from './apps/infrastructure/broadcast_channels/IndexView.jsx';
-import InfrastructureBroadcastChannelsShow from './apps/infrastructure/broadcast_channels/ShowView.jsx';
 import LibraryApp from './apps/library/app.jsx';
 import LibraryFileRepositoriesIndex from './apps/library/file_repositories/IndexView.jsx';
 import LibraryFileRepositoriesShow from './apps/library/file_repositories/show_view.jsx';
@@ -43,13 +40,15 @@ import AdministrationUsersIndex from './apps/administration/users/IndexView.jsx'
 import AdministrationFileRepositoriesIndex from './apps/administration/file_repositories/IndexView.jsx';
 import AdministrationFileRepositoriesShow from './apps/administration/file_repositories/ShowView.jsx';
 import AdministrationStatsIndex from './apps/administration/stats/IndexView.jsx';
+import AdministrationBroadcastChannelsIndex from './apps/administration/broadcast_channels/IndexView.jsx';
+import AdministrationBroadcastChannelsShow from './apps/administration/broadcast_channels/ShowView.jsx';
 
 Counterpart.registerTranslations("en", require('./locales/en/general.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/almanac.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/broadcast.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/library.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/electron.js'));
-Counterpart.registerTranslations("en", require('./locales/en/apps/infrastructure.js'));
+Counterpart.registerTranslations("en", require('./locales/en/apps/administration.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/administration.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/vault/file_browser.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/table_browser.js'));
@@ -61,7 +60,7 @@ Counterpart.registerTranslations("pl", require('./locales/pl/apps/almanac.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/broadcast.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/library.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/electron.js'));
-Counterpart.registerTranslations("pl", require('./locales/pl/apps/infrastructure.js'));
+Counterpart.registerTranslations("pl", require('./locales/pl/apps/administration.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/administration.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/vault/file_browser.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/table_browser.js'));
@@ -183,13 +182,6 @@ ReactDOM.render((
 
         <Route path="clipeditor" component={ClipEditorApp}></Route>
 
-        <Route path="infrastructure" component={BroadcastApp}>
-          <Route path="broadcast_channels">
-            <Route path="index" component={InfrastructureroadcastChannelsIndex} onEnter={pingGoogleAnalytics} />
-            <Route path="show/:id" component={InfrastructureBroadcastChannelsShow} onEnter={pingGoogleAnalytics} />
-          </Route>
-        </Route>
-
         <Route path="administration" component={AdministrationApp}>
           <Route path="users/index" component={AdministrationUsersIndex} onEnter={pingGoogleAnalytics} />
           <Route path="file_repositories">
@@ -197,6 +189,10 @@ ReactDOM.render((
             <Route path="show/:id" component={AdministrationFileRepositoriesShow} onEnter={pingGoogleAnalytics} />
           </Route>
           <Route path="stats/index" component={AdministrationStatsIndex} onEnter={pingGoogleAnalytics} />
+          <Route path="broadcast_channels">
+            <Route path="index" component={AdministrationBroadcastChannelsIndex} onEnter={pingGoogleAnalytics} />
+            <Route path="show/:id" component={AdministrationBroadcastChannelsShow} onEnter={pingGoogleAnalytics} />
+          </Route>
         </Route>
 
       </Route>

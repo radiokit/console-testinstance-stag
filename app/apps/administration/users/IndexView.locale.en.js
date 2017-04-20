@@ -55,7 +55,7 @@ export default {
                     administration: "Administration",
                     broadcast: "Broadcast",
                     freezer: "Freezer",
-                    infrastructure: "Infrastructure",
+                    administration: "administration",
                     almanac: "Almanac",
                   },
                   hint: "Select applications enabled for this user. Hold Ctrl while clicking to select/deselect multiple applications.",
