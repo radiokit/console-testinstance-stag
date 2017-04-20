@@ -13,9 +13,6 @@ export default {
         auto: {
           title: 'Auto',
         },
-        switch: {
-          title: 'Switch',
-        },
       },
       playlist: {
         header: 'Current Playlist',
