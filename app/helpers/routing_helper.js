@@ -49,11 +49,6 @@ export default {
 
     infrastructure: {
       icon: 'server-network',
-      computing_nodes: {
-        index() {
-          return '/apps/infrastructure/computing_nodes/index';
-        },
-      },
       broadcast_channels: {
         index() {
           return '/apps/infrastructure/broadcast_channels/index';

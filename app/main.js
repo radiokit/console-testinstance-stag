@@ -29,7 +29,6 @@ import AlmanacResourcesIndex from './apps/almanac/resources/IndexView.jsx';
 import AlmanacResourcesShow from './apps/almanac/resources/ShowView.jsx';
 import AlmanacAnnouncementsIndex from './apps/almanac/announcements/IndexView.jsx';
 import InfrastructureApp from './apps/infrastructure/app.jsx';
-import InfrastructureComputingNodesIndex from './apps/infrastructure/computing_nodes/index_view.jsx';
 import InfrastructureroadcastChannelsIndex from './apps/infrastructure/broadcast_channels/IndexView.jsx';
 import InfrastructureBroadcastChannelsShow from './apps/infrastructure/broadcast_channels/ShowView.jsx';
 import LibraryApp from './apps/library/app.jsx';
@@ -185,7 +184,6 @@ ReactDOM.render((
         <Route path="clipeditor" component={ClipEditorApp}></Route>
 
         <Route path="infrastructure" component={BroadcastApp}>
-          <Route path="computing_nodes/index" component={InfrastructureComputingNodesIndex} onEnter={pingGoogleAnalytics} />
           <Route path="broadcast_channels">
             <Route path="index" component={InfrastructureroadcastChannelsIndex} onEnter={pingGoogleAnalytics} />
             <Route path="show/:id" component={InfrastructureBroadcastChannelsShow} onEnter={pingGoogleAnalytics} />
