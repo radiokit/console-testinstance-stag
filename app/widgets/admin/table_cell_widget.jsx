@@ -25,10 +25,7 @@ import TableCellScopeOrganizationAccount from './table_cell_scope_organization_a
 import TableCellScopeBroadcastChannel from './table_cell_scope_broadcast_channel.jsx';
 import TableCellReferenceClientUser from './TableCellReferenceClientUser.jsx';
 import TableCellPlayButton from './table_cell_play_button.jsx';
-import TableCellJournalAction from './table_cell_journal_action.jsx';
-import TableCellJournalParams from './table_cell_journal_params.jsx';
-import TableCellJournalProduct from './table_cell_journal_product.jsx';
-import TableCellJournalSeverity from './table_cell_journal_severity.jsx';
+
 
 
 const TableCellWidget = (props) => {
@@ -273,42 +270,7 @@ const TableCellWidget = (props) => {
           />);
         break;
 
-      case 'journal-action':
-        cell = (
-          <TableCellJournalAction {...props.attributeConfig.props}
-            record={props.record}
-            attribute={props.attributeName}
-            value={value}
-          />);
-        break;
-
-      case 'journal-params':
-        cell = (
-          <TableCellJournalParams {...props.attributeConfig.props}
-            record={props.record}
-            attribute={props.attributeName}
-            value={value}
-          />);
-        break;
-
-      case 'journal-product':
-        cell = (
-          <TableCellJournalProduct {...props.attributeConfig.props}
-            record={props.record}
-            attribute={props.attributeName}
-            value={value}
-          />);
-        break;
-
-      case 'journal-severity':
-        cell = (
-          <TableCellJournalSeverity {...props.attributeConfig.props}
-            record={props.record}
-            attribute={props.attributeName}
-            value={value}
-          />);
-        break;
-
+  
       default:
         throw new Error(`Unknown table cell renderer ${props.attributeConfig.renderer}`);
     }
