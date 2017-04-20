@@ -104,6 +104,7 @@ export default React.createClass({
 
   chartOptions: {
     responsive: false,
+    animation: false,
     hover: {
       animationDuration: 0
     },
@@ -135,6 +136,11 @@ export default React.createClass({
   },
 
   dateFormat: 'YYYY-MM-DD HH:mm:ss',
+  contentPrefix: 'apps.administration.stats.charts',
+
+  getStatus() {
+    return Counterpart(this.contentPrefix + '.statuses.' + this.state.status);
+  },
 
   reload({ dateRange, users }) {
     const { data } = this.state;
@@ -155,11 +161,7 @@ export default React.createClass({
     const { className, ...props } = this.props;
     return (
       <div className={classNames('StatsChartPerDay', className)} {...props}>
-        <div className="StatsChartPerDay-status">{{
-          upToDate: 'Chart is up to date',
-          loading: 'Loading chart data...',
-          error: 'Could not load chart data',
-        }[this.state.status]}</div>
+        <div className="StatsChartPerDay-status">{this.getStatus()}</div>
         <div ref="container" className="StatsChartPerDay-innerContainer">
           <Line
             key={`${this.state.width}x${this.state.height}`}

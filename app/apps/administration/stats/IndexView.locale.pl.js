@@ -2,8 +2,17 @@ export default {
   apps: {
     administration: {
       stats: {
+        charts: {
+          statuses: {
+            upToDate: "Statystyki są aktualne",
+            loading: "Pobieranie danych...",
+            error: "Nie można pobrać danych",
+          }
+        },
         index: {
-          header: "Użytkownikcy",
+          show : {
+            header: "Statystyki",
+          },
           actions: {
             create: "Dodaj użytkownika",
             delete: "Usuń zaznaczonych użytkowników",

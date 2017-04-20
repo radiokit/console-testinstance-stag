@@ -104,22 +104,23 @@ export default React.createClass({
 
   chartOptions: {
     responsive: false,
+    animation: false,
     maintainAspectRatio: false,
     hover: {
       animationDuration: 0
     },
     elements: {
-      point: {radius: 0},
+      point: {
+        radius: 0,
+      },
+      line: {
+        fill: 'bottom',
+      },
     },
     legend: {
       display: false,
     },
     maintainAspectRatio: false,
-    elements: {
-      line: {
-        fill: 'bottom',
-      },
-    },
     scales: {
       xAxes: [{
         type: 'time',
@@ -139,6 +140,11 @@ export default React.createClass({
   },
 
   dateFormat: 'YYYY-MM-DD HH:mm:ss',
+  contentPrefix: 'apps.administration.stats.charts',
+
+  getStatus() {
+    return Counterpart(this.contentPrefix + '.statuses.' + this.state.status);
+  },
 
   reload({ dateRange, users }) {
     const { data } = this.state;
@@ -159,11 +165,7 @@ export default React.createClass({
     const { className, ...props } = this.props;
     return (
       <div className={classNames('StatsChartPerMinute', className)} {...props}>
-        <div className="StatsChartPerMinute-status">{{
-          upToDate: 'Chart is up to date',
-          loading: 'Loading chart data...',
-          error: 'Could not load chart data',
-        }[this.state.status]}</div>
+        <div className="StatsChartPerMinute-status">{this.getStatus()}</div>
         <div ref="container" className="StatsChartPerMinute-innerContainer">
           <Line
             key={`${this.state.width}x${this.state.height}`}

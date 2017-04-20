@@ -2,8 +2,17 @@ export default {
   apps: {
     administration: {
       stats: {
+        charts: {
+          statuses: {
+            upToDate: "Chart is up to date",
+            loading: "Loading chart data...",
+            error: "Could not load chart data",
+          }
+        },
         index: {
-          header: "Users",
+          show : {
+            header: "Stats",
+          },
           actions: {
             create: "Add user",
             delete: "Delete selected users",

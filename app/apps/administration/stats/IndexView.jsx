@@ -93,7 +93,7 @@ export default React.createClass({
     return (
       <Show
         contentPrefix={this.contentPrefix}
-        record={{ get: () => 'stats' }}
+        record={{ get: () => "" }}
         contentElement={this.content()}
       />
     );
