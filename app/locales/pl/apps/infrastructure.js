@@ -7,9 +7,6 @@ export default {
         computing_nodes: {
           title: "Serwery audio",
         },
-        media: {
-          title: "Media",
-        },
         broadcast_channels: {
           title: "Kanały"
         },

@@ -54,11 +54,6 @@ export default {
           return '/apps/infrastructure/computing_nodes/index';
         },
       },
-      media: {
-        index() {
-          return '/apps/infrastructure/media/index';
-        },
-      },
       broadcast_channels: {
         index() {
           return '/apps/infrastructure/broadcast_channels/index';

@@ -8,9 +8,6 @@ export default {
         computing_nodes: {
           title: "Audio Servers",
         },
-        media: {
-          title: "Media",
-        },
         broadcast_channels: {
           title: "Broadcast Channels",
         },
