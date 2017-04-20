@@ -174,6 +174,7 @@ export default React.createClass({
             height={this.state.height}
             width={this.state.width}
             style={{ height: this.state.height, width: this.state.width }}
+            redraw
           />
         </div>
       </div>
