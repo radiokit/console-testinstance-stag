@@ -7,8 +7,8 @@ export default {
         playlist: {
           title: 'Ramówka',
         },
-        live: {
-          title: 'Nadawanie na żywo',
+        royalties: {
+          title: 'Tantiemy',
         },
       },
       playlist: {

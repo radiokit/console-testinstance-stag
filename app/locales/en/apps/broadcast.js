@@ -7,8 +7,8 @@ export default {
         playlist: {
           title: 'Schedule',
         },
-        live: {
-          title: 'Live',
+        royalties: {
+          title: 'Royalties',
         },
       },
       playlist: {
