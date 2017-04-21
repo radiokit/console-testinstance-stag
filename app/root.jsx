@@ -36,6 +36,7 @@ export default React.createClass({
     onCurrentBroadcastChannelChange: React.PropTypes.func,
     routes: React.PropTypes.arrayOf(React.PropTypes.object),
     params: React.PropTypes.object,
+    apps: React.PropTypes.object,
   },
 
   getInitialState() {
@@ -69,6 +70,7 @@ export default React.createClass({
       onCurrentBroadcastChannelChange: this.onCurrentBroadcastChannelChange,
       routes: this.props.routes,
       params: this.props.params,
+      apps: this.getEnv().apps,
     };
   },
 

@@ -35,6 +35,11 @@ export default {
           return '/apps/broadcast/playlist';
         },
       },
+      royalties: {
+        index() {
+          return '/apps/broadcast/royalties/index';
+        },
+      },
     },
 
     administration: {
