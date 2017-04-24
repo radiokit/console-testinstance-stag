@@ -26,12 +26,10 @@ export default React.createClass({
   buildForm() {
     return {
       month: {
-        type: 'number',
+        type: 'text',
         validators: {
           presence: true,
         },
-        min: 1,
-        max: 12,
         value: moment().month() + 1,
       },
       year: {
