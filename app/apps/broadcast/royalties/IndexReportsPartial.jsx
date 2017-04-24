@@ -26,7 +26,7 @@ export default React.createClass({
   buildForm() {
     return {
       month: {
-        type: 'text',
+        type: 'string',
         validators: {
           presence: true,
         },
