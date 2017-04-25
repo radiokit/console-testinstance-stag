@@ -53,6 +53,7 @@ export default {
                                   tags: "Ekstrakcja metadanych",
                                   id3: {
                                     catalognumber: "Ekstrakcja numeru katalogowego z metadanych MP3/ID3",
+                                    year: "Ekstrakcja roku z metadanych MP3/ID3",
                                   },
                                 },
                               },

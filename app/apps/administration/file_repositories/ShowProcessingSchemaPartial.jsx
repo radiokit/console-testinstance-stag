@@ -32,6 +32,7 @@ const ShowProcessingsSchema = React.createClass({
           "analysis.audio.replaygain",
           "analysis.audio.tags",
           "analysis.audio.id3.catalognumber",
+          "analysis.audio.id3.year",
           "metadata.slug",
           "affiliate.itunes",
           "cover.discogs"
