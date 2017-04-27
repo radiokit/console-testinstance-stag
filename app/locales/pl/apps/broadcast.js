@@ -12,6 +12,10 @@ export default {
         },
       },
       playlist: {
+        show: {
+          header: 'Ramówka',
+          week: '%(count)s Tydzień',
+        },
         header: 'Ramówka',
         add_button: 'Dodaj utwór',
         add_dj_button: 'Dodaj AutoDJ',

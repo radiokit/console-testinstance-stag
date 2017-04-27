@@ -17,7 +17,7 @@ import Dashboard from './dashboard.jsx';
 import ScopeLayout from './layouts/ScopeLayout.jsx';
 import AppsIndex from './apps/apps_index.jsx';
 import BroadcastApp from './apps/broadcast/app.jsx';
-import BroadcastPlaylistIndex from './apps/broadcast/playlist/index_view.jsx';
+import BroadcastPlaylistShow from './apps/broadcast/playlist/ShowView.jsx';
 import BroadcastRoyaltiesIndex from './apps/broadcast/royalties/IndexView.jsx';
 import ElectronApp from './apps/electron/app.jsx';
 import ElectronPatchbayIndex from './apps/electron/patchbay/IndexView.jsx';
@@ -120,8 +120,8 @@ ReactDOM.render((
       <Route path="apps" component={AppsIndex} onEnter={pingGoogleAnalytics}>
         <Route path="broadcast" component={BroadcastApp}>
           <Route component={ScopeLayout} scope="broadcastChannel">
-            <Route path="playlist/index" component={BroadcastPlaylistIndex} onEnter={pingGoogleAnalytics} />
-            <Route path="playlist(/:date/:zoom)" component={BroadcastPlaylistIndex} onEnter={pingGoogleAnalytics} />
+            <Route path="playlist" component={BroadcastPlaylistShow} onEnter={pingGoogleAnalytics} />
+            <Route path="playlist/:date" component={BroadcastPlaylistShow} onEnter={pingGoogleAnalytics} />
           </Route>
           <Route component={ScopeLayout} scope="broadcastChannel">
             <Route path="royalties/index" component={BroadcastRoyaltiesIndex} onEnter={pingGoogleAnalytics} />

@@ -58,8 +58,6 @@
     "gravatar-api": "^1.2.5",
     "history": "^1.11.1",
     "immutable": "^3.7.5",
-    "immview": "1.5.2",
-    "immview-react-connect": "1.1.2",
     "lodash": "^4.17.2",
     "material-ui": "0.14.4",
     "mdi": "^1.5.54",

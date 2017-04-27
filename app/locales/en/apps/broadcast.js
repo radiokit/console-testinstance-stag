@@ -12,6 +12,10 @@ export default {
         },
       },
       playlist: {
+        show: {
+          header: 'Broadcast',
+          week: 'Week %(count)s',
+        },
         header: 'Current Playlist',
         add_button: 'Add single',
         add_dj_button: 'Add with AutoDJ',
