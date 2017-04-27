@@ -1,3 +1,4 @@
+import _ from 'mudash'
 import React from 'react';
 import { Seq, List } from 'immutable';
 import multiDownload from 'multi-download';
@@ -76,19 +77,34 @@ const ShowContentPartial = React.createClass({
     }
   },
 
+
   buildSelectedTags(selectedRecordIds) {
-    selectedRecordIds.count() > 0 && RadioKit
-      .query('vault', 'Data.Tag.Association')
-      .select('record_file_id', 'tag_item_id', 'id')
-      .where('record_file_id', 'in', selectedRecordIds.toJS())
-      .on('error', () => {
-        // FIXME
-      })
-      .on('fetch', (_event, _query, data) => {
-        this.setState({
-          selectedAssociations: data,
+    if(selectedRecordIds.count() > 0) {
+      const chunks = _.chunk(selectedRecordIds, 100);
+      let result = List();
+      let resolved = 0;
+
+      chunks
+        .forEach((chunk) => {
+          RadioKit
+            .query('vault', 'Data.Tag.Association')
+            .select('record_file_id', 'tag_item_id', 'id')
+            .where('record_file_id', 'in', chunk.toJS())
+            .on('error', () => {
+              // FIXME
+            })
+            .on('fetch', (_event, _query, data) => {
+              resolved++;
+              result = result.concat(data);;
+
+              if(resolved == chunks.count()) {
+                this.setState({
+                  selectedAssociations: result,
+                });
+              }
+            }).fetch();
         });
-      }).fetch();
+    } 
   },
 
   refreshTagData() {
