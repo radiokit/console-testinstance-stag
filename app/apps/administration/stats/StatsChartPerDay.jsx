@@ -115,6 +115,10 @@ export default React.createClass({
     },
     maintainAspectRatio: false,
     elements: {
+      point: {
+        radius: 0,
+        hitRadius: 2,
+      },
       line: {
         fill: 'bottom',
       },
