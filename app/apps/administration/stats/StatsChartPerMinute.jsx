@@ -5,6 +5,7 @@ import getColor from './getColor.js';
 import resizeSensor from 'css-element-queries/src/ResizeSensor';
 import moment from 'moment';
 import classNames from 'classnames';
+import merge from 'lodash.merge';
 
 import './StatsChartPerMinute.scss';
 
@@ -146,6 +147,21 @@ export default React.createClass({
     return Counterpart(this.contentPrefix + '.statuses.' + this.state.status);
   },
 
+  mergedChartOptions() {
+    const xAxisLabel = {
+      scales: {
+        xAxes: [{
+          scaleLabel: {
+            display: true,
+            labelString: Counterpart('apps.administration.stats.charts.labels.xAxisLabel'),
+          }
+        }]
+      }
+    };
+
+    return merge(this.chartOptions, xAxisLabel);
+  },
+
   reload({ dateRange, users }) {
     const { data } = this.state;
     data.labels = dateRange.toArray('minutes');
@@ -171,7 +187,7 @@ export default React.createClass({
             key={`${this.state.width}x${this.state.height}`}
             ref="chart"
             data={this.state.data}
-            options={this.chartOptions}
+            options={this.mergedChartOptions()}
             height={this.state.height}
             width={this.state.width}
             style={{ height: this.state.height, width: this.state.width }}

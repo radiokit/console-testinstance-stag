@@ -11,6 +11,7 @@ export default {
           labels: {
             connections: " (Odsłuchania)",
             listeners: " (Słuchacze)",
+            xAxisLabel: "Czas (UTC)",
           },
         },
         index: {

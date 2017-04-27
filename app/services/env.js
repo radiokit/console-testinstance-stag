@@ -3,9 +3,8 @@ function getEnv() {
     return window.ENV;
   }
   return {
-    auth: {
-      clientId: '123',
-      baseUrl: 'https://auth.radiokitapp-stag.org',
+    auth: { 
+      accessToken: '123'
     },
     apps: {
       jungle: { baseUrl: 'https://jungle.radiokitapp-stag.org' },

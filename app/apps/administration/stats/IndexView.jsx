@@ -11,8 +11,6 @@ import StatsChart from './StatsChart.jsx';
 
 import './IndexView.scss';
 
-import mock from './Mock';
-
 Counterpart.registerTranslations('en', require('./IndexView.locale.en.js'));
 Counterpart.registerTranslations('pl', require('./IndexView.locale.pl.js'));
 
@@ -34,10 +32,6 @@ export default React.createClass({
     const dateRange = moment.range(range.startDate.startOf('day'), range.endDate.endOf('day'));
     if (this.state.dateRange.isSame(dateRange)) return;
     this.setState({ dateRange });
-  },
-
-  getUsers() {
-    return mock.users(this.state.dateRange);
   },
 
   contentPrefix: 'apps.administration.stats.index',
