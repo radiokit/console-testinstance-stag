@@ -3,6 +3,7 @@ import React from 'react';
 import { Seq, List } from 'immutable';
 import multiDownload from 'multi-download';
 
+import LoadingWidget from '../../../widgets/general/loading_widget.jsx';
 import DeleteModal from '../../../widgets/admin/crud/delete_modal.jsx';
 import TableBrowser from '../../../widgets/admin/table_browser_widget.jsx';
 import ToolbarGroup from '../../../widgets/admin/toolbar_group_widget.jsx';
@@ -30,6 +31,7 @@ const ShowContentPartial = React.createClass({
       selectedRecordIds: Seq().toIndexedSeq(),
       selectedRecords: Seq().toIndexedSeq(),
       selectedAssociations: List(),
+      selectedAssociationsLoading: false,
     };
   },
 
@@ -84,26 +86,31 @@ const ShowContentPartial = React.createClass({
       let result = List();
       let resolved = 0;
 
-      chunks
-        .forEach((chunk) => {
-          RadioKit
-            .query('vault', 'Data.Tag.Association')
-            .select('record_file_id', 'tag_item_id', 'id')
-            .where('record_file_id', 'in', chunk.toJS())
-            .on('error', () => {
-              // FIXME
-            })
-            .on('fetch', (_event, _query, data) => {
-              resolved++;
-              result = result.concat(data);;
+      this.setState({
+        selectedAssociationsLoading: true,
+      }, () => {
+        chunks
+          .forEach((chunk) => {
+            RadioKit
+              .query('vault', 'Data.Tag.Association')
+              .select('record_file_id', 'tag_item_id', 'id')
+              .where('record_file_id', 'in', chunk.toJS())
+              .on('error', () => {
+                // FIXME
+              })
+              .on('fetch', (_event, _query, data) => {
+                resolved++;
+                result = result.concat(data);;
 
-              if(resolved == chunks.count()) {
-                this.setState({
-                  selectedAssociations: result,
-                });
-              }
-            }).fetch();
-        });
+                if(resolved == chunks.count()) {
+                  this.setState({
+                    selectedAssociationsLoading: false,
+                    selectedAssociations: result,
+                  });
+                }
+              }).fetch();
+          });
+      });
     } 
   },
 
@@ -307,7 +314,7 @@ const ShowContentPartial = React.createClass({
           <ToolbarButtonModal
             icon="folder"
             labelTextKey={`${this.props.contentPrefix}.actions.tags.assignTags`}
-            disabled={this.state.selectedRecordIds.count() === 0}
+            disabled={this.state.selectedAssociationsLoading || this.state.selectedRecordIds.count() === 0}
             modalElement={TagModal}
             modalProps={{
               selectedRecordIds: this.state.selectedRecordIds,
