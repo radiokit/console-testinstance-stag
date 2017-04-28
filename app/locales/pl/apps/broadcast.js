@@ -12,15 +12,20 @@ export default {
         },
       },
       playlist: {
-        show: {
-          header: 'Ramówka',
-          week: '%(count)s Tydzień',
-        },
         header: 'Ramówka',
-        add_button: 'Dodaj utwór',
-        add_dj_button: 'Dodaj AutoDJ',
-        update_button: 'Edytuj utwór',
-        delete_button: 'Usuń utwór',
+        week: '%(count)s Tydzień',
+        tabs: {
+          headers: {
+            day: 'Dzienna',
+          },
+        },
+        browser: {
+          header: {
+            name: 'Nazwa',
+            cue_in_at: 'Czas rozpoczęcia',
+            cue_out_at: 'Czas zakończenia',
+          },
+        },
       },
     },
   },

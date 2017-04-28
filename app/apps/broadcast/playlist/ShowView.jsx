@@ -1,28 +1,12 @@
 import React, { PropTypes } from 'react';
-import moment from 'moment';
 
-import Show from '../../../widgets/admin/crud/show_widget.jsx';
+import GridRow from '../../../widgets/admin/grid_row_widget.jsx';
+import GridCell from '../../../widgets/admin/grid_cell_widget.jsx';
+import Section from '../../../widgets/admin/section_widget.jsx';
+import Card from '../../../widgets/admin/card_widget.jsx';
+
 import SidebarPartial from './ShowViewSidebarPartial.jsx';
-
-const mockRecord = {
-  get: () => {},
-};
-
-const MILLISECONDS_PER_MINUTE = 1000 * 60;
-const MILLISECONDS_PER_HOUR = MILLISECONDS_PER_MINUTE * 60;
-const MILLISECONDS_PER_DAY = MILLISECONDS_PER_HOUR * 24;
-
-const DAY_START_HOURS_OFFSET = 5;
-
-function calcDayStart(timestamp, timezone, dayStartHoursOffset) {
-  return moment
-    .tz(timestamp, timezone)
-    .subtract(dayStartHoursOffset, 'hours')
-    .startOf('day')
-    .add(dayStartHoursOffset, 'hours')
-    .valueOf()
-  ;
-}
+import ContentPartial from './ShowViewContentPartial.jsx';
 
 const ShowView = React.createClass({
   propTypes: {
@@ -40,56 +24,13 @@ const ShowView = React.createClass({
       Date.now();
   },
 
-  getChildProps() {
-    return {
-      currentBroadcastChannel: this.context.currentBroadcastChannel,
-
-    };
-  },
-
   handleOffsetStartChange(offset) {
     this.props.history.push(`/apps/broadcast/playlist/${offset}`);
   },
 
-  modifyShowQuery(query) {
-    const currentBroadcastChannel = this.context.currentBroadcastChannel;
-    const from = calcDayStart(
-      this.getOffset(),
-      currentBroadcastChannel.get('timezone'),
-      DAY_START_HOURS_OFFSET
-    );
-    const to = from + MILLISECONDS_PER_DAY;
-    const fromISO = moment(from).toISOString();
-    const toISO = moment(to).toISOString();
-
-    return query
-      .clearWhere()
-      .select(
-        'start_at',
-        'stop_at',
-        'cue_in_at',
-        'cue_out_at',
-        'references',
-        'file',
-      )
-      .where(
-        'references',
-        'deq',
-        `broadcast_channel_id ${currentBroadcastChannel.get('id')}`,
-      )
-      .where('start_at', 'lte', toISO)
-      .where('stop_at', 'gte', fromISO);
-  },
-
-  buildTabs() {
+  buildSidebar() {
     return {
-
-    };
-  },
-
-  buildSideBar() {
-    return {
-      test: {
+      day: {
         element: SidebarPartial,
         props: {
           offsetStart: this.getOffset(),
@@ -99,19 +40,60 @@ const ShowView = React.createClass({
     };
   },
 
+  // modifyShowQuery(query) {
+  //   console.log(this.context.currentBroadcastChannel.toJS());
+  //   return query
+  //     .clearWhere()
+  //     .where(
+  //       'references',
+  //       'deq',
+  //       `broadcast_channel_id ${this.context.currentBroadcastChannel.get('id')}`
+  //     )
+  //     .select(
+  //       'metadata_schemas.id',
+  //       'metadata_schemas.name',
+  //       'metadata_schemas.key',
+  //       'metadata_schemas.kind',
+  //       'metadata_schemas.tag_category_id',
+  //     )
+  //     .joins('metadata_schemas');
+  // },
+
+  buildContent() {
+    return {
+      day: {
+        element: ContentPartial,
+        props: {
+          offset: this.getOffset(),
+        },
+      },
+    };
+  },
+
   render() {
     return (
-      <Show
-        contentPrefix="apps.broadcast.playlist"
-        app="plumber"
-        model="Media.Input.File.RadioKit.Vault"
-        showQueryFunc={this.modifyShowQuery}
-        sidebarElement={this.buildSideBar()}
-        contentElement={this.buildTabs()}
-        deleteEnabled={false}
-        // record={mockRecord}
-      />
+      <Section>
+        <GridRow>
+          <GridCell size="large" center>
+            <Card
+              contentPrefix="apps.broadcast.playlist"
+              sidebarElement={this.buildSidebar()}
+              contentElement={this.buildContent()}
+            />
+          </GridCell>
+        </GridRow>
+      </Section>
     );
+    // return (
+    //   <Show
+    //     contentPrefix="apps.broadcast.playlist"
+    //     app="vault"
+    //     model="Data.Record.Repository"
+    //     showQueryFunc={this.modifyShowQuery}
+    //     sidebarElement={this.buildSidebar()}
+    //     contentElement={this.buildContent()}
+    //   />
+    // );
   },
 });
 

@@ -166,6 +166,7 @@ export default React.createClass({
     if (typeof(window.ENV) === 'object') {
       return window.ENV;
     }
+
     return {
       auth: {
         clientId: '123',
@@ -183,7 +184,7 @@ export default React.createClass({
       external: {
       },
       verbose: false,
-      env: "dev"
+      env: 'dev',
     };
   },
 
@@ -238,7 +239,5 @@ export default React.createClass({
         {this.props.children}
       </AdminLayout>
     );
-
-    return null;
   },
 });

@@ -37,8 +37,7 @@ const PlaylistToolbar = React.createClass({
 
   render() {
     return (
-      <ToolbarGroup position="right">
-
+      <ToolbarGroup>
         <ToolbarButtonModal
           icon="plus"
           labelTextKey="playlist_toolbar.add_button"

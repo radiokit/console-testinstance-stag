@@ -284,7 +284,7 @@ const TableCellWidget = (props) => {
               value={value}
             />);
           break;
-    
+
         default:
           throw new Error(`Unknown table cell renderer ${props.attributeConfig.renderer}`);
       }

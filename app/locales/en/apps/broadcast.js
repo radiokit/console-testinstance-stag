@@ -12,15 +12,20 @@ export default {
         },
       },
       playlist: {
-        show: {
-          header: 'Broadcast',
-          week: 'Week %(count)s',
+        header: 'Playlist',
+        week: 'Week %(count)s',
+        tabs: {
+          headers: {
+            day: 'Daily',
+          },
         },
-        header: 'Current Playlist',
-        add_button: 'Add single',
-        add_dj_button: 'Add with AutoDJ',
-        update_button: 'Edit',
-        delete_button: 'Delete',
+        browser: {
+          header: {
+            name: 'Name',
+            cue_in_at: 'Start time',
+            cue_out_at: 'End time',
+          },
+        },
       },
     },
   },

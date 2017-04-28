@@ -2,8 +2,8 @@ import React, {
   PropTypes,
 } from 'react';
 import moment from 'moment';
-
 import Translate from 'react-translate-component';
+
 import './ShowViewSidebarPartial.scss';
 
 const BroadcastPlaylistSidebar = React.createClass({
@@ -71,7 +71,7 @@ const BroadcastPlaylistSidebar = React.createClass({
           </button>
 
           <div className="BroadcastPlaylistSidebar-button btn btn-default-light">
-            {label ? <Translate content={label} count={value} /> : value}
+            {label ? <Translate content={label} count={parseInt(value, 10)} /> : value}
           </div>
 
           <button
@@ -93,7 +93,7 @@ const BroadcastPlaylistSidebar = React.createClass({
           <ul className="BroadcastPlaylistSidebar--List">
             {this.renderOption({
               value: moment.utc(this.props.offsetStart).clone().startOf('day').format('w'),
-              label: 'apps.broadcast.playlist.show.week',
+              label: 'apps.broadcast.playlist.week',
               onPrevClick: this.handleWeekPreviousClick,
               onNextClick: this.handleWeekNextClick,
             })}
