@@ -5,9 +5,8 @@ export default {
         show: {
           tabs: {
             headers: {
-              streams: "Streams",
-              content_types: "Content Types",
               mix_sources: "Mix Sources",
+              scheduler_log_entries: "Scheduler log",
             },
           },
         },

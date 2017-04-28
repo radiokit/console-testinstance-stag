@@ -4,6 +4,7 @@ import Counterpart from 'counterpart';
 import Show from '../../../widgets/admin/crud/show_widget.jsx';
 
 import MixSourcesPartial from './ShowMixSourcesPartial.jsx';
+import SchedulerLogEntriesPartial from './ShowSchedulerLogEntriesPartial.jsx';
 
 
 Counterpart.registerTranslations("en", require('./ShowView.locale.en.js'));
@@ -20,6 +21,9 @@ export default React.createClass({
     return {
       mix_sources: {
         element: MixSourcesPartial, props: { contentPrefix: "apps.administration.broadcast_channels.show.tabs.body.mix_sources" },
+      },
+      scheduler_log_entries: {
+        element: SchedulerLogEntriesPartial, props: { contentPrefix: "apps.administration.broadcast_channels.show.tabs.body.scheduler_log_entries" },
       },
     }
   },
