@@ -1,0 +1,30 @@
+
+$formWhitespace: 15px;
+
+.ScheduleItemForm {
+  .ScheduleItemForm-content {
+    padding: $formWhitespace;
+  }
+
+  .ScheduleItemForm-optionalFields {
+    margin-top: $formWhitespace;
+
+    .form-control {
+      padding-top: $formWhitespace;
+    }
+  }
+
+  .ScheduleItemForm-footer {
+    padding: $formWhitespace;
+    text-align: right;
+    border-top: 1px solid #e5e5e5;
+
+    .ScheduleItemForm-footer-cancelButton {
+      margin-right: $formWhitespace;
+    }
+
+    .btn {
+      float: none;
+    }
+  }
+}

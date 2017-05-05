@@ -3,7 +3,7 @@ import moment from 'moment';
 
 import TableBrowser from '../../../widgets/admin/table_browser_widget.jsx';
 import RadioKit from '../../../services/RadioKit';
-import PlaylistToolbar from './playlist_toolbar.jsx';
+import PlaylistToolbar from './PlaylistToolbar.jsx';
 
 const MILLISECONDS_PER_MINUTE = 1000 * 60;
 const MILLISECONDS_PER_HOUR = MILLISECONDS_PER_MINUTE * 60;
@@ -27,7 +27,6 @@ const BroadcastPlaylistContent = React.createClass({
 
   contextTypes: {
     data: PropTypes.object.isRequired,
-    availableAccounts: PropTypes.object,
     currentBroadcastChannel: PropTypes.object.isRequired,
   },
 
@@ -92,11 +91,7 @@ const BroadcastPlaylistContent = React.createClass({
         requestFullRecords
         recordsQuery={this.buildTableRecordsQuery()}
       >
-        <PlaylistToolbar
-          availableAccounts={this.context.availableAccounts}
-          currentBroadcastChannel={this.context.currentBroadcastChannel}
-          offsetStart={this.props.offset}
-        />
+        <PlaylistToolbar />
       </TableBrowser>
     );
   },

@@ -40,25 +40,6 @@ const ShowView = React.createClass({
     };
   },
 
-  // modifyShowQuery(query) {
-  //   console.log(this.context.currentBroadcastChannel.toJS());
-  //   return query
-  //     .clearWhere()
-  //     .where(
-  //       'references',
-  //       'deq',
-  //       `broadcast_channel_id ${this.context.currentBroadcastChannel.get('id')}`
-  //     )
-  //     .select(
-  //       'metadata_schemas.id',
-  //       'metadata_schemas.name',
-  //       'metadata_schemas.key',
-  //       'metadata_schemas.kind',
-  //       'metadata_schemas.tag_category_id',
-  //     )
-  //     .joins('metadata_schemas');
-  // },
-
   buildContent() {
     return {
       day: {
@@ -84,16 +65,6 @@ const ShowView = React.createClass({
         </GridRow>
       </Section>
     );
-    // return (
-    //   <Show
-    //     contentPrefix="apps.broadcast.playlist"
-    //     app="vault"
-    //     model="Data.Record.Repository"
-    //     showQueryFunc={this.modifyShowQuery}
-    //     sidebarElement={this.buildSidebar()}
-    //     contentElement={this.buildContent()}
-    //   />
-    // );
   },
 });
 
