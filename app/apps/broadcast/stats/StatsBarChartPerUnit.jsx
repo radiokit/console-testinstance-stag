@@ -15,7 +15,8 @@ export default React.createClass({
 
   propTypes: {
     dateRange: React.PropTypes.object.isRequired,
-    users: React.PropTypes.object.isRequired,
+    targets: React.PropTypes.object.isRequired,
+    channels: React.PropTypes.object.isRequired,
     className: React.PropTypes.string,
     unit: React.PropTypes.string
   },
@@ -160,14 +161,31 @@ export default React.createClass({
     }
   },
 
-  reload({ dateRange, users, unit }) {
+  reload({ dateRange, targets, channels, unit }) {
     const { data } = this.state;
-    window.data.query('circumstances', this.getModelName(unit))
-      .joins('target')
-      .select('over_one_minute', 'over_five_minutes', 'over_fifteen_minutes', 'over_thirty_minutes', 'over_one_hour', 'over_three_hours', 'over_twelve_hours')
+    let query = window.data.query('circumstances', this.getModelName(unit))
       .where(unit, 'gte', dateRange.start.format(this.dateFormat))
-      .where(unit, 'lte', dateRange.end.format(this.dateFormat))
-      .where('target.id', 'in', users.map(u => u.get('id')).toJS())
+      .where(unit, 'lte', dateRange.end.format(this.dateFormat));
+
+    if (targets.isEmpty()) {
+      query
+        .where('target_id', 'isnull');
+    } else {
+      query
+        .joins('target')
+        .where('target.id', 'in', targets.map(u => u.get('id')).toJS());
+    }
+
+    if (channels.isEmpty()) {
+      query
+        .where('channel_id', 'isnull');
+    } else {
+      query
+        .where('channel_id', 'in', channels.map(u => u.get('channel_id')).toJS());
+    }
+
+    query
+      .select('over_one_minute', 'over_five_minutes', 'over_fifteen_minutes', 'over_thirty_minutes', 'over_one_hour', 'over_three_hours', 'over_twelve_hours')
       .on('fetch', this.onDataReceived)
       .fetch();
   },

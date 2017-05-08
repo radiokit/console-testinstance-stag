@@ -16,7 +16,8 @@ export default React.createClass({
 
   propTypes: {
     dateRange: React.PropTypes.object.isRequired,
-    users: React.PropTypes.object.isRequired,
+    targets: React.PropTypes.object.isRequired,
+    channels: React.PropTypes.object.isRequired,
     className: React.PropTypes.string,
   },
 
@@ -49,21 +50,22 @@ export default React.createClass({
   },
 
   onDataReceived(_event, _query, data) {
-    const { dateRange, users } = this.props;
+    const { dateRange, targets } = this.props;
     const dateRangeArray = dateRange.toArray('minutes');
-    const display_data = users
+    const display_data = targets
             .groupBy(u => u).map(u => u.get(0))
             .map(u => {
-              const connections = data
+              const filteredData = data
                 .filter(watch => watch.get('target').get('id') === u.get('id'))
                 .groupBy(watch =>
-                  moment(watch.get('minute'), this.dateFormat).diff(dateRange.start, 'minutes'))
-                .map(watch => watch.first().get('connections'));
-              const listeners = data
-                .filter(watch => watch.get('target').get('id') === u.get('id'))
-                .groupBy(watch =>
-                  moment(watch.get('minute'), this.dateFormat).diff(dateRange.start, 'minutes'))
-                .map(watch => watch.first().get('listeners'));
+                  moment(watch.get('minute'), this.dateFormat).diff(dateRange.start, 'minutes'));
+
+              const connections =  filteredData
+                .map(watch => watch.map(record => record.get('connections')).reduce((previous, current) => previous + current));
+
+              const listeners = filteredData
+                .map(watch => watch.map(record => record.get('listeners')).reduce((previous, current) => previous + current));
+
               return {
                 id: u.get('id'),
                 name: u.get('name'),
@@ -77,16 +79,16 @@ export default React.createClass({
               console.log(colorNum);
               return [
                 {
-                  label: u.name + Counterpart(this.contentPrefix + ".labels.connections"),
-                  data: u.connections,
-                  borderColor: getColor(colorNum, 50, 1),
+                  label: u.name + Counterpart(this.contentPrefix + ".labels.listeners"),
+                  data: u.listeners,
+                  borderColor: getColor(colorNum, 30, 1),
                   backgroundColor: getColor(colorNum, 60, 1),
                   borderWidth: 2,
                 },
                 {
-                  label: u.name + Counterpart(this.contentPrefix + ".labels.listeners"),
-                  data: u.listeners,
-                  borderColor: getColor(colorNum, 30, 1),
+                  label: u.name + Counterpart(this.contentPrefix + ".labels.connections"),
+                  data: u.connections,
+                  borderColor: getColor(colorNum, 50, 1),
                   backgroundColor: getColor(colorNum, 80, 1),
                   borderWidth: 2,
                 }
@@ -157,16 +159,33 @@ export default React.createClass({
     return merge(this.chartOptions, xAxisLabel);
   },
 
-  reload({ dateRange, users }) {
+  reload({ dateRange, targets, channels }) {
     const { data } = this.state;
     data.labels = dateRange.toArray('minutes');
-    this.setState({ data });
-    window.data.query('circumstances', 'cache_stream_play_per_target_per_minute')
-      .joins('target')
-      .select('target.id', 'target.name', 'minute', 'connections', 'listeners')
+
+    let query = window.data.query('circumstances', 'cache_stream_play_per_target_per_minute')
       .where('minute', 'gte', dateRange.start.format(this.dateFormat))
-      .where('minute', 'lte', dateRange.end.format(this.dateFormat))
-      .where('target.id', 'in', users.map(u => u.get('id')).toJS())
+      .where('minute', 'lte', dateRange.end.format(this.dateFormat));
+
+    if (targets.isEmpty()) {
+      query
+        .where('target_id', 'isnull');
+    } else {
+      query
+        .joins('target')
+        .where('target.id', 'in', targets.map(u => u.get('id')).toJS());
+    }
+
+    if (channels.isEmpty()) {
+      query
+        .where('channel_id', 'isnull');
+    } else {
+      query
+        .where('channel_id', 'in', channels.map(u => u.get('channel_id')).toJS());
+    }
+
+    query
+      .select('target.id', 'target.name', 'minute', 'connections', 'listeners')
       .on('fetch', this.onDataReceived)
       .fetch();
   },

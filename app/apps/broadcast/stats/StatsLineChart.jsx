@@ -12,36 +12,46 @@ export default React.createClass({
 
   propTypes: {
     dateRange: React.PropTypes.object.isRequired,
-    users: React.PropTypes.object.isRequired,
+    targets: React.PropTypes.object.isRequired,
+    channels: React.PropTypes.object.isRequired,
     className: React.PropTypes.string,
   },
 
   statsPerDayComponent() {
+    const { targets, channels } = this.props;
+
     return (
       <StatsLineChartPerDay
         className="Stats-chart"
         dateRange={this.getFixedDateRange()}
-        users={this.props.users}
+        targets={targets}
+        channels={channels}
       />
     );
   },
 
   statsPerHourComponent() {
+    const { targets, channels } = this.props;
+
     return (
       <StatsLineChartPerHour
         className="Stats-chart"
         dateRange={this.getFixedDateRange()}
-        users={this.props.users}
+        targets={targets}
+        channels={channels}
       />
     );
   },
 
   statsPerMinuteComponent() {
+    const { targets, channels } = this.props;
+
     return (
       <StatsLineChartPerMinute
         className="Stats-chart"
         dateRange={this.getFixedDateRange()}
-        users={this.props.users}
+        targets={targets}
+        channels={channels}
       />
     );
   },
@@ -64,10 +74,7 @@ export default React.createClass({
   },
 
   render() {
-    const { className, dateRange, users, ...props } = this.props;
-    const content = this.chooseContent(dateRange);
-
-    return content;
+    return this.chooseContent(this.props.dateRange);
   },
 
 });

@@ -10,19 +10,21 @@ export default React.createClass({
 
   propTypes: {
     dateRange: React.PropTypes.object.isRequired,
-    users: React.PropTypes.object.isRequired,
+    targets: React.PropTypes.object.isRequired,
+    channels: React.PropTypes.object.isRequired,
     className: React.PropTypes.string,
   },
 
   statsPerUnitComponent(unit) {
-    const { dateRange, users } = this.props;
+    const { dateRange, targets, channels } = this.props;
     const fixedDateRange = moment.range(dateRange.start.startOf(unit), dateRange.end.endOf(unit));
 
     return (
       <StatsBarChartPerUnit
         className="Stats-chart"
         dateRange={fixedDateRange}
-        users={users}
+        targets={targets}
+        channels={channels}
         unit={unit}
       />
     );
@@ -42,10 +44,7 @@ export default React.createClass({
   },
 
   render() {
-    const { className, dateRange, users, ...props } = this.props;
-    const content = this.chooseContent(dateRange);
-
-    return content;
+    return this.chooseContent(this.props.dateRange);
   },
 
 });

@@ -20,13 +20,33 @@ export default React.createClass({
   getInitialState() {
     return {
       dateRange: moment.range(moment().subtract(1, 'months'), moment()),
-      checkedUsers: Immutable.Seq().toIndexedSeq(),
-      selectedRecordIds: Immutable.Seq().toIndexedSeq(),
+      checkedTargets: Immutable.Seq().toIndexedSeq(),
+      checkedChannels: Immutable.Seq().toIndexedSeq(),
+      selectedTargetRecordIds: Immutable.Seq().toIndexedSeq(),
+      selectedChannelRecordIds: Immutable.Seq().toIndexedSeq(),
     };
   },
 
-  onTableRowSelect(selectedRecordIds, checkedUsers) {
-    this.setState({ selectedRecordIds, checkedUsers });
+  // componentWillMount() {
+  //   window.data.query('circumstances', 'target')
+  //     .select('id', 'name')
+  //     .on('fetch', (_event, _query, data) => {
+  //       // const targetIds = data.map(target => target.get('id'));
+
+  //       this.setState({
+  //         selectedTargetRecordIds: data,
+  //         // checkedTargets: targetIds,
+  //       });
+  //     })
+  //     .fetch();
+  // },
+
+  onChannelTableRowSelect(selectedChannelRecordIds, checkedChannels) {
+    this.setState({ selectedChannelRecordIds, checkedChannels });
+  },
+
+  onTargetTableRowSelect(selectedTargetRecordIds, checkedTargets) {
+    this.setState({ selectedTargetRecordIds, checkedTargets });
   },
 
   onDateRangeSelect(range) {
@@ -83,14 +103,16 @@ export default React.createClass({
           <StatsBarChart
             className="Stats-chart"
             dateRange={this.state.dateRange}
-            users={this.state.checkedUsers}
+            targets={this.state.checkedTargets}
+            channels={this.state.checkedChannels}
           />
         </div>
         <div className="Stats-lineChart">
           <StatsLineChart
             className="Stats-chart"
             dateRange={this.state.dateRange}
-            users={this.state.checkedUsers}
+            targets={this.state.checkedTargets}
+            channels={this.state.checkedChannels}
           />
         </div>
         <div className="Stats-tables">
@@ -100,11 +122,11 @@ export default React.createClass({
             contentPrefix={`${this.contentPrefix}.channelTable`}
             form={{}}
             modifyQueryResults={this.parseTableRows}
-            onSelect={this.onTableRowSelect}
+            onSelect={this.onChannelTableRowSelect}
             recordsQuery={channelTableQuery}
             requestFullRecords
             selectable
-            selectedRecordIds={this.state.selectedRecordIds}
+            selectedRecordIds={this.state.selectedChannelRecordIds}
           />
           <Table
             className="Stats-table"
@@ -112,11 +134,11 @@ export default React.createClass({
             contentPrefix={`${this.contentPrefix}.targetTable`}
             form={{}}
             modifyQueryResults={this.parseTableRows}
-            onSelect={this.onTableRowSelect}
+            onSelect={this.onTargetTableRowSelect}
             recordsQuery={targetTableQuery}
             requestFullRecords
             selectable
-            selectedRecordIds={this.state.selectedRecordIds}
+            selectedRecordIds={this.state.selectedTargetRecordIds}
           />
         </div>
       </div>
