@@ -52,6 +52,23 @@ export default {
           cancel_button: 'Anuluj',
           save_button: 'Dodaj do ramówki',
         },
+        delete: {
+          header: 'Usuwanie utworów',
+          message: {
+            progress: 'Usuwanie...',
+            confirmation: {
+              one: 'Utwór zostanie za chwilę usunięty',
+              otherRegular: '%(count)s utworów zostanie za chwilę usuniętych',
+              otherIrregular: '%(count)s utwory zostaną za chwilę usunięte',
+            },
+            acknowledgement: 'Wybrane utwory zostały usunięte',
+          },
+          action: {
+            cancel: 'Anuluj',
+            proceed: 'Usuń',
+            close: 'Zamknij',
+          },
+        },
       },
     },
   },

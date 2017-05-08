@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import moment from 'moment';
+import { Seq } from 'immutable';
 
 import TableBrowser from '../../../widgets/admin/table_browser_widget.jsx';
 import RadioKit from '../../../services/RadioKit';
@@ -30,6 +31,12 @@ const BroadcastPlaylistContent = React.createClass({
     currentBroadcastChannel: PropTypes.object.isRequired,
   },
 
+  getInitialState() {
+    return {
+      selectedRecordIds: Seq().toIndexedSeq(),
+    };
+  },
+
   componentWillReceiveProps(newProps) {
     if (newProps.offset !== this.props.offset) {
       // trigger data reload after props are propagated
@@ -40,6 +47,18 @@ const BroadcastPlaylistContent = React.createClass({
   componentDidUpdate() {
     if (this.refs.tableBrowser && this.requestDataRefetch) {
       this.requestDataRefetch = false;
+      this.refs.tableBrowser.reloadData();
+    }
+  },
+
+  onRecordsSelect(selectedRecordIds) {
+    this.setState({
+      selectedRecordIds,
+    });
+  },
+
+  onRecordsDelete() {
+    if (this.refs.tableBrowser) {
       this.refs.tableBrowser.reloadData();
     }
   },
@@ -90,8 +109,13 @@ const BroadcastPlaylistContent = React.createClass({
         contentPrefix="apps.broadcast.playlist.browser"
         requestFullRecords
         recordsQuery={this.buildTableRecordsQuery()}
+        selectable
+        onSelect={this.onRecordsSelect}
       >
-        <PlaylistToolbar />
+        <PlaylistToolbar
+          selectedRecordIds={this.state.selectedRecordIds}
+          onDelete={this.onRecordsDelete}
+        />
       </TableBrowser>
     );
   },

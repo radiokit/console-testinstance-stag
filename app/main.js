@@ -53,7 +53,9 @@ Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/table
 Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/modal.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/scope.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/form.js'));
+
 Counterpart.registerTranslations("pl", require('./locales/pl/general.js'));
+Counterpart.registerTranslations("pl", require('./locales/pl/pluralize.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/almanac.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/broadcast.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/library.js'));

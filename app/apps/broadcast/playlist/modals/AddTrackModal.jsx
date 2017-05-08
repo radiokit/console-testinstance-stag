@@ -1,6 +1,4 @@
-import React, {
-  PropTypes,
-} from 'react';
+import React, { PropTypes } from 'react';
 import Translate from 'react-translate-component';
 
 import ModalWidget from '../../../../widgets/admin/modal_widget.jsx';

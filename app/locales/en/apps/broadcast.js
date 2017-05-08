@@ -52,6 +52,19 @@ export default {
           cancel_button: 'Cancel',
           save_button: 'Add to playlist',
         },
+        delete: {
+          header: 'Deleting Tracks',
+          message: {
+            progress: 'Deleting...',
+            confirmation: '%(count)s tracks is going to be removed',
+            acknowledgement: 'Selected tracks has been removed',
+          },
+          action: {
+            cancel: 'Cancel',
+            proceed: 'Delete',
+            close: 'Zamknij',
+          },
+        },
       },
     },
   },
