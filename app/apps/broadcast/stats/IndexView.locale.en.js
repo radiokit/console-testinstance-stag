@@ -1,6 +1,6 @@
 export default {
   apps: {
-    administration: {
+    broadcast: {
       stats: {
         charts: {
           statuses: {

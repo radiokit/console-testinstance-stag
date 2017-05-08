@@ -35,7 +35,7 @@ export default React.createClass({
     this.setState({ dateRange });
   },
 
-  contentPrefix: 'apps.administration.stats.index',
+  contentPrefix: 'apps.broadcast.stats.index',
 
   buildTargetTableAttributes() {
     return {

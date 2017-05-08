@@ -19,6 +19,7 @@ import AppsIndex from './apps/apps_index.jsx';
 import BroadcastApp from './apps/broadcast/app.jsx';
 import BroadcastPlaylistShow from './apps/broadcast/playlist/ShowView.jsx';
 import BroadcastRoyaltiesIndex from './apps/broadcast/royalties/IndexView.jsx';
+import BroadcastStatsIndex from './apps/broadcast/stats/IndexView.jsx';
 import ElectronApp from './apps/electron/app.jsx';
 import ElectronPatchbayIndex from './apps/electron/patchbay/IndexView.jsx';
 import ElectronTransmissionsIndex from './apps/electron/transmissions/IndexView.jsx';
@@ -37,7 +38,6 @@ import AdministrationApp from './apps/administration/app.jsx';
 import AdministrationUsersIndex from './apps/administration/users/IndexView.jsx';
 import AdministrationFileRepositoriesIndex from './apps/administration/file_repositories/IndexView.jsx';
 import AdministrationFileRepositoriesShow from './apps/administration/file_repositories/ShowView.jsx';
-import AdministrationStatsIndex from './apps/administration/stats/IndexView.jsx';
 import AdministrationBroadcastChannelsIndex from './apps/administration/broadcast_channels/IndexView.jsx';
 import AdministrationBroadcastChannelsShow from './apps/administration/broadcast_channels/ShowView.jsx';
 
@@ -130,6 +130,7 @@ ReactDOM.render((
           <Route component={ScopeLayout} scope="broadcastChannel">
             <Route path="royalties/index" component={BroadcastRoyaltiesIndex} onEnter={pingGoogleAnalytics} />
           </Route>
+          <Route path="stats/index" component={BroadcastStatsIndex} onEnter={pingGoogleAnalytics} />
         </Route>
 
         <Route path="almanac" component={AlmanacApp}>
@@ -184,7 +185,6 @@ ReactDOM.render((
             <Route path="index" component={AdministrationFileRepositoriesIndex} onEnter={pingGoogleAnalytics} />
             <Route path="show/:id" component={AdministrationFileRepositoriesShow} onEnter={pingGoogleAnalytics} />
           </Route>
-          <Route path="stats/index" component={AdministrationStatsIndex} onEnter={pingGoogleAnalytics} />
           <Route path="broadcast_channels">
             <Route path="index" component={AdministrationBroadcastChannelsIndex} onEnter={pingGoogleAnalytics} />
             <Route path="show/:id" component={AdministrationBroadcastChannelsShow} onEnter={pingGoogleAnalytics} />

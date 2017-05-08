@@ -128,7 +128,7 @@ export default React.createClass({
   },
 
   dateFormat: 'YYYY-MM-DD HH:mm:ss',
-  contentPrefix: 'apps.administration.stats.charts',
+  contentPrefix: 'apps.broadcast.stats.charts',
 
   getModelName(unit) {
     switch(unit) {

@@ -13,9 +13,6 @@ export default {
         file_repositories: {
           title: "File Repositories",
         },
-        stats: {
-          title: "Stats",
-        },
       },
     }
   }
