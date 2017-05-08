@@ -12,6 +12,13 @@ export default {
             connections: " (Odsłuchania)",
             listeners: " (Słuchacze)",
             xAxisLabel: "Czas (UTC)",
+            over_one_minute: "Ponad 1 minuta",
+            over_five_minutes: "Ponad 5 minut",
+            over_fifteen_minutes: "Ponad 15 minut",
+            over_thirty_minutes: "Ponad 30 minut",
+            over_one_hour: "Ponad 1 godzina",
+            over_three_hours: "Ponad 3 godziny",
+            over_twelve_hours: "Ponad 12 godzin"
           },
         },
         index: {
@@ -23,11 +30,17 @@ export default {
             delete: "Usuń zaznaczonych użytkowników",
           },
 
-          table: {
-            loading: "Ładowanie listy użytkowników",
+          targetTable: {
+            loading: "Ładowanie grup docelowych",
             header: {
-              email: "e-mail",
-              name: "Grupy docelowe",
+              name: "Grupy docelowe"
+            },
+          },
+
+          channelTable: {
+            loading: "Ładowanie kanałów",
+            header: {
+              channel_id: "Kanały"
             },
           },
 

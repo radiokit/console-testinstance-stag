@@ -12,6 +12,13 @@ export default {
             connections: " (Connections)",
             listeners: " (Listeners)",
             xAxisLabel: "Time (UTC)",
+            over_one_minute: "Over 1 minute",
+            over_five_minutes: "Over 5 minutes",
+            over_fifteen_minutes: "Over 15 minutes",
+            over_thirty_minutes: "Over 30 minutes",
+            over_one_hour: "Over 1 hour",
+            over_three_hours: "Over 3 hours",
+            over_twelve_hours: "Over 12 hours"
           },
         },
         index: {
@@ -23,12 +30,17 @@ export default {
             delete: "Delete selected users",
           },
 
-          table: {
-            loading: "Fetching list of users",
+          targetTable: {
+            loading: "Fetching targets",
             header: {
-              email: "e-mail",
               name: "List of targets",
-              watchedCnt: "amount of watched movies",
+            },
+          },
+
+          channelTable: {
+            loading: "Fetching channels",
+            header: {
+              channel_id: "List of channels"
             },
           },
 

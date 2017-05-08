@@ -7,7 +7,7 @@ import moment from 'moment';
 import classNames from 'classnames';
 import merge from 'lodash.merge';
 
-import './StatsChartPerHour.scss';
+import './StatsLineChartPerHour.scss';
 
 Counterpart.registerTranslations('en', require('./IndexView.locale.en.js'));
 Counterpart.registerTranslations('pl', require('./IndexView.locale.pl.js'));
@@ -27,7 +27,6 @@ export default React.createClass({
       data: {
         datasets: [],
       },
-      status: 'upToDate',
     };
   },
 
@@ -95,7 +94,6 @@ export default React.createClass({
             });
 
     this.setState({
-      status: 'upToDate',
       data: {
         labels: dateRangeArray,
         datasets: [].concat.apply([], display_data),
@@ -145,10 +143,6 @@ export default React.createClass({
   dateFormat: 'YYYY-MM-DD HH:mm:ss',
   contentPrefix: 'apps.administration.stats.charts',
 
-  getStatus() {
-    return Counterpart(this.contentPrefix + '.statuses.' + this.state.status);
-  },
-
   mergedChartOptions() {
     const xAxisLabel = {
       scales: {
@@ -168,7 +162,6 @@ export default React.createClass({
     const { data } = this.state;
     data.labels = dateRange.toArray('hours');
     this.setState({ data });
-    this.setState({ status: 'loading' });
     window.data.query('circumstances', 'cache_stream_play_per_target_per_hour')
       .joins('target')
       .select('target.id', 'target.name', 'hour', 'connections', 'listeners')
@@ -182,9 +175,8 @@ export default React.createClass({
   render() {
     const { className, ...props } = this.props;
     return (
-      <div className={classNames('StatsChartPerHour', className)} {...props}>
-        <div className="StatsChartPerHour-status">{this.getStatus()}</div>
-        <div ref="container" className="StatsChartPerHour-innerContainer">
+      <div className={classNames('StatsLineChartPerHour', className)} {...props}>
+        <div ref="container" className="StatsLineChartPerHour-innerContainer">
           <Line
             key={`${this.state.width}x${this.state.height}`}
             ref="chart"

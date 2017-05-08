@@ -15,10 +15,26 @@
       display:block;
       padding: 10px;
     }
+  }
+
+  .Stats-lineChart {
+    width:100%;
+    display: flex;
+    flex-flow: row;
+
     .Stats-chart {
       height:300px;
       flex:1;
       padding: 10px;
+    }
+  }
+
+  .Stats-tables {
+    display: flex;
+    flex-flow: row wrap;
+
+    .Stats-table {
+      flex: 1;
     }
   }
 }

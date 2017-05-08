@@ -1,16 +1,16 @@
-.StatsChartPerDay {
+.StatsLineChartPerDay {
   overflow: hidden;
   display:flex;
   flex-flow: column;
 
-  .StatsChartPerDay-status {
+  .StatsLineChartPerDay-status {
     padding: {
       left: 40px;
       top: 10px;
       bottom: 5px;
     }
   }
-  .StatsChartPerDay-innerContainer {
+  .StatsLineChartPerDay-innerContainer {
     flex: 1;
     overflow: hidden;
   }

@@ -1,15 +1,12 @@
 import React from 'react';
-import Counterpart from 'counterpart';
-import { Line } from 'react-chartjs-2';
-import getColor from './getColor.js';
 import resizeSensor from 'css-element-queries/src/ResizeSensor';
 import moment from 'moment';
 import classNames from 'classnames';
-import StatsChartPerDay from './StatsChartPerDay.jsx';
-import StatsChartPerHour from './StatsChartPerHour.jsx';
-import StatsChartPerMinute from './StatsChartPerMinute.jsx';
+import StatsLineChartPerDay from './StatsLineChartPerDay.jsx';
+import StatsLineChartPerHour from './StatsLineChartPerHour.jsx';
+import StatsLineChartPerMinute from './StatsLineChartPerMinute.jsx';
 
-import './StatsChart.scss';
+import './StatsLineChart.scss';
 
 export default React.createClass({
 
@@ -21,7 +18,7 @@ export default React.createClass({
 
   statsPerDayComponent() {
     return (
-      <StatsChartPerDay
+      <StatsLineChartPerDay
         className="Stats-chart"
         dateRange={this.getFixedDateRange()}
         users={this.props.users}
@@ -31,7 +28,7 @@ export default React.createClass({
 
   statsPerHourComponent() {
     return (
-      <StatsChartPerHour
+      <StatsLineChartPerHour
         className="Stats-chart"
         dateRange={this.getFixedDateRange()}
         users={this.props.users}
@@ -41,7 +38,7 @@ export default React.createClass({
 
   statsPerMinuteComponent() {
     return (
-      <StatsChartPerMinute
+      <StatsLineChartPerMinute
         className="Stats-chart"
         dateRange={this.getFixedDateRange()}
         users={this.props.users}

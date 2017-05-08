@@ -7,7 +7,8 @@ import Table from '../../../widgets/admin/table_browser_widget.jsx';
 import { DateRange } from 'react-date-range';
 import moment from 'moment';
 import 'moment-range';
-import StatsChart from './StatsChart.jsx';
+import StatsLineChart from './StatsLineChart.jsx';
+import StatsBarChart from './StatsBarChart.jsx';
 
 import './IndexView.scss';
 
@@ -36,9 +37,15 @@ export default React.createClass({
 
   contentPrefix: 'apps.administration.stats.index',
 
-  buildTableAttributes() {
+  buildTargetTableAttributes() {
     return {
       name: { renderer: 'string' },
+    };
+  },
+
+  buildChannelTableAttributes() {
+    return {
+      channel_id: { renderer: 'string' },
     };
   },
 
@@ -47,9 +54,20 @@ export default React.createClass({
   },
 
   content() {
-    const tableQuery =
+    const targetTableQuery =
       window.data.query('circumstances', 'target')
         .select('id', 'name');
+
+    const channelTableQuery =
+      window.data.query('circumstances', 'raw_stream_play')
+        .scope('distinct_channels')
+        .select('channel_id');
+
+    // const channelTableQuery =
+    //   window.data.query('agenda', 'Broadcast.Channel')
+    //     .where('id', 'in', channelIds)
+    //     .select('id', 'name');
+
     return (
       <div className="Stats">
         <div className="Stats-header">
@@ -62,23 +80,45 @@ export default React.createClass({
               onChange={this.onDateRangeSelect}
             />
           </div>
-          <StatsChart
+          <StatsBarChart
             className="Stats-chart"
             dateRange={this.state.dateRange}
             users={this.state.checkedUsers}
           />
         </div>
-        <Table
-          attributes={this.buildTableAttributes()}
-          contentPrefix={`${this.contentPrefix}.table`}
-          form={{}}
-          modifyQueryResults={this.parseTableRows}
-          onSelect={this.onTableRowSelect}
-          recordsQuery={tableQuery}
-          requestFullRecords
-          selectable
-          selectedRecordIds={this.state.selectedRecordIds}
-        />
+        <div className="Stats-lineChart">
+          <StatsLineChart
+            className="Stats-chart"
+            dateRange={this.state.dateRange}
+            users={this.state.checkedUsers}
+          />
+        </div>
+        <div className="Stats-tables">
+          <Table
+            className="Stats-table"
+            attributes={this.buildChannelTableAttributes()}
+            contentPrefix={`${this.contentPrefix}.channelTable`}
+            form={{}}
+            modifyQueryResults={this.parseTableRows}
+            onSelect={this.onTableRowSelect}
+            recordsQuery={channelTableQuery}
+            requestFullRecords
+            selectable
+            selectedRecordIds={this.state.selectedRecordIds}
+          />
+          <Table
+            className="Stats-table"
+            attributes={this.buildTargetTableAttributes()}
+            contentPrefix={`${this.contentPrefix}.targetTable`}
+            form={{}}
+            modifyQueryResults={this.parseTableRows}
+            onSelect={this.onTableRowSelect}
+            recordsQuery={targetTableQuery}
+            requestFullRecords
+            selectable
+            selectedRecordIds={this.state.selectedRecordIds}
+          />
+        </div>
       </div>
     );
   },

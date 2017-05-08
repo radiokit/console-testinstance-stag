@@ -7,7 +7,7 @@ import moment from 'moment';
 import classNames from 'classnames';
 import merge from 'lodash.merge';
 
-import './StatsChartPerMinute.scss';
+import './StatsLineChartPerDay.scss';
 
 Counterpart.registerTranslations('en', require('./IndexView.locale.en.js'));
 Counterpart.registerTranslations('pl', require('./IndexView.locale.pl.js'));
@@ -18,6 +18,7 @@ export default React.createClass({
     dateRange: React.PropTypes.object.isRequired,
     users: React.PropTypes.object.isRequired,
     className: React.PropTypes.string,
+    xAxisLabel: React.PropTypes.string,
   },
 
   getInitialState() {
@@ -27,7 +28,6 @@ export default React.createClass({
       data: {
         datasets: [],
       },
-      status: 'upToDate',
     };
   },
 
@@ -51,19 +51,19 @@ export default React.createClass({
 
   onDataReceived(_event, _query, data) {
     const { dateRange, users } = this.props;
-    const dateRangeArray = dateRange.toArray('minutes');
+    const dateRangeArray = dateRange.toArray('days');
     const display_data = users
             .groupBy(u => u).map(u => u.get(0))
             .map(u => {
               const connections = data
                 .filter(watch => watch.get('target').get('id') === u.get('id'))
                 .groupBy(watch =>
-                  moment(watch.get('minute'), this.dateFormat).diff(dateRange.start, 'minutes'))
+                  moment(watch.get('day'), this.dateFormat).diff(dateRange.start, 'days'))
                 .map(watch => watch.first().get('connections'));
               const listeners = data
                 .filter(watch => watch.get('target').get('id') === u.get('id'))
                 .groupBy(watch =>
-                  moment(watch.get('minute'), this.dateFormat).diff(dateRange.start, 'minutes'))
+                  moment(watch.get('day'), this.dateFormat).diff(dateRange.start, 'days'))
                 .map(watch => watch.first().get('listeners'));
               return {
                 id: u.get('id'),
@@ -95,7 +95,6 @@ export default React.createClass({
             });
 
     this.setState({
-      status: 'upToDate',
       data: {
         labels: dateRangeArray,
         datasets: [].concat.apply([], display_data),
@@ -106,28 +105,28 @@ export default React.createClass({
   chartOptions: {
     responsive: false,
     animation: false,
-    maintainAspectRatio: false,
     hover: {
       animationDuration: 0
-    },
-    elements: {
-      point: {
-        radius: 0,
-      },
-      line: {
-        fill: 'bottom',
-      },
     },
     legend: {
       display: false,
     },
     maintainAspectRatio: false,
+    elements: {
+      point: {
+        radius: 0,
+        hitRadius: 2,
+      },
+      line: {
+        fill: 'bottom',
+      },
+    },
     scales: {
       xAxes: [{
         type: 'time',
         time: {
-          tooltipFormat: 'YYYY-MM-DD HH:mm',
-          displayFormat: 'HH:mm:ss',
+          tooltipFormat: 'YYYY-MM-DD',
+          displayFormat: 'DD.MM',
         },
         position: 'bottom',
       }],
@@ -142,10 +141,6 @@ export default React.createClass({
 
   dateFormat: 'YYYY-MM-DD HH:mm:ss',
   contentPrefix: 'apps.administration.stats.charts',
-
-  getStatus() {
-    return Counterpart(this.contentPrefix + '.statuses.' + this.state.status);
-  },
 
   mergedChartOptions() {
     const xAxisLabel = {
@@ -164,14 +159,13 @@ export default React.createClass({
 
   reload({ dateRange, users }) {
     const { data } = this.state;
-    data.labels = dateRange.toArray('minutes');
+    data.labels = dateRange.toArray('days');
     this.setState({ data });
-    this.setState({ status: 'loading' });
-    window.data.query('circumstances', 'cache_stream_play_per_target_per_minute')
+    window.data.query('circumstances', 'cache_stream_play_per_target_per_day')
       .joins('target')
-      .select('target.id', 'target.name', 'minute', 'connections', 'listeners')
-      .where('minute', 'gte', dateRange.start.format(this.dateFormat))
-      .where('minute', 'lte', dateRange.end.format(this.dateFormat))
+      .select('target.id', 'target.name', 'day', 'connections', 'listeners')
+      .where('day', 'gte', dateRange.start.format(this.dateFormat))
+      .where('day', 'lte', dateRange.end.format(this.dateFormat))
       .where('target.id', 'in', users.map(u => u.get('id')).toJS())
       .on('fetch', this.onDataReceived)
       .fetch();
@@ -180,9 +174,8 @@ export default React.createClass({
   render() {
     const { className, ...props } = this.props;
     return (
-      <div className={classNames('StatsChartPerMinute', className)} {...props}>
-        <div className="StatsChartPerMinute-status">{this.getStatus()}</div>
-        <div ref="container" className="StatsChartPerMinute-innerContainer">
+      <div className={classNames('StatsLineChartPerDay', className)} {...props}>
+        <div ref="container" className="StatsLineChartPerDay-innerContainer">
           <Line
             key={`${this.state.width}x${this.state.height}`}
             ref="chart"
