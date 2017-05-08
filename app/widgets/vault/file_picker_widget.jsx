@@ -106,7 +106,6 @@ export default React.createClass({
             />
           </div>
         </div>
-        <div style={{position: 'relative'}}>
         <TableBrowser
           ref="tableBrowser"
           limit={this.props.pageLimit}
@@ -116,7 +115,6 @@ export default React.createClass({
           attributes={this.buildAttributes()}
           recordsQuery={this.buildQuery()}
         />
-        </div>
       </div>
     );
   },
