@@ -3,7 +3,7 @@ import Translate from 'react-translate-component';
 
 import ModalWidget from '../../../../widgets/admin/modal_widget.jsx';
 import LoadingWidget from '../../../../widgets/general/loading_widget.jsx';
-import TableBrowser from '../../../../widgets/admin/table_browser_widget.jsx';
+import FilePickerWidget from '../../../../widgets/vault/file_picker_widget.jsx';
 import RadioKit from '../../../../services/RadioKit';
 import ScheduleItemForm from './ScheduleItemForm.jsx';
 import './AddTrackModal.scss';
@@ -22,6 +22,7 @@ const AddTrackModal = React.createClass({
       loading: false,
       loaded: false,
       error: null,
+      fileSearch: '',
       modalSize: 'normal',
       modalTitle: 'apps.broadcast.playlist.add_modal.account',
     };
@@ -107,41 +108,6 @@ const AddTrackModal = React.createClass({
       .fetch();
   },
 
-  buildFileAttributes() {
-    return {
-      name: { renderer: 'string', sortable: true },
-      inserted_at: { renderer: 'datetime', sortable: true },
-    };
-  },
-
-  buildFileQuery() {
-    return RadioKit
-      .query('vault', 'Data.Record.File')
-      .select(
-        'id',
-        'name',
-        'inserted_at',
-        'stage',
-        'metadata_items.id',
-        'metadata_items.metadata_schema_id',
-        'metadata_items.value_string',
-        'metadata_items.value_db',
-        'metadata_items.value_text',
-        'metadata_items.value_float',
-        'metadata_items.value_integer',
-        'metadata_items.value_duration',
-        'metadata_items.value_date',
-        'metadata_items.value_datetime',
-        'metadata_items.value_time',
-        'metadata_items.value_file',
-        'metadata_items.value_image',
-        'metadata_items.value_url',
-      )
-      .joins('metadata_items')
-      .where('record_repository_id', 'eq', this.state.repository.get('id'))
-      .where('stage', 'in', 'current', 'archive');
-  },
-
   closeModal() {
     this.refs.modal && this.refs.modal.hide && this.refs.modal.hide();
   },
@@ -224,13 +190,10 @@ const AddTrackModal = React.createClass({
     }
 
     return (
-      <TableBrowser
+      <FilePickerWidget
         limit={50}
-        recordsLinkFunc={this.onFileSelect}
-        attributes={this.buildFileAttributes()}
-        contentPrefix="widgets.vault.file_browser.table"
-        requestFullRecords
-        recordsQuery={this.buildFileQuery()}
+        onFileChoose={this.onFileSelect}
+        repository={this.state.repository}
       />
     );
   },

@@ -49,6 +49,7 @@ Counterpart.registerTranslations("en", require('./locales/en/apps/electron.js'))
 Counterpart.registerTranslations("en", require('./locales/en/apps/administration.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/administration.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/vault/file_browser.js'));
+Counterpart.registerTranslations("en", require('./locales/en/widgets/vault/file_picker.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/table_browser.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/modal.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/scope.js'));
@@ -63,6 +64,7 @@ Counterpart.registerTranslations("pl", require('./locales/pl/apps/electron.js'))
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/administration.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/administration.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/vault/file_browser.js'));
+Counterpart.registerTranslations("pl", require('./locales/pl/widgets/vault/file_picker.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/table_browser.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/modal.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/scope.js'));
