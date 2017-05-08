@@ -125,6 +125,17 @@ export default React.createClass({
       display: false,
     },
     maintainAspectRatio: false,
+    scales: {
+      xAxes: [{
+        position: 'bottom',
+      }],
+      yAxes: [{
+        ticks: {
+          suggestedMin: 0,
+          suggestedMax: 50,
+        },
+      }],
+    },
   },
 
   dateFormat: 'YYYY-MM-DD HH:mm:ss',

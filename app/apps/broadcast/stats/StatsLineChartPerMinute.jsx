@@ -80,14 +80,14 @@ export default React.createClass({
                   label: u.name + Counterpart(this.contentPrefix + ".labels.connections"),
                   data: u.connections,
                   borderColor: getColor(colorNum, 50, 1),
-                  backgroundColor: getColor(colorNum, 80, 0.2),
+                  backgroundColor: getColor(colorNum, 60, 1),
                   borderWidth: 2,
                 },
                 {
                   label: u.name + Counterpart(this.contentPrefix + ".labels.listeners"),
                   data: u.listeners,
                   borderColor: getColor(colorNum, 30, 1),
-                  backgroundColor: getColor(colorNum, 60, 0.2),
+                  backgroundColor: getColor(colorNum, 80, 1),
                   borderWidth: 2,
                 }
               ];
@@ -134,6 +134,7 @@ export default React.createClass({
           suggestedMin: 0,
           suggestedMax: 50,
         },
+        stacked: true
       }],
     },
   },
