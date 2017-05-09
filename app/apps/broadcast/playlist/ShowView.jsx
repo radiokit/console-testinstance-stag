@@ -4,7 +4,6 @@ import GridRow from '../../../widgets/admin/grid_row_widget.jsx';
 import GridCell from '../../../widgets/admin/grid_cell_widget.jsx';
 import Section from '../../../widgets/admin/section_widget.jsx';
 import Card from '../../../widgets/admin/card_widget.jsx';
-
 import SidebarPartial from './ShowViewSidebarPartial.jsx';
 import ContentPartial from './ShowViewContentPartial.jsx';
 
@@ -18,6 +17,13 @@ const ShowView = React.createClass({
     currentBroadcastChannel: React.PropTypes.object.isRequired,
   },
 
+  getInitialState() {
+    return {
+      startHour: 0,
+      endHour: 24,
+    };
+  },
+
   getOffset() {
     return this.props.routeParams.date ?
       parseInt(this.props.routeParams.date, 10) :
@@ -28,13 +34,23 @@ const ShowView = React.createClass({
     this.props.history.push(`/apps/broadcast/playlist/${offset}`);
   },
 
+  handleTimeRangeChange(startHour, endHour) {
+    this.setState({
+      startHour,
+      endHour,
+    });
+  },
+
   buildSidebar() {
     return {
       day: {
         element: SidebarPartial,
         props: {
-          offsetStart: this.getOffset(),
           onOffsetStartChange: this.handleOffsetStartChange,
+          onTimeRangeChange: this.handleTimeRangeChange,
+          offsetStart: this.getOffset(),
+          startHour: this.state.startHour,
+          endHour: this.state.endHour,
         },
       },
     };
@@ -46,6 +62,8 @@ const ShowView = React.createClass({
         element: ContentPartial,
         props: {
           offset: this.getOffset(),
+          startHour: this.state.startHour,
+          endHour: this.state.endHour,
         },
       },
     };

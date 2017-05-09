@@ -14,6 +14,7 @@ export default {
       playlist: {
         header: 'Playlist',
         week: 'Week %(count)s',
+        filter_hours: 'Hour filtering',
         toolbar: {
           add_button: 'Add track',
           update_button: 'Edit track',

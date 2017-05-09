@@ -14,6 +14,7 @@ export default {
       playlist: {
         header: 'Ramówka',
         week: '%(count)s Tydzień',
+        filter_hours: 'Filtrowanie godzin',
         toolbar: {
           add_button: 'Dodaj utwór',
           update_button: 'Edytuj utwór',

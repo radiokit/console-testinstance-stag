@@ -5,11 +5,10 @@ import { Seq } from 'immutable';
 import TableBrowser from '../../../widgets/admin/table_browser_widget.jsx';
 import RadioKit from '../../../services/RadioKit';
 import PlaylistToolbar from './PlaylistToolbar.jsx';
+import config from './playlistConfig';
 
 const MILLISECONDS_PER_MINUTE = 1000 * 60;
 const MILLISECONDS_PER_HOUR = MILLISECONDS_PER_MINUTE * 60;
-const MILLISECONDS_PER_DAY = MILLISECONDS_PER_HOUR * 24;
-const DAY_START_HOURS_OFFSET = 5;
 
 function calcDayStart(timestamp, timezone, dayStartHoursOffset) {
   return moment
@@ -24,6 +23,8 @@ function calcDayStart(timestamp, timezone, dayStartHoursOffset) {
 const BroadcastPlaylistContent = React.createClass({
   propTypes: {
     offset: PropTypes.number.isRequired,
+    startHour: PropTypes.number.isRequired,
+    endHour: PropTypes.number.isRequired,
   },
 
   contextTypes: {
@@ -38,7 +39,11 @@ const BroadcastPlaylistContent = React.createClass({
   },
 
   componentWillReceiveProps(newProps) {
-    if (newProps.offset !== this.props.offset) {
+    if (
+      newProps.offset !== this.props.offset ||
+      newProps.startHour !== this.props.startHour ||
+      newProps.endHour !== this.props.endHour
+    ) {
       // trigger data reload after props are propagated
       this.requestDataRefetch = true;
     }
@@ -72,15 +77,20 @@ const BroadcastPlaylistContent = React.createClass({
   },
 
   buildTableRecordsQuery() {
+    const startHour = (config.dayStartHoursOffset + this.props.startHour) % 24;
+    const hours = (this.props.endHour - this.props.startHour);
     const currentBroadcastChannel = this.context.currentBroadcastChannel;
     const from = calcDayStart(
       this.props.offset,
       currentBroadcastChannel.get('timezone'),
-      DAY_START_HOURS_OFFSET
+      startHour
     );
-    const to = from + MILLISECONDS_PER_DAY;
+    const to = from + hours * MILLISECONDS_PER_HOUR;
     const fromISO = moment(from).toISOString();
     const toISO = moment(to).toISOString();
+
+    console.log(startHour, hours);
+    console.log(fromISO, toISO);
 
     return RadioKit
       .query('plumber', 'Media.Input.File.RadioKit.Vault')
@@ -99,6 +109,8 @@ const BroadcastPlaylistContent = React.createClass({
       )
       .where('cue_in_at', 'lte', toISO)
       .where('cue_out_at', 'gte', fromISO);
+      // .where('cue_in_at', 'gte', fromISO)
+      // .where('cue_out_at', 'lte', toISO);
   },
 
   render() {
