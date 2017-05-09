@@ -65,9 +65,9 @@ const BroadcastPlaylistContent = React.createClass({
 
   buildTableAttributes() {
     return {
-      cue_in_at: { renderer: 'datetime', sortable: true },
+      cue_in_at: { renderer: 'time', sortable: true, props: { format: 'HH:mm:ss' } },
       name: { renderer: 'string', sortable: true },
-      cue_out_at: { renderer: 'datetime', sortable: true },
+      cue_out_at: { renderer: 'time', sortable: true, props: { format: 'HH:mm:ss' } },
     };
   },
 

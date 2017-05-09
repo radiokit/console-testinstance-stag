@@ -29,6 +29,8 @@ const AddTrackModal = React.createClass({
     const availableAccounts = this.context.availableAccounts;
 
     if (availableAccounts.size === 1) {
+      this.fetchRepositories(availableAccounts.first().get('id'));
+
       return {
         ...baseState,
         account: availableAccounts.first(),
@@ -47,7 +49,9 @@ const AddTrackModal = React.createClass({
     this.setState({
       account,
       loading: true,
-    }, this.fetchRepositories);
+    }, () => {
+      this.fetchRepositories(account.get('id'));
+    });
   },
 
   onRepositoryClick(repository) {
@@ -88,7 +92,7 @@ const AddTrackModal = React.createClass({
     });
   },
 
-  fetchRepositories() {
+  fetchRepositories(accountId) {
     RadioKit
       .query('vault', 'Data.Record.Repository')
       .select(
@@ -101,7 +105,7 @@ const AddTrackModal = React.createClass({
         'metadata_schemas.tag_category_id',
       )
       .joins('metadata_schemas')
-      .where('references', 'deq', 'user_account_id', this.state.account.get('id'))
+      .where('references', 'deq', 'user_account_id', accountId)
       .order('name', 'asc')
       .on('fetch', this.onFetchRepositoriesSuccess)
       .on('error', this.onFetchRepositoriesFailure)

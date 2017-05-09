@@ -71,6 +71,7 @@
     "phoenix-socket": "^1.0.4",
     "radiokit-api": "0.1.20",
     "radiokit-toolkit-auth": "^1.0.9",
+    "rc-slider": "^7.0.3",
     "react": "^0.14.2",
     "react-addons-css-transition-group": "^0.14.8",
     "react-autosuggest": "^3.7.3",
