@@ -7,6 +7,7 @@ import { DateRange } from 'react-date-range';
 import StatsLineChart from './StatsLineChart.jsx';
 import StatsBarChart from './StatsBarChart.jsx';
 import RadioKit from '../../../services/RadioKit';
+import TableCellChannelName from './TableCellChannelName.jsx';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 
@@ -51,7 +52,7 @@ export default React.createClass({
 
   buildChannelTableAttributes() {
     return {
-      channel_id: { renderer: 'string' },
+      channel_id: { renderer: TableCellChannelName },
     };
   },
 
@@ -68,12 +69,6 @@ export default React.createClass({
       window.data.query('circumstances', 'raw_stream_play')
         .scope('distinct_channels')
         .select('id', 'channel_id');
-
-
-    // const channelTableQuery =
-    //   window.data.query('agenda', 'Broadcast.Channel')
-    //     .where('id', 'in', this.state.channelIds || [])
-    //     .select('id', 'name');
 
     return (
       <div className="Stats">
