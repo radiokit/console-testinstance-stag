@@ -3,11 +3,6 @@ export default {
     broadcast: {
       stats: {
         charts: {
-          statuses: {
-            upToDate: "Chart is up to date",
-            loading: "Loading chart data...",
-            error: "Could not load chart data",
-          },
           labels: {
             connections: " (Connections)",
             listeners: " (Listeners)",
@@ -31,14 +26,14 @@ export default {
           },
 
           targetTable: {
-            loading: "Fetching targets",
+            loading: "",
             header: {
               name: "List of targets",
             },
           },
 
           channelTable: {
-            loading: "Fetching channels",
+            loading: "",
             header: {
               channel_id: "List of channels"
             },

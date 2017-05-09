@@ -3,11 +3,6 @@ export default {
     broadcast: {
       stats: {
         charts: {
-          statuses: {
-            upToDate: "Statystyki są aktualne",
-            loading: "Pobieranie danych...",
-            error: "Nie można pobrać danych",
-          },
           labels: {
             connections: " (Odsłuchania)",
             listeners: " (Słuchacze)",
@@ -31,14 +26,14 @@ export default {
           },
 
           targetTable: {
-            loading: "Ładowanie grup docelowych",
+            loading: "",
             header: {
               name: "Grupy docelowe"
             },
           },
 
           channelTable: {
-            loading: "Ładowanie kanałów",
+            loading: "",
             header: {
               channel_id: "Kanały"
             },

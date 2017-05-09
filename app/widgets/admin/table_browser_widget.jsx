@@ -19,6 +19,7 @@ export default React.createClass({
     recordsQuery: React.PropTypes.object.isRequired,
     recordsLinkFunc: React.PropTypes.func,
     requestFullRecords: React.PropTypes.bool,
+    selectAllOnMount: React.PropTypes.bool,
   },
 
 
@@ -43,6 +44,7 @@ export default React.createClass({
       selectedAll: false,
       sortedAttribute: null,
       sortedDirection: null,
+      selectAll: false,
     };
   },
 
@@ -71,6 +73,20 @@ export default React.createClass({
       .on("fetch", this.onRecordsQueryFetch);
     this.recordsQueryIds
       .on("fetch", this.onRecordIdsQueryFetch);
+  },
+
+  componentWillMount: function() {
+    if (this.props.selectAllOnMount) {
+      this.props.recordsQuery
+        .on('fetch', (_e, _z, data) => {
+          const selectedRecordIds = data.map((record) => { return record.get("id");  });
+          this.setState({
+            selectedRecordIds: selectedRecordIds,
+          });
+          this.props.onSelect(selectedRecordIds, data);
+        })
+        .fetch();
+    }
   },
 
   componentDidMount: function() {

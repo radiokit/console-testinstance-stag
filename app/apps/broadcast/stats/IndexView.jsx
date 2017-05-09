@@ -20,37 +20,19 @@ Counterpart.registerTranslations('pl', require('./IndexView.locale.pl.js'));
 export default React.createClass({
 
   getInitialState() {
-
-      // const chan = window.data.query('circumstances', 'raw_stream_play')
-      //   .scope('distinct_channels')
-      //   .select('channel_id')
-      //   .on('fetch', (_event, _query, data) => {
-      //     const channelIds = data.map(channel => channel.get('channel_id')).toJS();
-
-      //     // this.setState({
-      //     //   channelIds: channelIds,
-      //     // });
-      //     return channelIds;
-      //   })
-      //   .fetch();
-
-    // console.log(chan.getData());
-
     return {
       dateRange: moment.range(moment().subtract(1, 'months'), moment()),
       checkedTargets: Immutable.Seq().toIndexedSeq(),
       checkedChannels: Immutable.Seq().toIndexedSeq(),
-      selectedTargetRecordIds: Immutable.Seq().toIndexedSeq(),
-      selectedChannelRecordIds: Immutable.Seq().toIndexedSeq(),
     };
   },
 
-  onChannelTableRowSelect(selectedChannelRecordIds, checkedChannels) {
-    this.setState({ selectedChannelRecordIds, checkedChannels });
+  onChannelTableRowSelect(_selectedChannelRecordIds, checkedChannels) {
+    this.setState({ checkedChannels: checkedChannels || Immutable.Seq().toIndexedSeq() });
   },
 
-  onTargetTableRowSelect(selectedTargetRecordIds, checkedTargets) {
-    this.setState({ selectedTargetRecordIds, checkedTargets });
+  onTargetTableRowSelect(_selectedTargetRecordIds, checkedTargets) {
+    this.setState({ checkedTargets: checkedTargets || Immutable.Seq().toIndexedSeq() });
   },
 
   onDateRangeSelect(range) {
@@ -82,11 +64,10 @@ export default React.createClass({
       window.data.query('circumstances', 'target')
         .select('id', 'name');
 
-
     const channelTableQuery =
       window.data.query('circumstances', 'raw_stream_play')
         .scope('distinct_channels')
-        .select('channel_id');
+        .select('id', 'channel_id');
 
 
     // const channelTableQuery =
@@ -132,6 +113,7 @@ export default React.createClass({
             recordsQuery={channelTableQuery}
             requestFullRecords
             selectable
+            selectAllOnMount
           />
           <Table
             className="Stats-table"
@@ -143,14 +125,12 @@ export default React.createClass({
             recordsQuery={targetTableQuery}
             requestFullRecords
             selectable
+            selectAllOnMount
           />
         </div>
       </div>
     );
   },
-
-  //            selectedRecordIds={this.state.selectedChannelRecordIds}
-  //             selectedRecordIds={this.state.selectedTargetRecordIds}
 
   render() {
     return (
