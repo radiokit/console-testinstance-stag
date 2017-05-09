@@ -76,7 +76,6 @@ export default React.createClass({
             .toArray()
             .map(u => {
               const colorNum = parseInt(u.id.replace(/\D/g, ''), 10) % 500;
-              console.log(colorNum);
               return [
                 {
                   label: u.name + Counterpart(this.contentPrefix + ".labels.listeners"),
