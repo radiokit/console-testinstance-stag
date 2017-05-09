@@ -13,7 +13,6 @@ const MILLISECONDS_PER_HOUR = MILLISECONDS_PER_MINUTE * 60;
 function calcDayStart(timestamp, timezone, dayStartHoursOffset) {
   return moment
     .tz(timestamp, timezone)
-    .subtract(dayStartHoursOffset, 'hours')
     .startOf('day')
     .add(dayStartHoursOffset, 'hours')
     .valueOf()
@@ -77,7 +76,7 @@ const BroadcastPlaylistContent = React.createClass({
   },
 
   buildTableRecordsQuery() {
-    const startHour = (config.dayStartHoursOffset + this.props.startHour) % 24;
+    const startHour = config.dayStartHoursOffset + this.props.startHour;
     const hours = (this.props.endHour - this.props.startHour);
     const currentBroadcastChannel = this.context.currentBroadcastChannel;
     const from = calcDayStart(
@@ -88,9 +87,6 @@ const BroadcastPlaylistContent = React.createClass({
     const to = from + hours * MILLISECONDS_PER_HOUR;
     const fromISO = moment(from).toISOString();
     const toISO = moment(to).toISOString();
-
-    console.log(startHour, hours);
-    console.log(fromISO, toISO);
 
     return RadioKit
       .query('plumber', 'Media.Input.File.RadioKit.Vault')
@@ -109,8 +105,6 @@ const BroadcastPlaylistContent = React.createClass({
       )
       .where('cue_in_at', 'lte', toISO)
       .where('cue_out_at', 'gte', fromISO);
-      // .where('cue_in_at', 'gte', fromISO)
-      // .where('cue_out_at', 'lte', toISO);
   },
 
   render() {
