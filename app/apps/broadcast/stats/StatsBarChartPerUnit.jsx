@@ -14,7 +14,8 @@ Counterpart.registerTranslations('pl', require('./IndexView.locale.pl.js'));
 export default React.createClass({
 
   propTypes: {
-    dateRange: React.PropTypes.object.isRequired,
+    startDate: React.PropTypes.object.isRequired,
+    endDate: React.PropTypes.object.isRequired,
     targets: React.PropTypes.object.isRequired,
     channels: React.PropTypes.object.isRequired,
     className: React.PropTypes.string,
@@ -161,11 +162,11 @@ export default React.createClass({
     }
   },
 
-  reload({ dateRange, targets, channels, unit }) {
+  reload({ startDate, endDate, targets, channels, unit }) {
     const { data } = this.state;
     let query = window.data.query('circumstances', this.getModelName(unit))
-      .where(unit, 'gte', dateRange.start.format(this.dateFormat))
-      .where(unit, 'lte', dateRange.end.format(this.dateFormat));
+      .where(unit, 'gte', startDate.format(this.dateFormat))
+      .where(unit, 'lte', endDate.format(this.dateFormat));
 
     if (targets.isEmpty()) {
       query

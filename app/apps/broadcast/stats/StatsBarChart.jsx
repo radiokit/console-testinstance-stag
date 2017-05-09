@@ -1,8 +1,11 @@
 import React from 'react';
 import resizeSensor from 'css-element-queries/src/ResizeSensor';
-import moment from 'moment';
 import classNames from 'classnames';
 import StatsBarChartPerUnit from './StatsBarChartPerUnit.jsx';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+
+const moment = extendMoment(Moment);
 
 import './StatsBarChart.scss';
 
@@ -17,12 +20,14 @@ export default React.createClass({
 
   statsPerUnitComponent(unit) {
     const { dateRange, targets, channels } = this.props;
-    const fixedDateRange = moment.range(dateRange.start.startOf(unit), dateRange.end.endOf(unit));
+    const startDate = dateRange.start.clone().startOf(unit);
+    const endDate = dateRange.end.clone().endOf(unit);
 
     return (
       <StatsBarChartPerUnit
         className="Stats-chart"
-        dateRange={fixedDateRange}
+        startDate={startDate}
+        endDate={endDate}
         targets={targets}
         channels={channels}
         unit={unit}
@@ -31,16 +36,15 @@ export default React.createClass({
   },
 
   chooseContent(dateRange) {
-    const dateRangeLength = dateRange.toArray('days').length;
+    const dateRangeLength = Array.from(dateRange.by('days')).length;
 
-    // if(dateRangeLength > 21) {
-    //   return this.statsPerUnitComponent('month');
-    // } else if(dateRangeLength > 7) {
-    //   return this.statsPerUnitComponent('week');
-    // } else {
-    //   return this.statsPerUnitComponent('day');
-    // }
+    if(dateRangeLength > 21) {
+      return this.statsPerUnitComponent('month');
+    } else if(dateRangeLength > 7) {
+      return this.statsPerUnitComponent('week');
+    } else {
       return this.statsPerUnitComponent('day');
+    }
   },
 
   render() {

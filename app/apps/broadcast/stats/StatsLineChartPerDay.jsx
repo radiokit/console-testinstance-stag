@@ -52,7 +52,7 @@ export default React.createClass({
 
   onDataReceived(_event, _query, data) {
     const { dateRange, targets } = this.props;
-    const dateRangeArray = dateRange.toArray('days');
+    const dateRangeArray = Array.from(dateRange.by('days'));
     const display_data = targets
             .groupBy(u => u).map(u => u.get(0))
             .map(u => {
@@ -162,7 +162,7 @@ export default React.createClass({
 
   reload({ dateRange, targets, channels }) {
     const { data } = this.state;
-    data.labels = dateRange.toArray('days');
+    data.labels = Array.from(dateRange.by('days'));
 
     let query = window.data.query('circumstances', 'cache_stream_play_per_target_per_day')
       .where('day', 'gte', dateRange.start.format(this.dateFormat))

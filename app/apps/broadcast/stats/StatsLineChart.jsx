@@ -1,10 +1,13 @@
 import React from 'react';
 import resizeSensor from 'css-element-queries/src/ResizeSensor';
-import moment from 'moment';
 import classNames from 'classnames';
 import StatsLineChartPerDay from './StatsLineChartPerDay.jsx';
 import StatsLineChartPerHour from './StatsLineChartPerHour.jsx';
 import StatsLineChartPerMinute from './StatsLineChartPerMinute.jsx';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+
+const moment = extendMoment(Moment);
 
 import './StatsLineChart.scss';
 
@@ -57,12 +60,12 @@ export default React.createClass({
   },
 
   getFixedDateRange() {
-    const fixedDateRange = moment.range(this.props.dateRange.start.startOf('day'), this.props.dateRange.end.endOf('day'));
+    const fixedDateRange = moment.range(this.props.dateRange.start.clone().startOf('day'), this.props.dateRange.end.clone().endOf('day'));
     return fixedDateRange;
   },
 
   chooseContent(dateRange) {
-    const dateRangeLength = dateRange.toArray('days').length;
+    const dateRangeLength = Array.from(dateRange.by('days')).length;
 
     if(dateRangeLength > 7) {
       return this.statsPerDayComponent();
