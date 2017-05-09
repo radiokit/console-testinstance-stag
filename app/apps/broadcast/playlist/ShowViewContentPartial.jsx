@@ -61,7 +61,7 @@ const BroadcastPlaylistContent = React.createClass({
     });
   },
 
-  onRecordsDelete() {
+  reloadData() {
     if (this.refs.tableBrowser) {
       this.refs.tableBrowser.reloadData();
     }
@@ -69,9 +69,9 @@ const BroadcastPlaylistContent = React.createClass({
 
   buildTableAttributes() {
     return {
-      cue_in_at: { renderer: 'time', sortable: true, props: { format: 'HH:mm:ss' } },
+      cue_in_at: { renderer: 'datetime', sortable: true, props: { format: 'MMM DD HH:mm:ss', timezone: '' } },
       name: { renderer: 'string', sortable: true },
-      cue_out_at: { renderer: 'time', sortable: true, props: { format: 'HH:mm:ss' } },
+      cue_out_at: { renderer: 'datetime', sortable: true, props: { format: 'MMM DD HH:mm:ss', timezone: '' } },
     };
   },
 
@@ -120,7 +120,7 @@ const BroadcastPlaylistContent = React.createClass({
       >
         <PlaylistToolbar
           selectedRecordIds={this.state.selectedRecordIds}
-          onDelete={this.onRecordsDelete}
+          reloadData={this.reloadData}
         />
       </TableBrowser>
     );

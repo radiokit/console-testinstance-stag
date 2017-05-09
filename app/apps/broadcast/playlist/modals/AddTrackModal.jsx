@@ -9,6 +9,10 @@ import ScheduleItemForm from './ScheduleItemForm.jsx';
 import './AddTrackModal.scss';
 
 const AddTrackModal = React.createClass({
+  propTypes: {
+    onSave: PropTypes.func.isRequired,
+  },
+
   contextTypes: {
     availableAccounts: PropTypes.object.isRequired,
     currentBroadcastChannel: PropTypes.object.isRequired,
@@ -82,7 +86,7 @@ const AddTrackModal = React.createClass({
   },
 
   onScheduleItemSaved() {
-    this.setState({ loading: false, loaded: true });
+    this.setState({ loading: false, loaded: true }, this.props.onSave);
   },
 
   onScheduleItemError(error) {

@@ -1,10 +1,28 @@
 import React, { PropTypes } from 'react';
 import Translate from 'react-translate-component';
 import { throttle } from 'lodash';
+import { List } from 'immutable';
 
 import TableBrowser from '../admin/table_browser_widget.jsx';
 import RadioKit from '../../services/RadioKit';
 import './file_picker_widget.scss';
+
+function isMetadataSchemaSortable(schema) {
+  const kind = schema.get('kind');
+
+  return (
+    kind === 'string' ||
+    kind === 'db' ||
+    kind === 'integer' ||
+    kind === 'text' ||
+    kind === 'float' ||
+    kind === 'date' ||
+    kind === 'time' ||
+    kind === 'datetime' ||
+    kind === 'url' ||
+    kind === 'duration'
+  );
+}
 
 export default React.createClass({
   propTypes: {
@@ -22,6 +40,8 @@ export default React.createClass({
   getInitialState() {
     return {
       search: '',
+      visibleMetadataSchemas: [],
+      showMetadataTogglers: false,
     };
   },
 
@@ -35,6 +55,35 @@ export default React.createClass({
     }, this.refreshTable);
   },
 
+  onToggleMetadataItem(evt) {
+    const metadataSchemaId = evt.target.value;
+
+    if (this.state.visibleMetadataSchemas.includes(metadataSchemaId)) {
+      this.setState({
+        visibleMetadataSchemas: this.state.visibleMetadataSchemas
+          .filter(id => id !== metadataSchemaId),
+      });
+    } else {
+      this.setState({
+        visibleMetadataSchemas: [
+          ...this.state.visibleMetadataSchemas,
+          metadataSchemaId,
+        ],
+      });
+    }
+  },
+
+  onMetadataTogglersVisibilityChange() {
+    this.setState({
+      showMetadataTogglers: !this.state.showMetadataTogglers,
+    });
+  },
+
+  getFilteredMetadataSchemas() {
+    return this.props.repository.get('metadata_schemas', new List())
+      .filter(schema => schema.get('tag_category_id') === null);
+  },
+
   refreshTable() {
     if (this.refs.tableBrowser) {
       this.refs.tableBrowser.reloadData();
@@ -42,10 +91,44 @@ export default React.createClass({
   },
 
   buildAttributes() {
-    return {
+    const schemas = this.props.repository.get('metadata_schemas', new List());
+    const attributes = {
       name: { renderer: 'string', sortable: true },
       inserted_at: { renderer: 'datetime', sortable: true },
     };
+
+    return this.state.visibleMetadataSchemas.reduce((acc, schemaId) => {
+      const schema = schemas.find(it => it.get('id') === schemaId);
+      if (!schema) {
+        return acc;
+      }
+
+      // eslint-disable-next-line no-param-reassign
+      acc[schema.get('key')] = {
+        renderer: schema.get('kind'),
+        headerText: schema.get('name'),
+        sortable: isMetadataSchemaSortable(schema),
+        sortableFunc: (query, attribute, direction) => query.scope(
+          'sorted_by_metadata',
+          schema.get('key'),
+          schema.get('kind'),
+          direction
+        ),
+        valueFunc: (record) => {
+          const foundMetadataItem = record
+            .get('metadata_items')
+            .find(metadataItem => metadataItem.get('metadata_schema_id') === schemaId);
+
+          if (!foundMetadataItem) {
+            return null;
+          }
+
+          return foundMetadataItem.get(`value_${schema.get('kind')}`);
+        },
+      };
+
+      return acc;
+    }, attributes);
   },
 
   buildQuery() {
@@ -83,7 +166,48 @@ export default React.createClass({
     return query;
   },
 
+  renderMetadataSchemaCheckbox(metadataSchema) {
+    const selected = this.state.visibleMetadataSchemas.find(id =>
+      id === metadataSchema.get('id')
+    );
+
+    return (
+      <div
+        className="checkbox FilePickerWidget-metadataTogglers-checkbox"
+        key={metadataSchema.get('id')}
+      >
+        <label>
+          <input
+            type="checkbox"
+            value={metadataSchema.get('id')}
+            selected={selected}
+            onChange={this.onToggleMetadataItem}
+          />
+          {metadataSchema.get('name')}
+        </label>
+      </div>
+    );
+  },
+
+  renderMetadataTogglers() {
+    if (!this.state.showMetadataTogglers) {
+      return null;
+    }
+
+    const schemas = this.getFilteredMetadataSchemas()
+      .toArray()
+      .map(this.renderMetadataSchemaCheckbox);
+
+    return (
+      <div className="FilePickerWidget-metadataTogglers">
+        {schemas}
+      </div>
+    );
+  },
+
   render() {
+    const metadataIcon = this.state.showMetadataTogglers ? 'down' : 'right';
+
     return (
       <div className="FilePickerWidget">
         <div className="FilePickerWidget-header">
@@ -105,6 +229,19 @@ export default React.createClass({
               htmlFor="search"
             />
           </div>
+        </div>
+        <div className="FilePickerWidget-metadata clearfix">
+          <button
+            className="btn btn-default FilePickerWidget-metadata-expandButton"
+            onClick={this.onMetadataTogglersVisibilityChange}
+          >
+            <i className={`mdi mdi-chevron-${metadataIcon}`} />
+            <Translate
+              component="span"
+              content="widgets.vault.file_picker.metadata_label"
+            />
+          </button>
+          {this.renderMetadataTogglers()}
         </div>
         <TableBrowser
           ref="tableBrowser"

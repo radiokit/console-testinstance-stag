@@ -5,13 +5,15 @@ import ToolbarButtonModal from '../../../widgets/admin/toolbar_button_modal_widg
 import DeleteModal from '../../../widgets/admin/crud/delete_modal.jsx';
 import AddTrackModal from './modals/AddTrackModal.jsx';
 
-const PlaylistToolbar = ({ selectedRecordIds, onDelete }) => (
+const PlaylistToolbar = ({ selectedRecordIds, reloadData }) => (
   <ToolbarGroup>
     <ToolbarButtonModal
       icon="plus"
       labelTextKey="apps.broadcast.playlist.toolbar.add_button"
       modalElement={AddTrackModal}
-      modalProps={{}}
+      modalProps={{
+        onSave: reloadData,
+      }}
     />
     <ToolbarButtonModal
       icon="delete"
@@ -23,7 +25,7 @@ const PlaylistToolbar = ({ selectedRecordIds, onDelete }) => (
         app: 'plumber',
         model: 'Media.Input.File.RadioKit.Vault',
         selectedRecordIds,
-        afterFormAccept: onDelete,
+        afterFormAccept: reloadData,
       }}
     />
   </ToolbarGroup>
@@ -31,7 +33,7 @@ const PlaylistToolbar = ({ selectedRecordIds, onDelete }) => (
 
 PlaylistToolbar.propTypes = {
   selectedRecordIds: PropTypes.object.isRequired,
-  onDelete: PropTypes.func.isRequired,
+  reloadData: PropTypes.func.isRequired,
 };
 
 export default PlaylistToolbar;

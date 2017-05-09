@@ -4,6 +4,7 @@ export default {
       file_picker: {
         search_label: 'Search',
         search_input_label: 'File name',
+        metadata_label: 'Metadata',
       },
     },
   },

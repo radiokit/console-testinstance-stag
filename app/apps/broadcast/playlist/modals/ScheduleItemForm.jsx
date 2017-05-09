@@ -158,7 +158,7 @@ const ScheduleItemForm = React.createClass({
           <div className="form-group">
             <Translate
               component="label"
-              content="apps.  broadcast.playlist.form.end_at"
+              content="apps.broadcast.playlist.form.end_at"
             />
             <InputLocalDateTime
               disabled
