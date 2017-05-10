@@ -17,7 +17,7 @@ import Dashboard from './dashboard.jsx';
 import ScopeLayout from './layouts/ScopeLayout.jsx';
 import AppsIndex from './apps/apps_index.jsx';
 import BroadcastApp from './apps/broadcast/app.jsx';
-import BroadcastPlaylistIndex from './apps/broadcast/playlist/index_view.jsx';
+import BroadcastPlaylistShow from './apps/broadcast/playlist/ShowView.jsx';
 import BroadcastRoyaltiesIndex from './apps/broadcast/royalties/IndexView.jsx';
 import ElectronApp from './apps/electron/app.jsx';
 import ElectronPatchbayIndex from './apps/electron/patchbay/IndexView.jsx';
@@ -49,11 +49,14 @@ Counterpart.registerTranslations("en", require('./locales/en/apps/electron.js'))
 Counterpart.registerTranslations("en", require('./locales/en/apps/administration.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/administration.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/vault/file_browser.js'));
+Counterpart.registerTranslations("en", require('./locales/en/widgets/vault/file_picker.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/table_browser.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/modal.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/scope.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/form.js'));
+
 Counterpart.registerTranslations("pl", require('./locales/pl/general.js'));
+Counterpart.registerTranslations("pl", require('./locales/pl/pluralize.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/almanac.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/broadcast.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/library.js'));
@@ -61,6 +64,7 @@ Counterpart.registerTranslations("pl", require('./locales/pl/apps/electron.js'))
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/administration.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/administration.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/vault/file_browser.js'));
+Counterpart.registerTranslations("pl", require('./locales/pl/widgets/vault/file_picker.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/table_browser.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/modal.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/scope.js'));
@@ -120,8 +124,8 @@ ReactDOM.render((
       <Route path="apps" component={AppsIndex} onEnter={pingGoogleAnalytics}>
         <Route path="broadcast" component={BroadcastApp}>
           <Route component={ScopeLayout} scope="broadcastChannel">
-            <Route path="playlist/index" component={BroadcastPlaylistIndex} onEnter={pingGoogleAnalytics} />
-            <Route path="playlist(/:date/:zoom)" component={BroadcastPlaylistIndex} onEnter={pingGoogleAnalytics} />
+            <Route path="playlist" component={BroadcastPlaylistShow} onEnter={pingGoogleAnalytics} />
+            <Route path="playlist/:date" component={BroadcastPlaylistShow} onEnter={pingGoogleAnalytics} />
           </Route>
           <Route component={ScopeLayout} scope="broadcastChannel">
             <Route path="royalties/index" component={BroadcastRoyaltiesIndex} onEnter={pingGoogleAnalytics} />
