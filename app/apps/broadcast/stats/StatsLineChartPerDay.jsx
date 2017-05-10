@@ -2,33 +2,30 @@ import React from 'react';
 import Counterpart from 'counterpart';
 import { Line } from 'react-chartjs-2';
 import getColor from './getColor.js';
-import resizeSensor from 'css-element-queries/src/ResizeSensor';
 import moment from 'moment';
 import classNames from 'classnames';
 import merge from 'lodash.merge';
+import Loading from '../../../widgets/general/loading_widget.jsx';
 
-import './StatsChartPerDay.scss';
-
-Counterpart.registerTranslations('en', require('./IndexView.locale.en.js'));
-Counterpart.registerTranslations('pl', require('./IndexView.locale.pl.js'));
+import './StatsLineChartPerDay.scss';
 
 export default React.createClass({
 
   propTypes: {
     dateRange: React.PropTypes.object.isRequired,
-    users: React.PropTypes.object.isRequired,
+    targets: React.PropTypes.object.isRequired,
+    channels: React.PropTypes.object.isRequired,
     className: React.PropTypes.string,
     xAxisLabel: React.PropTypes.string,
   },
 
   getInitialState() {
     return {
-      width: 300,
-      height: 300,
+      height: 500,
+      loaded: false,
       data: {
         datasets: [],
       },
-      status: 'upToDate',
     };
   },
 
@@ -36,36 +33,27 @@ export default React.createClass({
     this.reload(this.props);
   },
 
-  componentDidMount() {
-    resizeSensor(this.refs.container, this.onResize);
-    this.onResize();
-  },
-
   componentWillReceiveProps(nextProps) {
     this.reload(nextProps);
   },
 
-  onResize() {
-    const { offsetWidth, offsetHeight } = this.refs.container;
-    this.setState({ width: offsetWidth, height: offsetHeight });
-  },
-
   onDataReceived(_event, _query, data) {
-    const { dateRange, users } = this.props;
-    const dateRangeArray = dateRange.toArray('days');
-    const display_data = users
+    const { dateRange, targets } = this.props;
+    const dateRangeArray = Array.from(dateRange.by('days'));
+    const display_data = targets
             .groupBy(u => u).map(u => u.get(0))
             .map(u => {
-              const connections = data
+              const filteredData = data
                 .filter(watch => watch.get('target').get('id') === u.get('id'))
                 .groupBy(watch =>
-                  moment(watch.get('day'), this.dateFormat).diff(dateRange.start, 'days'))
-                .map(watch => watch.first().get('connections'));
-              const listeners = data
-                .filter(watch => watch.get('target').get('id') === u.get('id'))
-                .groupBy(watch =>
-                  moment(watch.get('day'), this.dateFormat).diff(dateRange.start, 'days'))
-                .map(watch => watch.first().get('listeners'));
+                  moment(watch.get('day'), this.dateFormat).diff(dateRange.start, 'days'));
+
+              const connections =  filteredData
+                .map(watch => watch.map(record => record.get('connections')).reduce((previous, current) => previous + current));
+
+              const listeners = filteredData
+                .map(watch => watch.map(record => record.get('listeners')).reduce((previous, current) => previous + current));
+
               return {
                 id: u.get('id'),
                 name: u.get('name'),
@@ -76,27 +64,26 @@ export default React.createClass({
             .toArray()
             .map(u => {
               const colorNum = parseInt(u.id.replace(/\D/g, ''), 10) % 500;
-              console.log(colorNum);
               return [
-                {
-                  label: u.name + Counterpart(this.contentPrefix + ".labels.connections"),
-                  data: u.connections,
-                  borderColor: getColor(colorNum, 50, 1),
-                  backgroundColor: getColor(colorNum, 80, 0.2),
-                  borderWidth: 2,
-                },
                 {
                   label: u.name + Counterpart(this.contentPrefix + ".labels.listeners"),
                   data: u.listeners,
                   borderColor: getColor(colorNum, 30, 1),
-                  backgroundColor: getColor(colorNum, 60, 0.2),
+                  backgroundColor: getColor(colorNum, 60, 1),
+                  borderWidth: 2,
+                },
+                {
+                  label: u.name + Counterpart(this.contentPrefix + ".labels.connections"),
+                  data: u.connections,
+                  borderColor: getColor(colorNum, 50, 1),
+                  backgroundColor: getColor(colorNum, 80, 1),
                   borderWidth: 2,
                 }
               ];
             });
 
     this.setState({
-      status: 'upToDate',
+      loaded: true,
       data: {
         labels: dateRangeArray,
         datasets: [].concat.apply([], display_data),
@@ -105,16 +92,20 @@ export default React.createClass({
   },
 
   chartOptions: {
-    responsive: false,
+    responsive: true,
     animation: false,
+    maintainAspectRatio: false,
     hover: {
       animationDuration: 0
     },
     legend: {
       display: false,
     },
-    maintainAspectRatio: false,
     elements: {
+      point: {
+        radius: 0,
+        hitRadius: 2,
+      },
       line: {
         fill: 'bottom',
       },
@@ -133,16 +124,13 @@ export default React.createClass({
           suggestedMin: 0,
           suggestedMax: 50,
         },
+        stacked: true
       }],
     },
   },
 
   dateFormat: 'YYYY-MM-DD HH:mm:ss',
-  contentPrefix: 'apps.administration.stats.charts',
-
-  getStatus() {
-    return Counterpart(this.contentPrefix + '.statuses.' + this.state.status);
-  },
+  contentPrefix: 'apps.broadcast.stats.charts',
 
   mergedChartOptions() {
     const xAxisLabel = {
@@ -150,7 +138,7 @@ export default React.createClass({
         xAxes: [{
           scaleLabel: {
             display: true,
-            labelString: Counterpart('apps.administration.stats.charts.labels.xAxisLabel'),
+            labelString: Counterpart('apps.broadcast.stats.charts.labels.xAxisLabel'),
           }
         }]
       }
@@ -159,35 +147,53 @@ export default React.createClass({
     return merge(this.chartOptions, xAxisLabel);
   },
 
-  reload({ dateRange, users }) {
+  reload({ dateRange, targets, channels }) {
     const { data } = this.state;
-    data.labels = dateRange.toArray('days');
-    this.setState({ data });
-    this.setState({ status: 'loading' });
-    window.data.query('circumstances', 'cache_stream_play_per_target_per_day')
-      .joins('target')
-      .select('target.id', 'target.name', 'day', 'connections', 'listeners')
+    data.labels = Array.from(dateRange.by('days'));
+
+    let query = window.data.query('circumstances', 'cache_stream_play_per_target_per_day')
       .where('day', 'gte', dateRange.start.format(this.dateFormat))
-      .where('day', 'lte', dateRange.end.format(this.dateFormat))
-      .where('target.id', 'in', users.map(u => u.get('id')).toJS())
+      .where('day', 'lte', dateRange.end.format(this.dateFormat));
+
+    if (targets.isEmpty()) {
+      query
+        .where('target_id', 'isnull');
+    } else {
+      query
+        .joins('target')
+        .where('target.id', 'in', targets.map(u => u.get('id')).toJS());
+    }
+
+    if (channels.isEmpty()) {
+      query
+        .where('channel_id', 'isnull');
+    } else {
+      query
+        .where('channel_id', 'in', channels.map(u => u.get('channel_id')).toJS());
+    }
+
+    query
+      .select('target.id', 'target.name', 'day', 'connections', 'listeners')
       .on('fetch', this.onDataReceived)
       .fetch();
   },
 
   render() {
     const { className, ...props } = this.props;
+
+    if (this.state.loaded === false) {
+      return <Loading />;
+    }
+
     return (
-      <div className={classNames('StatsChartPerDay', className)} {...props}>
-        <div className="StatsChartPerDay-status">{this.getStatus()}</div>
-        <div ref="container" className="StatsChartPerDay-innerContainer">
+      <div className={classNames('StatsLineChartPerDay', className)} {...props}>
+        <div ref="container" className="StatsLineChartPerDay-innerContainer">
           <Line
-            key={`${this.state.width}x${this.state.height}`}
+            key={this.state.height}
             ref="chart"
             data={this.state.data}
             options={this.mergedChartOptions()}
             height={this.state.height}
-            width={this.state.width}
-            style={{ height: this.state.height, width: this.state.width }}
             redraw
           />
         </div>

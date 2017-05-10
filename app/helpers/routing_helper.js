@@ -40,6 +40,11 @@ export default {
           return '/apps/broadcast/royalties/index';
         },
       },
+      stats: {
+        index() {
+          return '/apps/broadcast/stats/index';
+        },
+      },
     },
 
     administration: {
@@ -52,11 +57,6 @@ export default {
       file_repositories: {
         index() {
           return '/apps/administration/file_repositories/index';
-        },
-      },
-      stats: {
-        index() {
-          return '/apps/administration/stats/index';
         },
       },
       broadcast_channels: {
