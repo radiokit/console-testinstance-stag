@@ -62,6 +62,8 @@ const ShowViewSidebarPartial = React.createClass({
           requestFullRecords
           selectable
           selectAllOnMount
+          onlyUpperPagination
+          hidePaginationCounter
         />
         <Table
           className="Stats-table"
@@ -74,6 +76,8 @@ const ShowViewSidebarPartial = React.createClass({
           requestFullRecords
           selectable
           selectAllOnMount
+          onlyUpperPagination
+          hidePaginationCounter
         />
       </div>
     );

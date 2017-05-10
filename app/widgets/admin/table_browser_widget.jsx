@@ -20,6 +20,8 @@ export default React.createClass({
     recordsLinkFunc: React.PropTypes.func,
     requestFullRecords: React.PropTypes.bool,
     selectAllOnMount: React.PropTypes.bool,
+    onlyUpperPagination: React.PropTypes.bool,
+    hidePaginationCounter: React.PropTypes.bool,
   },
 
 
@@ -27,6 +29,8 @@ export default React.createClass({
     return {
       selectable: false,
       limit: 100,
+      hidePaginationCounter: false,
+      onylUpperPagination: false,
     }
   },
 
@@ -233,10 +237,18 @@ export default React.createClass({
   },
 
   renderPagination: function() {
+    let counter;
+
+    if (this.props.hidePaginationCounter) {
+      counter = "";
+    } else {
+      counter = (<Translate className="btn" style={{cursor: "default"}} content="widgets.admin.table_browser.pagination.current.label" rangeStart={this.buildRangeStart()} rangeStop={this.buildRangeStop()} rangeTotal={this.state.recordsCount} component="div" />);
+    }
+
     if(this.state.recordsCount !== 0) {
       return (
         <ToolbarGroup position="right">
-          <Translate className="btn" style={{cursor: "default"}} content="widgets.admin.table_browser.pagination.current.label" rangeStart={this.buildRangeStart()} rangeStop={this.buildRangeStop()} rangeTotal={this.state.recordsCount} component="div" />
+          {counter}
           <button type="button" className="btn btn-default-light" onClick={this.onPreviousPageClick} disabled={this.state.offset === 0} title={Counterpart.translate("widgets.admin.table_browser.pagination.previous.title")}><i className="mdi mdi-chevron-left"/></button>
           <button type="button" className="btn btn-default-light" onClick={this.onNextPageClick} disabled={this.buildRangeStop() === this.state.recordsCount} title={Counterpart.translate("widgets.admin.table_browser.pagination.next.title")}><i className="mdi mdi-chevron-right"/></button>
         </ToolbarGroup>
@@ -321,7 +333,7 @@ export default React.createClass({
             {this.renderTable()}
 
             {() => {
-              if(this.state.recordsCount > 10) {
+              if(this.state.recordsCount > 10 && !this.props.onlyUpperPagination) {
                 return (
                   <Toolbar>
                     {this.renderPagination()}
