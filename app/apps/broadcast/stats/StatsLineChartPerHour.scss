@@ -1,17 +1,2 @@
 .StatsLineChartPerHour {
-  overflow: hidden;
-  display:flex;
-  flex-flow: column;
-
-  .StatsLineChartPerHour-status {
-    padding: {
-      left: 40px;
-      top: 10px;
-      bottom: 5px;
-    }
-  }
-  .StatsLineChartPerHour-innerContainer {
-    flex: 1;
-    overflow: hidden;
-  }
 }

@@ -2,14 +2,11 @@ import React from 'react';
 import Counterpart from 'counterpart';
 import { Bar } from 'react-chartjs-2';
 import getColor from './getColor.js';
-import resizeSensor from 'css-element-queries/src/ResizeSensor';
 import moment from 'moment';
 import classNames from 'classnames';
+import Loading from '../../../widgets/general/loading_widget.jsx';
 
 import './StatsBarChartPerUnit.scss';
-
-Counterpart.registerTranslations('en', require('./IndexView.locale.en.js'));
-Counterpart.registerTranslations('pl', require('./IndexView.locale.pl.js'));
 
 export default React.createClass({
 
@@ -24,8 +21,8 @@ export default React.createClass({
 
   getInitialState() {
     return {
-      width: 300,
-      height: 300,
+      height: 500,
+      loaded: false,
       data: {
         labels: [],
         datasets: [],
@@ -37,18 +34,8 @@ export default React.createClass({
     this.reload(this.props);
   },
 
-  componentDidMount() {
-    resizeSensor(this.refs.container, this.onResize);
-    this.onResize();
-  },
-
   componentWillReceiveProps(nextProps) {
     this.reload(nextProps);
-  },
-
-  onResize() {
-    const { offsetWidth, offsetHeight } = this.refs.container;
-    this.setState({ width: offsetWidth, height: offsetHeight });
   },
 
   onDataReceived(_event, _query, data) {
@@ -114,6 +101,7 @@ export default React.createClass({
     };
 
     this.setState({
+      loaded: true,
       data: displayData,
     });
   },
@@ -149,12 +137,10 @@ export default React.createClass({
         return 'cache_stream_play_length_per_target_per_day';
         break;
       }
-
       case 'week': {
         return 'cache_stream_play_length_per_target_per_week';
         break;
       }
-
       case 'month': {
         return 'cache_stream_play_length_per_target_per_month';
         break;
@@ -193,17 +179,20 @@ export default React.createClass({
 
   render() {
     const { className, ...props } = this.props;
+
+    if (this.state.loaded === false) {
+      return <Loading />;
+    }
+
     return (
       <div className={classNames('StatsBarChartPerUnit', className)} {...props}>
         <div ref="container" className="StatsBarChartPerUnit-innerContainer">
           <Bar
-            key={`${this.state.width}x${this.state.height}`}
+            key={this.state.height}
             ref="chart"
             data={this.state.data}
             options={this.chartOptions}
             height={this.state.height}
-            width={this.state.width}
-            style={{ height: this.state.height, width: this.state.width }}
             redraw
           />
         </div>

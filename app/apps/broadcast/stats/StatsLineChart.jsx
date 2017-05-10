@@ -25,7 +25,7 @@ export default React.createClass({
 
     return (
       <StatsLineChartPerDay
-        className="Stats-chart"
+        className="StatsLineChart"
         dateRange={this.getFixedDateRange()}
         targets={targets}
         channels={channels}
@@ -38,7 +38,7 @@ export default React.createClass({
 
     return (
       <StatsLineChartPerHour
-        className="Stats-chart"
+        className="StatsLineChart"
         dateRange={this.getFixedDateRange()}
         targets={targets}
         channels={channels}
@@ -51,7 +51,7 @@ export default React.createClass({
 
     return (
       <StatsLineChartPerMinute
-        className="Stats-chart"
+        className="StatsLineChart"
         dateRange={this.getFixedDateRange()}
         targets={targets}
         channels={channels}

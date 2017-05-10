@@ -25,7 +25,7 @@ export default React.createClass({
 
     return (
       <StatsBarChartPerUnit
-        className="Stats-chart"
+        className="StatsBarChart"
         startDate={startDate}
         endDate={endDate}
         targets={targets}

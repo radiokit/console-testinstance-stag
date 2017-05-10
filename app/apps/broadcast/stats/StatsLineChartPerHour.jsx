@@ -2,15 +2,12 @@ import React from 'react';
 import Counterpart from 'counterpart';
 import { Line } from 'react-chartjs-2';
 import getColor from './getColor.js';
-import resizeSensor from 'css-element-queries/src/ResizeSensor';
 import moment from 'moment';
 import classNames from 'classnames';
 import merge from 'lodash.merge';
+import Loading from '../../../widgets/general/loading_widget.jsx';
 
 import './StatsLineChartPerHour.scss';
-
-Counterpart.registerTranslations('en', require('./IndexView.locale.en.js'));
-Counterpart.registerTranslations('pl', require('./IndexView.locale.pl.js'));
 
 export default React.createClass({
 
@@ -23,8 +20,8 @@ export default React.createClass({
 
   getInitialState() {
     return {
-      width: 300,
-      height: 300,
+      height: 500,
+      loaded: false,
       data: {
         datasets: [],
       },
@@ -35,18 +32,8 @@ export default React.createClass({
     this.reload(this.props);
   },
 
-  componentDidMount() {
-    resizeSensor(this.refs.container, this.onResize);
-    this.onResize();
-  },
-
   componentWillReceiveProps(nextProps) {
     this.reload(nextProps);
-  },
-
-  onResize() {
-    const { offsetWidth, offsetHeight } = this.refs.container;
-    this.setState({ width: offsetWidth, height: offsetHeight });
   },
 
   onDataReceived(_event, _query, data) {
@@ -95,6 +82,7 @@ export default React.createClass({
             });
 
     this.setState({
+      loaded: true,
       data: {
         labels: dateRangeArray,
         datasets: [].concat.apply([], display_data),
@@ -104,7 +92,7 @@ export default React.createClass({
   },
 
   chartOptions: {
-    responsive: false,
+    responsive: true,
     animation: false,
     maintainAspectRatio: false,
     hover: {
@@ -113,7 +101,6 @@ export default React.createClass({
     legend: {
       display: false,
     },
-    maintainAspectRatio: false,
     elements: {
       point: {
         radius: 0,
@@ -193,17 +180,20 @@ export default React.createClass({
 
   render() {
     const { className, ...props } = this.props;
+
+    if (this.state.loaded === false) {
+      return <Loading />;
+    }
+
     return (
       <div className={classNames('StatsLineChartPerHour', className)} {...props}>
         <div ref="container" className="StatsLineChartPerHour-innerContainer">
           <Line
-            key={`${this.state.width}x${this.state.height}`}
+            key={this.state.height}
             ref="chart"
             data={this.state.data}
             options={this.mergedChartOptions()}
             height={this.state.height}
-            width={this.state.width}
-            style={{ height: this.state.height, width: this.state.width }}
             redraw
           />
         </div>
