@@ -1,0 +1,28 @@
+
+.FilePickerWidget {
+
+  .FilePickerWidget-header {
+    padding: 0 15px;
+  }
+
+  .FilePickerWidget-metadata {
+    padding: 0 15px;
+
+    .FilePickerWidget-metadata-expandButton {
+      float: none;
+    }
+  }
+
+  .FilePickerWidget-metadataTogglers {
+
+    .FilePickerWidget-metadataTogglers-checkbox {
+      display: inline-block;
+      width: 33%;
+      min-width: 200px;
+
+      span {
+        cursor: pointer;
+      }
+    }
+  }
+}
