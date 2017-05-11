@@ -266,6 +266,7 @@ const ShowContentPartial = React.createClass({
         ref="tableBrowser"
         onSelect={this.onTableSelect}
         selectable
+        searchable
         attributes={this.buildTableAttributes()}
         contentPrefix="widgets.vault.file_browser.table"
         requestFullRecords

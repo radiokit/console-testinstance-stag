@@ -20,6 +20,9 @@ export default {
         refresh: {
           title: "Odśwież",
         },
+        search: {
+          title: "Szukaj  (min. 3 znaki)",
+        },
         pagination: {
           current: {
             label: "Rekordy %(rangeStart)s-%(rangeStop)s z %(rangeTotal)s"

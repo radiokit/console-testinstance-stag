@@ -14,6 +14,7 @@ export default React.createClass({
     attributes: React.PropTypes.object.isRequired,
     contentPrefix: React.PropTypes.string.isRequired,
     selectable: React.PropTypes.bool,
+    searchable: React.PropTypes.bool,
     onSelect: React.PropTypes.func,
     limit: React.PropTypes.number.isRequired,
     recordsQuery: React.PropTypes.object.isRequired,
@@ -28,6 +29,7 @@ export default React.createClass({
   getDefaultProps: function() {
     return {
       selectable: false,
+      searchable: false,
       limit: 100,
       hidePaginationCounter: false,
       onylUpperPagination: false,
@@ -49,6 +51,7 @@ export default React.createClass({
       sortedAttribute: null,
       sortedDirection: null,
       selectAll: false,
+      searchTerm: null,
     };
   },
 
@@ -63,6 +66,14 @@ export default React.createClass({
       .clone()
       .clearSelect()
       .select("id")
+
+    if(this.state.searchTerm) {
+      this.recordQueryFull = this.recordsQueryFull
+        .scope("search", this.state.searchTerm);
+
+      this.recordQueryIds = this.recordsQueryIds
+        .scope("search", this.state.searchTerm);
+    }
 
     if(this.state.sortedAttribute) {
       if(typeof(this.props.attributes[this.state.sortedAttribute].sortableFunc) === "function") {
@@ -236,6 +247,51 @@ export default React.createClass({
     this.reloadData();
   },
 
+  onSearchChange: function(e) {
+    const term = e.target.value;
+
+    if(term.length >= 3) {
+      this.setState({
+        searchTerm: term,
+      }, () => {
+        this.scheduleReloadDueToSearchChange();   
+      });
+
+    } else {
+      this.setState({
+        searchTerm: null,
+      }, () => {
+        this.scheduleReloadDueToSearchChange();   
+      });
+    }
+  },
+
+  scheduleReloadDueToSearchChange: function() {
+    this.cancelReloadDueToSearchChange();
+
+    const that = this;
+    this.searchReloadTimeout = setTimeout(function() {
+      delete that.searchReloadTimeout;
+      that.reloadData();  
+    }, 500);          
+  },
+
+  cancelReloadDueToSearchChange: function() {
+    if(this.searchReloadTimeout) {
+      delete this.searchReloadTimeout;
+    }
+  },
+
+  renderSearch: function() {
+    if(this.props.searchable) {
+      return (
+        <ToolbarGroup position="right">
+          <input type="text" className="form-control" placeholder={Counterpart.translate("widgets.admin.table_browser.search.title")} onChange={this.onSearchChange} />
+        </ToolbarGroup>
+      );
+    }
+  },
+
   renderPagination: function() {
     let counter;
 
@@ -300,6 +356,7 @@ export default React.createClass({
 
               {this.renderPagination()}
               {this.renderRefresh()}
+              {this.renderSearch()}
             </Toolbar>
 
             {() => {
