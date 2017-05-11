@@ -17,6 +17,9 @@ export default {
             },
           }
         },
+        search: {
+          title: "Search (min. 3 characters)",
+        },
         refresh: {
           title: "Refresh",
         },
