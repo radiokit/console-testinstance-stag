@@ -10,6 +10,7 @@ import './AddTrackModal.scss';
 
 const AddTrackModal = React.createClass({
   propTypes: {
+    offset: PropTypes.number.isRequired,
     onSave: PropTypes.func.isRequired,
   },
 
@@ -209,6 +210,7 @@ const AddTrackModal = React.createClass({
   renderForm() {
     return (
       <ScheduleItemForm
+        offset={this.props.offset}
         file={this.state.file}
         schemas={this.state.repository.get('metadata_schemas')}
         timezone={this.context.currentBroadcastChannel.get('timezone')}
