@@ -7,6 +7,7 @@ import './ScheduleItemForm.scss';
 
 const ScheduleItemForm = React.createClass({
   propTypes: {
+    offset: PropTypes.number.isRequired,
     timezone: PropTypes.string.isRequired,
     file: PropTypes.object.isRequired,
     schemas: PropTypes.object.isRequired,
@@ -20,11 +21,13 @@ const ScheduleItemForm = React.createClass({
 
   getInitialState() {
     const duration = this.getFileDuration();
+    const startDate = moment(this.props.offset).startOf('day');
+    const endDate = moment(startDate).add(duration);
 
     return {
       name: this.props.initialName || this.props.file.get('name'),
-      startDate: this.props.initialStartDate || moment(),
-      endDate: this.props.initialStopDate || moment().add(duration),
+      startDate: this.props.initialStartDate || startDate,
+      endDate: this.props.initialStopDate || endDate,
       optionalFieldsExpanded: false,
     };
   },

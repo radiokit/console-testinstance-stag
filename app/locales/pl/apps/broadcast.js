@@ -10,6 +10,9 @@ export default {
         royalties: {
           title: 'Tantiemy',
         },
+        stats: {
+          title: "Statystyki",
+        },
       },
       playlist: {
         header: 'Ramówka',

@@ -28,6 +28,8 @@ export default React.createClass({
     contentProps: React.PropTypes.object,
     sidebarProps: React.PropTypes.object,
     toolbarProps: React.PropTypes.object,
+    sidebarColumnClasses: React.PropTypes.string,
+    contentColumnClasses: React.PropTypes.string,
   },
 
   getDefaultProps() {
@@ -139,7 +141,10 @@ export default React.createClass({
         <CardBody cardPadding={this.props.cardPadding} >
           {(this.props.sidebarElement)
           ? (
-                <CardSidebar>
+                <CardSidebar
+                  sidebarColumnClasses={this.props.sidebarColumnClasses}
+                  contentColumnClasses={this.props.contentColumnClasses}
+                >
                   {this.renderSidebarElement()}
                   {this.renderContentPartial()}
                 </CardSidebar>

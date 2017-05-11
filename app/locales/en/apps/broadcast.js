@@ -10,6 +10,9 @@ export default {
         royalties: {
           title: 'Royalties',
         },
+        stats: {
+          title: "Stats",
+        },
       },
       playlist: {
         header: 'Playlist',
