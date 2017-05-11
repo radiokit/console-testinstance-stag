@@ -278,6 +278,7 @@ export default React.createClass({
 
   cancelReloadDueToSearchChange: function() {
     if(this.searchReloadTimeout) {
+      clearTimeout(this.searchReloadTimeout);
       delete this.searchReloadTimeout;
     }
   },
