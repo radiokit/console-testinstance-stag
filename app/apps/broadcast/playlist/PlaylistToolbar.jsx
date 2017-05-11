@@ -5,7 +5,7 @@ import ToolbarButtonModal from '../../../widgets/admin/toolbar_button_modal_widg
 import DeleteModal from '../../../widgets/admin/crud/delete_modal.jsx';
 import AddTrackModal from './modals/AddTrackModal.jsx';
 
-const PlaylistToolbar = ({ selectedRecordIds, reloadData }) => (
+const PlaylistToolbar = ({ selectedRecordIds, reloadData, offset }) => (
   <ToolbarGroup>
     <ToolbarButtonModal
       icon="plus"
@@ -13,6 +13,7 @@ const PlaylistToolbar = ({ selectedRecordIds, reloadData }) => (
       modalElement={AddTrackModal}
       modalProps={{
         onSave: reloadData,
+        offset,
       }}
     />
     <ToolbarButtonModal
@@ -32,6 +33,7 @@ const PlaylistToolbar = ({ selectedRecordIds, reloadData }) => (
 );
 
 PlaylistToolbar.propTypes = {
+  offset: PropTypes.number.isRequired,
   selectedRecordIds: PropTypes.object.isRequired,
   reloadData: PropTypes.func.isRequired,
 };

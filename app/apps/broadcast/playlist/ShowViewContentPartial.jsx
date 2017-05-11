@@ -119,6 +119,7 @@ const BroadcastPlaylistContent = React.createClass({
         onSelect={this.onRecordsSelect}
       >
         <PlaylistToolbar
+          offset={this.props.offset}
           selectedRecordIds={this.state.selectedRecordIds}
           reloadData={this.reloadData}
         />
