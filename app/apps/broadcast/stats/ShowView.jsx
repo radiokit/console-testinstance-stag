@@ -19,10 +19,6 @@ Counterpart.registerTranslations('pl', require('./ShowView.locale.pl.js'));
 
 const ShowView = React.createClass({
 
-  contextTypes: {
-    params: React.PropTypes.object.isRequired,
-  },
-
   getInitialState() {
     return {
       dateRange: moment.range(moment().subtract(1, 'months'), moment()),

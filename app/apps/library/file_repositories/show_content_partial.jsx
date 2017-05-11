@@ -111,7 +111,7 @@ const ShowContentPartial = React.createClass({
               }).fetch();
           });
       });
-    } 
+    }
   },
 
   refreshTagData() {
