@@ -12,6 +12,10 @@ const ShowViewSidebarPartial = React.createClass({
     onDateRangeSelect: React.PropTypes.func.isRequired,
   },
 
+  contextTypes: {
+    availableBroadcastChannels: React.PropTypes.object.isRequired,
+  },
+
   buildTargetTableAttributes() {
     return {
       name: { renderer: 'string' },
@@ -31,13 +35,18 @@ const ShowViewSidebarPartial = React.createClass({
   contentPrefix: 'apps.broadcast.stats.show',
 
   render() {
+    const availableChannels = this.context.availableBroadcastChannels.map(u => u.get('id')).toJS();
+
     const targetTableQuery =
       window.data.query('circumstances', 'target')
+        .joins('raw_stream_plays')
+        .where('raw_stream_plays.channel_id', 'in', availableChannels)
         .select('id', 'name');
 
     const channelTableQuery =
       window.data.query('circumstances', 'raw_stream_play')
         .scope('distinct_channels')
+        .where('channel_id', 'in', availableChannels)
         .select('id', 'channel_id');
 
     return (

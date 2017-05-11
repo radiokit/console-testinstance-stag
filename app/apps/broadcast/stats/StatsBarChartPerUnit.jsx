@@ -165,7 +165,7 @@ export default React.createClass({
 
     if (channels.isEmpty()) {
       query
-        .where('channel_id', 'isnull');
+        .where('channel_id', 'in', []);
     } else {
       query
         .where('channel_id', 'in', channels.map(u => u.get('channel_id')).toJS());
