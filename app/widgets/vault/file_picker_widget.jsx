@@ -159,8 +159,7 @@ export default React.createClass({
       .where('stage', 'in', 'current', 'archive');
 
     if (this.state.search && this.state.search.length) {
-      const searchText = this.state.search.split('').map(letter => `${letter}%`).join('');
-      return query.where('name', 'ilike', `%${searchText}`);
+      return query.scope('search', this.state.search);
     }
 
     return query;

@@ -3,7 +3,7 @@ export default {
     vault: {
       file_picker: {
         search_label: 'Szukaj',
-        search_input_label: 'Nazwa pliku',
+        search_input_label: 'Nazwa pliku lub metadana',
         metadata_label: 'Metadane',
       },
     },
