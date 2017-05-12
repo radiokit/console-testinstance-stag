@@ -13,15 +13,15 @@ Counterpart.registerTranslations('pl', require('./IndexProfilePartial.locale.pl.
 
 
 export default React.createClass({
-  // propTypes: {
-  //   contentPrefix: React.PropTypes.string.isRequired,
-  // },
-  //
-  //
-  // contextTypes: {
-  //   currentBroadcastChannel: React.PropTypes.object.isRequired,
-  //   apps: React.PropTypes.object.isRequired,
-  // },
+  propTypes: {
+    contentPrefix: React.PropTypes.string.isRequired,
+  },
+
+
+  contextTypes: {
+    currentBroadcastChannel: React.PropTypes.object.isRequired,
+    apps: React.PropTypes.object.isRequired,
+  },
 
 
   buildForm() {
@@ -56,55 +56,6 @@ export default React.createClass({
       }
     };
   },
-
-
-
-  fetchMetadataItems(tag) {
-    RadioKit
-      .query('vault', 'Data.Tag.Item')
-      .select(
-        'id', 'name', 'tag_category_id', 'metadata_items.id', 'metadata_items.value_string',
-        'metadata_items.value_db', 'metadata_items.value_url', 'metadata_items.value_text',
-        'metadata_items.value_date', 'metadata_items.value_datetime', 'metadata_items.value_time',
-        'metadata_items.value_file', 'metadata_items.value_image',
-        'metadata_items.value_float', 'metadata_items.value_integer',
-        'metadata_items.metadata_schema_id', 'metadata_items.value_duration',
-      )
-      .joins('metadata_items')
-      .where('id', 'eq', tag.get('id'))
-      .on('error', () => {
-      })
-      .on('fetch', (_event, _query, data) => {
-        const tagIndex = this.state.selectedTagItems.indexOf(tag);
-        if (tagIndex > -1) {
-          this.setState({
-            selectedTagItems: this.state.selectedTagItems.remove(tagIndex).push(data.first()),
-          });
-        }
-      })
-      .fetch();
-  },
-
-  componentDidMount() {
-    RadioKit
-      .query('vault', 'Data.Tag.Category')
-      .select(
-        'id', 'name', 'tag_items.id', 'tag_items.name', 'tag_items.tag_category_id',
-        'metadata_schemas.id', 'metadata_schemas.key', 'metadata_schemas.kind',
-        'metadata_schemas.name',
-      )
-      .joins('metadata_schemas')
-      .joins('tag_items')
-      .where('record_repository_id', 'eq', this.props.record.get('id'))
-      .on('fetch', (_event, _query, data) => {
-        this.setState({
-          categories: data.filterNot(category => category.get('tag_items').isEmpty()),
-        });
-      })
-      .fetch();
-  },
-
-
 
 
   onFormSubmit(values) {

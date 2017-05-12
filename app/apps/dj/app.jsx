@@ -1,19 +1,31 @@
 import React from 'react';
+// import { Data } from 'radiokit-api';
 
 export default React.createClass({
 
-// contextTypes: {
-//   currentUser: React.PropTypes.object.isRequired,
+  contextTypes: {
+    currentUser: React.PropTypes.object.isRequired,
+
+  },
+
+// childContextTypes: {
+//   currentTagItemId: React.PropTypes.object,
+//   },
 //
+// getChildContext() {
+//   return {
+//   currentUser: this.state.currentUser,
+//   };
 // },
 
-childContextTypes: {
-  currentTagItemId: React.PropTypes.object,
+initializeCurrentUser (currentUser) {
+    const currentUserEmail = currentUser.get('email');
 },
 
 getInitialState() {
   return {
     currentTagItemId: null,
+    currentUser: null,
   }
 },
 
@@ -25,7 +37,7 @@ getInitialState() {
     RadioKit
       .query('vault', 'Data.Metadata.Item')
       .select('id', 'tag_item.id')
-      .where('value_string', 'eq', this.context.currentUser)
+      .where('value_string', 'eq', this.context.currentUserEmail)
       .on('fetch', (data) => {
         this.setState({
           currentTagItemId: this.currentTagItemId,
@@ -34,7 +46,6 @@ getInitialState() {
       })
       .on('error', () => {
         this.setState({
-          loaded: true,
           error: true,
         });
       })
@@ -42,16 +53,21 @@ getInitialState() {
   },
 
 
-
-
   render: function() {
-return
-    if (this.state = null){
-       <div></div>
-    }else{(<div>{this.props.children}</div>);
-
+    return (<div>{this.props.children}</div>);
   }
-}
+
+
+
+
+
+//   render: function() {
+// return
+//     if (this.queryTagItemId = null){
+//        <div></div>
+//     }else{
+//       (<div>{this.props.children}</div>)}
+// }
 
   // getChildContext() {
   //   return {
