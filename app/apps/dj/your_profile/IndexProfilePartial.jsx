@@ -17,10 +17,9 @@ export default React.createClass({
     contentPrefix: React.PropTypes.string.isRequired,
   },
 
-
   contextTypes: {
-    currentBroadcastChannel: React.PropTypes.object.isRequired,
-    apps: React.PropTypes.object.isRequired,
+    currentTagItemId: React.PropTypes.object.isRequired,
+    currentUser: React.PropTypes.object.isRequired,
   },
 
 
@@ -63,6 +62,8 @@ export default React.createClass({
   },
 
 
+
+
   render() {
     return (
       <div>
@@ -70,5 +71,5 @@ export default React.createClass({
         <Button onClick={() => this.refs.form.submit()} label={Counterpart.translate(`${this.props.contentPrefix}.submit`)} />
       </div>
     );
-  },
+  }
 });

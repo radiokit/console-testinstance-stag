@@ -37,7 +37,6 @@ export default React.createClass({
     routes: React.PropTypes.arrayOf(React.PropTypes.object),
     params: React.PropTypes.object,
     apps: React.PropTypes.object,
-    currentTagItemId: React.PropTypes.object, 
   },
 
   getInitialState() {
