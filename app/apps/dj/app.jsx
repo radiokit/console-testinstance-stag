@@ -8,7 +8,7 @@ export default React.createClass({
 
 
   childContextTypes: {
-    currentTagItemId: React.PropTypes.object,
+    currentTagItemId: React.PropTypes.string,
   },
 
 

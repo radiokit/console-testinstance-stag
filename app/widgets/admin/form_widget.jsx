@@ -123,7 +123,7 @@ const FormWidget = React.createClass({
             params = fieldConfig.fieldValueFunc(params, this.refs[fieldName].value);
             break;
         }
-        
+
       } else {
         switch (fieldConfig.type) {
           // FIXME deprecated, use scope-organization-account instead
@@ -291,6 +291,10 @@ const FormWidget = React.createClass({
       switch (fieldConfig.type) {
         case "string":
           input = (<Input className="form-control" type="text" id={ fieldName } ref={ fieldName } required={ required } value={ defaultVal } disabled={ disabled } />);
+          break;
+
+        case "text":
+          input = (<textarea className="form-control" type="text" rows="3" id={ fieldName } ref={ fieldName } required={ required } value={ defaultVal } disabled={ disabled } />);
           break;
 
         case "number":
