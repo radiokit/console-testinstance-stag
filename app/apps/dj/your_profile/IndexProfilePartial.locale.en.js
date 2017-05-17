@@ -2,6 +2,13 @@ export default {
   apps: {
     dj: {
       your_profile: {
+          header: "Your Profile",
+          tabs: {
+            headers: {
+              reports: "CurrentTab"
+            }
+          },
+
           form: {
             about: {
               label: "About",

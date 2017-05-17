@@ -2,9 +2,16 @@ export default {
   apps: {
     dj: {
       your_profile: {
+          header: "Twój Profil",
+          tabs: {
+            headers: {
+              reports: "Zakładka"
+            }
+          },
+
           form: {
             about: {
-              label: "About",
+              label: "O mnie",
             },
             facebook: {
               label: "facebook",
@@ -13,10 +20,10 @@ export default {
               label: "twitter",
             },
             cover: {
-              label: "cover",
+              label: "Okładka",
             },
           },
-          submit: "Update",
+          submit: "Aktualizuj",
         },
       },
     },
