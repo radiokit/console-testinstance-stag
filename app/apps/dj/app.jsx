@@ -1,51 +1,58 @@
 import React from 'react';
-import RadioKitAPI from 'radiokit-api';
+import RadioKit from '../../services/RadioKit.js';
 
 export default React.createClass({
+  contextTypes: {
+    currentUser: React.PropTypes.object.isRequired,
+  },
 
 
-childContextTypes: {
-  currentTagItemId: React.PropTypes.object,
-  currentUser: React.PropTypes.object,
+  childContextTypes: {
+    currentTagItemId: React.PropTypes.object,
   },
 
 
   getInitialState() {
     return {
       currentTagItemId: null,
-      currentUser: null,
+      loaded: false,
+      error: false,
     }
   },
 
-getChildContext() {
-  return {
-    currentTagItemId: this.context.currentTagItemId,
-    currentUser: this.context.currentUser,
+  getChildContext() {
+    return {
+      currentTagItemId: this.state.currentTagItemId,
+    };
+  },
 
-  };
-},
+  componentDidMount() {
+    this.queryTagItemId();
+  },
 
-initializeCurrentUser (currentUser) {
-    const currentUserEmail = currentUser.get('email');
-
-},
-
-
-
-  // componentDidMount() {
-  //   this.queryTagItemId();
-  // },
 
   queryTagItemId() {
-    this.state.data
+    RadioKit
       .query('vault', 'Data.Metadata.Item')
       .select('id', 'tag_item.id')
-      .where('value_string', 'eq', this.context.currentUserEmail)
-      .on('fetch', (data) => {
-        this.setState({
-          currentTagItemId: this.currentTagItemId,
-          loaded: true,
-        });
+      .joins('tag_item')
+      .where('value_string', 'eq', this.context.currentUser.get('email')) // FIXME make better condition
+      .on('fetch', (_a, _b, data) => {
+        if(data.size === 1) {
+          // fajnie
+          this.setState({
+            currentTagItemId: data.first().get('tag_item').get('id'),
+            loaded: true,
+            error: false,
+          });
+
+        } else {
+          // niefajnie
+          this.setState({
+            loaded: true,
+            error: true,
+          });
+        }
       })
       .on('error', () => {
         this.setState({
@@ -57,26 +64,14 @@ initializeCurrentUser (currentUser) {
 
 
   render: function() {
+    if(this.state.error) {
+      return (<div>DUPA</div>); //FIXME
+    }
+
+    if(this.state.loaded === false) {
+      return (<div>LOŁDING</div>); //FIXME
+    }
+
     return (<div>{this.props.children}</div>);
-
-
   }
-
-
-
-
-
-//   render: function() {
-// return
-//     if (this.queryTagItemId = null){
-//        <div></div>
-//     }else{
-//       (<div>{this.props.children}</div>)}
-// }
-
-  // getChildContext() {
-  //   return {
-  //     currentTagItemId: this.state.currentTagItemId,
-  //   }
-  // }
 });

@@ -1,8 +1,8 @@
 
 import React from 'react';
 import Counterpart from 'counterpart';
-import { Data } from 'radiokit-api';
 
+import RadioKit from '../../services/RadioKit.js';
 
 import Form from '../../../widgets/admin/form_widget.jsx';
 import Button from '../../../widgets/admin/button_widget.jsx';
@@ -19,9 +19,49 @@ export default React.createClass({
 
   contextTypes: {
     currentTagItemId: React.PropTypes.object.isRequired,
-    currentUser: React.PropTypes.object.isRequired,
   },
 
+
+  getInitialState() {
+    return {
+      loading: true,
+      error: false,
+    };
+  },
+
+
+  componentDidMount() {
+    RadioKit
+      .query('vault', 'Metadata.Item')
+      .select('id', 'value_string', 'metadata_schema.key')
+      .joins('metadata_schema')
+      .where('tag_item_id', 'eq', this.context.currentTagItemId)
+
+      // [
+      //   { //metadata item
+      //     id: "123",
+      //     value_string: "dupa",
+      //     metadata_schema: { // metadata schema
+      //       key: "whatever",
+      //     }
+      //   },
+      //   { //metadata item
+      //     id: "123",
+      //     value_string: "andaloop",
+      //     metadata_schema: { // metadata schema
+      //       key: "djname",
+      //     }
+      //   },
+      //   { //metadata item
+      //     id: "123",
+      //     value_string: "http://fb.com/dupa",
+      //     metadata_schema: { // metadata schema
+      //       key: "facebook",
+      //     }
+      //   },
+      // ]
+    }
+  },
 
   buildForm() {
     return {
@@ -65,6 +105,14 @@ export default React.createClass({
 
 
   render() {
+    if(this.state.error) {
+      return (<div>DUPA</div>); //FIXME
+    }
+
+    if(this.state.loaded === false) {
+      return (<div>LOŁDING</div>); //FIXME
+    }
+
     return (
       <div>
         <Form ref="form" form={this.buildForm()} contentPrefix={`${this.props.contentPrefix}.form`} onSubmit={this.onFormSubmit} />
