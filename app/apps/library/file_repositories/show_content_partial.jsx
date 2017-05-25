@@ -352,7 +352,12 @@ const ShowContentPartial = React.createClass({
          {(() => {
            switch (this.props.stage) {
              case 'incoming':
-               return this.renderMoveToButton('current');
+             return (
+              <div>
+                {this.renderMoveToButton('current')}
+                {this.renderMoveToButton('archive')}
+              </div>
+            );
              case 'current':
                return (
                 <div>
@@ -361,9 +366,18 @@ const ShowContentPartial = React.createClass({
                 </div>
               );
              case 'archive':
-               return this.renderMoveToButton('current');
-             case 'trash':
-               return this.renderMoveToButton('current');
+             return (
+              <div>
+                {this.renderMoveToButton('incoming')}
+                {this.renderMoveToButton('current')}
+              </div>
+             );             case 'trash':
+             return (
+              <div>
+                {this.renderMoveToButton('current')}
+                {this.renderMoveToButton('archive')}
+              </div>
+            );
              default: return null;
            }
          })()}
