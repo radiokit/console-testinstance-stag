@@ -30,6 +30,10 @@ export default React.createClass({
       facebook: null,
       twitter: null,
       cover: null,
+      aboutMetadataId: null,
+      facebookMetadataId: null,
+      twitterkMetadataId: null,
+
 
     };
   },
@@ -46,20 +50,26 @@ export default React.createClass({
         let facebook;
         let twitter;
         let cover;
+        let aboutMetadataId;
+        let facebookMetadataId;
+        let twitterMetadataId;
 
         let aboutFound = data.find((item) => item.get("metadata_schema").get("key") === "about");
         if(aboutFound) {
           about = aboutFound.get("value_text");
+          aboutMetadataId = aboutFound.get("id");
         }
 
         let facebookFound = data.find((item) => item.get("metadata_schema").get("key") === "facebook_url");
         if(facebookFound) {
           facebook = facebookFound.get("value_url");
+          facebookMetadataId = facebookFound.get("id");
         }
 
         let twitterFound = data.find((item) => item.get("metadata_schema").get("key") === "twitter_url");
         if(twitterFound) {
           twitter = twitterFound.get("value_url");
+          twitterMetadataId = twitterFound.get("id");
         }
 
         // let coverFound = data.find((item) => item.get("metadata_schema").get("key") === "cover");
@@ -74,6 +84,9 @@ export default React.createClass({
           about: about,
           facebook: facebook,
           twitter: twitter,
+          aboutMetadataId: aboutMetadataId,
+          facebookMetadataId: facebookMetadataId,
+          twitterMetadataId: twitterMetadataId,
           // cover: cover,
         });
     })
@@ -83,7 +96,7 @@ export default React.createClass({
   buildForm() {
     return {
       about: {
-        type: 'text',
+        type: 'string',
         validators: {
           presence: true,
         },
@@ -108,15 +121,31 @@ export default React.createClass({
       //   validators: {
       //     presence: true,
       //   },
-      //   value: ["zassane z tagitem"],
+      //   value: this.state.cover,
       // }
     };
   },
 
+  onFormSubmit(data) {
+    const about = data.about;
+    const facebook = data.facebook;
+    const twitter = data.twitter;
+    RadioKit
+    .record('vault', 'Data.Metadata.Item', this.state.aboutMetadataId)
+    .update({value_url: about});
 
-  // onFormSubmit(values) {
-  //   window.location.href = `${this.context.apps.vault.baseUrl}/api/royalties/v1.0/report/fetch?channel_id=${encodeURIComponent(this.context.currentBroadcastChannel.get('id'))}&template=${encodeURIComponent(values.template)}&month=${encodeURIComponent(values.month)}&year=${encodeURIComponent(values.year)}`;
-  // },
+
+    RadioKit
+      .record('vault', 'Data.Metadata.Item', this.state.facebookMetadataId)
+      .update({value_url: facebook});
+
+
+    RadioKit
+    .record('vault', 'Data.Metadata.Item', this.state.twitterMetadataId)
+    .update({value_url: twitter});
+
+  },
+
 
 
 
