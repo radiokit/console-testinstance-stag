@@ -210,10 +210,13 @@ const ShowContentPartial = React.createClass({
 
   buildTagFilterQuery(query) {
     const tagIdsFilter = this.props.tagFilter.map((tag) => tag.get('id'));
-    if (this.props.tagFilter.count() > 0) {
-      return query.where('tag_associations.tag_item_id', 'in', tagIdsFilter.toJS());
-    }
-    return query;
+    let fullQuery = query;
+
+    this.props.tagFilter.forEach((tag) => {
+      fullQuery = fullQuery.where('tag_associations.tag_item_id', 'eq', tag.get('id'));
+    });
+
+    return fullQuery;
   },
 
   buildTableRecordsQuery() {
