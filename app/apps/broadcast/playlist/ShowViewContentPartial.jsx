@@ -88,23 +88,48 @@ const BroadcastPlaylistContent = React.createClass({
     const fromISO = moment(from).toISOString();
     const toISO = moment(to).toISOString();
 
-    return RadioKit
-      .query('plumber', 'Media.Input.File.RadioKit.Vault')
-      .select(
-        'id',
-        'name',
-        'cue_in_at',
-        'cue_out_at',
-        'references',
-        'file',
-      )
-      .where(
-        'references',
-        'deq',
-        `broadcast_channel_id ${currentBroadcastChannel.get('id')}`,
-      )
-      .where('cue_in_at', 'lte', toISO)
-      .where('cue_out_at', 'gte', fromISO);
+    if(currentBroadcastChannel.get('lineup_base_url') === '' ||
+       currentBroadcastChannel.get('lineup_base_url') === null || 
+       currentBroadcastChannel.get('lineup_channel_id') === '' || 
+       currentBroadcastChannel.get('lineup_channel_id') === null) {
+      
+      // Deprecated backend for storing playlist
+      return RadioKit
+        .query('plumber', 'Media.Input.File.RadioKit.Vault')
+        .select(
+          'id',
+          'name',
+          'cue_in_at',
+          'cue_out_at',
+          'references',
+          'file',
+        )
+        .where(
+          'references',
+          'deq',
+          `broadcast_channel_id ${currentBroadcastChannel.get('id')}`,
+        )
+        .where('cue_in_at', 'lte', toISO)
+        .where('cue_out_at', 'gte', fromISO);
+
+    } else {
+      return RadioKit
+        .query(currentBroadcastChannel.get('lineup_base_url'), 'Track')
+        .select(
+          'id',
+          'name',
+          'cue_in_at',
+          'cue_out_at',
+          'file',
+        )
+        .where(
+          'channel_id',
+          'eq',
+          currentBroadcastChannel.get('lineup_channel_id'),
+        )
+        .where('cue_in_at', 'lte', fromISO)
+        .where('cue_out_at', 'gte', toISO);
+    }
   },
 
   render() {

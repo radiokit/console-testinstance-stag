@@ -29,6 +29,7 @@ export default {
           },
         },
         browser: {
+          loading: 'Loading',
           header: {
             name: 'Name',
             cue_in_at: 'Start time',
