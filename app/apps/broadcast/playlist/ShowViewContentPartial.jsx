@@ -85,13 +85,14 @@ const BroadcastPlaylistContent = React.createClass({
       startHour
     );
     const to = from + hours * MILLISECONDS_PER_HOUR;
-    const fromISO = moment(from).toISOString();
-    const toISO = moment(to).toISOString();
 
     if(currentBroadcastChannel.get('lineup_base_url') === '' ||
        currentBroadcastChannel.get('lineup_base_url') === null || 
        currentBroadcastChannel.get('lineup_channel_id') === '' || 
        currentBroadcastChannel.get('lineup_channel_id') === null) {
+
+      const fromISO = moment(from).toISOString();
+      const toISO = moment(to).toISOString();
       
       // Deprecated backend for storing playlist
       return RadioKit
@@ -113,6 +114,9 @@ const BroadcastPlaylistContent = React.createClass({
         .where('cue_out_at', 'gte', fromISO);
 
     } else {
+      const fromISO = moment(from).format("YYYY-MM-DDTHH:mm:ss"); // Do not send time zone
+      const toISO = moment(to).format("YYYY-MM-DDTHH:mm:ss"); // Do not send time zone
+
       return RadioKit
         .query(currentBroadcastChannel.get('lineup_base_url'), 'Track')
         .select(
