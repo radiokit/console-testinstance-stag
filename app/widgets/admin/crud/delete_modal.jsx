@@ -9,8 +9,9 @@ const DeleteModal = React.createClass({
   propTypes: {
     contentPrefix: React.PropTypes.string.isRequired,
     selectedRecordIds: React.PropTypes.object.isRequired,
-    app: React.PropTypes.string.isRequired,
-    model: React.PropTypes.string.isRequired,
+    app: React.PropTypes.string,
+    model: React.PropTypes.string,
+    performFunc: React.PropTypes.func,
     onSuccess: React.PropTypes.func,
     onDismiss: React.PropTypes.func,
     afterFormAccept: React.PropTypes.func,
@@ -45,10 +46,16 @@ const DeleteModal = React.createClass({
   },
 
   onPerform(index, recordId) {
-    RadioKit.record(this.props.app, this.props.model, recordId)
-      // .on("error", this.onDeleteError) // TODO
-      .on('loaded', this.onDeleteSuccess)
-      .destroy();
+    if(typeof(this.props.performFunc) === 'function') {
+      this.props.performFunc(index, recordId); // FIXME no async/promise/error handling
+      this.onDeleteSuccess();
+
+    } else {
+      RadioKit.record(this.props.app, this.props.model, recordId)
+        // .on("error", this.onDeleteError) // TODO
+        .on('loaded', this.onDeleteSuccess)
+        .destroy();
+    }
   },
 
   show() {

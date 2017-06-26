@@ -136,6 +136,40 @@ const BroadcastPlaylistContent = React.createClass({
     }
   },
 
+
+  renderPlaylistToolbar() {
+    const currentBroadcastChannel = this.context.currentBroadcastChannel;
+
+    if(currentBroadcastChannel.get('lineup_base_url') === '' ||
+       currentBroadcastChannel.get('lineup_base_url') === null || 
+       currentBroadcastChannel.get('lineup_channel_id') === '' || 
+       currentBroadcastChannel.get('lineup_channel_id') === null) {
+
+      // Deprecated backend for storing playlist
+      return (
+        <PlaylistToolbar
+          offset={this.props.offset}
+          selectedRecordIds={this.state.selectedRecordIds}
+          reloadData={this.reloadData}
+          app="plumber"
+          model="Media.Input.File.RadioKit.Vault"
+        />
+      );
+
+    } else {
+      return (
+        <PlaylistToolbar
+          offset={this.props.offset}
+          selectedRecordIds={this.state.selectedRecordIds}
+          reloadData={this.reloadData}
+          lineupBaseUrl={currentBroadcastChannel.get('lineup_base_url')}
+          lineupChannelId={currentBroadcastChannel.get('lineup_channel_id')}
+        />
+      );
+    }
+  },
+
+
   render() {
     return (
       <TableBrowser
@@ -147,11 +181,7 @@ const BroadcastPlaylistContent = React.createClass({
         selectable
         onSelect={this.onRecordsSelect}
       >
-        <PlaylistToolbar
-          offset={this.props.offset}
-          selectedRecordIds={this.state.selectedRecordIds}
-          reloadData={this.reloadData}
-        />
+      {this.renderPlaylistToolbar()}
       </TableBrowser>
     );
   },
