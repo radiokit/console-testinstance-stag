@@ -152,8 +152,6 @@ const AddTrackModal = React.createClass({
       } else {
         const formData = new FormData();
 
-        debugger;
-  
         formData.append('file_name', track.name);
         formData.append('file_id', this.state.file.get('id'));
         formData.append('cue_in_at', track.startDate.format("YYYY-MM-DDTHH:mm:ss")); // Do not send time zone
