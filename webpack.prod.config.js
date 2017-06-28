@@ -7,6 +7,7 @@ var node_modules_dir = path.resolve(__dirname, 'node_modules');
 
 var config = {
   entry: [
+    'whatwg-fetch',
     'bootstrap-loader',
     path.resolve(__dirname, 'app/main.js')
   ],

@@ -33,7 +33,8 @@ export default React.createClass({
       timezone:               { renderer: "string" },
       metadata_string:        { renderer: "string" },
       metadata_updated_at:    { renderer: "datetime" },
-      media_routing_group_id: { renderer: "string", props:{ selectable: true } },
+      lineup_base_url:        { renderer: "string" },
+      lineup_channel_id:      { renderer: "string" },
       user_account:           { renderer: "scope-user-account" },
     }
   },
@@ -62,13 +63,6 @@ export default React.createClass({
           presence: true,
         }
       },
-      media_routing_group_id: {
-        type: "string",
-        hint: true,
-        validators: {
-          presence: true,
-        }
-      },
       description: {
         type: "string",
         hint: false,
@@ -85,6 +79,14 @@ export default React.createClass({
         type: "string",
         hint: false,
       },
+      lineup_base_url: {
+        type: "string",
+        hint: false,
+      },
+      lineup_channel_id: {
+        type: "string",
+        hint: false,
+      },
       user_account: {
         type: "scope-user-account",
         validators: {
@@ -97,7 +99,7 @@ export default React.createClass({
 
   render: function() {
     return (
-      <Index contentPrefix="apps.administration.broadcast_channels" app="agenda" model="Broadcast.Channel" attributes={this.buildAttributes()} form={this.buildForm()} indexQueryFunc={this.modifyIndexQuery} />
+      <Index contentPrefix="apps.administration.broadcast_channels" app="agenda" model="Broadcast.Channel" updateEnabled attributes={this.buildAttributes()} form={this.buildForm()} indexQueryFunc={this.modifyIndexQuery} />
     );
   }
 });

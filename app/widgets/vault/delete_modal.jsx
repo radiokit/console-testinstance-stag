@@ -8,6 +8,7 @@ export default React.createClass({
   propTypes: {
     selectedRecordIds: React.PropTypes.object.isRequired,
     afterFormAccept: React.PropTypes.func,
+    performFunc: React.PropTypes.func,
   },
 
   getInitialState() {
@@ -24,10 +25,16 @@ export default React.createClass({
   },
 
   onPerform(index, recordId) {
-    window.data.record('vault', 'Data.Record.File', recordId)
-      // .on('error', this.onDeleteError) // TODO
-      .on('loaded', this.onDeleteSuccess)
-      .destroy();
+    if(typeof(this.props.performFunc) === 'function') {
+      if(this.props.performFunc(index, recordId)) {
+        this.onDeleteSuccess();
+      }
+    } else {
+      window.data.record('vault', 'Data.Record.File', recordId)
+        // .on('error', this.onDeleteError) // TODO
+        .on('loaded', this.onDeleteSuccess)
+        .destroy();
+    }
 
     this.props.afterFormAccept();
   },

@@ -29,6 +29,7 @@ export default {
           },
         },
         browser: {
+          loading: 'Ładowanie',
           header: {
             name: 'Nazwa',
             cue_in_at: 'Czas rozpoczęcia',
