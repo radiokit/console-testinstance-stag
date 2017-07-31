@@ -33,6 +33,7 @@ export default React.createClass({
   // FIXME don't use inline styles
   render() {
     const { selectedApp } = this.state;
+
     if (!selectedApp) {
       return (
         <Section className="dashboard">
@@ -59,6 +60,24 @@ export default React.createClass({
                   </div>
                 )
             ))}
+            <div key={'dj'} className="col-md-3">
+              <Card cardPadding={false} headerVisible={false}>
+                <a
+                  className="btn btn-block btn-default text-center small-padding"
+                  onClick={() => this.onAppClick('dj')}
+                >
+                  <i className={`text-xxxxl mdi mdi-${RoutingHelper.apps.dj.icon}`} />
+                  <Translate
+                    component="h2"
+                    content="apps.dj.navigation.title"
+                  />
+                  <Translate
+                    component="small"
+                    content="apps.dj.navigation.subtitle"
+                  />
+                </a>
+              </Card>
+            </div>
           </GridRow>
         </Section>
       );

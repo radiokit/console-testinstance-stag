@@ -75,32 +75,32 @@ export default {
       },
     },
 
-      library_limited: {
-        icon: 'library-music',
-        file_repositories: {
-          index() {
-            return '/apps/library_limited/file_repositories/index';
-          },
-        },
-      },
-
-      dj: {
-        icon: 'library-music',
-        go_live: {
-          index() {
-            return '/apps/dj/go_live/index';
-          },
-        },
-        your_library: {
-          index() {
-            return '/apps/dj/your_library/index';
-          },
-        },
-        your_profile: {
-          index() {
-            return '/apps/dj/your_profile/index';
-          },
+    library_limited: {
+      icon: 'library-music',
+      file_repositories: {
+        index() {
+          return '/apps/library_limited/file_repositories/index';
         },
       },
     },
+
+    dj: {
+      icon: 'library-music',
+      go_live: {
+        index() {
+          return '/apps/dj/go_live/index';
+        },
+      },
+      your_library: {
+        index() {
+          return '/apps/dj/your_library/index';
+        },
+      },
+      your_profile: {
+        index() {
+          return '/apps/dj/your_profile/index';
+        },
+      },
+    },
+  },
 };

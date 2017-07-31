@@ -1,8 +1,7 @@
 .MetadataFormWidget {
-
-  &__inputGroup{
+  &__inputGroup {
     float: none;
-    .form-control[disabled]{
+    .form-control[disabled] {
       cursor: not-allowed !important;
     }
   }
@@ -20,7 +19,7 @@
     }
   }
 
-  &__checkbox{
+  &__checkbox {
     display: table-cell;
     width: 1%;
     text-align: center;

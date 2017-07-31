@@ -42,7 +42,7 @@ import AdministrationBroadcastChannelsIndex from './apps/administration/broadcas
 import AdministrationBroadcastChannelsShow from './apps/administration/broadcast_channels/ShowView.jsx';
 import DjApp from './apps/dj/app.jsx';
 import DjGoLiveIndex from './apps/dj/go_live/IndexView.jsx';
-import DjYourLibraryIndex from './apps/dj/your_library/IndexView.jsx';
+import DjYourLibraryIndex from './apps/dj/your_library/index_view.jsx';
 import DjYourProfileIndex from './apps/dj/your_profile/IndexView.jsx';
 
 
@@ -139,15 +139,11 @@ ReactDOM.render((
           <Route path="stats/index" component={BroadcastStatsShow} onEnter={pingGoogleAnalytics} />
         </Route>
 
-
-          <Route path="dj" component={DjApp}>
-              <Route path="go_live/index" component={DjGoLiveIndex} onEnter={pingGoogleAnalytics} />
-              <Route path="your_library/index" component={DjYourLibraryIndex} onEnter={pingGoogleAnalytics} />
-              <Route path="your_profile/index" component={DjYourProfileIndex} onEnter={pingGoogleAnalytics} />
-          </Route>
-
-
-
+        <Route path="dj" component={DjApp}>
+          <Route path="go_live/index" component={DjGoLiveIndex} onEnter={pingGoogleAnalytics} />
+          <Route path="your_library/index" component={DjYourLibraryIndex} onEnter={pingGoogleAnalytics} />
+          <Route path="your_profile/index" component={DjYourProfileIndex} onEnter={pingGoogleAnalytics} />
+        </Route>
 
         <Route path="almanac" component={AlmanacApp}>
           <Route path="resources">

@@ -1,5 +1,6 @@
 import React from 'react';
 import Translate from 'react-translate-component';
+
 import Checkbox from '../../../widgets/general/indeterminate_checkbox_widget.jsx';
 
 const MetadataTextareaField = React.createClass({
@@ -11,6 +12,13 @@ const MetadataTextareaField = React.createClass({
     disabled: React.PropTypes.bool.isRequired,
     value: React.PropTypes.string,
     placeholder: React.PropTypes.string,
+    selectionToggable: React.PropTypes.bool,
+  },
+
+  getDefaultProps() {
+    return {
+      selectionToggable: true,
+    };
   },
 
   componentWillReceiveProps() {
@@ -34,13 +42,30 @@ const MetadataTextareaField = React.createClass({
     this.props.onFieldChanged(this.props.fieldId, isSelected ? undefined : this.props.value);
   },
 
+  renderCheckboxToggle() {
+    if (!this.props.selectionToggable) {
+      return null;
+    }
+
+    return (
+      <div className="MetadataFormWidget__checkbox">
+        <Translate component="p" content={`${this.props.contentPrefix}.retain`} />
+        <Checkbox
+          checked={this.props.disabled}
+          onSelected={() => this.toggleSelection(true)}
+          onDeselected={() => this.toggleSelection(false)}
+        />
+      </div>
+    );
+  },
+
   render() {
     const fieldId = this.props.fieldId;
 
     return (
       <div key={fieldId} className="form-group">
         <div className="MetadataFormWidget__textareaGroup">
-          <div className="input-group-content">
+          <div className={this.props.selectionToggable && 'input-group-content'}>
             <label
               htmlFor={fieldId}
             >
@@ -57,14 +82,7 @@ const MetadataTextareaField = React.createClass({
               onChange={this.onFieldChanged}
             />
           </div>
-          <div className="MetadataFormWidget__checkbox">
-            <Translate component="p" content={`${this.props.contentPrefix}.retain`} />
-            <Checkbox
-              checked={this.props.disabled}
-              onSelected={() => this.toggleSelection(true)}
-              onDeselected={() => this.toggleSelection(false)}
-            />
-          </div>
+          {this.renderCheckboxToggle()}
         </div>
       </div>
     );

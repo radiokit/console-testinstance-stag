@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Counterpart from 'counterpart';
 
@@ -46,6 +45,7 @@ export default React.createClass({
       .joins('metadata_schema')
       .where('tag_item_id', 'eq', this.context.currentTagItemId)
       .on('fetch', (_a, _b, data) => {
+        console.log(data.toJS());
         let about;
         let facebook;
         let twitter;
@@ -130,14 +130,14 @@ export default React.createClass({
     const about = data.about;
     const facebook = data.facebook;
     const twitter = data.twitter;
-    RadioKit
-    .record('vault', 'Data.Metadata.Item', this.state.aboutMetadataId)
-    .update({value_url: about});
+    // RadioKit
+    // .record('vault', 'Data.Metadata.Item', this.state.aboutMetadataId)
+    // .update({value_url: about});
 
 
     RadioKit
       .record('vault', 'Data.Metadata.Item', this.state.facebookMetadataId)
-      .update({value_url: facebook});
+      .update({ value_url: facebook });
 
 
     RadioKit

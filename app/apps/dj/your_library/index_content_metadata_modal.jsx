@@ -33,10 +33,6 @@ export default React.createClass({
     });
   },
 
-  getFieldTypeForSchema(schemaId) {
-    return this.state.form[schemaId].type;
-  },
-
   onDismiss() {
     this.props.onDismiss && this.props.onDismiss();
   },
@@ -103,6 +99,10 @@ export default React.createClass({
       payload[valueKey] = value;
       this.createMetadataItem(payload);
     });
+  },
+
+  getFieldTypeForSchema(schemaId) {
+    return this.state.form[schemaId].type;
   },
 
   show() {
