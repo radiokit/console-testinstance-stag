@@ -274,6 +274,7 @@ const DJLibraryIndexContent = React.createClass({
         modalProps={{
           contentPrefix: 'widgets.vault.file_browser.modals.upload',
           metadataSchemas: this.getFilteredMetadataSchemas(),
+          onDismiss: this.reloadTable,
           repository: this.props.record,
         }}
       />

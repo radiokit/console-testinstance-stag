@@ -117,6 +117,7 @@ export default {
           upload: {
             header: 'Upload file',
             instruction: 'Choose file',
+            finishedInfo: 'File uploaded!',
             table: {
               header: {
                 file_name: 'File name',
@@ -127,6 +128,7 @@ export default {
             action: {
               cancel: 'Cancel',
               upload: 'Upload file',
+              finish: 'Close',
             },
           },
           tag: {

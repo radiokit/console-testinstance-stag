@@ -45,7 +45,7 @@ const UploadMetadataFormWidget = React.createClass({
   },
 
   submit() {
-    this.refs.submitter.getDOMNode().click();
+    this.refs.submitter.click();
   },
 
   buildFieldValues() {

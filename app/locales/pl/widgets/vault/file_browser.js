@@ -117,6 +117,7 @@ export default {
           upload: {
             header: 'Załaduj plik',
             instruction: 'Wybierz plik',
+            finishedInfo: 'Plik został zapisany!',
             table: {
               header: {
                 file_name: 'Nazwa',
@@ -127,6 +128,7 @@ export default {
             action: {
               cancel: 'Anuluj',
               upload: 'Załaduj plik',
+              finish: 'Zakończ',
             },
           },
           tag: {
