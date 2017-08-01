@@ -73,7 +73,21 @@ export default React.createClass({
         metadata_override: nowPlaying,
         metadata_updated_at: moment().utc().toISOString(),
       });
-  },  
+  },
+
+
+  clearForm() {
+    this.setState({
+      nowPlaying: null,
+    }, () => {
+      RadioKit
+        .record('agenda', 'Broadcast.Channel', this.context.currentBroadcastChannel.get('id'))
+        .update({
+          metadata_override: null,
+          metadata_updated_at: moment().utc().toISOString(),
+        });
+    });
+  },
 
 
   render() {
@@ -85,6 +99,7 @@ export default React.createClass({
       <div>
         <Form ref="form" form={this.buildForm()} contentPrefix={`${this.props.contentPrefix}.form`} onSubmit={this.onFormSubmit} />
         <Button onClick={() => this.refs.form.submit()} label={Counterpart.translate(`${this.props.contentPrefix}.submit`)} />
+        <Button onClick={() => this.clearForm()} label={Counterpart.translate(`${this.props.contentPrefix}.clear`)} className="btn btn-default" />
       </div>
     );
   },

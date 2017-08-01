@@ -10,6 +10,7 @@ export default {
             },
           },
           submit: "Zapisz",
+          clear: "Wyczyść",
         },
       },
     },
