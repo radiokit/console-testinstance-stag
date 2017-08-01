@@ -13,6 +13,9 @@ export default {
         stats: {
           title: "Statystyki",
         },
+        metadata: {
+          title: "Metadane",
+        },
       },
       playlist: {
         header: 'Ramówka',

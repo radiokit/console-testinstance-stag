@@ -45,6 +45,11 @@ export default {
           return '/apps/broadcast/stats/index';
         },
       },
+      metadata: {
+        index() {
+          return '/apps/broadcast/metadata/index';
+        },
+      },
     },
 
     administration: {

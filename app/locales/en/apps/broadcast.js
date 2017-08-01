@@ -10,6 +10,9 @@ export default {
         royalties: {
           title: 'Royalties',
         },
+        metadata: {
+          title: 'Metadata',
+        },
         stats: {
           title: "Stats",
         },
