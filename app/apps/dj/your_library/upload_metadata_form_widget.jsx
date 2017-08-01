@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-// import Counterpart from 'counterpart';
 
 import MetadataInputField from './metadata_input_field.jsx';
 import MetadataTextareaField from './metadata_textarea_field.jsx';
@@ -18,8 +17,15 @@ const UploadMetadataFormWidget = React.createClass({
     };
   },
 
+  componentWillReceiveProps() {
+    this.setState({
+      userProvidedVals: {},
+    });
+  },
+
   onSubmit(e) {
     e.preventDefault();
+    this.props.onSubmit(this.buildFieldValues());
   },
 
   getFieldComponentClass(fieldType) {
@@ -39,11 +45,18 @@ const UploadMetadataFormWidget = React.createClass({
   },
 
   submit() {
-
+    this.refs.submitter.getDOMNode().click();
   },
 
   buildFieldValues() {
+    const values = {};
+    const newValues = this.state.userProvidedVals;
 
+    Object.keys(newValues).forEach((fieldId) => {
+      values[fieldId] = newValues[fieldId];
+    });
+
+    return values;
   },
 
   renderField(fieldId) {

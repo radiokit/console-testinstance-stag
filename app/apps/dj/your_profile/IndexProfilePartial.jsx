@@ -1,169 +1,238 @@
-import React from 'react';
-import Counterpart from 'counterpart';
+import React, { PropTypes } from 'react';
+import counterpart from 'counterpart';
+import Translate from 'react-translate-component';
 
 import RadioKit from '../../../services/RadioKit.js';
+import Loading from '../../../widgets/general/loading_widget.jsx';
+import Alert from '../../../widgets/admin/alert_widget.jsx';
+import MetadataInputField from '../your_library/metadata_input_field.jsx';
+import MetadataTextareaField from '../your_library/metadata_textarea_field.jsx';
 
-import Form from '../../../widgets/admin/form_widget.jsx';
-import Button from '../../../widgets/admin/button_widget.jsx';
-
-
-Counterpart.registerTranslations('en', require('./IndexProfilePartial.locale.en.js'));
-Counterpart.registerTranslations('pl', require('./IndexProfilePartial.locale.pl.js'));
-
+const allowedSchemas = [
+  'about',
+  'facebook_url',
+  'twitter_url',
+  'cover',
+];
 
 export default React.createClass({
   propTypes: {
-    contentPrefix: React.PropTypes.string.isRequired,
+    contentPrefix: PropTypes.string.isRequired,
   },
 
   contextTypes: {
-    currentTagItemId: React.PropTypes.string.isRequired,
+    currentTagItemId: PropTypes.string.isRequired,
+    currentTagCategoryId: PropTypes.string.isRequired,
   },
-
 
   getInitialState() {
     return {
       loaded: false,
       error: false,
-      about: null,
-      facebook: null,
-      twitter: null,
-      cover: null,
-      aboutMetadataId: null,
-      facebookMetadataId: null,
-      twitterkMetadataId: null,
-
-
+      form: {},
     };
   },
-
 
   componentDidMount() {
-    RadioKit
-      .query('vault', 'Data.Metadata.Item')
-      .select('id', 'value_string', 'value_image', 'value_text', 'value_url', 'metadata_schema.key')
-      .joins('metadata_schema')
-      .where('tag_item_id', 'eq', this.context.currentTagItemId)
-      .on('fetch', (_a, _b, data) => {
-        console.log(data.toJS());
-        let about;
-        let facebook;
-        let twitter;
-        let cover;
-        let aboutMetadataId;
-        let facebookMetadataId;
-        let twitterMetadataId;
-
-        let aboutFound = data.find((item) => item.get("metadata_schema").get("key") === "about");
-        if(aboutFound) {
-          about = aboutFound.get("value_text");
-          aboutMetadataId = aboutFound.get("id");
-        }
-
-        let facebookFound = data.find((item) => item.get("metadata_schema").get("key") === "facebook_url");
-        if(facebookFound) {
-          facebook = facebookFound.get("value_url");
-          facebookMetadataId = facebookFound.get("id");
-        }
-
-        let twitterFound = data.find((item) => item.get("metadata_schema").get("key") === "twitter_url");
-        if(twitterFound) {
-          twitter = twitterFound.get("value_url");
-          twitterMetadataId = twitterFound.get("id");
-        }
-
-        // let coverFound = data.find((item) => item.get("metadata_schema").get("key") === "cover");
-        // if(coverFound) {
-        //   cover = coverFound.get("value_image");
-        // }
-
-        // ...
-
-        this.setState({
-          loaded: true,
-          about: about,
-          facebook: facebook,
-          twitter: twitter,
-          aboutMetadataId: aboutMetadataId,
-          facebookMetadataId: facebookMetadataId,
-          twitterMetadataId: twitterMetadataId,
-          // cover: cover,
-        });
-    })
-    .fetch();
+    this.dataQuery = RadioKit
+      .query('vault', 'Data.Tag.Category')
+      .select(
+        'id',
+        'metadata_schemas.id',
+        'metadata_schemas.key',
+        'metadata_schemas.kind',
+        'metadata_schemas.name'
+      )
+      .joins('metadata_schemas')
+      .where('id', 'eq', this.context.currentTagCategoryId)
+      .on('fetch', this.onMetadataSchemaQuerySuccess)
+      .on('error', this.onQueryFailure)
+      .fetch();
   },
 
-  buildForm() {
-    return {
-      about: {
-        type: 'string',
-        validators: {
-          presence: true,
-        },
-        value: this.state.about,
-      },
-      facebook: {
-        type: 'string',
-        validators: {
-          presence: false,
-        },
-        value: this.state.facebook,
-      },
-      twitter: {
-        type: 'string',
-        validators: {
-          presence: false,
-        },
-        value: this.state.twitter,
-      },
-      // cover: {
-      //   type: 'string',
-      //   validators: {
-      //     presence: true,
-      //   },
-      //   value: this.state.cover,
-      // }
-    };
+  componentWillUnmount() {
+    if (!this.state.loaded && this.dataQuery) {
+      this.dataQuery.teardown();
+    }
   },
 
-  onFormSubmit(data) {
-    const about = data.about;
-    const facebook = data.facebook;
-    const twitter = data.twitter;
-    // RadioKit
-    // .record('vault', 'Data.Metadata.Item', this.state.aboutMetadataId)
-    // .update({value_url: about});
+  onMetadataSchemaQuerySuccess(_eventName, _record, data) {
+    if (!data.size) {
+      this.setState({ loaded: true, error: true });
+      return;
+    }
+    const metadataSchemas = data.first().get('metadata_schemas');
 
+    this.setState({ metadataSchemas }, () => {
+      this.dataQuery = RadioKit
+        .query('vault', 'Data.Metadata.Item')
+        .select(
+          'id', 'metadata_schema_id', 'value_string', 'value_text',
+          'value_float', 'value_integer', 'value_date', 'value_datetime',
+          'value_time', 'value_file', 'value_image', 'value_url',
+        )
+        .where('tag_item_id', 'eq', this.context.currentTagItemId)
+        .on('fetch', this.onMetadataItemsQuerySuccess)
+        .on('error', this.onQueryFailure)
+        .fetch();
+    });
+  },
 
-    RadioKit
-      .record('vault', 'Data.Metadata.Item', this.state.facebookMetadataId)
-      .update({ value_url: facebook });
+  onMetadataItemsQuerySuccess(_eventName, _record, data) {
+    this.buildForm(data);
+  },
 
-
-    RadioKit
-    .record('vault', 'Data.Metadata.Item', this.state.twitterMetadataId)
-    .update({value_url: twitter});
-
+  onQueryFailure() {
+    this.setState({ loaded: true, error: true });
   },
 
 
+  onFieldChanged(fieldId, value) {
+    const form = { ...this.state.form };
 
+    form[fieldId].value = value;
 
+    this.setState({ form });
+  },
 
-  render() {
-    if(this.state.error) {
-      return (<div>DUPA</div>); //FIXME
+  onFormSubmit(event) {
+    event.preventDefault();
+
+    Object.keys(this.state.form).forEach(fieldId => {
+      const fieldSummary = this.state.form[fieldId];
+
+      if (fieldSummary.metadataItemId) {
+        this.updateMetadataItem(fieldSummary);
+      } else {
+        this.createMetadataItem(fieldSummary);
+      }
+    });
+  },
+
+  getFilteredMetadataSchemas() {
+    return this.state.metadataSchemas.filter(schema =>
+      allowedSchemas.includes(schema.get('key'))
+    );
+  },
+
+  getFieldComponentClass(fieldType) {
+    switch (fieldType) {
+      case 'text':
+        return MetadataTextareaField;
+      default:
+        return MetadataInputField;
+    }
+  },
+
+  updateMetadataItem(formRow) {
+    const metadataItem = this.state.initialData.find(item =>
+      item.get('id') === formRow.metadataItemId
+    );
+    const metadataSchema = this.state.metadataSchemas.find(schema =>
+      schema.get('id') === formRow.metadataSchemaId
+    );
+    const valueKey = `value_${metadataSchema.get('kind')}`;
+
+    if (formRow.value === metadataItem.get(valueKey)) {
+      return;
     }
 
-    if(this.state.loaded === false) {
-      return (<div>LOŁDING</div>); //FIXME
+    RadioKit
+      .record('vault', 'Data.Metadata.Item', formRow.metadataItemId)
+      .update({
+        [valueKey]: formRow.value,
+      });
+  },
+
+  createMetadataItem(formRow) {
+    const metadataSchema = this.state.metadataSchemas.find(schema =>
+      schema.get('id') === formRow.metadataSchemaId
+    );
+
+    const valueKey = `value_${metadataSchema.get('kind')}`;
+
+    const payload = {
+      tag_item_id: this.context.currentTagItemId,
+      metadata_schema_id: formRow.metadataSchemaId,
+      [valueKey]: formRow.value,
+    };
+
+    RadioKit
+      .record('vault', 'Data.Metadata.Item')
+      .create(payload);
+  },
+
+  buildForm(data) {
+    const form = {};
+
+    this.getFilteredMetadataSchemas().forEach(schema => {
+      const schemaId = schema.get('id');
+      const metadataItem = data.find(item => item.get('metadata_schema_id') === schemaId);
+
+      const row = {
+        type: schema.get('kind'),
+        name: counterpart(`${this.props.contentPrefix}.form.${schema.get('key')}.label`),
+        value: metadataItem ? metadataItem.get(`value_${schema.get('kind')}`, '') : '',
+        metadataItemId: metadataItem && metadataItem.get('id'),
+        metadataSchemaId: schemaId,
+        hasMultiValues: false,
+      };
+
+      form[schemaId] = row;
+    });
+
+    this.setState({ form, loaded: true, initialData: data });
+  },
+
+  renderField(fieldId) {
+    const fieldSummary = this.state.form[fieldId];
+    const FieldComponent = this.getFieldComponentClass(fieldSummary.type);
+
+    return (
+      <FieldComponent
+        key={fieldId}
+        contentPrefix={this.props.contentPrefix}
+        fieldId={fieldId}
+        fieldSummary={fieldSummary}
+        value={fieldSummary.value}
+        disabled={false}
+        selectionToggable={false}
+        onFieldChanged={this.onFieldChanged}
+        showSavedImage
+      />
+    );
+  },
+
+  renderFields() {
+    return Object.keys(this.state.form).map(this.renderField);
+  },
+
+  render() {
+    if (!this.state.loaded) {
+      return <Loading />;
+    }
+
+    if (this.state.error) {
+      return <Alert type="error" infoTextKey="general.errors.communication.general" />;
     }
 
     return (
-      <div>
-        <Form ref="form" form={this.buildForm()} contentPrefix={`${this.props.contentPrefix}.form`} onSubmit={this.onFormSubmit} />
-        // <Button onClick={() => this.refs.form.submit()} label={Counterpart.translate(`${this.props.contentPrefix}.submit`)} />
-      </div>
+      <form
+        ref="form"
+        role="form"
+        form={this.state.form}
+        contentPrefix={`${this.props.contentPrefix}.form`}
+        onSubmit={this.onFormSubmit}
+      >
+        {this.renderFields()}
+        <Translate
+          component="button"
+          type="submit"
+          ref="submitter"
+          className="btn btn-primary"
+          content={`${this.props.contentPrefix}.form.submit`}
+        />
+      </form>
     );
-  }
+  },
 });

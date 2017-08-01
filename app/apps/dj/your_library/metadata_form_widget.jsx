@@ -5,7 +5,6 @@ import Counterpart from 'counterpart';
 
 import './metadata_form_widget.scss';
 const MetadataFormWidget = React.createClass({
-
   propTypes: {
     form: React.PropTypes.object.isRequired,
     onSubmit: React.PropTypes.func.isRequired,
@@ -27,13 +26,22 @@ const MetadataFormWidget = React.createClass({
     });
   },
 
-  submit() {
-    this.refs.submitter.getDOMNode().click();
-  },
-
   onSubmit(e) {
     e.preventDefault();
     this.props.onSubmit(this.buildFieldValues());
+  },
+
+  getFieldComponentClass(fieldType) {
+    switch (fieldType) {
+      case 'text':
+        return MetadataTextareaField;
+      default:
+        return MetadataInputField;
+    }
+  },
+
+  submit() {
+    this.refs.submitter.getDOMNode().click();
   },
 
   buildFieldValues() {
@@ -51,15 +59,6 @@ const MetadataFormWidget = React.createClass({
     const newInputVals = this.state.userProvidedVals;
     newInputVals[fieldId] = value;
     this.setState({ userProvidedVals: newInputVals });
-  },
-
-  getFieldComponentClass(fieldType) {
-    switch (fieldType) {
-      case 'text':
-        return MetadataTextareaField;
-      default:
-        return MetadataInputField;
-    }
   },
 
   isFieldEnabled(fieldId) {

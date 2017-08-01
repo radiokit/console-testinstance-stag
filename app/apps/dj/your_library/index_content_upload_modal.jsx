@@ -1,11 +1,16 @@
 import React, { PropTypes } from 'react';
 import Translate from 'react-translate-component';
-import { List } from 'immutable';
+// import { List } from 'immutable';
 
 import RadioKit from '../../../services/RadioKit';
 import Modal from '../../../widgets/admin/modal_widget.jsx';
 import Upload from '../../../widgets/admin/upload/upload_widget.jsx';
 import MetadataFormWidget from './upload_metadata_form_widget.jsx';
+
+const steps = {
+  metadata: 'metadata',
+  upload: 'upload',
+};
 
 export default React.createClass({
   propTypes: {
@@ -16,6 +21,7 @@ export default React.createClass({
 
   getInitialState() {
     return {
+      step: steps.metadata,
       formSubmitted: false,
       formFilled: {},
       form: this.getForm(),
@@ -23,11 +29,18 @@ export default React.createClass({
   },
 
   onFormSubmit(formFilled) {
-    this.setState({ formFilled });
+    this.setState({
+      formFilled,
+      step: steps.upload,
+    });
   },
 
   onConfirm() {
-    this.refs.form.submit();
+    this.refs.metadataForm.submit();
+  },
+
+  onCancel() {
+    this.refs.modal.hide();
   },
 
   getFilteredMetadataSchemas() {
@@ -59,24 +72,46 @@ export default React.createClass({
   renderFooter() {
     return (
       <div className="modal-footer">
-        <Translate component="button" content=
+        <Translate
+          component="button"
+          role="button"
+          content={`${this.props.contentPrefix}.action.cancel`}
+          className="btn btn-default"
+          onClick={this.onCancel}
+        />
+        <Translate
+          component="button"
+          role="button"
+          content={`${this.props.contentPrefix}.action.upload`}
+          className="btn btn-primary"
+          onClick={this.onConfirm}
+        />
       </div>
     );
   },
 
   renderContent() {
-    return (
-      <MetadataFormWidget
-        ref="form"
-        form={this.state.form}
-        contentPrefix={`${this.props.contentPrefix}.form`}
-        onSubmit={this.onFormSubmit}
-      />
-    );
+    if (this.state.step === steps.metadata) {
+      return (
+        <MetadataFormWidget
+          ref="metadataForm"
+          form={this.state.form}
+          contentPrefix={`${this.props.contentPrefix}.form`}
+          onSubmit={this.onFormSubmit}
+        />
+      );
+    }
+
+    if (this.state.step === steps.upload) {
+      return (
+        <Upload repository={this.props.repository} multiple={false} />
+      );
+    }
+
+    return null;
   },
 
   render() {
-    // <Upload repository={this.props.repository} />
     return (
       <Modal
         ref="modal"

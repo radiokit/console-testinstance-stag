@@ -17,12 +17,11 @@ export default React.createClass({
     currentUser: PropTypes.object.isRequired,
   },
 
-
   childContextTypes: {
     currentTagItemId: PropTypes.string,
+    currentTagCategoryId: PropTypes.string,
     currentRepositoryId: PropTypes.string,
   },
-
 
   getInitialState() {
     return {
@@ -36,6 +35,7 @@ export default React.createClass({
   getChildContext() {
     return {
       currentTagItemId: this.state.currentTagItemId,
+      currentTagCategoryId: this.state.currentTagCategoryId,
       currentRepositoryId: this.state.currentRepositoryId,
     };
   },
@@ -57,7 +57,11 @@ export default React.createClass({
         loaded: true,
         error: null,
         currentTagItemId: tagItemMetadata.getIn(['tag_item', 'id'], null),
-        currentRepositoryId: tagItemMetadata.getIn(['metadata_schema', 'record_repository_id'], null),
+        currentTagCategoryId: tagItemMetadata.getIn(['tag_item', 'tag_category_id'], null),
+        currentRepositoryId: tagItemMetadata.getIn(
+          ['metadata_schema', 'record_repository_id'],
+          null
+        ),
       });
     }
   },
@@ -75,6 +79,7 @@ export default React.createClass({
       .select(
         'id',
         'tag_item.id',
+        'tag_item.tag_category_id',
         'metadata_schema.record_repository_id'
       )
       .joins('tag_item')

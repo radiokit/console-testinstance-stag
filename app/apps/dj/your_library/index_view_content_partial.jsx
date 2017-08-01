@@ -272,7 +272,7 @@ const DJLibraryIndexContent = React.createClass({
         labelTextKey={`${this.props.contextPrefix}.actions.upload`}
         modalElement={UploadModal}
         modalProps={{
-          contentPrefix: 'widgets.vault.file_browser.modals.metadata_file',
+          contentPrefix: 'widgets.vault.file_browser.modals.upload',
           metadataSchemas: this.getFilteredMetadataSchemas(),
           repository: this.props.record,
         }}

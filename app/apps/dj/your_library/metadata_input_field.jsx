@@ -17,18 +17,26 @@ const MetadataInputField = React.createClass({
     ]),
     placeholder: React.PropTypes.string,
     selectionToggable: React.PropTypes.bool,
+    showSavedImage: React.PropTypes.bool,
   },
 
   getDefaultProps() {
     return {
       selectionToggable: true,
+      showSavedImage: false,
       isRequired: false,
     };
   },
 
   getInitialState() {
+    let imagePreviewUrl = null;
+
+    if (this.props.fieldSummary.type === 'image' && this.props.showSavedImage) {
+      imagePreviewUrl = this.props.value;
+    }
+
     return {
-      imagePreviewUrl: null,
+      imagePreviewUrl,
     };
   },
 

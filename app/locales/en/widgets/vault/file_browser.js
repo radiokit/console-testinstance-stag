@@ -114,16 +114,20 @@ export default {
               close: "Close",
             }
           },
-          upload:{
-            header: "Upload files",
-            instruction: "Choose files",
+          upload: {
+            header: 'Upload file',
+            instruction: 'Choose file',
             table: {
               header: {
-                file_name: "File name",
-                file_size: "Size",
-                status: "Status",
+                file_name: 'File name',
+                file_size: 'Size',
+                status: 'Status',
               },
-            }
+            },
+            action: {
+              cancel: 'Cancel',
+              upload: 'Upload file',
+            },
           },
           tag: {
             header: "Tags",

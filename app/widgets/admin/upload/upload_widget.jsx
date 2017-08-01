@@ -47,6 +47,15 @@ const UploadWidget = React.createClass({
   propTypes: {
     repository: React.PropTypes.object.isRequired,
     queues: React.PropTypes.object,
+    multiple: React.PropTypes.bool,
+    onUploadFinished: React.PropTypes.func,
+  },
+
+  getDefaultProps() {
+    return {
+      multiple: true,
+      onUploadFinished: null,
+    };
   },
 
   getInitialState() {
@@ -70,8 +79,10 @@ const UploadWidget = React.createClass({
 
   renderDropzone() {
     return (
-      <Dropzone className="card style-primary upload-dropzone"
+      <Dropzone
+        className="card style-primary upload-dropzone"
         onDrop={files => UploadDomain.upload(this.props.repository.get('id'), files)}
+        multiple={this.props.multiple}
       >
         <div className="card-body">
           <form className="upload-dropzone" ref="uploadButton" className="upload-button">
