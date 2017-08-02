@@ -86,11 +86,11 @@ export default {
 
     dj: {
       icon: 'library-music',
-      go_live: {
-        index() {
-          return '/apps/dj/go_live/index';
-        },
-      },
+      // go_live: {
+      //   index() {
+      //     return '/apps/dj/go_live/index';
+      //   },
+      // },
       your_library: {
         index() {
           return '/apps/dj/your_library/index';

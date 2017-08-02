@@ -44,7 +44,7 @@ export default React.createClass({
     this.queryTagItemId();
   },
 
-  onQuerySuccess(_a, _b, data) {
+  onQuerySuccess(_event, _record, data) {
     if (!data || !data.size) {
       this.setState({
         loaded: true,
@@ -93,13 +93,10 @@ export default React.createClass({
 
   render() {
     if (this.state.loaded === false) {
-      return (
-        <Loading
-          info
-          infoTextKey="apps.dj.loading"
-        />
-      );
-    } else if (this.state.error) {
+      return <Loading info infoTextKey="apps.dj.loading" />;
+    }
+
+    if (this.state.error) {
       const key = ({
         connection: 'general.errors.communication.general',
         notfound: 'apps.dj.errors.not_found',

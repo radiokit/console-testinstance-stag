@@ -213,7 +213,7 @@ export default React.createClass({
           <MetadataFormWidget
             ref="form"
             form={this.state.form}
-            contentPrefix={this.props.contentPrefix + '.form'}
+            contentPrefix={`${this.props.contentPrefix}.form`}
             onSubmit={this.onFormSubmit}
           />
         </div>

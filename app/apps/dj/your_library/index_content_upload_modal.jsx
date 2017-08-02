@@ -200,6 +200,10 @@ export default React.createClass({
   },
 
   renderContent() {
+    if (this.state.error) {
+      return <Translate content="general.errors.communication.general" />;
+    }
+
     if (this.state.step === steps.metadata) {
       return (
         <MetadataFormWidget
@@ -222,11 +226,7 @@ export default React.createClass({
     }
 
     if (this.state.step === steps.finished) {
-      return (
-        <Translate
-          content={`${this.props.contentPrefix}.finishedInfo`}
-        />
-      );
+      return <Translate content={`${this.props.contentPrefix}.finishedInfo`} />;
     }
 
     return null;
