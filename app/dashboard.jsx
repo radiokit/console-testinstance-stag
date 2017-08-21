@@ -72,7 +72,6 @@ export default React.createClass({
       <Section className="dashboard">
         <GridRow>
           {apps}
-          {this.renderAppCard('dj')}
         </GridRow>
       </Section>
     );
