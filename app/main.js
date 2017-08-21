@@ -41,6 +41,11 @@ import AdministrationFileRepositoriesIndex from './apps/administration/file_repo
 import AdministrationFileRepositoriesShow from './apps/administration/file_repositories/ShowView.jsx';
 import AdministrationBroadcastChannelsIndex from './apps/administration/broadcast_channels/IndexView.jsx';
 import AdministrationBroadcastChannelsShow from './apps/administration/broadcast_channels/ShowView.jsx';
+import DjApp from './apps/dj/app.jsx';
+import DjGoLiveIndex from './apps/dj/go_live/IndexView.jsx';
+import DjYourLibraryIndex from './apps/dj/your_library/index_view.jsx';
+import DjYourProfileIndex from './apps/dj/your_profile/IndexView.jsx';
+
 
 Counterpart.registerTranslations("en", require('./locales/en/general.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/almanac.js'));
@@ -48,7 +53,7 @@ Counterpart.registerTranslations("en", require('./locales/en/apps/broadcast.js')
 Counterpart.registerTranslations("en", require('./locales/en/apps/library.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/electron.js'));
 Counterpart.registerTranslations("en", require('./locales/en/apps/administration.js'));
-Counterpart.registerTranslations("en", require('./locales/en/apps/administration.js'));
+Counterpart.registerTranslations("en", require('./locales/en/apps/dj.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/vault/file_browser.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/vault/file_picker.js'));
 Counterpart.registerTranslations("en", require('./locales/en/widgets/admin/table_browser.js'));
@@ -63,7 +68,7 @@ Counterpart.registerTranslations("pl", require('./locales/pl/apps/broadcast.js')
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/library.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/electron.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/apps/administration.js'));
-Counterpart.registerTranslations("pl", require('./locales/pl/apps/administration.js'));
+Counterpart.registerTranslations("pl", require('./locales/pl/apps/dj.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/vault/file_browser.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/vault/file_picker.js'));
 Counterpart.registerTranslations("pl", require('./locales/pl/widgets/admin/table_browser.js'));
@@ -123,6 +128,7 @@ ReactDOM.render((
     <Route path="/" component={Root} onEnter={pingGoogleAnalytics}>
       <IndexRoute component={Dashboard} />
       <Route path="apps" component={AppsIndex} onEnter={pingGoogleAnalytics}>
+
         <Route path="broadcast" component={BroadcastApp}>
           <Route component={ScopeLayout} scope="broadcastChannel">
             <Route path="playlist" component={BroadcastPlaylistShow} onEnter={pingGoogleAnalytics} />
@@ -135,6 +141,12 @@ ReactDOM.render((
             <Route path="metadata/index" component={BroadcastMetadataIndex} onEnter={pingGoogleAnalytics} />
           </Route>
           <Route path="stats/index" component={BroadcastStatsShow} onEnter={pingGoogleAnalytics} />
+        </Route>
+
+        <Route path="dj" component={DjApp}>
+          <Route path="go_live/index" component={DjGoLiveIndex} onEnter={pingGoogleAnalytics} />
+          <Route path="your_library/index" component={DjYourLibraryIndex} onEnter={pingGoogleAnalytics} />
+          <Route path="your_profile/index" component={DjYourProfileIndex} onEnter={pingGoogleAnalytics} />
         </Route>
 
         <Route path="almanac" component={AlmanacApp}>
