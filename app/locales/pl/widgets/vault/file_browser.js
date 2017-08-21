@@ -114,16 +114,22 @@ export default {
               close: "Zamknij",
             }
           },
-          upload:{
-            header: "Załaduj pliki",
-            instruction: "Wybierz pliki",
+          upload: {
+            header: 'Załaduj plik',
+            instruction: 'Wybierz plik',
+            finishedInfo: 'Plik został zapisany!',
             table: {
               header: {
-                file_name: "Nazwa",
-                file_size: "Rozmiar",
-                status: "Status",
+                file_name: 'Nazwa',
+                file_size: 'Rozmiar',
+                status: 'Status',
               },
-            }
+            },
+            action: {
+              cancel: 'Anuluj',
+              upload: 'Załaduj plik',
+              finish: 'Zakończ',
+            },
           },
           tag: {
             header: "Kategorie",

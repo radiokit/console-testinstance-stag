@@ -3,10 +3,13 @@ import {
   updateProcessQueue,
   setupProcess,
 } from './UploadProcessesSummaries';
+import UploadProcessesStream from './UploadProcessesStream';
+import { OrderedMap } from 'immutable';
 
 
 const actions = {
   upload,
+  clear,
 };
 
 export default actions;
@@ -36,4 +39,8 @@ function upload(repositoryID, files) {
   // May break in future
   // Should be officially supported feature
   files.forEach(file => uploadProcess.__resumable.addFile(file));
+}
+
+function clear() {
+  UploadProcessesStream.write(OrderedMap());
 }

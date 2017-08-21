@@ -85,27 +85,90 @@ const BroadcastPlaylistContent = React.createClass({
       startHour
     );
     const to = from + hours * MILLISECONDS_PER_HOUR;
-    const fromISO = moment(from).toISOString();
-    const toISO = moment(to).toISOString();
 
-    return RadioKit
-      .query('plumber', 'Media.Input.File.RadioKit.Vault')
-      .select(
-        'id',
-        'name',
-        'cue_in_at',
-        'cue_out_at',
-        'references',
-        'file',
-      )
-      .where(
-        'references',
-        'deq',
-        `broadcast_channel_id ${currentBroadcastChannel.get('id')}`,
-      )
-      .where('cue_in_at', 'lte', toISO)
-      .where('cue_out_at', 'gte', fromISO);
+    if(currentBroadcastChannel.get('lineup_base_url') === '' ||
+       currentBroadcastChannel.get('lineup_base_url') === null || 
+       currentBroadcastChannel.get('lineup_channel_id') === '' || 
+       currentBroadcastChannel.get('lineup_channel_id') === null) {
+
+      const fromISO = moment(from).toISOString();
+      const toISO = moment(to).toISOString();
+      
+      // Deprecated backend for storing playlist
+      return RadioKit
+        .query('plumber', 'Media.Input.File.RadioKit.Vault')
+        .select(
+          'id',
+          'name',
+          'cue_in_at',
+          'cue_out_at',
+          'references',
+          'file',
+        )
+        .where(
+          'references',
+          'deq',
+          `broadcast_channel_id ${currentBroadcastChannel.get('id')}`,
+        )
+        .where('cue_in_at', 'lte', toISO)
+        .where('cue_out_at', 'gte', fromISO);
+
+    } else {
+      const fromISO = moment(from).format("YYYY-MM-DDTHH:mm:ss"); // Do not send time zone
+      const toISO = moment(to).format("YYYY-MM-DDTHH:mm:ss"); // Do not send time zone
+
+      return RadioKit
+        .query(currentBroadcastChannel.get('lineup_base_url'), 'Track')
+        .select(
+          'id',
+          'name',
+          'cue_in_at',
+          'cue_out_at',
+          'file',
+        )
+        .where(
+          'channel_id',
+          'eq',
+          currentBroadcastChannel.get('lineup_channel_id'),
+        )
+        .where('cue_in_at', 'lte', fromISO)
+        .where('cue_out_at', 'gte', toISO);
+    }
   },
+
+
+  renderPlaylistToolbar() {
+    const currentBroadcastChannel = this.context.currentBroadcastChannel;
+
+    if(currentBroadcastChannel.get('lineup_base_url') === '' ||
+       currentBroadcastChannel.get('lineup_base_url') === null || 
+       currentBroadcastChannel.get('lineup_channel_id') === '' || 
+       currentBroadcastChannel.get('lineup_channel_id') === null) {
+
+      // Deprecated backend for storing playlist
+      return (
+        <PlaylistToolbar
+          offset={this.props.offset}
+          selectedRecordIds={this.state.selectedRecordIds}
+          reloadData={this.reloadData}
+          app="plumber"
+          model="Media.Input.File.RadioKit.Vault"
+        />
+      );
+
+    } else {
+      return (
+        <PlaylistToolbar
+          offset={this.props.offset}
+          selectedRecordIds={this.state.selectedRecordIds}
+          reloadData={this.reloadData}
+          lineupBaseUrl={currentBroadcastChannel.get('lineup_base_url')}
+          lineupChannelId={currentBroadcastChannel.get('lineup_channel_id')}
+        />
+      );
+    }
+  },
+
 
   render() {
     return (
@@ -118,11 +181,7 @@ const BroadcastPlaylistContent = React.createClass({
         selectable
         onSelect={this.onRecordsSelect}
       >
-        <PlaylistToolbar
-          offset={this.props.offset}
-          selectedRecordIds={this.state.selectedRecordIds}
-          reloadData={this.reloadData}
-        />
+      {this.renderPlaylistToolbar()}
       </TableBrowser>
     );
   },

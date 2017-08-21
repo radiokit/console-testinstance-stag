@@ -47,6 +47,15 @@ const UploadWidget = React.createClass({
   propTypes: {
     repository: React.PropTypes.object.isRequired,
     queues: React.PropTypes.object,
+    multiple: React.PropTypes.bool,
+    onUploadProgress: React.PropTypes.func,
+  },
+
+  getDefaultProps() {
+    return {
+      multiple: true,
+      onUploadFinished: null,
+    };
   },
 
   getInitialState() {
@@ -58,8 +67,21 @@ const UploadWidget = React.createClass({
     };
   },
 
-  getQueue() {
-    const queues = this.props.queues || OrderedMap();
+  componentWillReceiveProps(newProps) {
+    if (this.props.onUploadProgress) {
+      const newQueue = this.getQueue(newProps.queues);
+      const currentQueue = this.getQueue();
+
+      if (!newQueue.count()) {
+        return;
+      }
+
+      this.props.onUploadProgress(newQueue, currentQueue);
+    }
+  },
+
+  getQueue(newQueues) {
+    const queues = newQueues || this.props.queues || OrderedMap();
     const repositoryQueues =
       queues.filter(
         queue => queue.get('repository') === this.props.repository.get('id')
@@ -69,9 +91,15 @@ const UploadWidget = React.createClass({
   },
 
   renderDropzone() {
+    if (!this.props.multiple && this.props.queues && this.props.queues.size) {
+      return null;
+    }
+
     return (
-      <Dropzone className="card style-primary upload-dropzone"
+      <Dropzone
+        className="card style-primary upload-dropzone"
         onDrop={files => UploadDomain.upload(this.props.repository.get('id'), files)}
+        multiple={this.props.multiple}
       >
         <div className="card-body">
           <form className="upload-dropzone" ref="uploadButton" className="upload-button">

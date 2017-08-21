@@ -10,6 +10,9 @@ export default {
         royalties: {
           title: 'Royalties',
         },
+        metadata: {
+          title: 'Metadata',
+        },
         stats: {
           title: "Stats",
         },
@@ -29,6 +32,7 @@ export default {
           },
         },
         browser: {
+          loading: 'Loading',
           header: {
             name: 'Name',
             cue_in_at: 'Start time',
