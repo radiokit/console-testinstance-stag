@@ -19,6 +19,7 @@ import AppsIndex from './apps/apps_index.jsx';
 import BroadcastApp from './apps/broadcast/app.jsx';
 import BroadcastPlaylistShow from './apps/broadcast/playlist/ShowView.jsx';
 import BroadcastRoyaltiesIndex from './apps/broadcast/royalties/IndexView.jsx';
+import BroadcastMetadataIndex from './apps/broadcast/metadata/IndexView.jsx';
 import BroadcastStatsShow from './apps/broadcast/stats/ShowView.jsx';
 import ElectronApp from './apps/electron/app.jsx';
 import ElectronPatchbayIndex from './apps/electron/patchbay/IndexView.jsx';
@@ -135,6 +136,9 @@ ReactDOM.render((
           </Route>
           <Route component={ScopeLayout} scope="broadcastChannel">
             <Route path="royalties/index" component={BroadcastRoyaltiesIndex} onEnter={pingGoogleAnalytics} />
+          </Route>
+          <Route component={ScopeLayout} scope="broadcastChannel">
+            <Route path="metadata/index" component={BroadcastMetadataIndex} onEnter={pingGoogleAnalytics} />
           </Route>
           <Route path="stats/index" component={BroadcastStatsShow} onEnter={pingGoogleAnalytics} />
         </Route>

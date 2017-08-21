@@ -13,6 +13,9 @@ export default {
         stats: {
           title: "Statystyki",
         },
+        metadata: {
+          title: "Metadane",
+        },
       },
       playlist: {
         header: 'Ramówka',
@@ -29,6 +32,7 @@ export default {
           },
         },
         browser: {
+          loading: 'Ładowanie',
           header: {
             name: 'Nazwa',
             cue_in_at: 'Czas rozpoczęcia',

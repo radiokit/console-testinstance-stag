@@ -120,7 +120,7 @@ export default React.createClass({
 
     this.state.data
       .query('agenda', 'Broadcast.Channel')
-      .select('id', 'name', 'references', 'timezone', 'media_routing_group_id')
+      .select('id', 'name', 'references', 'timezone', 'media_routing_group_id', 'lineup_base_url', 'lineup_channel_id')
       .where.apply(this, accountsCondition)
       .order('name', 'asc')
       .on('error', () => {
@@ -180,6 +180,13 @@ export default React.createClass({
         plumber: { baseUrl: 'https://plumber.radiokitapp-stag.org' },
         vault: { baseUrl: 'https://vault.radiokitapp-stag.org' },
         circumstances: { baseUrl: 'https://circumstances.radiokitapp-stag.org' },
+        default: function(appName) {
+          // That is called only if we're passing full lineup base URL instead 
+          // of app name in the broadcast view. 
+          return {
+            baseUrl: appName,
+          };
+        }
       },
       external: {
       },
