@@ -1,67 +1,83 @@
-import React from 'react';
-import '../../../../vendor/assets/stylesheets/materialadmin/materialadmin.css';
+import React, { PropTypes } from 'react';
+
+import Loading from '../../../widgets/general/loading_widget.jsx';
+import Alert from '../../../widgets/admin/alert_widget.jsx';
+import RadioKit from '../../../services/RadioKit.js';
+import './IndexView.scss';
 
 export default React.createClass({
+  contextTypes: {
+    currentTagItemId: PropTypes.string.isRequired,
+  },
 
-    getInitialState: function () {
-      return {live: false}
-    },
-    goLive: function () {
-      this.setState({live: true})
-      console.log(this.state)
-    },
-    stopBroadcast: function (){
-      this.setState({live: false})
-      console.log(this.state)
-    },
-    record: function () {
-      this.setState({recording: true})
-      console.log(this.state)
-    },
-    stopRecording: function (){
-      this.setState({recording: false})
-      console.log(this.state)
-    },
+  getInitialState() {
+    return {
+      playoutUrl: '',
+      error: null,
+      loaded: false,
+    };
+  },
 
+  componentDidMount() {
+    this.queryMetadataPlayoutUrl();
+  },
+
+  onQuerySuccess(_event, _record, data) {
+    if (!data || !data.size) {
+      this.setState({
+        loaded: true,
+        error: 'notfound',
+      });
+    } else {
+      const playoutMetadata = data.first();
+
+      this.setState({
+        loaded: true,
+        error: null,
+        playoutUrl: playoutMetadata.get('value_string'),
+        playoutMetadataId: playoutMetadata.get('id'),
+      });
+    }
+  },
+
+  onQueryFailure() {
+    this.setState({
+      loaded: true,
+      error: 'connection',
+    });
+  },
+
+  queryMetadataPlayoutUrl() {
+    RadioKit
+      .query('vault', 'Data.Metadata.Item')
+      .select('id', 'value_string')
+      .joins('tag_item')
+      .joins('metadata_schema')
+      .where('metadata_schema.key', 'eq', 'playout-url')
+      .where('tag_item.id', 'eq', this.context.currentTagItemId)
+      .on('fetch', this.onQuerySuccess)
+      .on('error', this.onQueryFailure)
+      .fetch();
+  },
 
   render() {
-      return (<div className="card">
-        <div className="card-body height-4">
-
-        <div className="col-lg-4">
-
-        <button className="btn ink-reaction btn-raised btn-primary" onClick={this.goLive}>Go Live</button>
-        </div>
-
-        <div className="col-lg-4">
-        <button className="btn ink-reaction btn-danger" onClick={this.stopBroadcast}>Stop Broadcast</button>
-        </div>
-
-        <div className="col-lg-4">
-         To stream straight to your channel - configure Icecast with this data
-          </div>
-        </div>
-
-        <div className="card-body height-4">
-
-        <div className="col-lg-4">
-
-        <button className="btn ink-reaction btn-raised btn-info" onClick={this.record}>Record Set</button>
-        </div>
-
-        <div className="col-lg-4">
-        <button className="btn ink-reaction btn-danger" onClick={this.stopRecording}>Stop Recording</button>
-        </div>
-
-        <div className="col-lg-4">
-         You can record your here without going live - the file will show up in Your Library
-          </div>
-
-
-
-
-        </div>
-      </div>);
-
+    if (this.state.loaded === false) {
+      return <Loading info infoTextKey="apps.dj.loading" />;
     }
+
+    if (this.state.error) {
+      const key = ({
+        connection: 'general.errors.communication.general',
+        notfound: 'apps.dj.errors.playout_not_found',
+      })[this.state.error];
+
+      return <Alert type="error" infoTextKey={key} />;
+    }
+
+    return (
+      <div className="Dj-GoLive-indexView">
+        <iframe src={this.state.playoutUrl} />
+      </div>
+    );
+  },
 });
