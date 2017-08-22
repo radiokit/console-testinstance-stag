@@ -12,6 +12,7 @@ import DJLibraryIndexContent from './index_view_content_partial.jsx';
 export default React.createClass({
   contextTypes: {
     currentTagItemId: PropTypes.string.isRequired,
+    currentTagItemName: PropTypes.string.isRequired,
     currentRepositoryId: PropTypes.string.isRequired,
   },
 
@@ -101,13 +102,15 @@ export default React.createClass({
       return <Alert type="error" infoTextKey="general.errors.communication.general" />;
     }
 
+    const cardHeader = `${this.state.record.get('name')} (${this.context.currentTagItemName})`;
+
     return (
       <Section>
         <GridRow>
           <GridCell size="large" center>
             <Card
               contentPrefix="apps.library.file_repositories.show"
-              headerText={this.state.record.get('name')}
+              headerText={cardHeader}
               contentElement={this.buildTabs()}
               contentProps={{
                 app: 'vault',

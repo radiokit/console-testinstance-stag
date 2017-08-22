@@ -136,7 +136,7 @@ const MetadataInputField = React.createClass({
       <div key={ fieldId } className="form-group">
         <div className="MetadataFormWidget__inputGroup">
           <div>
-            <img src={imagePreviewUrl} role="presentation" />
+            <img src={imagePreviewUrl} role="presentation" className="img-responsive" />
           </div>
           <div className={this.props.selectionToggable && 'input-group-content'}>
             <label
