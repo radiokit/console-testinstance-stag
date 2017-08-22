@@ -14,13 +14,6 @@ function getEnv() {
       plumber: { baseUrl: 'https://plumber.radiokitapp-stag.org' },
       vault: { baseUrl: 'https://vault.radiokitapp-stag.org' },
       circumstances: { baseUrl: 'https://circumstances.radiokitapp-stag.org' },
-      // jungle: { baseUrl: 'https://jungle.radiokitapp.org' },
-      // medium: { baseUrl: 'https://medium.radiokitapp.org' },
-      // auth: { baseUrl: 'https://auth.radiokitapp.org' },
-      // agenda: { baseUrl: 'https://agenda.radiokitapp.org' },
-      // plumber: { baseUrl: 'https://plumber.radiokitapp.org' },
-      // vault: { baseUrl: 'https://vault.radiokitapp.org' },
-      // circumstances: { baseUrl: 'https://circumstances.radiokitapp.org' },
       default: function(appName) {
         // That is called only if we're passing full lineup base URL instead
         // of app name in the broadcast view.

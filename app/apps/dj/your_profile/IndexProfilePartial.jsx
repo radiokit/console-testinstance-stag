@@ -9,10 +9,19 @@ import MetadataInputField from '../your_library/metadata_input_field.jsx';
 import MetadataTextareaField from '../your_library/metadata_textarea_field.jsx';
 
 const allowedSchemas = [
+  // Author
   'about',
   'facebook_url',
   'twitter_url',
   'cover',
+
+  // Show
+  'series_cover',
+  // 'series_email',
+  'series_facebook',
+  // 'series_name',
+  'series_lead',
+  // 'series_web',
 ];
 
 export default React.createClass({
