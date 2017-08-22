@@ -65,9 +65,9 @@ export default React.createClass({
       passwordError: false,
     }, () => {
       let options = {};
-      if(this.props.env.env !== 'prod') {
-        options['baseUrl'] = 'https://jungle.radiokitapp-stag.org';
-      }
+      // if(this.props.env.env !== 'prod') {
+      //   options['baseUrl'] = 'https://jungle.radiokitapp-stag.org';
+      // }
       Auth.Session.User.authenticateAsync(this.state.email, this.state.password, options, true)
         .then((session) => {
           this.props.onAuthenticated(session);
