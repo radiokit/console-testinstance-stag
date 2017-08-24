@@ -57,6 +57,8 @@ export default {
                     freezer: "Freezer",
                     administration: "Infrastruktura",
                     almanac: "Almanac",
+                    stream_metadata: 'Metadane strumienia',
+                    dj: 'DJ',
                   },
                   hint: "Wybierz aplikacje dostępne dla tego użytkownika. Przytrzymaj Ctrl podczas klikania by zaznaczyć/odznaczyć wiele aplikacji.",
                 },

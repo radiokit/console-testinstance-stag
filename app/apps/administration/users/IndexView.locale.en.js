@@ -57,6 +57,8 @@ export default {
                     freezer: "Freezer",
                     administration: "administration",
                     almanac: "Almanac",
+                    dj: 'DJ',
+                    stream_metadata: 'Stream metadata',
                   },
                   hint: "Select applications enabled for this user. Hold Ctrl while clicking to select/deselect multiple applications.",
                 },
