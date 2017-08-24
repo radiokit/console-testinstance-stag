@@ -5,9 +5,40 @@ import Alert from '../../../widgets/admin/alert_widget.jsx';
 import RadioKit from '../../../services/RadioKit.js';
 import './IndexView.scss';
 
+const requiredMetadata = [
+  {
+    key: 'series_name',
+    kind: 'string',
+    required: true,
+    source: 'tag_category',
+    source_id: 'series',
+  },
+  {
+    key: 'podcast_lead',
+    kind: 'string',
+    required: true,
+  },
+  {
+    key: 'guest',
+    kind: 'string',
+    required: false,
+  },
+  {
+    key: 'genre',
+    kind: 'string',
+    required: true,
+    min: 3,
+    source: 'tag_category',
+    source_key: 'genre',
+  },
+];
+
 export default React.createClass({
   contextTypes: {
     currentTagItemId: PropTypes.string.isRequired,
+    currentTagCategoryId: PropTypes.string.isRequired,
+    currentTagItemName: PropTypes.string.isRequired,
+    currentRepositoryId: PropTypes.string.isRequired,
   },
 
   getInitialState() {
@@ -30,6 +61,13 @@ export default React.createClass({
       });
     } else {
       const playoutMetadata = data.first();
+
+      if (!playoutMetadata.get('value_string')) {
+        this.setState({
+          loaded: true,
+          error: 'notfound',
+        });
+      }
 
       this.setState({
         loaded: true,
@@ -73,10 +111,12 @@ export default React.createClass({
 
       return <Alert type="error" infoTextKey={key} />;
     }
+    const metadataUrlString = encodeURIComponent(JSON.stringify(requiredMetadata));
+    const playoutUrl = `${this.state.playoutUrl}&metadata=${metadataUrlString}&tag_id=${this.context.currentTagItemId}`;
 
     return (
       <div className="Dj-GoLive-indexView">
-        <iframe src={this.state.playoutUrl} />
+        <iframe src={playoutUrl} />
       </div>
     );
   },
