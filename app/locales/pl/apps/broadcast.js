@@ -11,10 +11,7 @@ export default {
           title: 'Tantiemy',
         },
         stats: {
-          title: "Statystyki",
-        },
-        metadata: {
-          title: "Metadane",
+          title: 'Statystyki',
         },
       },
       playlist: {

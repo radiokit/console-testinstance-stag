@@ -107,5 +107,14 @@ export default {
         },
       },
     },
+
+    stream_metadata: {
+      icon: 'radio-tower',
+      metadata: {
+        index() {
+          return '/apps/stream_metadata/metadata/index';
+        },
+      },
+    },
   },
 };
