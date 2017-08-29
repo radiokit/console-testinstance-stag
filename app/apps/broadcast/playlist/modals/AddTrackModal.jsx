@@ -137,34 +137,33 @@ const AddTrackModal = React.createClass({
       const lineupBaseUrl = this.context.currentBroadcastChannel.get('lineup_base_url');
       const lineupChannelId = this.context.currentBroadcastChannel.get('lineup_channel_id');
 
-      if(lineupBaseUrl === '' ||
-         lineupBaseUrl === null || 
-         lineupChannelId === '' || 
-         lineupChannelId === null) {
-        
+      if (lineupBaseUrl === '' ||
+         lineupBaseUrl === null ||
+         lineupChannelId === '' ||
+         lineupChannelId === null
+      ) {
         // Deprecated backend for storing playlist
         RadioKit
           .record('plumber', 'Media.Input.File.RadioKit.Vault')
           .on('loaded', this.onScheduleItemSaved)
           .on('error', this.onScheduleItemError)
           .create(scheduleItem);
-      
       } else {
         const formData = new FormData();
 
         formData.append('file_name', track.name);
         formData.append('file_id', this.state.file.get('id'));
-        formData.append('cue_in_at', track.startDate.format("YYYY-MM-DDTHH:mm:ss")); // Do not send time zone
-        formData.append('cue_out_at', track.endDate.format("YYYY-MM-DDTHH:mm:ss")); // Do not send time zone
+        formData.append('cue_in_at', track.startDate.format('YYYY-MM-DDTHH:mm:ss')); // Do not send time zone
+        formData.append('cue_out_at', track.endDate.format('YYYY-MM-DDTHH:mm:ss')); // Do not send time zone
 
         const that = this;
 
         fetch(`${lineupBaseUrl}/api/lineup/v1.0/channel/${lineupChannelId}/playlist/track`, {
           method: 'POST',
           body: formData,
-        }).then(function(response) {
+        }).then(function (response) {
           that.onScheduleItemSaved();
-        }).catch(function(error) {
+        }).catch(function (error) {
           that.onScheduleItemError();
         });
       }
@@ -251,10 +250,6 @@ const AddTrackModal = React.createClass({
   },
 
   renderLoading() {
-    if (!this.state.loading) {
-      return null;
-    }
-
     return (
       <LoadingWidget
         info
