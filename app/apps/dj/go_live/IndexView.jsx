@@ -11,7 +11,7 @@ const requiredMetadata = [
     kind: 'string',
     required: true,
     source: 'tag_category',
-    source_id: 'series',
+    source_key: 'series',
   },
   {
     key: 'podcast_lead',
@@ -112,7 +112,8 @@ export default React.createClass({
       return <Alert type="error" infoTextKey={key} />;
     }
     const metadataUrlString = encodeURIComponent(JSON.stringify(requiredMetadata));
-    const playoutUrl = `${this.state.playoutUrl}&metadata=${metadataUrlString}&tag_item=[${this.context.currentTagItemId}]`;
+    const tagItemUrlString = encodeURIComponent(JSON.stringify([this.context.currentTagItemId]));
+    const playoutUrl = `${this.state.playoutUrl}&metadata=${metadataUrlString}&tag_item=${tagItemUrlString}`;
 
     return (
       <div className="Dj-GoLive-indexView">
