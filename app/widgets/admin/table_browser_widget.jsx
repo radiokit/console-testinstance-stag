@@ -254,14 +254,14 @@ export default React.createClass({
       this.setState({
         searchTerm: term,
       }, () => {
-        this.scheduleReloadDueToSearchChange();   
+        this.scheduleReloadDueToSearchChange();
       });
 
     } else {
       this.setState({
         searchTerm: null,
       }, () => {
-        this.scheduleReloadDueToSearchChange();   
+        this.scheduleReloadDueToSearchChange();
       });
     }
   },
@@ -272,8 +272,8 @@ export default React.createClass({
     const that = this;
     this.searchReloadTimeout = setTimeout(function() {
       delete that.searchReloadTimeout;
-      that.reloadData();  
-    }, 500);          
+      that.reloadData();
+    }, 500);
   },
 
   cancelReloadDueToSearchChange: function() {
