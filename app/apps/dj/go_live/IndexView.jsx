@@ -112,7 +112,7 @@ export default React.createClass({
       return <Alert type="error" infoTextKey={key} />;
     }
     const metadataUrlString = encodeURIComponent(JSON.stringify(requiredMetadata));
-    const playoutUrl = `${this.state.playoutUrl}&metadata=${metadataUrlString}&tag_id=${this.context.currentTagItemId}`;
+    const playoutUrl = `${this.state.playoutUrl}&metadata=${metadataUrlString}&tag_item=[${this.context.currentTagItemId}]`;
 
     return (
       <div className="Dj-GoLive-indexView">
