@@ -5,33 +5,9 @@ import Alert from '../../../widgets/admin/alert_widget.jsx';
 import RadioKit from '../../../services/RadioKit.js';
 import './IndexView.scss';
 
-const requiredMetadata = [
-  {
-    key: 'series_name',
-    kind: 'string',
-    required: true,
-    source: 'tag_category',
-    source_key: 'series',
-  },
-  {
-    key: 'podcast_lead',
-    kind: 'string',
-    required: true,
-  },
-  {
-    key: 'guest',
-    kind: 'string',
-    required: false,
-  },
-  {
-    key: 'genre',
-    kind: 'string',
-    required: true,
-    min: 3,
-    source: 'tag_category',
-    source_key: 'genre',
-  },
-];
+function encodeJSON(obj) {
+  return encodeURIComponent(JSON.stringify(obj));
+}
 
 export default React.createClass({
   contextTypes: {
@@ -85,6 +61,23 @@ export default React.createClass({
     });
   },
 
+  getPlayoutUrl() {
+    const tag = encodeJSON([this.context.currentTagItemId]);
+    const tagOptions = encodeJSON([{ tag_category: 'genre', min: 3 }]);
+    const metadata = encodeJSON([{
+      key: 'series_name',
+      value: this.context.currentTagItemName,
+    }]);
+    const metadataOptions = encodeJSON([
+      { key: 'podcast_lead', kind: 'string', required: true },
+      { key: 'guest', kind: 'string', required: false },
+    ]);
+    const playoutUrl = this.state.playoutUrl;
+
+    // eslint-disable-next-line max-len
+    return `${playoutUrl}&tag=${tag}&tag_options=${tagOptions}&metadata=${metadata}&metadata_options=${metadataOptions}`;
+  },
+
   queryMetadataPlayoutUrl() {
     RadioKit
       .query('vault', 'Data.Metadata.Item')
@@ -111,13 +104,10 @@ export default React.createClass({
 
       return <Alert type="error" infoTextKey={key} />;
     }
-    const metadataUrlString = encodeURIComponent(JSON.stringify(requiredMetadata));
-    const tagItemUrlString = encodeURIComponent(JSON.stringify([this.context.currentTagItemId]));
-    const playoutUrl = `${this.state.playoutUrl}&metadata=${metadataUrlString}&tag_item=${tagItemUrlString}`;
 
     return (
       <div className="Dj-GoLive-indexView">
-        <iframe src={playoutUrl} />
+        <iframe src={this.getPlayoutUrl()} />
       </div>
     );
   },
