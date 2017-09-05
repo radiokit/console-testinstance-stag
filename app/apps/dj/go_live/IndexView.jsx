@@ -38,7 +38,7 @@ export default React.createClass({
     } else {
       const playoutMetadata = data.first();
 
-      if (!playoutMetadata.get('value_string')) {
+      if (!playoutMetadata.get('value_text')) {
         this.setState({
           loaded: true,
           error: 'notfound',
@@ -48,7 +48,7 @@ export default React.createClass({
       this.setState({
         loaded: true,
         error: null,
-        playoutUrl: playoutMetadata.get('value_string'),
+        playoutUrl: playoutMetadata.get('value_text'),
         playoutMetadataId: playoutMetadata.get('id'),
       });
     }
@@ -81,10 +81,10 @@ export default React.createClass({
   queryMetadataPlayoutUrl() {
     RadioKit
       .query('vault', 'Data.Metadata.Item')
-      .select('id', 'value_string')
+      .select('id', 'value_text')
       .joins('tag_item')
       .joins('metadata_schema')
-      .where('metadata_schema.key', 'eq', 'playout-url')
+      .where('metadata_schema.key', 'eq', 'playout_url')
       .where('tag_item.id', 'eq', this.context.currentTagItemId)
       .on('fetch', this.onQuerySuccess)
       .on('error', this.onQueryFailure)
