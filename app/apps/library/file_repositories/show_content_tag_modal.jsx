@@ -230,7 +230,7 @@ const ShowContentTagModal = React.createClass({
                       onDeselected={onTagDeselected}
                       onRestore={onTagRestored}
                       indeterminate={tagStatus.indeterminate}
-            />
+                    />
                   </div>
                 </div>
               </li>

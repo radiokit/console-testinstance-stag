@@ -10,6 +10,7 @@ import ToolbarButtonModal from '../../../widgets/admin/toolbar_button_modal_widg
 import TableBrowser from '../../../widgets/admin/table_browser_widget.jsx';
 import MetadataModal from './index_content_metadata_modal.jsx';
 import UploadModal from './index_content_upload_modal.jsx';
+import StageModal from './index_content_stage_modal.jsx';
 
 const DJLibraryIndexContent = React.createClass({
   propTypes: {
@@ -64,35 +65,6 @@ const DJLibraryIndexContent = React.createClass({
   getFilteredMetadataSchemas() {
     return this.props.record.get('metadata_schemas')
       .filter(this.shouldShowMetadata);
-  },
-
-  moveFiles(newStage) {
-    const patch = { stage: newStage };
-
-    if (this.props.stage === 'trash') {
-      patch.destroy_at = null;
-    }
-
-    if (newStage === 'trash') {
-      patch.destroy_in = 1000 * 60 * 60 * 24 * 30;
-    }
-
-    this.setState({ stageMovingIndex: this.state.selectedRecordIds.count() - 1 });
-
-    this.state.selectedRecordIds.forEach((recordId) => {
-      RadioKit
-        .record('vault', 'Data.Record.File', recordId)
-        .on('loaded', () => {
-          if (this.state.stageMovingIndex === 0) {
-            this.reloadTable();
-          } else {
-            this.setState({
-              stageMovingIndex: this.state.stageMovingIndex - 1,
-            });
-          }
-        })
-        .update(patch);
-    });
   },
 
   isMetadataSchemaSortable(metadataSchema) {
@@ -192,13 +164,20 @@ const DJLibraryIndexContent = React.createClass({
     this.refs.tableBrowser.reloadData();
   },
 
-  renderMoveToButton(toStage) {
+  renderMoveToButton(stage) {
     return (
-      <ToolbarButton
+      <ToolbarButtonModal
         icon="folder-move"
-        labelTextKey={`${this.props.contextPrefix}.actions.move_to.${toStage}`}
+        labelTextKey={`${this.props.contextPrefix}.actions.move_to.${stage}`}
         disabled={this.state.selectedRecordIds.count() === 0}
-        onClick={() => this.moveFiles(toStage)}
+        modalElement={StageModal}
+        modalProps={{
+          contentPrefix: 'widgets.vault.file_browser.modals.stage',
+          selectedRecordIds: this.state.selectedRecordIds,
+          toStage: stage,
+          currentStage: this.props.stage,
+          onDismiss: this.reloadTable,
+        }}
       />
     );
   },
