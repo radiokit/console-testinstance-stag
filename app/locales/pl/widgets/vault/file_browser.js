@@ -179,10 +179,31 @@ export default {
               proceed: "Przypisz metadane",
               cancel: "Anuluj",
               close: "Zamknij",
-            }
+            },
           },
-        }
-      }
-    }
-  }
+
+          stage: {
+            header: 'Przenieś plii',
+            names: {
+              current: 'Gotowe',
+              archive: 'Archiwum',
+              trash: 'Kosz',
+              incoming: 'Nowe',
+            },
+            message: {
+              confirmation: '%(count)s plików zostanie przeniesionych z %(currentStage)s do %(toStage)s.',
+              acknowledgement: '%(count)s plików zostało przeniesionych do %(toStage)s.',
+              progress: 'Przenoszenie plików z %(currentStage)s do %(toStage)s.',
+              cancelled: 'Cześć plików została już przeniesiona do %(toStage)s, jednak dalsze przenoszenie zostało przerwane.',
+            },
+            action: {
+              proceed: 'Przenieś',
+              cancel: 'Anuluj',
+              close: 'Zamknij',
+            },
+          },
+        },
+      },
+    },
+  },
 };
