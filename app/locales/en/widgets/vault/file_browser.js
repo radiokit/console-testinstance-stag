@@ -181,8 +181,28 @@ export default {
               close: "Close",
             }
           },
-        }
-      }
-    }
-  }
+          stage: {
+            header: 'Move files',
+            names: {
+              current: 'Ready',
+              archive: 'Archive',
+              trash: 'Trash',
+              incoming: 'Incoming',
+            },
+            message: {
+              confirmation: '%(count)s file(s) will be moved from %(currentStage)s to %(toStage)s.',
+              acknowledgement: '%(count)s files moved to %(toStage)s.',
+              progress: 'Moving file(s) from %(currentStage)s to %(toStage)s.',
+              cancelled: 'Some file(s) has been moved to %(toStage)s, but moving was cancelled for the remaining part.',
+            },
+            action: {
+              proceed: 'Move',
+              cancel: 'Cancel',
+              close: 'Close',
+            },
+          },
+        },
+      },
+    },
+  },
 };

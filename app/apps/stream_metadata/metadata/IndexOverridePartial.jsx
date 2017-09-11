@@ -18,6 +18,9 @@ export default React.createClass({
     contentPrefix: React.PropTypes.string.isRequired,
   },
 
+  contextTypes: {
+    currentBroadcastChannel: React.PropTypes.object.isRequired,
+  },
 
   getInitialState() {
     return {
@@ -25,12 +28,6 @@ export default React.createClass({
       nowPlaying: null,
     };
   },
-
-
-  contextTypes: {
-    currentBroadcastChannel: React.PropTypes.object.isRequired,
-  },
-
 
   componentDidMount() {
     RadioKit
@@ -43,26 +40,13 @@ export default React.createClass({
           nowPlaying: data.first().get('metadata_override'),
         });
       })
-      .fetch();      
+      .fetch();
   },
-
-
-
-  buildForm() {
-    return {
-      nowPlaying: {
-        type: 'string',
-        hint: true,
-        value: this.state.nowPlaying,
-      },
-    };
-  },
-
 
   onFormSubmit(values) {
     let nowPlaying;
-    if(values.nowPlaying.trim() === '') {
-      nowPlaying = null;  
+    if (!values.nowPlaying || values.nowPlaying.trim() === '') {
+      nowPlaying = null;
     } else {
       nowPlaying = values.nowPlaying.trim();
     }
@@ -75,6 +59,15 @@ export default React.createClass({
       });
   },
 
+  buildForm() {
+    return {
+      nowPlaying: {
+        type: 'string',
+        hint: true,
+        value: this.state.nowPlaying,
+      },
+    };
+  },
 
   clearForm() {
     this.setState({
@@ -89,17 +82,28 @@ export default React.createClass({
     });
   },
 
-
   render() {
-    if(!this.state.loaded) {
+    if (!this.state.loaded) {
       return <LoadingWidget />;
     }
 
     return (
       <div>
-        <Form ref="form" form={this.buildForm()} contentPrefix={`${this.props.contentPrefix}.form`} onSubmit={this.onFormSubmit} />
-        <Button onClick={() => this.refs.form.submit()} label={Counterpart.translate(`${this.props.contentPrefix}.submit`)} />
-        <Button onClick={() => this.clearForm()} label={Counterpart.translate(`${this.props.contentPrefix}.clear`)} className="btn btn-default" />
+        <Form
+          ref="form"
+          form={this.buildForm()}
+          contentPrefix={`${this.props.contentPrefix}.form`}
+          onSubmit={this.onFormSubmit}
+        />
+        <Button
+          onClick={() => this.refs.form.submit()}
+          label={Counterpart.translate(`${this.props.contentPrefix}.submit`)}
+        />
+        <Button
+          onClick={() => this.clearForm()}
+          label={Counterpart.translate(`${this.props.contentPrefix}.clear`)}
+          className="btn btn-default"
+        />
       </div>
     );
   },

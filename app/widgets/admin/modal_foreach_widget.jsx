@@ -174,7 +174,8 @@ export default React.createClass({
         progressCurrent={this.props.index}
         progressMax={this.props.recordIds.count()}
         onSuccess={this.props.onSuccess}
-        onDismiss={this.onDismiss}>
+        onDismiss={this.onDismiss}
+      >
         {this.props.children}
       </ModalProgress>
     );

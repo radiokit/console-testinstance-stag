@@ -1,9 +1,8 @@
-import _ from 'mudash'
+import _ from 'mudash';
 import React from 'react';
 import { Seq, List } from 'immutable';
 import multiDownload from 'multi-download';
 
-import LoadingWidget from '../../../widgets/general/loading_widget.jsx';
 import DeleteModal from '../../../widgets/admin/crud/delete_modal.jsx';
 import TableBrowser from '../../../widgets/admin/table_browser_widget.jsx';
 import ToolbarGroup from '../../../widgets/admin/toolbar_group_widget.jsx';
@@ -13,10 +12,10 @@ import RadioKit from '../../../services/RadioKit';
 
 import UploadModal from './show_content_upload_modal.jsx';
 import MetadataModal from './show_content_metadata_modal.jsx';
+import StageModal from './show_content_stage_modal.jsx';
 import TagModal from './show_content_tag_modal.jsx';
 
 const ShowContentPartial = React.createClass({
-
   propTypes: {
     record: React.PropTypes.object.isRequired,
     app: React.PropTypes.string.isRequired,
@@ -36,18 +35,9 @@ const ShowContentPartial = React.createClass({
   },
 
   componentDidUpdate(prevProps) {
-    if (prevProps.tagFilter != this.props.tagFilter) {
+    if (prevProps.tagFilter !== this.props.tagFilter) {
       this.reloadTable();
     }
-  },
-
-  getCategories() {
-    const { record } = this.props;
-    const tags = record.get('tag_items', List()).groupBy(item => item.get('tag_category_id'));
-    return record
-      .get('tag_categories', List())
-      .map(category => category.set('tag_items', tags.get(category.get('id')) || List()))
-    ;
   },
 
   onTableSelect(selectedRecordIds, selectedRecords) {
@@ -79,9 +69,22 @@ const ShowContentPartial = React.createClass({
     }
   },
 
+  getFilteredMetadataSchemas() {
+    return this.props.record.get('metadata_schemas')
+      .filter((schema) => schema.get('tag_category_id') === null);
+  },
+
+  getCategories() {
+    const { record } = this.props;
+    const tags = record.get('tag_items', List()).groupBy(item => item.get('tag_category_id'));
+    return record
+      .get('tag_categories', List())
+      .map(category => category.set('tag_items', tags.get(category.get('id')) || List()))
+    ;
+  },
 
   buildSelectedTags(selectedRecordIds) {
-    if(selectedRecordIds.count() > 0) {
+    if (selectedRecordIds.count() > 0) {
       const chunks = _.chunk(selectedRecordIds, 100);
       let result = List();
       let resolved = 0;
@@ -100,9 +103,9 @@ const ShowContentPartial = React.createClass({
               })
               .on('fetch', (_event, _query, data) => {
                 resolved++;
-                result = result.concat(data);;
+                result = result.concat(data);
 
-                if(resolved == chunks.count()) {
+                if (resolved === chunks.count()) {
                   this.setState({
                     selectedAssociationsLoading: false,
                     selectedAssociations: result,
@@ -124,7 +127,7 @@ const ShowContentPartial = React.createClass({
   },
 
   isMetadataSchemaSortable(metadataSchema) {
-    let kind = metadataSchema.get("kind");
+    const kind = metadataSchema.get('kind');
 
     return (
       kind === 'string' ||
@@ -137,38 +140,6 @@ const ShowContentPartial = React.createClass({
       kind === 'datetime' ||
       kind === 'url' ||
       kind === 'duration');
-  },
-
-  moveFiles(newStage) {
-    const patch = { stage: newStage };
-    if (this.props.stage === 'trash') {
-      patch.destroy_at = null;
-    }
-    if (newStage === 'trash') {
-      patch.destroy_in = 1000 * 60 * 60 * 24 * 30;
-    }
-    this.setState({
-      stageMovingIndex: this.state.selectedRecordIds.count() - 1,
-    });
-    this.state.selectedRecordIds.forEach((recordId) => {
-      RadioKit
-      .record('vault', 'Data.Record.File', recordId)
-      .on('loaded', () => {
-        if (this.state.stageMovingIndex === 0) {
-          this.reloadTable();
-        } else {
-          this.setState({
-            stageMovingIndex: this.state.stageMovingIndex - 1,
-          });
-        }
-      })
-      .update(patch);
-    });
-  },
-
-  getFilteredMetadataSchemas() {
-    return this.props.record.get('metadata_schemas')
-      .filter((schema) => schema.get('tag_category_id') === null);
   },
 
   buildTableAttributes() {
@@ -209,7 +180,6 @@ const ShowContentPartial = React.createClass({
   },
 
   buildTagFilterQuery(query) {
-    const tagIdsFilter = this.props.tagFilter.map((tag) => tag.get('id'));
     let fullQuery = query;
 
     this.props.tagFilter.forEach((tag) => {
@@ -252,13 +222,93 @@ const ShowContentPartial = React.createClass({
       .where('record_repository_id', 'eq', this.props.record.get('id'));
   },
 
+  renderMetadataToolbarGroup() {
+    if (this.props.record.get('metadata_schemas').count() === 0) {
+      return null;
+    }
+
+    return (
+      <ToolbarGroup>
+        <ToolbarButtonModal
+          icon="barcode"
+          labelTextKey="widgets.vault.file_browser.modals.metadata_file.header"
+          disabled={this.state.selectedRecordIds.count() === 0}
+          modalElement={MetadataModal}
+          modalProps={{
+            contentPrefix: 'widgets.vault.file_browser.modals.metadata_file',
+            selectedRecords: this.state.selectedRecords,
+            metadataSchemas: this.getFilteredMetadataSchemas(),
+            onDismiss: this.reloadTable,
+            recordKey: 'record_file_id',
+          }}
+        />
+      </ToolbarGroup>
+    );
+  },
+
   renderMoveToButton(stage) {
     return (
-      <ToolbarButton
+      <ToolbarButtonModal
         icon="folder-move"
         labelTextKey={`${this.props.contentPrefix}.actions.move_to.${stage}`}
         disabled={this.state.selectedRecordIds.count() === 0}
-        onClick = {() => this.moveFiles(stage)}
+        modalElement={StageModal}
+        modalProps={{
+          contentPrefix: 'widgets.vault.file_browser.modals.stage',
+          selectedRecordIds: this.state.selectedRecordIds,
+          toStage: stage,
+          currentStage: this.props.stage,
+          onDismiss: this.reloadTable,
+        }}
+      />
+    );
+  },
+
+  renderMoveToolbarGroup() {
+    switch (this.props.stage) {
+      case 'incoming':
+        return (
+          <ToolbarGroup>
+            {this.renderMoveToButton('current')}
+            {this.renderMoveToButton('archive')}
+          </ToolbarGroup>
+        );
+      case 'current':
+        return (
+          <ToolbarGroup>
+            {this.renderMoveToButton('incoming')}
+            {this.renderMoveToButton('archive')}
+          </ToolbarGroup>
+        );
+      case 'archive':
+        return (
+          <ToolbarGroup>
+            {this.renderMoveToButton('incoming')}
+            {this.renderMoveToButton('current')}
+          </ToolbarGroup>
+        );
+      case 'trash':
+        return (
+          <ToolbarGroup>
+            {this.renderMoveToButton('current')}
+            {this.renderMoveToButton('archive')}
+          </ToolbarGroup>
+        );
+      default: return null;
+    }
+  },
+
+  renderUploadButton() {
+    if (this.props.stage !== 'incoming') {
+      return null;
+    }
+
+    return (
+      <ToolbarButtonModal
+        icon="upload"
+        labelTextKey={`${this.props.contentPrefix}.actions.upload`}
+        modalElement={UploadModal}
+        modalProps={{ repository: this.props.record }}
       />
     );
   },
@@ -276,19 +326,7 @@ const ShowContentPartial = React.createClass({
         recordsQuery={this.buildTagFilterQuery(this.buildTableRecordsQuery())}
       >
         <ToolbarGroup>
-          {(() => (
-            (this.props.stage === 'incoming')
-              ? (
-                  <ToolbarButtonModal
-                    icon="upload"
-                    labelTextKey={`${this.props.contentPrefix}.actions.upload`}
-                    modalElement={UploadModal}
-                    modalProps={{ repository: this.props.record }}
-                  />
-                )
-              : null
-            )
-          )()}
+          {this.renderUploadButton()}
           <ToolbarButton
             icon="download"
             disabled={this.state.selectedRecordIds.count() === 0}
@@ -328,64 +366,8 @@ const ShowContentPartial = React.createClass({
             }}
           />
         </ToolbarGroup>
-
-        {(() => (
-          (this.props.record.get('metadata_schemas').count() !== 0)
-            ? (
-              <ToolbarGroup>
-                <ToolbarButtonModal
-                  icon="barcode"
-                  labelTextKey="widgets.vault.file_browser.modals.metadata_file.header"
-                  disabled={this.state.selectedRecordIds.count() === 0}
-                  modalElement={MetadataModal}
-                  modalProps={{
-                    contentPrefix: 'widgets.vault.file_browser.modals.metadata_file',
-                    selectedRecords: this.state.selectedRecords,
-                    metadataSchemas: this.getFilteredMetadataSchemas(),
-                    onDismiss: this.reloadTable,
-                    recordKey: 'record_file_id',
-                  }}
-                />
-              </ToolbarGroup>
-            )
-            : null
-        ))()}
-
-        <ToolbarGroup>
-         {(() => {
-           switch (this.props.stage) {
-             case 'incoming':
-             return (
-              <div>
-                {this.renderMoveToButton('current')}
-                {this.renderMoveToButton('archive')}
-              </div>
-            );
-             case 'current':
-               return (
-                <div>
-                  {this.renderMoveToButton('incoming')}
-                  {this.renderMoveToButton('archive')}
-                </div>
-              );
-             case 'archive':
-             return (
-              <div>
-                {this.renderMoveToButton('incoming')}
-                {this.renderMoveToButton('current')}
-              </div>
-             );             case 'trash':
-             return (
-              <div>
-                {this.renderMoveToButton('current')}
-                {this.renderMoveToButton('archive')}
-              </div>
-            );
-             default: return null;
-           }
-         })()}
-         </ToolbarGroup>
-
+        {this.renderMetadataToolbarGroup()}
+        {this.renderMoveToolbarGroup()}
       </TableBrowser>
     );
   },
