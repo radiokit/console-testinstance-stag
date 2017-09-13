@@ -62,11 +62,7 @@ const ShowContentPartial = React.createClass({
   },
 
   onDeleteClick() {
-    if (this.props.stage === 'trash') {
-      this.refs.deleteModal.show();
-    } else {
-      this.moveFiles('trash');
-    }
+    this.refs.deleteModal.show();
   },
 
   getFilteredMetadataSchemas() {
@@ -298,6 +294,21 @@ const ShowContentPartial = React.createClass({
     }
   },
 
+  renderDeleteButton() {
+    if (this.props.stage === 'trash') {
+      return (
+        <ToolbarButton
+          icon="delete"
+          labelTextKey={`${this.props.contentPrefix}.actions.delete`}
+          disabled={this.state.selectedRecordIds.count() === 0}
+          onClick={this.onDeleteClick}
+        />
+      );
+    }
+
+    return this.renderMoveToButton('trash');
+  },
+
   renderUploadButton() {
     if (this.props.stage !== 'incoming') {
       return null;
@@ -332,23 +343,14 @@ const ShowContentPartial = React.createClass({
             disabled={this.state.selectedRecordIds.count() === 0}
             onClick={this.onDownloadClick}
           />
-          <ToolbarButton
-            icon="delete"
-            labelTextKey={`${
-              this.props.contentPrefix
-              }.actions.${
-              (this.props.stage === 'trash' ? 'delete' : 'move_to.trash')
-              }`}
-            disabled={this.state.selectedRecordIds.count() === 0}
-            onClick={this.onDeleteClick}
-          />
+          {this.renderDeleteButton()}
           <DeleteModal
             ref="deleteModal"
             contentPrefix={`${this.props.contentPrefix}.modals.delete`}
             selectedRecordIds={this.state.selectedRecordIds}
             app="vault"
             model="Data.Record.File"
-            onSuccess={ this.reloadTable }
+            onSuccess={this.reloadTable}
           />
         </ToolbarGroup>
 

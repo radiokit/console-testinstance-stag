@@ -55,11 +55,7 @@ const DJLibraryIndexContent = React.createClass({
   },
 
   onDeleteClick() {
-    if (this.props.stage === 'trash') {
-      this.refs.deleteModal.show();
-    } else {
-      this.moveFiles('trash');
-    }
+    this.refs.deleteModal.show();
   },
 
   getFilteredMetadataSchemas() {
@@ -216,6 +212,21 @@ const DJLibraryIndexContent = React.createClass({
     }
   },
 
+  renderDeleteButton() {
+    if (this.props.stage === 'trash') {
+      return (
+        <ToolbarButton
+          icon="delete"
+          labelTextKey={`${this.props.contextPrefix}.actions.delete`}
+          disabled={this.state.selectedRecordIds.count() === 0}
+          onClick={this.onDeleteClick}
+        />
+      );
+    }
+
+    return this.renderMoveToButton('trash');
+  },
+
   renderMetadataToolbarGroup() {
     if (this.props.record.get('metadata_schemas').count() === 0) {
       return null;
@@ -278,16 +289,7 @@ const DJLibraryIndexContent = React.createClass({
             disabled={this.state.selectedRecordIds.count() === 0}
             onClick={this.onDownloadClick}
           />
-          <ToolbarButton
-            icon="delete"
-            labelTextKey={`${
-              this.props.contextPrefix
-              }.actions.${
-              (this.props.stage === 'trash' ? 'delete' : 'move_to.trash')
-              }`}
-            disabled={this.state.selectedRecordIds.count() === 0}
-            onClick={this.onDeleteClick}
-          />
+          {this.renderDeleteButton()}
           <DeleteModal
             ref="deleteModal"
             contentPrefix={`${this.props.contextPrefix}.modals.delete`}
