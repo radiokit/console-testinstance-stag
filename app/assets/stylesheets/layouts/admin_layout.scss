@@ -31,12 +31,12 @@ a:disabled, a:disabled *, .btn:disabled, .btn:disabled * {
 
 input, textarea {
   cursor: text !important;
+  touch-callout: default !important;
+  user-select: auto !important;
 }
 
 select, input[type=radio], input[type=checkbox] {
   cursor: pointer !important;
-  touch-callout: default !important;
-  user-select: auto !important;
 }
 
 
