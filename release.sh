@@ -11,6 +11,8 @@ CURRENT_DIR=`pwd`
 TMP_DIR="/tmp/site-console-$ENV"
 BRANCH="gh-pages"
 REPO_URL="git@github.com:radiokit/site-console-$ENV.git"
+ROLLBAR_ACCESS_TOKEN="e91425b5d11a4e419082f8fb52975bea"
+LOCAL_USERNAME=`whoami`
 
 rm -rf $TMP_DIR
 
@@ -36,3 +38,9 @@ cd $CURRENT_DIR && \
 
 rm -rvf $TMP_DIR && \
 echo -e "\n\nFinished successfully!\n"
+
+curl https://api.rollbar.com/api/1/deploy/ \
+  -F access_token=$ROLLBAR_ACCESS_TOKEN \
+  -F environment=$ENV \
+  -F revision=$CURRENT_REVISION \
+  -F local_username=$LOCAL_USERNAME

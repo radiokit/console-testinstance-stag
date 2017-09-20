@@ -19,6 +19,10 @@ const ShowContentStageModal = React.createClass({
     };
   },
 
+  onDismiss() {
+    this.setState(this.getInitialState(), this.props.onDismiss);
+  },
+
   onMoveSuccess() {
     this.setState({ index: this.state.index + 1 });
   },
@@ -68,7 +72,7 @@ const ShowContentStageModal = React.createClass({
         onPerform={this.onMovePerform}
         contentPrefix="widgets.vault.file_browser.modals.stage"
         recordIds={this.props.selectedRecordIds}
-        onDismiss={this.props.onDismiss}
+        onDismiss={this.onDismiss}
         index={this.state.index}
         proceedType="info"
       >

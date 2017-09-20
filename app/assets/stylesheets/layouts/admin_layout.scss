@@ -35,6 +35,8 @@ input, textarea {
 
 select, input[type=radio], input[type=checkbox] {
   cursor: pointer !important;
+  touch-callout: default !important;
+  user-select: auto !important;
 }
 
 
