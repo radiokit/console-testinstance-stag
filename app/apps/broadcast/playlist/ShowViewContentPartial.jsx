@@ -10,6 +10,14 @@ import config from './playlistConfig';
 const MILLISECONDS_PER_MINUTE = 1000 * 60;
 const MILLISECONDS_PER_HOUR = MILLISECONDS_PER_MINUTE * 60;
 
+// checks if channel uses deprecated backend
+function isLineupUnavailable(broadcastChannel) {
+  return (
+    !broadcastChannel.get('lineup_base_url') ||
+    !broadcastChannel.get('lineup_channel_id')
+  );
+}
+
 function calcDayStart(timestamp, timezone, dayStartHoursOffset) {
   return moment
     .tz(timestamp, timezone)
@@ -86,14 +94,10 @@ const BroadcastPlaylistContent = React.createClass({
     );
     const to = from + hours * MILLISECONDS_PER_HOUR;
 
-    if(currentBroadcastChannel.get('lineup_base_url') === '' ||
-       currentBroadcastChannel.get('lineup_base_url') === null || 
-       currentBroadcastChannel.get('lineup_channel_id') === '' || 
-       currentBroadcastChannel.get('lineup_channel_id') === null) {
-
+    if (isLineupUnavailable(currentBroadcastChannel)) {
       const fromISO = moment(from).toISOString();
       const toISO = moment(to).toISOString();
-      
+
       // Deprecated backend for storing playlist
       return RadioKit
         .query('plumber', 'Media.Input.File.RadioKit.Vault')
@@ -112,39 +116,34 @@ const BroadcastPlaylistContent = React.createClass({
         )
         .where('cue_in_at', 'lte', toISO)
         .where('cue_out_at', 'gte', fromISO);
-
-    } else {
-      const fromISO = moment(from).format("YYYY-MM-DDTHH:mm:ss"); // Do not send time zone
-      const toISO = moment(to).format("YYYY-MM-DDTHH:mm:ss"); // Do not send time zone
-
-      return RadioKit
-        .query(currentBroadcastChannel.get('lineup_base_url'), 'Track')
-        .select(
-          'id',
-          'name',
-          'cue_in_at',
-          'cue_out_at',
-          'file',
-        )
-        .where(
-          'channel_id',
-          'eq',
-          currentBroadcastChannel.get('lineup_channel_id'),
-        )
-        .where('cue_in_at', 'lte', fromISO)
-        .where('cue_out_at', 'gte', toISO);
     }
+
+    const fromISO = moment(from).format('YYYY-MM-DDTHH:mm:ss'); // Do not send time zone
+    const toISO = moment(to).format('YYYY-MM-DDTHH:mm:ss'); // Do not send time zone
+
+    return RadioKit
+      .query(currentBroadcastChannel.get('lineup_base_url'), 'Track')
+      .select(
+        'id',
+        'name',
+        'cue_in_at',
+        'cue_out_at',
+        'file',
+      )
+      .where(
+        'channel_id',
+        'eq',
+        currentBroadcastChannel.get('lineup_channel_id'),
+      )
+      .where('cue_in_at', 'lte', fromISO)
+      .where('cue_out_at', 'gte', toISO);
   },
 
 
   renderPlaylistToolbar() {
     const currentBroadcastChannel = this.context.currentBroadcastChannel;
 
-    if(currentBroadcastChannel.get('lineup_base_url') === '' ||
-       currentBroadcastChannel.get('lineup_base_url') === null || 
-       currentBroadcastChannel.get('lineup_channel_id') === '' || 
-       currentBroadcastChannel.get('lineup_channel_id') === null) {
-
+    if (isLineupUnavailable(currentBroadcastChannel)) {
       // Deprecated backend for storing playlist
       return (
         <PlaylistToolbar
@@ -155,18 +154,17 @@ const BroadcastPlaylistContent = React.createClass({
           model="Media.Input.File.RadioKit.Vault"
         />
       );
-
-    } else {
-      return (
-        <PlaylistToolbar
-          offset={this.props.offset}
-          selectedRecordIds={this.state.selectedRecordIds}
-          reloadData={this.reloadData}
-          lineupBaseUrl={currentBroadcastChannel.get('lineup_base_url')}
-          lineupChannelId={currentBroadcastChannel.get('lineup_channel_id')}
-        />
-      );
     }
+
+    return (
+      <PlaylistToolbar
+        offset={this.props.offset}
+        selectedRecordIds={this.state.selectedRecordIds}
+        reloadData={this.reloadData}
+        lineupBaseUrl={currentBroadcastChannel.get('lineup_base_url')}
+        lineupChannelId={currentBroadcastChannel.get('lineup_channel_id')}
+      />
+    );
   },
 
 

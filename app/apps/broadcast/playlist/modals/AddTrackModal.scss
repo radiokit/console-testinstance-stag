@@ -21,3 +21,51 @@
     float: none;
   }
 }
+
+.AddTrackModal-footer {
+  text-align: right;
+
+  .btn { float: none; }
+}
+
+.AddTrackModal-warningInfo {
+  .AddTrackModal-warningInfo-title {
+    padding: 15px;
+    border-radius: 4px;
+    font-size: 1.5rem;
+  }
+
+  .AddTrackModal-warningInfo-subtitle {
+    padding: 10px 0;
+    text-align: center;
+  }
+  .AddTrackModal-warningInfo-list {
+    display: table;
+    width: 100%;
+    margin-bottom: 15px;
+
+    .AddTrackModal-warningInfo-list-header {
+      display: table-row;
+
+      & > * {
+        display: table-cell;
+        padding: 5px;
+        border-bottom: 2px solid #ddd;
+      }
+    }
+
+    .AddTrackModal-warningInfo-list-item {
+      display: table-row;
+
+      & > * {
+        display: table-cell;
+        padding: 5px;
+        border-bottom: 1px solid #ddd;
+      }
+
+      &:last-child > * {
+        border-bottom: none;
+      }
+    }
+  }
+}

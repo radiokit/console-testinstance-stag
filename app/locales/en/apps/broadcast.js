@@ -41,6 +41,14 @@ export default {
           loading: 'Loading...',
           close_button: 'Close',
           success_info: 'Track has been added to playlist.',
+          overlap_warning_title: `
+            There are tracks in playlist, which will overlap with file you are trying to add
+          `,
+          overlap_warning_subtitle: 'Do you want to continue?',
+          proceed_warning: 'Yes, add track',
+          your_file: 'Your file',
+          other_files: 'Existing overlapping files',
+
           account: {
             header: 'Choose account',
           },
