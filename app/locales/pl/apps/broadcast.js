@@ -41,6 +41,14 @@ export default {
           loading: 'Ładowanie...',
           close_button: 'Zamknij',
           success_info: 'Plik został dodany do ramówki.',
+          overlap_warning_title: `
+            W ramówce znajdują się utwory, które będą nachodzić na właśnie dodawany plik
+          `,
+          overlap_warning_subtitle: 'Czy chcesz kontynuować?',
+          proceed_warning: 'Tak, dodaj utwór',
+          your_file: 'Twój plik',
+          other_files: 'Istniejce pliki',
+
           account: {
             header: 'Wybierz konto',
           },
