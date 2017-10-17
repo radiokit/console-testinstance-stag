@@ -8,7 +8,6 @@ window.ENV = {
     "medium"        : { baseUrl: "https://medium-testintance.radiokitapp-stag.org" },
     "auth"          : { baseUrl: "https://auth-testintance.radiokitapp-stag.org" },
     "agenda"        : { baseUrl: "https://agenda-testintance.radiokitapp-stag.org" },
-    "plumber"       : { baseUrl: "https://plumber-testintance.radiokitapp-stag.org" },
     "vault"         : { baseUrl: "https://vault-testintance.radiokitapp-stag.org" },
     "circumstances" : { baseUrl: 'https://circumstances-testintance.radiokitapp-stag.org' },
     default: function(appName) {
