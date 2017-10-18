@@ -4,12 +4,12 @@ window.ENV = {
     baseUrl: "https://auth.radiokitapp-stag.org"
   },
   apps: {
-    "jungle"        : { baseUrl: "https://jungle-testintance.radiokitapp-stag.org" },
-    "medium"        : { baseUrl: "https://medium-testintance.radiokitapp-stag.org" },
-    "auth"          : { baseUrl: "https://auth-testintance.radiokitapp-stag.org" },
-    "agenda"        : { baseUrl: "https://agenda-testintance.radiokitapp-stag.org" },
-    "vault"         : { baseUrl: "https://vault-testintance.radiokitapp-stag.org" },
-    "circumstances" : { baseUrl: 'https://circumstances-testintance.radiokitapp-stag.org' },
+    "jungle"        : { baseUrl: "https://jungle-testinstance.radiokitapp-stag.org" },
+    "medium"        : { baseUrl: "https://medium-testinstance.radiokitapp-stag.org" },
+    "auth"          : { baseUrl: "https://auth-testinstance.radiokitapp-stag.org" },
+    "agenda"        : { baseUrl: "https://agenda-testinstance.radiokitapp-stag.org" },
+    "vault"         : { baseUrl: "https://vault-testinstance.radiokitapp-stag.org" },
+    "circumstances" : { baseUrl: 'https://circumstances-testinstance.radiokitapp-stag.org' },
     default: function(appName) {
       // That is called only if we're passing full lineup base URL instead
       // of app name in the broadcast view.
